@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
-#import "PADetailViewController.h"
+#import "PAEventInfoViewController.h"
 
-@interface PADetailViewController ()
+@interface PAEventInfoViewController ()
 - (void)configureView;
 @end
 
-@implementation PADetailViewController
+@implementation PAEventInfoViewController
 
 #pragma mark - Managing the detail item
 

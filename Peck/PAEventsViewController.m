@@ -6,15 +6,15 @@
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
-#import "PAMasterViewController.h"
+#import "PAEventsViewController.h"
 
-#import "PADetailViewController.h"
+#import "PAEventInfoViewController.h"
 
-@interface PAMasterViewController ()
+@interface PAEventsViewController ()
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @end
 
-@implementation PAMasterViewController
+@implementation PAEventsViewController
 
 - (void)awakeFromNib
 {

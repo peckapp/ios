@@ -8,7 +8,7 @@
 
 #import "PAAppDelegate.h"
 
-#import "PAMasterViewController.h"
+#import "PAEventsViewController.h"
 
 @implementation PAAppDelegate
 
@@ -20,7 +20,7 @@
 {
     // Override point for customization after application launch.
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-    PAMasterViewController *controller = (PAMasterViewController *)navigationController.topViewController;
+    PAEventsViewController *controller = (PAEventsViewController *)navigationController.topViewController;
     controller.managedObjectContext = self.managedObjectContext;
     return YES;
 }

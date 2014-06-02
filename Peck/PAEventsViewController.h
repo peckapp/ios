@@ -10,7 +10,7 @@
 
 #import <CoreData/CoreData.h>
 
-@interface PAMasterViewController : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface PAEventsViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PADetailViewController : UIViewController
+@interface PAEventInfoViewController : UIViewController
 
 @property (strong, nonatomic) id detailItem;
 
