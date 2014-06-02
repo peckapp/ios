@@ -38,6 +38,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="Cie-Kn-RIZ" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="News Feed" id="0xi-1q-sHx"/>
+                    <size key="freeformSize" width="320" height="568"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="aeK-6k-bhL">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
