@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PACirclesTableViewController : UITableViewController
+#import "PACoreDataProtocol.h"
+
+
+@interface PACirclesTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol>
+
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 
 @end

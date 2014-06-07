@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PAMoreTableViewController : UITableViewController
+#import "PACoreDataProtocol.h"
+
+
+@interface PAMoreTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol>
+
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 
 @end

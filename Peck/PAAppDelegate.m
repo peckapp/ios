@@ -9,6 +9,7 @@
 #import "PAAppDelegate.h"
 
 #import "PAEventsViewController.h"
+#import "PACoreDataProtocol.h"
 
 @implementation PAAppDelegate
 
@@ -19,8 +20,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-    PAEventsViewController *controller = (PAEventsViewController *)navigationController.topViewController;
+ 
+    // iterated through all subviews of the root tabcontroller and sets pointer to the managedObjectContext
+    UITabBarController* tabController = (UITabBarController *)self.window.rootViewController;
+    for (UINavigationController* navController in tabController.viewControllers) {
+        UIViewController <PACoreDataProtocol> * viewController = (UIViewController <PACoreDataProtocol> *)navController.topViewController;
+        viewController.managedObjectContext = self.managedObjectContext;
+    }
+    PAEventsViewController *controller = (PAEventsViewController *)tabController.viewControllers[0];
     controller.managedObjectContext = self.managedObjectContext;
     return YES;
 }

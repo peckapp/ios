@@ -16,7 +16,7 @@
 		863843C9193CB229004110F5 /* PADiningTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843C8193CB229004110F5 /* PADiningTableViewController.m */; };
 		863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CB193CB31C004110F5 /* PACirclesTableViewController.m */; };
 		863843CF193CB393004110F5 /* PAMoreTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CE193CB393004110F5 /* PAMoreTableViewController.m */; };
-		863843DA193CB75F004110F5 /* LoginStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 863843D3193CB75F004110F5 /* LoginStoryboard.storyboard */; };
+		863843DA193CB75F004110F5 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 863843D3193CB75F004110F5 /* Login.storyboard */; };
 		863843DB193CB75F004110F5 /* PeckInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D5193CB75F004110F5 /* PeckInitialViewController.m */; };
 		863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D7193CB75F004110F5 /* PeckLoginViewController.m */; };
 		863843DD193CB75F004110F5 /* PeckRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D9193CB75F004110F5 /* PeckRegisterViewController.m */; };
@@ -70,7 +70,7 @@
 		863843CB193CB31C004110F5 /* PACirclesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACirclesTableViewController.m; sourceTree = "<group>"; };
 		863843CD193CB393004110F5 /* PAMoreTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAMoreTableViewController.h; sourceTree = "<group>"; };
 		863843CE193CB393004110F5 /* PAMoreTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAMoreTableViewController.m; sourceTree = "<group>"; };
-		863843D3193CB75F004110F5 /* LoginStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LoginStoryboard.storyboard; sourceTree = "<group>"; };
+		863843D3193CB75F004110F5 /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		863843D4193CB75F004110F5 /* PeckInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeckInitialViewController.h; sourceTree = "<group>"; };
 		863843D5193CB75F004110F5 /* PeckInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckInitialViewController.m; sourceTree = "<group>"; };
 		863843D6193CB75F004110F5 /* PeckLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeckLoginViewController.h; sourceTree = "<group>"; };
@@ -82,6 +82,7 @@
 		863843E1193CB7FD004110F5 /* PAFeedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFeedTableViewController.h; sourceTree = "<group>"; };
 		863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFeedTableViewController.m; sourceTree = "<group>"; };
 		863843E6193CBA69004110F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
 		86D597FF193768BF00F38654 /* Peck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86D59802193768BF00F38654 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		86D59804193768BF00F38654 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -163,7 +164,7 @@
 		863843D2193CB739004110F5 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				863843D3193CB75F004110F5 /* LoginStoryboard.storyboard */,
+				863843D3193CB75F004110F5 /* Login.storyboard */,
 				863843D4193CB75F004110F5 /* PeckInitialViewController.h */,
 				863843D5193CB75F004110F5 /* PeckInitialViewController.m */,
 				863843D6193CB75F004110F5 /* PeckLoginViewController.h */,
@@ -215,6 +216,7 @@
 			children = (
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
+				868572281943787300287A73 /* PACoreDataProtocol.h */,
 				86D59816193768BF00F38654 /* Main.storyboard */,
 				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
 				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
@@ -351,7 +353,7 @@
 				86D59818193768BF00F38654 /* Main.storyboard in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
 				8629250F193CBC4A0057CA41 /* Post.storyboard in Resources */,
-				863843DA193CB75F004110F5 /* LoginStoryboard.storyboard in Resources */,
+				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
 				86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

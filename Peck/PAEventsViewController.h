@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 
 #import <CoreData/CoreData.h>
+#import "PACoreDataProtocol.h"
 
-@interface PAEventsViewController : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface PAEventsViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
