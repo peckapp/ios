@@ -21,14 +21,13 @@
 {
     // Override point for customization after application launch.
  
-    // iterated through all subviews of the root tabcontroller and sets pointer to the managedObjectContext
+    // iterates through all subviews of the root tabcontroller and sets pointer to the managedObjectContext
     UITabBarController* tabController = (UITabBarController *)self.window.rootViewController;
+    NSLog(@"%@",tabController.viewControllers);
     for (UINavigationController* navController in tabController.viewControllers) {
         UIViewController <PACoreDataProtocol> * viewController = (UIViewController <PACoreDataProtocol> *)navController.topViewController;
         viewController.managedObjectContext = self.managedObjectContext;
     }
-    PAEventsViewController *controller = (PAEventsViewController *)tabController.viewControllers[0];
-    controller.managedObjectContext = self.managedObjectContext;
     return YES;
 }
 							

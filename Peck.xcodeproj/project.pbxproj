@@ -23,6 +23,7 @@
 		863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */; };
 		863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */; };
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
+		8685722A19437EA700287A73 /* Post.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8685722919437EA700287A73 /* Post.xib */; };
 		86D59803193768BF00F38654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59802193768BF00F38654 /* Foundation.framework */; };
 		86D59805193768BF00F38654 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59804193768BF00F38654 /* CoreGraphics.framework */; };
 		86D59807193768BF00F38654 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59806193768BF00F38654 /* UIKit.framework */; };
@@ -83,6 +84,7 @@
 		863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFeedTableViewController.m; sourceTree = "<group>"; };
 		863843E6193CBA69004110F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
+		8685722919437EA700287A73 /* Post.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Post.xib; sourceTree = "<group>"; };
 		86D597FF193768BF00F38654 /* Peck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86D59802193768BF00F38654 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		86D59804193768BF00F38654 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -142,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				8629250E193CBC4A0057CA41 /* Post.storyboard */,
+				8685722919437EA700287A73 /* Post.xib */,
 				86292510193CBE000057CA41 /* PAPostViewController.h */,
 				86292511193CBE000057CA41 /* PAPostViewController.m */,
 			);
@@ -220,10 +223,10 @@
 				86D59816193768BF00F38654 /* Main.storyboard */,
 				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
 				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
-				863843E1193CB7FD004110F5 /* PAFeedTableViewController.h */,
-				863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */,
 				86D5981F193768BF00F38654 /* PAEventInfoViewController.h */,
 				86D59820193768BF00F38654 /* PAEventInfoViewController.m */,
+				863843E1193CB7FD004110F5 /* PAFeedTableViewController.h */,
+				863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */,
 				863843C7193CB229004110F5 /* PADiningTableViewController.h */,
 				863843C8193CB229004110F5 /* PADiningTableViewController.m */,
 				863843CA193CB31C004110F5 /* PACirclesTableViewController.h */,
@@ -355,6 +358,7 @@
 				8629250F193CBC4A0057CA41 /* Post.storyboard in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
 				86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */,
+				8685722A19437EA700287A73 /* Post.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
