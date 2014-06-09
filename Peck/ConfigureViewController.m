@@ -66,8 +66,9 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     [defaults setObject:college forKey:@"getCollege"];
-    
-    NSLog(@"%@", [defaults objectForKey:@"getCollege"]);
+    //this line adds the selected college to defaults
+    //use the following line to get the college
+    //[defaults objectForKey:@"getCollege"];
     
 }
 
