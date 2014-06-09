@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="wXS-p9-cDv">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment defaultVersion="1808" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.11"/>
     </dependencies>
     <scenes>
         <!--Feed Table View Controller - Root View Controller-->
@@ -116,7 +117,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D43-v5-Oqh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="863" y="1823"/>
+            <point key="canvasLocation" x="859" y="1786"/>
         </scene>
         <!--Navigation Controller - Circles-->
         <scene sceneID="fXo-bg-fUk">
@@ -132,7 +133,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Uw9-vz-hAL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="397" y="1823"/>
+            <point key="canvasLocation" x="393" y="1786"/>
         </scene>
         <!--More Table View Controller - Root View Controller-->
         <scene sceneID="Ixf-t6-oWA">
@@ -206,7 +207,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="whM-n9-Vo4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="863" y="1109"/>
+            <point key="canvasLocation" x="750" y="1109"/>
         </scene>
         <!--Navigation Controller - Dining-->
         <scene sceneID="nRf-hT-WfE">
@@ -222,7 +223,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Ds-um-s3b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="297" y="1093"/>
+            <point key="canvasLocation" x="269" y="1109"/>
         </scene>
         <!--Events View Controller - Master-->
         <scene sceneID="VgW-fR-Quf">
