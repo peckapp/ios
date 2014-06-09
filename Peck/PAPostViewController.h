@@ -10,4 +10,7 @@
 
 @interface PAPostViewController : UIViewController
 
+
+- (IBAction)cancelButton:(id)sender;
+
 @end

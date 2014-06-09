@@ -54,7 +54,7 @@
         <!--Navigation Controller - Events-->
         <scene sceneID="cUi-kZ-frf">
             <objects>
-                <navigationController id="rS3-R9-Ivy" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="EventsController" id="rS3-R9-Ivy" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Events" id="t6u-Ov-roD"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="yXu-0R-QUA">
                         <autoresizingMask key="autoresizingMask"/>
@@ -365,7 +365,11 @@
                                 <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <items>
                                     <navigationItem title="Post" id="skv-Pe-rBX">
-                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="fXm-Rf-8ag"/>
+                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="fXm-Rf-8ag">
+                                            <connections>
+                                                <action selector="cancelButton:" destination="cUM-GN-TXW" id="Oiq-eR-Azu"/>
+                                            </connections>
+                                        </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" title="Okay" id="pfX-4C-V6w"/>
                                     </navigationItem>
                                 </items>

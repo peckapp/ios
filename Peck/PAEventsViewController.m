@@ -49,7 +49,7 @@
     
     PAPostViewController * pvc = [self.storyboard instantiateViewControllerWithIdentifier:@"PostController"];
     [self presentViewController:pvc animated:YES completion:nil];
-    
+       
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
     [newManagedObject setValue:[NSDate date] forKey:@"timeStamp"];
