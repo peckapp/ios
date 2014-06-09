@@ -5,34 +5,34 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>D5731374-B151-4835-A952-1058C861C912</string>
+	<string>3AB4E10B-AD8A-4D41-9BA4-4E98A810E90E</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Peck</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>ED726514-42AB-40FB-870C-BE292B7F88B1</key>
-		<string>ssh://github.com/peckapp/ios</string>
+		<key>3630E91E-036B-4388-9554-69304402EEEF</key>
+		<string>https://github.com/peckapp/ios.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Peck.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>ED726514-42AB-40FB-870C-BE292B7F88B1</key>
+		<key>3630E91E-036B-4388-9554-69304402EEEF</key>
 		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/peckapp/ios</string>
+	<string>https://github.com/peckapp/ios.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>ED726514-42AB-40FB-870C-BE292B7F88B1</string>
+	<string>3630E91E-036B-4388-9554-69304402EEEF</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>ED726514-42AB-40FB-870C-BE292B7F88B1</string>
+			<string>3630E91E-036B-4388-9554-69304402EEEF</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ios</string>
 		</dict>

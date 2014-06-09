@@ -42,6 +42,8 @@
 		86D5982D193768C000F38654 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59808193768BF00F38654 /* CoreData.framework */; };
 		86D59835193768C000F38654 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86D59833193768C000F38654 /* InfoPlist.strings */; };
 		86D59837193768C000F38654 /* PeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59836193768C000F38654 /* PeckTests.m */; };
+		A4B772E51945FEFB00A31252 /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* ConfigureViewController.m */; };
+		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -108,6 +110,9 @@
 		86D59832193768C000F38654 /* PeckTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PeckTests-Info.plist"; sourceTree = "<group>"; };
 		86D59834193768C000F38654 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86D59836193768C000F38654 /* PeckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeckTests.m; sourceTree = "<group>"; };
+		A4B772E31945FEFB00A31252 /* ConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
+		A4B772E41945FEFB00A31252 /* ConfigureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigureViewController.m; sourceTree = "<group>"; };
+		A4B772E619460C3200A31252 /* schools.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = schools.plist; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -183,6 +188,7 @@
 		86D597F6193768BF00F38654 = {
 			isa = PBXGroup;
 			children = (
+				A4B772DD1945F8DB00A31252 /* Configure */,
 				86D5980A193768BF00F38654 /* Peck */,
 				86D59830193768C000F38654 /* PeckTests */,
 				86D59801193768BF00F38654 /* Frameworks */,
@@ -217,6 +223,8 @@
 		86D5980A193768BF00F38654 /* Peck */ = {
 			isa = PBXGroup;
 			children = (
+				A4B772E31945FEFB00A31252 /* ConfigureViewController.h */,
+				A4B772E41945FEFB00A31252 /* ConfigureViewController.m */,
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
 				868572281943787300287A73 /* PACoreDataProtocol.h */,
@@ -250,6 +258,7 @@
 				86D5980D193768BF00F38654 /* InfoPlist.strings */,
 				86D59810193768BF00F38654 /* main.m */,
 				86D59812193768BF00F38654 /* Peck-Prefix.pch */,
+				A4B772E619460C3200A31252 /* schools.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -270,6 +279,14 @@
 				86D59833193768C000F38654 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A4B772DD1945F8DB00A31252 /* Configure */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Configure;
+			path = Peck;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -355,6 +372,7 @@
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
 				86D59818193768BF00F38654 /* Main.storyboard in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
+				A4B772E719460C3200A31252 /* schools.plist in Resources */,
 				8629250F193CBC4A0057CA41 /* Post.storyboard in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
 				86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */,
@@ -413,6 +431,7 @@
 				863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */,
 				86D59811193768BF00F38654 /* main.m in Sources */,
 				863843CF193CB393004110F5 /* PAMoreTableViewController.m in Sources */,
+				A4B772E51945FEFB00A31252 /* ConfigureViewController.m in Sources */,
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,
 				863843C9193CB229004110F5 /* PADiningTableViewController.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,

@@ -10,6 +10,7 @@
 
 #import "PAEventsViewController.h"
 #import "PACoreDataProtocol.h"
+#import "ConfigureViewController.h"
 
 @implementation PAAppDelegate
 
@@ -22,13 +23,12 @@
     // Override point for customization after application launch.
  
     // iterates through all subviews of the root tabcontroller and sets pointer to the managedObjectContext
-    UITabBarController* tabController = (UITabBarController *)self.window.rootViewController;
-    NSLog(@"%@",tabController.viewControllers);
-    for (UINavigationController* navController in tabController.viewControllers) {
-        UIViewController <PACoreDataProtocol> * viewController = (UIViewController <PACoreDataProtocol> *)navController.topViewController;
-        viewController.managedObjectContext = self.managedObjectContext;
-    }
+    ConfigureViewController* configureController = (ConfigureViewController *)self.window.rootViewController;
+    configureController.managedObjectContext = self.managedObjectContext;
+      
+    
     return YES;
+    
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
