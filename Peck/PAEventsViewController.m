@@ -9,6 +9,7 @@
 #import "PAEventsViewController.h"
 
 #import "PAEventInfoViewController.h"
+#import "PAPostViewController.h"
 
 @interface PAEventsViewController ()
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -46,9 +47,13 @@
     NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
     NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:[entity name] inManagedObjectContext:context];
     
+    PAPostViewController * pvc = [self.storyboard instantiateViewControllerWithIdentifier:@"PostController"];
+    [self presentViewController:pvc animated:YES completion:nil];
+       
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
     [newManagedObject setValue:[NSDate date] forKey:@"timeStamp"];
+    
     
     // Save the context.
     NSError *error = nil;
