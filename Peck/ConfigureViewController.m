@@ -15,7 +15,6 @@
 
 @implementation ConfigureViewController
 @synthesize schoolPicker;
-@synthesize schools;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -30,7 +29,7 @@
 {
         [super viewDidLoad];
        // Do any additional setup after loading the view.
-    schools = [[NSArray alloc] initWithObjects:@"Williams",@"Middlebury", nil];
+    
     schoolPicker.dataSource = self;
     schoolPicker.delegate = self;
     
@@ -57,6 +56,19 @@
                       @"schools" ofType:@"plist"];
     NSArray *colleges = [[NSArray alloc] initWithContentsOfFile:path];
     return [colleges objectAtIndex:row];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
+    NSString *path = [[NSBundle mainBundle] pathForResource:
+                      @"schools" ofType:@"plist"];
+    NSArray *colleges = [[NSArray alloc] initWithContentsOfFile:path];
+    NSString *college = [colleges objectAtIndexedSubscript:row];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    [defaults setObject:college forKey:@"getCollege"];
+    
+    NSLog(@"%@", [defaults objectForKey:@"getCollege"]);
+    
 }
 
 
