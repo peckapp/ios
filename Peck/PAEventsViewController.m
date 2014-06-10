@@ -10,6 +10,7 @@
 
 #import "PAEventInfoViewController.h"
 #import "PAPostViewController.h"
+#import "PAPecksViewController.h"
 
 @interface PAEventsViewController ()
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -28,8 +29,9 @@
 	// Do any additional setup after loading the view, typically from a nib.
 
     self.title = @"Events";
-    
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+
+    UIBarButtonItem *pecksButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(showPecks:)];
+    self.navigationItem.leftBarButtonItem = pecksButton;
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
@@ -39,6 +41,12 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)showPecks:(id)sender
+{
+    PAPecksViewController * controller = [self.storyboard instantiateViewControllerWithIdentifier:@"PecksController"];
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 - (void)insertNewObject:(id)sender
