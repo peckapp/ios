@@ -381,6 +381,9 @@
                                     <segment title="Message"/>
                                     <segment title="Photo"/>
                                 </segments>
+                                <connections>
+                                    <action selector="segmentedControl:" destination="cUM-GN-TXW" eventType="valueChanged" id="qsp-3w-c9c"/>
+                                </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ZDX-Qv-276">
                                 <rect key="frame" x="0.0" y="146" width="320" height="422"/>
@@ -400,6 +403,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="controlSwitch" destination="ve7-Oz-bnH" id="h8c-Bx-fxG"/>
                         <outlet property="tableView" destination="ZDX-Qv-276" id="gsX-G0-nsb"/>
                     </connections>
                 </viewController>

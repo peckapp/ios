@@ -16,7 +16,9 @@
 @synthesize tableView;
 @synthesize eventItems;
 @synthesize eventSuggestions;
+@synthesize controlSwitch;
 int initialTVHeight;
+int initialRowHeight;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -33,9 +35,10 @@ int initialTVHeight;
     tableView.delegate=self;
     tableView.dataSource=self;
     initialTVHeight = tableView.frame.size.height;
+    initialRowHeight = tableView.rowHeight;
     
     
-    eventItems=@[@"Event Names", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
+    eventItems=@[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
     eventSuggestions=@[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
@@ -76,7 +79,7 @@ int initialTVHeight;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 6;
+    return eventItems.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -86,23 +89,24 @@ int initialTVHeight;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
         cell.accessoryType = UITableViewCellAccessoryNone;
         if ([indexPath section] == 0) {
-            UITextField *playerTextField = [[UITextField alloc] initWithFrame:CGRectMake(140, 10, 185, 30)];
+            UITextField *playerTextField = [[UITextField alloc] initWithFrame:CGRectMake(140, 8, 185, 30)];
             
             playerTextField.adjustsFontSizeToFitWidth = YES;
             playerTextField.textColor = [UIColor blackColor];
-                        playerTextField.keyboardType = UIKeyboardTypeDefault;
+            playerTextField.keyboardType = UIKeyboardTypeDefault;
             playerTextField.returnKeyType = UIReturnKeyDone;
             playerTextField.backgroundColor = [UIColor whiteColor];
             playerTextField.autocorrectionType = UITextAutocorrectionTypeYes; // auto correction support
             playerTextField.autocapitalizationType = UITextAutocapitalizationTypeSentences; // auto capitalization support
             
-            //playerTextField.clearButtonMode = UITextFieldViewModeNever; // no clear 'x' button to the right
             [playerTextField setEnabled: YES];
             playerTextField.delegate = self;
             
-            //[cell addSubview:playerTextField];
             [cell.contentView addSubview:playerTextField];
             
+            UILabel * titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(cell.frame.origin.x+15, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height)];
+            //titleLabel.text =[eventItems objectAtIndex:[indexPath row]];
+            [cell.contentView addSubview:titleLabel];
         }
 
     }
@@ -112,11 +116,24 @@ int initialTVHeight;
     if ([indexPath section] == 0) {
         
         UITextField * textField = (UITextField*) cell.contentView.subviews[0];
+        textField.hidden=NO;
         textField.placeholder = [eventSuggestions objectAtIndex:[indexPath row]];
-        
         textField.tag = [indexPath row];
-        NSLog(@"%@", textField.placeholder);
-        cell.textLabel.text = [eventItems objectAtIndex:[indexPath row]];
+        
+        UILabel * title = (UILabel*) cell.contentView.subviews[1];
+        title.text = [eventItems objectAtIndex:[indexPath row]];
+        if((controlSwitch.selectedSegmentIndex==2 && [indexPath row]==1) || (controlSwitch.selectedSegmentIndex==0 && [indexPath row]==1)){
+            textField.hidden=YES;
+        }
+
+        if(controlSwitch.selectedSegmentIndex==0){
+            textField.frame = CGRectMake(140, 8, 185, 30);
+        }
+        if(controlSwitch.selectedSegmentIndex==1 || controlSwitch.selectedSegmentIndex==2){
+                        textField.frame = CGRectMake(15, 45, 250, 30);
+        }
+       
+        //cell.textLabel.text = [eventItems objectAtIndex:[indexPath row]];
         
     }
     
@@ -142,5 +159,31 @@ int initialTVHeight;
 
 - (IBAction)cancelButton:(id)sender {
    [self dismissViewControllerAnimated:YES completion:^(void){}];
+}
+
+- (IBAction)segmentedControl:(id)sender {
+    if(controlSwitch.selectedSegmentIndex==0){
+        tableView.rowHeight = initialRowHeight;
+        self.tableView.frame = CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y, tableView.frame.size.width, initialTVHeight);
+        // Necessary in case the keyboard is up while switching the segmented control
+        eventItems=@[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
+        eventSuggestions=@[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
+        [self.tableView reloadData];
+    }
+    else if(controlSwitch.selectedSegmentIndex==1){
+        tableView.rowHeight=100;
+        self.tableView.frame = CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y, tableView.frame.size.width, initialTVHeight);
+        // Necessary in case the keyboard is up while switching the segmented control
+        eventItems=@[@"Who are you sharing with?", @"What's on your mind?"];
+        eventSuggestions=@[@"",@""];
+        [self.tableView reloadData];
+    }else if(controlSwitch.selectedSegmentIndex==2){
+        tableView.rowHeight=100;
+        self.tableView.frame = CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y, tableView.frame.size.width, initialTVHeight);
+        // Necessary in case the keyboard is up while switching the segmented control
+        eventItems=@[@"Who are you sharing with?",@"",@"Comment"];
+        eventSuggestions=@[@"",@"",@""];
+        [self.tableView reloadData];
+    }
 }
 @end
