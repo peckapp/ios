@@ -399,6 +399,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="ZDX-Qv-276" id="gsX-G0-nsb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HDc-2x-wwf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

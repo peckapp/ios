@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PAPostViewController : UIViewController
+@interface PAPostViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 - (IBAction)cancelButton:(id)sender;
+@property (strong, nonatomic) NSArray *eventItems;
+@property (strong, nonatomic) NSArray *eventSuggestions;
 
 @end
