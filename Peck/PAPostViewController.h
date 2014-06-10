@@ -16,4 +16,5 @@
 @property (strong, nonatomic) NSArray *eventItems;
 @property (strong, nonatomic) NSArray *eventSuggestions;
 
+
 @end
