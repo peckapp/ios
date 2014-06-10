@@ -73,6 +73,10 @@
     return 88.0;
 }
 
+- (IBAction)cancelButton:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:^(void){}];
+}
+
 /*
  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
  {
