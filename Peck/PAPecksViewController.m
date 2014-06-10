@@ -27,7 +27,7 @@
 {
     [super viewDidLoad];
     self.items = @[@"Item 1", @"Item 2", @"Item 3"];
-    self.title = @"Newsfeed";
+    self.title = @"Pecks";
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -58,10 +58,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"FeedCell";
+    static NSString *cellIdentifier = @"PeckCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:@"PAFeedCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        [tableView registerNib:[UINib nibWithNibName:@"PAPeckCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
     return cell;
@@ -69,8 +69,14 @@
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Hardcoded: replace later.
-    return 88.0;
+    // Calculate cell size
+    static NSString *cellIdentifier = @"PeckCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        [tableView registerNib:[UINib nibWithNibName:@"PAPeckCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
+    return cell.frame.size.height;
 }
 
 - (IBAction)cancelButton:(id)sender {

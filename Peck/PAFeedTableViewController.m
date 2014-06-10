@@ -70,7 +70,7 @@
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Hardcoded: replace later.
-    return 88.0;
+    return 44.0;
 }
 
 /*
