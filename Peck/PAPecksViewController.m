@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
+
+
 #import "PAPecksViewController.h"
 
 @interface PAPecksViewController ()
@@ -13,6 +15,9 @@
 @end
 
 @implementation PAPecksViewController
+
+static NSString *cellIdentifier = @"PeckCell";
+static NSString *nibName = @"PAPeckCell";
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -58,24 +63,25 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"PeckCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:@"PAPeckCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        // Configure cell by loading a nib.
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
+    // Return the cell.
     return cell;
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Calculate cell size
-    static NSString *cellIdentifier = @"PeckCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:@"PAPeckCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        // Configure cell by loading a nib.
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
+    // Return cell size.
     return cell.frame.size.height;
 }
 
@@ -83,16 +89,6 @@
     [self dismissViewControllerAnimated:YES completion:^(void){}];
 }
 
-/*
- - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
- {
- UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-
- // Configure the cell...
-
- return cell;
- }
- */
 
 /*
  // Override to support conditional editing of the table view.

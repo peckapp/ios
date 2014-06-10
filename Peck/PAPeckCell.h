@@ -10,4 +10,6 @@
 
 @interface PAPeckCell : UITableViewCell
 
+@property 
+
 @end
