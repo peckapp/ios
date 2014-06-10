@@ -159,22 +159,6 @@
 			name = Post;
 			sourceTree = "<group>";
 		};
-		86292513193CBF540057CA41 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				8629251F193CBFD40057CA41 /* PAPeckCell.h */,
-				86292520193CBFD40057CA41 /* PAPeckCell.m */,
-				86292521193CBFD40057CA41 /* PAPeckCell.xib */,
-				86292524193CBFF80057CA41 /* PAEventCell.h */,
-				86292525193CBFF80057CA41 /* PAEventCell.m */,
-				86292526193CBFF80057CA41 /* PAEventCell.xib */,
-				DDDAEDD819465DCB004CE102 /* PAFeedCell.h */,
-				DDDAEDD919465DCB004CE102 /* PAFeedCell.m */,
-				DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */,
-			);
-			name = Components;
-			sourceTree = "<group>";
-		};
 		863843D2193CB739004110F5 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,22 +227,14 @@
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
 				868572281943787300287A73 /* PACoreDataProtocol.h */,
 				86D59816193768BF00F38654 /* Main.storyboard */,
-				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
-				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
-				86D5981F193768BF00F38654 /* PAEventInfoViewController.h */,
-				86D59820193768BF00F38654 /* PAEventInfoViewController.m */,
-				863843E1193CB7FD004110F5 /* PAFeedTableViewController.h */,
-				863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */,
-				863843C7193CB229004110F5 /* PADiningTableViewController.h */,
-				863843C8193CB229004110F5 /* PADiningTableViewController.m */,
-				863843CA193CB31C004110F5 /* PACirclesTableViewController.h */,
-				863843CB193CB31C004110F5 /* PACirclesTableViewController.m */,
-				863843CD193CB393004110F5 /* PAMoreTableViewController.h */,
-				863843CE193CB393004110F5 /* PAMoreTableViewController.m */,
+				DDDAEDE419479665004CE102 /* Events */,
+				DDDAEDE51947967A004CE102 /* Newsfeed */,
+				DDDAEDE619479692004CE102 /* Dining */,
+				DDDAEDE7194796BA004CE102 /* Circles */,
+				DDDAEDE8194796C6004CE102 /* Profile */,
 				DDDAEDE019475EE7004CE102 /* Pecks */,
 				863843D2193CB739004110F5 /* Login */,
 				8629250D193CBB370057CA41 /* Post */,
-				86292513193CBF540057CA41 /* Components */,
 				867651EC19462E3500C14645 /* Webservice */,
 				86D59822193768BF00F38654 /* Images.xcassets */,
 				86D59819193768BF00F38654 /* Peck.xcdatamodeld */,
@@ -310,8 +286,64 @@
 			children = (
 				DDDAEDDD19475EBA004CE102 /* PAPecksViewController.h */,
 				DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */,
+				8629251F193CBFD40057CA41 /* PAPeckCell.h */,
+				86292520193CBFD40057CA41 /* PAPeckCell.m */,
+				86292521193CBFD40057CA41 /* PAPeckCell.xib */,
 			);
 			name = Pecks;
+			sourceTree = "<group>";
+		};
+		DDDAEDE419479665004CE102 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
+				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
+				86D5981F193768BF00F38654 /* PAEventInfoViewController.h */,
+				86D59820193768BF00F38654 /* PAEventInfoViewController.m */,
+				86292524193CBFF80057CA41 /* PAEventCell.h */,
+				86292525193CBFF80057CA41 /* PAEventCell.m */,
+				86292526193CBFF80057CA41 /* PAEventCell.xib */,
+			);
+			name = Events;
+			sourceTree = "<group>";
+		};
+		DDDAEDE51947967A004CE102 /* Newsfeed */ = {
+			isa = PBXGroup;
+			children = (
+				863843E1193CB7FD004110F5 /* PAFeedTableViewController.h */,
+				863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */,
+				DDDAEDD819465DCB004CE102 /* PAFeedCell.h */,
+				DDDAEDD919465DCB004CE102 /* PAFeedCell.m */,
+				DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */,
+			);
+			name = Newsfeed;
+			sourceTree = "<group>";
+		};
+		DDDAEDE619479692004CE102 /* Dining */ = {
+			isa = PBXGroup;
+			children = (
+				863843C7193CB229004110F5 /* PADiningTableViewController.h */,
+				863843C8193CB229004110F5 /* PADiningTableViewController.m */,
+			);
+			name = Dining;
+			sourceTree = "<group>";
+		};
+		DDDAEDE7194796BA004CE102 /* Circles */ = {
+			isa = PBXGroup;
+			children = (
+				863843CA193CB31C004110F5 /* PACirclesTableViewController.h */,
+				863843CB193CB31C004110F5 /* PACirclesTableViewController.m */,
+			);
+			name = Circles;
+			sourceTree = "<group>";
+		};
+		DDDAEDE8194796C6004CE102 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				863843CD193CB393004110F5 /* PAMoreTableViewController.h */,
+				863843CE193CB393004110F5 /* PAMoreTableViewController.m */,
+			);
+			name = Profile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
