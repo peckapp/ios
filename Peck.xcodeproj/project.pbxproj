@@ -45,6 +45,7 @@
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 		DDDAEDDB19465DCB004CE102 /* PAFeedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAFeedCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */; };
+		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +118,8 @@
 		DDDAEDD819465DCB004CE102 /* PAFeedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFeedCell.h; sourceTree = "<group>"; };
 		DDDAEDD919465DCB004CE102 /* PAFeedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFeedCell.m; sourceTree = "<group>"; };
 		DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAFeedCell.xib; sourceTree = "<group>"; };
+		DDDAEDDD19475EBA004CE102 /* PAPecksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPecksViewController.h; sourceTree = "<group>"; };
+		DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPecksViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,6 +255,7 @@
 				863843CB193CB31C004110F5 /* PACirclesTableViewController.m */,
 				863843CD193CB393004110F5 /* PAMoreTableViewController.h */,
 				863843CE193CB393004110F5 /* PAMoreTableViewController.m */,
+				DDDAEDE019475EE7004CE102 /* Pecks */,
 				863843D2193CB739004110F5 /* Login */,
 				8629250D193CBB370057CA41 /* Post */,
 				86292513193CBF540057CA41 /* Components */,
@@ -299,6 +303,15 @@
 			);
 			name = Configure;
 			path = Peck;
+			sourceTree = "<group>";
+		};
+		DDDAEDE019475EE7004CE102 /* Pecks */ = {
+			isa = PBXGroup;
+			children = (
+				DDDAEDDD19475EBA004CE102 /* PAPecksViewController.h */,
+				DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */,
+			);
+			name = Pecks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -455,6 +468,7 @@
 				86292527193CBFF80057CA41 /* PAEventCell.m in Sources */,
 				86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */,
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,
+				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,
 				86D5981E193768BF00F38654 /* PAEventsViewController.m in Sources */,
 				863843DD193CB75F004110F5 /* PeckRegisterViewController.m in Sources */,
 			);
