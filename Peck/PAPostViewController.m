@@ -8,17 +8,27 @@
 
 #import "PAPostViewController.h"
 
-@interface PAPostViewController ()
+@interface PAPostViewController () {
+    NSMutableArray * events;
+}
 
 @end
 
 @implementation PAPostViewController
+
 @synthesize tableView = _tableView;
 @synthesize eventItems = _eventItems;
 @synthesize eventSuggestions = _eventSuggestions;
 @synthesize controlSwitch = _controlSwitch;
+@synthesize photo;
+@synthesize userEvents = _userEvents;
+@synthesize userMessages = _userMessages;
+@synthesize userPhotos = _userPhotos;
+
 int initialTVHeight;
 int initialRowHeight;
+BOOL controlJustSwitched; //used to know when to set the text fields to nil
+//(if the control has just switched) or when the view is simply reloading due to scrolling
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -32,21 +42,24 @@ int initialRowHeight;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    controlJustSwitched=NO;
     
     _tableView.delegate=self;
     _tableView.dataSource=self;
     initialTVHeight = _tableView.frame.size.height;
     initialRowHeight = _tableView.rowHeight;
-    
+    photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
     _eventItems=@[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
     _eventSuggestions=@[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
     
+    //[_userEvents initWithArray:@[@"",@"",@"",@"",@"",@""]];
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     gestureRecognizer.cancelsTouchesInView=NO;
     [self.tableView addGestureRecognizer:gestureRecognizer];
     // This code allows the user to dismiss the keyboard by pressing somewhere else
-    
-    
+    events = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@"",@""]];
+    //events = ;
+    NSLog(@"events: %@",events);
    }
 
 - (void)didReceiveMemoryWarning
@@ -68,8 +81,14 @@ int initialRowHeight;
 
 - (void) hideKeyboard{
      self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
-    [self.view endEditing:NO];;
+    [self.view endEditing:NO];
+    for(int i=0; i<6; i++){
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        UITextField * textField = (UITextField*) cell.contentView.subviews[0];
+        NSString * text =textField.text;
+        events[i]=text;
     }
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -109,40 +128,62 @@ int initialRowHeight;
             //titleLabel.text =[eventItems objectAtIndex:[indexPath row]];
             [cell.contentView addSubview:titleLabel];
             
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(140, 0, 60, 44)];
+            imageView.image = photo;
+            [cell.contentView addSubview:imageView];
+            
         }
-
     }
-    
     
     if ([indexPath section] == 0) {
-        
+        UIImageView *imageView = (UIImageView *) cell.contentView.subviews[2];
+        imageView.frame = CGRectMake(140, 0, 60, 44);
+        if([indexPath row] != 1 || _controlSwitch.selectedSegmentIndex==1){
+            imageView.image=nil;
+        }
         UITextField * textField = (UITextField*) cell.contentView.subviews[0];
+        if(controlJustSwitched){
+            textField.text=nil;
+        }
         textField.hidden=NO;
         textField.placeholder = [_eventSuggestions objectAtIndex:[indexPath row]];
+        textField.text = [events objectAtIndex:[indexPath row]];
         textField.tag = [indexPath row];
-        
         UILabel * title = (UILabel*) cell.contentView.subviews[1];
         title.text = [_eventItems objectAtIndex:[indexPath row]];
-        if((_controlSwitch.selectedSegmentIndex==2 && [indexPath row]==1) || (_controlSwitch.selectedSegmentIndex==0 && [indexPath row]==1)){
+        if((_controlSwitch.selectedSegmentIndex==2 && [indexPath row]==1) || (_controlSwitch.selectedSegmentIndex==0 && [indexPath row]==1))//these are the locations of both of the "add a photo cells"
+        {
             textField.hidden=YES;
+            imageView.image = photo;
+            if(_controlSwitch.selectedSegmentIndex==2){
+                imageView.frame = CGRectMake(80, 0, 150, 100);
+            }
         }
-
-        if(_controlSwitch.selectedSegmentIndex==0){
+        if(_controlSwitch.selectedSegmentIndex==0)//Events
+        {
             textField.frame = CGRectMake(140, 8, 185, 30);
         }
-        if(_controlSwitch.selectedSegmentIndex==1 || _controlSwitch.selectedSegmentIndex==2){
+        if(_controlSwitch.selectedSegmentIndex==1 || _controlSwitch.selectedSegmentIndex==2)//Messages and Photos
+        {
                         textField.frame = CGRectMake(15, 45, 250, 30);
         }
-       
-        //cell.textLabel.text = [eventItems objectAtIndex:[indexPath row]];
-        
     }
-    
-    return cell;    
+    /*if((_controlSwitch.selectedSegmentIndex==0 && [indexPath row]==5) || (_controlSwitch.selectedSegmentIndex==1 && [indexPath row]==1) || (_controlSwitch.selectedSegmentIndex==2 && [indexPath row]==2)){
+    controlJustSwitched = NO;
+    }*/
+    return cell;
 }
+
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if(([indexPath row]==1 && _controlSwitch.selectedSegmentIndex==0) || ([indexPath row]==1 && _controlSwitch.selectedSegmentIndex==2)){
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
+                                                                 delegate: self
+                                                        cancelButtonTitle: @"Cancel"
+                                                   destructiveButtonTitle: nil
+                                                        otherButtonTitles: @"Take a new photo", @"Choose from existing", nil];
+        [actionSheet showInView:self.view];
         NSLog(@"add a photo");
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -158,8 +199,7 @@ int initialRowHeight;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
-    [textField resignFirstResponder];
+    [self hideKeyboard];
     return YES;
 }
 
@@ -170,29 +210,78 @@ int initialRowHeight;
 
 
 - (IBAction)segmentedControl:(id)sender {
+    controlJustSwitched=YES;
+    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
+    // Necessary in case the keyboard is up while switching the segmented control
     if(_controlSwitch.selectedSegmentIndex==0){
         _tableView.rowHeight = initialRowHeight;
-        self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
-        // Necessary in case the keyboard is up while switching the segmented control
         _eventItems=@[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
         _eventSuggestions=@[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
-        [self.tableView reloadData];
     }
     else if(_controlSwitch.selectedSegmentIndex==1){
         _tableView.rowHeight=100;
-        self.tableView.frame = CGRectMake(_tableView.frame.origin.x,
-                                          _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
-        // Necessary in case the keyboard is up while switching the segmented control
         _eventItems=@[@"Who are you sharing with?", @"What's on your mind?"];
         _eventSuggestions=@[@"",@""];
-        [self.tableView reloadData];
     }else if(_controlSwitch.selectedSegmentIndex==2){
         _tableView.rowHeight=100;
-        self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
-        // Necessary in case the keyboard is up while switching the segmented control
         _eventItems=@[@"Who are you sharing with?",@"",@"Comment"];
         _eventSuggestions=@[@"",@"",@""];
-        [self.tableView reloadData];
     }
+    [self.tableView reloadData];
+    controlJustSwitched = NO;
+}
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            [self takeNewPhotoFromCamera];
+            break;
+        case 1:
+            [self choosePhotoFromExistingImages];
+        default:
+            break;
+    }
+}
+- (void)takeNewPhotoFromCamera
+{
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+    {
+        UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+        controller.sourceType = UIImagePickerControllerSourceTypeCamera;
+        //controller.allowsEditing = NO;
+        //controller.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType: UIImagePickerControllerSourceTypeCamera];
+        
+        controller.delegate = self;
+        [self presentViewController: controller animated: YES completion: nil];
+    }
+}
+-(void)choosePhotoFromExistingImages
+{
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary])
+    {
+        UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+        controller.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        controller.modalPresentationStyle = UIModalPresentationCurrentContext;
+        controller.delegate = self;
+        [self presentViewController: controller animated: YES completion: nil];
+        
+    }
+}
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    NSLog(@"picked photo");
+    [self dismissViewControllerAnimated: YES completion: nil];
+    UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
+    photo = image;
+    UIImageView * imageView = (UIImageView *)[self.view viewWithTag:6];
+    imageView.image =photo;
+    //UIImageView *imageView = [[UIImageView alloc] initWithImage: image];
+    //[self.view addSubview: imageView];
+    [self.tableView reloadData];
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.1);
+}
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
+{
+    [self dismissViewControllerAnimated: YES completion: nil];
 }
 @end
