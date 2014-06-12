@@ -104,6 +104,8 @@
             
         } else if ([identifier isEqualToString:PAProfileIdentifier]) {
             
+        } else if ([identifier isEqualToString:PAPrimaryIdentifier]) {
+
         }
     }
 }

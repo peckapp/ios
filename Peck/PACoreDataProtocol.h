@@ -12,6 +12,7 @@
 #define PAAddIdentifier @"add"
 #define PACirclesIdentifier @"circles"
 #define PAProfileIdentifier @"profile"
+#define PAPrimaryIdentifier @"primary"
 
 
 @protocol PACoreDataProtocol

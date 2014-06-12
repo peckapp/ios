@@ -52,6 +52,7 @@
     }];
     // assigns the viewControllers to the dropdownViewController class
     dropdownViewController.secondaryViewControllers = [svcCollector copy];
+    dropdownViewController.primaryViewController = [storyBoard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
     
     return YES;
     
