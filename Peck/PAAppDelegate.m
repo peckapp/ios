@@ -11,6 +11,7 @@
 #import "PAEventsViewController.h"
 #import "PACoreDataProtocol.h"
 #import "ConfigureViewController.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @implementation PAAppDelegate
 
@@ -23,14 +24,31 @@
     // Override point for customization after application launch.
  
     // iterates through all subviews of the root tabcontroller and sets pointer to the managedObjectContext
-    ConfigureViewController* configureController = (ConfigureViewController *)self.window.rootViewController;
-    configureController.managedObjectContext = self.managedObjectContext;
-      
     
+    //ConfigureViewController* configureController = (ConfigureViewController *)self.window.rootViewController;
+    //configureController.managedObjectContext = self.managedObjectContext;
+    [FBLoginView class];
+    UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
+    UIViewController *initViewController = [storyBoard instantiateInitialViewController];
+    [self.window setRootViewController:initViewController];
+    //initViewController.managedObjectContext = self.managedObjectContext;
+
     return YES;
     
 }
-							
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    
+    // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
+    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+    
+    // You can add your app-specific url handling code here if needed
+    
+    return wasHandled;
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

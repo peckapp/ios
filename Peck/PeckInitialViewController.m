@@ -7,6 +7,7 @@
 //
 
 #import "PeckInitialViewController.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @interface PeckInitialViewController ()
 
@@ -29,12 +30,10 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.schoolList = @[@"Williams",@"Exeter",@"Middlebury"];
-    
-    self.schoolPicker.dataSource = self;
-    self.schoolPicker.delegate = self;
-    
-    [self.schoolPicker reloadAllComponents];
+    FBLoginView *loginView = [[FBLoginView alloc] init];
+    loginView.frame = CGRectOffset(loginView.frame, (self.view.center.x - (loginView.frame.size.width / 2)), 375);
+    loginView.delegate=self;
+    [self.view addSubview:loginView];
 }
 
 - (void)didReceiveMemoryWarning
@@ -45,38 +44,37 @@
 
 #pragma mark - Navigation
 
+
+
+- (void)loginViewFetchedUserInfo:(FBLoginView *)loginView
+                            user:(id<FBGraphUser>)user {
+    //self.profilePictureView.profileID = user.id;
+    self.nameLabel.text = user.name;
+    double delayInSeconds = 0.1;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
+                                                                 bundle: nil];
+        
+        UIViewController *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PostController"];
+        
+        [self presentViewController:controller animated:YES completion:nil];
+        
+        //[activityIndicator stopAnimating];
+    });
+}
+
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     //sets the school string in NSUserDefaults for future reference
-    [[NSUserDefaults standardUserDefaults] setObject:self.schoolList[[self.schoolPicker selectedRowInComponent:0]] forKey:@"school"];
+    //[[NSUserDefaults standardUserDefaults] setObject:self.schoolList[[self.schoolPicker selectedRowInComponent:0]] forKey:@"school"];
     
     //sets the loginSaved BOOL to YES to avoid login screen in the future
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"loginSaved"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-#pragma mark - Picker view data source
 
--(NSInteger) numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
--(NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return [self.schoolList count];
-}
-
-#pragma mark - Picker view delegate
-
--(NSString*) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    return self.schoolList[row];
-}
-
--(void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    
-}
 
 @end
