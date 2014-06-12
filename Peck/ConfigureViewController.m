@@ -7,7 +7,7 @@
 //
 
 #import "ConfigureViewController.h"
-#import "PADiningTableViewController.h"
+#import "PADropdownViewController.h"
 
 @interface ConfigureViewController ()
 
@@ -78,14 +78,17 @@
 
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    UITabBarController *tabController;
-    tabController = segue.destinationViewController;
-    NSLog(@"%@",tabController.viewControllers);
-    for (UINavigationController* navController in tabController.viewControllers) {
+    
+    PADropdownViewController *dropdownController = (PADropdownViewController*)segue.destinationViewController;
+    
+    NSLog(@"%@",dropdownController.secondaryViewControllers);
+    
+    /*
+    for (UINavigationController* navController in dropdownController.secondaryViewControllers) {
         UIViewController <PACoreDataProtocol> * viewController = (UIViewController <PACoreDataProtocol> *)navController.topViewController;
         viewController.managedObjectContext = self.managedObjectContext;
     }
-    
+    */
 
 }
 

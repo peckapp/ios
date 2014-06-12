@@ -93,6 +93,8 @@
 		863843E6193CBA69004110F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		867651ED19462E5200C14645 /* old_webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = old_webservice.h; sourceTree = "<group>"; };
 		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
+		86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownViewController.h; sourceTree = "<group>"; };
+		86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADropdownViewController.m; sourceTree = "<group>"; };
 		86D597FF193768BF00F38654 /* Peck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86D59802193768BF00F38654 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		86D59804193768BF00F38654 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -244,12 +246,12 @@
 		86D5980A193768BF00F38654 /* Peck */ = {
 			isa = PBXGroup;
 			children = (
-				A4B772E31945FEFB00A31252 /* ConfigureViewController.h */,
-				A4B772E41945FEFB00A31252 /* ConfigureViewController.m */,
+				868572281943787300287A73 /* PACoreDataProtocol.h */,
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
-				868572281943787300287A73 /* PACoreDataProtocol.h */,
 				86D59816193768BF00F38654 /* Main.storyboard */,
+				86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */,
+				86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */,
 				DDDAEDE419479665004CE102 /* Events */,
 				DDDAEDE51947967A004CE102 /* Newsfeed */,
 				DDDAEDE619479692004CE102 /* Dining */,
@@ -299,6 +301,8 @@
 		A4B772DD1945F8DB00A31252 /* Configure */ = {
 			isa = PBXGroup;
 			children = (
+				A4B772E31945FEFB00A31252 /* ConfigureViewController.h */,
+				A4B772E41945FEFB00A31252 /* ConfigureViewController.m */,
 			);
 			name = Configure;
 			path = Peck;
@@ -521,6 +525,7 @@
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				86D59821193768BF00F38654 /* PAEventInfoViewController.m in Sources */,
+				86D4A7251948FC4D008D9B25 /* PADropdownViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PeckInitialViewController.m in Sources */,
 				863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */,
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
