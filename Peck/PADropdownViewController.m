@@ -112,7 +112,7 @@
 
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     UIViewController *selectedViewController = self.secondaryViewControllers[item.tag];
-    [self presentViewController:selectedViewController animated:YES completion:nil];
+    [self performSegueWithIdentifier:selectedViewController.restorationIdentifier sender:self];
 }
 
 # pragma mark - PADropdownViewControllerDelegate methods
@@ -139,6 +139,9 @@
 -(void) perform
 {
     // make whatever view controller calls are necessary to perform the transition you want
+    
+    // this is a simple transition, needs to be customized further
+    [self.sourceViewController presentViewController:self.destinationViewController animated:YES completion:nil];
 }
 
 @end

@@ -35,16 +35,23 @@
     // passes the mamangedObjectContext for Core Data
     dropdownViewController.managedObjectContext = self.managedObjectContext;
     
-    dropdownViewController.secondaryViewControllers = @[[storyBoard instantiateViewControllerWithIdentifier:PAPecksIdentifier],
-                                                        [storyBoard instantiateViewControllerWithIdentifier:PAFeedIdentifier],
-                                                        [storyBoard instantiateViewControllerWithIdentifier:PAAddIdentifier],
-                                                        [storyBoard instantiateViewControllerWithIdentifier:PACirclesIdentifier],
-                                                        [storyBoard instantiateViewControllerWithIdentifier:PAProfileIdentifier]];
-    // sets the tags for each tabBarItem to the appropriate index
-    [dropdownViewController.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
-        UIViewController *viewController = (UIViewController*)obj;
+    NSArray * identifiers = @[PAPecksIdentifier,
+                              PAFeedIdentifier,
+                              PAAddIdentifier,
+                              PACirclesIdentifier,
+                              PAProfileIdentifier];
+    
+    // creates the viewControllers for the identifiers and sets restorationIdentifier and the tags for each tabBarItem to the appropriate index
+    NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:5];
+    [identifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
+        NSString * identifier = (NSString*)obj;
+        UIViewController *viewController = [storyBoard instantiateViewControllerWithIdentifier:identifier];
         viewController.tabBarItem.tag = idx;
+        viewController.restorationIdentifier = identifier;
+        [svcCollector insertObject:viewController atIndex:idx];
     }];
+    // assigns the viewControllers to the dropdownViewController class
+    dropdownViewController.secondaryViewControllers = [svcCollector copy];
     
     return YES;
     
