@@ -22,6 +22,7 @@
 		863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */; };
 		863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */; };
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
+		86D4A7251948FC4D008D9B25 /* PADropdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */; };
 		86D59803193768BF00F38654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59802193768BF00F38654 /* Foundation.framework */; };
 		86D59805193768BF00F38654 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59804193768BF00F38654 /* CoreGraphics.framework */; };
 		86D59807193768BF00F38654 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59806193768BF00F38654 /* UIKit.framework */; };
@@ -87,6 +88,8 @@
 		863843E6193CBA69004110F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		867651ED19462E5200C14645 /* old_webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = old_webservice.h; sourceTree = "<group>"; };
 		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
+		86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownViewController.h; sourceTree = "<group>"; };
+		86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADropdownViewController.m; sourceTree = "<group>"; };
 		86D597FF193768BF00F38654 /* Peck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86D59802193768BF00F38654 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		86D59804193768BF00F38654 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -227,6 +230,8 @@
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
 				868572281943787300287A73 /* PACoreDataProtocol.h */,
 				86D59816193768BF00F38654 /* Main.storyboard */,
+				86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */,
+				86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */,
 				DDDAEDE419479665004CE102 /* Events */,
 				DDDAEDE51947967A004CE102 /* Newsfeed */,
 				DDDAEDE619479692004CE102 /* Dining */,
@@ -396,6 +401,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Peck;
 				TargetAttributes = {
+					86D597FE193768BF00F38654 = {
+						DevelopmentTeam = P83C3BYK4B;
+					};
 					86D59827193768C000F38654 = {
 						TestTargetID = 86D597FE193768BF00F38654;
 					};
@@ -494,6 +502,7 @@
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				86D59821193768BF00F38654 /* PAEventInfoViewController.m in Sources */,
+				86D4A7251948FC4D008D9B25 /* PADropdownViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PeckInitialViewController.m in Sources */,
 				863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */,
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
@@ -628,6 +637,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Peck/Peck-Prefix.pch";
 				INFOPLIST_FILE = "Peck/Peck-Info.plist";
@@ -642,6 +652,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Peck/Peck-Prefix.pch";
 				INFOPLIST_FILE = "Peck/Peck-Info.plist";
