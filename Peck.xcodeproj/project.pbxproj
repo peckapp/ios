@@ -86,6 +86,7 @@
 		863843E1193CB7FD004110F5 /* PAFeedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFeedTableViewController.h; sourceTree = "<group>"; };
 		863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFeedTableViewController.m; sourceTree = "<group>"; };
 		863843E6193CBA69004110F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		86492A5A1949F8960035935F /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		867651ED19462E5200C14645 /* old_webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = old_webservice.h; sourceTree = "<group>"; };
 		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
 		86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownViewController.h; sourceTree = "<group>"; };
@@ -136,6 +137,7 @@
 				86D59807193768BF00F38654 /* UIKit.framework in Frameworks */,
 				86D59803193768BF00F38654 /* Foundation.framework in Frameworks */,
 				BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */,
+				86492A5B1949F8960035935F /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +219,7 @@
 				86D59808193768BF00F38654 /* CoreData.framework */,
 				86D59829193768C000F38654 /* XCTest.framework */,
 				B42EB121A7584B6DAFCD7624 /* libPods.a */,
+				86492A5A1949F8960035935F /* FacebookSDK.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -642,6 +645,7 @@
 				GCC_PREFIX_HEADER = "Peck/Peck-Prefix.pch";
 				INFOPLIST_FILE = "Peck/Peck-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -657,6 +661,7 @@
 				GCC_PREFIX_HEADER = "Peck/Peck-Prefix.pch";
 				INFOPLIST_FILE = "Peck/Peck-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
