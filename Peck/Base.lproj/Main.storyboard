@@ -237,7 +237,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3k8-vG-VKb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="788" y="1953"/>
+            <point key="canvasLocation" x="-58" y="1719"/>
         </scene>
         <!--Events View Controller - Master-->
         <scene sceneID="VgW-fR-Quf">
@@ -376,10 +376,10 @@
             </objects>
             <point key="canvasLocation" x="-920" y="1107"/>
         </scene>
-        <!--Post View Controller-->
+        <!--Post View Controller - Add-->
         <scene sceneID="YJE-x1-rpl">
             <objects>
-                <viewController storyboardIdentifier="add" id="cUM-GN-TXW" customClass="PAPostViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="add" title="Add" id="cUM-GN-TXW" customClass="PAPostViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="cuc-Wn-l49"/>
                         <viewControllerLayoutGuide type="bottom" id="fCl-jb-lZS"/>

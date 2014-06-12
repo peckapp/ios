@@ -32,11 +32,19 @@
     [self.window setRootViewController:initViewController];
     
     PADropdownViewController * dropdownViewController = (PADropdownViewController*)initViewController;
-    dropdownViewController.secondaryViewControllers = @[[storyBoard instantiateViewControllerWithIdentifier:PASeguePecksIdentifier],
-                                                        [storyBoard instantiateViewControllerWithIdentifier:PASegueFeedIdentifier],
-                                                        [storyBoard instantiateViewControllerWithIdentifier:PASegueAddIdentifier],
-                                                        [storyBoard instantiateViewControllerWithIdentifier:PASegueCirclesIdentifier],
-                                                        [storyBoard instantiateViewControllerWithIdentifier:PASegueProfileIdentifier]];
+    // passes the mamangedObjectContext for Core Data
+    dropdownViewController.managedObjectContext = self.managedObjectContext;
+    
+    dropdownViewController.secondaryViewControllers = @[[storyBoard instantiateViewControllerWithIdentifier:PAPecksIdentifier],
+                                                        [storyBoard instantiateViewControllerWithIdentifier:PAFeedIdentifier],
+                                                        [storyBoard instantiateViewControllerWithIdentifier:PAAddIdentifier],
+                                                        [storyBoard instantiateViewControllerWithIdentifier:PACirclesIdentifier],
+                                                        [storyBoard instantiateViewControllerWithIdentifier:PAProfileIdentifier]];
+    // sets the tags for each tabBarItem to the appropriate index
+    [dropdownViewController.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
+        UIViewController *viewController = (UIViewController*)obj;
+        viewController.tabBarItem.tag = idx;
+    }];
     
     return YES;
     

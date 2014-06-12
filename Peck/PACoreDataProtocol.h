@@ -7,15 +7,16 @@
 //
 
 // these are hopefully temporary macros to access the main storyboard's childviewcontrollers of the dropdown
-#define PASeguePecksIdentifier @"pecks"
-#define PASegueFeedIdentifier @"feed"
-#define PASegueAddIdentifier @"add"
-#define PASegueCirclesIdentifier @"circles"
-#define PASegueProfileIdentifier @"profile"
+#define PAPecksIdentifier @"pecks"
+#define PAFeedIdentifier @"feed"
+#define PAAddIdentifier @"add"
+#define PACirclesIdentifier @"circles"
+#define PAProfileIdentifier @"profile"
 
 
 @protocol PACoreDataProtocol
 
+@required
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end

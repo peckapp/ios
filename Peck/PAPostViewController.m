@@ -39,6 +39,7 @@ int initialRowHeight;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     _tableView.delegate=self;
     _tableView.dataSource=self;
     initialTVHeight = _tableView.frame.size.height;
@@ -54,8 +55,7 @@ int initialRowHeight;
     // This code allows the user to dismiss the keyboard by pressing somewhere else
     
     _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-    
-   }
+}
 
 - (void)didReceiveMemoryWarning
 {

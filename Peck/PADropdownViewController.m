@@ -46,15 +46,26 @@
     tabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 49)];    
     
     if (self.secondaryViewControllers == nil) {
-        // what this should really do is try to access the connected manual triggered segues from the storyboard, but I do not know how
+        // what this should really do is try to access the connected manual triggered segues from the storyboard, but not sure how
         tabBar.items = @[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag:1],
                          [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemContacts tag:2],
                          [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFeatured tag:3]];
     } else {
-        // builds the array of tabBarItems throgh enumeration into a mutable array and then copying these values into a static array
+        // does the necessary setup for each viewcontroller, retreiving tabBarItems and passing it the managedObject Context
         NSMutableArray * tempTabBarItems = [NSMutableArray arrayWithCapacity:self.secondaryViewControllers.count];
         [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [tempTabBarItems insertObject:((UIViewController*)obj).tabBarItem atIndex:idx];
+            UIViewController *viewController = (UIViewController*)obj;
+            if ([viewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
+                UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)viewController;
+                cdViewController.managedObjectContext = self.managedObjectContext;
+            } else if ([viewController isMemberOfClass:[UINavigationController class]]) { // passes mOC to topViewController of NavController if possible
+                UIViewController * topViewController = ((UINavigationController*)viewController).topViewController;
+                if ([topViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) {
+                    UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)topViewController;
+                    cdViewController.managedObjectContext = self.managedObjectContext;
+                }
+            }
+            [tempTabBarItems insertObject:viewController.tabBarItem atIndex:idx];
         }];
         tabBar.items = [tempTabBarItems copy];
     }
@@ -83,15 +94,15 @@
 {
     NSString *identifier = segue.identifier;
     if ([segue isKindOfClass:[PADropdownViewControllerSegue class]]) {
-        if ([identifier isEqualToString:PASeguePecksIdentifier]) {
+        if ([identifier isEqualToString:PAPecksIdentifier]) {
             
-        } else if ([identifier isEqualToString:PASegueFeedIdentifier]) {
+        } else if ([identifier isEqualToString:PAFeedIdentifier]) {
             
-        } else if ([identifier isEqualToString:PASegueAddIdentifier]) {
+        } else if ([identifier isEqualToString:PAAddIdentifier]) {
             
-        } else if ([identifier isEqualToString:PASegueCirclesIdentifier]) {
+        } else if ([identifier isEqualToString:PACirclesIdentifier]) {
             
-        } else if ([identifier isEqualToString:PASegueProfileIdentifier]) {
+        } else if ([identifier isEqualToString:PAProfileIdentifier]) {
             
         }
     }

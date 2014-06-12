@@ -45,7 +45,7 @@
 
 - (void)showPecks:(id)sender
 {
-    PAPecksViewController * controller = [self.storyboard instantiateViewControllerWithIdentifier:@"PecksController"];
+    PAPecksViewController * controller = [self.storyboard instantiateViewControllerWithIdentifier:PAPecksIdentifier];
     [self presentViewController:controller animated:YES completion:nil];
 }
 
@@ -55,7 +55,7 @@
     NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
     NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:[entity name] inManagedObjectContext:context];
     
-    PAPostViewController * pvc = [self.storyboard instantiateViewControllerWithIdentifier:@"PostController"];
+    PAPostViewController * pvc = [self.storyboard instantiateViewControllerWithIdentifier:PAAddIdentifier];
     [self presentViewController:pvc animated:YES completion:nil];
        
     // If appropriate, configure the new managed object.
