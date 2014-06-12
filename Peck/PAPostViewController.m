@@ -9,7 +9,7 @@
 #import "PAPostViewController.h"
 
 @interface PAPostViewController () {
-    NSMutableArray * events;
+    NSMutableArray * userEvents;
 }
 
 @end
@@ -22,13 +22,10 @@
 @synthesize controlSwitch = _controlSwitch;
 @synthesize photo;
 @synthesize userEvents = _userEvents;
-@synthesize userMessages = _userMessages;
-@synthesize userPhotos = _userPhotos;
+
 
 int initialTVHeight;
 int initialRowHeight;
-BOOL controlJustSwitched; //used to know when to set the text fields to nil
-//(if the control has just switched) or when the view is simply reloading due to scrolling
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -42,8 +39,6 @@ BOOL controlJustSwitched; //used to know when to set the text fields to nil
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    controlJustSwitched=NO;
-    
     _tableView.delegate=self;
     _tableView.dataSource=self;
     initialTVHeight = _tableView.frame.size.height;
@@ -57,9 +52,9 @@ BOOL controlJustSwitched; //used to know when to set the text fields to nil
     gestureRecognizer.cancelsTouchesInView=NO;
     [self.tableView addGestureRecognizer:gestureRecognizer];
     // This code allows the user to dismiss the keyboard by pressing somewhere else
-    events = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@"",@""]];
-    //events = ;
-    NSLog(@"events: %@",events);
+    
+    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+    
    }
 
 - (void)didReceiveMemoryWarning
@@ -82,13 +77,7 @@ BOOL controlJustSwitched; //used to know when to set the text fields to nil
 - (void) hideKeyboard{
      self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
     [self.view endEditing:NO];
-    for(int i=0; i<6; i++){
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        UITextField * textField = (UITextField*) cell.contentView.subviews[0];
-        NSString * text =textField.text;
-        events[i]=text;
     }
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -103,7 +92,7 @@ BOOL controlJustSwitched; //used to know when to set the text fields to nil
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    NSLog(@"cell for row at index path: %i", [indexPath row]);
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
@@ -142,12 +131,9 @@ BOOL controlJustSwitched; //used to know when to set the text fields to nil
             imageView.image=nil;
         }
         UITextField * textField = (UITextField*) cell.contentView.subviews[0];
-        if(controlJustSwitched){
-            textField.text=nil;
-        }
         textField.hidden=NO;
         textField.placeholder = [_eventSuggestions objectAtIndex:[indexPath row]];
-        textField.text = [events objectAtIndex:[indexPath row]];
+        textField.text = [_userEvents objectAtIndex:[indexPath row]];
         textField.tag = [indexPath row];
         UILabel * title = (UILabel*) cell.contentView.subviews[1];
         title.text = [_eventItems objectAtIndex:[indexPath row]];
@@ -165,12 +151,11 @@ BOOL controlJustSwitched; //used to know when to set the text fields to nil
         }
         if(_controlSwitch.selectedSegmentIndex==1 || _controlSwitch.selectedSegmentIndex==2)//Messages and Photos
         {
-                        textField.frame = CGRectMake(15, 45, 250, 30);
+            textField.frame = CGRectMake(15, 45, 250, 30);
         }
     }
-    /*if((_controlSwitch.selectedSegmentIndex==0 && [indexPath row]==5) || (_controlSwitch.selectedSegmentIndex==1 && [indexPath row]==1) || (_controlSwitch.selectedSegmentIndex==2 && [indexPath row]==2)){
-    controlJustSwitched = NO;
-    }*/
+    //if([indexPath row]==0 || [indexPath row]==6)
+    //[self updateEventArray];
     return cell;
 }
 
@@ -203,6 +188,37 @@ BOOL controlJustSwitched; //used to know when to set the text fields to nil
     return YES;
 }
 
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    NSLog(@"didEndEditing");
+    [self updateEventArray];
+}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [self updateEventArray];
+}
+
+-(void)updateEventArray{
+    
+    int count=0;
+    if(_controlSwitch.selectedSegmentIndex==0){
+        count=6;
+    }
+    if(_controlSwitch.selectedSegmentIndex==1){
+        count=2;
+    }
+    if(_controlSwitch.selectedSegmentIndex==2){
+        count=3;
+    }
+    for(int i=0; i<count; i++){
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        UITextField * textField = (UITextField*) cell.contentView.subviews[0];
+        NSString * text =textField.text;
+        if(text!=nil)
+            _userEvents[i]=text;
+         NSLog(@"%@", _userEvents);
+    }
+   
+}
+
 
 - (IBAction)cancelButton:(id)sender {
    [self dismissViewControllerAnimated:YES completion:^(void){}];
@@ -210,8 +226,9 @@ BOOL controlJustSwitched; //used to know when to set the text fields to nil
 
 
 - (IBAction)segmentedControl:(id)sender {
-    controlJustSwitched=YES;
-    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
+    photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
+    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+   self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
     // Necessary in case the keyboard is up while switching the segmented control
     if(_controlSwitch.selectedSegmentIndex==0){
         _tableView.rowHeight = initialRowHeight;
@@ -228,7 +245,6 @@ BOOL controlJustSwitched; //used to know when to set the text fields to nil
         _eventSuggestions=@[@"",@"",@""];
     }
     [self.tableView reloadData];
-    controlJustSwitched = NO;
 }
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
