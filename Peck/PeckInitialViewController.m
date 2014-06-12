@@ -57,7 +57,7 @@
         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
                                                                  bundle: nil];
         
-        UIViewController *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PostController"];
+        UIViewController *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventsController"];
         
         [self presentViewController:controller animated:YES completion:nil];
         
