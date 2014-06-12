@@ -15,6 +15,8 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
+@protocol PADropdownViewControllerDelegate; //allows delegate to be referenced in interface
+
 @interface PADropdownViewController : UIViewController
 
 // viewcontroller that displays the primary content
@@ -34,6 +36,9 @@
 // Contains all the icons at the top of the screen,
 // handling touches to those items that cause their associated views to drop down
 @property (nonatomic,readonly) UITabBar * tabBar;
+
+//
+@property(nonatomic, assign) id<PADropdownViewControllerDelegate> delegate;
 
 @end
 
@@ -72,3 +77,12 @@
                                               toViewController:(UIViewController *)toVC ;
 
 @end
+
+// this allows the relationships to be defined on a storyboard
+@interface PADropdownViewControllerSegue : UIStoryboardSegue
+
+// copied in from SWRevealViewController
+@property (strong) void(^performBlock)( PADropdownViewControllerSegue* segue, UIViewController* svc, UIViewController* dvc );
+
+@end
+

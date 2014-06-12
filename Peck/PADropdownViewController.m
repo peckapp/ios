@@ -23,6 +23,11 @@
     return self;
 }
 
+- (void)loadView
+{
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -45,5 +50,26 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+@end
+
+# pragma mark - PADropdownViewController custom Segue methods
+
+@implementation PADropdownViewControllerSegue
+
+-(id)initWithIdentifier:(NSString *)identifier source:(UIViewController *)source destination:(UIViewController *)destination
+{
+    
+    self = [super initWithIdentifier:identifier source:source destination:destination];
+    if (self) {
+        // do custom segue stuff
+    }
+    return self;
+}
+
+-(void) perform
+{
+    // make whatever view controller calls are necessary to perform the transition you want
+}
 
 @end
