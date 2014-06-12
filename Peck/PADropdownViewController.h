@@ -20,16 +20,20 @@
 @interface PADropdownViewController : UIViewController
 
 // viewcontroller that displays the primary content
-@property (strong, nonatomic) UIViewController * primaryViewController;
+@property (nonatomic) UIViewController * primaryViewController;
 
 // array of viewcontrollers that drop down on button clicks to display their content
 // order of the elements in the array determines their presentation order, left to right.
-@property (strong, nonatomic) NSArray * secondaryViewControllers;
+// These viewControllers MUST have these properties:
+//  - custom PADropdownViewControllerSegues pointing to them in the storyboard
+//  - title properties set and their associates segues configured with identifiers containing the same string
+//  - tabBarItem properties set with UITabBarItems
+@property (nonatomic) NSArray * secondaryViewControllers;
 - (void)setSecondaryViewControllers:(NSArray *)secondaryViewControllers animated:(BOOL)animated;
 
 // points temporarily to the viewcontroller that is active
 // this could be either the primary or one of the secondaries, depending on the current state
-@property (weak, nonatomic) UIViewController * activeViewController;
+@property (nonatomic) UIViewController * activeViewController;
 // the location of the activeViewController in the secondaryViewControllers array. nil if primary is active
 @property (nonatomic) NSUInteger * activeIndex;
 

@@ -10,9 +10,16 @@
 
 @interface PADropdownViewController ()
 
+
+@property (nonatomic) BOOL animated;
+// the common name between the storyboard identifiers and the title properties of the secondaryViewControllers
+@property (nonatomic) NSArray * secondaryIdentifiers;
+
 @end
 
 @implementation PADropdownViewController
+
+@synthesize tabBar;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -23,15 +30,36 @@
     return self;
 }
 
+// this method handles loading in the view
 - (void)loadView
 {
-    
+    //[super loadView];
+    UIView *contentView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
+    contentView.backgroundColor = [UIColor whiteColor];
+    self.view = contentView;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    tabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 49)];
+    /*
+    tabBar.items = @[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag:1],
+                     [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemContacts tag:2],
+                     [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFeatured tag:3]];
+     */
+    
+    // builds the array of tabBarItems throgh enumeration into a mutable array and then copying these values into a static array
+    NSMutableArray * tempTabBarItems = [NSMutableArray arrayWithCapacity:self.secondaryViewControllers.count];
+    [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [tempTabBarItems insertObject:((UIViewController*)obj).tabBarItem atIndex:idx];
+    }];
+    tabBar.items = [tempTabBarItems copy];
+    
+    
+    [self.view addSubview:tabBar];
 }
 
 - (void)didReceiveMemoryWarning
@@ -40,16 +68,39 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+#pragma mark Assigning ViewControllers
+-(void) setSecondaryViewControllers:(NSArray *)secondaryViewControllers animated:(BOOL)animated
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    self.animated = animated;
+    self.secondaryViewControllers = secondaryViewControllers;
 }
-*/
+
+#pragma mark Storyboard Support
+
+static NSString * const PASeguePecksIdentifier = @"pecks";
+static NSString * const PASegueFeedIdentifier = @"feed";
+static NSString * const PASegueAddIdentifier = @"add";
+static NSString * const PASegueCirclesIdentifier = @"circles";
+static NSString * const PASegueProfileIdentifier = @"profile";
+
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSString *identifier = segue.identifier;
+    if ([segue isKindOfClass:[PADropdownViewControllerSegue class]]) {
+        if ([identifier isEqualToString:PASeguePecksIdentifier]) {
+            
+        } else if ([identifier isEqualToString:PASegueFeedIdentifier]) {
+            
+        } else if ([identifier isEqualToString:PASegueAddIdentifier]) {
+            
+        } else if ([identifier isEqualToString:PASegueCirclesIdentifier]) {
+            
+        } else if ([identifier isEqualToString:PASegueProfileIdentifier]) {
+            
+        }
+    }
+}
 
 @end
 

@@ -224,8 +224,6 @@
 		86D5980A193768BF00F38654 /* Peck */ = {
 			isa = PBXGroup;
 			children = (
-				A4B772E31945FEFB00A31252 /* ConfigureViewController.h */,
-				A4B772E41945FEFB00A31252 /* ConfigureViewController.m */,
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
 				868572281943787300287A73 /* PACoreDataProtocol.h */,
@@ -281,6 +279,8 @@
 		A4B772DD1945F8DB00A31252 /* Configure */ = {
 			isa = PBXGroup;
 			children = (
+				A4B772E31945FEFB00A31252 /* ConfigureViewController.h */,
+				A4B772E41945FEFB00A31252 /* ConfigureViewController.m */,
 			);
 			name = Configure;
 			path = Peck;
