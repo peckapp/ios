@@ -14,10 +14,11 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import "PACoreDataProtocol.h"
 
 @protocol PADropdownViewControllerDelegate; //allows delegate to be referenced in interface
 
-@interface PADropdownViewController : UIViewController
+@interface PADropdownViewController : UIViewController <PACoreDataProtocol,UITabBarDelegate>
 
 // viewcontroller that displays the primary content
 @property (nonatomic) UIViewController * primaryViewController;
@@ -41,8 +42,11 @@
 // handling touches to those items that cause their associated views to drop down
 @property (nonatomic,readonly) UITabBar * tabBar;
 
-//
+// acts as its own delegate
 @property(nonatomic, assign) id<PADropdownViewControllerDelegate> delegate;
+
+// the core data managed object context to be passed to the child viewControllers
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end
 

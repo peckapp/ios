@@ -137,7 +137,6 @@
 				86D59807193768BF00F38654 /* UIKit.framework in Frameworks */,
 				86D59803193768BF00F38654 /* Foundation.framework in Frameworks */,
 				BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */,
-				86492A5B1949F8960035935F /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,9 +226,9 @@
 		86D5980A193768BF00F38654 /* Peck */ = {
 			isa = PBXGroup;
 			children = (
+				868572281943787300287A73 /* PACoreDataProtocol.h */,
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
-				868572281943787300287A73 /* PACoreDataProtocol.h */,
 				86D59816193768BF00F38654 /* Main.storyboard */,
 				86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */,
 				86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */,

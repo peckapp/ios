@@ -11,6 +11,7 @@
 #import "PAEventsViewController.h"
 #import "PACoreDataProtocol.h"
 #import "ConfigureViewController.h"
+#import "PADropdownViewController.h"
 
 @implementation PAAppDelegate
 
@@ -23,9 +24,19 @@
     // Override point for customization after application launch.
  
     // iterates through all subviews of the root tabcontroller and sets pointer to the managedObjectContext
-    ConfigureViewController* configureController = (ConfigureViewController *)self.window.rootViewController;
-    configureController.managedObjectContext = self.managedObjectContext;
-      
+    //ConfigureViewController* configureController = (ConfigureViewController *)self.window.rootViewController;
+    //configureController.managedObjectContext = self.managedObjectContext;
+    
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *initViewController = [storyBoard instantiateInitialViewController];
+    [self.window setRootViewController:initViewController];
+    
+    PADropdownViewController * dropdownViewController = (PADropdownViewController*)initViewController;
+    dropdownViewController.secondaryViewControllers = @[[storyBoard instantiateViewControllerWithIdentifier:PASeguePecksIdentifier],
+                                                        [storyBoard instantiateViewControllerWithIdentifier:PASegueFeedIdentifier],
+                                                        [storyBoard instantiateViewControllerWithIdentifier:PASegueAddIdentifier],
+                                                        [storyBoard instantiateViewControllerWithIdentifier:PASegueCirclesIdentifier],
+                                                        [storyBoard instantiateViewControllerWithIdentifier:PASegueProfileIdentifier]];
     
     return YES;
     

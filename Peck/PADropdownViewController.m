@@ -33,7 +33,7 @@
 // this method handles loading in the view
 - (void)loadView
 {
-    //[super loadView];
+    // must not call [super loadView];
     UIView *contentView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     contentView.backgroundColor = [UIColor whiteColor];
     self.view = contentView;
@@ -42,23 +42,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
-    tabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 49)];
-    /*
-    tabBar.items = @[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag:1],
-                     [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemContacts tag:2],
-                     [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFeatured tag:3]];
-     */
+    tabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 49)];    
     
-    // builds the array of tabBarItems throgh enumeration into a mutable array and then copying these values into a static array
-    NSMutableArray * tempTabBarItems = [NSMutableArray arrayWithCapacity:self.secondaryViewControllers.count];
-    [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [tempTabBarItems insertObject:((UIViewController*)obj).tabBarItem atIndex:idx];
-    }];
-    tabBar.items = [tempTabBarItems copy];
-    
-    
+    if (self.secondaryViewControllers == nil) {
+        // what this should really do is try to access the connected manual triggered segues from the storyboard, but I do not know how
+        tabBar.items = @[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag:1],
+                         [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemContacts tag:2],
+                         [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFeatured tag:3]];
+    } else {
+        // builds the array of tabBarItems throgh enumeration into a mutable array and then copying these values into a static array
+        NSMutableArray * tempTabBarItems = [NSMutableArray arrayWithCapacity:self.secondaryViewControllers.count];
+        [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [tempTabBarItems insertObject:((UIViewController*)obj).tabBarItem atIndex:idx];
+        }];
+        tabBar.items = [tempTabBarItems copy];
+    }
+    tabBar.delegate = self;
     [self.view addSubview:tabBar];
 }
 
@@ -67,7 +67,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 #pragma mark Assigning ViewControllers
 -(void) setSecondaryViewControllers:(NSArray *)secondaryViewControllers animated:(BOOL)animated
@@ -78,11 +77,7 @@
 
 #pragma mark Storyboard Support
 
-static NSString * const PASeguePecksIdentifier = @"pecks";
-static NSString * const PASegueFeedIdentifier = @"feed";
-static NSString * const PASegueAddIdentifier = @"add";
-static NSString * const PASegueCirclesIdentifier = @"circles";
-static NSString * const PASegueProfileIdentifier = @"profile";
+
 
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -102,7 +97,19 @@ static NSString * const PASegueProfileIdentifier = @"profile";
     }
 }
 
+# pragma mark - UITabBarDelegate methods
+
+-(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    UIViewController *selectedViewController = self.secondaryViewControllers[item.tag];
+    [self presentViewController:selectedViewController animated:YES completion:nil];
+}
+
+# pragma mark - PADropdownViewControllerDelegate methods
+
+
+
 @end
+
 
 # pragma mark - PADropdownViewController custom Segue methods
 
