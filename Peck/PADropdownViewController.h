@@ -89,9 +89,8 @@
 
 // this allows the relationships to be defined on a storyboard
 @interface PADropdownViewControllerSegue : UIStoryboardSegue
+@end
 
-// copied in from SWRevealViewController
-@property (strong) void(^performBlock)( PADropdownViewControllerSegue* segue, UIViewController* svc, UIViewController* dvc );
-
+@interface PADropdownViewControllerUnwind : UIStoryboardSegue
 @end
 

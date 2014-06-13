@@ -12,6 +12,7 @@
 #define PAAddIdentifier @"add"
 #define PACirclesIdentifier @"circles"
 #define PAProfileIdentifier @"profile"
+#define PAPrimaryIdentifier @"primary"
 
 #define PAPecksIndex 1
 #define PAFeedIndex 2

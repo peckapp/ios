@@ -54,8 +54,22 @@
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
     
+    // creates the viewControllers for the identifiers and sets restorationIdentifier and the tags for each tabBarItem to the appropriate index
+    NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:5];
+    [identifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
+        NSString * identifier = (NSString*)obj;
+        UIViewController *viewController = [storyBoard instantiateViewControllerWithIdentifier:identifier];
+        viewController.tabBarItem.tag = idx;
+        viewController.restorationIdentifier = identifier;
+        [svcCollector insertObject:viewController atIndex:idx];
+    }];
+    // assigns the viewControllers to the dropdownViewController class
+    dropdownViewController.secondaryViewControllers = [svcCollector copy];
+    dropdownViewController.primaryViewController = [storyBoard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
+
     // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
     BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+
     
     // You can add your app-specific url handling code here if needed
     
