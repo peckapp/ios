@@ -8,12 +8,17 @@
 
 #import "PADropdownViewController.h"
 
-@interface PADropdownViewController ()
-
+@interface PADropdownViewController () {
+    
+}
 
 @property (nonatomic) BOOL animated;
-// the common name between the storyboard identifiers and the title properties of the secondaryViewControllers
-@property (nonatomic) NSArray * secondaryIdentifiers;
+
+// marks whether or not this class is using classes and segues from the storyboard, or programatically handling them
+@property (nonatomic) BOOL usingStoryboard;
+
+// number of secondary view controllers
+@property (nonatomic) NSInteger numberOfSecondaries;
 
 @end
 
@@ -46,30 +51,60 @@
     tabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 49)];    
     
     if (self.secondaryViewControllers == nil) {
-        // what this should really do is try to access the connected manual triggered segues from the storyboard, but not sure how
-        tabBar.items = @[[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag:1],
-                         [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemContacts tag:2],
-                         [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFeatured tag:3]];
-    } else {
-        // does the necessary setup for each viewcontroller, retreiving tabBarItems and passing it the managedObject Context
-        NSMutableArray * tempTabBarItems = [NSMutableArray arrayWithCapacity:self.secondaryViewControllers.count];
-        [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            UIViewController *viewController = (UIViewController*)obj;
-            if ([viewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
-                UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)viewController;
-                cdViewController.managedObjectContext = self.managedObjectContext;
-            } else if ([viewController isMemberOfClass:[UINavigationController class]]) { // passes mOC to topViewController of NavController if possible
-                UIViewController * topViewController = ((UINavigationController*)viewController).topViewController;
-                if ([topViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) {
-                    UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)topViewController;
-                    cdViewController.managedObjectContext = self.managedObjectContext;
-                }
-            }
-            [tempTabBarItems insertObject:viewController.tabBarItem atIndex:idx];
-        }];
-        tabBar.items = [tempTabBarItems copy];
+        
+        // no actual viewControllers were passed in, so if there is an array of identifers,
+        // they are used to instantiate the classes from the storyboard
+        
+        if (self.secondaryViewControllerIdentifiers != nil) {
+            NSLog(@"Instantiating secondaryViewControllers from the storyboard based on their identifiers");
+            
+            self.numberOfSecondaries = self.secondaryViewControllerIdentifiers.count;
+            NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.numberOfSecondaries];
+            
+            [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
+                NSString * identifier = (NSString*)obj;
+                UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+                viewController.tabBarItem.tag = idx;
+                viewController.restorationIdentifier = identifier;
+                [svcCollector insertObject:viewController atIndex:idx];
+            }];
+            
+            // assigns the viewControllers to the dropdownViewController class
+            self.secondaryViewControllers = [svcCollector copy];
+            
+        } else {
+            [NSException raise:@"nil values for both secondaryViewControllers and secondaryViewControllerIdentifiers"
+                        format:@"must instantiate one of these"];
+        }
+        
     }
+    // does the necessary setup for each viewcontroller, retreiving tabBarItems and passing it the managedObject Context
+    NSLog(@"Instantiating secondaryViewControllers for the PAPropdownViewController from the storyboard based on secondaryViewControllerIdentifiers");
+    NSMutableArray * tempTabBarItems = [NSMutableArray arrayWithCapacity:self.secondaryViewControllers.count];
+    
+    [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+        UIViewController *viewController = (UIViewController*)obj;
+        if ([viewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
+            
+            UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)viewController;
+            cdViewController.managedObjectContext = self.managedObjectContext;
+            
+        } else if ([viewController isMemberOfClass:[UINavigationController class]]) { // passes mOC to topViewController of NavController if possible
+            
+            UIViewController * topViewController = ((UINavigationController*)viewController).topViewController;
+            
+            if ([topViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) {
+                UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)topViewController;
+                cdViewController.managedObjectContext = self.managedObjectContext;
+            }
+        }
+        [tempTabBarItems insertObject:viewController.tabBarItem atIndex:idx];
+    }];
+    tabBar.items = [tempTabBarItems copy];
+    
     tabBar.delegate = self;
+    
     [self.view addSubview:tabBar];
 }
 
@@ -80,6 +115,7 @@
 }
 
 #pragma mark Assigning ViewControllers
+
 -(void) setSecondaryViewControllers:(NSArray *)secondaryViewControllers animated:(BOOL)animated
 {
     self.animated = animated;
@@ -87,8 +123,6 @@
 }
 
 #pragma mark Storyboard Support
-
-
 
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -108,11 +142,25 @@
     }
 }
 
+-(void) presentViewControllerAtIndex:(NSInteger)index animated:(BOOL)flag completion:(void (^)(void))completion {
+    UIViewController * destController =[self.secondaryViewControllers objectAtIndex:index];
+    [super presentViewController:destController animated:flag completion:completion];
+}
+
 # pragma mark - UITabBarDelegate methods
 
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    UIViewController *selectedViewController = self.secondaryViewControllers[item.tag];
-    [self performSegueWithIdentifier:selectedViewController.restorationIdentifier sender:self];
+    
+    if (self.usingStoryboard) { // calls segue programatically if the segue is being used
+        NSString * identifier = self.secondaryViewControllerIdentifiers[item.tag];
+        [self performSegueWithIdentifier:identifier sender:self];
+    } else { // presents the view controller programatically if storyboards are unused
+        UIViewController *selectedViewController = self.secondaryViewControllers[item.tag];
+        
+        // this is just a simple modal presentation. custom behavior must be done through the segue
+        [self presentViewController:selectedViewController animated:YES completion:nil];
+    }
+    
 }
 
 # pragma mark - PADropdownViewControllerDelegate methods
@@ -139,9 +187,15 @@
 -(void) perform
 {
     // make whatever view controller calls are necessary to perform the transition you want
+
     
     // this is a simple transition, needs to be customized further
-    [self.sourceViewController presentViewController:self.destinationViewController animated:YES completion:nil];
+    [self.sourceViewController presentViewController:self.destinationViewController
+                                            animated:YES
+                                          completion:nil];
+    
+    ((UIViewController <PACoreDataProtocol> *)self.destinationViewController).managedObjectContext
+        = ((UIViewController <PACoreDataProtocol> *)self.sourceViewController).managedObjectContext;
 }
 
 @end

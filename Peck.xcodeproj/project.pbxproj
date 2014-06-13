@@ -190,7 +190,6 @@
 		86D597F6193768BF00F38654 = {
 			isa = PBXGroup;
 			children = (
-				A4B772DD1945F8DB00A31252 /* Configure */,
 				86D5980A193768BF00F38654 /* Peck */,
 				86D59830193768C000F38654 /* PeckTests */,
 				86D59801193768BF00F38654 /* Frameworks */,
@@ -232,6 +231,7 @@
 				86D59816193768BF00F38654 /* Main.storyboard */,
 				86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */,
 				86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */,
+				A4B772DD1945F8DB00A31252 /* Configure */,
 				DDDAEDE419479665004CE102 /* Events */,
 				DDDAEDE51947967A004CE102 /* Newsfeed */,
 				DDDAEDE619479692004CE102 /* Dining */,
@@ -285,7 +285,6 @@
 				A4B772E41945FEFB00A31252 /* ConfigureViewController.m */,
 			);
 			name = Configure;
-			path = Peck;
 			sourceTree = "<group>";
 		};
 		DDDAEDE019475EE7004CE102 /* Pecks */ = {

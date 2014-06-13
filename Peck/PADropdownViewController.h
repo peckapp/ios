@@ -30,6 +30,7 @@
 //  - title properties set and their associates segues configured with identifiers containing the same string
 //  - tabBarItem properties set with UITabBarItems
 @property (nonatomic) NSArray * secondaryViewControllers;
+@property (nonatomic) NSArray * secondaryViewControllerIdentifiers;
 - (void)setSecondaryViewControllers:(NSArray *)secondaryViewControllers animated:(BOOL)animated;
 
 // points temporarily to the viewcontroller that is active
