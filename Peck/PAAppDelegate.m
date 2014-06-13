@@ -11,7 +11,7 @@
 #import "PAEventsViewController.h"
 #import "PACoreDataProtocol.h"
 #import "ConfigureViewController.h"
-#import "PADropdownViewController.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @implementation PAAppDelegate
 
@@ -24,13 +24,18 @@
     // Override point for customization after application launch.
  
     // iterates through all subviews of the root tabcontroller and sets pointer to the managedObjectContext
+    
     //ConfigureViewController* configureController = (ConfigureViewController *)self.window.rootViewController;
     //configureController.managedObjectContext = self.managedObjectContext;
-    
-    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    [FBLoginView class];
+    UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
     UIViewController *initViewController = [storyBoard instantiateInitialViewController];
     [self.window setRootViewController:initViewController];
+    //initViewController.managedObjectContext = self.managedObjectContext;
+
+    return YES;
     
+
     PADropdownViewController * dropdownViewController = (PADropdownViewController*)initViewController;
     // passes the mamangedObjectContext for Core Data
     dropdownViewController.managedObjectContext = self.managedObjectContext;
@@ -40,6 +45,14 @@
                               PAAddIdentifier,
                               PACirclesIdentifier,
                               PAProfileIdentifier];
+    [dropdownViewController setSecondaryViewControllerIdentifiers:identifiers];
+
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
     
     // creates the viewControllers for the identifiers and sets restorationIdentifier and the tags for each tabBarItem to the appropriate index
     NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:5];
@@ -53,11 +66,16 @@
     // assigns the viewControllers to the dropdownViewController class
     dropdownViewController.secondaryViewControllers = [svcCollector copy];
     dropdownViewController.primaryViewController = [storyBoard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
+
+    // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
+    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+
     
-    return YES;
+    // You can add your app-specific url handling code here if needed
     
+    return wasHandled;
 }
-							
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

@@ -14,6 +14,11 @@
 #define PAProfileIdentifier @"profile"
 #define PAPrimaryIdentifier @"primary"
 
+#define PAPecksIndex 1
+#define PAFeedIndex 2
+#define PAAddIndex 3
+#define PACirclesIndex 4
+#define PAProfileIndex 5
 
 @protocol PACoreDataProtocol
 

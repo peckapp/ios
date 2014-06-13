@@ -42,7 +42,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+#pragma mark - Navigation
 
 - (NSInteger)numberOfComponentsInPickerView: (UIPickerView *)pickerView{
     return 1;

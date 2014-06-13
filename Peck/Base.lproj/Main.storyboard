@@ -46,7 +46,7 @@
         <!--Navigation Controller - Pecks-->
         <scene sceneID="YWh-za-12c">
             <objects>
-                <navigationController storyboardIdentifier="pecks" title="Pecks" definesPresentationContext="YES" id="7ZG-zh-pMr" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="pecks" title="Pecks" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7ZG-zh-pMr" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1CP-bb-nXj">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -61,7 +61,7 @@
         <!--Navigation Controller - Events-->
         <scene sceneID="cUi-kZ-frf">
             <objects>
-                <navigationController storyboardIdentifier="feed" id="rS3-R9-Ivy" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="feed" useStoryboardIdentifierAsRestorationIdentifier="YES" id="rS3-R9-Ivy" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Events" id="t6u-Ov-roD"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="yXu-0R-QUA">
                         <autoresizingMask key="autoresizingMask"/>
@@ -106,7 +106,7 @@
         <!--Navigation Controller - Circles-->
         <scene sceneID="fXo-bg-fUk">
             <objects>
-                <navigationController storyboardIdentifier="circles" definesPresentationContext="YES" id="hiW-cR-lbl" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="circles" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="hiW-cR-lbl" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Circles" id="SMl-bH-uN3"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="EwE-O6-gtf">
                         <autoresizingMask key="autoresizingMask"/>
@@ -151,7 +151,7 @@
         <!--Navigation Controller - More-->
         <scene sceneID="gC2-m0-3wP">
             <objects>
-                <navigationController storyboardIdentifier="profile" definesPresentationContext="YES" id="bif-qW-HUa" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="profile" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="bif-qW-HUa" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="More" id="pUF-Ec-lSI"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Kog-Y2-wMU">
                         <autoresizingMask key="autoresizingMask"/>
@@ -163,63 +163,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cIN-YJ-lYD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="373" y="1295"/>
-        </scene>
-        <!--View Controller - Item 2-->
-        <scene sceneID="cpl-Bz-gIN">
-            <objects>
-                <viewController id="sPd-MC-n0k" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="cop-69-nyQ"/>
-                        <viewControllerLayoutGuide type="bottom" id="2hW-2h-whV"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="sLt-dV-p4J">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="XMK-UU-X8U"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="GJo-O4-Cgr" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-622" y="2691"/>
-        </scene>
-        <!--View Controller - Item 1-->
-        <scene sceneID="Vfe-eM-MAN">
-            <objects>
-                <viewController id="N3q-Jh-36f" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="8Os-QJ-ON7"/>
-                        <viewControllerLayoutGuide type="bottom" id="499-VX-dzv"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Pcv-KZ-XqY">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Item 1" id="cdG-ED-IWw"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nge-rd-auI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-622" y="2071"/>
-        </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="FCN-lk-n80">
-            <objects>
-                <tabBarController id="yqk-Cp-Aw5" sceneMemberID="viewController">
-                    <nil key="simulatedBottomBarMetrics"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="aRg-BW-t6Q">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="N3q-Jh-36f" kind="relationship" relationship="viewControllers" id="Q55-7z-Qsf"/>
-                        <segue destination="sPd-MC-n0k" kind="relationship" relationship="viewControllers" id="WG7-ab-Ho5"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="a5C-Q8-ajY" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1162" y="2383"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="3Uw-vS-Ld7">
@@ -329,7 +272,7 @@
         <!--Configure View Controller-->
         <scene sceneID="LG1-G8-7Oc">
             <objects>
-                <viewController id="wXS-p9-cDv" customClass="ConfigureViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="configure" id="wXS-p9-cDv" customClass="ConfigureViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Wkg-0s-ijO"/>
                         <viewControllerLayoutGuide type="bottom" id="mT2-HM-4Xa"/>
@@ -387,7 +330,7 @@
         <!--Post View Controller - Add-->
         <scene sceneID="YJE-x1-rpl">
             <objects>
-                <viewController storyboardIdentifier="add" title="Add" id="cUM-GN-TXW" customClass="PAPostViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="add" title="Add" useStoryboardIdentifierAsRestorationIdentifier="YES" id="cUM-GN-TXW" customClass="PAPostViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="cuc-Wn-l49"/>
                         <viewControllerLayoutGuide type="bottom" id="fCl-jb-lZS"/>

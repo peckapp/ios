@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <FacebookSDK/FacebookSDK.h>
 
-@interface PeckInitialViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate>
-
-@property (weak, nonatomic) IBOutlet UIPickerView *schoolPicker;
+@interface PeckInitialViewController : UIViewController <FBLoginViewDelegate>
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 
 @end
