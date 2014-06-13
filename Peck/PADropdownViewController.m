@@ -168,6 +168,12 @@
 # pragma mark - PADropdownViewControllerDelegate methods
 
 
+# pragma mark - Custom unwind segue
+- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
+    PADropdownViewControllerUnwind *segue = [[PADropdownViewControllerUnwind alloc] initWithIdentifier:identifier source:fromViewController destination:toViewController];
+    return segue;
+}
+
 
 @end
 
@@ -225,3 +231,31 @@
 }
 
 @end
+
+
+@implementation PADropdownViewControllerUnwind
+
+- (void)perform {
+    UIViewController *src = (UIViewController *) self.sourceViewController;
+    UIViewController *dst = (UIViewController *) self.destinationViewController;
+
+    CGFloat distance = src.view.frame.size.height;
+    src.view.transform = CGAffineTransformMakeTranslation(0, 0);
+    dst.view.transform = CGAffineTransformMakeTranslation(0, 0);
+
+    [src.view.superview insertSubview:dst.view belowSubview:src.view];
+
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         src.view.transform = CGAffineTransformMakeTranslation(0, distance);
+
+                     }
+                     completion:^(BOOL finished){
+                         [dst.view removeFromSuperview];
+                         [src presentViewController:dst animated:NO completion:NULL];
+                     }
+     ];
+}
+
+@end
+
