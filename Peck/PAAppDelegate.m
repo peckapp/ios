@@ -35,7 +35,20 @@
 
     return YES;
     
+
+    PADropdownViewController * dropdownViewController = (PADropdownViewController*)initViewController;
+    // passes the mamangedObjectContext for Core Data
+    dropdownViewController.managedObjectContext = self.managedObjectContext;
+    
+    NSArray * identifiers = @[PAPecksIdentifier,
+                              PAFeedIdentifier,
+                              PAAddIdentifier,
+                              PACirclesIdentifier,
+                              PAProfileIdentifier];
+    [dropdownViewController setSecondaryViewControllerIdentifiers:identifiers];
+
 }
+
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
