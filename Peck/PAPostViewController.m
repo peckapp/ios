@@ -223,7 +223,7 @@ int initialRowHeight;
 
 
 - (IBAction)cancelButton:(id)sender {
-   [self dismissViewControllerAnimated:YES completion:^(void){}];
+    // [self dismissViewControllerAnimated:YES completion:^(void){}];
 }
 
 
@@ -298,6 +298,7 @@ int initialRowHeight;
     [self.tableView reloadData];
     NSData *imageData = UIImageJPEGRepresentation(image, 0.1);
 }
+
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
 {
     [self dismissViewControllerAnimated: YES completion: nil];

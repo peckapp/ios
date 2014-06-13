@@ -397,10 +397,14 @@
                                     <navigationItem title="Post" id="skv-Pe-rBX">
                                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="fXm-Rf-8ag">
                                             <connections>
-                                                <action selector="cancelButton:" destination="cUM-GN-TXW" id="Oiq-eR-Azu"/>
+                                                <segue destination="6eS-WM-WvO" kind="unwind" unwindAction="unwindToDropdownViewController:" id="6lT-u9-L0F"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Okay" id="pfX-4C-V6w"/>
+                                        <barButtonItem key="rightBarButtonItem" title="Okay" id="pfX-4C-V6w">
+                                            <connections>
+                                                <segue destination="6eS-WM-WvO" kind="unwind" unwindAction="unwindToDropdownViewController:" id="vtg-ti-wwv"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -438,12 +442,13 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HDc-2x-wwf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="6eS-WM-WvO" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="278" y="417"/>
         </scene>
     </scenes>
     <resources>
-        <image name="ImagePlaceholder.jpeg" width="275" height="183"/>
+        <image name="ImagePlaceholder.jpeg" width="1030" height="1030"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

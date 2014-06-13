@@ -135,6 +135,15 @@
     }
 }
 
+- (IBAction)unwindToDropdownViewController:(UIStoryboardSegue *)unwindSegue
+{
+}
+
+- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
+    PADropdownViewControllerUnwind *segue = [[PADropdownViewControllerUnwind alloc] initWithIdentifier:identifier source:fromViewController destination:toViewController];
+    return segue;
+}
+
 -(void) presentViewControllerAtIndex:(NSInteger)index animated:(BOOL)flag completion:(void (^)(void))completion {
     UIViewController * destController =[self.secondaryViewControllers objectAtIndex:index];
     [super presentViewController:destController animated:flag completion:completion];
@@ -156,20 +165,11 @@
     
 }
 
-# pragma mark - PADropdownViewControllerDelegate methods
-
-
-# pragma mark - Custom unwind segue
-- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
-    PADropdownViewControllerUnwind *segue = [[PADropdownViewControllerUnwind alloc] initWithIdentifier:identifier source:fromViewController destination:toViewController];
-    return segue;
-}
-
 
 @end
 
 
-# pragma mark - PADropdownViewController custom Segue methods
+# pragma mark - Segues
 
 @implementation PADropdownViewControllerSegue
 
@@ -186,16 +186,6 @@
 
 -(void) perform
 {
-    // make whatever view controller calls are necessary to perform the transition you want
-
-    
-    // this is a simple transition, needs to be customized further
-    /*
-    [self.sourceViewController presentViewController:self.destinationViewController
-                                            animated:YES
-                                          completion:nil];
-    */
-
     UIViewController *src = (UIViewController *) self.sourceViewController;
     UIViewController *dst = (UIViewController *) self.destinationViewController;
 
@@ -205,7 +195,9 @@
 
     [src.view.superview insertSubview:dst.view belowSubview:src.view];
 
-    [UIView animateWithDuration:0.5
+    [UIView animateWithDuration: 0.4
+                          delay: 0.0
+                        options: UIViewAnimationOptionCurveEaseOut
                      animations:^{
                          src.view.transform = CGAffineTransformMakeTranslation(0, distance);
 
@@ -240,24 +232,34 @@
 
 @implementation PADropdownViewControllerUnwind
 
+-(id)initWithIdentifier:(NSString *)identifier source:(UIViewController *)source destination:(UIViewController *)destination
+{
+
+    self = [super initWithIdentifier:identifier source:source destination:destination];
+    if (self) {
+        // do custom segue stuff
+    }
+    return self;
+}
+
 - (void)perform {
     UIViewController *src = (UIViewController *) self.sourceViewController;
     UIViewController *dst = (UIViewController *) self.destinationViewController;
 
     CGFloat distance = src.view.frame.size.height;
     src.view.transform = CGAffineTransformMakeTranslation(0, 0);
-    dst.view.transform = CGAffineTransformMakeTranslation(0, 0);
+    dst.view.transform = CGAffineTransformMakeTranslation(0, distance);
 
-    [src.view.superview insertSubview:dst.view belowSubview:src.view];
+    [src.view.superview insertSubview:dst.view aboveSubview:src.view];
 
     [UIView animateWithDuration:0.5
                      animations:^{
-                         src.view.transform = CGAffineTransformMakeTranslation(0, distance);
+                         dst.view.transform = CGAffineTransformMakeTranslation(0, 0);
 
                      }
                      completion:^(BOOL finished){
                          [dst.view removeFromSuperview];
-                         [src presentViewController:dst animated:NO completion:NULL];
+                         [src dismissViewControllerAnimated:NO completion:NULL];
                      }
      ];
 }
