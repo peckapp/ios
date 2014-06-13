@@ -93,8 +93,6 @@ int initialRowHeight;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSLog(@"cell for row at index path: %li", (long)[indexPath row]);
-
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
@@ -156,8 +154,6 @@ int initialRowHeight;
             textField.frame = CGRectMake(15, 45, 250, 30);
         }
     }
-    //if([indexPath row]==0 || [indexPath row]==6)
-    //[self updateEventArray];
     return cell;
 }
 
