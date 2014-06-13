@@ -12,6 +12,7 @@
 #import "PACoreDataProtocol.h"
 #import "ConfigureViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "PADropdownViewController.h"
 
 @implementation PAAppDelegate
 
