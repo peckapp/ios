@@ -47,13 +47,7 @@
                               PACirclesIdentifier,
                               PAProfileIdentifier];
     [dropdownViewController setSecondaryViewControllerIdentifiers:identifiers];
-
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
+    
     
     // creates the viewControllers for the identifiers and sets restorationIdentifier and the tags for each tabBarItem to the appropriate index
     NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:5];
@@ -67,6 +61,14 @@
     // assigns the viewControllers to the dropdownViewController class
     dropdownViewController.secondaryViewControllers = [svcCollector copy];
     dropdownViewController.primaryViewController = [storyBoard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
+
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+
 
     // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
     BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
