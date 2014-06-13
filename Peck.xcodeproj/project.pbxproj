@@ -24,6 +24,7 @@
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
 		8696686D194B397000E969C1 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8696686C194B397000E969C1 /* FacebookSDK.framework */; };
 		86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */; };
+		86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BFB4AF194B889100ADAB75 /* PADropdownBar.m */; };
 		86D59803193768BF00F38654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59802193768BF00F38654 /* Foundation.framework */; };
 		86D59805193768BF00F38654 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59804193768BF00F38654 /* CoreGraphics.framework */; };
 		86D59807193768BF00F38654 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59806193768BF00F38654 /* UIKit.framework */; };
@@ -94,6 +95,8 @@
 		867651ED19462E5200C14645 /* old_webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = old_webservice.h; sourceTree = "<group>"; };
 		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
 		8696686C194B397000E969C1 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		86BFB4AE194B889100ADAB75 /* PADropdownBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownBar.h; sourceTree = "<group>"; };
+		86BFB4AF194B889100ADAB75 /* PADropdownBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADropdownBar.m; sourceTree = "<group>"; };
 		86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownViewController.h; sourceTree = "<group>"; };
 		86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADropdownViewController.m; sourceTree = "<group>"; };
 		86D597FF193768BF00F38654 /* Peck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peck.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -247,6 +250,8 @@
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
 				86D59816193768BF00F38654 /* Main.storyboard */,
+				86BFB4AE194B889100ADAB75 /* PADropdownBar.h */,
+				86BFB4AF194B889100ADAB75 /* PADropdownBar.m */,
 				86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */,
 				86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */,
 				A4B772DD1945F8DB00A31252 /* Configure */,
@@ -523,6 +528,7 @@
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				86D59821193768BF00F38654 /* PAEventInfoViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PeckInitialViewController.m in Sources */,
+				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
 				863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */,
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
 				86292527193CBFF80057CA41 /* PAEventCell.m in Sources */,

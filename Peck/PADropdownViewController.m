@@ -58,6 +58,8 @@
         if (self.secondaryViewControllerIdentifiers != nil) {
             NSLog(@"Instantiating secondaryViewControllers from the storyboard based on their identifiers");
             
+            self.usingStoryboard = YES;
+            
             self.numberOfSecondaries = self.secondaryViewControllerIdentifiers.count;
             NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.numberOfSecondaries];
             
@@ -77,28 +79,17 @@
                         format:@"must instantiate one of these"];
         }
         
+    } else {
+        NSLog(@"attempting to use pre-specified secondaryViewControllers in PADropdownViewController (functionality un-implemented)");
+    
     }
-    // does the necessary setup for each viewcontroller, retreiving tabBarItems and passing it the managedObject Context
-    NSLog(@"Instantiating secondaryViewControllers for the PAPropdownViewController from the storyboard based on secondaryViewControllerIdentifiers");
+    
+    // does the necessary general setup for each viewcontroller, retreiving tabBarItems and passing it the managedObject Context
+    
     NSMutableArray * tempTabBarItems = [NSMutableArray arrayWithCapacity:self.secondaryViewControllers.count];
     
     [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        
-        UIViewController *viewController = (UIViewController*)obj;
-        if ([viewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
-            
-            UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)viewController;
-            cdViewController.managedObjectContext = self.managedObjectContext;
-            
-        } else if ([viewController isMemberOfClass:[UINavigationController class]]) { // passes mOC to topViewController of NavController if possible
-            
-            UIViewController * topViewController = ((UINavigationController*)viewController).topViewController;
-            
-            if ([topViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) {
-                UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)topViewController;
-                cdViewController.managedObjectContext = self.managedObjectContext;
-            }
-        }
+        UIViewController * viewController = (UIViewController *)obj;
         [tempTabBarItems insertObject:viewController.tabBarItem atIndex:idx];
     }];
     tabBar.items = [tempTabBarItems copy];
@@ -224,9 +215,23 @@
                          [src presentViewController:dst animated:NO completion:NULL];
                      }
      ];
-
-    ((UIViewController <PACoreDataProtocol> *)self.destinationViewController).managedObjectContext
-        = ((UIViewController <PACoreDataProtocol> *)self.sourceViewController).managedObjectContext;
+    
+    // handles passing core data managed object context to the destinationViewControllers
+    UIViewController <PACoreDataProtocol> * srcViewController = (UIViewController <PACoreDataProtocol> *)self.sourceViewController;
+    if ([self.destinationViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
+        
+        UIViewController <PACoreDataProtocol> * cdDestViewController = (UIViewController <PACoreDataProtocol> *)self.destinationViewController;
+        cdDestViewController.managedObjectContext = srcViewController.managedObjectContext;
+        
+    } else if ([self.destinationViewController isMemberOfClass:[UINavigationController class]]) { // passes mOC to topViewController of NavController if possible
+        
+        UIViewController * topViewController = ((UINavigationController*)self.destinationViewController).topViewController;
+        
+        if ([topViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) {
+            UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)topViewController;
+            cdViewController.managedObjectContext = srcViewController.managedObjectContext;
+        }
+    }
 
 }
 
