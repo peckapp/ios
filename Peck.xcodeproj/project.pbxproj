@@ -23,6 +23,7 @@
 		863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */; };
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
 		8696686D194B397000E969C1 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8696686C194B397000E969C1 /* FacebookSDK.framework */; };
+		86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */; };
 		86D59803193768BF00F38654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59802193768BF00F38654 /* Foundation.framework */; };
 		86D59805193768BF00F38654 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59804193768BF00F38654 /* CoreGraphics.framework */; };
 		86D59807193768BF00F38654 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59806193768BF00F38654 /* UIKit.framework */; };
@@ -510,6 +511,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
 				863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */,
 				86D59811193768BF00F38654 /* main.m in Sources */,
 				DDDAEDDB19465DCB004CE102 /* PAFeedCell.m in Sources */,

@@ -29,16 +29,16 @@
     //ConfigureViewController* configureController = (ConfigureViewController *)self.window.rootViewController;
     //configureController.managedObjectContext = self.managedObjectContext;
     [FBLoginView class];
-    UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
+    UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     UIViewController *initViewController = [storyBoard instantiateInitialViewController];
     [self.window setRootViewController:initViewController];
     //initViewController.managedObjectContext = self.managedObjectContext;
 
-    return YES;
+    //
     
 
     PADropdownViewController * dropdownViewController = (PADropdownViewController*)initViewController;
-    // passes the mamangedObjectContext for Core Data
+    // passes the manangedObjectContext for Core Data
     dropdownViewController.managedObjectContext = self.managedObjectContext;
     
     NSArray * identifiers = @[PAPecksIdentifier,
@@ -48,7 +48,7 @@
                               PAProfileIdentifier];
     [dropdownViewController setSecondaryViewControllerIdentifiers:identifiers];
     
-    
+    /*
     // creates the viewControllers for the identifiers and sets restorationIdentifier and the tags for each tabBarItem to the appropriate index
     NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:5];
     [identifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
@@ -61,7 +61,8 @@
     // assigns the viewControllers to the dropdownViewController class
     dropdownViewController.secondaryViewControllers = [svcCollector copy];
     dropdownViewController.primaryViewController = [storyBoard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
-
+     */
+    return YES;
 }
 
 - (BOOL)application:(UIApplication *)application
