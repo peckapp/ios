@@ -42,6 +42,7 @@
 		86D5982D193768C000F38654 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59808193768BF00F38654 /* CoreData.framework */; };
 		86D59835193768C000F38654 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86D59833193768C000F38654 /* InfoPlist.strings */; };
 		86D59837193768C000F38654 /* PeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59836193768C000F38654 /* PeckTests.m */; };
+		A4141082194B47FB00572D4D /* ImagePlaceholder.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A4141081194B47FB00572D4D /* ImagePlaceholder.jpeg */; };
 		A4925C07194A179A001AAC4A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C06194A179A001AAC4A /* Accounts.framework */; };
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
@@ -119,6 +120,7 @@
 		86D59832193768C000F38654 /* PeckTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PeckTests-Info.plist"; sourceTree = "<group>"; };
 		86D59834193768C000F38654 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86D59836193768C000F38654 /* PeckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeckTests.m; sourceTree = "<group>"; };
+		A4141081194B47FB00572D4D /* ImagePlaceholder.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = ImagePlaceholder.jpeg; path = ../../../../Downloads/ImagePlaceholder.jpeg; sourceTree = "<group>"; };
 		A4925C06194A179A001AAC4A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A4925C08194A17A1001AAC4A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A4925C0A194A17AB001AAC4A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -269,6 +271,7 @@
 		86D5980B193768BF00F38654 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A4141081194B47FB00572D4D /* ImagePlaceholder.jpeg */,
 				86D5980C193768BF00F38654 /* Peck-Info.plist */,
 				86D5980D193768BF00F38654 /* InfoPlist.strings */,
 				86D59810193768BF00F38654 /* main.m */,
@@ -458,6 +461,7 @@
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
 				DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */,
 				A4B772E719460C3200A31252 /* schools.plist in Resources */,
+				A4141082194B47FB00572D4D /* ImagePlaceholder.jpeg in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
 				86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */,
 			);

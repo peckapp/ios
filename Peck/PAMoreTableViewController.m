@@ -14,14 +14,10 @@
 
 @implementation PAMoreTableViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@synthesize profilePicture;
+@synthesize scroller;
+@synthesize emailTextField, twitterTextField, facebookTextField, infoTextView, nameTextField;
+int currentTextField;
 
 - (void)viewDidLoad
 {
@@ -32,82 +28,47 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
     self.title = @"More";
+    UITapGestureRecognizer *tapRecognizer;
+    tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector (changePicture)];
+    [profilePicture addGestureRecognizer:tapRecognizer];
+    profilePicture.userInteractionEnabled = YES; // very important for UIImageView
+    tapRecognizer.cancelsTouchesInView=NO;
+    
+    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
+    gestureRecognizer.cancelsTouchesInView=NO;
+    [self.scroller addGestureRecognizer:gestureRecognizer];
 
+    [scroller setScrollEnabled:YES];
+    [scroller setContentSize:CGSizeMake(320, 800)];
+    infoTextView.layer.borderWidth=.5f;
+    infoTextView.layer.borderColor = [[UIColor grayColor] CGColor];
+    infoTextView.layer.cornerRadius = 8;
+    
+    emailTextField.delegate = self;
+    twitterTextField.delegate = self;
+    facebookTextField.delegate = self;
+    nameTextField.delegate = self;
+    infoTextView.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
+-(void)changePicture{
+    NSLog(@"changing picture");
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
+                                                                 delegate: self
+                                                        cancelButtonTitle: @"Cancel"
+                                                   destructiveButtonTitle: nil
+                                                        otherButtonTitles: @"Take a new photo", @"Choose from existing", nil];
+    [actionSheet showInView:self.view];
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
 }
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
-}
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 /*
 #pragma mark - Navigation
 
@@ -118,5 +79,170 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - UIImagePickerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    NSLog(@"picked photo");
+    [self dismissViewControllerAnimated: YES completion: nil];
+    UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
+    profilePicture.image = image;
+}
+
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
+{
+    [self dismissViewControllerAnimated: YES completion: nil];
+}
+
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            [self takeNewPhotoFromCamera];
+            break;
+        case 1:
+            [self choosePhotoFromExistingImages];
+        default:
+            break;
+    }
+}
+
+- (void)takeNewPhotoFromCamera
+{
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+    {
+        UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+        controller.sourceType = UIImagePickerControllerSourceTypeCamera;
+        controller.delegate = self;
+        [self presentViewController: controller animated: YES completion: nil];
+    }
+}
+-(void)choosePhotoFromExistingImages
+{
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary])
+    {
+        UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+        controller.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        controller.modalPresentationStyle = UIModalPresentationCurrentContext;
+        controller.delegate = self;
+        [self presentViewController: controller animated: YES completion: nil];
+        
+    }
+}
+
+
+
+- (void) hideKeyboard{
+    if(currentTextField==0)
+        [infoTextView resignFirstResponder];
+    else{
+        [self.scroller endEditing:NO];
+    }
+    
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    currentTextField = (int)textField.tag;
+    
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    
+    [self hideKeyboard];
+    return YES;
+}
+
+-(void)textViewDidEndEditing:(UITextView *)textView{
+    [self hideKeyboard];
+}
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView{
+    [self hideKeyboard];
+    return YES;
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView{
+    currentTextField = 0;
+}
+
+- (void)registerForKeyboardNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+}
+
+- (void)deregisterFromKeyboardNotifications {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
+    
+    [self registerForKeyboardNotifications];
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    [self deregisterFromKeyboardNotifications];
+    
+    [super viewWillDisappear:animated];
+    
+}
+- (void)keyboardWasShown:(NSNotification *)notification {
+    
+    int textFieldHeight;
+    if(currentTextField==0){
+        textFieldHeight = infoTextView.frame.origin.y;
+        textFieldHeight+=infoTextView.frame.size.height;
+    }
+    else{
+        UITextField * tempTextField = (UITextField *) [self.scroller viewWithTag:currentTextField];
+        textFieldHeight = tempTextField.frame.origin.y;
+    }
+    
+    NSDictionary* info = [notification userInfo];
+    
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    CGRect screenRect = self.view.frame;
+    NSLog(@"screenRect height: %f", screenRect.size.height);
+    
+    CGPoint scrollPoint = CGPointMake(0.0, 33+keyboardSize.height -(screenRect.size.height-textFieldHeight));
+    
+    //if(textFieldHeight > (screenRect.size.height - keyboardSize.height)){
+    NSLog(@"new y: %f", scrollPoint.y);
+    [self.scroller setContentOffset:scrollPoint animated:YES];
+    //}
+}
+
+- (void)keyboardWillBeHidden:(NSNotification *)notification {
+    //[self.scroller setContentOffset:CGPointZero animated:YES];
+    
+}
 
 @end
