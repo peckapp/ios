@@ -44,6 +44,8 @@
 		86D59835193768C000F38654 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86D59833193768C000F38654 /* InfoPlist.strings */; };
 		86D59837193768C000F38654 /* PeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59836193768C000F38654 /* PeckTests.m */; };
 		A4141082194B47FB00572D4D /* ImagePlaceholder.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A4141081194B47FB00572D4D /* ImagePlaceholder.jpeg */; };
+		A463F384194B959800ED441F /* PACircleCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F382194B959800ED441F /* PACircleCellTableViewCell.m */; };
+		A463F385194B959800ED441F /* PACircleCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A463F383194B959800ED441F /* PACircleCellTableViewCell.xib */; };
 		A4925C07194A179A001AAC4A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C06194A179A001AAC4A /* Accounts.framework */; };
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
@@ -124,6 +126,9 @@
 		86D59834193768C000F38654 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86D59836193768C000F38654 /* PeckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeckTests.m; sourceTree = "<group>"; };
 		A4141081194B47FB00572D4D /* ImagePlaceholder.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = ImagePlaceholder.jpeg; path = ../../../../Downloads/ImagePlaceholder.jpeg; sourceTree = "<group>"; };
+		A463F381194B959800ED441F /* PACircleCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleCellTableViewCell.h; sourceTree = "<group>"; };
+		A463F382194B959800ED441F /* PACircleCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACircleCellTableViewCell.m; sourceTree = "<group>"; };
+		A463F383194B959800ED441F /* PACircleCellTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PACircleCellTableViewCell.xib; sourceTree = "<group>"; };
 		A4925C06194A179A001AAC4A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A4925C08194A17A1001AAC4A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A4925C0A194A17AB001AAC4A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -365,6 +370,9 @@
 			children = (
 				863843CA193CB31C004110F5 /* PACirclesTableViewController.h */,
 				863843CB193CB31C004110F5 /* PACirclesTableViewController.m */,
+				A463F381194B959800ED441F /* PACircleCellTableViewCell.h */,
+				A463F382194B959800ED441F /* PACircleCellTableViewCell.m */,
+				A463F383194B959800ED441F /* PACircleCellTableViewCell.xib */,
 			);
 			name = Circles;
 			sourceTree = "<group>";
@@ -462,6 +470,7 @@
 			files = (
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
+				A463F385194B959800ED441F /* PACircleCellTableViewCell.xib in Resources */,
 				86D59818193768BF00F38654 /* Main.storyboard in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
 				DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */,
@@ -540,6 +549,7 @@
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,
 				86D5981E193768BF00F38654 /* PAEventsViewController.m in Sources */,
+				A463F384194B959800ED441F /* PACircleCellTableViewCell.m in Sources */,
 				863843DD193CB75F004110F5 /* PeckRegisterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

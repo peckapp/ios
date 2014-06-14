@@ -7,12 +7,16 @@
 //
 
 #import "PACirclesTableViewController.h"
+#import "PACircleCellTableViewCell.h"
 
 @interface PACirclesTableViewController ()
 
 @end
 
 @implementation PACirclesTableViewController
+
+@synthesize tempCircles = _tempCircles;
+@synthesize tableView = _tableView;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -34,6 +38,11 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     self.title = @"Circles";
+    
+    _tableView.delegate=self;
+    _tableView.dataSource=self;
+    _tempCircles = @[@"Physics", @"Chess Club",@"Sailing Club"];
+    [_tableView reloadData];
 
 }
 
@@ -49,26 +58,36 @@
 {
 #warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 #warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    return 3;
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
+    UITableViewCell * cell = [self.tableView dequeueReusableCellWithIdentifier:@"PrototypeCell"];
+    NSLog(@"about to create cell");
+    if (cell == nil) {
+        NSLog(@"creating cell");
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PrototypeCell"];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.textLabel.text=@"COol CEll";
+    }
+    //cell.circleTitle.text=@"my circle";
+     cell.textLabel.text=@"COol CEll";
     return cell;
 }
-*/
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+   
+}
+
 
 /*
 // Override to support conditional editing of the table view.
