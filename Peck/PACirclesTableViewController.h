@@ -10,12 +10,19 @@
 
 #import "PACoreDataProtocol.h"
 
+@protocol PACirclesControllerDelegate <UITableViewDelegate>
 
-@interface PACirclesTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource>
+-(void)Profile:(int) userID;
+
+@end
+
+@interface PACirclesTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, PACirclesControllerDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @property (strong, nonatomic) NSArray * tempCircles;
+
 @end
+
