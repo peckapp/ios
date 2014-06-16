@@ -8,6 +8,8 @@
 
 #import "PADropdownViewController.h"
 
+#define barHeight 50
+
 @interface PADropdownViewController () {
     
 }
@@ -19,6 +21,9 @@
 
 // number of secondary view controllers
 @property (nonatomic) NSInteger numberOfSecondaries;
+
+// Designates the frame for child view controllers.
+@property (nonatomic) CGRect frameForContentController;
 
 @end
 
@@ -48,7 +53,9 @@
 {
     [super viewDidLoad];
     
-    tabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 49)];    
+    tabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), barHeight)];
+
+    self.frameForContentController = CGRectMake(0, 20 + barHeight, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - barHeight);
     
     if (self.secondaryViewControllers == nil) {
         
@@ -105,12 +112,27 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark Assigning ViewControllers
+#pragma Manage ViewControllers
 
 -(void) setSecondaryViewControllers:(NSArray *)secondaryViewControllers animated:(BOOL)animated
 {
     self.animated = animated;
     self.secondaryViewControllers = secondaryViewControllers;
+}
+
+- (void) displayContentController: (UIViewController*) content;
+{
+    [self addChildViewController:content];
+    content.view.frame = self.frameForContentController;
+    [self.view addSubview: content.view];
+    [content didMoveToParentViewController:self];
+}
+
+- (void) hideContentController: (UIViewController*) content
+{
+    [content willMoveToParentViewController:nil];
+    [content.view removeFromSuperview];
+    [content removeFromParentViewController];
 }
 
 #pragma mark Storyboard Support
