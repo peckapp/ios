@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property(nonatomic, assign) id <PACirclesControllerDelegate> delegate;
+@property (nonatomic, assign) NSInteger members;
 
-
+-(void)addImages;
 @end
