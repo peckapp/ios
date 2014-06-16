@@ -36,8 +36,6 @@
 // points temporarily to the viewcontroller that is active
 // this could be either the primary or one of the secondaries, depending on the current state
 @property (nonatomic) UIViewController * activeViewController;
-// the location of the activeViewController in the secondaryViewControllers array. nil if primary is active
-@property (nonatomic) NSUInteger * activeIndex;
 
 // Contains all the icons at the top of the screen,
 // handling touches to those items that cause their associated views to drop down
