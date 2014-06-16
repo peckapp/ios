@@ -10,7 +10,7 @@
 
 #import "PAEventsViewController.h"
 #import "PACoreDataProtocol.h"
-#import "ConfigureViewController.h"
+#import "PAConfigureViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "PADropdownViewController.h"
 

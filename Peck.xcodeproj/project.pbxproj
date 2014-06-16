@@ -7,14 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		86051D49194BB27200961541 /* Silhouette.png in Resources */ = {isa = PBXBuildFile; fileRef = 86051D48194BB27200961541 /* Silhouette.png */; };
+		86051D4C194BB60200961541 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86D59816193768BF00F38654 /* Main.storyboard */; };
+		86051D4D194BB64200961541 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86051D4A194BB3EB00961541 /* FacebookSDK.framework */; };
 		86292512193CBE000057CA41 /* PAPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292511193CBE000057CA41 /* PAPostViewController.m */; };
 		86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292520193CBFD40057CA41 /* PAPeckCell.m */; };
 		86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86292521193CBFD40057CA41 /* PAPeckCell.xib */; };
 		86292527193CBFF80057CA41 /* PAEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292525193CBFF80057CA41 /* PAEventCell.m */; };
 		86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86292526193CBFF80057CA41 /* PAEventCell.xib */; };
-		863843C9193CB229004110F5 /* PADiningTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843C8193CB229004110F5 /* PADiningTableViewController.m */; };
 		863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CB193CB31C004110F5 /* PACirclesTableViewController.m */; };
-		863843CF193CB393004110F5 /* PAMoreTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CE193CB393004110F5 /* PAMoreTableViewController.m */; };
+		863843CF193CB393004110F5 /* PAProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CE193CB393004110F5 /* PAProfileTableViewController.m */; };
 		863843DA193CB75F004110F5 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 863843D3193CB75F004110F5 /* Login.storyboard */; };
 		863843DB193CB75F004110F5 /* PeckInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D5193CB75F004110F5 /* PeckInitialViewController.m */; };
 		863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D7193CB75F004110F5 /* PeckLoginViewController.m */; };
@@ -22,7 +24,6 @@
 		863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */; };
 		863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */; };
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
-		8696686D194B397000E969C1 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8696686C194B397000E969C1 /* FacebookSDK.framework */; };
 		86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */; };
 		86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BFB4AF194B889100ADAB75 /* PADropdownBar.m */; };
 		86D59803193768BF00F38654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59802193768BF00F38654 /* Foundation.framework */; };
@@ -32,7 +33,6 @@
 		86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86D5980D193768BF00F38654 /* InfoPlist.strings */; };
 		86D59811193768BF00F38654 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59810193768BF00F38654 /* main.m */; };
 		86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59814193768BF00F38654 /* PAAppDelegate.m */; };
-		86D59818193768BF00F38654 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86D59816193768BF00F38654 /* Main.storyboard */; };
 		86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86D59819193768BF00F38654 /* Peck.xcdatamodeld */; };
 		86D5981E193768BF00F38654 /* PAEventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D5981D193768BF00F38654 /* PAEventsViewController.m */; };
 		86D59821193768BF00F38654 /* PAEventInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59820193768BF00F38654 /* PAEventInfoViewController.m */; };
@@ -43,14 +43,13 @@
 		86D5982D193768C000F38654 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59808193768BF00F38654 /* CoreData.framework */; };
 		86D59835193768C000F38654 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86D59833193768C000F38654 /* InfoPlist.strings */; };
 		86D59837193768C000F38654 /* PeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59836193768C000F38654 /* PeckTests.m */; };
-		A4141082194B47FB00572D4D /* ImagePlaceholder.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A4141081194B47FB00572D4D /* ImagePlaceholder.jpeg */; };
-		A463F384194B959800ED441F /* PACircleCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F382194B959800ED441F /* PACircleCellTableViewCell.m */; };
-		A463F385194B959800ED441F /* PACircleCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A463F383194B959800ED441F /* PACircleCellTableViewCell.xib */; };
+		A463F384194B959800ED441F /* PACircleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F382194B959800ED441F /* PACircleCell.m */; };
+		A463F385194B959800ED441F /* PACircleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A463F383194B959800ED441F /* PACircleCell.xib */; };
 		A4925C07194A179A001AAC4A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C06194A179A001AAC4A /* Accounts.framework */; };
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
 		A4925C0D194A1B32001AAC4A /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */; };
-		A4B772E51945FEFB00A31252 /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* ConfigureViewController.m */; };
+		A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */; };
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 		DDDAEDDB19465DCB004CE102 /* PAFeedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAFeedCell.m */; };
@@ -69,6 +68,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		86051D48194BB27200961541 /* Silhouette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Silhouette.png; sourceTree = "<group>"; };
+		86051D4A194BB3EB00961541 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		86292510193CBE000057CA41 /* PAPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPostViewController.h; sourceTree = "<group>"; };
 		86292511193CBE000057CA41 /* PAPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPostViewController.m; sourceTree = "<group>"; };
 		8629251F193CBFD40057CA41 /* PAPeckCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPeckCell.h; sourceTree = "<group>"; };
@@ -77,12 +78,10 @@
 		86292524193CBFF80057CA41 /* PAEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEventCell.h; sourceTree = "<group>"; };
 		86292525193CBFF80057CA41 /* PAEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEventCell.m; sourceTree = "<group>"; };
 		86292526193CBFF80057CA41 /* PAEventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAEventCell.xib; sourceTree = "<group>"; };
-		863843C7193CB229004110F5 /* PADiningTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningTableViewController.h; sourceTree = "<group>"; };
-		863843C8193CB229004110F5 /* PADiningTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningTableViewController.m; sourceTree = "<group>"; };
 		863843CA193CB31C004110F5 /* PACirclesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACirclesTableViewController.h; sourceTree = "<group>"; };
 		863843CB193CB31C004110F5 /* PACirclesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACirclesTableViewController.m; sourceTree = "<group>"; };
-		863843CD193CB393004110F5 /* PAMoreTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAMoreTableViewController.h; sourceTree = "<group>"; };
-		863843CE193CB393004110F5 /* PAMoreTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAMoreTableViewController.m; sourceTree = "<group>"; };
+		863843CD193CB393004110F5 /* PAProfileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAProfileTableViewController.h; sourceTree = "<group>"; };
+		863843CE193CB393004110F5 /* PAProfileTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAProfileTableViewController.m; sourceTree = "<group>"; };
 		863843D3193CB75F004110F5 /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		863843D4193CB75F004110F5 /* PeckInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeckInitialViewController.h; sourceTree = "<group>"; };
 		863843D5193CB75F004110F5 /* PeckInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckInitialViewController.m; sourceTree = "<group>"; };
@@ -97,7 +96,6 @@
 		863843E6193CBA69004110F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		867651ED19462E5200C14645 /* old_webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = old_webservice.h; sourceTree = "<group>"; };
 		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
-		8696686C194B397000E969C1 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		86BFB4AE194B889100ADAB75 /* PADropdownBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownBar.h; sourceTree = "<group>"; };
 		86BFB4AF194B889100ADAB75 /* PADropdownBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADropdownBar.m; sourceTree = "<group>"; };
 		86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownViewController.h; sourceTree = "<group>"; };
@@ -125,16 +123,15 @@
 		86D59832193768C000F38654 /* PeckTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PeckTests-Info.plist"; sourceTree = "<group>"; };
 		86D59834193768C000F38654 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86D59836193768C000F38654 /* PeckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeckTests.m; sourceTree = "<group>"; };
-		A4141081194B47FB00572D4D /* ImagePlaceholder.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = ImagePlaceholder.jpeg; path = ../../../../Downloads/ImagePlaceholder.jpeg; sourceTree = "<group>"; };
-		A463F381194B959800ED441F /* PACircleCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleCellTableViewCell.h; sourceTree = "<group>"; };
-		A463F382194B959800ED441F /* PACircleCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACircleCellTableViewCell.m; sourceTree = "<group>"; };
-		A463F383194B959800ED441F /* PACircleCellTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PACircleCellTableViewCell.xib; sourceTree = "<group>"; };
+		A463F381194B959800ED441F /* PACircleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleCell.h; sourceTree = "<group>"; };
+		A463F382194B959800ED441F /* PACircleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACircleCell.m; sourceTree = "<group>"; };
+		A463F383194B959800ED441F /* PACircleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PACircleCell.xib; sourceTree = "<group>"; };
 		A4925C06194A179A001AAC4A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A4925C08194A17A1001AAC4A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A4925C0A194A17AB001AAC4A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
-		A4B772E31945FEFB00A31252 /* ConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
-		A4B772E41945FEFB00A31252 /* ConfigureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigureViewController.m; sourceTree = "<group>"; };
+		A4B772E31945FEFB00A31252 /* PAConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAConfigureViewController.h; sourceTree = "<group>"; };
+		A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAConfigureViewController.m; sourceTree = "<group>"; };
 		A4B772E619460C3200A31252 /* schools.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = schools.plist; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -150,6 +147,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86051D4D194BB64200961541 /* FacebookSDK.framework in Frameworks */,
 				A4925C0D194A1B32001AAC4A /* libsqlite3.0.dylib in Frameworks */,
 				A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */,
 				A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */,
@@ -158,7 +156,6 @@
 				86D59805193768BF00F38654 /* CoreGraphics.framework in Frameworks */,
 				86D59809193768BF00F38654 /* CoreData.framework in Frameworks */,
 				86D59807193768BF00F38654 /* UIKit.framework in Frameworks */,
-				8696686D194B397000E969C1 /* FacebookSDK.framework in Frameworks */,
 				86D59803193768BF00F38654 /* Foundation.framework in Frameworks */,
 				BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */,
 			);
@@ -178,6 +175,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		86051D47194BB24900961541 /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				86051D48194BB27200961541 /* Silhouette.png */,
+			);
+			name = Graphics;
+			sourceTree = "<group>";
+		};
 		8629250D193CBB370057CA41 /* Post */ = {
 			isa = PBXGroup;
 			children = (
@@ -244,8 +249,8 @@
 				86D59806193768BF00F38654 /* UIKit.framework */,
 				86D59808193768BF00F38654 /* CoreData.framework */,
 				86D59829193768C000F38654 /* XCTest.framework */,
+				86051D4A194BB3EB00961541 /* FacebookSDK.framework */,
 				B42EB121A7584B6DAFCD7624 /* libPods.a */,
-				8696686C194B397000E969C1 /* FacebookSDK.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -264,13 +269,13 @@
 				A4B772DD1945F8DB00A31252 /* Configure */,
 				DDDAEDE419479665004CE102 /* Events */,
 				DDDAEDE51947967A004CE102 /* Newsfeed */,
-				DDDAEDE619479692004CE102 /* Dining */,
 				DDDAEDE7194796BA004CE102 /* Circles */,
 				DDDAEDE8194796C6004CE102 /* Profile */,
 				DDDAEDE019475EE7004CE102 /* Pecks */,
 				863843D2193CB739004110F5 /* Login */,
 				8629250D193CBB370057CA41 /* Post */,
 				867651EC19462E3500C14645 /* Webservice */,
+				86051D47194BB24900961541 /* Graphics */,
 				86D59822193768BF00F38654 /* Images.xcassets */,
 				86D59819193768BF00F38654 /* Peck.xcdatamodeld */,
 				86D5980B193768BF00F38654 /* Supporting Files */,
@@ -281,7 +286,6 @@
 		86D5980B193768BF00F38654 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				A4141081194B47FB00572D4D /* ImagePlaceholder.jpeg */,
 				86D5980C193768BF00F38654 /* Peck-Info.plist */,
 				86D5980D193768BF00F38654 /* InfoPlist.strings */,
 				86D59810193768BF00F38654 /* main.m */,
@@ -312,8 +316,8 @@
 		A4B772DD1945F8DB00A31252 /* Configure */ = {
 			isa = PBXGroup;
 			children = (
-				A4B772E31945FEFB00A31252 /* ConfigureViewController.h */,
-				A4B772E41945FEFB00A31252 /* ConfigureViewController.m */,
+				A4B772E31945FEFB00A31252 /* PAConfigureViewController.h */,
+				A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */,
 			);
 			name = Configure;
 			sourceTree = "<group>";
@@ -356,23 +360,14 @@
 			name = Newsfeed;
 			sourceTree = "<group>";
 		};
-		DDDAEDE619479692004CE102 /* Dining */ = {
-			isa = PBXGroup;
-			children = (
-				863843C7193CB229004110F5 /* PADiningTableViewController.h */,
-				863843C8193CB229004110F5 /* PADiningTableViewController.m */,
-			);
-			name = Dining;
-			sourceTree = "<group>";
-		};
 		DDDAEDE7194796BA004CE102 /* Circles */ = {
 			isa = PBXGroup;
 			children = (
 				863843CA193CB31C004110F5 /* PACirclesTableViewController.h */,
 				863843CB193CB31C004110F5 /* PACirclesTableViewController.m */,
-				A463F381194B959800ED441F /* PACircleCellTableViewCell.h */,
-				A463F382194B959800ED441F /* PACircleCellTableViewCell.m */,
-				A463F383194B959800ED441F /* PACircleCellTableViewCell.xib */,
+				A463F381194B959800ED441F /* PACircleCell.h */,
+				A463F382194B959800ED441F /* PACircleCell.m */,
+				A463F383194B959800ED441F /* PACircleCell.xib */,
 			);
 			name = Circles;
 			sourceTree = "<group>";
@@ -380,8 +375,8 @@
 		DDDAEDE8194796C6004CE102 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				863843CD193CB393004110F5 /* PAMoreTableViewController.h */,
-				863843CE193CB393004110F5 /* PAMoreTableViewController.m */,
+				863843CD193CB393004110F5 /* PAProfileTableViewController.h */,
+				863843CE193CB393004110F5 /* PAProfileTableViewController.m */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -468,14 +463,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86051D4C194BB60200961541 /* Main.storyboard in Resources */,
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
-				A463F385194B959800ED441F /* PACircleCellTableViewCell.xib in Resources */,
-				86D59818193768BF00F38654 /* Main.storyboard in Resources */,
+				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
+				86051D49194BB27200961541 /* Silhouette.png in Resources */,
 				DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */,
 				A4B772E719460C3200A31252 /* schools.plist in Resources */,
-				A4141082194B47FB00572D4D /* ImagePlaceholder.jpeg in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
 				86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */,
 			);
@@ -533,10 +528,9 @@
 				863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */,
 				86D59811193768BF00F38654 /* main.m in Sources */,
 				DDDAEDDB19465DCB004CE102 /* PAFeedCell.m in Sources */,
-				863843CF193CB393004110F5 /* PAMoreTableViewController.m in Sources */,
-				A4B772E51945FEFB00A31252 /* ConfigureViewController.m in Sources */,
+				863843CF193CB393004110F5 /* PAProfileTableViewController.m in Sources */,
+				A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */,
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,
-				863843C9193CB229004110F5 /* PADiningTableViewController.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				86D59821193768BF00F38654 /* PAEventInfoViewController.m in Sources */,
@@ -549,7 +543,7 @@
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,
 				86D5981E193768BF00F38654 /* PAEventsViewController.m in Sources */,
-				A463F384194B959800ED441F /* PACircleCellTableViewCell.m in Sources */,
+				A463F384194B959800ED441F /* PACircleCell.m in Sources */,
 				863843DD193CB75F004110F5 /* PeckRegisterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -674,6 +668,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -681,8 +676,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/ataylor/Documents/FacebookSDK,
-					/Users/johnkarabinos/Documents/FacebookSDK,
+					"/Users/${USER}/Documents/FacebookSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Peck/Peck-Prefix.pch";
@@ -709,6 +703,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -716,8 +711,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/ataylor/Documents/FacebookSDK,
-					/Users/johnkarabinos/Documents/FacebookSDK,
+					"/Users/${USER}/Documents/FacebookSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Peck/Peck-Prefix.pch";
