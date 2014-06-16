@@ -13,7 +13,9 @@
 #import "PAPecksViewController.h"
 
 @interface PAEventsViewController ()
+
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+
 @end
 
 @implementation PAEventsViewController
@@ -142,7 +144,7 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
     
-    NSString * eventString = [NSString stringWithString:@"Event"];
+    NSString * eventString = @"Event";
     NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
