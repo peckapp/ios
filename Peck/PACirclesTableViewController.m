@@ -71,16 +71,18 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell * cell = [self.tableView dequeueReusableCellWithIdentifier:@"PrototypeCell"];
+    PACircleCellTableViewCell * cell = [self.tableView dequeueReusableCellWithIdentifier:@"PrototypeCell"];
     NSLog(@"about to create cell");
     if (cell == nil) {
         NSLog(@"creating cell");
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PrototypeCell"];
+        cell = [[PACircleCellTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PrototypeCell"];
         cell.accessoryType = UITableViewCellAccessoryNone;
-        cell.textLabel.text=@"COol CEll";
+        //cell.circleTitle = [_tempCircles objectAtIndex:[indexPath row]];
+        NSLog(@"%@", [_tempCircles objectAtIndex:[indexPath row]]);
+        cell.textLabel.text=[_tempCircles objectAtIndex:[indexPath row]];
     }
-    //cell.circleTitle.text=@"my circle";
-     cell.textLabel.text=@"COol CEll";
+    
+    // cell.textLabel.text=@"Cool CEll";
     return cell;
 }
 
