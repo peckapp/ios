@@ -9,31 +9,26 @@
 #import "PACircleCell.h"
 #import "PACirclesTableViewController.h"
 #import "PAFriendProfileViewController.h"
+#import "PAAppDelegate.h"
+#import "Circle.h"
 
 @implementation PACircleCell
 @synthesize scrollView;
 @synthesize circleTitle;
-
+@synthesize members = _members;
+bool loadedImages;
 - (void)awakeFromNib
 {
     // Initialization code
     
-    //TODO: replace 500 with a constant times the number of people in the circle
-    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, 500, self.frame.size.height);
     [scrollView setScrollEnabled:YES];
-    [scrollView setContentSize:CGSizeMake(500, self.frame.origin.y)];
     UITapGestureRecognizer *tapRecognizer;
     tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector (selectProfile:)];
     tapRecognizer.cancelsTouchesInView = NO;
     [scrollView addGestureRecognizer:tapRecognizer];
     scrollView.userInteractionEnabled =YES;
+    loadedImages=NO;
     
-    //TODO: replace 4 with the number of people in the circle
-    for(int i = 0; i < 4; i++){
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(80*i, 0, 55, 44)];
-        imageView.image = [UIImage imageNamed:@"Silhouette.png"];
-        [scrollView addSubview:imageView];
-    }
     
 }
 
@@ -52,7 +47,18 @@
     //get the cell and the picture that has been selected and open that profile
 }
 
-
+-(void)addImages{
+    //TODO: fix this code so that reloading the table view does not reallocate
+    if(!loadedImages){
+        for(int i = 0; i < _members; i++){
+            NSLog(@"allocating image");
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(80*i, 0, 55, 44)];
+            imageView.image = [UIImage imageNamed:@"Silhouette.png"];
+            //use tag and i to get the correct image
+            [scrollView addSubview:imageView];
+        }
+    }loadedImages=YES;
+}
 
 
 @end
