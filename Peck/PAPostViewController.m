@@ -98,6 +98,7 @@ int initialRowHeight;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
         cell.accessoryType = UITableViewCellAccessoryNone;
         if ([indexPath section] == 0) {
+            
             UITextField *playerTextField = [[UITextField alloc] initWithFrame:CGRectMake(140, 8, 185, 30)];
             
             playerTextField.adjustsFontSizeToFitWidth = YES;

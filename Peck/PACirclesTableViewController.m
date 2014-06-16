@@ -8,6 +8,8 @@
 
 #import "PACirclesTableViewController.h"
 #import "PACircleCell.h"
+#import "PAAppDelegate.h"
+#import "Circle.h"
 
 @interface PACirclesTableViewController ()
 
@@ -15,8 +17,11 @@
 
 @implementation PACirclesTableViewController
 
-@synthesize tempCircles = _tempCircles;
+@synthesize circles = _circles;
 @synthesize tableView = _tableView;
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -41,8 +46,25 @@
     
     _tableView.delegate=self;
     _tableView.dataSource=self;
-    _tempCircles = @[@"Physics", @"Chess Club",@"Sailing Club"];
-    [_tableView reloadData];
+    NSArray *members1 =@[@"A-Aron",@"D-Nice",@"TeeMothy",@"BALAKE",@"John",@"name",@"another name",@"one more"];
+    NSArray *members2 =@[@"Thing 1",@"Thing 2"];
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    Circle *circle1 = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
+    [circle1 setCircleName:@"Physics"];
+    [circle1 setMembers:members1];
+    Circle *circle2 = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
+    [circle2 setCircleName:@"Chess Club"];
+    [circle2 setMembers:members2];
+    
+    
+    NSFetchRequest * request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *circles = [NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
+    [request setEntity:circles];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
+    self.circles = mutableFetchResults;
 
 }
 
@@ -63,7 +85,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 3;
+    return 2;
 }
 
 
@@ -76,7 +98,16 @@
     }
     cell.delegate=self;
     cell.tag=[indexPath row];
-    cell.circleTitle.text = [_tempCircles objectAtIndex:[indexPath row]];
+    Circle * tempCircle = _circles[[indexPath row]];
+    NSArray *members = tempCircle.members;
+    int numberOfMembers = [members count];
+    for(int i =0; i<[members count]; i++){
+        NSLog(@"Member: %@", members[i]);
+    }
+    cell.members = numberOfMembers;
+    cell.circleTitle.text = tempCircle.circleName;
+    [cell.scrollView setContentSize:CGSizeMake(80*numberOfMembers, cell.frame.origin.y)];
+    [cell addImages];
     return cell;
 }
 
