@@ -122,34 +122,24 @@
 
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSString *identifier = segue.identifier;
     if ([segue isKindOfClass:[PADropdownViewControllerSegue class]]) {
-        if ([identifier isEqualToString:PAPecksIdentifier]) {
-            
-        } else if ([identifier isEqualToString:PAFeedIdentifier]) {
-            
-        } else if ([identifier isEqualToString:PAAddIdentifier]) {
-            
-        } else if ([identifier isEqualToString:PACirclesIdentifier]) {
-            
-        } else if ([identifier isEqualToString:PAProfileIdentifier]) {
-            
-        } else if ([identifier isEqualToString:PAPrimaryIdentifier]) {
-
-        }
+        [self displayContentController: segue.destinationViewController];
     }
 }
 
 - (IBAction)unwindToDropdownViewController:(UIStoryboardSegue *)unwindSegue
 {
+
 }
 
-- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
+- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier
+{
     PADropdownViewControllerUnwind *segue = [[PADropdownViewControllerUnwind alloc] initWithIdentifier:identifier source:fromViewController destination:toViewController];
     return segue;
 }
 
--(void) presentViewControllerAtIndex:(NSInteger)index animated:(BOOL)flag completion:(void (^)(void))completion {
+-(void) presentViewControllerAtIndex:(NSInteger)index animated:(BOOL)flag completion:(void (^)(void))completion
+{
     UIViewController * destController =[self.secondaryViewControllers objectAtIndex:index];
     [super presentViewController:destController animated:flag completion:completion];
 }
@@ -178,41 +168,8 @@
 
 @implementation PADropdownViewControllerSegue
 
--(id)initWithIdentifier:(NSString *)identifier source:(UIViewController *)source destination:(UIViewController *)destination
-{
-    
-    self = [super initWithIdentifier:identifier source:source destination:destination];
-    if (self) {
-        // do custom segue stuff
-    }
-    return self;
-}
-
-
 -(void) perform
 {
-    UIViewController *src = (UIViewController *) self.sourceViewController;
-    UIViewController *dst = (UIViewController *) self.destinationViewController;
-
-    CGFloat distance = src.view.frame.size.height;
-    src.view.transform = CGAffineTransformMakeTranslation(0, 0);
-    dst.view.transform = CGAffineTransformMakeTranslation(0, 0);
-
-    [src.view.superview insertSubview:dst.view belowSubview:src.view];
-
-    [UIView animateWithDuration: 0.4
-                          delay: 0.0
-                        options: UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         src.view.transform = CGAffineTransformMakeTranslation(0, distance);
-
-                     }
-                     completion:^(BOOL finished){
-                         [dst.view removeFromSuperview];
-                         [src presentViewController:dst animated:NO completion:NULL];
-                     }
-     ];
-    
     // handles passing core data managed object context to the destinationViewControllers
     UIViewController <PACoreDataProtocol> * srcViewController = (UIViewController <PACoreDataProtocol> *)self.sourceViewController;
     if ([self.destinationViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
@@ -237,37 +194,32 @@
 
 @implementation PADropdownViewControllerUnwind
 
--(id)initWithIdentifier:(NSString *)identifier source:(UIViewController *)source destination:(UIViewController *)destination
-{
-
-    self = [super initWithIdentifier:identifier source:source destination:destination];
-    if (self) {
-        // do custom segue stuff
-    }
-    return self;
-}
-
 - (void)perform {
-    UIViewController *src = (UIViewController *) self.sourceViewController;
-    UIViewController *dst = (UIViewController *) self.destinationViewController;
 
-    CGFloat distance = src.view.frame.size.height;
-    src.view.transform = CGAffineTransformMakeTranslation(0, 0);
-    dst.view.transform = CGAffineTransformMakeTranslation(0, distance);
-
-    [src.view.superview insertSubview:dst.view aboveSubview:src.view];
-
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         dst.view.transform = CGAffineTransformMakeTranslation(0, 0);
-
-                     }
-                     completion:^(BOOL finished){
-                         [dst.view removeFromSuperview];
-                         [src dismissViewControllerAnimated:NO completion:NULL];
-                     }
-     ];
 }
 
 @end
 
+/*
+UIViewController *src = (UIViewController *) self.sourceViewController;
+UIViewController *dst = (UIViewController *) self.destinationViewController;
+
+CGFloat distance = src.view.frame.size.height;
+src.view.transform = CGAffineTransformMakeTranslation(0, 0);
+dst.view.transform = CGAffineTransformMakeTranslation(0, 0);
+
+[src.view.superview insertSubview:dst.view belowSubview:src.view];
+
+[UIView animateWithDuration: 0.4
+                      delay: 0.0
+                    options: UIViewAnimationOptionCurveEaseOut
+                 animations:^{
+                     src.view.transform = CGAffineTransformMakeTranslation(0, distance);
+
+                 }
+                 completion:^(BOOL finished){
+                     [dst.view removeFromSuperview];
+                     [src presentViewController:dst animated:NO completion:NULL];
+                 }
+ ];
+*/
