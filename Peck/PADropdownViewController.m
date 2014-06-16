@@ -127,17 +127,6 @@
     }
 }
 
-- (IBAction)unwindToDropdownViewController:(UIStoryboardSegue *)unwindSegue
-{
-
-}
-
-- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier
-{
-    PADropdownViewControllerUnwind *segue = [[PADropdownViewControllerUnwind alloc] initWithIdentifier:identifier source:fromViewController destination:toViewController];
-    return segue;
-}
-
 -(void) presentViewControllerAtIndex:(NSInteger)index animated:(BOOL)flag completion:(void (^)(void))completion
 {
     UIViewController * destController =[self.secondaryViewControllers objectAtIndex:index];
@@ -186,15 +175,6 @@
             cdViewController.managedObjectContext = srcViewController.managedObjectContext;
         }
     }
-
-}
-
-@end
-
-
-@implementation PADropdownViewControllerUnwind
-
-- (void)perform {
 
 }
 
