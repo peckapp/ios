@@ -33,8 +33,6 @@
     UIViewController *initViewController = [storyBoard instantiateInitialViewController];
     [self.window setRootViewController:initViewController];
     //initViewController.managedObjectContext = self.managedObjectContext;
-
-    //
     
 
     PADropdownViewController * dropdownViewController = (PADropdownViewController*)initViewController;
@@ -46,8 +44,8 @@
                               PAAddIdentifier,
                               PACirclesIdentifier,
                               PAProfileIdentifier];
-    [dropdownViewController setSecondaryViewControllerIdentifiers:identifiers];
-    
+    dropdownViewController.secondaryViewControllerIdentifiers = identifiers;
+
     /*
     // creates the viewControllers for the identifiers and sets restorationIdentifier and the tags for each tabBarItem to the appropriate index
     NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:5];
