@@ -22,6 +22,7 @@ bool loadedImages;
     // Initialization code
     
     [scrollView setScrollEnabled:YES];
+    //[scrollView setContentSize:CGSizeMake(800, 0)];
     UITapGestureRecognizer *tapRecognizer;
     tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector (selectProfile:)];
     tapRecognizer.cancelsTouchesInView = NO;
