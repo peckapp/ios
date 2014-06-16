@@ -14,14 +14,6 @@
     
 }
 
-@property (nonatomic) BOOL animated;
-
-// marks whether or not this class is using classes and segues from the storyboard, or programatically handling them
-@property (nonatomic) BOOL usingStoryboard;
-
-// number of secondary view controllers
-@property (nonatomic) NSInteger numberOfSecondaries;
-
 // Designates the frame for child view controllers.
 @property (nonatomic) CGRect frameForContentController;
 
@@ -64,11 +56,8 @@
         
         if (self.secondaryViewControllerIdentifiers != nil) {
             NSLog(@"Instantiating secondaryViewControllers from the storyboard based on their identifiers");
-            
-            self.usingStoryboard = YES;
-            
-            self.numberOfSecondaries = self.secondaryViewControllerIdentifiers.count;
-            NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.numberOfSecondaries];
+
+            NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
             
             [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
                 NSString * identifier = (NSString*)obj;
@@ -114,12 +103,6 @@
 
 #pragma Manage ViewControllers
 
--(void) setSecondaryViewControllers:(NSArray *)secondaryViewControllers animated:(BOOL)animated
-{
-    self.animated = animated;
-    self.secondaryViewControllers = secondaryViewControllers;
-}
-
 - (void) displayContentController: (UIViewController*) content;
 {
     [self addChildViewController:content];
@@ -139,34 +122,13 @@
 
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSString *identifier = segue.identifier;
     if ([segue isKindOfClass:[PADropdownViewControllerSegue class]]) {
-        if ([identifier isEqualToString:PAPecksIdentifier]) {
-            
-        } else if ([identifier isEqualToString:PAFeedIdentifier]) {
-            
-        } else if ([identifier isEqualToString:PAAddIdentifier]) {
-            
-        } else if ([identifier isEqualToString:PACirclesIdentifier]) {
-            
-        } else if ([identifier isEqualToString:PAProfileIdentifier]) {
-            
-        } else if ([identifier isEqualToString:PAPrimaryIdentifier]) {
-
-        }
+        [self displayContentController: segue.destinationViewController];
     }
 }
 
-- (IBAction)unwindToDropdownViewController:(UIStoryboardSegue *)unwindSegue
+-(void) presentViewControllerAtIndex:(NSInteger)index animated:(BOOL)flag completion:(void (^)(void))completion
 {
-}
-
-- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
-    PADropdownViewControllerUnwind *segue = [[PADropdownViewControllerUnwind alloc] initWithIdentifier:identifier source:fromViewController destination:toViewController];
-    return segue;
-}
-
--(void) presentViewControllerAtIndex:(NSInteger)index animated:(BOOL)flag completion:(void (^)(void))completion {
     UIViewController * destController =[self.secondaryViewControllers objectAtIndex:index];
     [super presentViewController:destController animated:flag completion:completion];
 }
@@ -174,17 +136,17 @@
 # pragma mark - UITabBarDelegate methods
 
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    
-    if (self.usingStoryboard) { // calls segue programatically if the segue is being used
-        NSString * identifier = self.secondaryViewControllerIdentifiers[item.tag];
-        [self performSegueWithIdentifier:identifier sender:self];
-    } else { // presents the view controller programatically if storyboards are unused
-        UIViewController *selectedViewController = self.secondaryViewControllers[item.tag];
-        
-        // this is just a simple modal presentation. custom behavior must be done through the segue
-        [self presentViewController:selectedViewController animated:YES completion:nil];
-    }
-    
+
+    NSString * identifier = self.secondaryViewControllerIdentifiers[item.tag];
+    [self performSegueWithIdentifier:identifier sender:self];
+
+//    } else { // presents the view controller programatically if storyboards are unused
+//        UIViewController *selectedViewController = self.secondaryViewControllers[item.tag];
+//        
+//        // this is just a simple modal presentation. custom behavior must be done through the segue
+//        [self presentViewController:selectedViewController animated:YES completion:nil];
+//    }
+
 }
 
 
@@ -195,41 +157,8 @@
 
 @implementation PADropdownViewControllerSegue
 
--(id)initWithIdentifier:(NSString *)identifier source:(UIViewController *)source destination:(UIViewController *)destination
-{
-    
-    self = [super initWithIdentifier:identifier source:source destination:destination];
-    if (self) {
-        // do custom segue stuff
-    }
-    return self;
-}
-
-
 -(void) perform
 {
-    UIViewController *src = (UIViewController *) self.sourceViewController;
-    UIViewController *dst = (UIViewController *) self.destinationViewController;
-
-    CGFloat distance = src.view.frame.size.height;
-    src.view.transform = CGAffineTransformMakeTranslation(0, 0);
-    dst.view.transform = CGAffineTransformMakeTranslation(0, 0);
-
-    [src.view.superview insertSubview:dst.view belowSubview:src.view];
-
-    [UIView animateWithDuration: 0.4
-                          delay: 0.0
-                        options: UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         src.view.transform = CGAffineTransformMakeTranslation(0, distance);
-
-                     }
-                     completion:^(BOOL finished){
-                         [dst.view removeFromSuperview];
-                         [src presentViewController:dst animated:NO completion:NULL];
-                     }
-     ];
-    
     // handles passing core data managed object context to the destinationViewControllers
     UIViewController <PACoreDataProtocol> * srcViewController = (UIViewController <PACoreDataProtocol> *)self.sourceViewController;
     if ([self.destinationViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
@@ -251,40 +180,26 @@
 
 @end
 
+/*
+UIViewController *src = (UIViewController *) self.sourceViewController;
+UIViewController *dst = (UIViewController *) self.destinationViewController;
 
-@implementation PADropdownViewControllerUnwind
+CGFloat distance = src.view.frame.size.height;
+src.view.transform = CGAffineTransformMakeTranslation(0, 0);
+dst.view.transform = CGAffineTransformMakeTranslation(0, 0);
 
--(id)initWithIdentifier:(NSString *)identifier source:(UIViewController *)source destination:(UIViewController *)destination
-{
+[src.view.superview insertSubview:dst.view belowSubview:src.view];
 
-    self = [super initWithIdentifier:identifier source:source destination:destination];
-    if (self) {
-        // do custom segue stuff
-    }
-    return self;
-}
+[UIView animateWithDuration: 0.4
+                      delay: 0.0
+                    options: UIViewAnimationOptionCurveEaseOut
+                 animations:^{
+                     src.view.transform = CGAffineTransformMakeTranslation(0, distance);
 
-- (void)perform {
-    UIViewController *src = (UIViewController *) self.sourceViewController;
-    UIViewController *dst = (UIViewController *) self.destinationViewController;
-
-    CGFloat distance = src.view.frame.size.height;
-    src.view.transform = CGAffineTransformMakeTranslation(0, 0);
-    dst.view.transform = CGAffineTransformMakeTranslation(0, distance);
-
-    [src.view.superview insertSubview:dst.view aboveSubview:src.view];
-
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         dst.view.transform = CGAffineTransformMakeTranslation(0, 0);
-
-                     }
-                     completion:^(BOOL finished){
-                         [dst.view removeFromSuperview];
-                         [src dismissViewControllerAnimated:NO completion:NULL];
-                     }
-     ];
-}
-
-@end
-
+                 }
+                 completion:^(BOOL finished){
+                     [dst.view removeFromSuperview];
+                     [src presentViewController:dst animated:NO completion:NULL];
+                 }
+ ];
+*/
