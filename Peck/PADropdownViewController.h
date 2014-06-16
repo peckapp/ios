@@ -31,7 +31,6 @@
 //  - tabBarItem properties set with UITabBarItems
 @property (nonatomic) NSArray * secondaryViewControllers;
 @property (nonatomic) NSArray * secondaryViewControllerIdentifiers;
-- (void)setSecondaryViewControllers:(NSArray *)secondaryViewControllers animated:(BOOL)animated;
 
 // points temporarily to the viewcontroller that is active
 // this could be either the primary or one of the secondaries, depending on the current state

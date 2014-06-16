@@ -14,14 +14,6 @@
     
 }
 
-@property (nonatomic) BOOL animated;
-
-// marks whether or not this class is using classes and segues from the storyboard, or programatically handling them
-@property (nonatomic) BOOL usingStoryboard;
-
-// number of secondary view controllers
-@property (nonatomic) NSInteger numberOfSecondaries;
-
 // Designates the frame for child view controllers.
 @property (nonatomic) CGRect frameForContentController;
 
@@ -64,11 +56,8 @@
         
         if (self.secondaryViewControllerIdentifiers != nil) {
             NSLog(@"Instantiating secondaryViewControllers from the storyboard based on their identifiers");
-            
-            self.usingStoryboard = YES;
-            
-            self.numberOfSecondaries = self.secondaryViewControllerIdentifiers.count;
-            NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.numberOfSecondaries];
+
+            NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
             
             [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
                 NSString * identifier = (NSString*)obj;
@@ -113,12 +102,6 @@
 }
 
 #pragma Manage ViewControllers
-
--(void) setSecondaryViewControllers:(NSArray *)secondaryViewControllers animated:(BOOL)animated
-{
-    self.animated = animated;
-    self.secondaryViewControllers = secondaryViewControllers;
-}
 
 - (void) displayContentController: (UIViewController*) content;
 {
@@ -174,17 +157,17 @@
 # pragma mark - UITabBarDelegate methods
 
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    
-    if (self.usingStoryboard) { // calls segue programatically if the segue is being used
-        NSString * identifier = self.secondaryViewControllerIdentifiers[item.tag];
-        [self performSegueWithIdentifier:identifier sender:self];
-    } else { // presents the view controller programatically if storyboards are unused
-        UIViewController *selectedViewController = self.secondaryViewControllers[item.tag];
-        
-        // this is just a simple modal presentation. custom behavior must be done through the segue
-        [self presentViewController:selectedViewController animated:YES completion:nil];
-    }
-    
+
+    NSString * identifier = self.secondaryViewControllerIdentifiers[item.tag];
+    [self performSegueWithIdentifier:identifier sender:self];
+
+//    } else { // presents the view controller programatically if storyboards are unused
+//        UIViewController *selectedViewController = self.secondaryViewControllers[item.tag];
+//        
+//        // this is just a simple modal presentation. custom behavior must be done through the segue
+//        [self presentViewController:selectedViewController animated:YES completion:nil];
+//    }
+
 }
 
 
