@@ -69,23 +69,24 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell * cell = [self.tableView dequeueReusableCellWithIdentifier:@"PrototypeCell"];
-    NSLog(@"about to create cell");
+    PACircleCell * cell = [self.tableView dequeueReusableCellWithIdentifier:@"PrototypeCell"];
     if (cell == nil) {
-        NSLog(@"creating cell");
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PrototypeCell"];
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        cell.textLabel.text=@"COol CEll";
+        [_tableView registerNib:[UINib nibWithNibName:@"PACircleCell" bundle:nil]  forCellReuseIdentifier:@"PrototypeCell"];
+        cell = [_tableView dequeueReusableCellWithIdentifier:@"PrototypeCell"];
     }
-    //cell.circleTitle.text=@"my circle";
-     cell.textLabel.text=@"COol CEll";
+    cell.delegate=self;
+    cell.tag=[indexPath row];
+    cell.circleTitle.text = [_tempCircles objectAtIndex:[indexPath row]];
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-   
-}
+# pragma mark - PACirclesControllerDelegate
 
+-(void)Profile: (int) userID{
+    UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController * controller = [storyboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
+    [self presentViewController:controller animated:YES completion:nil];
+}
 
 /*
 // Override to support conditional editing of the table view.

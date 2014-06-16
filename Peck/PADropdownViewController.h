@@ -15,6 +15,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import "PACoreDataProtocol.h"
+#import "PADropdownBar.h"
 
 @protocol PADropdownViewControllerDelegate; //allows delegate to be referenced in interface
 
@@ -38,7 +39,7 @@
 
 // Contains all the icons at the top of the screen,
 // handling touches to those items that cause their associated views to drop down
-@property (nonatomic,readonly) UITabBar * tabBar;
+@property (nonatomic,readonly) PADropdownBar * dropdownBar;
 
 // acts as its own delegate
 @property(nonatomic, assign) id<PADropdownViewControllerDelegate> delegate;

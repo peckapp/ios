@@ -21,7 +21,7 @@
 
 @implementation PADropdownViewController
 
-@synthesize tabBar;
+@synthesize dropdownBar;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -45,7 +45,7 @@
 {
     [super viewDidLoad];
     
-    tabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), barHeight)];
+    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), barHeight)];
 
     self.frameForContentController = CGRectMake(0, 20 + barHeight, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - barHeight);
     
@@ -88,11 +88,11 @@
         UIViewController * viewController = (UIViewController *)obj;
         [tempTabBarItems insertObject:viewController.tabBarItem atIndex:idx];
     }];
-    tabBar.items = [tempTabBarItems copy];
+    dropdownBar.items = [tempTabBarItems copy];
     
-    tabBar.delegate = self;
+    dropdownBar.delegate = self;
     
-    [self.view addSubview:tabBar];
+    [self.view addSubview:dropdownBar];
 }
 
 - (void)didReceiveMemoryWarning

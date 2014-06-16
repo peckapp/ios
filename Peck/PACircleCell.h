@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PACirclesTableViewController.h"
 
-@interface PACircleCell : UITableViewCell
+@interface PACircleCell : UITableViewCell <UIGestureRecognizerDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property(nonatomic, assign) id <PACirclesControllerDelegate> delegate;
+
 
 @end
