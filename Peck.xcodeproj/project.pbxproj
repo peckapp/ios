@@ -25,6 +25,7 @@
 		863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */; };
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
 		867B52D319508F7500BEB37B /* PAPrimaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D219508F7500BEB37B /* PAPrimaryViewController.m */; };
+		867B52D619509F5000BEB37B /* PASessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D519509F5000BEB37B /* PASessionManager.m */; };
 		86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */; };
 		86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BFB4AF194B889100ADAB75 /* PADropdownBar.m */; };
 		86D59803193768BF00F38654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59802193768BF00F38654 /* Foundation.framework */; };
@@ -100,6 +101,8 @@
 		867651ED19462E5200C14645 /* old_webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = old_webservice.h; sourceTree = "<group>"; };
 		867B52D119508F7500BEB37B /* PAPrimaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPrimaryViewController.h; sourceTree = "<group>"; };
 		867B52D219508F7500BEB37B /* PAPrimaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPrimaryViewController.m; sourceTree = "<group>"; };
+		867B52D419509F5000BEB37B /* PASessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASessionManager.h; sourceTree = "<group>"; };
+		867B52D519509F5000BEB37B /* PASessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASessionManager.m; sourceTree = "<group>"; };
 		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
 		86BFB4AE194B889100ADAB75 /* PADropdownBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownBar.h; sourceTree = "<group>"; };
 		86BFB4AF194B889100ADAB75 /* PADropdownBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADropdownBar.m; sourceTree = "<group>"; };
@@ -220,6 +223,8 @@
 		867651EC19462E3500C14645 /* Webservice */ = {
 			isa = PBXGroup;
 			children = (
+				867B52D419509F5000BEB37B /* PASessionManager.h */,
+				867B52D519509F5000BEB37B /* PASessionManager.m */,
 				867651ED19462E5200C14645 /* old_webservice.h */,
 			);
 			name = Webservice;
@@ -564,6 +569,7 @@
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
 				A463F38D194F683D00ED441F /* Circle.m in Sources */,
 				86292527193CBFF80057CA41 /* PAEventCell.m in Sources */,
+				867B52D619509F5000BEB37B /* PASessionManager.m in Sources */,
 				86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */,
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,

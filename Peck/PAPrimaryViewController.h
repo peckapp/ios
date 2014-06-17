@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PACoreDataProtocol.h"
 
-@interface PAPrimaryViewController : UIViewController
+@interface PAPrimaryViewController : UIViewController <PACoreDataProtocol>
+
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end
