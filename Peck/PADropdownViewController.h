@@ -31,7 +31,6 @@
 //  - title properties set and their associates segues configured with identifiers containing the same string
 //  - tabBarItem properties set with UITabBarItems
 @property (nonatomic) NSArray * secondaryViewControllers;
-@property (nonatomic) NSArray * secondaryViewControllerIdentifiers;
 
 // points temporarily to the viewcontroller that is active
 // this could be either the primary or one of the secondaries, depending on the current state
@@ -83,12 +82,5 @@
             animationControllerForTransitionFromViewController:(UIViewController *)fromVC
                                               toViewController:(UIViewController *)toVC ;
 
-@end
-
-// this allows the relationships to be defined on a storyboard
-@interface PADropdownViewControllerSegue : UIStoryboardSegue
-@end
-
-@interface PADropdownViewControllerUnwind : UIStoryboardSegue
 @end
 

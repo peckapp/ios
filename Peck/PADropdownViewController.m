@@ -14,6 +14,9 @@
     
 }
 
+@property (nonatomic) NSString * primaryViewControllerIdentifier;
+@property (nonatomic) NSArray * secondaryViewControllerIdentifiers;
+
 // Designates the frame for child view controllers.
 @property (nonatomic) CGRect frameForContentController;
 
@@ -22,15 +25,6 @@
 @implementation PADropdownViewController
 
 @synthesize dropdownBar;
-
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 // this method handles loading in the view
 - (void)loadView
@@ -44,55 +38,47 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), barHeight)];
 
-    self.frameForContentController = CGRectMake(0, 20 + barHeight, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - barHeight);
-    
-    if (self.secondaryViewControllers == nil) {
-        
-        // no actual viewControllers were passed in, so if there is an array of identifers,
-        // they are used to instantiate the classes from the storyboard
-        
-        if (self.secondaryViewControllerIdentifiers != nil) {
-            NSLog(@"Instantiating secondaryViewControllers from the storyboard based on their identifiers");
+    self.primaryViewControllerIdentifier = PAPrimaryIdentifier;
+    self.secondaryViewControllerIdentifiers = @[PAPecksIdentifier,
+                                                PAFeedIdentifier,
+                                                PAAddIdentifier,
+                                                PACirclesIdentifier,
+                                                PAProfileIdentifier];
 
-            NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
-            
-            [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
-                NSString * identifier = (NSString*)obj;
-                UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
-                viewController.tabBarItem.tag = idx;
-                viewController.restorationIdentifier = identifier;
-                [svcCollector insertObject:viewController atIndex:idx];
-            }];
-            
-            // assigns the viewControllers to the dropdownViewController class
-            self.secondaryViewControllers = [svcCollector copy];
-            
-        } else {
-            [NSException raise:@"nil values for both secondaryViewControllers and secondaryViewControllerIdentifiers"
-                        format:@"must instantiate one of these"];
-        }
-        
-    } else {
-        NSLog(@"attempting to use pre-specified secondaryViewControllers in PADropdownViewController (functionality un-implemented)");
-    
-    }
-    
-    // does the necessary general setup for each viewcontroller, retreiving tabBarItems and passing it the managedObject Context
-    
+    // Instantiate primary view controller
+    NSLog(@"Instantiating primary view contorller");
+    self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
+
+    // Instantiate secondary view controllers
+    NSLog(@"Instantiating secondary view controller");
+    NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
+    [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
+        NSString * identifier = (NSString*)obj;
+        UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+        viewController.tabBarItem.tag = idx;
+        viewController.restorationIdentifier = identifier;
+        [svcCollector insertObject:viewController atIndex:idx];
+    }];
+    self.secondaryViewControllers = [svcCollector copy];
+
+    // Create tab bar items
     NSMutableArray * tempTabBarItems = [NSMutableArray arrayWithCapacity:self.secondaryViewControllers.count];
-    
     [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         UIViewController * viewController = (UIViewController *)obj;
         [tempTabBarItems insertObject:viewController.tabBarItem atIndex:idx];
     }];
+
+    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), barHeight)];
     dropdownBar.items = [tempTabBarItems copy];
-    
     dropdownBar.delegate = self;
-    
     [self.view addSubview:dropdownBar];
+
+    // Create a frame for child view controllers
+    self.frameForContentController = CGRectMake(0, 20 + barHeight, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - barHeight);
+
+    // Display primary view controller
+    [self displayContentController: self.primaryViewController];
 }
 
 - (void)didReceiveMemoryWarning
@@ -118,65 +104,58 @@
     [content removeFromParentViewController];
 }
 
-#pragma mark Storyboard Support
-
--(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void) cycleFromViewController: (UIViewController*) old
+                toViewController: (UIViewController*) new
 {
-    if ([segue isKindOfClass:[PADropdownViewControllerSegue class]]) {
-        [self displayContentController: segue.destinationViewController];
-    }
-}
+    [self addChildViewController:new];
+    [old willMoveToParentViewController:nil];
 
--(void) presentViewControllerAtIndex:(NSInteger)index animated:(BOOL)flag completion:(void (^)(void))completion
-{
-    UIViewController * destController =[self.secondaryViewControllers objectAtIndex:index];
-    [super presentViewController:destController animated:flag completion:completion];
+    [self transitionFromViewController:old
+                      toViewController:new
+                              duration:0.3
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{}
+                            completion:^(BOOL finished) {
+                                [old removeFromParentViewController];
+                                [new didMoveToParentViewController:self];
+                            }];
 }
 
 # pragma mark - UITabBarDelegate methods
 
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
 
-    NSString * identifier = self.secondaryViewControllerIdentifiers[item.tag];
-    [self performSegueWithIdentifier:identifier sender:self];
+    UIViewController * destinationViewController = self.secondaryViewControllers[item.tag];
+    // [self cycleFromViewController: self.activeViewController toViewController: destinationViewController];
+    
+    [self hideContentController:self.activeViewController];
+    [self displayContentController:destinationViewController];
 
-//    } else { // presents the view controller programatically if storyboards are unused
-//        UIViewController *selectedViewController = self.secondaryViewControllers[item.tag];
-//        
-//        // this is just a simple modal presentation. custom behavior must be done through the segue
-//        [self presentViewController:selectedViewController animated:YES completion:nil];
-//    }
+    // TODO: this passing may be unnecessary because child view controllers can access the managed object context from DropdownViewController
 
-}
-
-
-@end
-
-
-# pragma mark - Segues
-
-@implementation PADropdownViewControllerSegue
-
--(void) perform
-{
     // handles passing core data managed object context to the destinationViewControllers
-    UIViewController <PACoreDataProtocol> * srcViewController = (UIViewController <PACoreDataProtocol> *)self.sourceViewController;
-    if ([self.destinationViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
-        
-        UIViewController <PACoreDataProtocol> * cdDestViewController = (UIViewController <PACoreDataProtocol> *)self.destinationViewController;
-        cdDestViewController.managedObjectContext = srcViewController.managedObjectContext;
-        
-    } else if ([self.destinationViewController isMemberOfClass:[UINavigationController class]]) { // passes mOC to topViewController of NavController if possible
-        
-        UIViewController * topViewController = ((UINavigationController*)self.destinationViewController).topViewController;
-        
+    UIViewController <PACoreDataProtocol> * srcViewController = (UIViewController <PACoreDataProtocol> *)self.activeViewController;
+    if ([destinationViewController isMemberOfClass:[UINavigationController class]]) { // passes mOC to topViewController of NavController if possible
+
+        UIViewController * topViewController = ((UINavigationController*)destinationViewController).topViewController;
+
+        self.activeViewController = topViewController;
         if ([topViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) {
             UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)topViewController;
             cdViewController.managedObjectContext = srcViewController.managedObjectContext;
         }
-    }
+    } else if ([destinationViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
 
+        self.activeViewController = destinationViewController;
+
+        UIViewController <PACoreDataProtocol> * cdDestViewController = (UIViewController <PACoreDataProtocol> *)destinationViewController;
+        cdDestViewController.managedObjectContext = srcViewController.managedObjectContext;
+        
+    } else {
+        NSLog(@"Managed Object context not passed");
+    }
 }
+
 
 @end
 
