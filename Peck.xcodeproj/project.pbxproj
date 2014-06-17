@@ -387,13 +387,13 @@
 		DDDAEDE7194796BA004CE102 /* Circles */ = {
 			isa = PBXGroup;
 			children = (
-				A463F38B194F683D00ED441F /* Circle.h */,
-				A463F38C194F683D00ED441F /* Circle.m */,
 				863843CA193CB31C004110F5 /* PACirclesTableViewController.h */,
 				863843CB193CB31C004110F5 /* PACirclesTableViewController.m */,
 				A463F381194B959800ED441F /* PACircleCell.h */,
 				A463F382194B959800ED441F /* PACircleCell.m */,
 				A463F383194B959800ED441F /* PACircleCell.xib */,
+				A463F38B194F683D00ED441F /* Circle.h */,
+				A463F38C194F683D00ED441F /* Circle.m */,
 				A463F386194F3A4B00ED441F /* PAFriendProfileViewController.h */,
 				A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */,
 			);
