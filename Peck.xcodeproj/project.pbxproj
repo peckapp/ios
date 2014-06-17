@@ -24,6 +24,8 @@
 		863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */; };
 		863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */; };
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
+		867B52D319508F7500BEB37B /* PAPrimaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D219508F7500BEB37B /* PAPrimaryViewController.m */; };
+		867B52D619509F5000BEB37B /* PASessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D519509F5000BEB37B /* PASessionManager.m */; };
 		86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */; };
 		86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BFB4AF194B889100ADAB75 /* PADropdownBar.m */; };
 		86D59803193768BF00F38654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59802193768BF00F38654 /* Foundation.framework */; };
@@ -99,6 +101,10 @@
 		863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFeedTableViewController.m; sourceTree = "<group>"; };
 		863843E6193CBA69004110F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		867651ED19462E5200C14645 /* old_webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = old_webservice.h; sourceTree = "<group>"; };
+		867B52D119508F7500BEB37B /* PAPrimaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPrimaryViewController.h; sourceTree = "<group>"; };
+		867B52D219508F7500BEB37B /* PAPrimaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPrimaryViewController.m; sourceTree = "<group>"; };
+		867B52D419509F5000BEB37B /* PASessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASessionManager.h; sourceTree = "<group>"; };
+		867B52D519509F5000BEB37B /* PASessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASessionManager.m; sourceTree = "<group>"; };
 		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
 		86BFB4AE194B889100ADAB75 /* PADropdownBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownBar.h; sourceTree = "<group>"; };
 		86BFB4AF194B889100ADAB75 /* PADropdownBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADropdownBar.m; sourceTree = "<group>"; };
@@ -224,9 +230,20 @@
 		867651EC19462E3500C14645 /* Webservice */ = {
 			isa = PBXGroup;
 			children = (
+				867B52D419509F5000BEB37B /* PASessionManager.h */,
+				867B52D519509F5000BEB37B /* PASessionManager.m */,
 				867651ED19462E5200C14645 /* old_webservice.h */,
 			);
 			name = Webservice;
+			sourceTree = "<group>";
+		};
+		867B52D019508F5800BEB37B /* Primary */ = {
+			isa = PBXGroup;
+			children = (
+				867B52D119508F7500BEB37B /* PAPrimaryViewController.h */,
+				867B52D219508F7500BEB37B /* PAPrimaryViewController.m */,
+			);
+			name = Primary;
 			sourceTree = "<group>";
 		};
 		86D597F6193768BF00F38654 = {
@@ -279,6 +296,7 @@
 				86BFB4AF194B889100ADAB75 /* PADropdownBar.m */,
 				86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */,
 				86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */,
+				867B52D019508F5800BEB37B /* Primary */,
 				A4B772DD1945F8DB00A31252 /* Configure */,
 				DDDAEDE419479665004CE102 /* Events */,
 				DDDAEDE51947967A004CE102 /* Newsfeed */,
@@ -377,13 +395,13 @@
 		DDDAEDE7194796BA004CE102 /* Circles */ = {
 			isa = PBXGroup;
 			children = (
-				A463F38B194F683D00ED441F /* Circle.h */,
-				A463F38C194F683D00ED441F /* Circle.m */,
 				863843CA193CB31C004110F5 /* PACirclesTableViewController.h */,
 				863843CB193CB31C004110F5 /* PACirclesTableViewController.m */,
 				A463F381194B959800ED441F /* PACircleCell.h */,
 				A463F382194B959800ED441F /* PACircleCell.m */,
 				A463F383194B959800ED441F /* PACircleCell.xib */,
+				A463F38B194F683D00ED441F /* Circle.h */,
+				A463F38C194F683D00ED441F /* Circle.m */,
 				A463F386194F3A4B00ED441F /* PAFriendProfileViewController.h */,
 				A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */,
 			);
@@ -543,6 +561,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				867B52D319508F7500BEB37B /* PAPrimaryViewController.m in Sources */,
 				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
 				863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */,
 				86D59811193768BF00F38654 /* main.m in Sources */,
@@ -560,6 +579,7 @@
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
 				A463F38D194F683D00ED441F /* Circle.m in Sources */,
 				86292527193CBFF80057CA41 /* PAEventCell.m in Sources */,
+				867B52D619509F5000BEB37B /* PASessionManager.m in Sources */,
 				86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */,
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,
