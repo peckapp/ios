@@ -49,6 +49,8 @@
 		A463F385194B959800ED441F /* PACircleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A463F383194B959800ED441F /* PACircleCell.xib */; };
 		A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */; };
 		A463F38D194F683D00ED441F /* Circle.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F38C194F683D00ED441F /* Circle.m */; };
+		A463F38F19507FA300ED441F /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = A463F38E19507FA300ED441F /* Property List.plist */; };
+		A463F3921950BD4200ED441F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F3911950BD4200ED441F /* Event.m */; };
 		A4925C07194A179A001AAC4A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C06194A179A001AAC4A /* Accounts.framework */; };
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
@@ -56,6 +58,9 @@
 		A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */; };
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
+		DD6C9AC21950999700B4764D /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = DD6C9ABF1950999700B4764D /* background.png */; };
+		DD6C9AC31950999700B4764D /* button-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = DD6C9AC01950999700B4764D /* button-selected.png */; };
+		DD6C9AC41950999700B4764D /* button.png in Resources */ = {isa = PBXBuildFile; fileRef = DD6C9AC11950999700B4764D /* button.png */; };
 		DDDAEDDB19465DCB004CE102 /* PAFeedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAFeedCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */; };
 		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
@@ -138,6 +143,9 @@
 		A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFriendProfileViewController.m; sourceTree = "<group>"; };
 		A463F38B194F683D00ED441F /* Circle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Circle.h; sourceTree = "<group>"; };
 		A463F38C194F683D00ED441F /* Circle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Circle.m; sourceTree = "<group>"; };
+		A463F38E19507FA300ED441F /* Property List.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Property List.plist"; sourceTree = "<group>"; };
+		A463F3901950BD4200ED441F /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		A463F3911950BD4200ED441F /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A4925C06194A179A001AAC4A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A4925C08194A17A1001AAC4A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A4925C0A194A17AB001AAC4A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -147,6 +155,9 @@
 		A4B772E619460C3200A31252 /* schools.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = schools.plist; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD6C9ABF1950999700B4764D /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = ../../../Desktop/background.png; sourceTree = SOURCE_ROOT; };
+		DD6C9AC01950999700B4764D /* button-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "button-selected.png"; path = "../../../Desktop/button-selected.png"; sourceTree = SOURCE_ROOT; };
+		DD6C9AC11950999700B4764D /* button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button.png; path = ../../../Desktop/button.png; sourceTree = SOURCE_ROOT; };
 		DDDAEDD819465DCB004CE102 /* PAFeedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFeedCell.h; sourceTree = "<group>"; };
 		DDDAEDD919465DCB004CE102 /* PAFeedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFeedCell.m; sourceTree = "<group>"; };
 		DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAFeedCell.xib; sourceTree = "<group>"; };
@@ -190,6 +201,9 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				DD6C9ABF1950999700B4764D /* background.png */,
+				DD6C9AC01950999700B4764D /* button-selected.png */,
+				DD6C9AC11950999700B4764D /* button.png */,
 				86051D48194BB27200961541 /* Silhouette.png */,
 			);
 			name = Graphics;
@@ -198,6 +212,8 @@
 		8629250D193CBB370057CA41 /* Post */ = {
 			isa = PBXGroup;
 			children = (
+				A463F3901950BD4200ED441F /* Event.h */,
+				A463F3911950BD4200ED441F /* Event.m */,
 				86292510193CBE000057CA41 /* PAPostViewController.h */,
 				86292511193CBE000057CA41 /* PAPostViewController.m */,
 			);
@@ -315,6 +331,7 @@
 				86D59810193768BF00F38654 /* main.m */,
 				86D59812193768BF00F38654 /* Peck-Prefix.pch */,
 				A4B772E619460C3200A31252 /* schools.plist */,
+				A463F38E19507FA300ED441F /* Property List.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -499,7 +516,9 @@
 				86051D49194BB27200961541 /* Silhouette.png in Resources */,
 				DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */,
 				A4B772E719460C3200A31252 /* schools.plist in Resources */,
+				DD6C9AC31950999700B4764D /* button-selected.png in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
+				A463F38F19507FA300ED441F /* Property List.plist in Resources */,
 				86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -565,6 +584,7 @@
 				86D59821193768BF00F38654 /* PAEventInfoViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PeckInitialViewController.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
+				A463F3921950BD4200ED441F /* Event.m in Sources */,
 				863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */,
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
 				A463F38D194F683D00ED441F /* Circle.m in Sources */,

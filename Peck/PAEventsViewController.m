@@ -12,6 +12,7 @@
 #import "PAPostViewController.h"
 #import "PAPecksViewController.h"
 #import "PAAppDelegate.h"
+#import "Event.h"
 
 @interface PAEventsViewController ()
 
@@ -159,7 +160,7 @@
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"eventName" ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -243,8 +244,11 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
+    //NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    //cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
+    Event *tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.text = tempEvent.eventName;
+    cell.imageView.image = [UIImage imageWithData:tempEvent.photo];
 }
 
 @end

@@ -51,12 +51,6 @@
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     
-    Circle *circle1 = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
-    [circle1 setCircleName:@"Physics"];
-    [circle1 setMembers:members1];
-    Circle *circle2 = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
-    [circle2 setCircleName:@"Chess Club"];
-    [circle2 setMembers:members2];
     
     NSFetchRequest * request = [[NSFetchRequest alloc] init];
     NSEntityDescription *circles = [NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
@@ -68,8 +62,86 @@
     NSError *error = nil;
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
     self.circles = mutableFetchResults;
-    NSLog(@"circles: %@", _circles);
+    NSLog(@"Number of circles: %lu", (unsigned long)[_circles count]);
+    //Set circles to the current core data (this will be nil the first time it loads)
+    
+    
+    dispatch_queue_t  queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+        NSFetchRequest * request1 = [[NSFetchRequest alloc] init];
+        NSEntityDescription *circles1 = [NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
+        [request1 setEntity:circles1];
+        
+        NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"circleName" ascending:YES];
+        NSArray *sortDescriptors1 = [[NSArray alloc] initWithObjects:sortDescriptor1, nil];
+        [request1 setSortDescriptors:sortDescriptors1];
 
+        NSError *error1 = nil;
+        NSMutableArray *mutableFetchResults1 = [[_managedObjectContext executeFetchRequest:request1 error:&error1]mutableCopy];
+        NSMutableArray * circleNames = [NSMutableArray array];
+        for(int i=0; i<[mutableFetchResults1 count];i++){
+            Circle *tempCircle = mutableFetchResults1[i];
+            circleNames[i]=tempCircle.circleName;
+        }
+        //fetch the core data and put the names of the circles into a temp array
+        
+        NSString *path = [[NSBundle mainBundle] pathForResource:
+                          @"Property List" ofType:@"plist"];
+        NSArray *circleNames2 = [[NSArray alloc] initWithContentsOfFile:path];
+        //get the real current circles from a plist (will be updated to get this data from dreamhost)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //check if the arrays are the same (if the circles are up to date)
+            BOOL updatedCircles=YES;
+            if([circleNames count]!=[circleNames2 count])
+                updatedCircles=NO;
+            if(updatedCircles){
+                for(int k=0;k<[circleNames count];k++){
+                    NSString *tempString1 = circleNames[k];
+                    NSString *tempString2 = circleNames2[k];
+                    if(![tempString1 isEqualToString:tempString2]){
+                        NSLog(@"the strings are different");
+                        updatedCircles=NO;
+                    }
+                }
+            }
+            //if they are not up to date, delete the core data and load in the new circles
+            if(!updatedCircles){
+                int j = (int)[mutableFetchResults1 count];
+                 for(int i=0;i<j;i++){
+                     NSManagedObject *eventToDelete = mutableFetchResults1[0];
+                     [_managedObjectContext deleteObject:eventToDelete];
+                     [mutableFetchResults1 removeObjectAtIndex:0];
+                 }
+        
+                 Circle *circle1 = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
+                 [circle1 setCircleName:@"Physics"];
+                 [circle1 setMembers:members1];
+                
+                Circle *circle2 = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
+                [circle2 setCircleName:@"Chess Club"];
+                [circle2 setMembers:members2];
+                
+                NSFetchRequest * request = [[NSFetchRequest alloc] init];
+                NSEntityDescription *circles = [NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
+                [request setEntity:circles];
+                NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"circleName" ascending:YES];
+                NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+                [request setSortDescriptors:sortDescriptors];
+                
+                NSError *error = nil;
+                NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
+                self.circles = mutableFetchResults;
+                NSLog(@"circles: %@", _circles);
+                NSLog(@"Number of circles: %lu", (unsigned long)[_circles count]);
+                [self.tableView reloadData];
+            }
+            
+        });
+    });
+   
+    NSLog(@"View did load");
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -104,7 +176,7 @@
     cell.tag=[indexPath row];
     Circle * tempCircle = _circles[[indexPath row]];
     NSArray *members = tempCircle.members;
-    int numberOfMembers = [members count];
+    int numberOfMembers = (int)[members count];
     for(int i =0; i<[members count]; i++){
         NSLog(@"Member: %@", members[i]);
     }

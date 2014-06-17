@@ -7,6 +7,8 @@
 //
 
 #import "PAPostViewController.h"
+#import "PAAppDelegate.h"
+#import "Event.h"
 
 @interface PAPostViewController () {
     NSMutableArray * userEvents;
@@ -22,7 +24,9 @@
 @synthesize controlSwitch = _controlSwitch;
 @synthesize photo;
 @synthesize userEvents = _userEvents;
-
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 int initialTVHeight;
 int initialRowHeight;
@@ -42,6 +46,7 @@ int initialRowHeight;
     
     _tableView.delegate=self;
     _tableView.dataSource=self;
+    //_tableView.frame = CGRectMake(_tableView.frame.origin.x, 300, _tableView.frame.size.width, _tableView.frame.size.height);
     initialTVHeight = _tableView.frame.size.height;
     initialRowHeight = _tableView.rowHeight;
     photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
@@ -128,6 +133,7 @@ int initialRowHeight;
     if ([indexPath section] == 0) {
         UIImageView *imageView = (UIImageView *) cell.contentView.subviews[2];
         imageView.frame = CGRectMake(140, 0, 60, 44);
+        imageView.tag = [indexPath row];
         if([indexPath row] != 1 || _controlSwitch.selectedSegmentIndex==1){
             imageView.image=nil;
         }
@@ -176,10 +182,10 @@ int initialRowHeight;
 
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
-    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, 115);
-    // TODO: the height reads 115 but should be changed to reflect the heigh of the keyboard
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
+    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height-216);
+    // TODO: the keyboard height reads 216 but should not be hardcoded
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -213,15 +219,11 @@ int initialRowHeight;
         NSString * text =textField.text;
         if(text!=nil)
             _userEvents[i]=text;
-         NSLog(@"%@", _userEvents);
     }
    
 }
 
 
-- (IBAction)cancelButton:(id)sender {
-    // [self dismissViewControllerAnimated:YES completion:^(void){}];
-}
 
 
 - (IBAction)segmentedControl:(id)sender {
@@ -293,11 +295,36 @@ int initialRowHeight;
     //UIImageView *imageView = [[UIImageView alloc] initWithImage: image];
     //[self.view addSubview: imageView];
     [self.tableView reloadData];
-    NSData *imageData = UIImageJPEGRepresentation(image, 0.1);
+    //NSData *imageData = UIImageJPEGRepresentation(image, 0.1);
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
 {
     [self dismissViewControllerAnimated: YES completion: nil];
 }
+
+
+
+
+- (IBAction)okayButton:(id)sender {
+
+   
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
+    [event setEventName:_userEvents[0]];
+    [event setLocation:_userEvents[2]];
+    [event setTime:_userEvents[3]];
+    [event setDescrip:_userEvents[5]];
+    NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
+    [event setPhoto:imageData];
+    
+    /*
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"primary"];
+    [self presentViewController: controller animated:YES completion:nil];
+     */
+}
+
 @end

@@ -42,7 +42,7 @@ bool loadedImages;
 
 -(void)selectProfile: (UIGestureRecognizer*) sender{
     CGPoint tapPoint = [sender locationInView:scrollView];
-    NSLog(@"cell: %i, x location: %f", self.tag, tapPoint.x);
+    //NSLog(@"cell: %i, x location: %f", self.tag, tapPoint.x);
     [_delegate Profile:2];
 
     //get the cell and the picture that has been selected and open that profile

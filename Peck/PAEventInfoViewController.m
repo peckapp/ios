@@ -8,13 +8,18 @@
 
 #import "PAEventInfoViewController.h"
 #import "PAAppDelegate.h"
+#import "Event.h"
 
 @interface PAEventInfoViewController ()
 - (void)configureView;
 @end
 
 @implementation PAEventInfoViewController
-
+@synthesize fetchedResultsController;
+@synthesize detailDescriptionLabel;
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 #pragma mark - Managing the detail item
 
@@ -22,7 +27,7 @@
 {
     if (_detailItem != newDetailItem) {
         _detailItem = newDetailItem;
-        
+        NSLog(@"the event: %@", _detailItem);
         // Update the view.
         [self configureView];
     }
@@ -33,7 +38,13 @@
     // Update the user interface for the detail item.
 
     if (self.detailItem) {
-        self.detailDescriptionLabel.text = [[self.detailItem valueForKey:@"timeStamp"] description];
+        self.detailDescriptionLabel.text = [[self.detailItem valueForKey:@"descrip"] description];
+        self.eventTitleLabel.text =[[self.detailItem valueForKey:@"eventName"] description];
+        
+        self.eventPhoto.image = [UIImage imageWithData:[self.detailItem valueForKey:@"photo"]];
+        
+        
+        //cell.imageView.image = [UIImage imageWithData:tempEvent.photo];
     }
 }
 
