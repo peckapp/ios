@@ -89,75 +89,55 @@
 
 #pragma Manage ViewControllers
 
-- (void) displayContentController: (UIViewController*) content;
-{
-    [self addChildViewController:content];
-    content.view.frame = self.frameForContentController;
-    [self.view addSubview: content.view];
-    [content didMoveToParentViewController:self];
-}
-
-- (void) hideContentController: (UIViewController*) content
-{
-    [content willMoveToParentViewController:nil];
-    [content.view removeFromSuperview];
-    [content removeFromParentViewController];
-}
-
-- (void) cycleFromViewController: (UIViewController*) old
-                toViewController: (UIViewController*) new
+- (void) displayContentController: (UIViewController*) new;
 {
     [self addChildViewController:new];
-    [old willMoveToParentViewController:nil];
+    new.view.frame = self.frameForContentController;
+    [self.view addSubview: new.view];
+    [new didMoveToParentViewController:self];
+    self.activeViewController = new;
+}
 
-    [self transitionFromViewController:old
-                      toViewController:new
-                              duration:0.3
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^{}
+- (void) hideContentController: (UIViewController*) old
+{
+    [old willMoveToParentViewController:nil];
+    [old.view removeFromSuperview];
+    [old removeFromParentViewController];
+}
+
+- (void) transitionFromViewController: (UIViewController*) old
+                toViewController: (UIViewController*) new
+{
+    self.view.userInteractionEnabled = NO;
+    [old willMoveToParentViewController:nil];
+    [self addChildViewController:new];
+
+    CGFloat distance = self.frameForContentController.size.height;
+    new.view.frame = self.frameForContentController;
+    new.view.transform = CGAffineTransformMakeTranslation(0, distance);
+
+    [self transitionFromViewController: old toViewController: new
+                              duration: 0.25 options:0
+                            animations:^{
+                                new.view.transform = CGAffineTransformMakeTranslation(0, 0);
+                            }
                             completion:^(BOOL finished) {
                                 [old removeFromParentViewController];
                                 [new didMoveToParentViewController:self];
+                                self.activeViewController = new;
+                                self.view.userInteractionEnabled = YES;
                             }];
 }
-
 # pragma mark - UITabBarDelegate methods
 
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
 
     UIViewController * destinationViewController = self.secondaryViewControllers[item.tag];
-    // [self cycleFromViewController: self.activeViewController toViewController: destinationViewController];
-    
-    [self hideContentController:self.activeViewController];
-    [self displayContentController:destinationViewController];
-
-    self.activeViewController = destinationViewController;
-
-    /*
-    // TODO: this passing may be unnecessary because child view controllers can access the managed object context from DropdownViewController
-
-    // handles passing core data managed object context to the destinationViewControllers
-    UIViewController <PACoreDataProtocol> * srcViewController = (UIViewController <PACoreDataProtocol> *)self.activeViewController;
-    if ([destinationViewController isMemberOfClass:[UINavigationController class]]) { // passes mOC to topViewController of NavController if possible
-
-        UIViewController * topViewController = ((UINavigationController*)destinationViewController).topViewController;
-
-        self.activeViewController = topViewController;
-        if ([topViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) {
-            UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)topViewController;
-            cdViewController.managedObjectContext = srcViewController.managedObjectContext;
-        }
-    } else if ([destinationViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
-
-        self.activeViewController = destinationViewController;
-
-        UIViewController <PACoreDataProtocol> * cdDestViewController = (UIViewController <PACoreDataProtocol> *)destinationViewController;
-        cdDestViewController.managedObjectContext = srcViewController.managedObjectContext;
-        
+    if (self.activeViewController == destinationViewController) {
+        [self transitionFromViewController: self.activeViewController toViewController: self.primaryViewController];
     } else {
-        NSLog(@"Managed Object context not passed");
+        [self transitionFromViewController: self.activeViewController toViewController: destinationViewController];
     }
-     */
 }
 
 
