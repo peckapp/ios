@@ -11,6 +11,7 @@
 #import "PAEventInfoViewController.h"
 #import "PAPostViewController.h"
 #import "PAPecksViewController.h"
+#import "PAAppDelegate.h"
 
 @interface PAEventsViewController ()
 
@@ -19,6 +20,10 @@
 @end
 
 @implementation PAEventsViewController
+
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 - (void)awakeFromNib
 {
@@ -140,7 +145,9 @@
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
-    
+
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
     

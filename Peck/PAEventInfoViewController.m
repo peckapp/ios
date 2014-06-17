@@ -7,12 +7,14 @@
 //
 
 #import "PAEventInfoViewController.h"
+#import "PAAppDelegate.h"
 
 @interface PAEventInfoViewController ()
 - (void)configureView;
 @end
 
 @implementation PAEventInfoViewController
+
 
 #pragma mark - Managing the detail item
 
@@ -39,6 +41,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+
     [self configureView];
     
     

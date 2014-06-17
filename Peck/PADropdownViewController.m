@@ -131,6 +131,9 @@
     [self hideContentController:self.activeViewController];
     [self displayContentController:destinationViewController];
 
+    self.activeViewController = destinationViewController;
+
+    /*
     // TODO: this passing may be unnecessary because child view controllers can access the managed object context from DropdownViewController
 
     // handles passing core data managed object context to the destinationViewControllers
@@ -154,6 +157,7 @@
     } else {
         NSLog(@"Managed Object context not passed");
     }
+     */
 }
 
 
