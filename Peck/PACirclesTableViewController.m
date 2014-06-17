@@ -51,13 +51,47 @@
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     
+    dispatch_queue_t  queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+        NSFetchRequest * request1 = [[NSFetchRequest alloc] init];
+        NSEntityDescription *circles1 = [NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
+        [request1 setEntity:circles1];
+
+        NSError *error1 = nil;
+        NSMutableArray *mutableFetchResults1 = [[_managedObjectContext executeFetchRequest:request1 error:&error1]mutableCopy];
+        NSMutableArray * circleNames = [NSMutableArray array];
+        for(int i=0; i<[mutableFetchResults1 count];i++){
+            Circle *tempCircle = mutableFetchResults1[i];
+            circleNames[i]=tempCircle.circleName;
+        }
+        
+        NSString *path = [[NSBundle mainBundle] pathForResource:
+                          @"Property List" ofType:@"plist"];
+        NSArray *circleNames2 = [[NSArray alloc] initWithContentsOfFile:path];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"circleNames: %@", circleNames);
+            NSLog(@"circleNames2: %@", circleNames2);
+            
+        });
+    });
+   
+    
+    /*int j = [mutableFetchResults1 count];
+    for(int i=0;i<j;i++){
+        NSManagedObject *eventToDelete = mutableFetchResults1[0];
+        [_managedObjectContext deleteObject:eventToDelete];
+        [mutableFetchResults1 removeObjectAtIndex:0];
+    }
+    */
+    /*
     Circle *circle1 = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
     [circle1 setCircleName:@"Physics"];
     [circle1 setMembers:members1];
     Circle *circle2 = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
     [circle2 setCircleName:@"Chess Club"];
     [circle2 setMembers:members2];
-    
+    */
+     
     NSFetchRequest * request = [[NSFetchRequest alloc] init];
     NSEntityDescription *circles = [NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
     [request setEntity:circles];
