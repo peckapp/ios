@@ -38,13 +38,6 @@
     PADropdownViewController * dropdownViewController = (PADropdownViewController*)initViewController;
     // passes the manangedObjectContext for Core Data
     dropdownViewController.managedObjectContext = self.managedObjectContext;
-    
-    NSArray * identifiers = @[PAPecksIdentifier,
-                              PAFeedIdentifier,
-                              PAAddIdentifier,
-                              PACirclesIdentifier,
-                              PAProfileIdentifier];
-    dropdownViewController.secondaryViewControllerIdentifiers = identifiers;
 
     /*
     // creates the viewControllers for the identifiers and sets restorationIdentifier and the tags for each tabBarItem to the appropriate index

@@ -50,6 +50,7 @@
     NSArray *members2 =@[@"Thing 1",@"Thing 2"];
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
+    
     Circle *circle1 = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
     [circle1 setCircleName:@"Physics"];
     [circle1 setMembers:members1];
@@ -57,14 +58,17 @@
     [circle2 setCircleName:@"Chess Club"];
     [circle2 setMembers:members2];
     
-    
     NSFetchRequest * request = [[NSFetchRequest alloc] init];
     NSEntityDescription *circles = [NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
     [request setEntity:circles];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"circleName" ascending:YES];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    [request setSortDescriptors:sortDescriptors];
     
     NSError *error = nil;
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
     self.circles = mutableFetchResults;
+    NSLog(@"circles: %@", _circles);
 
 }
 
@@ -85,7 +89,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 2;
+    return [_circles count];
 }
 
 
@@ -106,7 +110,7 @@
     }
     cell.members = numberOfMembers;
     cell.circleTitle.text = tempCircle.circleName;
-    [cell.scrollView setContentSize:CGSizeMake(80*numberOfMembers, cell.frame.origin.y)];
+    [cell.scrollView setContentSize:CGSizeMake(80*(numberOfMembers), 0)];
     [cell addImages];
     return cell;
 }
