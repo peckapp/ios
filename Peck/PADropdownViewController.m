@@ -47,10 +47,11 @@
                                                 PAProfileIdentifier];
 
     // Instantiate primary view controller
+    NSLog(@"Instantiating primary view contorller");
     self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
 
     // Instantiate secondary view controllers
-    NSLog(@"Instantiating secondary view controllers from the storyboard based on their identifiers");
+    NSLog(@"Instantiating secondary view controller");
     NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
     [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
         NSString * identifier = (NSString*)obj;
@@ -126,25 +127,29 @@
     [self hideContentController:self.activeViewController];
     [self displayContentController:destinationViewController];
 
+    // TODO: this passing may be unnecessary because child view controllers can access the managed object context from DropdownViewController
+
     // handles passing core data managed object context to the destinationViewControllers
     UIViewController <PACoreDataProtocol> * srcViewController = (UIViewController <PACoreDataProtocol> *)self.activeViewController;
-    if ([destinationViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
-
-        UIViewController <PACoreDataProtocol> * cdDestViewController = (UIViewController <PACoreDataProtocol> *)destinationViewController;
-        cdDestViewController.managedObjectContext = srcViewController.managedObjectContext;
-
-    } else if ([destinationViewController isMemberOfClass:[UINavigationController class]]) { // passes mOC to topViewController of NavController if possible
+    if ([destinationViewController isMemberOfClass:[UINavigationController class]]) { // passes mOC to topViewController of NavController if possible
 
         UIViewController * topViewController = ((UINavigationController*)destinationViewController).topViewController;
 
+        self.activeViewController = topViewController;
         if ([topViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) {
             UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)topViewController;
             cdViewController.managedObjectContext = srcViewController.managedObjectContext;
         }
+    } else if ([destinationViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
+
+        self.activeViewController = destinationViewController;
+
+        UIViewController <PACoreDataProtocol> * cdDestViewController = (UIViewController <PACoreDataProtocol> *)destinationViewController;
+        cdDestViewController.managedObjectContext = srcViewController.managedObjectContext;
+        
+    } else {
+        NSLog(@"Managed Object context not passed");
     }
-
-    // self.activeViewController = destinationViewController;
-
 }
 
 
