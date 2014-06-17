@@ -176,10 +176,10 @@ int initialRowHeight;
 
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
-    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, 115);
-    // TODO: the height reads 115 but should be changed to reflect the heigh of the keyboard
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
+    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height-216);
+    // TODO: the keyboard height reads 216 but should not be hardcoded
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -220,7 +220,7 @@ int initialRowHeight;
 
 
 - (IBAction)cancelButton:(id)sender {
-    // [self dismissViewControllerAnimated:YES completion:^(void){}];
+    //[self dismissViewControllerAnimated:YES completion:^(void){}];
 }
 
 
@@ -293,11 +293,15 @@ int initialRowHeight;
     //UIImageView *imageView = [[UIImageView alloc] initWithImage: image];
     //[self.view addSubview: imageView];
     [self.tableView reloadData];
-    NSData *imageData = UIImageJPEGRepresentation(image, 0.1);
+    //NSData *imageData = UIImageJPEGRepresentation(image, 0.1);
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
 {
     [self dismissViewControllerAnimated: YES completion: nil];
 }
+
+
+
+
 @end
