@@ -18,4 +18,9 @@
 @property (strong, nonatomic) id detailItem;
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (weak, nonatomic) IBOutlet UIImageView *eventPhoto;
+@property (weak, nonatomic) IBOutlet UILabel *eventTitleLabel;
+
 @end

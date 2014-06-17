@@ -13,19 +13,20 @@
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 - (IBAction)segmentedControl:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *controlSwitch;
 
-- (IBAction)cancelButton:(id)sender;
+- (IBAction)okayButton:(id)sender;
+
 @property (strong, nonatomic) NSArray *eventItems;
 @property (strong, nonatomic) NSArray *eventSuggestions;
 @property (strong, nonatomic) UIImage *photo;
 
 @property (strong, nonatomic) NSMutableArray *userEvents;
-@property (strong, nonatomic) NSMutableArray *userMessages;
-@property (strong, nonatomic) NSMutableArray *userPhotos;
 
 @end
