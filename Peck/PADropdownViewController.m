@@ -104,19 +104,21 @@
     [content removeFromParentViewController];
 }
 
-#pragma mark Storyboard Support
-
--(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void) cycleFromViewController: (UIViewController*) old
+                toViewController: (UIViewController*) new
 {
-    if ([segue isKindOfClass:[PADropdownViewControllerSegue class]]) {
-        //[self displayContentController: segue.destinationViewController];
-    }
-}
+    [self addChildViewController:new];
+    [old willMoveToParentViewController:nil];
 
--(void) presentViewControllerAtIndex:(NSInteger)index animated:(BOOL)flag completion:(void (^)(void))completion
-{
-    UIViewController * destController =[self.secondaryViewControllers objectAtIndex:index];
-    [super presentViewController:destController animated:flag completion:completion];
+    [self transitionFromViewController:old
+                      toViewController:new
+                              duration:0.3
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{}
+                            completion:^(BOOL finished) {
+                                [old removeFromParentViewController];
+                                [new didMoveToParentViewController:self];
+                            }];
 }
 
 # pragma mark - UITabBarDelegate methods
@@ -124,6 +126,8 @@
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
 
     UIViewController * destinationViewController = self.secondaryViewControllers[item.tag];
+    // [self cycleFromViewController: self.activeViewController toViewController: destinationViewController];
+    
     [self hideContentController:self.activeViewController];
     [self displayContentController:destinationViewController];
 
@@ -152,34 +156,6 @@
     }
 }
 
-
-@end
-
-
-# pragma mark - Segues
-
-@implementation PADropdownViewControllerSegue
-
--(void) perform
-{
-//    // handles passing core data managed object context to the destinationViewControllers
-//    UIViewController <PACoreDataProtocol> * srcViewController = (UIViewController <PACoreDataProtocol> *)self.sourceViewController;
-//    if ([self.destinationViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) { // passes managedObjectContext if viewController conforms to protocol
-//        
-//        UIViewController <PACoreDataProtocol> * cdDestViewController = (UIViewController <PACoreDataProtocol> *)self.destinationViewController;
-//        cdDestViewController.managedObjectContext = srcViewController.managedObjectContext;
-//        
-//    } else if ([self.destinationViewController isMemberOfClass:[UINavigationController class]]) { // passes mOC to topViewController of NavController if possible
-//        
-//        UIViewController * topViewController = ((UINavigationController*)self.destinationViewController).topViewController;
-//        
-//        if ([topViewController conformsToProtocol:@protocol(PACoreDataProtocol)]) {
-//            UIViewController <PACoreDataProtocol> * cdViewController = (UIViewController <PACoreDataProtocol> *)topViewController;
-//            cdViewController.managedObjectContext = srcViewController.managedObjectContext;
-//        }
-//    }
-
-}
 
 @end
 

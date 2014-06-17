@@ -84,10 +84,3 @@
 
 @end
 
-// this allows the relationships to be defined on a storyboard
-@interface PADropdownViewControllerSegue : UIStoryboardSegue
-@end
-
-@interface PADropdownViewControllerUnwind : UIStoryboardSegue
-@end
-
