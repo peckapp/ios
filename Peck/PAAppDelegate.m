@@ -23,21 +23,25 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    [FBLoginView class];
+    UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *initViewController = [storyBoard instantiateInitialViewController];
+    [self.window setRootViewController:initViewController];
+    
+    // TODO: cleanup old code if possible
  
     // iterates through all subviews of the root tabcontroller and sets pointer to the managedObjectContext
     
     //ConfigureViewController* configureController = (ConfigureViewController *)self.window.rootViewController;
     //configureController.managedObjectContext = self.managedObjectContext;
-    [FBLoginView class];
-    UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *initViewController = [storyBoard instantiateInitialViewController];
-    [self.window setRootViewController:initViewController];
+
     //initViewController.managedObjectContext = self.managedObjectContext;
     
 
-    PADropdownViewController * dropdownViewController = (PADropdownViewController*)initViewController;
+    //PADropdownViewController * dropdownViewController = (PADropdownViewController*)initViewController;
     // passes the manangedObjectContext for Core Data
-    dropdownViewController.managedObjectContext = self.managedObjectContext;
+    //dropdownViewController.managedObjectContext = self.managedObjectContext;
 
     /*
     // creates the viewControllers for the identifiers and sets restorationIdentifier and the tags for each tabBarItem to the appropriate index
