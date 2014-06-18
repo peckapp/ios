@@ -131,6 +131,7 @@ int initialRowHeight;
     }
     
     if ([indexPath section] == 0) {
+        cell.tag=[indexPath row];
         UIImageView *imageView = (UIImageView *) cell.contentView.subviews[2];
         imageView.frame = CGRectMake(140, 0, 60, 44);
         imageView.tag = [indexPath row];
@@ -139,6 +140,7 @@ int initialRowHeight;
         }
         UITextField * textField = (UITextField*) cell.contentView.subviews[0];
         textField.hidden=NO;
+        [textField setUserInteractionEnabled:YES];
         textField.placeholder = [_eventSuggestions objectAtIndex:[indexPath row]];
         textField.text = [_userEvents objectAtIndex:[indexPath row]];
         textField.tag = [indexPath row];
@@ -155,6 +157,8 @@ int initialRowHeight;
         if(_controlSwitch.selectedSegmentIndex==0)//Events
         {
             textField.frame = CGRectMake(140, 8, 185, 30);
+            if([indexPath row]==3)
+               [textField setUserInteractionEnabled:NO];
         }
         if(_controlSwitch.selectedSegmentIndex==1 || _controlSwitch.selectedSegmentIndex==2)//Messages and Photos
         {
@@ -176,9 +180,30 @@ int initialRowHeight;
         [actionSheet showInView:self.view];
         NSLog(@"add a photo");
     }
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if([indexPath row]==3 && _controlSwitch.selectedSegmentIndex==0){
+        
+            
+        CGRect pickerFrame = CGRectMake(0,300,0,0);
+        UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:pickerFrame];
+        [datePicker addTarget:self action:@selector(pickerChanged:)forControlEvents:UIControlEventValueChanged];
+        [self.view addSubview:datePicker];
+           }
+    
+    //[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+- (void)pickerChanged:(id)sender
+{
+    NSLog(@"value: %@",[sender date]);
+    NSIndexPath *indexPath = [_tableView indexPathForSelectedRow];
+    UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
+    UITextField *textField = cell.contentView.subviews[0];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"z d, yyyy h:mm a"];
+    
+    NSString *stringFromDate = [formatter stringFromDate:[sender date]];
+    textField.text = stringFromDate;
+}
 
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
@@ -307,8 +332,16 @@ int initialRowHeight;
 
 
 - (IBAction)okayButton:(id)sender {
-
-   
+    if([_userEvents[0] isEqualToString:@""] || [_userEvents[3] isEqualToString:@""]){
+        NSLog(@"allert");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                                        message:@"You must enter an event name and time"
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+    else{
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     
@@ -325,6 +358,7 @@ int initialRowHeight;
     UIViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"primary"];
     [self presentViewController: controller animated:YES completion:nil];
      */
+    }
 }
 
 @end
