@@ -43,8 +43,10 @@
     _managedObjectContext = [appdelegate managedObjectContext];
     
     
-    [[PASessionManager sharedClient] GET:@"api/events" parameters:nil success:^
-        (NSURLSessionDataTask * __unused task, id JSON) {
+    [[PASessionManager sharedClient] GET:@"api/events"
+                              parameters:nil
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"JSON: %@",JSON);
          NSArray *postsFromResponse = (NSArray*)JSON;
          NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
@@ -59,11 +61,12 @@
                 NSLog(@"EVENT: %@",event);
              }
          }
-            
-    } failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+     }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
             NSLog(@"ERROR: %@",error);
     }];
     
+    /*
     [[PASessionManager sharedClient] POST:@"api/events"
                                parameters:@{}
                                   success:^(NSURLSessionDataTask *task,id responseObject) {
@@ -72,6 +75,7 @@
                                   failure:^(NSURLSessionDataTask *task, NSError * error) {
                                       NSLog(@"POST error: %@",error);
                                   }];
+     */
 }
 
 
