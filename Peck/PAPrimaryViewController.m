@@ -42,7 +42,7 @@
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     
-    [[PASessionManager sharedClient] GET:@"events.json" parameters:nil success:^
+    [[PASessionManager sharedClient] GET:@"api/events" parameters:nil success:^
         (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"JSON: %@",JSON);
          NSArray *postsFromResponse = (NSArray*)JSON;
@@ -57,17 +57,26 @@
     } failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
             NSLog(@"ERROR: %@",error);
     }];
+    
+    [[PASessionManager sharedClient] POST:@"api/events"
+                               parameters:@{}
+                                  success:^(NSURLSessionDataTask *task,id responseObject) {
+                                      NSLog(@"POST success: %@",responseObject);
+                                  }
+                                  failure:^(NSURLSessionDataTask *task, NSError * error) {
+                                      NSLog(@"POST error: %@",error);
+                                  }];
 }
 
 -(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
 {
-    event.title = [dictionary objectForKey:@"title"];
-    event.description = [dictionary objectForKey:@"description"];
-    event.institution = [dictionary objectForKey:@"institution"];
-    event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
-    NSDateFormatter * df = [[NSDateFormatter alloc] init];
-    event.startDate = [df dateFromString:[attributes valueForKey:@"start_date"]];
-    event.endDate = [df dateFromString:[attributes valueForKey:@"end_date"]];
+    event.eventName = [dictionary objectForKey:@"title"];
+    event.descrip = [dictionary objectForKey:@"description"];
+    event.location = [dictionary objectForKey:@"institution"];
+    //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
+    //NSDateFormatter * df = [[NSDateFormatter alloc] init];
+    //event.startDate = [df dateFromString:[attributes valueForKey:@"start_date"]];
+    //event.endDate = [df dateFromString:[attributes valueForKey:@"end_date"]];
     
     // the below doesn't work due to current disparity between the json and coredata terminology
     /*

@@ -4,18 +4,6 @@
         <attribute name="circleName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="members" optional="YES" attributeType="Transformable" syncable="YES"/>
     </entity>
-    <entity name="Old Event">
-        <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="endDate" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="institution" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="isPublic" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="startDate" optional="YES" attributeType="Date">
-            <userInfo/>
-        </attribute>
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <userInfo/>
-    </entity>
-    <elements>
     <entity name="Event" representedClassName="Event">
         <attribute name="descrip" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="eventName" optional="YES" attributeType="String" syncable="YES"/>
@@ -26,7 +14,6 @@
         <userInfo/>
     </entity>
     <elements>
-        <element name="Event" positionX="261" positionY="189" width="128" height="133"/>
         <element name="Circle" positionX="261" positionY="198" width="128" height="73"/>
         <element name="Event" positionX="261" positionY="189" width="128" height="133"/>
     </elements>

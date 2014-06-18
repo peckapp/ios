@@ -58,9 +58,6 @@
 		A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */; };
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
-		DD6C9AC21950999700B4764D /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = DD6C9ABF1950999700B4764D /* background.png */; };
-		DD6C9AC31950999700B4764D /* button-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = DD6C9AC01950999700B4764D /* button-selected.png */; };
-		DD6C9AC41950999700B4764D /* button.png in Resources */ = {isa = PBXBuildFile; fileRef = DD6C9AC11950999700B4764D /* button.png */; };
 		DDDAEDDB19465DCB004CE102 /* PAFeedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAFeedCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */; };
 		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
@@ -155,9 +152,6 @@
 		A4B772E619460C3200A31252 /* schools.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = schools.plist; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DD6C9ABF1950999700B4764D /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = ../../../Desktop/background.png; sourceTree = SOURCE_ROOT; };
-		DD6C9AC01950999700B4764D /* button-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "button-selected.png"; path = "../../../Desktop/button-selected.png"; sourceTree = SOURCE_ROOT; };
-		DD6C9AC11950999700B4764D /* button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button.png; path = ../../../Desktop/button.png; sourceTree = SOURCE_ROOT; };
 		DDDAEDD819465DCB004CE102 /* PAFeedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFeedCell.h; sourceTree = "<group>"; };
 		DDDAEDD919465DCB004CE102 /* PAFeedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFeedCell.m; sourceTree = "<group>"; };
 		DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAFeedCell.xib; sourceTree = "<group>"; };
@@ -201,9 +195,6 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
-				DD6C9ABF1950999700B4764D /* background.png */,
-				DD6C9AC01950999700B4764D /* button-selected.png */,
-				DD6C9AC11950999700B4764D /* button.png */,
 				86051D48194BB27200961541 /* Silhouette.png */,
 			);
 			name = Graphics;
@@ -516,7 +507,6 @@
 				86051D49194BB27200961541 /* Silhouette.png in Resources */,
 				DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */,
 				A4B772E719460C3200A31252 /* schools.plist in Resources */,
-				DD6C9AC31950999700B4764D /* button-selected.png in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
 				A463F38F19507FA300ED441F /* Property List.plist in Resources */,
 				86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */,
