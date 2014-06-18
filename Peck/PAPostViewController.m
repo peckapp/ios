@@ -44,7 +44,7 @@ NSDate *chosenDate;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    chosenDate= [NSDate date];
     _tableView.delegate=self;
     _tableView.dataSource=self;
     //_tableView.frame = CGRectMake(_tableView.frame.origin.x, 300, _tableView.frame.size.width, _tableView.frame.size.height);
@@ -127,7 +127,7 @@ NSDate *chosenDate;
             //titleLabel.text =[eventItems objectAtIndex:[indexPath row]];
             [cell.contentView addSubview:titleLabel];
         
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(140, 0, 60, 44)];
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(140, 0, 50, 44)];
             imageView.image = photo;
             [cell.contentView addSubview:imageView];
             
@@ -378,6 +378,11 @@ NSDate *chosenDate;
     [event setDescrip:_userEvents[5]];
     NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
     [event setPhoto:imageData];
+    //TODO: Set the id to something other than the title
+    [event setId:_userEvents[0]];
+    photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
+    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+    [_tableView reloadData];
     
     /*
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

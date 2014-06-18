@@ -18,6 +18,7 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
+
 @end
 
 @implementation PAEventsViewController
@@ -25,6 +26,9 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
+NSCache *imageCache;
+int allImagesLoaded;
 
 - (void)awakeFromNib
 {
@@ -35,7 +39,10 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-
+    if(!imageCache){
+        imageCache = [[NSCache alloc] init];
+    }
+       
     self.title = @"Events";
 
     UIBarButtonItem *pecksButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(showPecks:)];
@@ -43,6 +50,8 @@
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
+    
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -244,11 +253,37 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    //NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    //cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
+    allImagesLoaded++;
     Event *tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = tempEvent.title;
-    cell.imageView.image = [UIImage imageWithData:tempEvent.photo];
+    NSString *imageID = tempEvent.id;
+    UIImage *image = [imageCache objectForKey:imageID];
+    if(image){
+        cell.imageView.image=image;
+    }else{
+        
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+        dispatch_async(queue, ^{
+            NSData *data = tempEvent.photo;
+            UIImage *image = [UIImage imageWithData:data];
+            if(!image){
+                image = [UIImage imageNamed:@"Silhouette.png"];
+                
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"image id: %@", imageID);
+                [imageCache setObject:image forKey:imageID];
+                cell.imageView.image =image;
+                //reload the cell to display the image
+                //this will be called at most one time for each cell
+                //because the image will be loaded into the cache
+                //after the first time
+                [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+            });
+        });
+    
+    }
+    
 }
 
 @end
