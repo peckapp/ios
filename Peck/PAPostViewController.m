@@ -181,12 +181,23 @@ int initialRowHeight;
         NSLog(@"add a photo");
     }
     if([indexPath row]==3 && _controlSwitch.selectedSegmentIndex==0){
+        UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:@"Date Picker"
+                                                          delegate:self
+                                                 cancelButtonTitle:@"Cancel"
+                                            destructiveButtonTitle:nil
+                                                 otherButtonTitles:nil];
         
+        // Add the picker
+        UIDatePicker *pickerView = [[UIDatePicker alloc] init];
+        pickerView.datePickerMode = UIDatePickerModeDate;
+        [menu addSubview:pickerView];
+        [menu showInView:self.view];
+
             
-        CGRect pickerFrame = CGRectMake(0,300,0,0);
+       /* CGRect pickerFrame = CGRectMake(0,300,0,0);
         UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:pickerFrame];
         [datePicker addTarget:self action:@selector(pickerChanged:)forControlEvents:UIControlEventValueChanged];
-        [self.view addSubview:datePicker];
+        [self.view addSubview:datePicker];*/
            }
     
     //[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -348,7 +359,7 @@ int initialRowHeight;
     Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
     [event setEventName:_userEvents[0]];
     [event setLocation:_userEvents[2]];
-    [event setTime:_userEvents[3]];
+    //[event setTime:_userEvents[3]];
     [event setDescrip:_userEvents[5]];
     NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
     [event setPhoto:imageData];
