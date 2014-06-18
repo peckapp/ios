@@ -57,6 +57,7 @@
 		A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */; };
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
 		A4BDFE661951E7160020EFD5 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE651951E7160020EFD5 /* Event.m */; };
+		A4BDFE69195225160020EFD5 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE68195225160020EFD5 /* Message.m */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 		DDDAEDDB19465DCB004CE102 /* PAFeedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAFeedCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */; };
@@ -150,6 +151,8 @@
 		A4B772E619460C3200A31252 /* schools.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = schools.plist; sourceTree = "<group>"; };
 		A4BDFE641951E7160020EFD5 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		A4BDFE651951E7160020EFD5 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
+		A4BDFE67195225160020EFD5 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
+		A4BDFE68195225160020EFD5 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDDAEDD819465DCB004CE102 /* PAFeedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFeedCell.h; sourceTree = "<group>"; };
@@ -203,6 +206,8 @@
 		8629250D193CBB370057CA41 /* Post */ = {
 			isa = PBXGroup;
 			children = (
+				A4BDFE67195225160020EFD5 /* Message.h */,
+				A4BDFE68195225160020EFD5 /* Message.m */,
 				A4BDFE641951E7160020EFD5 /* Event.h */,
 				A4BDFE651951E7160020EFD5 /* Event.m */,
 				86292510193CBE000057CA41 /* PAPostViewController.h */,
@@ -577,6 +582,7 @@
 				863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */,
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
 				A463F38D194F683D00ED441F /* Circle.m in Sources */,
+				A4BDFE69195225160020EFD5 /* Message.m in Sources */,
 				A4BDFE661951E7160020EFD5 /* Event.m in Sources */,
 				86292527193CBFF80057CA41 /* PAEventCell.m in Sources */,
 				867B52D619509F5000BEB37B /* PASessionManager.m in Sources */,

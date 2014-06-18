@@ -9,7 +9,7 @@
 #import "PAPostViewController.h"
 #import "PAAppDelegate.h"
 #import "Event.h"
-
+#import "Message.h"
 @interface PAPostViewController () {
     NSMutableArray * userEvents;
 }
@@ -150,12 +150,12 @@ NSDate *chosenDate;
         textField.tag = [indexPath row];
         UILabel * title = (UILabel*) cell.contentView.subviews[1];
         title.text = [_eventItems objectAtIndex:[indexPath row]];
-        if((_controlSwitch.selectedSegmentIndex==2 && [indexPath row]==1) || (_controlSwitch.selectedSegmentIndex==0 && [indexPath row]==1))//these are the locations of both of the "add a photo cells"
+        if((_controlSwitch.selectedSegmentIndex==1 && [indexPath row]==2) || (_controlSwitch.selectedSegmentIndex==0 && [indexPath row]==1))//these are the locations of both of the "add a photo cells"
         {
             textField.hidden=YES;
             imageView.image = photo;
-            if(_controlSwitch.selectedSegmentIndex==2){
-                imageView.frame = CGRectMake(80, 0, 150, 100);
+            if(_controlSwitch.selectedSegmentIndex==1){
+                imageView.frame = CGRectMake(120, 0, 140, 100);
             }
         }
         if(_controlSwitch.selectedSegmentIndex==0)//Events
@@ -166,7 +166,7 @@ NSDate *chosenDate;
                 [textField setUserInteractionEnabled:NO];
             }
         }
-        if(_controlSwitch.selectedSegmentIndex==1 || _controlSwitch.selectedSegmentIndex==2)//Messages and Photos
+        if(_controlSwitch.selectedSegmentIndex==1)//Messages
         {
             textField.frame = CGRectMake(15, 45, 250, 30);
         }
@@ -177,7 +177,7 @@ NSDate *chosenDate;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if(([indexPath row]==1 && _controlSwitch.selectedSegmentIndex==0) || ([indexPath row]==1 && _controlSwitch.selectedSegmentIndex==2)){
+    if(([indexPath row]==1 && _controlSwitch.selectedSegmentIndex==0) || ([indexPath row]==2 && _controlSwitch.selectedSegmentIndex==1)){
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
                                                                  delegate: self
                                                         cancelButtonTitle: @"Cancel"
@@ -186,7 +186,7 @@ NSDate *chosenDate;
         [actionSheet showInView:self.view];
         NSLog(@"add a photo");
     }
-    if([indexPath row]==3 && _controlSwitch.selectedSegmentIndex==0){
+    else if([indexPath row]==3 && _controlSwitch.selectedSegmentIndex==0){
         UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:nil
                                                           delegate:self
                                                  cancelButtonTitle:nil
@@ -207,8 +207,9 @@ NSDate *chosenDate;
         
 
            }
-    
-    //[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    else{
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
 }
 
 - (void)pickerChanged:(id)sender
@@ -246,9 +247,6 @@ NSDate *chosenDate;
     if(_controlSwitch.selectedSegmentIndex==1){
         count=2;
     }
-    if(_controlSwitch.selectedSegmentIndex==2){
-        count=3;
-    }
     for(int i=0; i<count; i++){
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         UITextField * textField = (UITextField*) cell.contentView.subviews[0];
@@ -272,11 +270,7 @@ NSDate *chosenDate;
     }
     else if(_controlSwitch.selectedSegmentIndex==1){
         _tableView.rowHeight=100;
-        _eventItems=@[@"Who are you sharing with?", @"What's on your mind?"];
-        _eventSuggestions=@[@"",@""];
-    }else if(_controlSwitch.selectedSegmentIndex==2){
-        _tableView.rowHeight=100;
-        _eventItems=@[@"Who are you sharing with?",@"",@"Comment"];
+        _eventItems=@[@"Who are you sharing with?", @"What's on your mind?",@"Add a photo"];
         _eventSuggestions=@[@"",@"",@""];
     }
     [self.tableView reloadData];
@@ -285,7 +279,7 @@ NSDate *chosenDate;
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSIndexPath *indexPath = [_tableView indexPathForSelectedRow];
-    if([indexPath row]==1){
+    if(([indexPath row]==1 && _controlSwitch.selectedSegmentIndex==0) || ([indexPath row]==2 &&_controlSwitch.selectedSegmentIndex==1)){
         switch (buttonIndex) {
             case 0:
                 [self takeNewPhotoFromCamera];
@@ -295,7 +289,7 @@ NSDate *chosenDate;
             default:
                 break;
         }
-    }else if([indexPath row]==3){
+    }else if([indexPath row]==3 && _controlSwitch.selectedSegmentIndex==0){
         switch (buttonIndex) {
             case 0:
                 [self addDate];
@@ -327,6 +321,7 @@ NSDate *chosenDate;
 }
 -(void)choosePhotoFromExistingImages
 {
+    NSLog(@"choose a photo");
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary])
     {
         UIImagePickerController *controller = [[UIImagePickerController alloc] init];
@@ -358,37 +353,59 @@ NSDate *chosenDate;
 
 
 - (IBAction)okayButton:(id)sender {
-    if([_userEvents[0] isEqualToString:@""] || [_userEvents[3] isEqualToString:@""]){
-        NSLog(@"allert");
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                                        message:@"You must enter an event name and time"
-                                                       delegate:self
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
+    if(_controlSwitch.selectedSegmentIndex==0){
+        if([_userEvents[0] isEqualToString:@""] || [_userEvents[3] isEqualToString:@""]){
+            NSLog(@"allert");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                                            message:@"You must enter an event name and time"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        else{
+            PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+            _managedObjectContext = [appdelegate managedObjectContext];
+    
+            Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
+            [event setTitle:_userEvents[0]];
+            [event setLocation:_userEvents[2]];
+            [event setStart_date:chosenDate];
+            [event setDescrip:_userEvents[5]];
+            NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
+            [event setPhoto:imageData];
+            //TODO: Set the id to something other than the title
+            [event setId:_userEvents[0]];
+            photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
+            _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+            [_tableView reloadData];
+    
+            /*
+             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+             UIViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"primary"];
+             [self presentViewController: controller animated:YES completion:nil];
+             */
+        }
+        
     }
-    else{
-    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
-    
-    Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
-    [event setTitle:_userEvents[0]];
-    [event setLocation:_userEvents[2]];
-    [event setStart_date:chosenDate];
-    [event setDescrip:_userEvents[5]];
-    NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
-    [event setPhoto:imageData];
-    //TODO: Set the id to something other than the title
-    [event setId:_userEvents[0]];
-    photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
-    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-    [_tableView reloadData];
-    
-    /*
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"primary"];
-    [self presentViewController: controller animated:YES completion:nil];
-     */
+    else if(_controlSwitch.selectedSegmentIndex==1){
+        if([_userEvents[1] isEqualToString:@""]){
+            NSLog(@"allert");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                                            message:@"You must enter a message"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        else{
+            PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+            _managedObjectContext = [appdelegate managedObjectContext];
+            
+            Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:_managedObjectContext];
+            [message setText:_userEvents[1]];
+            
+        }
     }
 }
 

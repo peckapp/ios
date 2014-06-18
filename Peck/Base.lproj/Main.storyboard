@@ -440,16 +440,31 @@
             </objects>
             <point key="canvasLocation" x="-1320" y="1191"/>
         </scene>
+        <!--Navigation Controller - Add-->
+        <scene sceneID="kh1-OH-BWn">
+            <objects>
+                <navigationController storyboardIdentifier="add" title="Add" definesPresentationContext="YES" id="COS-N3-QSc" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="hnU-FI-Bhc">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="cUM-GN-TXW" kind="relationship" relationship="rootViewController" id="hAp-b7-tJh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZHC-4V-ePU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-720" y="1191"/>
+        </scene>
         <!--Post View Controller - Add-->
         <scene sceneID="YJE-x1-rpl">
             <objects>
-                <viewController storyboardIdentifier="add" title="Add" useStoryboardIdentifierAsRestorationIdentifier="YES" id="cUM-GN-TXW" customClass="PAPostViewController" sceneMemberID="viewController">
+                <viewController title="Add" useStoryboardIdentifierAsRestorationIdentifier="YES" id="cUM-GN-TXW" customClass="PAPostViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kxF-f0-T4p">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" id="WsM-nq-iLa">
-                                <rect key="frame" x="0.0" y="45" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="130" width="320" height="44"/>
                                 <items>
                                     <navigationItem title="Post" id="skv-Pe-rBX">
                                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="fXm-Rf-8ag">
@@ -465,17 +480,6 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="ve7-Oz-bnH">
-                                <rect key="frame" x="44" y="89" width="232" height="29"/>
-                                <segments>
-                                    <segment title="Event"/>
-                                    <segment title="Message"/>
-                                    <segment title="Photo"/>
-                                </segments>
-                                <connections>
-                                    <action selector="segmentedControl:" destination="cUM-GN-TXW" eventType="valueChanged" id="qsp-3w-c9c"/>
-                                </connections>
-                            </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="ZDX-Qv-276">
                                 <rect key="frame" x="0.0" y="146" width="320" height="422"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -490,19 +494,28 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="sX6-DO-RDu">
-                                <rect key="frame" x="137" y="15" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Done">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="ve7-Oz-bnH">
+                                <rect key="frame" x="44" y="64" width="232" height="29"/>
+                                <segments>
+                                    <segment title="Event"/>
+                                    <segment title="Message"/>
+                                </segments>
                                 <connections>
-                                    <action selector="okayButton:" destination="cUM-GN-TXW" eventType="touchUpInside" id="XoP-Hh-gGc"/>
+                                    <action selector="segmentedControl:" destination="cUM-GN-TXW" eventType="valueChanged" id="qsp-3w-c9c"/>
                                 </connections>
-                            </button>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" title="New" id="Sn3-cJ-bi1">
+                        <barButtonItem key="backBarButtonItem" title="Done" id="gmN-h9-gn7"/>
+                        <barButtonItem key="leftBarButtonItem" title="Edit" id="16S-ig-2eB"/>
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="s52-l2-6dI">
+                            <connections>
+                                <action selector="okayButton:" destination="cUM-GN-TXW" id="1G6-xn-29y"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="controlSwitch" destination="ve7-Oz-bnH" id="h8c-Bx-fxG"/>
                         <outlet property="tableView" destination="ZDX-Qv-276" id="gsX-G0-nsb"/>
@@ -511,7 +524,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HDc-2x-wwf" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="6eS-WM-WvO" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-720" y="1191"/>
+            <point key="canvasLocation" x="-260" y="1191"/>
         </scene>
     </scenes>
     <resources>
