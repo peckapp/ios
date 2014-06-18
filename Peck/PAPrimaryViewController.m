@@ -42,16 +42,22 @@
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     
+    
     [[PASessionManager sharedClient] GET:@"api/events" parameters:nil success:^
         (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"JSON: %@",JSON);
          NSArray *postsFromResponse = (NSArray*)JSON;
          NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
          for (NSDictionary *eventAttributes in postsFromResponse) {
-             Event * event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
-             [self setAttributesInEvent:event withDictionary:eventAttributes];
-             [mutableEvents addObject:event];
-             NSLog(@"EVENT: %@",event);
+             NSString *newID = [[eventAttributes objectForKey:@"id"] stringValue];
+             BOOL eventAlreadyExists = [self eventExists:newID];
+            if(!eventAlreadyExists){
+                NSLog(@"about to add the event");
+                Event * event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
+                [self setAttributesInEvent:event withDictionary:eventAttributes];
+                [mutableEvents addObject:event];
+                NSLog(@"EVENT: %@",event);
+             }
          }
             
     } failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -68,11 +74,34 @@
                                   }];
 }
 
+
+-(BOOL)eventExists:(NSString *) newID{
+    NSFetchRequest * request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *events = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:_managedObjectContext];
+    [request setEntity:events];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id == %@", newID];
+    [request setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
+    //fetch events in order to check if the events we want to add already exist in core data
+    
+    if([mutableFetchResults count]==0)
+        return NO;
+    else {
+        return YES;
+    }
+}
+
+
 -(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
 {
-    event.eventName = [dictionary objectForKey:@"title"];
+    NSLog(@"set attributes of event");
+    event.title = [dictionary objectForKey:@"title"];
     event.descrip = [dictionary objectForKey:@"description"];
     event.location = [dictionary objectForKey:@"institution"];
+    NSString *tempString = [[dictionary objectForKey:@"id"] stringValue];
+    event.id = tempString;
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
     //NSDateFormatter * df = [[NSDateFormatter alloc] init];
     //event.startDate = [df dateFromString:[attributes valueForKey:@"start_date"]];

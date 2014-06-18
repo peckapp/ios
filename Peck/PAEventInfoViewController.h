@@ -22,5 +22,6 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (weak, nonatomic) IBOutlet UIImageView *eventPhoto;
 @property (weak, nonatomic) IBOutlet UILabel *eventTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 
 @end

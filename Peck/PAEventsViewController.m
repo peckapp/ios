@@ -160,7 +160,7 @@
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"eventName" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -247,7 +247,7 @@
     //NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     //cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
     Event *tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = tempEvent.eventName;
+    cell.textLabel.text = tempEvent.title;
     cell.imageView.image = [UIImage imageWithData:tempEvent.photo];
 }
 
