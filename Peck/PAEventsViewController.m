@@ -260,9 +260,7 @@ int allImagesLoaded;
                 [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
             });
         });
-    
     }
-    
 }
 
 @end
