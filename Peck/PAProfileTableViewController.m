@@ -28,7 +28,7 @@ int currentTextField;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.title = @"More";
+    self.title = @"Profile";
     UITapGestureRecognizer *tapRecognizer;
     tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector (changePicture)];
     [profilePicture addGestureRecognizer:tapRecognizer];
