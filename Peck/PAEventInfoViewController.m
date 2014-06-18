@@ -12,11 +12,14 @@
 
 @interface PAEventInfoViewController ()
 - (void)configureView;
+@property (nonatomic, retain) NSDateFormatter *formatter;
+
 @end
 
 @implementation PAEventInfoViewController
 @synthesize fetchedResultsController;
 @synthesize detailDescriptionLabel;
+@synthesize dateLabel;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -39,10 +42,12 @@
 
     if (self.detailItem) {
         self.detailDescriptionLabel.text = [[self.detailItem valueForKey:@"descrip"] description];
-        self.eventTitleLabel.text =[[self.detailItem valueForKey:@"eventName"] description];
+        self.eventTitleLabel.text =[[self.detailItem valueForKey:@"title"] description];
         
         self.eventPhoto.image = [UIImage imageWithData:[self.detailItem valueForKey:@"photo"]];
-        
+        NSDate *date = [self.detailItem valueForKey:@"start_date"];
+        NSString *stringFromDate = [self.formatter stringFromDate:date];
+        self.dateLabel.text = stringFromDate;
         
         //cell.imageView.image = [UIImage imageWithData:tempEvent.photo];
     }
@@ -51,6 +56,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.formatter = [[NSDateFormatter alloc] init];
+    [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
 	// Do any additional setup after loading the view, typically from a nib.
 
     [self configureView];

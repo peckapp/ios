@@ -30,6 +30,7 @@
 
 int initialTVHeight;
 int initialRowHeight;
+NSDate *chosenDate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -84,6 +85,8 @@ int initialRowHeight;
     [self.view endEditing:NO];
     }
 
+# pragma mark - table view data source
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -95,6 +98,8 @@ int initialRowHeight;
     // Return the number of rows in the section.
     return _eventItems.count;
 }
+
+#pragma mark - table view delegate
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -113,7 +118,6 @@ int initialRowHeight;
             playerTextField.backgroundColor = [UIColor whiteColor];
             playerTextField.autocorrectionType = UITextAutocorrectionTypeYes; // auto correction support
             playerTextField.autocapitalizationType = UITextAutocapitalizationTypeSentences; // auto capitalization support
-            
             [playerTextField setEnabled: YES];
             playerTextField.delegate = self;
             
@@ -122,7 +126,7 @@ int initialRowHeight;
             UILabel * titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(cell.frame.origin.x+15, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height)];
             //titleLabel.text =[eventItems objectAtIndex:[indexPath row]];
             [cell.contentView addSubview:titleLabel];
-            
+        
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(140, 0, 60, 44)];
             imageView.image = photo;
             [cell.contentView addSubview:imageView];
@@ -157,8 +161,10 @@ int initialRowHeight;
         if(_controlSwitch.selectedSegmentIndex==0)//Events
         {
             textField.frame = CGRectMake(140, 8, 185, 30);
-            if([indexPath row]==3)
-               [textField setUserInteractionEnabled:NO];
+            if([indexPath row]==3){
+                //the date field
+                [textField setUserInteractionEnabled:NO];
+            }
         }
         if(_controlSwitch.selectedSegmentIndex==1 || _controlSwitch.selectedSegmentIndex==2)//Messages and Photos
         {
@@ -181,12 +187,25 @@ int initialRowHeight;
         NSLog(@"add a photo");
     }
     if([indexPath row]==3 && _controlSwitch.selectedSegmentIndex==0){
+        UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:nil
+                                                          delegate:self
+                                                 cancelButtonTitle:nil
+                                            destructiveButtonTitle:nil
+                                                 otherButtonTitles:@"Done",nil];
         
-            
-        CGRect pickerFrame = CGRectMake(0,300,0,0);
-        UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:pickerFrame];
-        [datePicker addTarget:self action:@selector(pickerChanged:)forControlEvents:UIControlEventValueChanged];
-        [self.view addSubview:datePicker];
+        // Add the picker
+        UIDatePicker *pickerView = [[UIDatePicker alloc] init];
+        
+        //pickerView.datePickerMode = UIDatePickerModeDate;
+        CGRect pickerRect = pickerView.bounds;
+        pickerRect.origin.y = -40;
+        pickerView.bounds = pickerRect;
+        [menu addSubview:pickerView];
+        [menu showInView:self.view];
+        [menu setBounds:CGRectMake(0, 0, 320, 450)];
+        [pickerView addTarget:self action:@selector(pickerChanged:)forControlEvents:UIControlEventValueChanged];
+        
+
            }
     
     //[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -194,18 +213,10 @@ int initialRowHeight;
 
 - (void)pickerChanged:(id)sender
 {
-    NSLog(@"value: %@",[sender date]);
-    NSIndexPath *indexPath = [_tableView indexPathForSelectedRow];
-    UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
-    UITextField *textField = cell.contentView.subviews[0];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"z d, yyyy h:mm a"];
-    
-    NSString *stringFromDate = [formatter stringFromDate:[sender date]];
-    textField.text = stringFromDate;
+    chosenDate = [sender date];
 }
 
-
+# pragma mark - text field delegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
     self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height-216);
@@ -249,8 +260,6 @@ int initialRowHeight;
 }
 
 
-
-
 - (IBAction)segmentedControl:(id)sender {
     photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
     _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
@@ -272,27 +281,46 @@ int initialRowHeight;
     }
     [self.tableView reloadData];
 }
+
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    switch (buttonIndex) {
-        case 0:
-            [self takeNewPhotoFromCamera];
-            break;
-        case 1:
-            [self choosePhotoFromExistingImages];
-        default:
-            break;
+    NSIndexPath *indexPath = [_tableView indexPathForSelectedRow];
+    if([indexPath row]==1){
+        switch (buttonIndex) {
+            case 0:
+                [self takeNewPhotoFromCamera];
+                break;
+            case 1:
+                [self choosePhotoFromExistingImages];
+            default:
+                break;
+        }
+    }else if([indexPath row]==3){
+        switch (buttonIndex) {
+            case 0:
+                [self addDate];
+                break;
+            default:
+                break;
+        }
     }
 }
+
+-(void)addDate{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+    NSString *stringFromDate = [formatter stringFromDate:chosenDate];
+    _userEvents[3]=stringFromDate;
+    [self.tableView reloadData];
+}
+
+
 - (void)takeNewPhotoFromCamera
 {
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
     {
         UIImagePickerController *controller = [[UIImagePickerController alloc] init];
         controller.sourceType = UIImagePickerControllerSourceTypeCamera;
-        //controller.allowsEditing = NO;
-        //controller.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType: UIImagePickerControllerSourceTypeCamera];
-        
         controller.delegate = self;
         [self presentViewController: controller animated: YES completion: nil];
     }
@@ -309,18 +337,16 @@ int initialRowHeight;
         
     }
 }
+# pragma mark - image picker delegate
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    NSLog(@"picked photo");
     [self dismissViewControllerAnimated: YES completion: nil];
     UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
     photo = image;
     UIImageView * imageView = (UIImageView *)[self.view viewWithTag:6];
     imageView.image =photo;
-    //UIImageView *imageView = [[UIImageView alloc] initWithImage: image];
-    //[self.view addSubview: imageView];
     [self.tableView reloadData];
-    //NSData *imageData = UIImageJPEGRepresentation(image, 0.1);
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
@@ -346,9 +372,9 @@ int initialRowHeight;
     _managedObjectContext = [appdelegate managedObjectContext];
     
     Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
-    [event setEventName:_userEvents[0]];
+    [event setTitle:_userEvents[0]];
     [event setLocation:_userEvents[2]];
-    [event setTime:_userEvents[3]];
+    [event setStart_date:chosenDate];
     [event setDescrip:_userEvents[5]];
     NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
     [event setPhoto:imageData];
