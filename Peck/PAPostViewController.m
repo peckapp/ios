@@ -196,7 +196,6 @@ NSDate *chosenDate;
         // Add the picker
         UIDatePicker *pickerView = [[UIDatePicker alloc] init];
         
-        //pickerView.datePickerMode = UIDatePickerModeDate;
         CGRect pickerRect = pickerView.bounds;
         pickerRect.origin.y = -40;
         pickerView.bounds = pickerRect;
@@ -271,7 +270,7 @@ NSDate *chosenDate;
     else if(_controlSwitch.selectedSegmentIndex==1){
         _tableView.rowHeight=100;
         _eventItems=@[@"Who are you sharing with?", @"What's on your mind?",@"Add a photo"];
-        _eventSuggestions=@[@"",@"",@""];
+        _eventSuggestions=@[@"Mom, Dad",@"My message",@""];
     }
     [self.tableView reloadData];
 }
@@ -287,6 +286,7 @@ NSDate *chosenDate;
             case 1:
                 [self choosePhotoFromExistingImages];
             default:
+                [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
                 break;
         }
     }else if([indexPath row]==3 && _controlSwitch.selectedSegmentIndex==0){
@@ -372,6 +372,7 @@ NSDate *chosenDate;
             [event setLocation:_userEvents[2]];
             [event setStart_date:chosenDate];
             [event setDescrip:_userEvents[5]];
+            [event setCreated_at:[NSDate date]];
             NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
             [event setPhoto:imageData];
             //TODO: Set the id to something other than the title
@@ -404,7 +405,15 @@ NSDate *chosenDate;
             
             Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:_managedObjectContext];
             [message setText:_userEvents[1]];
+            [message setCreated_at:[NSDate date]];
+            NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
+            [message setPhoto:imageData];
+
             
+            photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
+            _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+            [_tableView reloadData];
+
         }
     }
 }
