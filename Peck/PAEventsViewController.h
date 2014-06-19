@@ -11,11 +11,11 @@
 #import <CoreData/CoreData.h>
 #import "PACoreDataProtocol.h"
 
-@interface PAEventsViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol>
+@interface PAEventsViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDataSource,UITableViewDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-
+@property (strong, nonatomic) NSArray *diningMeals;
 @end

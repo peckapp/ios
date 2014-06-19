@@ -43,8 +43,7 @@
     if (self.detailItem) {
         
         self.detailDescriptionLabel.text = [[self.detailItem valueForKey:@"descrip"] description];
-        //self.eventTitleLabel.text =[[self.detailItem valueForKey:@"title"] description];
-        self.title =[[self.detailItem valueForKey:@"title"] description];
+        self.eventTitleLabel.text =[[self.detailItem valueForKey:@"title"] description];
         self.eventPhoto.image = [UIImage imageWithData:[self.detailItem valueForKey:@"photo"]];
         NSDate *date = [self.detailItem valueForKey:@"start_date"];
         NSString *stringFromDate = [self.formatter stringFromDate:date];

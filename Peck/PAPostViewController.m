@@ -381,11 +381,7 @@ NSDate *chosenDate;
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
             [_tableView reloadData];
     
-            /*
-             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-             UIViewController *controller = [storyboard instantiateViewControllerWithIdentifier:@"primary"];
-             [self presentViewController: controller animated:YES completion:nil];
-             */
+            //[self performSegueWithIdentifier:@"showEvents" sender:self];
         }
         
     }
@@ -414,6 +410,7 @@ NSDate *chosenDate;
             photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
             [_tableView reloadData];
+            //[self performSegueWithIdentifier:@"showFeed" sender:self];
 
         }
     }

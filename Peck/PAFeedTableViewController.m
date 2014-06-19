@@ -121,11 +121,6 @@ NSCache *imageCache;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    /*
-    NSLog(@"did select row");
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"feedInfo"];
-    [self presentViewController:viewController animated:YES completion:nil];*/
     [self performSegueWithIdentifier:@"showMessageDetail" sender:self];
 }
 

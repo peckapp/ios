@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface PAEventCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *eventPhoto;
+@property (weak, nonatomic) IBOutlet UILabel *eventTitle;
 
 @end

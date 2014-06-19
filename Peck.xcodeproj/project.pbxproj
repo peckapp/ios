@@ -60,6 +60,7 @@
 		A4BDFE661951E7160020EFD5 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE651951E7160020EFD5 /* Event.m */; };
 		A4BDFE6C19531FCA0020EFD5 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6B19531FCA0020EFD5 /* Message.m */; };
 		A4BDFE6F195329650020EFD5 /* PAFeedInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6E195329650020EFD5 /* PAFeedInfoViewController.m */; };
+		A4BDFE72195362E40020EFD5 /* PADiningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE71195362E40020EFD5 /* PADiningViewController.m */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 		DDDAEDDB19465DCB004CE102 /* PAFeedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAFeedCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */; };
@@ -158,6 +159,8 @@
 		A4BDFE6B19531FCA0020EFD5 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		A4BDFE6D195329650020EFD5 /* PAFeedInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFeedInfoViewController.h; sourceTree = "<group>"; };
 		A4BDFE6E195329650020EFD5 /* PAFeedInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFeedInfoViewController.m; sourceTree = "<group>"; };
+		A4BDFE70195362E40020EFD5 /* PADiningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningViewController.h; sourceTree = "<group>"; };
+		A4BDFE71195362E40020EFD5 /* PADiningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningViewController.m; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDDAEDD819465DCB004CE102 /* PAFeedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFeedCell.h; sourceTree = "<group>"; };
@@ -387,6 +390,8 @@
 				86292524193CBFF80057CA41 /* PAEventCell.h */,
 				86292525193CBFF80057CA41 /* PAEventCell.m */,
 				86292526193CBFF80057CA41 /* PAEventCell.xib */,
+				A4BDFE70195362E40020EFD5 /* PADiningViewController.h */,
+				A4BDFE71195362E40020EFD5 /* PADiningViewController.m */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -580,6 +585,7 @@
 				863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */,
 				86D59811193768BF00F38654 /* main.m in Sources */,
 				DDDAEDDB19465DCB004CE102 /* PAFeedCell.m in Sources */,
+				A4BDFE72195362E40020EFD5 /* PADiningViewController.m in Sources */,
 				863843CF193CB393004110F5 /* PAProfileTableViewController.m in Sources */,
 				A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */,
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,

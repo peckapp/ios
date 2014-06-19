@@ -14,8 +14,11 @@
 #import "PAAppDelegate.h"
 #import "Event.h"
 #import "PASessionManager.h"
+#import "PAEventCell.h"
 
 @interface PAEventsViewController ()
+    
+
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
@@ -27,6 +30,10 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+@synthesize diningMeals = _diningMeals;
+UITableView *eventsTableView;
+UITableView *diningTableView;
+
 
 NSCache *imageCache;
 
@@ -41,21 +48,35 @@ NSCache *imageCache;
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    _diningMeals = @[@"Breakfast", @"Lunch", @"Dinner",@"Late Night"];
+    
     if(!imageCache){
         imageCache = [[NSCache alloc] init];
     }
        
     self.title = @"Events";
-
-    UIBarButtonItem *pecksButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(showPecks:)];
-    self.navigationItem.leftBarButtonItem = pecksButton;
-
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
-    
-    [self checkServerData];
-    [self.tableView reloadData];
+    if(!eventsTableView){
+        eventsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 200, 320, 300)];
+        [self.view addSubview:eventsTableView];
     }
+    eventsTableView.dataSource = self;
+    eventsTableView.delegate = self;
+    [self checkServerData];
+    [eventsTableView reloadData];
+    
+    if(!diningTableView){
+        diningTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 44, 320, 200)];
+        [self.view addSubview:diningTableView];
+        }
+    diningTableView.dataSource = self;
+    diningTableView.delegate = self;
+    [diningTableView reloadData];
+    
+    
+    [self.view reloadInputViews];
+    
+    
+}
 
 -(void)checkServerData{
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
@@ -82,9 +103,9 @@ NSCache *imageCache;
              }
          }
      }
-                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
-                                 }];
+    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+        NSLog(@"ERROR: %@",error);
+    }];
     
     /*
      [[PASessionManager sharedClient] POST:@"api/events"
@@ -163,22 +184,67 @@ NSCache *imageCache;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [[self.fetchedResultsController sections] count];
+    if(tableView==eventsTableView)
+        return [[self.fetchedResultsController sections] count];
+    else
+        return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    
+    if(tableView==eventsTableView){
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
     return [sectionInfo numberOfObjects];
+    }
+    else{
+        return [_diningMeals count];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    if(tableView==eventsTableView){
+    static NSString *cellIdentifier = @"EventCell";
+    PAEventCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        [tableView registerNib:[UINib nibWithNibName:@"PAEventCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
+    
     [self configureCell:cell atIndexPath:indexPath];
+    
     return cell;
+    }
+    else if(tableView == diningTableView){
+        static NSString *cellIdentifier = @"DiningCell";
+        PAEventCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (cell == nil) {
+            [tableView registerNib:[UINib nibWithNibName:@"PAEventCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        }
+        
+        [self configureDiningCell:cell atIndexPath:indexPath];
+        
+        return cell;
+
+    }else{
+        //this else will never be entered. It is simply here to let the
+        //compiler know that a cell will be returned
+        UITableViewCell *cell = [[UITableViewCell alloc] init];
+        return cell;
+    }
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if(tableView==eventsTableView){
+        [self performSegueWithIdentifier:@"showEventDetail" sender:self];
+    }
+    else if(tableView==diningTableView){
+        [self performSegueWithIdentifier:@"showDiningMenu" sender:self];
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -210,10 +276,13 @@ NSCache *imageCache;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"showDetail"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    if ([[segue identifier] isEqualToString:@"showEventDetail"]) {
+        NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
         NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setDetailItem:object];
+    }else if([[segue identifier] isEqualToString:@"showDiningMenu"]){
+        //NSIndexPath *indexPath = [diningTableView indexPathForSelectedRow];
+        //pass the fetched dining menu to the dining view controller
     }
 }
 
@@ -262,7 +331,7 @@ NSCache *imageCache;
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.tableView beginUpdates];
+    [eventsTableView beginUpdates];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
@@ -270,11 +339,11 @@ NSCache *imageCache;
 {
     switch(type) {
         case NSFetchedResultsChangeInsert:
-            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [eventsTableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeDelete:
-            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [eventsTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
 }
@@ -283,7 +352,7 @@ NSCache *imageCache;
        atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
-    UITableView *tableView = self.tableView;
+    UITableView *tableView = eventsTableView;
     
     switch(type) {
         case NSFetchedResultsChangeInsert:
@@ -307,7 +376,7 @@ NSCache *imageCache;
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.tableView endUpdates];
+    [eventsTableView endUpdates];
 }
 
 /*
@@ -322,6 +391,7 @@ NSCache *imageCache;
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+    
     Event *tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = tempEvent.title;
     NSString *imageID = tempEvent.id;
@@ -346,10 +416,17 @@ NSCache *imageCache;
                 //this will be called at most one time for each cell
                 //because the image will be loaded into the cache
                 //after the first time
-                [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+                [eventsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
             });
         });
     }
+}
+
+-(void)configureDiningCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"configure dining cell");
+    cell.textLabel.text = [_diningMeals objectAtIndex:[indexPath row]];
+    
+        
 }
 
 @end
