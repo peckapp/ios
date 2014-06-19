@@ -16,7 +16,7 @@
 #import <Foundation/Foundation.h>
 #import "PACoreDataProtocol.h"
 #import "PADropdownBar.h"
-
+#define barHeight 50
 @protocol PADropdownViewControllerDelegate; //allows delegate to be referenced in interface
 
 @interface PADropdownViewController : UIViewController <PACoreDataProtocol,UITabBarDelegate>

@@ -10,6 +10,7 @@
 #import "PAAppDelegate.h"
 #import "Event.h"
 #import "Message.h"
+#import "PADropdownViewController.h"
 @interface PAPostViewController () {
     NSMutableArray * userEvents;
 }
@@ -30,6 +31,7 @@
 
 int initialTVHeight;
 int initialRowHeight;
+int titleThickness;
 NSDate *chosenDate;
 UITableView *_tableView;
 
@@ -47,7 +49,11 @@ UITableView *_tableView;
     [super viewDidLoad];
     chosenDate= [NSDate date];
     if(!_tableView){
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 88, 320, 400)];
+        
+        titleThickness=88;
+        int topOffSet = barHeight+titleThickness;
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, titleThickness, self.view.frame.size.width, self.view.frame.size.height-topOffSet)];
+        NSLog(@"table view height: %f", self.view.frame.size.height-topOffSet);
         [self.view addSubview:_tableView];
     }
     _tableView.delegate=self;
@@ -223,10 +229,13 @@ UITableView *_tableView;
 
 # pragma mark - text field delegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
-    _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height-216);
+    //_tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
+    NSLog(@"new frame height: %f", _tableView.frame.size.height-216);
+    if(_tableView.frame.size.height==initialTVHeight){
+    _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height-(216+22));
     // TODO: the keyboard height reads 216 but should not be hardcoded
     [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{

@@ -8,7 +8,7 @@
 
 #import "PADropdownViewController.h"
 
-#define barHeight 50
+
 
 @interface PADropdownViewController () {
     
