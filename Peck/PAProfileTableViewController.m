@@ -40,7 +40,7 @@ int currentTextField;
     [self.scroller addGestureRecognizer:gestureRecognizer];
 
     [scroller setScrollEnabled:YES];
-    [scroller setContentSize:CGSizeMake(320, 800)];
+    [scroller setContentSize:CGSizeMake(320, 1000)];
     infoTextView.layer.borderWidth=.5f;
     infoTextView.layer.borderColor = [[UIColor grayColor] CGColor];
     infoTextView.layer.cornerRadius = 8;
@@ -214,15 +214,18 @@ int currentTextField;
     
 }
 - (void)keyboardWasShown:(NSNotification *)notification {
-    
+    int widthOfText;
     int textFieldHeight;
     if(currentTextField==0){
         textFieldHeight = infoTextView.frame.origin.y;
         textFieldHeight+=infoTextView.frame.size.height;
+        widthOfText=infoTextView.frame.size.height;
     }
     else{
         UITextField * tempTextField = (UITextField *) [self.scroller viewWithTag:currentTextField];
         textFieldHeight = tempTextField.frame.origin.y;
+        widthOfText = tempTextField.frame.size.height;
+        textFieldHeight+=widthOfText;
     }
     
     NSDictionary* info = [notification userInfo];
@@ -230,14 +233,15 @@ int currentTextField;
     CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
     CGRect screenRect = self.view.frame;
-    NSLog(@"screenRect height: %f", screenRect.size.height);
     
-    CGPoint scrollPoint = CGPointMake(0.0, 33+keyboardSize.height -(screenRect.size.height-textFieldHeight));
+    CGPoint scrollPoint = CGPointMake(0.0, keyboardSize.height -(screenRect.size.height-textFieldHeight));
     
-    //if(textFieldHeight > (screenRect.size.height - keyboardSize.height)){
-    NSLog(@"new y: %f", scrollPoint.y);
-    [self.scroller setContentOffset:scrollPoint animated:YES];
-    //}
+    int currentHeight = (int)[[scroller.layer presentationLayer] bounds].origin.y;
+
+    int visibleHeight=screenRect.size.height - keyboardSize.height;
+    if(textFieldHeight > (currentHeight+visibleHeight-widthOfText)){
+        [self.scroller setContentOffset:scrollPoint animated:YES];
+    }
 }
 
 - (void)keyboardWillBeHidden:(NSNotification *)notification {
@@ -245,4 +249,7 @@ int currentTextField;
     
 }
 
+- (IBAction)saveChangesButton:(id)sender {
+    //will store the new profile information into core data
+}
 @end

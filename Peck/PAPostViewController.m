@@ -18,7 +18,7 @@
 
 @implementation PAPostViewController
 
-@synthesize tableView = _tableView;
+//@synthesize tableView = _tableView;
 @synthesize eventItems = _eventItems;
 @synthesize eventSuggestions = _eventSuggestions;
 @synthesize controlSwitch = _controlSwitch;
@@ -31,6 +31,7 @@
 int initialTVHeight;
 int initialRowHeight;
 NSDate *chosenDate;
+UITableView *_tableView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -45,6 +46,10 @@ NSDate *chosenDate;
 {
     [super viewDidLoad];
     chosenDate= [NSDate date];
+    if(!_tableView){
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 88, 320, 400)];
+        [self.view addSubview:_tableView];
+    }
     _tableView.delegate=self;
     _tableView.dataSource=self;
     //_tableView.frame = CGRectMake(_tableView.frame.origin.x, 300, _tableView.frame.size.width, _tableView.frame.size.height);
@@ -57,7 +62,7 @@ NSDate *chosenDate;
     //[_userEvents initWithArray:@[@"",@"",@"",@"",@"",@""]];
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     gestureRecognizer.cancelsTouchesInView=NO;
-    [self.tableView addGestureRecognizer:gestureRecognizer];
+    [_tableView addGestureRecognizer:gestureRecognizer];
     // This code allows the user to dismiss the keyboard by pressing somewhere else
     
     _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
@@ -81,7 +86,7 @@ NSDate *chosenDate;
 */
 
 - (void) hideKeyboard{
-     self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
+     _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
     [self.view endEditing:NO];
     }
 
@@ -103,7 +108,7 @@ NSDate *chosenDate;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -207,7 +212,7 @@ NSDate *chosenDate;
 
            }
     else{
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [_tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
@@ -218,10 +223,10 @@ NSDate *chosenDate;
 
 # pragma mark - text field delegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
-    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height-216);
+    _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
+    _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height-216);
     // TODO: the keyboard height reads 216 but should not be hardcoded
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -247,7 +252,7 @@ NSDate *chosenDate;
         count=2;
     }
     for(int i=0; i<count; i++){
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         UITextField * textField = (UITextField*) cell.contentView.subviews[0];
         NSString * text =textField.text;
         if(text!=nil)
@@ -260,7 +265,7 @@ NSDate *chosenDate;
 - (IBAction)segmentedControl:(id)sender {
     photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
     _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-   self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
+   _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
     // Necessary in case the keyboard is up while switching the segmented control
     if(_controlSwitch.selectedSegmentIndex==0){
         _tableView.rowHeight = initialRowHeight;
@@ -272,7 +277,7 @@ NSDate *chosenDate;
         _eventItems=@[@"Who are you sharing with?", @"What's on your mind?",@"Add a photo"];
         _eventSuggestions=@[@"Mom, Dad",@"My message",@""];
     }
-    [self.tableView reloadData];
+    [_tableView reloadData];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -286,7 +291,7 @@ NSDate *chosenDate;
             case 1:
                 [self choosePhotoFromExistingImages];
             default:
-                [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+                [_tableView deselectRowAtIndexPath:indexPath animated:YES];
                 break;
         }
     }else if([indexPath row]==3 && _controlSwitch.selectedSegmentIndex==0){
@@ -305,7 +310,7 @@ NSDate *chosenDate;
     [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
     NSString *stringFromDate = [formatter stringFromDate:chosenDate];
     _userEvents[3]=stringFromDate;
-    [self.tableView reloadData];
+    [_tableView reloadData];
 }
 
 
@@ -341,7 +346,7 @@ NSDate *chosenDate;
     photo = image;
     UIImageView * imageView = (UIImageView *)[self.view viewWithTag:6];
     imageView.image =photo;
-    [self.tableView reloadData];
+    [_tableView reloadData];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;

@@ -30,12 +30,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Pecks" id="9la-ag-PAB">
                         <barButtonItem key="backBarButtonItem" title="Done" id="iKi-ft-MfS"/>
-                        <barButtonItem key="leftBarButtonItem" title="Edit" id="D4q-JD-5ek"/>
-                        <barButtonItem key="rightBarButtonItem" title="Done" id="vMA-no-99f">
-                            <connections>
-                                <action selector="cancelButton:" destination="vCF-rC-B71" id="4uv-eR-EHz"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="leftBarButtonItem" id="D4q-JD-5ek"/>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
@@ -327,6 +322,16 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wj3-Jz-H4K">
+                                        <rect key="frame" x="94" y="784" width="133" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Save Changes">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="saveChangesButton:" destination="4gY-60-r3D" eventType="touchUpInside" id="bX5-dg-Qlp"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </scrollView>
                         </subviews>
@@ -574,7 +579,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="controlSwitch" destination="ve7-Oz-bnH" id="h8c-Bx-fxG"/>
-                        <outlet property="tableView" destination="ZDX-Qv-276" id="gsX-G0-nsb"/>
                         <segue destination="dbL-Fg-Sgg" kind="push" identifier="showFeed" id="7xt-IF-tkU"/>
                         <segue destination="pGg-6v-bdr" kind="push" identifier="showEvents" id="kbr-xc-iWf"/>
                     </connections>

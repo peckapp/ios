@@ -18,7 +18,7 @@
 
 - (IBAction)segmentedControl:(id)sender;
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+//@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *controlSwitch;
 
 - (IBAction)okayButton:(id)sender;
