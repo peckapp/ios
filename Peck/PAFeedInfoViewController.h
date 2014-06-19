@@ -1,8 +1,8 @@
 //
-//  PAFeedTableViewController.h
+//  PAFeedInfoViewController.h
 //  Peck
 //
-//  Created by Aaron Taylor on 6/2/14.
+//  Created by John Karabinos on 6/19/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -11,11 +11,16 @@
 #import "PACoreDataProtocol.h"
 
 
-@interface PAFeedTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol>
+@interface PAFeedInfoViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
+@property (strong, nonatomic) id detailItem;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (strong, nonatomic) NSArray *items;
+
+@property (weak, nonatomic) IBOutlet UIImageView *messagePhoto;
+
+@property (weak, nonatomic) IBOutlet UITextView *messageTextView;
+
 @end

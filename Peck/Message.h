@@ -2,7 +2,7 @@
 //  Message.h
 //  Peck
 //
-//  Created by John Karabinos on 6/18/14.
+//  Created by John Karabinos on 6/19/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -16,5 +16,6 @@
 @property (nonatomic, retain) NSData * photo;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSString * text;
+@property (nonatomic, retain) NSString * id;
 
 @end

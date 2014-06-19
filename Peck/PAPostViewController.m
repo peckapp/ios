@@ -406,6 +406,7 @@ NSDate *chosenDate;
             Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:_managedObjectContext];
             [message setText:_userEvents[1]];
             [message setCreated_at:[NSDate date]];
+            [message setId:_userEvents[1]];
             NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
             [message setPhoto:imageData];
 

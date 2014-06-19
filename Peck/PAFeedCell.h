@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface PAFeedCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UITextView *messageTextView;
 
 @end
