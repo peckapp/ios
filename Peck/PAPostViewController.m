@@ -11,6 +11,7 @@
 #import "Event.h"
 #import "Message.h"
 #import "PADropdownViewController.h"
+#import "PAPeers.h"
 @interface PAPostViewController () {
     NSMutableArray * userEvents;
 }
@@ -47,9 +48,20 @@ UITableView *_tableView;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    PAPeers *peerTree1 = [PAPeers peers];
+    NSString *name1 = peerTree1.peerTree.right.name;
+    NSLog(@"peerTree1 name1: %@", name1);
+    int numberOfNames = [peerTree1.peerTree searchForName:@"Andre"];
+    NSLog(@"Number of Names: %i", numberOfNames);
+    BOOL nameExists = [peerTree1.peerTree search:@"Andrew"];
+    NSLog(@"andrew exists? %u", nameExists);
+    
+    
+    
+    
     chosenDate= [NSDate date];
     if(!_tableView){
-        
         titleThickness=88;
         int topOffSet = barHeight+titleThickness;
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, titleThickness, self.view.frame.size.width, self.view.frame.size.height-topOffSet)];

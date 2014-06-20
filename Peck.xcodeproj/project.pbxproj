@@ -48,6 +48,7 @@
 		86D59837193768C000F38654 /* PeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59836193768C000F38654 /* PeckTests.m */; };
 		A40CF56519547AAB0021C088 /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56419547AAB0021C088 /* Peer.m */; };
 		A40CF56819547ACC0021C088 /* PAPeers.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56719547ACC0021C088 /* PAPeers.m */; };
+		A40CF574195483140021C088 /* PABST.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF573195483140021C088 /* PABST.m */; };
 		A463F384194B959800ED441F /* PACircleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F382194B959800ED441F /* PACircleCell.m */; };
 		A463F385194B959800ED441F /* PACircleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A463F383194B959800ED441F /* PACircleCell.xib */; };
 		A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */; };
@@ -144,6 +145,8 @@
 		A40CF56419547AAB0021C088 /* Peer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peer.m; sourceTree = "<group>"; };
 		A40CF56619547ACC0021C088 /* PAPeers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPeers.h; sourceTree = "<group>"; };
 		A40CF56719547ACC0021C088 /* PAPeers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPeers.m; sourceTree = "<group>"; };
+		A40CF572195483140021C088 /* PABST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PABST.h; sourceTree = "<group>"; };
+		A40CF573195483140021C088 /* PABST.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PABST.m; sourceTree = "<group>"; };
 		A463F381194B959800ED441F /* PACircleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleCell.h; sourceTree = "<group>"; };
 		A463F382194B959800ED441F /* PACircleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACircleCell.m; sourceTree = "<group>"; };
 		A463F383194B959800ED441F /* PACircleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PACircleCell.xib; sourceTree = "<group>"; };
@@ -373,6 +376,8 @@
 				A40CF56419547AAB0021C088 /* Peer.m */,
 				A40CF56619547ACC0021C088 /* PAPeers.h */,
 				A40CF56719547ACC0021C088 /* PAPeers.m */,
+				A40CF572195483140021C088 /* PABST.h */,
+				A40CF573195483140021C088 /* PABST.m */,
 			);
 			name = Peers;
 			sourceTree = "<group>";
@@ -626,6 +631,7 @@
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,
 				86D5981E193768BF00F38654 /* PAEventsViewController.m in Sources */,
+				A40CF574195483140021C088 /* PABST.m in Sources */,
 				A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */,
 				A463F384194B959800ED441F /* PACircleCell.m in Sources */,
 				863843DD193CB75F004110F5 /* PeckRegisterViewController.m in Sources */,

@@ -7,10 +7,16 @@
 //
 
 #import "PAPeers.h"
+#import "PABST.h"
+@interface PAPeers(){
+    
+}
 
-@implementation PAPeers
+@end
 
+@implementation PAPeers{
 
+}
 
 + (instancetype)peers {
     static PAPeers *_peers = nil;
@@ -23,7 +29,14 @@
 }
 
 -(id)init{
-    self;
+    
+    NSArray *testPeers = @[@"John",@"Mark",@"Jason",@"Andrew", @"Jenny"];
+    
+    self.peerTree = [[PABST alloc] init];
+    
+    for(int i=0; i<[testPeers count]; i++){
+        [self.peerTree addNode:self.peerTree WithName:testPeers[i]];
+    }
     
     return self;
 }

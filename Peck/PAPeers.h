@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PABST.h"
 
 @interface PAPeers : NSObject
-
++(instancetype)peers;
+@property (atomic, retain) PABST * peerTree;
 @end
