@@ -52,8 +52,9 @@ UITableView *_tableView;
     PAPeers *peerTree1 = [PAPeers peers];
     NSString *name1 = peerTree1.peerTree.right.name;
     NSLog(@"peerTree1 name1: %@", name1);
-    int numberOfNames = [peerTree1.peerTree searchForName:@"Andre"];
-    NSLog(@"Number of Names: %i", numberOfNames);
+    NSMutableArray *names = [NSMutableArray array];
+    names = [peerTree1.peerTree searchForName:@"J" WithArray:names];
+    NSLog(@"Names: %@", names);
     BOOL nameExists = [peerTree1.peerTree search:@"Andrew"];
     NSLog(@"andrew exists? %u", nameExists);
     

@@ -11,8 +11,6 @@
 @implementation PABST
 
 
-
-
 -(void)addNode:(PABST*) root WithName:(NSString *)newName{
     if(_name==nil){
         _name=newName;
@@ -51,23 +49,31 @@
     return NO;
 }
 
--(int)searchForName:(NSString *)searchName{
+-(NSMutableArray*)searchForName:(NSString *)searchName WithArray:(NSMutableArray*)currentNames{
    // NSMutableArray *names;
-    NSLog(@"current name: %@", _name);
     if(self==nil)
         return 0;
     else if([searchName length] <= [_name length]){
         NSString *temp = [_name substringToIndex:[searchName length]];
         if([temp isEqualToString:searchName]){
-            return 1 + [_right searchForName:searchName] + [_left searchForName:searchName];
-            //return _names + [_right searchForName:searchName] + [_left searchForName:searchName];
+            [currentNames addObject:_name];
+            [currentNames arrayByAddingObjectsFromArray:[_right searchForName:searchName WithArray:currentNames]];
+            [currentNames arrayByAddingObjectsFromArray:[_left searchForName:searchName WithArray:currentNames]];
+            return currentNames;
+            //return 1 + [_right searchForName:searchName] + [_left searchForName:searchName];
+        }else{
+            [currentNames arrayByAddingObjectsFromArray:[_right searchForName:searchName WithArray:currentNames]];
+            [currentNames arrayByAddingObjectsFromArray:[_left searchForName:searchName WithArray:currentNames]];
+            return  currentNames;
         }
     }
     else{
         
-        return [_right searchForName:searchName] + [_left searchForName:searchName];
+        [currentNames arrayByAddingObjectsFromArray:[_right searchForName:searchName WithArray:currentNames]];
+        [currentNames arrayByAddingObjectsFromArray:[_left searchForName:searchName WithArray:currentNames]];
+        return  currentNames;
+
     }
-    return 0;
 }
 
 

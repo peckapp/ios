@@ -14,7 +14,7 @@
 
 -(void)addNode:(PABST*)root WithName:newName;
 -(BOOL)search:(NSString *)searchName;
--(int)searchForName:(NSString *)searchName;
+-(NSMutableArray*)searchForName:(NSString *)searchName WithArray:currentNames;
 
 @property PABST *right;
 @property PABST *left;
