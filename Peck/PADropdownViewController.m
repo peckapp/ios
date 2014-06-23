@@ -7,7 +7,7 @@
 //
 
 #import "PADropdownViewController.h"
-
+#import "PAFilter.h"
 
 
 @interface PADropdownViewController () {
@@ -16,6 +16,8 @@
 
 @property (nonatomic) NSString * primaryViewControllerIdentifier;
 @property (nonatomic) NSArray * secondaryViewControllerIdentifiers;
+
+@property (nonatomic, retain) PAFilter * filter;
 
 // Designates the frame for child view controllers.
 @property (nonatomic) CGRect frameForContentController;
@@ -77,6 +79,10 @@
     // Create a frame for child view controllers
     self.frameForContentController = CGRectMake(0, 20 + barHeight, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - barHeight);
 
+    // creates the filter object
+    self.filter = [[PAFilter alloc] init];
+    [self.view addSubview:self.filter];
+    
     // Display primary view controller
     [self displayContentController: self.primaryViewController];
 }
@@ -96,10 +102,21 @@
     [self.view addSubview: new.view];
     [new didMoveToParentViewController:self];
     self.activeViewController = new;
+    
+    if (new == self.primaryViewController) {
+        [self.filter presentUpwardForMode:PAFilterHomeMode];
+    } else if (new == self.secondaryViewControllers[1]) {
+        [self.filter presentUpwardForMode:PAFilterExploreMode];
+    }
 }
 
 - (void) hideContentController: (UIViewController*) old
 {
+    // dismisses filter if it is active
+    if (old == self.secondaryViewControllers[1]) {
+        [self.filter dismissDownward];
+    }
+    
     [old willMoveToParentViewController:nil];
     [old.view removeFromSuperview];
     [old removeFromParentViewController];
@@ -108,6 +125,13 @@
 - (void) transitionFromViewController: (UIViewController*) old
                 toViewController: (UIViewController*) new
 {
+    // dismisses filter if it is active, presents it if moving to explore tab
+    if (old == self.secondaryViewControllers[1]) {
+        [self.filter dismissDownward];
+    } else if (new == self.secondaryViewControllers[1]) {
+        [self.filter presentUpwardForMode:PAFilterExploreMode];
+    }
+    
     self.view.userInteractionEnabled = NO;
     [old willMoveToParentViewController:nil];
     [self addChildViewController:new];
