@@ -28,10 +28,10 @@
 		867B52D319508F7500BEB37B /* PAPrimaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D219508F7500BEB37B /* PAPrimaryViewController.m */; };
 		867B52D619509F5000BEB37B /* PASessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D519509F5000BEB37B /* PASessionManager.m */; };
 		8689DD8B195871D200A6B61C /* PAFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8689DD8A195871D200A6B61C /* PAFilter.m */; };
-		8689DD9819587E7C00A6B61C /* Filter Button-standard.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DD9419587E7C00A6B61C /* Filter Button-standard.png */; };
-		8689DD9919587E7C00A6B61C /* Filter Button-subscription.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DD9519587E7C00A6B61C /* Filter Button-subscription.png */; };
-		8689DD9A19587E7C00A6B61C /* Filter Button-dining.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DD9619587E7C00A6B61C /* Filter Button-dining.png */; };
-		8689DD9B19587E7C00A6B61C /* Filter Button-detail.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DD9719587E7C00A6B61C /* Filter Button-detail.png */; };
+		8689DDB319589E3600A6B61C /* filter_detail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDAF19589E3600A6B61C /* filter_detail@2x.png */; };
+		8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB019589E3600A6B61C /* filter_dining@2x.png */; };
+		8689DDB519589E3600A6B61C /* filter_standard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB119589E3600A6B61C /* filter_standard@2x.png */; };
+		8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB219589E3600A6B61C /* filter_subscription@2x.png */; };
 		86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */; };
 		86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BFB4AF194B889100ADAB75 /* PADropdownBar.m */; };
 		86D59803193768BF00F38654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59802193768BF00F38654 /* Foundation.framework */; };
@@ -121,10 +121,10 @@
 		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
 		8689DD89195871D200A6B61C /* PAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFilter.h; sourceTree = "<group>"; };
 		8689DD8A195871D200A6B61C /* PAFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFilter.m; sourceTree = "<group>"; };
-		8689DD9419587E7C00A6B61C /* Filter Button-standard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Filter Button-standard.png"; sourceTree = "<group>"; };
-		8689DD9519587E7C00A6B61C /* Filter Button-subscription.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Filter Button-subscription.png"; sourceTree = "<group>"; };
-		8689DD9619587E7C00A6B61C /* Filter Button-dining.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Filter Button-dining.png"; sourceTree = "<group>"; };
-		8689DD9719587E7C00A6B61C /* Filter Button-detail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Filter Button-detail.png"; sourceTree = "<group>"; };
+		8689DDAF19589E3600A6B61C /* filter_detail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_detail@2x.png"; sourceTree = "<group>"; };
+		8689DDB019589E3600A6B61C /* filter_dining@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_dining@2x.png"; sourceTree = "<group>"; };
+		8689DDB119589E3600A6B61C /* filter_standard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_standard@2x.png"; sourceTree = "<group>"; };
+		8689DDB219589E3600A6B61C /* filter_subscription@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_subscription@2x.png"; sourceTree = "<group>"; };
 		86BFB4AE194B889100ADAB75 /* PADropdownBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownBar.h; sourceTree = "<group>"; };
 		86BFB4AF194B889100ADAB75 /* PADropdownBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADropdownBar.m; sourceTree = "<group>"; };
 		86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownViewController.h; sourceTree = "<group>"; };
@@ -226,10 +226,10 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
-				8689DD9419587E7C00A6B61C /* Filter Button-standard.png */,
-				8689DD9519587E7C00A6B61C /* Filter Button-subscription.png */,
-				8689DD9619587E7C00A6B61C /* Filter Button-dining.png */,
-				8689DD9719587E7C00A6B61C /* Filter Button-detail.png */,
+				8689DDAF19589E3600A6B61C /* filter_detail@2x.png */,
+				8689DDB019589E3600A6B61C /* filter_dining@2x.png */,
+				8689DDB119589E3600A6B61C /* filter_standard@2x.png */,
+				8689DDB219589E3600A6B61C /* filter_subscription@2x.png */,
 				86051D48194BB27200961541 /* Silhouette.png */,
 			);
 			name = Graphics;
@@ -557,21 +557,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8689DDB519589E3600A6B61C /* filter_standard@2x.png in Resources */,
+				8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */,
 				86051D4C194BB60200961541 /* Main.storyboard in Resources */,
-				8689DD9819587E7C00A6B61C /* Filter Button-standard.png in Resources */,
+				8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */,
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
-				8689DD9A19587E7C00A6B61C /* Filter Button-dining.png in Resources */,
-				8689DD9919587E7C00A6B61C /* Filter Button-subscription.png in Resources */,
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
 				86051D49194BB27200961541 /* Silhouette.png in Resources */,
 				860A8D27195201A700C5B4A6 /* thor_peckapp_com.cer in Resources */,
-				8689DD9B19587E7C00A6B61C /* Filter Button-detail.png in Resources */,
 				DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */,
 				A4B772E719460C3200A31252 /* schools.plist in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
 				A463F38F19507FA300ED441F /* Property List.plist in Resources */,
+				8689DDB319589E3600A6B61C /* filter_detail@2x.png in Resources */,
 				86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

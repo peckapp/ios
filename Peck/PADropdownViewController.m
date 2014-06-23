@@ -81,7 +81,6 @@
 
     // creates the filter object
     self.filter = [[PAFilter alloc] init];
-    [self.view addSubview:self.filter];
     
     // Display primary view controller
     [self displayContentController: self.primaryViewController];
@@ -104,8 +103,10 @@
     self.activeViewController = new;
     
     if (new == self.primaryViewController) {
+        [self.view addSubview:self.filter];
         [self.filter presentUpwardForMode:PAFilterHomeMode];
     } else if (new == self.secondaryViewControllers[1]) {
+        [self.view addSubview:self.filter];
         [self.filter presentUpwardForMode:PAFilterExploreMode];
     }
 }
@@ -114,6 +115,7 @@
 {
     // dismisses filter if it is active
     if (old == self.secondaryViewControllers[1]) {
+        [self.filter removeFromSuperview];
         [self.filter dismissDownward];
     }
     
@@ -127,8 +129,10 @@
 {
     // dismisses filter if it is active, presents it if moving to explore tab
     if (old == self.secondaryViewControllers[1]) {
+        [self.filter removeFromSuperview];
         [self.filter dismissDownward];
     } else if (new == self.secondaryViewControllers[1]) {
+        [self.view addSubview:self.filter];
         [self.filter presentUpwardForMode:PAFilterExploreMode];
     }
     
