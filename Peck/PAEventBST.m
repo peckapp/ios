@@ -1,33 +1,34 @@
 //
-//  PABST.m
+//  PAEventBST.m
 //  Peck
 //
-//  Created by John Karabinos on 6/20/14.
+//  Created by John Karabinos on 6/23/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
-#import "PABST.h"
+#import "PAEventBST.h"
 
-@implementation PABST
+@implementation PAEventBST
 
-
--(void)addNode:(PABST*) root WithName:(NSString *)newName{
+-(void)addNode:(PAEventBST*) root WithName:(NSString *)newName WithEvent:(Event *) newEvent{
     if(_name==nil){
+        _event=newEvent;
         _name=newName;
+        
     }
     else{
         NSComparisonResult result = [_name compare:newName];
         if(result==NSOrderedAscending){
             if(!_right){
-                _right = [[PABST alloc] init];
+                _right = [[PAEventBST alloc] init];
             }
-            [_right addNode:root WithName:newName];
+            [_right addNode:root WithName:newName WithEvent:newEvent];
         }
         else{
             if(!_left){
-                _left = [[PABST alloc] init];
+                _left = [[PAEventBST alloc] init];
             }
-            [_left addNode:root WithName:newName];
+            [_left addNode:root WithName:newName WithEvent:newEvent];
         }
     }
 }
@@ -55,7 +56,7 @@
     else if([searchName length] <= [_name length]){
         NSString *temp = [_name substringToIndex:[searchName length]];
         if([temp isEqualToString:searchName]){
-            [currentNames addObject:_name];
+            [currentNames addObject:_event];
             [currentNames arrayByAddingObjectsFromArray:[_right searchForName:searchName WithArray:currentNames]];
             [currentNames arrayByAddingObjectsFromArray:[_left searchForName:searchName WithArray:currentNames]];
             return currentNames;
@@ -69,10 +70,11 @@
         [currentNames arrayByAddingObjectsFromArray:[_right searchForName:searchName WithArray:currentNames]];
         [currentNames arrayByAddingObjectsFromArray:[_left searchForName:searchName WithArray:currentNames]];
         return  currentNames;
-
+        
     }
 }
 
 
 
 @end
+

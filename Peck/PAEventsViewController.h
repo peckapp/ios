@@ -11,11 +11,13 @@
 #import <CoreData/CoreData.h>
 #import "PACoreDataProtocol.h"
 
-@interface PAEventsViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDataSource,UITableViewDelegate>
+@interface PAEventsViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDataSource,UITableViewDelegate, UISearchBarDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (strong, nonatomic) NSArray *diningMeals;
+- (IBAction)yesterdayButton:(id)sender;
+- (IBAction)todayButton:(id)sender;
+- (IBAction)tomorrowButton:(id)sender;
 @end
