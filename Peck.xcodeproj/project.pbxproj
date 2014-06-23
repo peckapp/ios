@@ -27,6 +27,7 @@
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
 		867B52D319508F7500BEB37B /* PAPrimaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D219508F7500BEB37B /* PAPrimaryViewController.m */; };
 		867B52D619509F5000BEB37B /* PASessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D519509F5000BEB37B /* PASessionManager.m */; };
+		8689DD8B195871D200A6B61C /* PAFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8689DD8A195871D200A6B61C /* PAFilter.m */; };
 		86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */; };
 		86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BFB4AF194B889100ADAB75 /* PADropdownBar.m */; };
 		86D59803193768BF00F38654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59802193768BF00F38654 /* Foundation.framework */; };
@@ -114,6 +115,8 @@
 		867B52D419509F5000BEB37B /* PASessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASessionManager.h; sourceTree = "<group>"; };
 		867B52D519509F5000BEB37B /* PASessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASessionManager.m; sourceTree = "<group>"; };
 		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
+		8689DD89195871D200A6B61C /* PAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFilter.h; sourceTree = "<group>"; };
+		8689DD8A195871D200A6B61C /* PAFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFilter.m; sourceTree = "<group>"; };
 		86BFB4AE194B889100ADAB75 /* PADropdownBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownBar.h; sourceTree = "<group>"; };
 		86BFB4AF194B889100ADAB75 /* PADropdownBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADropdownBar.m; sourceTree = "<group>"; };
 		86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownViewController.h; sourceTree = "<group>"; };
@@ -320,6 +323,8 @@
 				86BFB4AF194B889100ADAB75 /* PADropdownBar.m */,
 				86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */,
 				86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */,
+				8689DD89195871D200A6B61C /* PAFilter.h */,
+				8689DD8A195871D200A6B61C /* PAFilter.m */,
 				867B52D019508F5800BEB37B /* Primary */,
 				A4B772DD1945F8DB00A31252 /* Configure */,
 				DDDAEDE419479665004CE102 /* Events */,
@@ -603,6 +608,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8689DD8B195871D200A6B61C /* PAFilter.m in Sources */,
 				867B52D319508F7500BEB37B /* PAPrimaryViewController.m in Sources */,
 				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
 				863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */,
