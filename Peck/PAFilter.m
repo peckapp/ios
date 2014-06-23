@@ -8,6 +8,8 @@
 
 #import "PAFilter.h"
 
+#define edgeBuffer 20
+
 @interface PAFilter() {
     
 }
@@ -26,7 +28,10 @@
 @property (nonatomic, retain) UIImage * subscription;
 @property (nonatomic, retain) UIImage * dining;
 
+// whether or not the filter is active in selecting a different mode
 @property (nonatomic, getter=isActive) BOOL active;
+// whether or not the filter is presented on the screen
+@property (nonatomic) BOOL presented;
 
 @end
 
@@ -45,6 +50,8 @@
         
         self.alpha = 0.75; // slightly transparent when unactivated
         
+        self.presented = false;
+        
         // loads images for each option
         /*
         self.standard = [[CIImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"Filter Button-standard" ofType:@"png"]]];
@@ -53,10 +60,10 @@
         self.dining = [[CIImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"Filter Button-dining" ofType:@"png"]]];
          */
         
-        self.standard = [UIImage imageNamed:@"Filter Button-standard.png"];
-        self.detail = [UIImage imageNamed:@"Filter Button-detail.png"];
-        self.subscription = [UIImage imageNamed:@"Filter Button-subscription.png"];
-        self.dining = [UIImage imageNamed:@"Filter Button-dining.png"];
+        self.standard = [UIImage imageNamed:@"filter_standard.png"];
+        self.detail = [UIImage imageNamed:@"filter_detail.png"];
+        self.subscription = [UIImage imageNamed:@"filter_subscription.png"];
+        self.dining = [UIImage imageNamed:@"filter_dining.png"];
         
         [self addSubview:[[UIImageView alloc] initWithImage:self.standard]];
     }
@@ -64,60 +71,94 @@
     return self;
 }
 
+#pragma mark - Animation
+
 - (void)presentUpwardForMode:(PAFilterMode)mode
 {
-    NSString *keyPath = @"transform.translation.y";
-    
-    CAKeyframeAnimation *translation = [CAKeyframeAnimation animationWithKeyPath:keyPath];
-    
-    translation.duration = 0.5;
-    translation.autoreverses = true;
-    
-    NSMutableArray *values = [NSMutableArray array];
-    
-    [values addObject:[NSNumber numberWithFloat:0.0]];
-    double height = 0 - self.layer.frame.size.height;
-    [values addObject:[NSNumber numberWithDouble:height]];
-    
-    translation.values = values;
-    
-    NSMutableArray * timingFunctions = [NSMutableArray array];
-    [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault]];
-    
-    translation.timingFunctions = timingFunctions;
-    
-    [self.layer addAnimation:translation forKey:keyPath];
+    if (!self.presented) {
+        NSString *keyPath = @"transform.translation.y";
+        
+        CAKeyframeAnimation *translation = [CAKeyframeAnimation animationWithKeyPath:keyPath];
+        translation.delegate = self;
+        
+        translation.duration = 0.5;
+        
+        NSMutableArray *values = [NSMutableArray array];
+        
+        [values addObject:[NSNumber numberWithFloat:0.0]];
+        double height = 0 - self.layer.frame.size.height - edgeBuffer;
+        [values addObject:[NSNumber numberWithDouble:height]];
+        
+        translation.values = values;
+        
+        NSMutableArray * timingFunctions = [NSMutableArray array];
+        [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault]];
+        
+        translation.timingFunctions = timingFunctions;
+        
+        self.presented = true;
+        
+        [self.layer addAnimation:translation forKey:keyPath];
+    } else {
+        NSLog(@"WARNING: attempted to present PAFilter when it was already presented");
+    }
 }
 
 - (void)dismissDownward
 {
-    NSString *keyPath = @"transform.translation.y";
+    if (self.presented) {
+        NSString *keyPath = @"transform.translation.y";
+        
+        CAKeyframeAnimation *translation = [CAKeyframeAnimation animationWithKeyPath:keyPath];
+        translation.delegate = self;
+        
+        translation.duration = 0.5;
+        
+        NSMutableArray *values = [NSMutableArray array];
+        
+        [values addObject:[NSNumber numberWithFloat:0.0]];
+        double height = self.layer.frame.size.height + edgeBuffer; //[[UIScreen mainScreen] bounds].size.height - self.layer.frame.size.height;
+        [values addObject:[NSNumber numberWithDouble:height]];
+        
+        translation.values = values;
+        
+        NSMutableArray * timingFunctions = [NSMutableArray array];
+        [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault]];
+        
+        translation.timingFunctions = timingFunctions;
+        
+        self.presented = false;
+        
+        [self.layer addAnimation:translation forKey:keyPath];
+    } else {
+        NSLog(@"WARNING: attempted to dismiss PAFilter when it was already dismissed");
+    }
     
-    CAKeyframeAnimation *translation = [CAKeyframeAnimation animationWithKeyPath:keyPath];
-    
-    translation.duration = 0.5;
-    translation.autoreverses = true;
-    
-    NSMutableArray *values = [NSMutableArray array];
-    
-    [values addObject:[NSNumber numberWithFloat:0.0]];
-    double height = self.layer.frame.size.height; //[[UIScreen mainScreen] bounds].size.height - self.layer.frame.size.height;
-    [values addObject:[NSNumber numberWithDouble:height]];
-    
-    translation.values = values;
-    
-    NSMutableArray * timingFunctions = [NSMutableArray array];
-    [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault]];
-    
-    translation.timingFunctions = timingFunctions;
-    
-    [self.layer addAnimation:translation forKey:keyPath];
 }
+
+- (void)animationDidStart:(CAAnimation *)anim
+{
+    
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
+{
+    
+    if (self.presented) {
+        self.center = CGPointMake(self.center.x, self.center.y - self.layer.frame.size.height - edgeBuffer);
+    } else {
+        self.center = CGPointMake(self.center.x, self.center.y + self.layer.frame.size.height + edgeBuffer);
+    }
+}
+
+#pragma mark - User Interaction
 
 // if the touch is on the filter ui element, make the web appear
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     self.alpha = 1.0; // becomes solid when activated
+    
+    NSLog(@"touched filter");
     
     [self setNeedsDisplay]; // let the system know to update the view, probably want to do this with animation instead
 }
@@ -145,7 +186,11 @@
 
 - (CGRect) startingRect
 {
-    return CGRectMake(250, 500, 60, 60);
+    double height = 60;
+    double width = 60;
+    double x = [[UIScreen mainScreen] bounds].size.width - width - edgeBuffer;
+    double y = [[UIScreen mainScreen] bounds].size.height;
+    return CGRectMake(x, y, height, width);
 }
 
 @end
