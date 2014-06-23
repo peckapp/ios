@@ -23,9 +23,8 @@
 		863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D7193CB75F004110F5 /* PeckLoginViewController.m */; };
 		863843DD193CB75F004110F5 /* PeckRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D9193CB75F004110F5 /* PeckRegisterViewController.m */; };
 		863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */; };
-		863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */; };
+		863843E3193CB7FD004110F5 /* PAExploreTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843E2193CB7FD004110F5 /* PAExploreTableViewController.m */; };
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
-		867B52D319508F7500BEB37B /* PAPrimaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D219508F7500BEB37B /* PAPrimaryViewController.m */; };
 		867B52D619509F5000BEB37B /* PASessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D519509F5000BEB37B /* PASessionManager.m */; };
 		86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */; };
 		86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BFB4AF194B889100ADAB75 /* PADropdownBar.m */; };
@@ -64,11 +63,11 @@
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
 		A4BDFE661951E7160020EFD5 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE651951E7160020EFD5 /* Event.m */; };
 		A4BDFE6C19531FCA0020EFD5 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6B19531FCA0020EFD5 /* Message.m */; };
-		A4BDFE6F195329650020EFD5 /* PAFeedInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6E195329650020EFD5 /* PAFeedInfoViewController.m */; };
+		A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */; };
 		A4BDFE72195362E40020EFD5 /* PADiningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE71195362E40020EFD5 /* PADiningViewController.m */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
-		DDDAEDDB19465DCB004CE102 /* PAFeedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAFeedCell.m */; };
-		DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */; };
+		DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAExploreCell.m */; };
+		DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */; };
 		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -107,12 +106,10 @@
 		863843D9193CB75F004110F5 /* PeckRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckRegisterViewController.m; sourceTree = "<group>"; };
 		863843DE193CB7A4004110F5 /* PeckLoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeckLoadingViewController.h; sourceTree = "<group>"; };
 		863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckLoadingViewController.m; sourceTree = "<group>"; };
-		863843E1193CB7FD004110F5 /* PAFeedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFeedTableViewController.h; sourceTree = "<group>"; };
-		863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFeedTableViewController.m; sourceTree = "<group>"; };
+		863843E1193CB7FD004110F5 /* PAExploreTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreTableViewController.h; sourceTree = "<group>"; };
+		863843E2193CB7FD004110F5 /* PAExploreTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreTableViewController.m; sourceTree = "<group>"; };
 		863843E6193CBA69004110F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		867651ED19462E5200C14645 /* old_webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = old_webservice.h; sourceTree = "<group>"; };
-		867B52D119508F7500BEB37B /* PAPrimaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPrimaryViewController.h; sourceTree = "<group>"; };
-		867B52D219508F7500BEB37B /* PAPrimaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPrimaryViewController.m; sourceTree = "<group>"; };
 		867B52D419509F5000BEB37B /* PASessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASessionManager.h; sourceTree = "<group>"; };
 		867B52D519509F5000BEB37B /* PASessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASessionManager.m; sourceTree = "<group>"; };
 		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
@@ -172,15 +169,15 @@
 		A4BDFE651951E7160020EFD5 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A4BDFE6A19531FCA0020EFD5 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		A4BDFE6B19531FCA0020EFD5 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		A4BDFE6D195329650020EFD5 /* PAFeedInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFeedInfoViewController.h; sourceTree = "<group>"; };
-		A4BDFE6E195329650020EFD5 /* PAFeedInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFeedInfoViewController.m; sourceTree = "<group>"; };
+		A4BDFE6D195329650020EFD5 /* PAExploreInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreInfoViewController.h; sourceTree = "<group>"; };
+		A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreInfoViewController.m; sourceTree = "<group>"; };
 		A4BDFE70195362E40020EFD5 /* PADiningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningViewController.h; sourceTree = "<group>"; };
 		A4BDFE71195362E40020EFD5 /* PADiningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningViewController.m; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DDDAEDD819465DCB004CE102 /* PAFeedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFeedCell.h; sourceTree = "<group>"; };
-		DDDAEDD919465DCB004CE102 /* PAFeedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFeedCell.m; sourceTree = "<group>"; };
-		DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAFeedCell.xib; sourceTree = "<group>"; };
+		DDDAEDD819465DCB004CE102 /* PAExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreCell.h; sourceTree = "<group>"; };
+		DDDAEDD919465DCB004CE102 /* PAExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreCell.m; sourceTree = "<group>"; };
+		DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAExploreCell.xib; sourceTree = "<group>"; };
 		DDDAEDDD19475EBA004CE102 /* PAPecksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPecksViewController.h; sourceTree = "<group>"; };
 		DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPecksViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -266,15 +263,6 @@
 			name = Webservice;
 			sourceTree = "<group>";
 		};
-		867B52D019508F5800BEB37B /* Primary */ = {
-			isa = PBXGroup;
-			children = (
-				867B52D119508F7500BEB37B /* PAPrimaryViewController.h */,
-				867B52D219508F7500BEB37B /* PAPrimaryViewController.m */,
-			);
-			name = Primary;
-			sourceTree = "<group>";
-		};
 		86D597F6193768BF00F38654 = {
 			isa = PBXGroup;
 			children = (
@@ -326,10 +314,9 @@
 				86BFB4AF194B889100ADAB75 /* PADropdownBar.m */,
 				86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */,
 				86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */,
-				867B52D019508F5800BEB37B /* Primary */,
 				A4B772DD1945F8DB00A31252 /* Configure */,
 				DDDAEDE419479665004CE102 /* Events */,
-				DDDAEDE51947967A004CE102 /* Newsfeed */,
+				DDDAEDE51947967A004CE102 /* Explore */,
 				DDDAEDE7194796BA004CE102 /* Circles */,
 				DDDAEDE8194796C6004CE102 /* Profile */,
 				DDDAEDE019475EE7004CE102 /* Pecks */,
@@ -429,18 +416,18 @@
 			name = Events;
 			sourceTree = "<group>";
 		};
-		DDDAEDE51947967A004CE102 /* Newsfeed */ = {
+		DDDAEDE51947967A004CE102 /* Explore */ = {
 			isa = PBXGroup;
 			children = (
-				863843E1193CB7FD004110F5 /* PAFeedTableViewController.h */,
-				863843E2193CB7FD004110F5 /* PAFeedTableViewController.m */,
-				DDDAEDD819465DCB004CE102 /* PAFeedCell.h */,
-				DDDAEDD919465DCB004CE102 /* PAFeedCell.m */,
-				DDDAEDDA19465DCB004CE102 /* PAFeedCell.xib */,
-				A4BDFE6D195329650020EFD5 /* PAFeedInfoViewController.h */,
-				A4BDFE6E195329650020EFD5 /* PAFeedInfoViewController.m */,
+				863843E1193CB7FD004110F5 /* PAExploreTableViewController.h */,
+				863843E2193CB7FD004110F5 /* PAExploreTableViewController.m */,
+				DDDAEDD819465DCB004CE102 /* PAExploreCell.h */,
+				DDDAEDD919465DCB004CE102 /* PAExploreCell.m */,
+				DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */,
+				A4BDFE6D195329650020EFD5 /* PAExploreInfoViewController.h */,
+				A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */,
 			);
-			name = Newsfeed;
+			name = Explore;
 			sourceTree = "<group>";
 		};
 		DDDAEDE7194796BA004CE102 /* Circles */ = {
@@ -557,7 +544,7 @@
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
 				86051D49194BB27200961541 /* Silhouette.png in Resources */,
 				860A8D27195201A700C5B4A6 /* thor_peckapp_com.cer in Resources */,
-				DDDAEDDC19465DCB004CE102 /* PAFeedCell.xib in Resources */,
+				DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */,
 				A4B772E719460C3200A31252 /* schools.plist in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
 				A463F38F19507FA300ED441F /* Property List.plist in Resources */,
@@ -613,11 +600,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				867B52D319508F7500BEB37B /* PAPrimaryViewController.m in Sources */,
 				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
-				863843E3193CB7FD004110F5 /* PAFeedTableViewController.m in Sources */,
+				863843E3193CB7FD004110F5 /* PAExploreTableViewController.m in Sources */,
 				86D59811193768BF00F38654 /* main.m in Sources */,
-				DDDAEDDB19465DCB004CE102 /* PAFeedCell.m in Sources */,
+				DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */,
 				A40CF56519547AAB0021C088 /* Peer.m in Sources */,
 				A4BDFE72195362E40020EFD5 /* PADiningViewController.m in Sources */,
 				863843CF193CB393004110F5 /* PAProfileTableViewController.m in Sources */,
@@ -629,7 +615,7 @@
 				863843DB193CB75F004110F5 /* PeckInitialViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
-				A4BDFE6F195329650020EFD5 /* PAFeedInfoViewController.m in Sources */,
+				A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */,
 				863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */,
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
 				A4773C8019589E8200AB9831 /* PAEvents.m in Sources */,

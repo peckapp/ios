@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.17" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment defaultVersion="1808" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.11"/>
     </dependencies>
     <scenes>
         <!--Pecks View Controller - Pecks-->
@@ -38,10 +39,10 @@
             </objects>
             <point key="canvasLocation" x="-184" y="-229"/>
         </scene>
-        <!--Feed Table View Controller - Newsfeed-->
+        <!--Explore Table View Controller - Explore-->
         <scene sceneID="09g-Dv-sHg">
             <objects>
-                <tableViewController id="dbL-Fg-Sgg" customClass="PAFeedTableViewController" sceneMemberID="viewController">
+                <tableViewController title="Explore" id="dbL-Fg-Sgg" customClass="PAExploreTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="R1T-hS-FbY">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -51,7 +52,7 @@
                             <outlet property="delegate" destination="dbL-Fg-Sgg" id="g2R-U0-mof"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Newsfeed" id="csn-Eh-RQM"/>
+                    <navigationItem key="navigationItem" title="Explore" id="csn-Eh-RQM"/>
                     <connections>
                         <segue destination="gt2-YE-863" kind="push" identifier="showMessageDetail" id="zdc-7i-jBF"/>
                     </connections>
@@ -60,10 +61,10 @@
             </objects>
             <point key="canvasLocation" x="-184" y="470"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller - Explore-->
         <scene sceneID="RJ5-1c-Ets">
             <objects>
-                <navigationController storyboardIdentifier="feed" definesPresentationContext="YES" id="YgY-YD-cce" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="feed" title="Explore" definesPresentationContext="YES" id="YgY-YD-cce" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="FaF-Ex-tMg"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="YHk-3p-VBI">
                         <autoresizingMask key="autoresizingMask"/>
@@ -91,10 +92,10 @@
             </objects>
             <point key="canvasLocation" x="-720" y="-229"/>
         </scene>
-        <!--Feed Info View Controller - Detail-->
+        <!--Explore Info View Controller - Detail-->
         <scene sceneID="Zfp-18-CXc">
             <objects>
-                <viewController storyboardIdentifier="feedInfo" useStoryboardIdentifierAsRestorationIdentifier="YES" id="gt2-YE-863" customClass="PAFeedInfoViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="feedInfo" useStoryboardIdentifierAsRestorationIdentifier="YES" id="gt2-YE-863" customClass="PAExploreInfoViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VHI-HX-z4R">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -352,28 +353,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jgw-4o-OAg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-184" y="2627"/>
-        </scene>
-        <!--Primary View Controller-->
-        <scene sceneID="3Uw-vS-Ld7">
-            <objects>
-                <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="TFZ-hF-vcp" customClass="PAPrimaryViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="ym5-VX-7Eg">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NWp-al-A4t">
-                                <rect key="frame" x="139" y="273" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3k8-vG-VKb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1320" y="1910"/>
+            <point key="canvasLocation" x="-184" y="2843"/>
         </scene>
         <!--Events View Controller - Master-->
         <scene sceneID="VgW-fR-Quf">
