@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
-#import "PAFeedInfoViewController.h"
+#import "PAExploreInfoViewController.h"
 
-@interface PAFeedInfoViewController ()
+@interface PAExploreInfoViewController ()
 - (void)setDetailItem:(id)newDetailItem;
 @end
 
-@implementation PAFeedInfoViewController
+@implementation PAExploreInfoViewController
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;

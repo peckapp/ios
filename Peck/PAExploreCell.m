@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
-#import "PAFeedCell.h"
+#import "PAExploreCell.h"
 
-@implementation PAFeedCell
+@implementation PAExploreCell
 @synthesize messageTextView;
 
 - (void)awakeFromNib

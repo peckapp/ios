@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PAFeedCell : UITableViewCell
+@interface PAExploreCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UITextView *messageTextView;
 
 @end

@@ -6,17 +6,17 @@
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
-#import "PAFeedTableViewController.h"
+#import "PAExploreTableViewController.h"
 #import "Message.h"
 #import "PAAppDelegate.h"
-#import "PAFeedCell.h"
-#import "PAFeedInfoViewController.h"
+#import "PAExploreCell.h"
+#import "PAExploreInfoViewController.h"
 
-@interface PAFeedTableViewController ()
+@interface PAExploreTableViewController ()
 
 @end
 
-@implementation PAFeedTableViewController
+@implementation PAExploreTableViewController
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
@@ -64,7 +64,7 @@ NSCache *imageCache;
     return [sectionInfo numberOfObjects];
 }
 
-- (void)configureCell:(PAFeedCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureCell:(PAExploreCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Message *tempMessage = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.messageTextView.text = tempMessage.text;
@@ -99,7 +99,7 @@ NSCache *imageCache;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIdentifier = @"FeedCell";
-    PAFeedCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    PAExploreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         [tableView registerNib:[UINib nibWithNibName:@"PAFeedCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
