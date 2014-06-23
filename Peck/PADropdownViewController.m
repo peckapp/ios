@@ -41,28 +41,8 @@
 {
     [super viewDidLoad];
 
-    self.primaryViewControllerIdentifier = PAPrimaryIdentifier;
-    self.secondaryViewControllerIdentifiers = @[PAPecksIdentifier,
-                                                PAFeedIdentifier,
-                                                PAAddIdentifier,
-                                                PACirclesIdentifier,
-                                                PAProfileIdentifier];
-
-    // Instantiate primary view controller
-    NSLog(@"Instantiating primary view contorller");
-    self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
-
-    // Instantiate secondary view controllers
-    NSLog(@"Instantiating secondary view controller");
-    NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
-    [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
-        NSString * identifier = (NSString*)obj;
-        UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
-        viewController.tabBarItem.tag = idx;
-        viewController.restorationIdentifier = identifier;
-        [svcCollector insertObject:viewController atIndex:idx];
-    }];
-    self.secondaryViewControllers = [svcCollector copy];
+    // initializes and sets up the primary and secondary viewcontrollers
+    [self initializeViewControllers];
 
     // Create tab bar items
     NSMutableArray * tempTabBarItems = [NSMutableArray arrayWithCapacity:self.secondaryViewControllers.count];
@@ -83,7 +63,33 @@
     self.filter = [[PAFilter alloc] init];
     
     // Display primary view controller
-    [self displayContentController: self.primaryViewController];
+    [self setupPrimaryController];
+}
+
+- (void) initializeViewControllers
+{
+    self.primaryViewControllerIdentifier = PAPrimaryIdentifier;
+    self.secondaryViewControllerIdentifiers = @[PAPecksIdentifier,
+                                                PAFeedIdentifier,
+                                                PAAddIdentifier,
+                                                PACirclesIdentifier,
+                                                PAProfileIdentifier];
+    
+    // Instantiate primary view controller
+    NSLog(@"Instantiating primary view contorller");
+    self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
+    
+    // Instantiate secondary view controllers
+    NSLog(@"Instantiating secondary view controller");
+    NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
+    [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
+        NSString * identifier = (NSString*)obj;
+        UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+        viewController.tabBarItem.tag = idx;
+        viewController.restorationIdentifier = identifier;
+        [svcCollector insertObject:viewController atIndex:idx];
+    }];
+    self.secondaryViewControllers = [svcCollector copy];
 }
 
 - (void)didReceiveMemoryWarning
@@ -94,52 +100,93 @@
 
 #pragma Manage ViewControllers
 
-- (void) displayContentController: (UIViewController*) new;
+- (void) setupPrimaryController
 {
-    [self addChildViewController:new];
-    new.view.frame = self.frameForContentController;
-    [self.view addSubview: new.view];
-    [new didMoveToParentViewController:self];
-    self.activeViewController = new;
+    [self addChildViewController:self.primaryViewController];
+    self.primaryViewController.view.frame = self.frameForContentController;
+    [self.view addSubview: self.primaryViewController.view];
+    [self.primaryViewController didMoveToParentViewController:self];
+    self.activeViewController = self.primaryViewController;
     
-    if (new == self.primaryViewController) {
-        [self.view addSubview:self.filter];
-        [self.filter presentUpwardForMode:PAFilterHomeMode];
-    } else if (new == self.secondaryViewControllers[1]) {
+    return;
+    
+    [self.view addSubview:self.filter];
+    [self.filter presentUpwardForMode:PAFilterHomeMode];
+}
+
+// displays a secondary over the primary
+- (void) displaySecondaryContentController: (UIViewController*) new;
+{
+    [new willMoveToParentViewController:self];
+    [self addChildViewController:new];
+    
+    new.view.frame = self.frameForContentController;
+    
+    CGFloat distance = self.frameForContentController.size.height;
+    new.view.transform = CGAffineTransformMakeTranslation(0, distance);
+    
+    [self transitionFromViewController: self.primaryViewController toViewController: new
+                              duration: 0.25 options:0
+                            animations:^{
+                                new.view.transform = CGAffineTransformMakeTranslation(0, 0);
+                            }
+                            completion:^(BOOL finished) {
+                                self.activeViewController = new;
+                                [self.primaryViewController removeFromParentViewController];
+                                self.view.userInteractionEnabled = YES;
+                                [new didMoveToParentViewController:self];
+                            }];
+    return;
+    // presents filter in the proper mode
+    [self.filter dismissDownward];
+    [self.filter removeFromSuperview];
+    if (false && new == self.secondaryViewControllers[1]) {
         [self.view addSubview:self.filter];
         [self.filter presentUpwardForMode:PAFilterExploreMode];
     }
 }
 
-- (void) hideContentController: (UIViewController*) old
+// hides secondary to reveal and enable the primary
+- (void) hideActiveSecondaryContentController
 {
+    [self.primaryViewController willMoveToParentViewController:self];
+    [self addChildViewController:self.primaryViewController];
+    
+    self.primaryViewController.view.frame = self.frameForContentController;
+    
+    CGFloat distance = self.frameForContentController.size.height;
+    self.activeViewController.view.transform = CGAffineTransformMakeTranslation(0, 0);
+    
+    [self transitionFromViewController: self.activeViewController toViewController: self.primaryViewController
+                              duration: 0.25 options:0
+                            animations:^{
+                                self.activeViewController.view.transform = CGAffineTransformMakeTranslation(0, distance);
+                            }
+                            completion:^(BOOL finished) {
+                                [self.activeViewController removeFromParentViewController];
+                                [self.primaryViewController didMoveToParentViewController:self];
+                                self.activeViewController = self.primaryViewController;
+                                self.view.userInteractionEnabled = YES;
+                            }];
+    return;
     // dismisses filter if it is active
-    if (old == self.secondaryViewControllers[1]) {
+    if (self.activeViewController == self.secondaryViewControllers[1]) {
         [self.filter removeFromSuperview];
         [self.filter dismissDownward];
     }
-    
-    [old willMoveToParentViewController:nil];
-    [old.view removeFromSuperview];
-    [old removeFromParentViewController];
+    [self.view addSubview:self.filter];
+    [self.filter presentUpwardForMode:PAFilterHomeMode];
 }
+
 
 - (void) transitionFromViewController: (UIViewController*) old
                 toViewController: (UIViewController*) new
 {
-    // dismisses filter if it is active, presents it if moving to explore tab
-    if (old == self.secondaryViewControllers[1]) {
-        [self.filter removeFromSuperview];
-        [self.filter dismissDownward];
-    } else if (new == self.secondaryViewControllers[1]) {
-        [self.view addSubview:self.filter];
-        [self.filter presentUpwardForMode:PAFilterExploreMode];
-    }
     
     self.view.userInteractionEnabled = NO;
     [old willMoveToParentViewController:nil];
     [self addChildViewController:new];
-
+    
     CGFloat distance = self.frameForContentController.size.height;
     new.view.frame = self.frameForContentController;
     new.view.transform = CGAffineTransformMakeTranslation(0, distance);
@@ -155,42 +202,37 @@
                                 self.activeViewController = new;
                                 self.view.userInteractionEnabled = YES;
                             }];
+    
+    // dismisses filter if it is active, presents it if moving to explore tab
+    if (old == self.secondaryViewControllers[1]) {
+        [self.filter removeFromSuperview];
+        [self.filter dismissDownward];
+    } else if (new == self.secondaryViewControllers[1]) {
+        [self.view addSubview:self.filter];
+        [self.filter presentUpwardForMode:PAFilterExploreMode];
+    }
 }
 # pragma mark - UITabBarDelegate methods
 
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
 
     UIViewController * destinationViewController = self.secondaryViewControllers[item.tag];
-    if (self.activeViewController == destinationViewController) {
-        [self transitionFromViewController: self.activeViewController toViewController: self.primaryViewController];
+    
+    if (self.activeViewController == self.primaryViewController) {
+        // primary is active, need to present a secondary on top of it
+        [self displaySecondaryContentController:destinationViewController];
+        
+    } else if (self.activeViewController == destinationViewController) {
+        
+        // selected controller tapped again to dismiss it
+        [self hideActiveSecondaryContentController]; //:self.activeViewController];
+        //[self transitionFromViewController: self.activeViewController toViewController: self.primaryViewController];
+        
     } else {
+        
         [self transitionFromViewController: self.activeViewController toViewController: destinationViewController];
     }
 }
 
 
 @end
-
-/*
-UIViewController *src = (UIViewController *) self.sourceViewController;
-UIViewController *dst = (UIViewController *) self.destinationViewController;
-
-CGFloat distance = src.view.frame.size.height;
-src.view.transform = CGAffineTransformMakeTranslation(0, 0);
-dst.view.transform = CGAffineTransformMakeTranslation(0, 0);
-
-[src.view.superview insertSubview:dst.view belowSubview:src.view];
-
-[UIView animateWithDuration: 0.4
-                      delay: 0.0
-                    options: UIViewAnimationOptionCurveEaseOut
-                 animations:^{
-                     src.view.transform = CGAffineTransformMakeTranslation(0, distance);
-
-                 }
-                 completion:^(BOOL finished){
-                     [dst.view removeFromSuperview];
-                     [src presentViewController:dst animated:NO completion:NULL];
-                 }
- ];
-*/
