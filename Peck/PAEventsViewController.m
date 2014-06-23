@@ -53,6 +53,15 @@ NSCache *imageCache;
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+
     lastCurrentHeight=0;
     if(!searchBar){
         titleThickness=44;
@@ -227,13 +236,6 @@ NSCache *imageCache;
         
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
-        
-    NSError *error = nil;
-    if (![self.fetchedResultsController performFetch:&error])
-    {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-    }
     
     return _fetchedResultsController;
     
