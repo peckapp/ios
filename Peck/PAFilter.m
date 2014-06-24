@@ -173,7 +173,7 @@
     NSLog(@"WARNING: touches cancelled for UIEvent: %@",event);
 }
 
-# pragma mark - Utiliy methods
+# pragma mark - Utility methods
 
 - (CGRect) startingRect
 {
