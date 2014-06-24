@@ -19,7 +19,7 @@
 #define barHeight 50
 @protocol PADropdownViewControllerDelegate; //allows delegate to be referenced in interface
 
-@interface PADropdownViewController : UIViewController <PACoreDataProtocol,UITabBarDelegate>
+@interface PADropdownViewController : UIViewController <PACoreDataProtocol, PADropdownBarDelegate>
 
 // viewcontroller that displays the primary content
 @property (nonatomic) UIViewController * primaryViewController;
@@ -38,7 +38,7 @@
 
 // Contains all the icons at the top of the screen,
 // handling touches to those items that cause their associated views to drop down
-@property (nonatomic,readonly) PADropdownBar * dropdownBar;
+@property (nonatomic) PADropdownBar * dropdownBar;
 
 // acts as its own delegate
 @property(nonatomic, assign) id<PADropdownViewControllerDelegate> delegate;

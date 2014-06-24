@@ -8,24 +8,47 @@
 
 #import "PADropdownBar.h"
 
+@interface PADropdownBar ()
+@property (nonatomic, strong) NSObject <PADropdownBarDelegate> * delegate;
+@end
+
 @implementation PADropdownBar
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (id) initWithFrame:(CGRect)frame itemCount:(NSUInteger)count delegate:(NSObject <PADropdownBarDelegate>*)dropdownDelegate;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+
+        self.backgroundColor = [UIColor whiteColor];
+
+        CGFloat offset = CGRectGetWidth(frame) / count;
+
+        for (NSUInteger i = 0 ; i < count ; i++)
+        {
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            [button addTarget:self action:@selector(didSelectItem:) forControlEvents:UIControlEventTouchUpInside];
+            //[button setImage:[UIImage imageNamed:@"graphics/button-selected.png"] forState:UIControlStateNormal];
+            button.backgroundColor = [UIColor grayColor];
+            [button setTag:i];
+            button.frame = CGRectMake(i * offset, 0.0, 50.0, 50.0);
+            [self addSubview:button];
+        }
+
+        self.delegate = dropdownDelegate;
     }
     return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+- (void) didSelectItem:(UIButton *)sender
 {
-    // Drawing code
+    NSLog(@"PADropdownBar didSelectItem");
+    int index = sender.tag;
+    [self.delegate barDidSelectItemWithIndex:index];
 }
-*/
+
+- (void) selectItemAtIndex:(NSInteger)index;
+{
+    // Select buttons
+}
 
 @end

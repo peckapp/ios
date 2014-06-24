@@ -64,6 +64,9 @@
 		A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */; };
 		A4BDFE72195362E40020EFD5 /* PADiningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE71195362E40020EFD5 /* PADiningViewController.m */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
+		DDC9D3DC1959BB3D009BC9F3 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC9D3D91959BB3D009BC9F3 /* background.png */; };
+		DDC9D3DD1959BB3D009BC9F3 /* button-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC9D3DA1959BB3D009BC9F3 /* button-selected.png */; };
+		DDC9D3DE1959BB3D009BC9F3 /* button.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC9D3DB1959BB3D009BC9F3 /* button.png */; };
 		DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAExploreCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */; };
 		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
@@ -169,6 +172,9 @@
 		A4BDFE71195362E40020EFD5 /* PADiningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningViewController.m; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDC9D3D91959BB3D009BC9F3 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = ../../../../Desktop/background.png; sourceTree = "<group>"; };
+		DDC9D3DA1959BB3D009BC9F3 /* button-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "button-selected.png"; path = "../../../../Desktop/button-selected.png"; sourceTree = "<group>"; };
+		DDC9D3DB1959BB3D009BC9F3 /* button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button.png; path = ../../../../Desktop/button.png; sourceTree = "<group>"; };
 		DDDAEDD819465DCB004CE102 /* PAExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreCell.h; sourceTree = "<group>"; };
 		DDDAEDD919465DCB004CE102 /* PAExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreCell.m; sourceTree = "<group>"; };
 		DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAExploreCell.xib; sourceTree = "<group>"; };
@@ -213,6 +219,9 @@
 			isa = PBXGroup;
 			children = (
 				86051D48194BB27200961541 /* Silhouette.png */,
+				DDC9D3D91959BB3D009BC9F3 /* background.png */,
+				DDC9D3DA1959BB3D009BC9F3 /* button-selected.png */,
+				DDC9D3DB1959BB3D009BC9F3 /* button.png */,
 			);
 			name = Graphics;
 			sourceTree = "<group>";
@@ -528,10 +537,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				86051D4C194BB60200961541 /* Main.storyboard in Resources */,
+				DDC9D3DE1959BB3D009BC9F3 /* button.png in Resources */,
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
+				DDC9D3DC1959BB3D009BC9F3 /* background.png in Resources */,
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
+				DDC9D3DD1959BB3D009BC9F3 /* button-selected.png in Resources */,
 				86051D49194BB27200961541 /* Silhouette.png in Resources */,
 				860A8D27195201A700C5B4A6 /* thor_peckapp_com.cer in Resources */,
 				DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */,

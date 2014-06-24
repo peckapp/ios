@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PADropdownBar : UITabBar
+@class PADropdownBar;
+@protocol PADropdownBarDelegate
+- (void) barDidSelectItemWithIndex:(NSInteger)index;
+@end
 
-
-
+@interface PADropdownBar : UIView
+- (id) initWithFrame:(CGRect)frame itemCount:(NSUInteger)count delegate:(NSObject <PADropdownBarDelegate>*)dropdownDelegate;
+- (void) selectItemAtIndex:(NSInteger)index;
 @end

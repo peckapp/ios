@@ -51,7 +51,7 @@
     self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
 
     // Instantiate secondary view controllers
-    NSLog(@"Instantiating secondary view controller");
+    NSLog(@"Instantiating secondary view controllers");
     NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
     [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
         NSString * identifier = (NSString*)obj;
@@ -62,16 +62,18 @@
     }];
     self.secondaryViewControllers = [svcCollector copy];
 
+    /*
     // Create tab bar items
     NSMutableArray * tempTabBarItems = [NSMutableArray arrayWithCapacity:self.secondaryViewControllers.count];
     [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         UIViewController * viewController = (UIViewController *)obj;
         [tempTabBarItems insertObject:viewController.tabBarItem atIndex:idx];
     }];
+     */
 
-    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), barHeight)];
-    dropdownBar.items = [tempTabBarItems copy];
-    dropdownBar.delegate = self;
+    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), barHeight)
+                                             itemCount:[self.secondaryViewControllerIdentifiers count]
+                                              delegate:self];
     [self.view addSubview:dropdownBar];
 
     // Create a frame for child view controllers
@@ -105,39 +107,14 @@
     [old removeFromParentViewController];
 }
 
-- (void) transitionFromViewController: (UIViewController*) old
-                toViewController: (UIViewController*) new
-{
-    self.view.userInteractionEnabled = NO;
-    [old willMoveToParentViewController:nil];
-    [self addChildViewController:new];
-
-    CGFloat distance = self.frameForContentController.size.height;
-    new.view.frame = self.frameForContentController;
-    new.view.transform = CGAffineTransformMakeTranslation(0, distance);
-
-    [self transitionFromViewController: old toViewController: new
-                              duration: 0.25 options:0
-                            animations:^{
-                                new.view.transform = CGAffineTransformMakeTranslation(0, 0);
-                            }
-                            completion:^(BOOL finished) {
-                                [old removeFromParentViewController];
-                                [new didMoveToParentViewController:self];
-                                self.activeViewController = new;
-                                self.view.userInteractionEnabled = YES;
-                            }];
-}
 # pragma mark - UITabBarDelegate methods
 
--(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-
-    UIViewController * destinationViewController = self.secondaryViewControllers[item.tag];
-    if (self.activeViewController == destinationViewController) {
-        [self transitionFromViewController: self.activeViewController toViewController: self.primaryViewController];
-    } else {
-        [self transitionFromViewController: self.activeViewController toViewController: destinationViewController];
-    }
+-(void)barDidSelectItemWithIndex:(NSInteger)index
+{
+    NSLog(@"DropdownViewController barDidSelectItemWIthIndex");
+    UIViewController * destinationViewController = self.secondaryViewControllers[index];
+    [self hideContentController:self.activeViewController];
+    [self displayContentController:destinationViewController];
 }
 
 
@@ -165,4 +142,46 @@ dst.view.transform = CGAffineTransformMakeTranslation(0, 0);
                      [src presentViewController:dst animated:NO completion:NULL];
                  }
  ];
+*/
+
+/*
+- (void) displayContentController: (UIViewController*) new;
+{
+    [self addChildViewController:new];
+    new.view.frame = self.frameForContentController;
+    [self.view addSubview: new.view];
+    [new didMoveToParentViewController:self];
+    self.activeViewController = new;
+}
+
+- (void) hideContentController: (UIViewController*) old
+{
+    [old willMoveToParentViewController:nil];
+    [old.view removeFromSuperview];
+    [old removeFromParentViewController];
+}
+
+- (void) transitionFromViewController: (UIViewController*) old
+toViewController: (UIViewController*) new
+{
+    self.view.userInteractionEnabled = NO;
+    [old willMoveToParentViewController:nil];
+    [self addChildViewController:new];
+
+    CGFloat distance = self.frameForContentController.size.height;
+    new.view.frame = self.frameForContentController;
+    new.view.transform = CGAffineTransformMakeTranslation(0, distance);
+
+    [self transitionFromViewController: old toViewController: new
+                              duration: 0.25 options:0
+                            animations:^{
+                                new.view.transform = CGAffineTransformMakeTranslation(0, 0);
+                            }
+                            completion:^(BOOL finished) {
+                                [old removeFromParentViewController];
+                                [new didMoveToParentViewController:self];
+                                self.activeViewController = new;
+                                self.view.userInteractionEnabled = YES;
+                            }];
+}
 */
