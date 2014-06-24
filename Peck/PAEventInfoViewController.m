@@ -9,6 +9,7 @@
 #import "PAEventInfoViewController.h"
 #import "PAAppDelegate.h"
 #import "Event.h"
+#import "PAImageManager.h"
 
 @interface PAEventInfoViewController ()
 - (void)configureView;
@@ -23,6 +24,7 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
 
 #pragma mark - Managing the detail item
 
@@ -43,8 +45,9 @@
     if (self.detailItem) {
         
         self.detailDescriptionLabel.text = [[self.detailItem valueForKey:@"descrip"] description];
+        NSString *title =[[self.detailItem valueForKey:@"title"] description];
         self.eventTitleLabel.text =[[self.detailItem valueForKey:@"title"] description];
-        self.eventPhoto.image = [UIImage imageWithData:[self.detailItem valueForKey:@"photo"]];
+        self.eventPhoto.image = [UIImage imageWithData:[[PAImageManager imageManager] ReadImage:title]];
         NSDate *date = [self.detailItem valueForKey:@"start_date"];
         NSString *stringFromDate = [self.formatter stringFromDate:date];
         self.dateLabel.text = stringFromDate;

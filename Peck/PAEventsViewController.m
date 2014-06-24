@@ -17,7 +17,8 @@
 #import "PAEventCell.h"
 #import "PADropdownViewController.h"
 #import "PAEvents.h"
-
+#import "PASyncManager.h"
+#import "PAImageManager.h"
 
 @interface PAEventsViewController ()
     
@@ -41,7 +42,8 @@ int lastCurrentHeight;
 CGRect initialSearchBarRect;
 CGRect initialTableViewRect;
 NSCache *imageCache;
-
+BOOL searching;
+NSString *searchText;
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -49,11 +51,23 @@ NSCache *imageCache;
 
 }
 
+-(void)viewDidDisappear:(BOOL)animated{
+    
+    searching=NO;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    NSLog(@"set searching to no");
+    searching=NO;
+    [eventsTableView reloadData];
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    
+    searching=NO;
     
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error])
@@ -91,98 +105,12 @@ NSCache *imageCache;
     }
     eventsTableView.dataSource = self;
     eventsTableView.delegate = self;
+
+    [[PASyncManager globalSyncManager] updateEventInfo];
     
-    [self checkServerData];
     [eventsTableView reloadData];
     
     
-}
-
-
--(void)checkServerData{
-    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
-    
-    
-    
-    [[PASessionManager sharedClient] GET:@"api/events"
-                              parameters:nil
-                                 success:^
-     (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"JSON: %@",JSON);
-         NSArray *postsFromResponse = (NSArray*)JSON;
-         NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
-         for (NSDictionary *eventAttributes in postsFromResponse) {
-             NSString *newID = [[eventAttributes objectForKey:@"id"] stringValue];
-             BOOL eventAlreadyExists = [self eventExists:newID];
-             if(!eventAlreadyExists){
-                 NSLog(@"about to add the event");
-                 Event * event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
-                 [self setAttributesInEvent:event withDictionary:eventAttributes];
-                 [mutableEvents addObject:event];
-             }
-         }
-         NSLog(@"fetched results controller objects: %@", _fetchedResultsController.fetchedObjects);
-     }
-    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-        NSLog(@"ERROR: %@",error);
-    }];
-    
-    /*
-     [[PASessionManager sharedClient] POST:@"api/events"
-     parameters:@{}
-     success:^(NSURLSessionDataTask *task,id responseObject) {
-     NSLog(@"POST success: %@",responseObject);
-     }
-     failure:^(NSURLSessionDataTask *task, NSError * error) {
-     NSLog(@"POST error: %@",error);
-     }];
-     */
-}
-
--(BOOL)eventExists:(NSString *) newID{
-    NSFetchRequest * request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *events = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:_managedObjectContext];
-    [request setEntity:events];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id == %@", newID];
-    [request setPredicate:predicate];
-    
-    NSError *error = nil;
-    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
-    //fetch events in order to check if the events we want to add already exist in core data
-    
-    if([mutableFetchResults count]==0)
-        return NO;
-    else {
-        return YES;
-    }
-}
-
-
--(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
-{
-    NSLog(@"set attributes of event");
-    event.title = [dictionary objectForKey:@"title"];
-    event.descrip = [dictionary objectForKey:@"description"];
-    event.location = [dictionary objectForKey:@"institution"];
-    NSString *tempString = [[dictionary objectForKey:@"id"] stringValue];
-    event.id = tempString;
-    //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
-    //NSDateFormatter * df = [[NSDateFormatter alloc] init];
-    //event.startDate = [df dateFromString:[attributes valueForKey:@"start_date"]];
-    //event.endDate = [df dateFromString:[attributes valueForKey:@"end_date"]];
-    
-    // the below doesn't work due to current disparity between the json and coredata terminology
-    /*
-     NSDictionary *attributes = [[event entity] attributesByName];
-     for (NSString *attribute in attributes) {
-     id value = [dictionary objectForKey:attribute];
-     if (value == nil) {
-     continue;
-     }
-     [event setValue:value forKey:attribute];
-     }
-     */
 }
 
 - (void)didReceiveMemoryWarning
@@ -204,6 +132,7 @@ NSCache *imageCache;
 #pragma mark - Fetched Results controller
 
 -(NSFetchedResultsController *)fetchedResultsController{
+    NSLog(@"Returning the normal controller");
     if(_fetchedResultsController!=nil){
         return _fetchedResultsController;
     }
@@ -237,7 +166,48 @@ NSCache *imageCache;
     self.fetchedResultsController = aFetchedResultsController;
     
     return _fetchedResultsController;
+}
+
+-(NSFetchedResultsController *)searchFetchedResultsController{
+    NSLog(@"returning the search controller");
+    if(_searchFetchedResultsController)
+        return _searchFetchedResultsController;
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
     
+    NSString * eventString = @"Event";
+    NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSString *attributeName = @"title";
+    NSString *attributeValue = searchText;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K like %@",
+                              attributeName, attributeValue];
+    
+    [fetchRequest setPredicate:predicate];
+    // Set the batch size to a suitable number.
+    [fetchRequest setFetchBatchSize:20];
+    
+    // Edit the sort key as appropriate.
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:YES];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    // Edit the section name key path and cache name if appropriate.
+    // nil for section name key path means "no sections".
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
+                                                             initWithFetchRequest:fetchRequest
+                                                             managedObjectContext:_managedObjectContext
+                                                             sectionNameKeyPath:nil //this needs to be nil
+                                                             cacheName:@"Master"];
+    
+    aFetchedResultsController.delegate = self;
+    self.searchFetchedResultsController = aFetchedResultsController;
+    
+    return _searchFetchedResultsController;
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
@@ -295,18 +265,17 @@ NSCache *imageCache;
     }
 }
 
-- (void)controllerDidChangeContent:
-(NSFetchedResultsController *)controller
+- (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
 {
     [eventsTableView endUpdates];
 }
 
 #pragma mark - Table View
 
-/*- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     int currentHeight = (int)[[eventsTableView.layer presentationLayer] bounds].origin.y;
     if(currentHeight>lastCurrentHeight && currentHeight>0){
-        if([_fetchedResultsController.fetchedObjects count]*44>initialTableViewRect.size.height){
+        if([_fetchedResultsController.fetchedObjects count]*44>initialTableViewRect.size.height+searchBarThickness){
         int tempCurrentHeight=currentHeight;
         if(currentHeight>searchBarThickness){
             tempCurrentHeight=searchBarThickness;
@@ -339,28 +308,27 @@ NSCache *imageCache;
     
      lastCurrentHeight=currentHeight;
     
-}*/
-
-/*- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    int currentHeight = (int)[[eventsTableView.layer presentationLayer] bounds].origin.y;
-    if(currentHeight==0){
-         eventsTableView.frame = CGRectMake(eventsTableView.frame.origin.x, eventsTableView.frame.origin.y+searchBarThickness, eventsTableView.frame.size.width, eventsTableView.frame.size.height-searchBarThickness);
-        searchBar.hidden=NO;
-        
-    }
-    NSLog(@"did end decelerating");
 }
-*/
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if(!searching)
        return [[_fetchedResultsController sections] count];
+    else
+        return [[_searchFetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if(!searching){
     id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
     return [sectionInfo numberOfObjects];
+    }
+    else{
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[_searchFetchedResultsController sections] objectAtIndex:section];
+        return [sectionInfo numberOfObjects];
+
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -417,7 +385,11 @@ NSCache *imageCache;
 {
     if ([[segue identifier] isEqualToString:@"showEventDetail"]) {
         NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
-        NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        NSManagedObject *object;
+        if(!searching)
+            object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        else
+            object = [[self searchFetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setDetailItem:object];
     }
 }
@@ -436,7 +408,11 @@ NSCache *imageCache;
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    Event *tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    Event *tempEvent;
+    if(!searching)
+        tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    else
+        tempEvent =[self.searchFetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = tempEvent.title;
     NSString *imageID = tempEvent.id;
     UIImage *image = [imageCache objectForKey:imageID];
@@ -446,7 +422,8 @@ NSCache *imageCache;
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
-            NSData *data = tempEvent.photo;
+            NSData *data = [[PAImageManager imageManager] ReadImage:tempEvent.title];
+            //NSData *data = tempEvent.photo;
             UIImage *image = [UIImage imageWithData:data];
             if(!image){
                 image = [UIImage imageNamed:@"Silhouette.png"];
@@ -469,7 +446,16 @@ NSCache *imageCache;
 #pragma mark - Search Bar Delegate
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    NSString * searchText = searchBar.text;
+    _searchFetchedResultsController=nil;
+    searchText = searchBar.text;
+    searching=YES;
+    NSError *error = nil;
+    if (![self.searchFetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
     NSMutableArray * foundObjects = [NSMutableArray array];
     [eventsTableView reloadData];
     lastCurrentHeight = 0;
@@ -477,6 +463,7 @@ NSCache *imageCache;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
+    searching=NO;
     searchBar.text=nil;
     [eventsTableView reloadData];
     NSLog(@"User canceled search");

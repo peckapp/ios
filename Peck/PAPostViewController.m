@@ -12,6 +12,7 @@
 #import "Message.h"
 #import "PADropdownViewController.h"
 #import "PAPeers.h"
+#import "PAImageManager.h"
 @interface PAPostViewController () {
     NSMutableArray * userEvents;
 }
@@ -401,8 +402,13 @@ UITableView *_tableView;
             [event setDescrip:_userEvents[5]];
             [event setCreated_at:[NSDate date]];
             NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
-            [event setPhoto:imageData];
+            
+            
+           
+            
+            [[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];
             //TODO: Set the id to something other than the title
+            //also set the image title to the id rather than the title
             [event setId:_userEvents[0]];
             photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
