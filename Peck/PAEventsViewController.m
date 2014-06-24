@@ -455,8 +455,7 @@ NSString *searchText;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-    
-    NSMutableArray * foundObjects = [NSMutableArray array];
+
     [eventsTableView reloadData];
     lastCurrentHeight = 0;
     [searchBar resignFirstResponder];

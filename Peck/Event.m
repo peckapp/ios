@@ -15,7 +15,6 @@
 @dynamic title;
 @dynamic location;
 @dynamic members;
-@dynamic photo;
 @dynamic start_date;
 @dynamic end_date;
 @dynamic updated_at;
