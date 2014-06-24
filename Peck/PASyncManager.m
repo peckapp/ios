@@ -31,43 +31,46 @@
 
 
 -(void)updateEventInfo{
-    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
-    
-
-    [[PASessionManager sharedClient] GET:@"api/events"
-                              parameters:nil
-                                 success:^
-     (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"JSON: %@",JSON);
-         NSArray *postsFromResponse = (NSArray*)JSON;
-         NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
-         for (NSDictionary *eventAttributes in postsFromResponse) {
-             NSString *newID = [[eventAttributes objectForKey:@"id"] stringValue];
-             BOOL eventAlreadyExists = [self eventExists:newID];
-             if(!eventAlreadyExists){
-                 NSLog(@"about to add the event");
-                 Event * event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
-                 [self setAttributesInEvent:event withDictionary:eventAttributes];
-                 [mutableEvents addObject:event];
-                 NSLog(@"EVENT: %@",event);
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+        
+        NSLog(@"in secondary thread");
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [appdelegate managedObjectContext];
+        
+        
+        [[PASessionManager sharedClient] GET:@"api/events"
+                                  parameters:nil
+                                     success:^
+         (NSURLSessionDataTask * __unused task, id JSON) {
+             NSLog(@"JSON: %@",JSON);
+             NSArray *postsFromResponse = (NSArray*)JSON;
+             NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
+             for (NSDictionary *eventAttributes in postsFromResponse) {
+                 NSString *newID = [[eventAttributes objectForKey:@"id"] stringValue];
+                 BOOL eventAlreadyExists = [self eventExists:newID];
+                 if(!eventAlreadyExists){
+                     NSLog(@"about to add the event");
+                     Event * event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
+                     [self setAttributesInEvent:event withDictionary:eventAttributes];
+                     [mutableEvents addObject:event];
+                     NSLog(@"EVENT: %@",event);
+                 }
              }
          }
-     }
-                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
-                                 }];
+                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                         NSLog(@"ERROR: %@",error);
+                                     }];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //TODO: if there are any problems with the core data being added in the thread above,
+            // then we should add a separate managed object context and merge the two in this thread.
+            
+            
+        });
+    });
+
     
-    /*
-     [[PASessionManager sharedClient] POST:@"api/events"
-     parameters:@{}
-     success:^(NSURLSessionDataTask *task,id responseObject) {
-     NSLog(@"POST success: %@",responseObject);
-     }
-     failure:^(NSURLSessionDataTask *task, NSError * error) {
-     NSLog(@"POST error: %@",error);
-     }];
-     */
 }
 
 -(BOOL)eventExists:(NSString *) newID{

@@ -92,8 +92,9 @@ NSCache *imageCache;
     }
     eventsTableView.dataSource = self;
     eventsTableView.delegate = self;
-    
+
     [[PASyncManager globalSyncManager] updateEventInfo];
+    
     [eventsTableView reloadData];
     
     
@@ -254,17 +255,6 @@ NSCache *imageCache;
      lastCurrentHeight=currentHeight;
     
 }
-
-/*- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    int currentHeight = (int)[[eventsTableView.layer presentationLayer] bounds].origin.y;
-    if(currentHeight==0){
-         eventsTableView.frame = CGRectMake(eventsTableView.frame.origin.x, eventsTableView.frame.origin.y+searchBarThickness, eventsTableView.frame.size.width, eventsTableView.frame.size.height-searchBarThickness);
-        searchBar.hidden=NO;
-        
-    }
-    NSLog(@"did end decelerating");
-}
-*/
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
