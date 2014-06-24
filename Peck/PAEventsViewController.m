@@ -91,6 +91,7 @@ NSCache *imageCache;
     }
     eventsTableView.dataSource = self;
     eventsTableView.delegate = self;
+    
     [self checkServerData];
     [eventsTableView reloadData];
     
@@ -119,9 +120,9 @@ NSCache *imageCache;
                  Event * event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
                  [self setAttributesInEvent:event withDictionary:eventAttributes];
                  [mutableEvents addObject:event];
-                 NSLog(@"EVENT: %@",event);
              }
          }
+         NSLog(@"fetched results controller objects: %@", _fetchedResultsController.fetchedObjects);
      }
     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
         NSLog(@"ERROR: %@",error);
@@ -203,11 +204,9 @@ NSCache *imageCache;
 #pragma mark - Fetched Results controller
 
 -(NSFetchedResultsController *)fetchedResultsController{
-    NSLog(@"fetched results controller: %@", _fetchedResultsController);
     if(_fetchedResultsController!=nil){
         return _fetchedResultsController;
     }
-    NSLog(@"fetched results controller: %@", _fetchedResultsController);
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -221,7 +220,7 @@ NSCache *imageCache;
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -231,7 +230,7 @@ NSCache *imageCache;
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
                                                                  initWithFetchRequest:fetchRequest
                                                                  managedObjectContext:_managedObjectContext
-                                                                 sectionNameKeyPath:@"start_date"
+                                                                 sectionNameKeyPath:nil //this needs to be nil
                                                                  cacheName:@"Master"];
         
     aFetchedResultsController.delegate = self;
@@ -304,7 +303,7 @@ NSCache *imageCache;
 
 #pragma mark - Table View
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+/*- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     int currentHeight = (int)[[eventsTableView.layer presentationLayer] bounds].origin.y;
     if(currentHeight>lastCurrentHeight && currentHeight>0){
         if([_fetchedResultsController.fetchedObjects count]*44>initialTableViewRect.size.height){
@@ -340,7 +339,7 @@ NSCache *imageCache;
     
      lastCurrentHeight=currentHeight;
     
-}
+}*/
 
 /*- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     int currentHeight = (int)[[eventsTableView.layer presentationLayer] bounds].origin.y;
