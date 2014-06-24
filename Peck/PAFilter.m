@@ -16,13 +16,6 @@
 
 @property (nonatomic, retain) NSMutableArray * selections;
 
-/*
-@property (nonatomic, retain) CIImage * standard;
-@property (nonatomic, retain) CIImage * detail;
-@property (nonatomic, retain) CIImage * subscription;
-@property (nonatomic, retain) CIImage * dining;
- */
-
 @property (nonatomic, retain) UIImage * standard;
 @property (nonatomic, retain) UIImage * detail;
 @property (nonatomic, retain) UIImage * subscription;
@@ -52,14 +45,7 @@
         
         self.presented = false;
         
-        // loads images for each option
-        /*
-        self.standard = [[CIImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"Filter Button-standard" ofType:@"png"]]];
-        self.detail = [[CIImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"Filter Button-detail" ofType:@"png"]]];
-        self.subscription = [[CIImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"Filter Button-subscription" ofType:@"png"]]];
-        self.dining = [[CIImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"Filter Button-dining" ofType:@"png"]]];
-         */
-        
+        // sets the images, may want to do this using arrays later on
         self.standard = [UIImage imageNamed:@"filter_standard.png"];
         self.detail = [UIImage imageNamed:@"filter_detail.png"];
         self.subscription = [UIImage imageNamed:@"filter_subscription.png"];
@@ -180,6 +166,11 @@
     
     self.alpha = 0.75; // becomes transparent after selection finishes
     self.active = false;
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"WARNING: touches cancelled for UIEvent: %@",event);
 }
 
 # pragma mark - Utiliy methods
