@@ -23,6 +23,7 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -46,99 +47,13 @@
     
     _tableView.delegate=self;
     _tableView.dataSource=self;
-    NSArray *members1 =@[@"A-Aron",@"D-Nice",@"TeeMothy",@"BALAKE",@"John",@"name",@"another name",@"one more"];
-    NSArray *members2 =@[@"Thing 1",@"Thing 2"];
-    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
-    
-    
-    NSFetchRequest * request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *circles = [NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
-    [request setEntity:circles];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"circleName" ascending:YES];
-    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-    [request setSortDescriptors:sortDescriptors];
-    
     NSError *error = nil;
-    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
-    self.circles = mutableFetchResults;
-    NSLog(@"Number of circles: %lu", (unsigned long)[_circles count]);
-    //Set circles to the current core data (this will be nil the first time it loads)
-    
-    
-    dispatch_queue_t  queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-    dispatch_async(queue, ^{
-        NSFetchRequest * request1 = [[NSFetchRequest alloc] init];
-        NSEntityDescription *circles1 = [NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
-        [request1 setEntity:circles1];
-        
-        NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"circleName" ascending:YES];
-        NSArray *sortDescriptors1 = [[NSArray alloc] initWithObjects:sortDescriptor1, nil];
-        [request1 setSortDescriptors:sortDescriptors1];
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
 
-        NSError *error1 = nil;
-        NSMutableArray *mutableFetchResults1 = [[_managedObjectContext executeFetchRequest:request1 error:&error1]mutableCopy];
-        NSMutableArray * circleNames = [NSMutableArray array];
-        for(int i=0; i<[mutableFetchResults1 count];i++){
-            Circle *tempCircle = mutableFetchResults1[i];
-            circleNames[i]=tempCircle.circleName;
-        }
-        //fetch the core data and put the names of the circles into a temp array
-        
-        NSString *path = [[NSBundle mainBundle] pathForResource:
-                          @"Property List" ofType:@"plist"];
-        NSArray *circleNames2 = [[NSArray alloc] initWithContentsOfFile:path];
-        //get the real current circles from a plist (will be updated to get this data from dreamhost)
-        dispatch_async(dispatch_get_main_queue(), ^{
-            //check if the arrays are the same (if the circles are up to date)
-            BOOL updatedCircles=YES;
-            if([circleNames count]!=[circleNames2 count])
-                updatedCircles=NO;
-            if(updatedCircles){
-                for(int k=0;k<[circleNames count];k++){
-                    NSString *tempString1 = circleNames[k];
-                    NSString *tempString2 = circleNames2[k];
-                    if(![tempString1 isEqualToString:tempString2]){
-                        NSLog(@"the strings are different");
-                        updatedCircles=NO;
-                    }
-                }
-            }
-            //if they are not up to date, delete the core data and load in the new circles
-            if(!updatedCircles){
-                int j = (int)[mutableFetchResults1 count];
-                 for(int i=0;i<j;i++){
-                     NSManagedObject *eventToDelete = mutableFetchResults1[0];
-                     [_managedObjectContext deleteObject:eventToDelete];
-                     [mutableFetchResults1 removeObjectAtIndex:0];
-                 }
-        
-                 Circle *circle1 = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
-                 [circle1 setCircleName:@"Physics"];
-                 [circle1 setMembers:members1];
-                
-                Circle *circle2 = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
-                [circle2 setCircleName:@"Chess Club"];
-                [circle2 setMembers:members2];
-                
-                NSFetchRequest * request = [[NSFetchRequest alloc] init];
-                NSEntityDescription *circles = [NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext];
-                [request setEntity:circles];
-                NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"circleName" ascending:YES];
-                NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-                [request setSortDescriptors:sortDescriptors];
-                
-                NSError *error = nil;
-                NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
-                self.circles = mutableFetchResults;
-                NSLog(@"circles: %@", _circles);
-                NSLog(@"Number of circles: %lu", (unsigned long)[_circles count]);
-                [self.tableView reloadData];
-            }
-            
-        });
-    });
-   
     NSLog(@"View did load");
     
     
@@ -155,13 +70,13 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return [[_fetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    return [_circles count];
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
+    return [sectionInfo numberOfObjects]+1;
 }
 
 
@@ -172,20 +87,43 @@
         [_tableView registerNib:[UINib nibWithNibName:@"PACircleCell" bundle:nil]  forCellReuseIdentifier:@"PrototypeCell"];
         cell = [_tableView dequeueReusableCellWithIdentifier:@"PrototypeCell"];
     }
-    cell.delegate=self;
-    cell.tag=[indexPath row];
-    Circle * tempCircle = _circles[[indexPath row]];
-    NSArray *members = tempCircle.members;
-    int numberOfMembers = (int)[members count];
-    for(int i =0; i<[members count]; i++){
-        NSLog(@"Member: %@", members[i]);
-    }
-    cell.members = numberOfMembers;
-    cell.circleTitle.text = tempCircle.circleName;
-    [cell.scrollView setContentSize:CGSizeMake(80*(numberOfMembers), 0)];
-    [cell addImages];
+    
+    [self configureCell:cell atIndexPath:indexPath];
+  
     return cell;
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if([indexPath row]==[_fetchedResultsController.fetchedObjects count]){
+        NSLog(@"Create a circle");
+        [self performSegueWithIdentifier:@"createACircle" sender:self];
+        
+    }
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
+
+- (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    if([indexPath row]==[_fetchedResultsController.fetchedObjects count]){
+        cell.circleTitle.text=@"Create a Circle";
+    }
+    else{
+        cell.delegate=self;
+        cell.tag=[indexPath row];
+        Circle * tempCircle = [_fetchedResultsController objectAtIndexPath:indexPath];
+        //NSArray *members = tempCircle.members;
+        NSLog(@"Circle members: %@", tempCircle.members);
+        int numberOfMembers = (int)[tempCircle.members count];
+        cell.members = numberOfMembers;
+        cell.circleTitle.text = tempCircle.circleName;
+        [cell.scrollView setContentSize:CGSizeMake(80*(numberOfMembers), 0)];
+        [cell addImages];
+    }
+    
+}
+
 
 # pragma mark - PACirclesControllerDelegate
 
@@ -243,5 +181,106 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+
+#pragma mark - Fetched Results controller
+
+-(NSFetchedResultsController *)fetchedResultsController{
+    NSLog(@"Returning the normal controller");
+    if(_fetchedResultsController!=nil){
+        return _fetchedResultsController;
+    }
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
+    
+    NSString * eventString = @"Circle";
+    NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    // Set the batch size to a suitable number.
+    [fetchRequest setFetchBatchSize:20];
+    
+    // Edit the sort key as appropriate.
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"circleName" ascending:NO];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    // Edit the section name key path and cache name if appropriate.
+    // nil for section name key path means "no sections".
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
+                                                             initWithFetchRequest:fetchRequest
+                                                             managedObjectContext:_managedObjectContext
+                                                             sectionNameKeyPath:nil //this needs to be nil
+                                                             cacheName:@"Master"];
+    
+    aFetchedResultsController.delegate = self;
+    self.fetchedResultsController = aFetchedResultsController;
+    
+    return _fetchedResultsController;
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [_tableView beginUpdates];
+}
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [_tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [_tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{
+    NSLog(@"did change object");
+    UITableView *tableView = _tableView;
+    
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:
+            [tableView
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [tableView
+             deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            [self configureCell:[tableView cellForRowAtIndexPath:indexPath]
+                    atIndexPath:indexPath];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            [tableView
+             deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            
+            [tableView
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
+{
+    [_tableView endUpdates];
+}
+
 
 @end
