@@ -42,7 +42,8 @@ int lastCurrentHeight;
 CGRect initialSearchBarRect;
 CGRect initialTableViewRect;
 NSCache *imageCache;
-
+BOOL searching;
+NSString *searchText;
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -50,11 +51,23 @@ NSCache *imageCache;
 
 }
 
+-(void)viewDidDisappear:(BOOL)animated{
+    
+    searching=NO;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    NSLog(@"set searching to no");
+    searching=NO;
+    [eventsTableView reloadData];
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    
+    searching=NO;
     
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error])
@@ -119,6 +132,7 @@ NSCache *imageCache;
 #pragma mark - Fetched Results controller
 
 -(NSFetchedResultsController *)fetchedResultsController{
+    NSLog(@"Returning the normal controller");
     if(_fetchedResultsController!=nil){
         return _fetchedResultsController;
     }
@@ -152,7 +166,48 @@ NSCache *imageCache;
     self.fetchedResultsController = aFetchedResultsController;
     
     return _fetchedResultsController;
+}
+
+-(NSFetchedResultsController *)searchFetchedResultsController{
+    NSLog(@"returning the search controller");
+    if(_searchFetchedResultsController)
+        return _searchFetchedResultsController;
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
     
+    NSString * eventString = @"Event";
+    NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSString *attributeName = @"title";
+    NSString *attributeValue = searchText;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K like %@",
+                              attributeName, attributeValue];
+    
+    [fetchRequest setPredicate:predicate];
+    // Set the batch size to a suitable number.
+    [fetchRequest setFetchBatchSize:20];
+    
+    // Edit the sort key as appropriate.
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:YES];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    // Edit the section name key path and cache name if appropriate.
+    // nil for section name key path means "no sections".
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
+                                                             initWithFetchRequest:fetchRequest
+                                                             managedObjectContext:_managedObjectContext
+                                                             sectionNameKeyPath:nil //this needs to be nil
+                                                             cacheName:@"Master"];
+    
+    aFetchedResultsController.delegate = self;
+    self.searchFetchedResultsController = aFetchedResultsController;
+    
+    return _searchFetchedResultsController;
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
@@ -210,8 +265,7 @@ NSCache *imageCache;
     }
 }
 
-- (void)controllerDidChangeContent:
-(NSFetchedResultsController *)controller
+- (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
 {
     [eventsTableView endUpdates];
 }
@@ -258,13 +312,23 @@ NSCache *imageCache;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if(!searching)
        return [[_fetchedResultsController sections] count];
+    else
+        return [[_searchFetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if(!searching){
     id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
     return [sectionInfo numberOfObjects];
+    }
+    else{
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[_searchFetchedResultsController sections] objectAtIndex:section];
+        return [sectionInfo numberOfObjects];
+
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -321,7 +385,11 @@ NSCache *imageCache;
 {
     if ([[segue identifier] isEqualToString:@"showEventDetail"]) {
         NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
-        NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        NSManagedObject *object;
+        if(!searching)
+            object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        else
+            object = [[self searchFetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setDetailItem:object];
     }
 }
@@ -340,7 +408,11 @@ NSCache *imageCache;
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    Event *tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    Event *tempEvent;
+    if(!searching)
+        tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    else
+        tempEvent =[self.searchFetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = tempEvent.title;
     NSString *imageID = tempEvent.id;
     UIImage *image = [imageCache objectForKey:imageID];
@@ -374,7 +446,16 @@ NSCache *imageCache;
 #pragma mark - Search Bar Delegate
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    NSString * searchText = searchBar.text;
+    _searchFetchedResultsController=nil;
+    searchText = searchBar.text;
+    searching=YES;
+    NSError *error = nil;
+    if (![self.searchFetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
     NSMutableArray * foundObjects = [NSMutableArray array];
     [eventsTableView reloadData];
     lastCurrentHeight = 0;
@@ -382,6 +463,7 @@ NSCache *imageCache;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
+    searching=NO;
     searchBar.text=nil;
     [eventsTableView reloadData];
     NSLog(@"User canceled search");
