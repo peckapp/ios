@@ -60,6 +60,8 @@
 		A463F38F19507FA300ED441F /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = A463F38E19507FA300ED441F /* Property List.plist */; };
 		A4773C8019589E8200AB9831 /* PAEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C7F19589E8200AB9831 /* PAEvents.m */; };
 		A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C821958A27F00AB9831 /* PAEventBST.m */; };
+		A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C881959D2FE00AB9831 /* PASyncManager.m */; };
+		A4773C8C1959DD0E00AB9831 /* PAImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C8B1959DD0E00AB9831 /* PAImageManager.m */; };
 		A4925C07194A179A001AAC4A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C06194A179A001AAC4A /* Accounts.framework */; };
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
@@ -169,6 +171,10 @@
 		A4773C7F19589E8200AB9831 /* PAEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEvents.m; sourceTree = "<group>"; };
 		A4773C811958A27F00AB9831 /* PAEventBST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEventBST.h; sourceTree = "<group>"; };
 		A4773C821958A27F00AB9831 /* PAEventBST.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEventBST.m; sourceTree = "<group>"; };
+		A4773C871959D2FE00AB9831 /* PASyncManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASyncManager.h; sourceTree = "<group>"; };
+		A4773C881959D2FE00AB9831 /* PASyncManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASyncManager.m; sourceTree = "<group>"; };
+		A4773C8A1959DD0E00AB9831 /* PAImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAImageManager.h; sourceTree = "<group>"; };
+		A4773C8B1959DD0E00AB9831 /* PAImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAImageManager.m; sourceTree = "<group>"; };
 		A4925C06194A179A001AAC4A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A4925C08194A17A1001AAC4A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A4925C0A194A17AB001AAC4A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -234,6 +240,8 @@
 				8689DDB119589E3600A6B61C /* filter_standard@2x.png */,
 				8689DDB219589E3600A6B61C /* filter_subscription@2x.png */,
 				86051D48194BB27200961541 /* Silhouette.png */,
+				A4773C8A1959DD0E00AB9831 /* PAImageManager.h */,
+				A4773C8B1959DD0E00AB9831 /* PAImageManager.m */,
 			);
 			name = Graphics;
 			sourceTree = "<group>";
@@ -274,6 +282,8 @@
 				867B52D419509F5000BEB37B /* PASessionManager.h */,
 				867B52D519509F5000BEB37B /* PASessionManager.m */,
 				867651ED19462E5200C14645 /* old_webservice.h */,
+				A4773C871959D2FE00AB9831 /* PASyncManager.h */,
+				A4773C881959D2FE00AB9831 /* PASyncManager.m */,
 			);
 			name = Webservice;
 			sourceTree = "<group>";
@@ -331,7 +341,6 @@
 				86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */,
 				8689DD89195871D200A6B61C /* PAFilter.h */,
 				8689DD8A195871D200A6B61C /* PAFilter.m */,
-				867B52D019508F5800BEB37B /* Primary */,
 				A4B772DD1945F8DB00A31252 /* Configure */,
 				DDDAEDE419479665004CE102 /* Events */,
 				DDDAEDE51947967A004CE102 /* Explore */,
@@ -623,7 +632,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8689DD8B195871D200A6B61C /* PAFilter.m in Sources */,
-				867B52D319508F7500BEB37B /* PAPrimaryViewController.m in Sources */,
 				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
 				863843E3193CB7FD004110F5 /* PAExploreTableViewController.m in Sources */,
 				86D59811193768BF00F38654 /* main.m in Sources */,
@@ -641,6 +649,7 @@
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
 				A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */,
 				863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */,
+				A4773C8C1959DD0E00AB9831 /* PAImageManager.m in Sources */,
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
 				A4773C8019589E8200AB9831 /* PAEvents.m in Sources */,
 				A463F38D194F683D00ED441F /* Circle.m in Sources */,
@@ -654,6 +663,7 @@
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,
 				86D5981E193768BF00F38654 /* PAEventsViewController.m in Sources */,
 				A40CF574195483140021C088 /* PABST.m in Sources */,
+				A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */,
 				A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */,
 				A463F384194B959800ED441F /* PACircleCell.m in Sources */,
 				863843DD193CB75F004110F5 /* PeckRegisterViewController.m in Sources */,

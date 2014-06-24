@@ -12,6 +12,7 @@
 #import "Message.h"
 #import "PADropdownViewController.h"
 #import "PAPeers.h"
+#import "PAImageManager.h"
 @interface PAPostViewController () {
     NSMutableArray * userEvents;
 }
@@ -401,7 +402,25 @@ UITableView *_tableView;
             [event setDescrip:_userEvents[5]];
             [event setCreated_at:[NSDate date]];
             NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
-            [event setPhoto:imageData];
+            
+            
+            /*
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *documentsPath = [paths objectAtIndex:0]; //Get the docs directory
+            NSString *imageName = [event.title stringByAppendingString:@".png"];
+            NSString *filePath = [documentsPath stringByAppendingPathComponent:imageName]; //Add the file name
+            [imageData writeToFile:filePath atomically:YES]; //Write the file
+            
+            NSArray *paths2 = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *documentsPath2 = [paths2 objectAtIndex:0]; //Get the docs directory
+            NSString *filePath2 = [documentsPath2 stringByAppendingPathComponent:imageName];
+            NSData *pngData = [NSData dataWithContentsOfFile:filePath2];
+*/
+            
+            [[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];
+           /* NSData *pngData = [[PAImageManager imageManager] ReadImage:event.title];
+            
+            [event setPhoto:pngData];*/
             //TODO: Set the id to something other than the title
             [event setId:_userEvents[0]];
             photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
