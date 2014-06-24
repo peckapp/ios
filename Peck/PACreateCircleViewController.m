@@ -35,6 +35,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIBarButtonItem *button = [[UIBarButtonItem alloc] init];
+    NSArray * buttons = @[button];
+    UIToolbar *bar = [[UIToolbar alloc] init];
+    [bar setItems:buttons];
+    membersTextField.inputAccessoryView = bar;
     // Do any additional setup after loading the view.
 }
 
