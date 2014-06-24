@@ -71,13 +71,16 @@
     }];
      */
 
-    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), barHeight)
+    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 0)
                                              itemCount:[self.secondaryViewControllerIdentifiers count]
                                               delegate:self];
     [self.view addSubview:dropdownBar];
 
     // Create a frame for child view controllers
-    self.frameForContentController = CGRectMake(0, 20 + barHeight, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - barHeight);
+    self.frameForContentController = CGRectMake(0,
+                                                20 + CGRectGetHeight(dropdownBar.frame),
+                                                CGRectGetWidth(self.view.frame),
+                                                CGRectGetHeight(self.view.frame) - CGRectGetHeight(dropdownBar.frame));
 
     // Display primary view controller
     [self displayContentController: self.primaryViewController];
@@ -111,10 +114,11 @@
 
 -(void)barDidSelectItemWithIndex:(NSInteger)index
 {
-    NSLog(@"DropdownViewController barDidSelectItemWIthIndex");
+    NSLog(@"Switching view controllers...");
     UIViewController * destinationViewController = self.secondaryViewControllers[index];
     [self hideContentController:self.activeViewController];
     [self displayContentController:destinationViewController];
+    NSLog(@"Done switching.");
 }
 
 

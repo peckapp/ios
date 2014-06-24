@@ -8,20 +8,31 @@
 
 #import "PADropdownBar.h"
 
+// Button dimensions. This should be calculated programatically from button image.
+#define buttonWidth 50.0
+#define buttonHeight 30.0
+
 @interface PADropdownBar ()
 @property (nonatomic, strong) NSObject <PADropdownBarDelegate> * delegate;
+
 @end
 
 @implementation PADropdownBar
 
 - (id) initWithFrame:(CGRect)frame itemCount:(NSUInteger)count delegate:(NSObject <PADropdownBarDelegate>*)dropdownDelegate;
 {
+    frame.size.height = buttonHeight;
+
     self = [super initWithFrame:frame];
     if (self) {
 
         self.backgroundColor = [UIColor whiteColor];
 
+        // The spacing between each button
         CGFloat offset = CGRectGetWidth(frame) / count;
+
+        // The x position of the first button
+        CGFloat startX = (offset - buttonWidth) / 2;
 
         for (NSUInteger i = 0 ; i < count ; i++)
         {
@@ -30,7 +41,7 @@
             //[button setImage:[UIImage imageNamed:@"graphics/button-selected.png"] forState:UIControlStateNormal];
             button.backgroundColor = [UIColor grayColor];
             [button setTag:i];
-            button.frame = CGRectMake(i * offset, 0.0, 50.0, 50.0);
+            button.frame = CGRectMake(startX + i * offset, 0.0, buttonWidth, buttonHeight);
             [self addSubview:button];
         }
 
@@ -41,7 +52,7 @@
 
 - (void) didSelectItem:(UIButton *)sender
 {
-    NSLog(@"PADropdownBar didSelectItem");
+    NSLog(@"Bar item selected.");
     int index = sender.tag;
     [self.delegate barDidSelectItemWithIndex:index];
 }
