@@ -18,7 +18,7 @@
 @property (nonatomic) NSArray * secondaryViewControllerIdentifiers;
 
 // Designates the frame for child view controllers.
-@property (nonatomic) CGRect frameForContentController;
+@property (nonatomic) CGRect frameForChildViewController;
 
 @end
 
@@ -77,13 +77,13 @@
     [self.view addSubview:dropdownBar];
 
     // Create a frame for child view controllers
-    self.frameForContentController = CGRectMake(0,
+    self.frameForChildViewController = CGRectMake(0,
                                                 20 + CGRectGetHeight(dropdownBar.frame),
                                                 CGRectGetWidth(self.view.frame),
                                                 CGRectGetHeight(self.view.frame) - CGRectGetHeight(dropdownBar.frame));
 
     // Display primary view controller
-    [self displayContentController: self.primaryViewController];
+    [self displayChildViewController:self.primaryViewController];
 }
 
 - (void)didReceiveMemoryWarning
@@ -94,33 +94,67 @@
 
 #pragma Manage ViewControllers
 
-- (void) displayContentController: (UIViewController*) new;
+- (void) displayChildViewController: (UIViewController*) newVC
 {
-    [self addChildViewController:new];
-    new.view.frame = self.frameForContentController;
-    [self.view addSubview: new.view];
-    [new didMoveToParentViewController:self];
-    self.activeViewController = new;
+    [self addChildViewController:newVC];
+    newVC.view.frame = self.frameForChildViewController;
+    [self.view addSubview: newVC.view];
+    [newVC didMoveToParentViewController:self];
+    self.activeViewController = newVC;
 }
 
-- (void) hideContentController: (UIViewController*) old
+- (void) hideChildViewController: (UIViewController*) oldVC
 {
-    [old willMoveToParentViewController:nil];
-    [old.view removeFromSuperview];
-    [old removeFromParentViewController];
+    [oldVC willMoveToParentViewController:nil];
+    [oldVC.view removeFromSuperview];
+    [oldVC removeFromParentViewController];
 }
 
-# pragma mark - UITabBarDelegate methods
-
--(void)barDidSelectItemWithIndex:(NSInteger)index
+- (void)slideViewController:(UIViewController *) newVC overViewController: (UIViewController *) oldVC
 {
-    NSLog(@"Switching view controllers...");
-    UIViewController * destinationViewController = self.secondaryViewControllers[index];
-    [self hideContentController:self.activeViewController];
-    [self displayContentController:destinationViewController];
-    NSLog(@"Done switching.");
+    [oldVC willMoveToParentViewController:nil];
+    [newVC willMoveToParentViewController:self];
+    [self hideChildViewController:oldVC];
+
+    UIView * oldView = oldVC.view;
+    UIView * newView = newVC.view;
+
+    [self.view addSubview:oldView];
+    [self.view addSubview:newView];
+
+    CGFloat distance = self.frameForChildViewController.size.height;
+    newView.frame = self.frameForChildViewController;
+    [newView setTransform:CGAffineTransformMakeTranslation(0.0, distance)];
+
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:0
+                     animations:^{
+                         [newView setTransform:CGAffineTransformMakeTranslation(0.0, 0.0)];
+                     }
+                     completion:^(BOOL finished) {
+                         [oldVC removeFromParentViewController];
+                         [newVC removeFromParentViewController];
+                         
+                         [self displayChildViewController:newVC];
+                     }];
 }
 
+
+#pragma mark - PADropdownBarDelegate
+
+- (void) barDidSelectItemAtIndex:(NSInteger)index
+{
+    UIViewController * targetViewController = self.secondaryViewControllers[index];
+    [self hideChildViewController:self.activeViewController];
+    [self displayChildViewController:targetViewController];
+}
+
+- (void) barDidReselectItemAtIndex:(NSInteger)index
+{
+    UIViewController * targetViewController = self.primaryViewController;
+    [self slideViewController:targetViewController overViewController:self.activeViewController];
+}
 
 @end
 

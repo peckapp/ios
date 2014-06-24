@@ -16,7 +16,7 @@
 #import <Foundation/Foundation.h>
 #import "PACoreDataProtocol.h"
 #import "PADropdownBar.h"
-#define barHeight 50
+
 @protocol PADropdownViewControllerDelegate; //allows delegate to be referenced in interface
 
 @interface PADropdownViewController : UIViewController <PACoreDataProtocol, PADropdownBarDelegate>
@@ -64,23 +64,11 @@
 - (BOOL)dropdownController:(PADropdownViewController *)dropdownController shouldSwitchToDropdown:(UIViewController *)viewController;
 - (void)dropdownController:(PADropdownViewController *)dropdownController didSwitchToDropdown:(UIViewController *)viewController;
 
-
-// *****************************************************
-// the below delegate methods were copied in from UITabBarController and are likely unnecessary. Just temporarily kept around for reference.
-// *****************************************************
-- (void)dropdownController:(PADropdownViewController *)dropdownController willBeginCustomizingViewControllers:(NSArray *)viewControllers;
-- (void)dropdownController:(PADropdownViewController *)dropdownController willEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed;
-- (void)dropdownController:(PADropdownViewController *)dropdownController didEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed;
-
 - (NSUInteger)dropdownControllerSupportedInterfaceOrientations:(PADropdownViewController *)dropdownController;
 - (UIInterfaceOrientation)dropdownControllerPreferredInterfaceOrientationForPresentation:(PADropdownViewController *)dropdownController;
 
-- (id <UIViewControllerInteractiveTransitioning>)dropdownController:(PADropdownViewController *)dropdownController
-                      interactionControllerForAnimationController: (id <UIViewControllerAnimatedTransitioning>)animationController;
-
-- (id <UIViewControllerAnimatedTransitioning>)dropdownController:(PADropdownViewController *)dropdownController
-            animationControllerForTransitionFromViewController:(UIViewController *)fromVC
-                                              toViewController:(UIViewController *)toVC ;
-
+- (id <UIViewControllerAnimatedTransitioning>)dropdownController:(PADropdownViewController *)parentController
+              animationControllerForTransitionFromViewController:(UIViewController *)previousViewController
+                                                toViewController:(UIViewController *)nextViewController;
 @end
 

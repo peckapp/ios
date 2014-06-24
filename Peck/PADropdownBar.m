@@ -14,7 +14,7 @@
 
 @interface PADropdownBar ()
 @property (nonatomic, strong) NSObject <PADropdownBarDelegate> * delegate;
-
+@property (nonatomic) NSInteger currentIndex;
 @end
 
 @implementation PADropdownBar
@@ -37,7 +37,7 @@
         for (NSUInteger i = 0 ; i < count ; i++)
         {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            [button addTarget:self action:@selector(didSelectItem:) forControlEvents:UIControlEventTouchUpInside];
+            [button addTarget:self action:@selector(selectItem:) forControlEvents:UIControlEventTouchUpInside];
             //[button setImage:[UIImage imageNamed:@"graphics/button-selected.png"] forState:UIControlStateNormal];
             button.backgroundColor = [UIColor grayColor];
             [button setTag:i];
@@ -50,16 +50,17 @@
     return self;
 }
 
-- (void) didSelectItem:(UIButton *)sender
+- (void) selectItem:(UIButton *)sender
 {
     NSLog(@"Bar item selected.");
     int index = sender.tag;
-    [self.delegate barDidSelectItemWithIndex:index];
-}
-
-- (void) selectItemAtIndex:(NSInteger)index;
-{
-    // Select buttons
+    if (index == self.currentIndex) {
+        [self.delegate barDidReselectItemAtIndex:index];
+        self.currentIndex = -1;
+    } else {
+        [self.delegate barDidSelectItemAtIndex:index];
+        self.currentIndex = index;
+    }
 }
 
 @end

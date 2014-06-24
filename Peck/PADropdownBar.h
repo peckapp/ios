@@ -10,10 +10,10 @@
 
 @class PADropdownBar;
 @protocol PADropdownBarDelegate
-- (void) barDidSelectItemWithIndex:(NSInteger)index;
+- (void) barDidSelectItemAtIndex:(NSInteger)index;
+- (void) barDidReselectItemAtIndex:(NSInteger)index;
 @end
 
 @interface PADropdownBar : UIView
 - (id) initWithFrame:(CGRect)frame itemCount:(NSUInteger)count delegate:(NSObject <PADropdownBarDelegate>*)dropdownDelegate;
-- (void) selectItemAtIndex:(NSInteger)index;
 @end
