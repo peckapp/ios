@@ -108,8 +108,6 @@
     [self.primaryViewController didMoveToParentViewController:self];
     self.activeViewController = self.primaryViewController;
     
-    return;
-    
     [self.view addSubview:self.filter];
     [self.filter presentUpwardForMode:PAFilterHomeMode];
 }
@@ -119,28 +117,21 @@
 {
     [new willMoveToParentViewController:self];
     [self addChildViewController:new];
+    [self.view addSubview:new.view];
     
     new.view.frame = self.frameForContentController;
     
-    CGFloat distance = self.frameForContentController.size.height;
-    new.view.transform = CGAffineTransformMakeTranslation(0, distance);
+    self.activeViewController = new;
+    [self.primaryViewController removeFromParentViewController];
+    [self.primaryViewController.view removeFromSuperview];
+    self.view.userInteractionEnabled = YES;
+    [new didMoveToParentViewController:self];
     
-    [self transitionFromViewController: self.primaryViewController toViewController: new
-                              duration: 0.25 options:0
-                            animations:^{
-                                new.view.transform = CGAffineTransformMakeTranslation(0, 0);
-                            }
-                            completion:^(BOOL finished) {
-                                self.activeViewController = new;
-                                [self.primaryViewController removeFromParentViewController];
-                                self.view.userInteractionEnabled = YES;
-                                [new didMoveToParentViewController:self];
-                            }];
-    return;
+    
     // presents filter in the proper mode
     [self.filter dismissDownward];
     [self.filter removeFromSuperview];
-    if (false && new == self.secondaryViewControllers[1]) {
+    if (new == self.secondaryViewControllers[1]) {
         [self.view addSubview:self.filter];
         [self.filter presentUpwardForMode:PAFilterExploreMode];
     }
@@ -151,24 +142,8 @@
 {
     [self.primaryViewController willMoveToParentViewController:self];
     [self addChildViewController:self.primaryViewController];
+    [self.view addSubview:self.primaryViewController.view];
     
-    self.primaryViewController.view.frame = self.frameForContentController;
-    
-    CGFloat distance = self.frameForContentController.size.height;
-    self.activeViewController.view.transform = CGAffineTransformMakeTranslation(0, 0);
-    
-    [self transitionFromViewController: self.activeViewController toViewController: self.primaryViewController
-                              duration: 0.25 options:0
-                            animations:^{
-                                self.activeViewController.view.transform = CGAffineTransformMakeTranslation(0, distance);
-                            }
-                            completion:^(BOOL finished) {
-                                [self.activeViewController removeFromParentViewController];
-                                [self.primaryViewController didMoveToParentViewController:self];
-                                self.activeViewController = self.primaryViewController;
-                                self.view.userInteractionEnabled = YES;
-                            }];
-    return;
     // dismisses filter if it is active
     if (self.activeViewController == self.secondaryViewControllers[1]) {
         [self.filter removeFromSuperview];
@@ -176,6 +151,14 @@
     }
     [self.view addSubview:self.filter];
     [self.filter presentUpwardForMode:PAFilterHomeMode];
+    
+    self.primaryViewController.view.frame = self.frameForContentController;
+    
+    [self.activeViewController removeFromParentViewController];
+    [self.activeViewController.view removeFromSuperview];
+    [self.primaryViewController didMoveToParentViewController:self];
+    self.activeViewController = self.primaryViewController;
+    self.view.userInteractionEnabled = YES;
 }
 
 
