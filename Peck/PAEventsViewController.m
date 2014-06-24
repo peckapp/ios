@@ -217,10 +217,10 @@ NSCache *imageCache;
 
 #pragma mark - Table View
 
-/*- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     int currentHeight = (int)[[eventsTableView.layer presentationLayer] bounds].origin.y;
     if(currentHeight>lastCurrentHeight && currentHeight>0){
-        if([_fetchedResultsController.fetchedObjects count]*44>initialTableViewRect.size.height){
+        if([_fetchedResultsController.fetchedObjects count]*44>initialTableViewRect.size.height+searchBarThickness){
         int tempCurrentHeight=currentHeight;
         if(currentHeight>searchBarThickness){
             tempCurrentHeight=searchBarThickness;
@@ -253,7 +253,7 @@ NSCache *imageCache;
     
      lastCurrentHeight=currentHeight;
     
-}*/
+}
 
 /*- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     int currentHeight = (int)[[eventsTableView.layer presentationLayer] bounds].origin.y;

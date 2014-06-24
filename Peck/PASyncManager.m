@@ -34,8 +34,7 @@
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     
-    
-    
+
     [[PASessionManager sharedClient] GET:@"api/events"
                               parameters:nil
                                  success:^
