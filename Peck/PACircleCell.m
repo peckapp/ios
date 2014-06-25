@@ -20,7 +20,7 @@ bool loadedImages;
 - (void)awakeFromNib
 {
     // Initialization code
-    
+
     [scrollView setScrollEnabled:YES];
     //[scrollView setContentSize:CGSizeMake(800, 0)];
     UITapGestureRecognizer *tapRecognizer;
@@ -29,8 +29,8 @@ bool loadedImages;
     [scrollView addGestureRecognizer:tapRecognizer];
     scrollView.userInteractionEnabled =YES;
     loadedImages=NO;
-    
-    
+
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -54,7 +54,7 @@ bool loadedImages;
         for(int i = 0; i < _members; i++){
             NSLog(@"allocating image");
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(80*i, 0, 55, 44)];
-            imageView.image = [UIImage imageNamed:@"Silhouette.png"];
+            imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
             //use tag and i to get the correct image
             [scrollView addSubview:imageView];
         }
@@ -63,8 +63,3 @@ bool loadedImages;
 
 
 @end
-
-
-
-
-

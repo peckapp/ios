@@ -75,7 +75,7 @@ UITableView *_tableView;
     //_tableView.frame = CGRectMake(_tableView.frame.origin.x, 300, _tableView.frame.size.width, _tableView.frame.size.height);
     initialTVHeight = _tableView.frame.size.height;
     initialRowHeight = _tableView.rowHeight;
-    photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
+    photo = [UIImage imageNamed:@"img-placeholder.png"];
     _eventItems=@[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
     _eventSuggestions=@[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
     
