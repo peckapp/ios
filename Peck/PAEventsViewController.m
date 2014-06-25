@@ -21,11 +21,8 @@
 #import "PAImageManager.h"
 
 @interface PAEventsViewController ()
-    
-
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
-
 
 @end
 
