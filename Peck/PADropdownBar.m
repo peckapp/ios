@@ -58,11 +58,11 @@
 
 - (void) selectItem:(UIButton *)sender
 {
-    int index = sender.tag;
+    int index = (int)sender.tag;
     self.currentButton.backgroundColor = deselected;
 
     if (self.currentButton) {
-        int currentIndex = self.currentButton.tag;
+        int currentIndex = (int)self.currentButton.tag;
 
         if (currentIndex == index) {
             NSLog(@"Secondary was already selected, switch to primary");
