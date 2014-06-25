@@ -57,7 +57,7 @@
 - (void) selectItem:(UIButton *)sender
 {
     int index = (int)sender.tag;
-    self.currentButton.backgroundColor = deselected;
+    [self.currentButton setSelected:NO];
 
     if (self.currentButton) {
         int currentIndex = (int)self.currentButton.tag;

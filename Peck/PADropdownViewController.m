@@ -62,7 +62,7 @@
                                                   CGRectGetHeight(self.view.frame) - CGRectGetHeight(dropdownBar.frame));
 
     // Instantiate primary view controller
-    NSLog(@"Instantiating primary view contorller");
+    NSLog(@"Instantiating primary view controller");
     self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
     self.primaryViewController.view.frame = self.frameForChildViewController;
 
@@ -82,6 +82,10 @@
     // Display views
     [self.view addSubview:dropdownBar];
     [self displayChildViewController:self.primaryViewController];
+    
+    self.filter = [PAFilter filter];
+    [self.view addSubview:self.filter];
+    [self.filter presentUpwardForMode:PAFilterHomeMode];
 }
 
 - (void)didReceiveMemoryWarning
@@ -144,7 +148,11 @@
 
                          [self displayChildViewController:newVC];
                          self.view.userInteractionEnabled = YES;
+                         
                      }];
+    // dismisses filter as dropbown appears
+    [self.filter dismissDownward];
+    
 }
 
 - (void) barDidDeselectItemAtIndex:(NSInteger)index
@@ -182,6 +190,9 @@
 
                          [self displayChildViewController:newVC];
                          self.view.userInteractionEnabled = YES;
+                         
+                         [self.filter presentUpwardForMode:PAFilterHomeMode];
+                         [self.view bringSubviewToFront:self.filter];
                      }];
 }
 
