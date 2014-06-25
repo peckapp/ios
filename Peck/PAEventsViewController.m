@@ -160,7 +160,7 @@ NSString *searchBarText;
                                                                  initWithFetchRequest:fetchRequest
                                                                  managedObjectContext:_managedObjectContext
                                                                  sectionNameKeyPath:nil //this needs to be nil
-                                                                 cacheName:@"Master"];
+                                                                 cacheName:nil];
         
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
@@ -205,7 +205,7 @@ NSString *searchBarText;
                                                              initWithFetchRequest:fetchRequest
                                                              managedObjectContext:_managedObjectContext
                                                              sectionNameKeyPath:nil //this needs to be nil
-                                                             cacheName:@"Master"];
+                                                             cacheName:nil];
     
     aFetchedResultsController.delegate = self;
     self.searchFetchedResultsController = aFetchedResultsController;
