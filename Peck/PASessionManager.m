@@ -22,6 +22,16 @@ static NSString * const PADevSecureAPIBaseURLString = @"https://thor.peckapp.com
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PATestAPIBaseURLString]];
+    });
+    
+    return _sharedClient;
+}
+
++ (instancetype)sharedSecureClient {
+    static PASessionManager *_sharedClient = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PATestSecureAPIBaseURLString]];
         _sharedClient.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
         // TODO: must remove this for production once our certificates for the webservice are created
         _sharedClient.securityPolicy.allowInvalidCertificates = YES;
