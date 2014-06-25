@@ -9,8 +9,8 @@
 #import "PADropdownBar.h"
 
 // Button dimensions. This should be calculated programatically from button image.
-#define buttonWidth 40.0
-#define buttonHeight 40.0
+#define barHeight 40.0
+#define buffer 2.0
 #define statusBarHeight 20.0
 
 #define selected [UIColor blackColor]
@@ -26,27 +26,25 @@
 
 - (id) initWithFrame:(CGRect)frame itemCount:(NSUInteger)count delegate:(NSObject <PADropdownBarDelegate>*)dropdownDelegate;
 {
-    frame.size.height = statusBarHeight + buttonHeight;
+    frame.size.height = statusBarHeight + barHeight + buffer * 2;
 
     self = [super initWithFrame:frame];
     if (self) {
 
-        self.backgroundColor = background;
+        self.backgroundColor = [UIColor whiteColor];
 
         // The spacing between each button
-        CGFloat offset = CGRectGetWidth(frame) / count;
-
-        // The x position of the first button
-        CGFloat startX = (offset - buttonWidth) / 2;
+        CGFloat buttonWidth = CGRectGetWidth(frame) / count;
 
         for (NSUInteger i = 0 ; i < count ; i++)
         {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
             [button addTarget:self action:@selector(selectItem:) forControlEvents:UIControlEventTouchUpInside];
-            //[button setImage:[UIImage imageNamed:@"graphics/button-selected.png"] forState:UIControlStateNormal];
+            [button setImage:[UIImage imageNamed:@"button.png"] forState:UIControlStateNormal];
+            [button setImage:[UIImage imageNamed:@"button-selected.png"] forState:UIControlStateSelected];
             [button setTag:i];
-            button.backgroundColor = deselected;
-            button.frame = CGRectMake(startX + i * offset, statusBarHeight, buttonWidth, buttonHeight);
+            button.backgroundColor = [UIColor clearColor];
+            button.frame = CGRectMake(i * buttonWidth, statusBarHeight + buffer, buttonWidth, barHeight);
             [self addSubview:button];
         }
 
@@ -59,7 +57,7 @@
 - (void) selectItem:(UIButton *)sender
 {
     int index = sender.tag;
-    self.currentButton.backgroundColor = deselected;
+    [self.currentButton setSelected:NO];
 
     if (self.currentButton) {
         int currentIndex = self.currentButton.tag;
@@ -78,14 +76,14 @@
                 [self.delegate barDidSlideRightToIndex:index];
             }
             self.currentButton = sender;
-            sender.backgroundColor = selected;
+            [sender setSelected:YES];
         }
     }
     else {
         NSLog(@"Primary controller was selected, switch to secondary");
         [self.delegate barDidSelectItemAtIndex:index];
         self.currentButton = sender;
-        sender.backgroundColor = selected;
+        [sender setSelected:YES];
     }
 }
 
