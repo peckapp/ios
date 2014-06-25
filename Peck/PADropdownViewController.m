@@ -151,7 +151,7 @@
                          
                      }];
     // dismisses filter as dropbown appears
-    [self.filter dismissDownward];
+    [self hideFilter];
     
 }
 
@@ -191,8 +191,8 @@
                          [self displayChildViewController:newVC];
                          self.view.userInteractionEnabled = YES;
                          
-                         [self.filter presentUpwardForMode:PAFilterHomeMode];
-                         [self.view bringSubviewToFront:self.filter];
+                         // show the dropdown filter for the home mode
+                         [self showFilterForMode:PAFilterHomeMode];
                      }];
 }
 
@@ -274,6 +274,23 @@
                          [self displayChildViewController:newVC];
                          self.view.userInteractionEnabled = YES;
                      }];
+}
+
+# pragma mark Filter methods
+
+- (void)hideFilter
+{
+    if (self.filter.presented) {
+        [self.filter dismissDownward];
+    }
+}
+
+- (void)showFilterForMode:(PAFilterMode)mode
+{
+    if (!self.filter.presented) {
+        [self.filter presentUpwardForMode:mode];
+        [self.view bringSubviewToFront:self.filter];
+    }
 }
 
 @end

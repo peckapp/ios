@@ -24,8 +24,6 @@
 
 // whether or not the filter is active in selecting a different mode
 @property (nonatomic, getter=isActive) BOOL active;
-// whether or not the filter is presented on the screen
-@property (nonatomic) BOOL presented;
 
 @end
 
