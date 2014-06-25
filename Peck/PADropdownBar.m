@@ -58,15 +58,26 @@
     NSLog(@"Bar item selected.");
     int index = sender.tag;
     if (self.currentIndex == -1) {
+
+        // Primary controller was selected, switch to secondary
         [self.delegate barDidSelectItemAtIndex:index];
         self.currentIndex = index;
     }
     else if (self.currentIndex == index) {
-        [self.delegate barDidReselectItemAtIndex:index];
+
+        // Secondary was already selected, switch to primary
+        [self.delegate barDidDeselectItemAtIndex:index];
         self.currentIndex = -1;
     }
     else {
-        [self.delegate barDidSwitchSelectionToIndex:index];
+
+        // A different secondary was selected, switch to that one
+        if (index < self.currentIndex) {
+            [self.delegate barDidSlideLeftToIndex:index];
+        }
+        else {
+            [self.delegate barDidSlideRightToIndex:index];
+        }
         self.currentIndex = index;
     }
 }
