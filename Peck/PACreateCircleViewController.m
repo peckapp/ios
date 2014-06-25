@@ -9,7 +9,8 @@
 #import "PACreateCircleViewController.h"
 #import "PAAppDelegate.h"
 #import "Circle.h"
-
+#import "HTAutocompleteTextField.h"
+#import "HTAutocompleteManager.h"
 
 @interface PACreateCircleViewController ()
 
@@ -20,7 +21,8 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-@synthesize titleTextField, membersTextField;
+@synthesize titleTextField, membersAutocompleteTextField;
+@synthesize titleLabel;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -35,13 +37,27 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIBarButtonItem *button = [[UIBarButtonItem alloc] init];
-    NSArray * buttons = @[button];
-    UIToolbar *bar = [[UIToolbar alloc] init];
+    [titleTextField addTarget:self
+                  action:@selector(textFieldDidChange)
+        forControlEvents:UIControlEventEditingChanged];
+    
+    membersAutocompleteTextField.autocompleteDataSource = [HTAutocompleteManager sharedManager];
+    membersAutocompleteTextField.autocompleteType = HTAutocompleteTypeName;
+    
+    //[self.view addSubview:testField];
+    UIToolbar *bar = [[UIToolbar alloc] initWithFrame:CGRectMake(0,0,self.view.bounds.size.width, 44)];
+    //bar.barStyle= UIBarStyleBlackTranslucent;
+    //bar.tintColor = [UIColor darkGrayColor];
+    
+    UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(chooseMember)];
+    NSArray * buttons = [[NSArray alloc] initWithObjects:button, nil];
+    
     [bar setItems:buttons];
-    membersTextField.inputAccessoryView = bar;
+    membersAutocompleteTextField.inputAccessoryView = bar;
     // Do any additional setup after loading the view.
 }
+
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -60,6 +76,19 @@
 }
 */
 
+-(void)chooseMember{
+    NSLog(@"choose a member");
+    NSString *tempText= membersAutocompleteTextField.text;
+    tempText = [tempText stringByAppendingString:membersAutocompleteTextField.autocompleteLabel.text];
+    membersAutocompleteTextField.text = [tempText stringByAppendingString:@", "];
+    
+}
+
+-(void)textFieldDidChange{
+    titleLabel.text = titleTextField.text;
+
+}
+
 - (IBAction)createCircleButton:(id)sender {
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
@@ -67,7 +96,7 @@
     Circle * circle = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext: _managedObjectContext];
     
     [circle setCircleName:titleTextField.text];
-    NSString *membersString= membersTextField.text;
+    NSString *membersString= membersAutocompleteTextField.text;
     NSArray *membersArray = [membersString componentsSeparatedByString:@","];
     [circle setMembers:membersArray];
     

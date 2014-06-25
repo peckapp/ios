@@ -18,11 +18,14 @@ PODS:
   - AFNetworking/UIKit (2.2.4):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - HTAutocompleteTextField (1.2.6)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.2.4)
+  - HTAutocompleteTextField (~> 1.2.6)
 
 SPEC CHECKSUMS:
   AFNetworking: ab63e259fe91eef4519b371ef0a4955af0e73e64
+  HTAutocompleteTextField: 92ca48eb8f2a7fba756fb9f19bc54cba3391b8f4
 
 COCOAPODS: 0.33.1
