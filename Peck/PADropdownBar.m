@@ -11,6 +11,7 @@
 // Button dimensions. This should be calculated programatically from button image.
 #define buttonWidth 50.0
 #define buttonHeight 30.0
+#define statusBarHeight 20.0
 
 @interface PADropdownBar ()
 @property (nonatomic, strong) NSObject <PADropdownBarDelegate> * delegate;
@@ -21,7 +22,7 @@
 
 - (id) initWithFrame:(CGRect)frame itemCount:(NSUInteger)count delegate:(NSObject <PADropdownBarDelegate>*)dropdownDelegate;
 {
-    frame.size.height = buttonHeight;
+    frame.size.height = statusBarHeight + buttonHeight;
 
     self = [super initWithFrame:frame];
     if (self) {
@@ -41,7 +42,7 @@
             //[button setImage:[UIImage imageNamed:@"graphics/button-selected.png"] forState:UIControlStateNormal];
             button.backgroundColor = [UIColor grayColor];
             [button setTag:i];
-            button.frame = CGRectMake(startX + i * offset, 0.0, buttonWidth, buttonHeight);
+            button.frame = CGRectMake(startX + i * offset, statusBarHeight, buttonWidth, buttonHeight);
             [self addSubview:button];
         }
 

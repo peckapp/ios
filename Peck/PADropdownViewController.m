@@ -71,14 +71,14 @@
     }];
      */
 
-    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 0)
+    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 0)
                                              itemCount:[self.secondaryViewControllerIdentifiers count]
                                               delegate:self];
     [self.view addSubview:dropdownBar];
 
     // Create a frame for child view controllers
     self.frameForChildViewController = CGRectMake(0,
-                                                20 + CGRectGetHeight(dropdownBar.frame),
+                                                CGRectGetHeight(dropdownBar.frame),
                                                 CGRectGetWidth(self.view.frame),
                                                 CGRectGetHeight(self.view.frame) - CGRectGetHeight(dropdownBar.frame));
 
@@ -112,6 +112,7 @@
 
 - (void)slideViewController:(UIViewController *) newVC overViewController: (UIViewController *) oldVC
 {
+    self.view.userInteractionEnabled = NO;
     [oldVC willMoveToParentViewController:nil];
     [newVC willMoveToParentViewController:self];
     [self hideChildViewController:oldVC];
@@ -119,12 +120,12 @@
     UIView * oldView = oldVC.view;
     UIView * newView = newVC.view;
 
-    [self.view addSubview:oldView];
-    [self.view addSubview:newView];
+    [self.view insertSubview:oldView belowSubview:dropdownBar];
+    [self.view insertSubview:newView belowSubview:dropdownBar];
 
     CGFloat distance = self.frameForChildViewController.size.height;
     newView.frame = self.frameForChildViewController;
-    [newView setTransform:CGAffineTransformMakeTranslation(0.0, distance)];
+    [newView setTransform:CGAffineTransformMakeTranslation(0.0, -distance)];
 
     [UIView animateWithDuration:0.3
                           delay:0.0
@@ -137,6 +138,7 @@
                          [newVC removeFromParentViewController];
                          
                          [self displayChildViewController:newVC];
+                         self.view.userInteractionEnabled = YES;
                      }];
 }
 
