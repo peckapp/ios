@@ -20,7 +20,7 @@ bool loadedImages;
 - (void)awakeFromNib
 {
     // Initialization code
-    
+
     [scrollView setScrollEnabled:YES];
     //[scrollView setContentSize:CGSizeMake(800, 0)];
     UITapGestureRecognizer *tapRecognizer;
@@ -29,8 +29,8 @@ bool loadedImages;
     [scrollView addGestureRecognizer:tapRecognizer];
     scrollView.userInteractionEnabled =YES;
     loadedImages=NO;
-    
-    
+
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -63,8 +63,3 @@ bool loadedImages;
 
 
 @end
-
-
-
-
-

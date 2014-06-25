@@ -12,5 +12,6 @@
 @interface PASessionManager : AFHTTPSessionManager
 
 + (instancetype)sharedClient;
++ (instancetype)sharedSecureClient;
 
 @end

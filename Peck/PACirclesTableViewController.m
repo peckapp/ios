@@ -261,7 +261,7 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:[tableView cellForRowAtIndexPath:indexPath]
+            [self configureCell:(PACircleCell*)[tableView cellForRowAtIndexPath:indexPath]
                     atIndexPath:indexPath];
             break;
             

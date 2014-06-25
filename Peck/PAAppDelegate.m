@@ -8,10 +8,12 @@
 
 #import "PAAppDelegate.h"
 
+#import <FacebookSDK/FacebookSDK.h>
+#import <Crashlytics/Crashlytics.h>
+
 #import "PAEventsViewController.h"
 #import "PACoreDataProtocol.h"
 #import "PAConfigureViewController.h"
-#import <FacebookSDK/FacebookSDK.h>
 #import "PADropdownViewController.h"
 
 @implementation PAAppDelegate
@@ -28,6 +30,9 @@
     UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     UIViewController *initViewController = [storyBoard instantiateInitialViewController];
     [self.window setRootViewController:initViewController];
+    
+    // Must remain after third-party SDK code
+    [Crashlytics startWithAPIKey:@"147270e58be36f1b12187f08c0fa5ff034e701c8"];
     
     // TODO: cleanup old code if possible
  

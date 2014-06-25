@@ -31,6 +31,7 @@
 		8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB019589E3600A6B61C /* filter_dining@2x.png */; };
 		8689DDB519589E3600A6B61C /* filter_standard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB119589E3600A6B61C /* filter_standard@2x.png */; };
 		8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB219589E3600A6B61C /* filter_subscription@2x.png */; };
+		869B8789195B2226001DF0A2 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 869B8788195B2226001DF0A2 /* Crashlytics.framework */; };
 		86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */; };
 		86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BFB4AF194B889100ADAB75 /* PADropdownBar.m */; };
 		86D59803193768BF00F38654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59802193768BF00F38654 /* Foundation.framework */; };
@@ -95,6 +96,13 @@
 			remoteGlobalIDString = 86D597FE193768BF00F38654;
 			remoteInfo = Peck;
 		};
+		86E84FF0195B2058000874EB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 86D597F7193768BF00F38654 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 86D597FE193768BF00F38654;
+			remoteInfo = Peck;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -135,6 +143,7 @@
 		8689DDB019589E3600A6B61C /* filter_dining@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_dining@2x.png"; sourceTree = "<group>"; };
 		8689DDB119589E3600A6B61C /* filter_standard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_standard@2x.png"; sourceTree = "<group>"; };
 		8689DDB219589E3600A6B61C /* filter_subscription@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_subscription@2x.png"; sourceTree = "<group>"; };
+		869B8788195B2226001DF0A2 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		86BFB4AE194B889100ADAB75 /* PADropdownBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownBar.h; sourceTree = "<group>"; };
 		86BFB4AF194B889100ADAB75 /* PADropdownBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADropdownBar.m; sourceTree = "<group>"; };
 		86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownViewController.h; sourceTree = "<group>"; };
@@ -233,6 +242,7 @@
 				86D59809193768BF00F38654 /* CoreData.framework in Frameworks */,
 				86D59807193768BF00F38654 /* UIKit.framework in Frameworks */,
 				86D59803193768BF00F38654 /* Foundation.framework in Frameworks */,
+				869B8789195B2226001DF0A2 /* Crashlytics.framework in Frameworks */,
 				BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -338,6 +348,7 @@
 		86D59801193768BF00F38654 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				869B8788195B2226001DF0A2 /* Crashlytics.framework */,
 				A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */,
 				A4925C0A194A17AB001AAC4A /* Social.framework */,
 				A4925C08194A17A1001AAC4A /* AdSupport.framework */,
@@ -523,6 +534,7 @@
 				86D597FC193768BF00F38654 /* Frameworks */,
 				86D597FD193768BF00F38654 /* Resources */,
 				8137F61EC11E42F783F36E79 /* Copy Pods Resources */,
+				869B8787195B21CA001DF0A2 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -545,6 +557,7 @@
 			);
 			dependencies = (
 				86D5982F193768C000F38654 /* PBXTargetDependency */,
+				86E84FF1195B2058000874EB /* PBXTargetDependency */,
 			);
 			name = PeckTests;
 			productName = PeckTests;
@@ -661,6 +674,20 @@
 			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		869B8787195B21CA001DF0A2 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = "./Crashlytics.framework/run 147270e58be36f1b12187f08c0fa5ff034e701c8 0119e59fc1ecda6fdd5a37f6187e26d8e9547a8fb48c49b3b7401ce22bbfa5ed";
+			shellScript = "";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -723,6 +750,11 @@
 			isa = PBXTargetDependency;
 			target = 86D597FE193768BF00F38654 /* Peck */;
 			targetProxy = 86D5982E193768C000F38654 /* PBXContainerItemProxy */;
+		};
+		86E84FF1195B2058000874EB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 86D597FE193768BF00F38654 /* Peck */;
+			targetProxy = 86E84FF0195B2058000874EB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

@@ -17,6 +17,9 @@ typedef enum {
 
 @interface PAFilter : UIView
 
+// designated factory for the filter. use this for instantiation
++(instancetype)filter;
+
 // causes the filter element to drop below the screen
 - (void)dismissDownward;
 
