@@ -7,7 +7,6 @@
 //
 
 #import "PAEventsViewController.h"
-
 #import "PAEventInfoViewController.h"
 #import "PAPostViewController.h"
 #import "PAPecksViewController.h"
@@ -40,6 +39,7 @@ CGRect initialSearchBarRect;
 CGRect initialTableViewRect;
 NSCache *imageCache;
 BOOL searching;
+BOOL showingDetail;
 NSString *searchBarText;
 - (void)awakeFromNib
 {
@@ -49,24 +49,22 @@ NSString *searchBarText;
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
-    
-    searching=NO;
-    [eventsTableView reloadData];
+    if(!showingDetail){
+        searching=NO;
+        [eventsTableView reloadData];
+    }
 }
 
-/*-(void)viewWillDisappear:(BOOL)animated{
-    NSLog(@"set searching to no");
-    searching=NO;
-    
-    
-}*/
+-(void)viewWillAppear:(BOOL)animated{
+    showingDetail=NO;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     searching=NO;
-    
+    showingDetail=NO;
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error])
     {
@@ -94,11 +92,11 @@ NSString *searchBarText;
     
     if(!eventsTableView){
         int tableViewY =searchBarThickness +titleThickness;
-        eventsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, tableViewY, 320, (self.view.frame.size.height-barHeight)-tableViewY-20)];
+        eventsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, tableViewY, 320, (self.view.frame.size.height)-tableViewY-20)];
         //20 is the thickness of the bar with time and battery
         initialTableViewRect = eventsTableView.frame;
         NSLog(@"view height: %f", self.view.frame.size.height);
-        NSLog(@"table view height: %f", (self.view.frame.size.height-barHeight)-tableViewY);
+        NSLog(@"table view height: %f", (self.view.frame.size.height)-tableViewY);
         [self.view addSubview:eventsTableView];
     }
     eventsTableView.dataSource = self;
@@ -157,7 +155,7 @@ NSString *searchBarText;
                                                                  initWithFetchRequest:fetchRequest
                                                                  managedObjectContext:_managedObjectContext
                                                                  sectionNameKeyPath:nil //this needs to be nil
-                                                                 cacheName:@"Master"];
+                                                                 cacheName:nil];
         
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
@@ -202,7 +200,7 @@ NSString *searchBarText;
                                                              initWithFetchRequest:fetchRequest
                                                              managedObjectContext:_managedObjectContext
                                                              sectionNameKeyPath:nil //this needs to be nil
-                                                             cacheName:@"Master"];
+                                                             cacheName:nil];
     
     aFetchedResultsController.delegate = self;
     self.searchFetchedResultsController = aFetchedResultsController;
@@ -385,6 +383,7 @@ NSString *searchBarText;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showEventDetail"]) {
+        showingDetail=YES;
         NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
         NSManagedObject *object;
         if(!searching)
