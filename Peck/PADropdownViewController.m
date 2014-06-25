@@ -9,10 +9,7 @@
 #import "PADropdownViewController.h"
 #import "PAFilter.h"
 
-
-@interface PADropdownViewController () {
-    
-}
+@interface PADropdownViewController () {}
 
 @property (nonatomic) NSString * primaryViewControllerIdentifier;
 @property (nonatomic) NSArray * secondaryViewControllerIdentifiers;
@@ -20,9 +17,11 @@
 @property (nonatomic, retain) PAFilter * filter;
 
 // Designates the frame for child view controllers.
-@property (nonatomic) CGRect frameForContentController;
+@property (nonatomic) CGRect frameForChildViewController;
 
 @end
+
+#pragma mark - Implementation
 
 @implementation PADropdownViewController
 
@@ -80,13 +79,14 @@
     self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
     
     // Instantiate secondary view controllers
-    NSLog(@"Instantiating secondary view controller");
+    NSLog(@"Instantiating secondary view controllers");
     NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
     [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
         NSString * identifier = (NSString*)obj;
         UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
         viewController.tabBarItem.tag = idx;
         viewController.restorationIdentifier = identifier;
+        viewController.view.frame = self.frameForChildViewController;
         [svcCollector insertObject:viewController atIndex:idx];
     }];
     self.secondaryViewControllers = [svcCollector copy];
@@ -98,7 +98,15 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma Manage ViewControllers
+#pragma mark Manage ViewControllers
+
+- (void) displayChildViewController: (UIViewController*) newVC
+{
+    [self addChildViewController:newVC];
+    [self.view addSubview: newVC.view];
+    [newVC didMoveToParentViewController:self];
+    self.activeViewController = newVC;
+}
 
 - (void) setupPrimaryController
 {
@@ -195,9 +203,12 @@
         [self.filter presentUpwardForMode:PAFilterExploreMode];
     }
 }
-# pragma mark - UITabBarDelegate methods
 
--(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+- (void) barDidSlideLeftToIndex:(NSInteger)index
+{
+    NSLog(@"%d", index);
+    UIViewController * oldVC = self.activeViewController;
+    UIViewController * newVC = self.secondaryViewControllers[index];
 
     UIViewController * destinationViewController = self.secondaryViewControllers[item.tag];
     
@@ -217,5 +228,10 @@
     }
 }
 
+- (void) barDidSlideRightToIndex:(NSInteger)index
+{
+    NSLog(@"%d", index);
+    UIViewController * oldVC = self.activeViewController;
+    UIViewController * newVC = self.secondaryViewControllers[index];
 
 @end

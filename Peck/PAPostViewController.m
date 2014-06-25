@@ -65,7 +65,7 @@ UITableView *_tableView;
     chosenDate= [NSDate date];
     if(!_tableView){
         titleThickness=88;
-        int topOffSet = barHeight+titleThickness;
+        int topOffSet = titleThickness;
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, titleThickness, self.view.frame.size.width, self.view.frame.size.height-topOffSet)];
         NSLog(@"table view height: %f", self.view.frame.size.height-topOffSet);
         [self.view addSubview:_tableView];
