@@ -95,11 +95,11 @@ NSString *searchBarText;
     
     if(!eventsTableView){
         int tableViewY =searchBarThickness +titleThickness;
-        eventsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, tableViewY, 320, (self.view.frame.size.height-barHeight)-tableViewY-20)];
+        eventsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, tableViewY, 320, (self.view.frame.size.height)-tableViewY-20)];
         //20 is the thickness of the bar with time and battery
         initialTableViewRect = eventsTableView.frame;
         NSLog(@"view height: %f", self.view.frame.size.height);
-        NSLog(@"table view height: %f", (self.view.frame.size.height-barHeight)-tableViewY);
+        NSLog(@"table view height: %f", (self.view.frame.size.height)-tableViewY);
         [self.view addSubview:eventsTableView];
     }
     eventsTableView.dataSource = self;
