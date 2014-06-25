@@ -36,11 +36,11 @@
         // The spacing between each button
         CGFloat buttonWidth = CGRectGetWidth(frame) / count;
 
-        NSArray *icons = @[[UIImage imageNamed:@"pecks.png"],
-                          [UIImage imageNamed:@"explore.png"],
-                          [UIImage imageNamed:@"post.png"],
-                          [UIImage imageNamed:@"circles.png"],
-                          [UIImage imageNamed:@"profile.png"]];
+        NSArray *icons = @[[UIImage imageNamed:@"dropdown_pecks.png"],
+                          [UIImage imageNamed:@"dropdown_explore.png"],
+                          [UIImage imageNamed:@"dropdown_post.png"],
+                          [UIImage imageNamed:@"dropdown_circles.png"],
+                          [UIImage imageNamed:@"dropdown_profile.png"]];
 
         for (NSUInteger i = 0 ; i < count ; i++)
         {
