@@ -36,12 +36,18 @@
         // The spacing between each button
         CGFloat buttonWidth = CGRectGetWidth(frame) / count;
 
+        NSArray *icons = @[[UIImage imageNamed:@"pecks.png"],
+                          [UIImage imageNamed:@"explore.png"],
+                          [UIImage imageNamed:@"post.png"],
+                          [UIImage imageNamed:@"circles.png"],
+                          [UIImage imageNamed:@"profile.png"]];
+
         for (NSUInteger i = 0 ; i < count ; i++)
         {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
             [button addTarget:self action:@selector(selectItem:) forControlEvents:UIControlEventTouchUpInside];
-            [button setImage:[UIImage imageNamed:@"button.png"] forState:UIControlStateNormal];
-            [button setImage:[UIImage imageNamed:@"button-selected.png"] forState:UIControlStateSelected];
+            [button setImage:icons[i] forState:UIControlStateNormal];
+            [button setImage:icons[i] forState:UIControlStateSelected];
             [button setTag:i];
             button.backgroundColor = [UIColor clearColor];
             button.frame = CGRectMake(i * buttonWidth, statusBarHeight + buffer, buttonWidth, barHeight);
