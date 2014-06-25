@@ -12,8 +12,8 @@
 @protocol PADropdownBarDelegate
 - (void) barDidSelectItemAtIndex:(NSInteger)index;
 - (void) barDidDeselectItemAtIndex:(NSInteger)index;
-- (void) barDidSlideRightToIndex:(NSInteger) index;
-- (void) barDidSlideLeftToIndex:(NSInteger) index;
+- (void) barDidSlideRightToIndex:(NSInteger)index;
+- (void) barDidSlideLeftToIndex:(NSInteger)index;
 @end
 
 @interface PADropdownBar : UIView

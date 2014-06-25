@@ -108,6 +108,7 @@
 
 - (void) barDidSelectItemAtIndex:(NSInteger)index
 {
+    NSLog(@"%d", index);
     UIViewController * oldVC = self.activeViewController;
     UIViewController * newVC = self.secondaryViewControllers[index];
 
@@ -145,6 +146,7 @@
 
 - (void) barDidDeselectItemAtIndex:(NSInteger)index
 {
+    NSLog(@"%d", index);
     UIViewController * oldVC = self.activeViewController;
     UIViewController * newVC = self.primaryViewController;
 
@@ -182,6 +184,7 @@
 
 - (void) barDidSlideLeftToIndex:(NSInteger)index
 {
+    NSLog(@"%d", index);
     UIViewController * oldVC = self.activeViewController;
     UIViewController * newVC = self.secondaryViewControllers[index];
 
@@ -221,6 +224,7 @@
 
 - (void) barDidSlideRightToIndex:(NSInteger)index
 {
+    NSLog(@"%d", index);
     UIViewController * oldVC = self.activeViewController;
     UIViewController * newVC = self.secondaryViewControllers[index];
 
