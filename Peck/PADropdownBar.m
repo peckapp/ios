@@ -29,6 +29,8 @@
 
         self.backgroundColor = [UIColor whiteColor];
 
+        self.currentIndex = -1;
+
         // The spacing between each button
         CGFloat offset = CGRectGetWidth(frame) / count;
 
@@ -55,11 +57,16 @@
 {
     NSLog(@"Bar item selected.");
     int index = sender.tag;
-    if (index == self.currentIndex) {
+    if (self.currentIndex == -1) {
+        [self.delegate barDidSelectItemAtIndex:index];
+        self.currentIndex = index;
+    }
+    else if (self.currentIndex == index) {
         [self.delegate barDidReselectItemAtIndex:index];
         self.currentIndex = -1;
-    } else {
-        [self.delegate barDidSelectItemAtIndex:index];
+    }
+    else {
+        [self.delegate barDidSwitchSelectionToIndex:index];
         self.currentIndex = index;
     }
 }

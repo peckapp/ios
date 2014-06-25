@@ -39,6 +39,7 @@
 {
     [super viewDidLoad];
 
+    // Initialize child view controllers
     self.primaryViewControllerIdentifier = PAPrimaryIdentifier;
     self.secondaryViewControllerIdentifiers = @[PAPecksIdentifier,
                                                 PAFeedIdentifier,
@@ -46,9 +47,21 @@
                                                 PACirclesIdentifier,
                                                 PAProfileIdentifier];
 
+    // Initialize dropdown bar
+    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 0)
+                                             itemCount:[self.secondaryViewControllerIdentifiers count]
+                                              delegate:self];
+
+    // Create a frame for child view controllers
+    self.frameForChildViewController = CGRectMake(0,
+                                                  CGRectGetHeight(dropdownBar.frame),
+                                                  CGRectGetWidth(self.view.frame),
+                                                  CGRectGetHeight(self.view.frame) - CGRectGetHeight(dropdownBar.frame));
+
     // Instantiate primary view controller
     NSLog(@"Instantiating primary view contorller");
     self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
+    self.primaryViewController.view.frame = self.frameForChildViewController;
 
     // Instantiate secondary view controllers
     NSLog(@"Instantiating secondary view controllers");
@@ -58,31 +71,13 @@
         UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
         viewController.tabBarItem.tag = idx;
         viewController.restorationIdentifier = identifier;
+        viewController.view.frame = self.frameForChildViewController;
         [svcCollector insertObject:viewController atIndex:idx];
     }];
     self.secondaryViewControllers = [svcCollector copy];
 
-    /*
-    // Create tab bar items
-    NSMutableArray * tempTabBarItems = [NSMutableArray arrayWithCapacity:self.secondaryViewControllers.count];
-    [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        UIViewController * viewController = (UIViewController *)obj;
-        [tempTabBarItems insertObject:viewController.tabBarItem atIndex:idx];
-    }];
-     */
-
-    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 0)
-                                             itemCount:[self.secondaryViewControllerIdentifiers count]
-                                              delegate:self];
+    // Display views
     [self.view addSubview:dropdownBar];
-
-    // Create a frame for child view controllers
-    self.frameForChildViewController = CGRectMake(0,
-                                                CGRectGetHeight(dropdownBar.frame),
-                                                CGRectGetWidth(self.view.frame),
-                                                CGRectGetHeight(self.view.frame) - CGRectGetHeight(dropdownBar.frame));
-
-    // Display primary view controller
     [self displayChildViewController:self.primaryViewController];
 }
 
@@ -97,7 +92,6 @@
 - (void) displayChildViewController: (UIViewController*) newVC
 {
     [self addChildViewController:newVC];
-    newVC.view.frame = self.frameForChildViewController;
     [self.view addSubview: newVC.view];
     [newVC didMoveToParentViewController:self];
     self.activeViewController = newVC;
@@ -110,8 +104,13 @@
     [oldVC removeFromParentViewController];
 }
 
-- (void)slideViewController:(UIViewController *) newVC overViewController: (UIViewController *) oldVC
+#pragma mark - PADropdownBarDelegate
+
+- (void) barDidSelectItemAtIndex:(NSInteger)index
 {
+    UIViewController * oldVC = self.activeViewController;
+    UIViewController * newVC = self.secondaryViewControllers[index];
+
     self.view.userInteractionEnabled = NO;
     [oldVC willMoveToParentViewController:nil];
     [newVC willMoveToParentViewController:self];
@@ -124,38 +123,67 @@
     [self.view insertSubview:newView belowSubview:dropdownBar];
 
     CGFloat distance = self.frameForChildViewController.size.height;
-    newView.frame = self.frameForChildViewController;
-    [newView setTransform:CGAffineTransformMakeTranslation(0.0, -distance)];
+    newView.transform = CGAffineTransformMakeTranslation(0.0, -distance);
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:0
                      animations:^{
-                         [newView setTransform:CGAffineTransformMakeTranslation(0.0, 0.0)];
+                         newView.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
                      }
                      completion:^(BOOL finished) {
                          [oldVC removeFromParentViewController];
                          [newVC removeFromParentViewController];
-                         
+
+                         [newVC didMoveToParentViewController:self];
+
                          [self displayChildViewController:newVC];
                          self.view.userInteractionEnabled = YES;
                      }];
 }
 
+- (void) barDidReselectItemAtIndex:(NSInteger)index
+{
+    UIViewController * oldVC = self.activeViewController;
+    UIViewController * newVC = self.primaryViewController;
 
-#pragma mark - PADropdownBarDelegate
+    self.view.userInteractionEnabled = NO;
+    [oldVC willMoveToParentViewController:nil];
+    [newVC willMoveToParentViewController:self];
+    [self hideChildViewController:oldVC];
 
-- (void) barDidSelectItemAtIndex:(NSInteger)index
+    UIView * oldView = oldVC.view;
+    UIView * newView = newVC.view;
+
+    [self.view insertSubview:newView belowSubview:dropdownBar];
+    [self.view insertSubview:oldView belowSubview:dropdownBar];
+
+    CGFloat distance = self.frameForChildViewController.size.height;
+    oldView.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:0
+                     animations:^{
+                         oldView.transform = CGAffineTransformMakeTranslation(0.0, -distance);
+                     }
+                     completion:^(BOOL finished) {
+                         [oldVC removeFromParentViewController];
+                         [newVC removeFromParentViewController];
+
+                         oldView.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+                         [newVC didMoveToParentViewController:self];
+
+                         [self displayChildViewController:newVC];
+                         self.view.userInteractionEnabled = YES;
+                     }];
+}
+
+- (void) barDidSwitchSelectionToIndex:(NSInteger)index
 {
     UIViewController * targetViewController = self.secondaryViewControllers[index];
     [self hideChildViewController:self.activeViewController];
     [self displayChildViewController:targetViewController];
-}
-
-- (void) barDidReselectItemAtIndex:(NSInteger)index
-{
-    UIViewController * targetViewController = self.primaryViewController;
-    [self slideViewController:targetViewController overViewController:self.activeViewController];
 }
 
 @end

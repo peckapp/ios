@@ -12,6 +12,7 @@
 @protocol PADropdownBarDelegate
 - (void) barDidSelectItemAtIndex:(NSInteger)index;
 - (void) barDidReselectItemAtIndex:(NSInteger)index;
+- (void) barDidSwitchSelectionToIndex:(NSInteger)index;
 @end
 
 @interface PADropdownBar : UIView
