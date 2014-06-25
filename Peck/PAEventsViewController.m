@@ -43,7 +43,7 @@ CGRect initialSearchBarRect;
 CGRect initialTableViewRect;
 NSCache *imageCache;
 BOOL searching;
-NSString *searchText;
+NSString *searchBarText;
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -54,14 +54,15 @@ NSString *searchText;
 -(void)viewDidDisappear:(BOOL)animated{
     
     searching=NO;
+    [eventsTableView reloadData];
 }
 
--(void)viewWillDisappear:(BOOL)animated{
+/*-(void)viewWillDisappear:(BOOL)animated{
     NSLog(@"set searching to no");
     searching=NO;
-    [eventsTableView reloadData];
     
-}
+    
+}*/
 
 - (void)viewDidLoad
 {
@@ -132,7 +133,6 @@ NSString *searchText;
 #pragma mark - Fetched Results controller
 
 -(NSFetchedResultsController *)fetchedResultsController{
-    NSLog(@"Returning the normal controller");
     if(_fetchedResultsController!=nil){
         return _fetchedResultsController;
     }
@@ -169,9 +169,9 @@ NSString *searchText;
 }
 
 -(NSFetchedResultsController *)searchFetchedResultsController{
-    NSLog(@"returning the search controller");
     if(_searchFetchedResultsController)
         return _searchFetchedResultsController;
+    
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -182,9 +182,12 @@ NSString *searchText;
     [fetchRequest setEntity:entity];
     
     NSString *attributeName = @"title";
-    NSString *attributeValue = searchText;
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K like %@",
+    NSString *attributeValue = searchBarText;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@",
                               attributeName, attributeValue];
+    // the [c] dismisses case sensitivity
+    NSLog(@"creating the new predicate");
+    NSLog(@"search bar text: %@", searchBarText);
     
     [fetchRequest setPredicate:predicate];
     // Set the batch size to a suitable number.
@@ -275,11 +278,12 @@ NSString *searchText;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     int currentHeight = (int)[[eventsTableView.layer presentationLayer] bounds].origin.y;
     if(currentHeight>lastCurrentHeight && currentHeight>0){
-        if([_fetchedResultsController.fetchedObjects count]*44>initialTableViewRect.size.height+searchBarThickness){
-        int tempCurrentHeight=currentHeight;
-        if(currentHeight>searchBarThickness){
-            tempCurrentHeight=searchBarThickness;
-        }
+        if((([_fetchedResultsController.fetchedObjects count]*44>initialTableViewRect.size.height+searchBarThickness)&& !searching) || (([_searchFetchedResultsController.fetchedObjects count]*44>initialTableViewRect.size.height) && searching)){
+            // only scroll the scroll bar up if the number of events goes off screen
+            int tempCurrentHeight=currentHeight;
+            if(currentHeight>searchBarThickness){
+                tempCurrentHeight=searchBarThickness;
+            }
             CGRect tempSearchRect = initialSearchBarRect;
             tempSearchRect.origin.y = initialSearchBarRect.origin.y -tempCurrentHeight;
             searchBar.frame=tempSearchRect;
@@ -445,19 +449,34 @@ NSString *searchText;
 
 #pragma mark - Search Bar Delegate
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    _searchFetchedResultsController=nil;
-    searchText = searchBar.text;
-    searching=YES;
-    NSError *error = nil;
-    if (![self.searchFetchedResultsController performFetch:&error])
-    {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }
 
-    [eventsTableView reloadData];
-    lastCurrentHeight = 0;
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+    NSLog(@"Text did change");
+    if([searchText isEqualToString:@""]){
+        searching=NO;
+        searchBar.text=nil;
+        [eventsTableView reloadData];
+        NSLog(@"User cancelled search");
+    }else{
+        NSLog(@"use the search fetch controller");
+        _searchFetchedResultsController=nil;
+        searchBarText = searchText;
+        searching=YES;
+        NSError *error = nil;
+        if (![self.searchFetchedResultsController performFetch:&error])
+        {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    
+        [eventsTableView reloadData];
+        lastCurrentHeight = 0;
+        
+    }
+}
+
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
 }
 
@@ -465,7 +484,7 @@ NSString *searchText;
     searching=NO;
     searchBar.text=nil;
     [eventsTableView reloadData];
-    NSLog(@"User canceled search");
+    NSLog(@"User cancelled search");
     [searchBar resignFirstResponder]; // if you want the keyboard to go away
 }
 
