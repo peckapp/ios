@@ -7,7 +7,6 @@
 //
 
 #import "PAEventsViewController.h"
-
 #import "PAEventInfoViewController.h"
 #import "PAPostViewController.h"
 #import "PAPecksViewController.h"
@@ -43,6 +42,7 @@ CGRect initialSearchBarRect;
 CGRect initialTableViewRect;
 NSCache *imageCache;
 BOOL searching;
+BOOL showingDetail;
 NSString *searchBarText;
 - (void)awakeFromNib
 {
@@ -52,24 +52,22 @@ NSString *searchBarText;
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
-    
-    searching=NO;
-    [eventsTableView reloadData];
+    if(!showingDetail){
+        searching=NO;
+        [eventsTableView reloadData];
+    }
 }
 
-/*-(void)viewWillDisappear:(BOOL)animated{
-    NSLog(@"set searching to no");
-    searching=NO;
-    
-    
-}*/
+-(void)viewWillAppear:(BOOL)animated{
+    showingDetail=NO;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     searching=NO;
-    
+    showingDetail=NO;
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error])
     {
@@ -388,6 +386,7 @@ NSString *searchBarText;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showEventDetail"]) {
+        showingDetail=YES;
         NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
         NSManagedObject *object;
         if(!searching)
