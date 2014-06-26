@@ -14,6 +14,7 @@
 #import "PAPeers.h"
 #import "PAImageManager.h"
 #import "PASessionManager.h"
+#import "PASyncManager.h"
 
 @interface PAPostViewController () {
     NSMutableArray * userEvents;
@@ -415,30 +416,40 @@ UITableView *_tableView;
             
             
             //[event setId:_userEvents[0]];
+           
+            //[[PASyncManager globalSyncManager] postEvent];
+            
             NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                                      _userEvents[0],@"title",
                                     _userEvents[5], @"event_description",
-                                      1, @"institution_id",
-                                      nil, @"user_id",
-                                      nil, @"club_id",
-                                      nil, @"event_url",
-                                      nil, @"open",
-                                      nil, @"image_url",
-                                      nil, @"comment_count",
-                                      chosenDate, @"start_date",
-                                      
-                                    nil];
-            
-            /*[[PASessionManager sharedClient] POST:@"api/simple_events"
-                                      parameters:_userEvents[0], nil
-                                         success:^
-             (NSURLSessionDataTask * __unused task, id JSON) {
-                 
-             }
-*/
+                                      [NSNumber numberWithInt:1], @"institution_id",
+                                     _userEvents[5], @"event_description",
+                                      _userEvents[3], @"start_date",
+                                      _userEvents[3], @"end_date",
+                                     
+                                      nil];
             
             
             
+            NSError *error=nil;
+            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:setEvent
+                            options:kNilOptions error:&error];
+            
+            
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+            [request setURL:[NSURL URLWithString:@"http://thor.peckapp.com:3500/api/simple_events"]];
+            [request setHTTPMethod:@"POST"];
+            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+            [request setHTTPBody:jsonData];
+            
+            // print json:
+            NSLog(@"JSON summary: %@", [[NSString alloc] initWithData:jsonData
+                                                             encoding:NSUTF8StringEncoding]);
+            NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+            [connection start];
+            
+             [[PASyncManager globalSyncManager] updateEventInfo];
             
             
             photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
