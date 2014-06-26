@@ -417,7 +417,7 @@ UITableView *_tableView;
             
             //[event setId:_userEvents[0]];
            
-            //[[PASyncManager globalSyncManager] postEvent];
+            
             
             NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                                      _userEvents[0],@"title",
@@ -429,27 +429,9 @@ UITableView *_tableView;
                                      
                                       nil];
             
+            [[PASyncManager globalSyncManager] postEvent: setEvent];
             
-            
-            NSError *error=nil;
-            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:setEvent
-                            options:kNilOptions error:&error];
-            
-            
-            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-            [request setURL:[NSURL URLWithString:@"http://thor.peckapp.com:3500/api/simple_events"]];
-            [request setHTTPMethod:@"POST"];
-            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-            [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-            [request setHTTPBody:jsonData];
-            
-            // print json:
-            NSLog(@"JSON summary: %@", [[NSString alloc] initWithData:jsonData
-                                                             encoding:NSUTF8StringEncoding]);
-            NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-            [connection start];
-            
-             [[PASyncManager globalSyncManager] updateEventInfo];
+            [[PASyncManager globalSyncManager] updateEventInfo];
             
             
             photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];

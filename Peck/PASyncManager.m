@@ -29,6 +29,34 @@
     return _globalSyncManager;
 }
 
+-(void)postEvent:(NSDictionary *)dictionary{
+    NSError *error=nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:dictionary
+                                                       options:kNilOptions error:&error];
+    
+    
+    [[PASessionManager sharedClient] POST:@"api/simple_events"
+                              parameters:dictionary
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"success: %@", JSON);
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+    
+    /*
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:@"http://thor.peckapp.com:3500/api/simple_events"]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setHTTPBody:jsonData];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [connection start];*/
+
+}
 
 -(void)updateEventInfo{
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);

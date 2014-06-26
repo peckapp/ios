@@ -15,4 +15,5 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 + (instancetype)globalSyncManager;
 -(void)updateEventInfo;
+-(void)postEvent:(NSDictionary *) dictionary;
 @end
