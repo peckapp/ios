@@ -39,12 +39,14 @@
         _managedObjectContext = [appdelegate managedObjectContext];
         
         
-        [[PASessionManager sharedClient] GET:@"api/events"
+        [[PASessionManager sharedClient] GET:@"api/simple_events"
                                   parameters:nil
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              NSLog(@"JSON: %@",JSON);
-             NSArray *postsFromResponse = (NSArray*)JSON;
+             NSDictionary *eventsDictionary = (NSDictionary*)JSON;
+             NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
+             NSLog(@"posts from response: %@", postsFromResponse);
              NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
              for (NSDictionary *eventAttributes in postsFromResponse) {
                  NSString *newID = [[eventAttributes objectForKey:@"id"] stringValue];
@@ -95,8 +97,8 @@
 {
     NSLog(@"set attributes of event");
     event.title = [dictionary objectForKey:@"title"];
-    event.descrip = [dictionary objectForKey:@"description"];
-    event.location = [dictionary objectForKey:@"institution"];
+    //event.descrip = [dictionary objectForKey:@"event_description"];
+    //event.location = [dictionary objectForKey:@"institution_id"];
     NSString *tempString = [[dictionary objectForKey:@"id"] stringValue];
     event.id = tempString;
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];

@@ -21,7 +21,7 @@ static NSString * const PADevSecureAPIBaseURLString = @"https://thor.peckapp.com
     static PASessionManager *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PATestAPIBaseURLString]];
+        _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PADevAPIBaseURLString]];
     });
     
     return _sharedClient;

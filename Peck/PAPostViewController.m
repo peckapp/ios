@@ -13,6 +13,9 @@
 #import "PADropdownViewController.h"
 #import "PAPeers.h"
 #import "PAImageManager.h"
+#import "PASessionManager.h"
+#import "PASyncManager.h"
+
 @interface PAPostViewController () {
     NSMutableArray * userEvents;
 }
@@ -392,7 +395,7 @@ UITableView *_tableView;
             [alert show];
         }
         else{
-            PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+           /* PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
             _managedObjectContext = [appdelegate managedObjectContext];
     
             Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
@@ -406,10 +409,49 @@ UITableView *_tableView;
             
            
             
-            [[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];
+            [[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];*/
             //TODO: Set the id to something other than the title
             //also set the image title to the id rather than the title
-            [event setId:_userEvents[0]];
+            
+            
+            
+            //[event setId:_userEvents[0]];
+           
+            //[[PASyncManager globalSyncManager] postEvent];
+            
+            NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     _userEvents[0],@"title",
+                                    _userEvents[5], @"event_description",
+                                      [NSNumber numberWithInt:1], @"institution_id",
+                                     _userEvents[5], @"event_description",
+                                      _userEvents[3], @"start_date",
+                                      _userEvents[3], @"end_date",
+                                     
+                                      nil];
+            
+            
+            
+            NSError *error=nil;
+            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:setEvent
+                            options:kNilOptions error:&error];
+            
+            
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+            [request setURL:[NSURL URLWithString:@"http://thor.peckapp.com:3500/api/simple_events"]];
+            [request setHTTPMethod:@"POST"];
+            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+            [request setHTTPBody:jsonData];
+            
+            // print json:
+            NSLog(@"JSON summary: %@", [[NSString alloc] initWithData:jsonData
+                                                             encoding:NSUTF8StringEncoding]);
+            NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+            [connection start];
+            
+             [[PASyncManager globalSyncManager] updateEventInfo];
+            
+            
             photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
             [_tableView reloadData];
