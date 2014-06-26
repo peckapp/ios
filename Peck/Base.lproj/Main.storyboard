@@ -471,6 +471,7 @@
                             </button>
                         </barButtonItem>
                     </navigationItem>
+                    <size key="freeformSize" width="320" height="568"/>
                     <connections>
                         <segue destination="Ah7-4n-0Wa" kind="push" identifier="showEventDetail" id="Zjz-hZ-Td6"/>
                     </connections>
@@ -519,8 +520,8 @@
                     <connections>
                         <outlet property="dateLabel" destination="dgm-Xq-AXV" id="kmc-gi-b88"/>
                         <outlet property="detailDescriptionLabel" destination="Lei-5M-9Gs" id="sCT-F7-F6f"/>
-                        <outlet property="eventPhoto" destination="WcH-m6-uGK" id="x4S-8d-k9D"/>
-                        <outlet property="eventTitleLabel" destination="aoK-qw-Ab0" id="y09-4X-nEi"/>
+                        <outlet property="photoView" destination="WcH-m6-uGK" id="Cgr-3V-eo2"/>
+                        <outlet property="titleLabel" destination="aoK-qw-Ab0" id="ljL-uZ-87x"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lrm-kH-fPn" sceneMemberID="firstResponder"/>
@@ -673,6 +674,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="7xt-IF-tkU"/>
-        <segue reference="kbr-xc-iWf"/>
+        <segue reference="RxB-wf-QIq"/>
     </inferredMetricsTieBreakers>
 </document>

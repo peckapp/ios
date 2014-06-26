@@ -20,8 +20,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (weak, nonatomic) IBOutlet UIImageView *eventPhoto;
-@property (weak, nonatomic) IBOutlet UILabel *eventTitleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UIImageView * photoView;
+@property (weak, nonatomic) IBOutlet UILabel * titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel * dateLabel;
 
 @end

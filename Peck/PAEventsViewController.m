@@ -31,7 +31,7 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 static NSString *cellIdentifier = PAAddIdentifier;
-static NSString *nibName = @"PAPeckCell";
+static NSString *nibName = @"PAEventCell";
 UITableView *eventsTableView;
 UISearchBar * searchBar;
 int titleThickness;
@@ -418,11 +418,11 @@ NSString *searchBarText;
     else
         tempEvent =[self.searchFetchedResultsController objectAtIndexPath:indexPath];
     NSLog(@"changed cell text");
-    cell.title.text = tempEvent.title;
+    cell.titleLabel.text = tempEvent.title;
     NSString *imageID = tempEvent.id;
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
-        cell.photo.image=image;
+        cell.photoView.image=image;
     }else{
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
@@ -437,7 +437,7 @@ NSString *searchBarText;
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"image id: %@", imageID);
                 [imageCache setObject:image forKey:imageID];
-                cell.photo.image =image;
+                cell.photoView.image =image;
                 //reload the cell to display the image
                 //this will be called at most one time for each cell
                 //because the image will be loaded into the cache

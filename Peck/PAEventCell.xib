@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6154.17" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1808" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.11"/>
+        <deployment defaultVersion="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -33,7 +33,7 @@
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="image-placeholder.png" translatesAutoresizingMaskIntoConstraints="NO" id="hnB-bx-xgy" customClass="P">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="image-placeholder.png" translatesAutoresizingMaskIntoConstraints="NO" id="hnB-bx-xgy">
                         <rect key="frame" x="0.0" y="0.0" width="87" height="87"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
@@ -41,11 +41,9 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="endTime" destination="jEe-Kh-XUL" id="fde-Eq-yWh"/>
-                <outlet property="eventPhoto" destination="hnB-bx-xgy" id="a8u-ET-sHA"/>
-                <outlet property="eventTitle" destination="L8n-uC-mmT" id="RtS-zH-5Fa"/>
-                <outlet property="photo" destination="hnB-bx-xgy" id="Fjm-cO-FrZ"/>
+                <outlet property="photoView" destination="hnB-bx-xgy" id="Tbc-Va-VKk"/>
                 <outlet property="startTime" destination="MkQ-i8-7NS" id="G8v-GN-geU"/>
-                <outlet property="title" destination="L8n-uC-mmT" id="3D3-pb-Zfn"/>
+                <outlet property="titleLabel" destination="L8n-uC-mmT" id="ads-dG-APB"/>
             </connections>
         </tableViewCell>
     </objects>
