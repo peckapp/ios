@@ -59,6 +59,7 @@
 		86DD9C26195C56320074096E /* Icon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DD9C23195C56320074096E /* Icon-40@2x.png */; };
 		86DD9C27195C56320074096E /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DD9C24195C56320074096E /* Icon-60@2x.png */; };
 		86DD9C28195C56320074096E /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DD9C25195C56320074096E /* Icon-Small@2x.png */; };
+		86DD9C2B195C70AE0074096E /* PeckWebserviceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DD9C2A195C70AE0074096E /* PeckWebserviceTests.m */; };
 		A40CF56519547AAB0021C088 /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56419547AAB0021C088 /* Peer.m */; };
 		A40CF56819547ACC0021C088 /* PAPeers.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56719547ACC0021C088 /* PAPeers.m */; };
 		A40CF574195483140021C088 /* PABST.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF573195483140021C088 /* PABST.m */; };
@@ -100,6 +101,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		86D5982E193768C000F38654 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 86D597F7193768BF00F38654 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 86D597FE193768BF00F38654;
+			remoteInfo = Peck;
+		};
+		86DD9C2D195C721B0074096E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 86D597F7193768BF00F38654 /* Project object */;
 			proxyType = 1;
@@ -189,6 +197,8 @@
 		86DD9C23195C56320074096E /* Icon-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40@2x.png"; sourceTree = "<group>"; };
 		86DD9C24195C56320074096E /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
 		86DD9C25195C56320074096E /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
+		86DD9C2A195C70AE0074096E /* PeckWebserviceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckWebserviceTests.m; sourceTree = "<group>"; };
+		86DD9C2C195C71C30074096E /* webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = webservice.h; sourceTree = "<group>"; };
 		A40CF56319547AAB0021C088 /* Peer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peer.h; sourceTree = "<group>"; };
 		A40CF56419547AAB0021C088 /* Peer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peer.m; sourceTree = "<group>"; };
 		A40CF56619547ACC0021C088 /* PAPeers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPeers.h; sourceTree = "<group>"; };
@@ -371,6 +381,7 @@
 				867B52D419509F5000BEB37B /* PASessionManager.h */,
 				867B52D519509F5000BEB37B /* PASessionManager.m */,
 				867651ED19462E5200C14645 /* old_webservice.h */,
+				86DD9C2C195C71C30074096E /* webservice.h */,
 				A4773C871959D2FE00AB9831 /* PASyncManager.h */,
 				A4773C881959D2FE00AB9831 /* PASyncManager.m */,
 			);
@@ -466,6 +477,7 @@
 			isa = PBXGroup;
 			children = (
 				86D59836193768C000F38654 /* PeckTests.m */,
+				86DD9C2A195C70AE0074096E /* PeckWebserviceTests.m */,
 				86D59831193768C000F38654 /* Supporting Files */,
 			);
 			path = PeckTests;
@@ -632,6 +644,7 @@
 			dependencies = (
 				86D5982F193768C000F38654 /* PBXTargetDependency */,
 				86E84FF1195B2058000874EB /* PBXTargetDependency */,
+				86DD9C2E195C721B0074096E /* PBXTargetDependency */,
 			);
 			name = PeckTests;
 			productName = PeckTests;
@@ -824,6 +837,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				86D59837193768C000F38654 /* PeckTests.m in Sources */,
+				86DD9C2B195C70AE0074096E /* PeckWebserviceTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -834,6 +848,11 @@
 			isa = PBXTargetDependency;
 			target = 86D597FE193768BF00F38654 /* Peck */;
 			targetProxy = 86D5982E193768C000F38654 /* PBXContainerItemProxy */;
+		};
+		86DD9C2E195C721B0074096E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 86D597FE193768BF00F38654 /* Peck */;
+			targetProxy = 86DD9C2D195C721B0074096E /* PBXContainerItemProxy */;
 		};
 		86E84FF1195B2058000874EB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
