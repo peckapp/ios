@@ -54,6 +54,7 @@
 		A40CF56819547ACC0021C088 /* PAPeers.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56719547ACC0021C088 /* PAPeers.m */; };
 		A40CF574195483140021C088 /* PABST.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF573195483140021C088 /* PABST.m */; };
 		A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */; };
+		A433EAA6195B53D800DAA201 /* PACircleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA5195B53D800DAA201 /* PACircleScrollView.m */; };
 		A463F384194B959800ED441F /* PACircleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F382194B959800ED441F /* PACircleCell.m */; };
 		A463F385194B959800ED441F /* PACircleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A463F383194B959800ED441F /* PACircleCell.xib */; };
 		A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */; };
@@ -163,6 +164,8 @@
 		A40CF573195483140021C088 /* PABST.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PABST.m; sourceTree = "<group>"; };
 		A433EAA0195B3F5800DAA201 /* HTAutocompleteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTAutocompleteManager.h; sourceTree = "<group>"; };
 		A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTAutocompleteManager.m; sourceTree = "<group>"; };
+		A433EAA4195B53D800DAA201 /* PACircleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleScrollView.h; sourceTree = "<group>"; };
+		A433EAA5195B53D800DAA201 /* PACircleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACircleScrollView.m; sourceTree = "<group>"; };
 		A463F381194B959800ED441F /* PACircleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleCell.h; sourceTree = "<group>"; };
 		A463F382194B959800ED441F /* PACircleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACircleCell.m; sourceTree = "<group>"; };
 		A463F383194B959800ED441F /* PACircleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PACircleCell.xib; sourceTree = "<group>"; };
@@ -487,6 +490,8 @@
 				A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */,
 				A4773C8D195A076800AB9831 /* PACreateCircleViewController.h */,
 				A4773C8E195A076800AB9831 /* PACreateCircleViewController.m */,
+				A433EAA4195B53D800DAA201 /* PACircleScrollView.h */,
+				A433EAA5195B53D800DAA201 /* PACircleScrollView.m */,
 			);
 			name = Circles;
 			sourceTree = "<group>";
@@ -679,6 +684,7 @@
 				A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */,
 				86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */,
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,
+				A433EAA6195B53D800DAA201 /* PACircleScrollView.m in Sources */,
 				A4773C92195A0E4C00AB9831 /* Circle.m in Sources */,
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,
 				86D5981E193768BF00F38654 /* PAEventsViewController.m in Sources */,

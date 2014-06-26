@@ -11,19 +11,25 @@
 #import "Circle.h"
 #import "HTAutocompleteTextField.h"
 #import "HTAutocompleteManager.h"
+#import "PACircleScrollView.h"
 
 @interface PACreateCircleViewController ()
-
+@property (strong, nonatomic) PACircleScrollView *circleScrollView;
 @end
 
 @implementation PACreateCircleViewController
+   
+
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize titleTextField, membersAutocompleteTextField;
 @synthesize titleLabel;
+@synthesize addedPeers = _addedPeers;
 
+
+//PACircleScrollView *circleScrollView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -40,6 +46,16 @@
     [titleTextField addTarget:self
                   action:@selector(textFieldDidChange)
         forControlEvents:UIControlEventEditingChanged];
+    
+    if(!self.circleScrollView){
+        self.circleScrollView = [[PACircleScrollView alloc] initWithFrame:CGRectMake(100, 55, self.view.frame.size.width-100, 60)];
+        [self.view addSubview:self.circleScrollView];
+        self.circleScrollView.delegate=self;
+    }
+    if(!_addedPeers){
+        _addedPeers = [NSMutableArray array];
+    }
+    
     
     membersAutocompleteTextField.autocompleteDataSource = [HTAutocompleteManager sharedManager];
     membersAutocompleteTextField.autocompleteType = HTAutocompleteTypeName;
@@ -80,8 +96,18 @@
     NSLog(@"choose a member");
     NSString *tempText= membersAutocompleteTextField.text;
     tempText = [tempText stringByAppendingString:membersAutocompleteTextField.autocompleteLabel.text];
-    membersAutocompleteTextField.text = [tempText stringByAppendingString:@", "];
-    
+    //membersAutocompleteTextField.text = [tempText stringByAppendingString:@", "];
+    membersAutocompleteTextField.text=@"";
+    membersAutocompleteTextField.autocompleteLabel.text=@"";
+    if(!_addedPeers){
+        _addedPeers = [NSMutableArray array];
+    }
+
+    [_addedPeers addObject:tempText];
+    NSLog(@"peers added so far: %@", _addedPeers);
+    UIImage *image = [UIImage imageNamed:@"Silhouette.png"];
+    [self.circleScrollView addPeer:image WithName:tempText];
+
 }
 
 -(void)textFieldDidChange{
@@ -96,9 +122,22 @@
     Circle * circle = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext: _managedObjectContext];
     
     [circle setCircleName:titleTextField.text];
-    NSString *membersString= membersAutocompleteTextField.text;
-    NSArray *membersArray = [membersString componentsSeparatedByString:@","];
-    [circle setMembers:membersArray];
+    [circle setMembers:_addedPeers];
     
 }
+
+-(void)removePeer:(int) peer{
+    if(_addedPeers[peer]!=nil){
+        [_addedPeers removeObjectAtIndex:peer];
+        [self.circleScrollView removePeer:peer];
+    }
+    
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    if(textField==membersAutocompleteTextField){
+        membersAutocompleteTextField.autocompleteLabel.text=@"";
+    }
+}
+
 @end

@@ -321,7 +321,6 @@ static HTAutocompleteManager *sharedManager;
         PAPeers *peerTree1 = [PAPeers peers];
         NSMutableArray *names = [NSMutableArray array];
         names = [peerTree1.peerTree searchForName:prefix WithArray:names];
-        NSLog(@"Names: %@", names);
         if([names count]>0){
             NSString *finalName=names[0];
             finalName = [finalName substringFromIndex:prefix.length];
