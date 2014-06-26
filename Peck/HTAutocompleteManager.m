@@ -318,6 +318,7 @@ static HTAutocompleteManager *sharedManager;
         }
     }
     else if(textField.autocompleteType == HTAutocompleteTypeName){
+        if(! [prefix isEqualToString:@""]){
         PAPeers *peerTree1 = [PAPeers peers];
         NSMutableArray *names = [NSMutableArray array];
         names = [peerTree1.peerTree searchForName:prefix WithArray:names];
@@ -325,6 +326,7 @@ static HTAutocompleteManager *sharedManager;
             NSString *finalName=names[0];
             finalName = [finalName substringFromIndex:prefix.length];
             return finalName;
+        }
         }
     }
     

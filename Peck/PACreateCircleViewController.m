@@ -93,12 +93,14 @@
 */
 
 -(void)chooseMember{
+    if(![membersAutocompleteTextField.text isEqualToString:@""]){
     NSLog(@"choose a member");
     NSString *tempText= membersAutocompleteTextField.text;
     tempText = [tempText stringByAppendingString:membersAutocompleteTextField.autocompleteLabel.text];
     //membersAutocompleteTextField.text = [tempText stringByAppendingString:@", "];
     membersAutocompleteTextField.text=@"";
     membersAutocompleteTextField.autocompleteLabel.text=@"";
+    [membersAutocompleteTextField forceRefreshAutocompleteText];
     if(!_addedPeers){
         _addedPeers = [NSMutableArray array];
     }
@@ -107,7 +109,7 @@
     NSLog(@"peers added so far: %@", _addedPeers);
     UIImage *image = [UIImage imageNamed:@"Silhouette.png"];
     [self.circleScrollView addPeer:image WithName:tempText];
-
+    }
 }
 
 -(void)textFieldDidChange{
@@ -127,7 +129,7 @@
 }
 
 -(void)removePeer:(int) peer{
-    if(_addedPeers[peer]!=nil){
+    if(_circleScrollView.numberOfMembers>=(peer+1)){
         [_addedPeers removeObjectAtIndex:peer];
         [self.circleScrollView removePeer:peer];
     }

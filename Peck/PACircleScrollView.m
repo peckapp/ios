@@ -93,6 +93,7 @@
     [_memberPhotos removeObjectAtIndex:i];
     [_nameLabels removeObjectAtIndex:i];
     _numberOfMembers--;
+    [self setContentSize:CGSizeMake(80*(_numberOfMembers), 60)];
 }
 
 @end
