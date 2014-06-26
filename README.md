@@ -11,6 +11,14 @@ Along the very top of the screen, just below the status bar, sits the dropdownBa
 
 Our dropdown views are Pecks, for notifications; feed, for general college news; add, to create your own events and content; circles, for groups of friends; and profile, to customize your information, subscriptions, and settings.
 
+## Third Party Code
+- AFNetworking
+- Facebook API
+- Twitter API
+ - still needs to be added
+- Crashlytics
+- HTAutoCompleteTextField
+
 ## Data Storage and Retreival
 The app will use Core Data to store the most recent events that are relevant to the user. Upon opening the app, the last data retrieved from the server will appear in the UI.
 At the same time, an asynchronous request will be sent to the server to retrieve the latest data. Once this request has been fulfilled, the data will be parsed, added to the core data model, and the visible user interface will be dynamically updated to display the new information to the user.

@@ -9,6 +9,7 @@
 #import "PAFilter.h"
 
 #define edgeBuffer 20
+#define verticalTranslation @"transform.translation.y"
 
 @interface PAFilter() {
     
@@ -23,12 +24,15 @@
 
 // whether or not the filter is active in selecting a different mode
 @property (nonatomic, getter=isActive) BOOL active;
-// whether or not the filter is presented on the screen
-@property (nonatomic) BOOL presented;
 
 @end
 
 @implementation PAFilter
+
++ (instancetype)filter
+{
+    return [[PAFilter alloc] init];
+}
 
 - (instancetype)init
 {
@@ -62,7 +66,7 @@
 - (void)presentUpwardForMode:(PAFilterMode)mode
 {
     if (!self.presented) {
-        NSString *keyPath = @"transform.translation.y";
+        NSString *keyPath = verticalTranslation;
         
         CAKeyframeAnimation *translation = [CAKeyframeAnimation animationWithKeyPath:keyPath];
         translation.delegate = self;
@@ -93,7 +97,7 @@
 - (void)dismissDownward
 {
     if (self.presented) {
-        NSString *keyPath = @"transform.translation.y";
+        NSString *keyPath = verticalTranslation;
         
         CAKeyframeAnimation *translation = [CAKeyframeAnimation animationWithKeyPath:keyPath];
         translation.delegate = self;
@@ -173,6 +177,32 @@
     NSLog(@"WARNING: touches cancelled for UIEvent: %@",event);
 }
 
+# pragma mark - Remain on top
+/*
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (object == self.superview && [keyPath isEqual:@"subviews.@count"]) {
+        [self.superview bringSubviewToFront:self];
+    }
+    
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    if (self.superview) {
+        [self.superview removeObserver:self forKeyPath:@"subviews.@count"];
+    }
+    
+    [super willMoveToSuperview:newSuperview];
+}
+
+- (void)didMoveToSuperview {
+    [super didMoveToSuperview];
+    
+    if (self.superview) {
+        [self.superview addObserver:self forKeyPath:@"subviews.@count" options:0 context:nil];
+    }
+}
+*/
 # pragma mark - Utility methods
 
 - (CGRect) startingRect

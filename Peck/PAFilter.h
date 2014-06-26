@@ -17,6 +17,12 @@ typedef enum {
 
 @interface PAFilter : UIView
 
+// whether or not the filter is presented on the screen
+@property (nonatomic) BOOL presented;
+
+// designated factory for the filter. use this for instantiation
++(instancetype)filter;
+
 // causes the filter element to drop below the screen
 - (void)dismissDownward;
 

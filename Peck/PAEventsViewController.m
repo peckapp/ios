@@ -20,11 +20,8 @@
 #import "PAImageManager.h"
 
 @interface PAEventsViewController ()
-    
-
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
-
 
 @end
 
@@ -78,10 +75,10 @@ NSString *searchBarText;
     if(!searchBar){
         titleThickness=44;
         searchBarThickness = 30;
-        searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,titleThickness,320,30)];
+        searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,0,320,searchBarThickness)];
         initialSearchBarRect=searchBar.frame;
         searchBar.delegate = self;
-        searchBar.showsCancelButton = YES;
+        searchBar.showsCancelButton = NO;
         [self.view addSubview:searchBar];
     }
     
@@ -93,7 +90,7 @@ NSString *searchBarText;
     self.title = @"Events";
     
     if(!eventsTableView){
-        int tableViewY =searchBarThickness +titleThickness;
+        int tableViewY = searchBarThickness;
         eventsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, tableViewY, 320, (self.view.frame.size.height)-tableViewY-20)];
         //20 is the thickness of the bar with time and battery
         initialTableViewRect = eventsTableView.frame;
@@ -428,7 +425,7 @@ NSString *searchBarText;
             //NSData *data = tempEvent.photo;
             UIImage *image = [UIImage imageWithData:data];
             if(!image){
-                image = [UIImage imageNamed:@"Silhouette.png"];
+                image = [UIImage imageNamed:@"image-placeholder.png"];
                 
             }
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -473,6 +470,15 @@ NSString *searchBarText;
     }
 }
 
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    searchBar.showsCancelButton = YES;
+    return YES;
+}
+
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
+    searchBar.showsCancelButton = NO;
+    return YES;
+}
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];

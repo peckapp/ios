@@ -62,7 +62,7 @@
                                                   CGRectGetHeight(self.view.frame) - CGRectGetHeight(dropdownBar.frame));
 
     // Instantiate primary view controller
-    NSLog(@"Instantiating primary view contorller");
+    NSLog(@"Instantiating primary view controller");
     self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
     self.primaryViewController.view.frame = self.frameForChildViewController;
 
@@ -82,6 +82,10 @@
     // Display views
     [self.view addSubview:dropdownBar];
     [self displayChildViewController:self.primaryViewController];
+    
+    self.filter = [PAFilter filter];
+    [self.view addSubview:self.filter];
+    [self.filter presentUpwardForMode:PAFilterHomeMode];
 }
 
 - (void)didReceiveMemoryWarning
@@ -111,7 +115,7 @@
 
 - (void) barDidSelectItemAtIndex:(NSInteger)index
 {
-    NSLog(@"%d", index);
+    NSLog(@"%ld", (long)index);
     UIViewController * oldVC = self.activeViewController;
     UIViewController * newVC = self.secondaryViewControllers[index];
 
@@ -144,12 +148,16 @@
 
                          [self displayChildViewController:newVC];
                          self.view.userInteractionEnabled = YES;
+                         
                      }];
+    // dismisses filter as dropbown appears
+    [self hideFilter];
+    
 }
 
 - (void) barDidDeselectItemAtIndex:(NSInteger)index
 {
-    NSLog(@"%d", index);
+    NSLog(@"%ld", (long)index);
     UIViewController * oldVC = self.activeViewController;
     UIViewController * newVC = self.primaryViewController;
 
@@ -182,12 +190,15 @@
 
                          [self displayChildViewController:newVC];
                          self.view.userInteractionEnabled = YES;
+                         
+                         // show the dropdown filter for the home mode
+                         [self showFilterForMode:PAFilterHomeMode];
                      }];
 }
 
 - (void) barDidSlideLeftToIndex:(NSInteger)index
 {
-    NSLog(@"%d", index);
+    NSLog(@"%ld", (long)index);
     UIViewController * oldVC = self.activeViewController;
     UIViewController * newVC = self.secondaryViewControllers[index];
 
@@ -227,7 +238,7 @@
 
 - (void) barDidSlideRightToIndex:(NSInteger)index
 {
-    NSLog(@"%d", index);
+    NSLog(@"%ld", (long)index);
     UIViewController * oldVC = self.activeViewController;
     UIViewController * newVC = self.secondaryViewControllers[index];
 
@@ -263,6 +274,23 @@
                          [self displayChildViewController:newVC];
                          self.view.userInteractionEnabled = YES;
                      }];
+}
+
+# pragma mark Filter methods
+
+- (void)hideFilter
+{
+    if (self.filter.presented) {
+        [self.filter dismissDownward];
+    }
+}
+
+- (void)showFilterForMode:(PAFilterMode)mode
+{
+    if (!self.filter.presented) {
+        [self.filter presentUpwardForMode:mode];
+        [self.view bringSubviewToFront:self.filter];
+    }
 }
 
 @end
