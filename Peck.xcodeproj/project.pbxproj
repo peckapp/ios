@@ -56,6 +56,9 @@
 		86D5982D193768C000F38654 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59808193768BF00F38654 /* CoreData.framework */; };
 		86D59835193768C000F38654 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86D59833193768C000F38654 /* InfoPlist.strings */; };
 		86D59837193768C000F38654 /* PeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59836193768C000F38654 /* PeckTests.m */; };
+		86DD9C26195C56320074096E /* Icon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DD9C23195C56320074096E /* Icon-40@2x.png */; };
+		86DD9C27195C56320074096E /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DD9C24195C56320074096E /* Icon-60@2x.png */; };
+		86DD9C28195C56320074096E /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DD9C25195C56320074096E /* Icon-Small@2x.png */; };
 		A40CF56519547AAB0021C088 /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56419547AAB0021C088 /* Peer.m */; };
 		A40CF56819547ACC0021C088 /* PAPeers.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56719547ACC0021C088 /* PAPeers.m */; };
 		A40CF574195483140021C088 /* PABST.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF573195483140021C088 /* PABST.m */; };
@@ -181,6 +184,9 @@
 		86D59832193768C000F38654 /* PeckTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PeckTests-Info.plist"; sourceTree = "<group>"; };
 		86D59834193768C000F38654 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86D59836193768C000F38654 /* PeckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeckTests.m; sourceTree = "<group>"; };
+		86DD9C23195C56320074096E /* Icon-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40@2x.png"; sourceTree = "<group>"; };
+		86DD9C24195C56320074096E /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
+		86DD9C25195C56320074096E /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
 		A40CF56319547AAB0021C088 /* Peer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peer.h; sourceTree = "<group>"; };
 		A40CF56419547AAB0021C088 /* Peer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peer.m; sourceTree = "<group>"; };
 		A40CF56619547ACC0021C088 /* PAPeers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPeers.h; sourceTree = "<group>"; };
@@ -274,6 +280,7 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				86DD9C29195C56590074096E /* old icon */,
 				8671A2C8195B846800700101 /* dropdown2 */,
 				8671A2C6195B843800700101 /* dropdown */,
 				DD898138195B5AE20079CDC9 /* image-placeholder.png */,
@@ -466,6 +473,16 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		86DD9C29195C56590074096E /* old icon */ = {
+			isa = PBXGroup;
+			children = (
+				86DD9C23195C56320074096E /* Icon-40@2x.png */,
+				86DD9C24195C56320074096E /* Icon-60@2x.png */,
+				86DD9C25195C56320074096E /* Icon-Small@2x.png */,
+			);
+			name = "old icon";
+			sourceTree = "<group>";
+		};
 		A40CF56219547A730021C088 /* Peers */ = {
 			isa = PBXGroup;
 			children = (
@@ -654,6 +671,7 @@
 				8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */,
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
+				86DD9C26195C56320074096E /* Icon-40@2x.png in Resources */,
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
 				DD898152195B7AA80079CDC9 /* post@2x.png in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
@@ -672,6 +690,8 @@
 				8671A2CF195B848D00700101 /* dropdown_explore@2x.png in Resources */,
 				DD898153195B7AA80079CDC9 /* profile@2x.png in Resources */,
 				DD898136195B523F0079CDC9 /* button@2x.png in Resources */,
+				86DD9C27195C56320074096E /* Icon-60@2x.png in Resources */,
+				86DD9C28195C56320074096E /* Icon-Small@2x.png in Resources */,
 				86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */,
 				DD898137195B523F0079CDC9 /* button-selected@2x.png in Resources */,
 			);
