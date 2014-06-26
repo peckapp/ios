@@ -429,13 +429,13 @@ UITableView *_tableView;
                                       
                                     nil];
             
-            [[PASessionManager sharedClient] POST:@"api/simple_events"
+            /*[[PASessionManager sharedClient] POST:@"api/simple_events"
                                       parameters:_userEvents[0], nil
                                          success:^
              (NSURLSessionDataTask * __unused task, id JSON) {
                  
              }
-
+*/
             
             
             
