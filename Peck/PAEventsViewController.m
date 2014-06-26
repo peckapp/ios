@@ -30,6 +30,8 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+static NSString *cellIdentifier = PAAddIdentifier;
+static NSString *nibName = @"PAPeckCell";
 UITableView *eventsTableView;
 UISearchBar * searchBar;
 int titleThickness;
@@ -332,10 +334,9 @@ NSString *searchBarText;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"EventCell";
     PAEventCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:@"PAEventCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
     
@@ -344,6 +345,19 @@ NSString *searchBarText;
     return cell;
     
 }
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        // Configure cell by loading a nib.
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
+    // Return cell size.
+    return cell.frame.size.height;
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if(tableView==eventsTableView){
@@ -406,18 +420,19 @@ NSString *searchBarText;
 }
  */
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Event *tempEvent;
     if(!searching)
         tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
     else
         tempEvent =[self.searchFetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = tempEvent.title;
+    NSLog(@"changed cell text");
+    cell.title.text = tempEvent.title;
     NSString *imageID = tempEvent.id;
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
-        cell.imageView.image=image;
+        cell.photo.image=image;
     }else{
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
@@ -432,7 +447,7 @@ NSString *searchBarText;
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"image id: %@", imageID);
                 [imageCache setObject:image forKey:imageID];
-                cell.imageView.image =image;
+                cell.photo.image =image;
                 //reload the cell to display the image
                 //this will be called at most one time for each cell
                 //because the image will be loaded into the cache

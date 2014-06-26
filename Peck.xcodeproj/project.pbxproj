@@ -15,7 +15,6 @@
 		86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292520193CBFD40057CA41 /* PAPeckCell.m */; };
 		86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86292521193CBFD40057CA41 /* PAPeckCell.xib */; };
 		86292527193CBFF80057CA41 /* PAEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292525193CBFF80057CA41 /* PAEventCell.m */; };
-		86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86292526193CBFF80057CA41 /* PAEventCell.xib */; };
 		863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CB193CB31C004110F5 /* PACirclesTableViewController.m */; };
 		863843CF193CB393004110F5 /* PAProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CE193CB393004110F5 /* PAProfileTableViewController.m */; };
 		863843DA193CB75F004110F5 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 863843D3193CB75F004110F5 /* Login.storyboard */; };
@@ -88,6 +87,8 @@
 		DD898151195B7AA80079CDC9 /* pecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89814C195B7AA80079CDC9 /* pecks@2x.png */; };
 		DD898152195B7AA80079CDC9 /* post@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89814D195B7AA80079CDC9 /* post@2x.png */; };
 		DD898153195B7AA80079CDC9 /* profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89814E195B7AA80079CDC9 /* profile@2x.png */; };
+		DD898159195C83C40079CDC9 /* profile-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898158195C83C40079CDC9 /* profile-placeholder.png */; };
+		DD89815D195C98D10079CDC9 /* PAEventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD89815C195C98D10079CDC9 /* PAEventCell.xib */; };
 		DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAExploreCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */; };
 		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
@@ -121,7 +122,6 @@
 		86292521193CBFD40057CA41 /* PAPeckCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAPeckCell.xib; sourceTree = "<group>"; };
 		86292524193CBFF80057CA41 /* PAEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEventCell.h; sourceTree = "<group>"; };
 		86292525193CBFF80057CA41 /* PAEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEventCell.m; sourceTree = "<group>"; };
-		86292526193CBFF80057CA41 /* PAEventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAEventCell.xib; sourceTree = "<group>"; };
 		863843CA193CB31C004110F5 /* PACirclesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACirclesTableViewController.h; sourceTree = "<group>"; };
 		863843CB193CB31C004110F5 /* PACirclesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACirclesTableViewController.m; sourceTree = "<group>"; };
 		863843CD193CB393004110F5 /* PAProfileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAProfileTableViewController.h; sourceTree = "<group>"; };
@@ -230,6 +230,8 @@
 		DD89814C195B7AA80079CDC9 /* pecks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pecks@2x.png"; sourceTree = "<group>"; };
 		DD89814D195B7AA80079CDC9 /* post@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "post@2x.png"; sourceTree = "<group>"; };
 		DD89814E195B7AA80079CDC9 /* profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile@2x.png"; sourceTree = "<group>"; };
+		DD898158195C83C40079CDC9 /* profile-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "profile-placeholder.png"; path = "../../../../Desktop/profile-placeholder.png"; sourceTree = "<group>"; };
+		DD89815C195C98D10079CDC9 /* PAEventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAEventCell.xib; sourceTree = "<group>"; };
 		DDDAEDD819465DCB004CE102 /* PAExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreCell.h; sourceTree = "<group>"; };
 		DDDAEDD919465DCB004CE102 /* PAExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreCell.m; sourceTree = "<group>"; };
 		DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAExploreCell.xib; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				DD898158195C83C40079CDC9 /* profile-placeholder.png */,
 				8671A2C8195B846800700101 /* dropdown2 */,
 				8671A2C6195B843800700101 /* dropdown */,
 				DD898138195B5AE20079CDC9 /* image-placeholder.png */,
@@ -505,11 +508,11 @@
 			children = (
 				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
 				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
-				86D5981F193768BF00F38654 /* PAEventInfoViewController.h */,
-				86D59820193768BF00F38654 /* PAEventInfoViewController.m */,
 				86292524193CBFF80057CA41 /* PAEventCell.h */,
 				86292525193CBFF80057CA41 /* PAEventCell.m */,
-				86292526193CBFF80057CA41 /* PAEventCell.xib */,
+				DD89815C195C98D10079CDC9 /* PAEventCell.xib */,
+				86D5981F193768BF00F38654 /* PAEventInfoViewController.h */,
+				86D59820193768BF00F38654 /* PAEventInfoViewController.m */,
 				A4BDFE70195362E40020EFD5 /* PADiningViewController.h */,
 				A4BDFE71195362E40020EFD5 /* PADiningViewController.m */,
 				A4773C7E19589E8200AB9831 /* PAEvents.h */,
@@ -650,11 +653,13 @@
 				DD898150195B7AA80079CDC9 /* explore@2x.png in Resources */,
 				DD898151195B7AA80079CDC9 /* pecks@2x.png in Resources */,
 				86051D4C194BB60200961541 /* Main.storyboard in Resources */,
+				DD898159195C83C40079CDC9 /* profile-placeholder.png in Resources */,
 				8671A2D1195B848D00700101 /* dropdown_circles@2x.png in Resources */,
 				8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */,
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
+				DD89815D195C98D10079CDC9 /* PAEventCell.xib in Resources */,
 				DD898152195B7AA80079CDC9 /* post@2x.png in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
 				DD89814F195B7AA80079CDC9 /* circles@2x.png in Resources */,
@@ -672,7 +677,6 @@
 				8671A2CF195B848D00700101 /* dropdown_explore@2x.png in Resources */,
 				DD898153195B7AA80079CDC9 /* profile@2x.png in Resources */,
 				DD898136195B523F0079CDC9 /* button@2x.png in Resources */,
-				86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */,
 				DD898137195B523F0079CDC9 /* button-selected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
