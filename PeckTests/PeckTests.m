@@ -8,7 +8,6 @@
 
 #import <XCTest/XCTest.h>
 #import <Foundation/Foundation.h>
-#import "PASessionManager.h"
 
 @interface PeckTests : XCTestCase
 
@@ -31,24 +30,6 @@
 - (void)testExample
 {
     //XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
-}
-
-- (void)SSLTesting
-{
-    [[PASessionManager sharedSecureClient] GET:@"api/events"
-                                    parameters:nil
-                                       success:^
-     (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"JSON: %@",JSON);
-         NSArray *postsFromResponse = (NSArray*)JSON;
-         for (NSDictionary *eventAttributes in postsFromResponse) {
-             NSLog(@"Event Attributes: %@",eventAttributes);
-         }
-     }
-                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
-                                 }];
-    
 }
 
 @end
