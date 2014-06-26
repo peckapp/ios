@@ -76,7 +76,7 @@ NSString *searchBarText;
     lastCurrentHeight=0;
     if(!searchBar){
         titleThickness=44;
-        searchBarThickness = 30;
+        searchBarThickness = 40;
         searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,0,320,searchBarThickness)];
         initialSearchBarRect=searchBar.frame;
         searchBar.delegate = self;
@@ -116,19 +116,10 @@ NSString *searchBarText;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)showPecks:(id)sender
-{
-    PAPecksViewController * controller = [self.storyboard instantiateViewControllerWithIdentifier:PAPecksIdentifier];
-    [self presentViewController:controller animated:YES completion:nil];
-}
-
-- (void)insertNewObject:(id)sender
-{
-}
-
 #pragma mark - Fetched Results controller
 
--(NSFetchedResultsController *)fetchedResultsController{
+-(NSFetchedResultsController *)fetchedResultsController
+{
     if(_fetchedResultsController!=nil){
         return _fetchedResultsController;
     }
@@ -306,7 +297,7 @@ NSString *searchBarText;
         }
     }
     
-     lastCurrentHeight=currentHeight;
+    lastCurrentHeight=currentHeight;
     
 }
 
