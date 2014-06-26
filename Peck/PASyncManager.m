@@ -29,6 +29,34 @@
     return _globalSyncManager;
 }
 
+-(void)postEvent:(NSDictionary *)dictionary{
+    NSError *error=nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:dictionary
+                                                       options:kNilOptions error:&error];
+    
+    
+    [[PASessionManager sharedClient] POST:@"api/simple_events"
+                              parameters:dictionary
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"success: %@", JSON);
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+    
+    /*
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:@"http://thor.peckapp.com:3500/api/simple_events"]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setHTTPBody:jsonData];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [connection start];*/
+
+}
 
 -(void)updateEventInfo{
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
@@ -39,12 +67,14 @@
         _managedObjectContext = [appdelegate managedObjectContext];
         
         
-        [[PASessionManager sharedClient] GET:@"api/events"
+        [[PASessionManager sharedClient] GET:@"api/simple_events"
                                   parameters:nil
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              NSLog(@"JSON: %@",JSON);
-             NSArray *postsFromResponse = (NSArray*)JSON;
+             NSDictionary *eventsDictionary = (NSDictionary*)JSON;
+             NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
+             NSLog(@"posts from response: %@", postsFromResponse);
              NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
              for (NSDictionary *eventAttributes in postsFromResponse) {
                  NSString *newID = [[eventAttributes objectForKey:@"id"] stringValue];
@@ -95,8 +125,8 @@
 {
     NSLog(@"set attributes of event");
     event.title = [dictionary objectForKey:@"title"];
-    event.descrip = [dictionary objectForKey:@"description"];
-    event.location = [dictionary objectForKey:@"institution"];
+    //event.descrip = [dictionary objectForKey:@"event_description"];
+    //event.location = [dictionary objectForKey:@"institution_id"];
     NSString *tempString = [[dictionary objectForKey:@"id"] stringValue];
     event.id = tempString;
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];

@@ -71,7 +71,6 @@ NSString *searchBarText;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-
     lastCurrentHeight=0;
     if(!searchBar){
         titleThickness=44;
