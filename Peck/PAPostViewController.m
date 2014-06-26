@@ -13,6 +13,8 @@
 #import "PADropdownViewController.h"
 #import "PAPeers.h"
 #import "PAImageManager.h"
+#import "PASessionManager.h"
+
 @interface PAPostViewController () {
     NSMutableArray * userEvents;
 }
@@ -392,7 +394,7 @@ UITableView *_tableView;
             [alert show];
         }
         else{
-            PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+           /* PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
             _managedObjectContext = [appdelegate managedObjectContext];
     
             Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
@@ -406,10 +408,39 @@ UITableView *_tableView;
             
            
             
-            [[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];
+            [[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];*/
             //TODO: Set the id to something other than the title
             //also set the image title to the id rather than the title
-            [event setId:_userEvents[0]];
+            
+            
+            
+            //[event setId:_userEvents[0]];
+            NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     _userEvents[0],@"title",
+                                    _userEvents[5], @"event_description",
+                                      1, @"institution_id",
+                                      nil, @"user_id",
+                                      nil, @"club_id",
+                                      nil, @"event_url",
+                                      nil, @"open",
+                                      nil, @"image_url",
+                                      nil, @"comment_count",
+                                      chosenDate, @"start_date",
+                                      
+                                    nil];
+            
+            [[PASessionManager sharedClient] POST:@"api/simple_events"
+                                      parameters:_userEvents[0], nil
+                                         success:^
+             (NSURLSessionDataTask * __unused task, id JSON) {
+                 
+             }
+
+            
+            
+            
+            
+            
             photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
             [_tableView reloadData];
