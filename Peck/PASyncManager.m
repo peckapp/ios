@@ -31,25 +31,46 @@
 }
 
 -(void)setUser{
-        NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    
+    NSLog(@"setting the new user");
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    @"John", @"first_name",
+                                    @"Doe", @"last_name",
+                                    @"guest", @"username",
+                                    [NSNumber numberWithInt:1],@"institution_id",
+                                    @"apiKEY",@"api_key",
                                     nil];
-    [[PASessionManager sharedClient] POST:@"api/circles"
+    [[PASessionManager sharedClient] POST:@"api/users"
                                     parameters:dictionary
                                     success:^
     (NSURLSessionDataTask * __unused task, id JSON) {
         NSLog(@"success: %@", JSON);
     }
-failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-    NSLog(@"ERROR: %@",error);
-}];
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+
+    [[PASessionManager sharedClient] GET:@"api/users"
+                               parameters:nil
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"JSON: %@",JSON);
+         NSDictionary *eventsDictionary = (NSDictionary*)JSON;
+         NSArray *postsFromResponse = [eventsDictionary objectForKey:@"circles"];
+         NSDictionary *userDictionary = postsFromResponse[0];
+         NSString *userID = [userDictionary objectForKey:@"user_id"];
+         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+         [defaults setObject:userID forKey:@"user_id"];
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
 
 }
 
 
 -(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray *)members{
     
-    [[PASessionManager sharedClient] POST:@"api/circles"
+    [[PASessionManager sharedClient] POST:@"api/users"
                                parameters:dictionary
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {

@@ -31,7 +31,9 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     NSString * userID = [defaults objectForKey:@"user_id"];
-    if(userID ==nil){
+    NSLog(@"USER ID: %@", userID);
+    if(!userID){
+        NSLog(@"Set a new user");
         [[PASyncManager globalSyncManager] setUser];
     }
     

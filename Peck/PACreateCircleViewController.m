@@ -133,7 +133,7 @@
                             titleTextField.text, @"circle_name",
                               [NSNumber numberWithInt:1], @"user_id",
                                 nil];
-    [[PASyncManager globalSyncManager] postCircle:setCircle];
+    [[PASyncManager globalSyncManager] postCircle:setCircle withMembers:_addedPeers];
     
     
     
