@@ -161,7 +161,18 @@
                             <outlet property="delegate" destination="inP-uB-7M9" id="HBY-CT-w7t"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Circles" id="J11-ba-12R"/>
+                    <navigationItem key="navigationItem" title="Circles" id="J11-ba-12R">
+                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="zhe-1j-F6E">
+                            <connections>
+                                <action selector="addCircle:" destination="inP-uB-7M9" id="mJh-0S-dVl"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Item" systemItem="add" id="Vrn-iN-kgK">
+                            <connections>
+                                <action selector="addCircle:" destination="inP-uB-7M9" id="KwH-7o-FuR"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <size key="freeformSize" width="320" height="568"/>
                     <connections>
                         <outlet property="tableView" destination="j5U-Yp-073" id="oWF-hL-OqT"/>
@@ -213,7 +224,7 @@
                                     <navigationItem title="Create Circle" id="bIY-5S-eqd">
                                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="99E-0o-JLy">
                                             <connections>
-                                                <segue destination="je6-6p-AOl" kind="unwind" unwindAction="unwindToThisViewController:" id="nMF-gQ-Ub5"/>
+                                                <segue destination="je6-6p-AOl" kind="unwind" unwindAction="unwindToCirclesViewController:" id="RmN-9T-qi7"/>
                                             </connections>
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" title="Done" id="H8w-rB-fY0"/>
