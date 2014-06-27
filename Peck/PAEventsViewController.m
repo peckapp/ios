@@ -19,6 +19,9 @@
 #import "PASyncManager.h"
 #import "PAImageManager.h"
 
+#define statusBarHeight 20
+#define searchBarHeight 40
+
 @interface PAEventsViewController ()
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -30,19 +33,20 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-static NSString *cellIdentifier = PAAddIdentifier;
-static NSString *nibName = @"PAEventCell";
+
+static NSString * cellIdentifier = PAPrimaryIdentifier;
+static NSString * nibName = @"PAEventCell";
+
 UITableView *eventsTableView;
 UISearchBar * searchBar;
-int titleThickness;
-int searchBarThickness;
-int lastCurrentHeight;
-CGRect initialSearchBarRect;
-CGRect initialTableViewRect;
-NSCache *imageCache;
+
+CGRect cellFrame;
+
+NSCache * imageCache;
 BOOL searching;
 BOOL showingDetail;
 NSString *searchBarText;
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -52,33 +56,29 @@ NSString *searchBarText;
 
 -(void)viewDidDisappear:(BOOL)animated{
     if(!showingDetail){
-        searching=NO;
+        searching = NO;
         [eventsTableView reloadData];
     }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    showingDetail=NO;
+    showingDetail = NO;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    searching=NO;
-    showingDetail=NO;
-    NSError *error = nil;
+
+    searching = NO;
+    showingDetail = NO;
+    NSError * error = nil;
     if (![self.fetchedResultsController performFetch:&error])
     {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-    lastCurrentHeight=0;
     if(!searchBar){
-        titleThickness=44;
-        searchBarThickness = 40;
-        searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,0,320,searchBarThickness)];
-        initialSearchBarRect=searchBar.frame;
+        searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight)];
         searchBar.delegate = self;
         searchBar.showsCancelButton = NO;
         [self.view addSubview:searchBar];
@@ -92,22 +92,28 @@ NSString *searchBarText;
     self.title = @"Events";
     
     if(!eventsTableView){
-        int tableViewY = searchBarThickness;
-        eventsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, tableViewY, 320, (self.view.frame.size.height)-tableViewY-20)];
-        //20 is the thickness of the bar with time and battery
-        initialTableViewRect = eventsTableView.frame;
+        int tableViewY = searchBarHeight;
+        eventsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, tableViewY, self.view.frame.size.width, (self.view.frame.size.height) - tableViewY - statusBarHeight)];
         NSLog(@"view height: %f", self.view.frame.size.height);
-        NSLog(@"table view height: %f", (self.view.frame.size.height)-tableViewY);
+        NSLog(@"table view height: %f", (self.view.frame.size.height) - tableViewY);
         [self.view addSubview:eventsTableView];
     }
+
     eventsTableView.dataSource = self;
     eventsTableView.delegate = self;
+
+    // Get the size of the cells
+    UITableViewCell * cell = [eventsTableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        // Configure cell by loading a nib.
+        [eventsTableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [eventsTableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
+    cellFrame = cell.frame;
 
     [[PASyncManager globalSyncManager] updateEventInfo];
     
     [eventsTableView reloadData];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -265,14 +271,17 @@ NSString *searchBarText;
 #pragma mark - Table View
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    /*
     int currentHeight = (int)[[eventsTableView.layer presentationLayer] bounds].origin.y;
     if(currentHeight>lastCurrentHeight && currentHeight>0){
-        if((([_fetchedResultsController.fetchedObjects count]*44>initialTableViewRect.size.height+searchBarThickness)&& !searching) || (([_searchFetchedResultsController.fetchedObjects count]*44>initialTableViewRect.size.height) && searching)){
+        if((([_fetchedResultsController.fetchedObjects count] * 88 > eventsTableView.frame.size.height + searchBarThickness)&& !searching) || (([_searchFetchedResultsController.fetchedObjects count] * 44 > eventsTableView.frame.size.height) && searching)) {
+
             // only scroll the scroll bar up if the number of events goes off screen
-            int tempCurrentHeight=currentHeight;
-            if(currentHeight>searchBarThickness){
-                tempCurrentHeight=searchBarThickness;
+            int tempCurrentHeight = currentHeight;
+            if(currentHeight > searchBarHeight){
+                tempCurrentHeight = searchBarHeight;
             }
+
             CGRect tempSearchRect = initialSearchBarRect;
             tempSearchRect.origin.y = initialSearchBarRect.origin.y -tempCurrentHeight;
             searchBar.frame=tempSearchRect;
@@ -300,7 +309,7 @@ NSString *searchBarText;
     }
     
     lastCurrentHeight=currentHeight;
-    
+    */
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -340,19 +349,12 @@ NSString *searchBarText;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        // Configure cell by loading a nib.
-        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    }
-    // Return cell size.
-    return cell.frame.size.height;
+    return cellFrame.size.height;
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if(tableView==eventsTableView){
+    if(tableView == eventsTableView){
         [self performSegueWithIdentifier:@"showEventDetail" sender:self];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -415,16 +417,21 @@ NSString *searchBarText;
 - (void)configureCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Event *tempEvent;
-    if(!searching)
+    if(!searching) {
         tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    else
+    }
+    else {
         tempEvent =[self.searchFetchedResultsController objectAtIndexPath:indexPath];
+    }
+
     cell.titleLabel.text = tempEvent.title;
     NSString *imageID = tempEvent.id;
     UIImage *image = [imageCache objectForKey:imageID];
-    if(image){
+
+    if(image) {
         cell.photoView.image=image;
-    }else{
+    }
+    else {
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
@@ -439,6 +446,7 @@ NSString *searchBarText;
                 NSLog(@"image id: %@", imageID);
                 [imageCache setObject:image forKey:imageID];
                 cell.photoView.image =image;
+
                 //reload the cell to display the image
                 //this will be called at most one time for each cell
                 //because the image will be loaded into the cache
@@ -455,16 +463,16 @@ NSString *searchBarText;
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     NSLog(@"Text did change");
     if([searchText isEqualToString:@""]){
-        searching=NO;
-        searchBar.text=nil;
+        searching = NO;
+        searchBar.text = nil;
         [eventsTableView reloadData];
         NSLog(@"User cancelled search");
     }else{
         NSLog(@"use the search fetch controller");
-        _searchFetchedResultsController=nil;
+        _searchFetchedResultsController = nil;
         searchBarText = searchText;
-        searching=YES;
-        NSError *error = nil;
+        searching = YES;
+        NSError * error = nil;
         if (![self.searchFetchedResultsController performFetch:&error])
         {
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -472,18 +480,16 @@ NSString *searchBarText;
         }
     
         [eventsTableView reloadData];
-        lastCurrentHeight = 0;
-        
     }
 }
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    searchBar.showsCancelButton = YES;
+    [searchBar setShowsCancelButton:YES animated:YES];
     return YES;
 }
 
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-    searchBar.showsCancelButton = NO;
+    [searchBar setShowsCancelButton:NO animated:YES];
     return YES;
 }
 
@@ -492,8 +498,8 @@ NSString *searchBarText;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
-    searching=NO;
-    searchBar.text=nil;
+    searching = NO;
+    searchBar.text = nil;
     [eventsTableView reloadData];
     NSLog(@"User cancelled search");
     [searchBar resignFirstResponder]; // if you want the keyboard to go away

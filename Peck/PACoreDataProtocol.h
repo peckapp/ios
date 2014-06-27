@@ -8,8 +8,8 @@
 
 // these are hopefully temporary macros to access the main storyboard's childviewcontrollers of the dropdown
 #define PAPecksIdentifier @"pecks"
-#define PAFeedIdentifier @"feed"
-#define PAAddIdentifier @"add"
+#define PAExploreIdentifier @"explore"
+#define PAPostIdentifier @"post"
 #define PACirclesIdentifier @"circles"
 #define PAProfileIdentifier @"profile"
 #define PAPrimaryIdentifier @"primary"
