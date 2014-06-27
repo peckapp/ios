@@ -13,9 +13,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Circle Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cLy-A1-znm">
-                        <rect key="frame" x="20" y="0.0" width="94" height="43"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Circle Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cLy-A1-znm">
+                        <rect key="frame" x="20" y="0.0" width="300" height="37"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -25,8 +26,8 @@
                 </subviews>
             </tableViewCellContentView>
             <connections>
-                <outlet property="circleTitle" destination="cLy-A1-znm" id="vbf-V1-bau"/>
-                <outlet property="scrollView" destination="OE9-FT-TlX" id="fcd-lE-Aol"/>
+                <outlet property="circleTitle" destination="cLy-A1-znm" id="wnS-l6-gPt"/>
+                <outlet property="scrollView" destination="OE9-FT-TlX" id="Klf-S2-zCD"/>
             </connections>
         </tableViewCell>
     </objects>

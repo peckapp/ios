@@ -17,6 +17,7 @@
 @synthesize circleTitle;
 @synthesize members = _members;
 bool loadedImages;
+
 - (void)awakeFromNib
 {
     // Initialization code
@@ -27,8 +28,8 @@ bool loadedImages;
     tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector (selectProfile:)];
     tapRecognizer.cancelsTouchesInView = NO;
     [scrollView addGestureRecognizer:tapRecognizer];
-    scrollView.userInteractionEnabled =YES;
-    loadedImages=NO;
+    scrollView.userInteractionEnabled = YES;
+    loadedImages = NO;
 
 
 }

@@ -143,11 +143,11 @@ CGRect cellFrame;
 - (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath row]==[_fetchedResultsController.fetchedObjects count]){
-        cell.circleTitle.text=@"Create";
+        cell.circleTitle.text = @"Create";
     }
     else{
-        cell.delegate=self;
-        cell.tag=[indexPath row];
+        cell.delegate = self;
+        cell.tag = [indexPath row];
         Circle * tempCircle = [_fetchedResultsController objectAtIndexPath:indexPath];
         //NSArray *members = tempCircle.members;
         NSLog(@"Circle members: %@", tempCircle.members);
@@ -207,8 +207,12 @@ CGRect cellFrame;
 }
 */
 
-/*
 #pragma mark - Navigation
+
+- (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue
+{
+}
+
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -216,7 +220,6 @@ CGRect cellFrame;
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }
-*/
 
 
 #pragma mark - Fetched Results controller
