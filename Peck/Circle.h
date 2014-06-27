@@ -2,7 +2,7 @@
 //  Circle.h
 //  Peck
 //
-//  Created by John Karabinos on 6/24/14.
+//  Created by John Karabinos on 6/27/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -15,5 +15,6 @@
 @property (nonatomic, retain) NSString * circleName;
 @property (nonatomic, retain) id members;
 @property (nonatomic, retain) NSNumber * numberOfMembers;
+@property (nonatomic, retain) NSString * id;
 
 @end

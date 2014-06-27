@@ -12,6 +12,8 @@
 #import "HTAutocompleteTextField.h"
 #import "HTAutocompleteManager.h"
 #import "PACircleScrollView.h"
+#import "PASyncManager.h"
+
 
 @interface PACreateCircleViewController ()
 @property (strong, nonatomic) PACircleScrollView *circleScrollView;
@@ -118,13 +120,14 @@
 }
 
 - (IBAction)createCircleButton:(id)sender {
-    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
     
-    Circle * circle = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext: _managedObjectContext];
+    NSDictionary *setCircle = [NSDictionary dictionaryWithObjectsAndKeys:
+                            [NSNumber numberWithInt:1], @"institution_id",
+                            titleTextField.text, @"circle_name",
+                              [NSNumber numberWithInt:1], @"user_id",
+                                nil];
+    [[PASyncManager globalSyncManager] postCircle:setCircle withMembers:_addedPeers];
     
-    [circle setCircleName:titleTextField.text];
-    [circle setMembers:_addedPeers];
     
 }
 

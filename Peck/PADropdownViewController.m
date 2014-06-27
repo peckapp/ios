@@ -44,8 +44,8 @@
     // Initialize child view controllers
     self.primaryViewControllerIdentifier = PAPrimaryIdentifier;
     self.secondaryViewControllerIdentifiers = @[PAPecksIdentifier,
-                                                PAFeedIdentifier,
-                                                PAAddIdentifier,
+                                                PAExploreIdentifier,
+                                                PAPostIdentifier,
                                                 PACirclesIdentifier,
                                                 PAProfileIdentifier];
 
@@ -54,11 +54,12 @@
                                              itemCount:[self.secondaryViewControllerIdentifiers count]
                                               delegate:self];
 
+    // TODO: Frame is currently too big.
     // Create a frame for child view controllers
     self.frameForChildViewController = CGRectMake(0,
                                                   CGRectGetHeight(dropdownBar.frame),
                                                   CGRectGetWidth(self.view.frame),
-                                                  CGRectGetHeight(self.view.frame) - CGRectGetHeight(dropdownBar.frame));
+                                                  CGRectGetHeight(self.view.frame) /*- CGRectGetHeight(dropdownBar.frame)*/);
 
     // Instantiate primary view controller
     NSLog(@"Instantiating primary view controller");

@@ -10,7 +10,7 @@
 #import "PACircleCell.h"
 #import "PAAppDelegate.h"
 #import "Circle.h"
-
+#import "PASyncManager.h"
 @interface PACirclesTableViewController ()
 
 @end
@@ -23,6 +23,10 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+static NSString * cellIdentifier = PACirclesIdentifier;
+static NSString * nibName = @"PACircleCell";
+
+CGRect cellFrame;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -54,8 +58,19 @@
         abort();
     }
 
+    // Get the size of the cells
+    UITableViewCell * cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        // Configure cell by loading a nib.
+        [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
+    cellFrame = cell.frame;
+
     NSLog(@"View did load");
     
+    [[PASyncManager globalSyncManager] updateCircleInfo];
+    [_tableView reloadData];
     
 }
 
@@ -79,18 +94,43 @@
     return [sectionInfo numberOfObjects]+1;
 }
 
+/*
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    PAEventCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
+
+    [self configureCell:cell atIndexPath:indexPath];
+
+    return cell;
+
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return cellFrame.size.height;
+}
+ */
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PACircleCell * cell = [self.tableView dequeueReusableCellWithIdentifier:@"PrototypeCell"];
+    PACircleCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        [_tableView registerNib:[UINib nibWithNibName:@"PACircleCell" bundle:nil]  forCellReuseIdentifier:@"PrototypeCell"];
-        cell = [_tableView dequeueReusableCellWithIdentifier:@"PrototypeCell"];
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil]  forCellReuseIdentifier:cellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
     
     [self configureCell:cell atIndexPath:indexPath];
   
     return cell;
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return cellFrame.size.height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -107,11 +147,11 @@
 - (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath row]==[_fetchedResultsController.fetchedObjects count]){
-        cell.circleTitle.text=@"Create";
+        cell.circleTitle.text = @"Create";
     }
     else{
-        cell.delegate=self;
-        cell.tag=[indexPath row];
+        cell.delegate = self;
+        cell.tag = [indexPath row];
         Circle * tempCircle = [_fetchedResultsController objectAtIndexPath:indexPath];
         //NSArray *members = tempCircle.members;
         NSLog(@"Circle members: %@", tempCircle.members);
@@ -171,8 +211,12 @@
 }
 */
 
-/*
 #pragma mark - Navigation
+
+- (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue
+{
+}
+
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -180,7 +224,6 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }
-*/
 
 
 #pragma mark - Fetched Results controller
@@ -214,7 +257,7 @@
                                                              initWithFetchRequest:fetchRequest
                                                              managedObjectContext:_managedObjectContext
                                                              sectionNameKeyPath:nil //this needs to be nil
-                                                             cacheName:@"Master"];
+                                                             cacheName:nil];
     
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;

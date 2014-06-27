@@ -16,7 +16,7 @@
 
 @implementation PAPecksViewController
 
-static NSString *cellIdentifier = PAAddIdentifier;
+static NSString *cellIdentifier = PAPecksIdentifier;
 static NSString *nibName = @"PAPeckCell";
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -32,6 +32,7 @@ static NSString *nibName = @"PAPeckCell";
 {
     [super viewDidLoad];
     self.items = @[@"Item 1", @"Item 2", @"Item 3"];
+    self.title = @"Pecks";
     
 
     // Uncomment the following line to preserve selection between presentations.
