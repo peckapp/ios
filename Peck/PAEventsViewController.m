@@ -22,6 +22,9 @@
 #import "AFNetworking.h"
 #import "UIImageView+AFNetworking.h"
 
+#define statusBarHeight 20
+#define searchBarHeight 40
+
 @interface PAEventsViewController ()
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;

@@ -46,34 +46,7 @@
     // Must remain after third-party SDK code
     [Crashlytics startWithAPIKey:@"147270e58be36f1b12187f08c0fa5ff034e701c8"];
     
-    // TODO: cleanup old code if possible
- 
-    // iterates through all subviews of the root tabcontroller and sets pointer to the managedObjectContext
     
-    //ConfigureViewController* configureController = (ConfigureViewController *)self.window.rootViewController;
-    //configureController.managedObjectContext = self.managedObjectContext;
-
-    //initViewController.managedObjectContext = self.managedObjectContext;
-    
-
-    //PADropdownViewController * dropdownViewController = (PADropdownViewController*)initViewController;
-    // passes the manangedObjectContext for Core Data
-    //dropdownViewController.managedObjectContext = self.managedObjectContext;
-
-    /*
-    // creates the viewControllers for the identifiers and sets restorationIdentifier and the tags for each tabBarItem to the appropriate index
-    NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:5];
-    [identifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
-        NSString * identifier = (NSString*)obj;
-        UIViewController *viewController = [storyBoard instantiateViewControllerWithIdentifier:identifier];
-        viewController.tabBarItem.tag = idx;
-        viewController.restorationIdentifier = identifier;
-        [svcCollector insertObject:viewController atIndex:idx];
-    }];
-    // assigns the viewControllers to the dropdownViewController class
-    dropdownViewController.secondaryViewControllers = [svcCollector copy];
-    dropdownViewController.primaryViewController = [storyBoard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
-     */
     return YES;
 }
 
@@ -201,6 +174,7 @@
          
          */
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        // TODO: eliminate this call
         abort();
     }    
     
