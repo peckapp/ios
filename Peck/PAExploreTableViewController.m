@@ -22,7 +22,13 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+static NSString * cellIdentifier = PAExploreIdentifier;
+static NSString * nibName = @"PAExploreCell";
+
+CGRect cellFrame;
+
 NSCache *imageCache;
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -43,6 +49,13 @@ NSCache *imageCache;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
+    cellFrame = cell.frame;
 }
 
 - (void)didReceiveMemoryWarning
@@ -67,7 +80,7 @@ NSCache *imageCache;
 - (void)configureCell:(PAExploreCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Message *tempMessage = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.messageTextView.text = tempMessage.text;
+    cell.descriptionLabel.text = tempMessage.text;
     NSString *imageID = tempMessage.id;
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
@@ -79,13 +92,13 @@ NSCache *imageCache;
             NSData *data = tempMessage.photo;
             UIImage *image = [UIImage imageWithData:data];
             if(!image){
-                image = [UIImage imageNamed:@"Silhouette.png"];
+                image = [UIImage imageNamed:@"image-placeholder.png"];
                 
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"image id: %@", imageID);
                 [imageCache setObject:image forKey:imageID];
-                cell.imageView.image =image;
+                cell.photoView.image =image;
                 //reload the cell to display the image
                 //this will be called at most one time for each cell
                 //because the image will be loaded into the cache
@@ -98,10 +111,9 @@ NSCache *imageCache;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"FeedCell";
     PAExploreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:@"PAFeedCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
     
@@ -111,10 +123,9 @@ NSCache *imageCache;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"FeedCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:@"PAFeedCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
     return cell.frame.size.height;

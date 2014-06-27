@@ -9,12 +9,10 @@
 #import "PAExploreCell.h"
 
 @implementation PAExploreCell
-@synthesize messageTextView;
 
 - (void)awakeFromNib
 {
-    // Initialization code
-    [messageTextView setEditable:NO];
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

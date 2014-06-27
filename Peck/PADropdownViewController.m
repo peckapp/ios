@@ -45,8 +45,8 @@
     // Initialize child view controllers
     self.primaryViewControllerIdentifier = PAPrimaryIdentifier;
     self.secondaryViewControllerIdentifiers = @[PAPecksIdentifier,
-                                                PAFeedIdentifier,
-                                                PAAddIdentifier,
+                                                PAExploreIdentifier,
+                                                PAPostIdentifier,
                                                 PACirclesIdentifier,
                                                 PAProfileIdentifier];
 

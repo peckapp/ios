@@ -63,7 +63,7 @@
         <!--Navigation Controller - Explore-->
         <scene sceneID="RJ5-1c-Ets">
             <objects>
-                <navigationController storyboardIdentifier="feed" title="Explore" definesPresentationContext="YES" id="YgY-YD-cce" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="explore" title="Explore" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="YgY-YD-cce" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="FaF-Ex-tMg"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="YHk-3p-VBI">
@@ -578,7 +578,7 @@
         <!--Navigation Controller - Add-->
         <scene sceneID="kh1-OH-BWn">
             <objects>
-                <navigationController storyboardIdentifier="add" title="Add" definesPresentationContext="YES" id="COS-N3-QSc" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="post" title="Add" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="COS-N3-QSc" sceneMemberID="viewController">
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="hnU-FI-Bhc">
                         <autoresizingMask key="autoresizingMask"/>
@@ -673,7 +673,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="7xt-IF-tkU"/>
-        <segue reference="kbr-xc-iWf"/>
+        <segue reference="rcw-vZ-dVm"/>
+        <segue reference="RxB-wf-QIq"/>
     </inferredMetricsTieBreakers>
 </document>

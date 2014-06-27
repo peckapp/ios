@@ -16,7 +16,7 @@
 
 @implementation PAPecksViewController
 
-static NSString *cellIdentifier = PAAddIdentifier;
+static NSString *cellIdentifier = PAPecksIdentifier;
 static NSString *nibName = @"PAPeckCell";
 
 - (id)initWithStyle:(UITableViewStyle)style
