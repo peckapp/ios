@@ -623,25 +623,8 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" id="WsM-nq-iLa">
-                                <rect key="frame" x="0.0" y="114" width="320" height="44"/>
-                                <items>
-                                    <navigationItem title="Post" id="skv-Pe-rBX">
-                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="fXm-Rf-8ag">
-                                            <connections>
-                                                <segue destination="6eS-WM-WvO" kind="unwind" unwindAction="unwindToDropdownViewController:" id="6lT-u9-L0F"/>
-                                            </connections>
-                                        </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="pfX-4C-V6w">
-                                            <connections>
-                                                <segue destination="6eS-WM-WvO" kind="unwind" unwindAction="unwindToDropdownViewController:" id="vtg-ti-wwv"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="ZDX-Qv-276">
-                                <rect key="frame" x="0.0" y="82" width="320" height="422"/>
+                                <rect key="frame" x="0.0" y="62" width="320" height="442"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PostCell" id="GRi-7g-hnm">
@@ -683,7 +666,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HDc-2x-wwf" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="6eS-WM-WvO" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-184" y="1191"/>
         </scene>
@@ -698,7 +680,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rcw-vZ-dVm"/>
-        <segue reference="RxB-wf-QIq"/>
+        <segue reference="kbr-xc-iWf"/>
+        <segue reference="7xt-IF-tkU"/>
     </inferredMetricsTieBreakers>
 </document>
