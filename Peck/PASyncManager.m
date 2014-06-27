@@ -44,23 +44,15 @@
                                     success:^
     (NSURLSessionDataTask * __unused task, id JSON) {
         NSLog(@"success: %@", JSON);
+        NSDictionary *postsFromResponse = (NSDictionary*)JSON;
+        NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
+        //get the most recent user added
+        NSString *userID = [[userDictionary objectForKey:@"id"] stringValue];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:userID forKey:@"user_id"];
+        //NSLog(@" the user id has been set: %@",[defaults objectForKey:@"user_id"]);
+        //get the user id with this line
     }
-                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
-                                  }];
-
-    [[PASessionManager sharedClient] GET:@"api/users"
-                               parameters:nil
-                                  success:^
-     (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"JSON: %@",JSON);
-         NSDictionary *eventsDictionary = (NSDictionary*)JSON;
-         NSArray *postsFromResponse = [eventsDictionary objectForKey:@"circles"];
-         NSDictionary *userDictionary = postsFromResponse[0];
-         NSString *userID = [userDictionary objectForKey:@"user_id"];
-         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-         [defaults setObject:userID forKey:@"user_id"];
-     }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
                                   }];
