@@ -25,7 +25,7 @@
 static NSString * cellIdentifier = PAExploreIdentifier;
 static NSString * nibName = @"PAExploreCell";
 
-CGRect cellFrame;
+CGFloat cellHeight;
 
 NSCache *imageCache;
 
@@ -55,7 +55,7 @@ NSCache *imageCache;
         [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
-    cellFrame = cell.frame;
+    cellHeight = cell.frame.size.height;
 }
 
 - (void)didReceiveMemoryWarning
@@ -125,7 +125,7 @@ NSCache *imageCache;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return cellFrame.size.height;
+    return cellHeight;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

@@ -40,7 +40,7 @@ static NSString * nibName = @"PAEventCell";
 UITableView *eventsTableView;
 UISearchBar * searchBar;
 
-CGRect cellFrame;
+CGFloat cellHeight;
 
 NSCache * imageCache;
 BOOL searching;
@@ -108,7 +108,7 @@ NSString *searchBarText;
         [eventsTableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [eventsTableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
-    cellFrame = cell.frame;
+    cellHeight = cell.frame.size.height;
 
     [[PASyncManager globalSyncManager] updateEventInfo];
     [[PASyncManager globalSyncManager] updatePeerInfo];
@@ -349,7 +349,7 @@ NSString *searchBarText;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return cellFrame.size.height;
+    return cellHeight;
 }
 
 
