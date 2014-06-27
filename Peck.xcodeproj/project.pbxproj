@@ -8,14 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		86051D49194BB27200961541 /* Silhouette.png in Resources */ = {isa = PBXBuildFile; fileRef = 86051D48194BB27200961541 /* Silhouette.png */; };
-		86051D4C194BB60200961541 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86D59816193768BF00F38654 /* Main.storyboard */; };
 		86051D4D194BB64200961541 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86051D4A194BB3EB00961541 /* FacebookSDK.framework */; };
 		860A8D27195201A700C5B4A6 /* thor_peckapp_com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 860A8D26195201A700C5B4A6 /* thor_peckapp_com.cer */; };
 		86292512193CBE000057CA41 /* PAPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292511193CBE000057CA41 /* PAPostViewController.m */; };
 		86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292520193CBFD40057CA41 /* PAPeckCell.m */; };
 		86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86292521193CBFD40057CA41 /* PAPeckCell.xib */; };
 		86292527193CBFF80057CA41 /* PAEventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292525193CBFF80057CA41 /* PAEventCell.m */; };
-		86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86292526193CBFF80057CA41 /* PAEventCell.xib */; };
 		863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CB193CB31C004110F5 /* PACirclesTableViewController.m */; };
 		863843CF193CB393004110F5 /* PAProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CE193CB393004110F5 /* PAProfileTableViewController.m */; };
 		863843DA193CB75F004110F5 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 863843D3193CB75F004110F5 /* Login.storyboard */; };
@@ -56,9 +54,6 @@
 		86D5982D193768C000F38654 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59808193768BF00F38654 /* CoreData.framework */; };
 		86D59835193768C000F38654 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86D59833193768C000F38654 /* InfoPlist.strings */; };
 		86D59837193768C000F38654 /* PeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59836193768C000F38654 /* PeckTests.m */; };
-		86DD9C26195C56320074096E /* Icon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DD9C23195C56320074096E /* Icon-40@2x.png */; };
-		86DD9C27195C56320074096E /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DD9C24195C56320074096E /* Icon-60@2x.png */; };
-		86DD9C28195C56320074096E /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DD9C25195C56320074096E /* Icon-Small@2x.png */; };
 		86DD9C2B195C70AE0074096E /* PeckWebserviceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DD9C2A195C70AE0074096E /* PeckWebserviceTests.m */; };
 		A40CF56519547AAB0021C088 /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56419547AAB0021C088 /* Peer.m */; };
 		A40CF56819547ACC0021C088 /* PAPeers.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56719547ACC0021C088 /* PAPeers.m */; };
@@ -84,7 +79,6 @@
 		A4BDFE661951E7160020EFD5 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE651951E7160020EFD5 /* Event.m */; };
 		A4BDFE6C19531FCA0020EFD5 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6B19531FCA0020EFD5 /* Message.m */; };
 		A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */; };
-		A4BDFE72195362E40020EFD5 /* PADiningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE71195362E40020EFD5 /* PADiningViewController.m */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 		DD898136195B523F0079CDC9 /* button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898133195B523F0079CDC9 /* button@2x.png */; };
 		DD898137195B523F0079CDC9 /* button-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898134195B523F0079CDC9 /* button-selected@2x.png */; };
@@ -94,6 +88,12 @@
 		DD898151195B7AA80079CDC9 /* pecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89814C195B7AA80079CDC9 /* pecks@2x.png */; };
 		DD898152195B7AA80079CDC9 /* post@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89814D195B7AA80079CDC9 /* post@2x.png */; };
 		DD898153195B7AA80079CDC9 /* profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89814E195B7AA80079CDC9 /* profile@2x.png */; };
+		DD898159195C83C40079CDC9 /* profile-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898158195C83C40079CDC9 /* profile-placeholder.png */; };
+		DD89816D195CAF6F0079CDC9 /* PAEventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD89816C195CAF6F0079CDC9 /* PAEventCell.xib */; };
+		DD898171195CAFF20079CDC9 /* Icon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89816E195CAFF20079CDC9 /* Icon-40@2x.png */; };
+		DD898172195CAFF20079CDC9 /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89816F195CAFF20079CDC9 /* Icon-60@2x.png */; };
+		DD898173195CAFF20079CDC9 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898170195CAFF20079CDC9 /* Icon-Small@2x.png */; };
+		DDCD45BF195DA6D10032333F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86D59816193768BF00F38654 /* Main.storyboard */; };
 		DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAExploreCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */; };
 		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
@@ -134,7 +134,6 @@
 		86292521193CBFD40057CA41 /* PAPeckCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAPeckCell.xib; sourceTree = "<group>"; };
 		86292524193CBFF80057CA41 /* PAEventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEventCell.h; sourceTree = "<group>"; };
 		86292525193CBFF80057CA41 /* PAEventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEventCell.m; sourceTree = "<group>"; };
-		86292526193CBFF80057CA41 /* PAEventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAEventCell.xib; sourceTree = "<group>"; };
 		863843CA193CB31C004110F5 /* PACirclesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACirclesTableViewController.h; sourceTree = "<group>"; };
 		863843CB193CB31C004110F5 /* PACirclesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACirclesTableViewController.m; sourceTree = "<group>"; };
 		863843CD193CB393004110F5 /* PAProfileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAProfileTableViewController.h; sourceTree = "<group>"; };
@@ -194,9 +193,6 @@
 		86D59832193768C000F38654 /* PeckTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PeckTests-Info.plist"; sourceTree = "<group>"; };
 		86D59834193768C000F38654 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86D59836193768C000F38654 /* PeckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeckTests.m; sourceTree = "<group>"; };
-		86DD9C23195C56320074096E /* Icon-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40@2x.png"; sourceTree = "<group>"; };
-		86DD9C24195C56320074096E /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
-		86DD9C25195C56320074096E /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
 		86DD9C2A195C70AE0074096E /* PeckWebserviceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckWebserviceTests.m; sourceTree = "<group>"; };
 		86DD9C2C195C71C30074096E /* webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = webservice.h; sourceTree = "<group>"; };
 		A40CF56319547AAB0021C088 /* Peer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peer.h; sourceTree = "<group>"; };
@@ -240,8 +236,6 @@
 		A4BDFE6B19531FCA0020EFD5 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		A4BDFE6D195329650020EFD5 /* PAExploreInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreInfoViewController.h; sourceTree = "<group>"; };
 		A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreInfoViewController.m; sourceTree = "<group>"; };
-		A4BDFE70195362E40020EFD5 /* PADiningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningViewController.h; sourceTree = "<group>"; };
-		A4BDFE71195362E40020EFD5 /* PADiningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningViewController.m; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD898133195B523F0079CDC9 /* button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button@2x.png"; sourceTree = "<group>"; };
@@ -252,6 +246,11 @@
 		DD89814C195B7AA80079CDC9 /* pecks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pecks@2x.png"; sourceTree = "<group>"; };
 		DD89814D195B7AA80079CDC9 /* post@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "post@2x.png"; sourceTree = "<group>"; };
 		DD89814E195B7AA80079CDC9 /* profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile@2x.png"; sourceTree = "<group>"; };
+		DD898158195C83C40079CDC9 /* profile-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "profile-placeholder.png"; path = "../../../../Desktop/profile-placeholder.png"; sourceTree = "<group>"; };
+		DD89816C195CAF6F0079CDC9 /* PAEventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAEventCell.xib; sourceTree = "<group>"; };
+		DD89816E195CAFF20079CDC9 /* Icon-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40@2x.png"; sourceTree = "<group>"; };
+		DD89816F195CAFF20079CDC9 /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
+		DD898170195CAFF20079CDC9 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
 		DDDAEDD819465DCB004CE102 /* PAExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreCell.h; sourceTree = "<group>"; };
 		DDDAEDD919465DCB004CE102 /* PAExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreCell.m; sourceTree = "<group>"; };
 		DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAExploreCell.xib; sourceTree = "<group>"; };
@@ -296,7 +295,7 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
-				86DD9C29195C56590074096E /* old icon */,
+				DD898158195C83C40079CDC9 /* profile-placeholder.png */,
 				8671A2C8195B846800700101 /* dropdown2 */,
 				8671A2C6195B843800700101 /* dropdown */,
 				DD898138195B5AE20079CDC9 /* image-placeholder.png */,
@@ -431,6 +430,9 @@
 		86D5980A193768BF00F38654 /* Peck */ = {
 			isa = PBXGroup;
 			children = (
+				DD89816E195CAFF20079CDC9 /* Icon-40@2x.png */,
+				DD89816F195CAFF20079CDC9 /* Icon-60@2x.png */,
+				DD898170195CAFF20079CDC9 /* Icon-Small@2x.png */,
 				A433EAA3195B43C700DAA201 /* AutocompleteManager */,
 				A40CF56219547A730021C088 /* Peers */,
 				868572281943787300287A73 /* PACoreDataProtocol.h */,
@@ -492,16 +494,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		86DD9C29195C56590074096E /* old icon */ = {
-			isa = PBXGroup;
-			children = (
-				86DD9C23195C56320074096E /* Icon-40@2x.png */,
-				86DD9C24195C56320074096E /* Icon-60@2x.png */,
-				86DD9C25195C56320074096E /* Icon-Small@2x.png */,
-			);
-			name = "old icon";
-			sourceTree = "<group>";
-		};
 		A40CF56219547A730021C088 /* Peers */ = {
 			isa = PBXGroup;
 			children = (
@@ -550,13 +542,11 @@
 			children = (
 				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
 				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
-				86D5981F193768BF00F38654 /* PAEventInfoViewController.h */,
-				86D59820193768BF00F38654 /* PAEventInfoViewController.m */,
 				86292524193CBFF80057CA41 /* PAEventCell.h */,
 				86292525193CBFF80057CA41 /* PAEventCell.m */,
-				86292526193CBFF80057CA41 /* PAEventCell.xib */,
-				A4BDFE70195362E40020EFD5 /* PADiningViewController.h */,
-				A4BDFE71195362E40020EFD5 /* PADiningViewController.m */,
+				DD89816C195CAF6F0079CDC9 /* PAEventCell.xib */,
+				86D5981F193768BF00F38654 /* PAEventInfoViewController.h */,
+				86D59820193768BF00F38654 /* PAEventInfoViewController.m */,
 				A4773C7E19589E8200AB9831 /* PAEvents.h */,
 				A4773C7F19589E8200AB9831 /* PAEvents.m */,
 				A4773C811958A27F00AB9831 /* PAEventBST.h */,
@@ -693,16 +683,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDCD45BF195DA6D10032333F /* Main.storyboard in Resources */,
 				8689DDB519589E3600A6B61C /* filter_standard@2x.png in Resources */,
 				8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */,
 				DD898150195B7AA80079CDC9 /* explore@2x.png in Resources */,
 				DD898151195B7AA80079CDC9 /* pecks@2x.png in Resources */,
-				86051D4C194BB60200961541 /* Main.storyboard in Resources */,
+				DD898171195CAFF20079CDC9 /* Icon-40@2x.png in Resources */,
+				DD89816D195CAF6F0079CDC9 /* PAEventCell.xib in Resources */,
+				DD898159195C83C40079CDC9 /* profile-placeholder.png in Resources */,
 				8671A2D1195B848D00700101 /* dropdown_circles@2x.png in Resources */,
 				8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */,
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
-				86DD9C26195C56320074096E /* Icon-40@2x.png in Resources */,
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
 				DD898152195B7AA80079CDC9 /* post@2x.png in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
@@ -711,19 +703,18 @@
 				DD898139195B5AE20079CDC9 /* image-placeholder.png in Resources */,
 				86051D49194BB27200961541 /* Silhouette.png in Resources */,
 				860A8D27195201A700C5B4A6 /* thor_peckapp_com.cer in Resources */,
+				DD898173195CAFF20079CDC9 /* Icon-Small@2x.png in Resources */,
 				DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */,
 				A4B772E719460C3200A31252 /* schools.plist in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
 				8671A2D0195B848D00700101 /* dropdown_post@2x.png in Resources */,
 				A463F38F19507FA300ED441F /* Property List.plist in Resources */,
+				DD898172195CAFF20079CDC9 /* Icon-60@2x.png in Resources */,
 				8689DDB319589E3600A6B61C /* filter_detail@2x.png in Resources */,
 				8671A2D2195B848D00700101 /* dropdown_profile@2x.png in Resources */,
 				8671A2CF195B848D00700101 /* dropdown_explore@2x.png in Resources */,
 				DD898153195B7AA80079CDC9 /* profile@2x.png in Resources */,
 				DD898136195B523F0079CDC9 /* button@2x.png in Resources */,
-				86DD9C27195C56320074096E /* Icon-60@2x.png in Resources */,
-				86DD9C28195C56320074096E /* Icon-Small@2x.png in Resources */,
-				86292528193CBFF80057CA41 /* PAEventCell.xib in Resources */,
 				DD898137195B523F0079CDC9 /* button-selected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -797,7 +788,6 @@
 				86D59811193768BF00F38654 /* main.m in Sources */,
 				DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */,
 				A40CF56519547AAB0021C088 /* Peer.m in Sources */,
-				A4BDFE72195362E40020EFD5 /* PADiningViewController.m in Sources */,
 				863843CF193CB393004110F5 /* PAProfileTableViewController.m in Sources */,
 				A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */,
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,
