@@ -11,6 +11,10 @@
 #define edgeBuffer 20
 #define verticalTranslation @"transform.translation.y"
 
+#define activeAlpha 0.85
+#define inactiveAlpha 0.5
+#define fadeInOutDuration 0.2
+
 @interface PAFilter() {
     
 }
@@ -146,9 +150,14 @@
 // if the touch is on the filter ui element, make the web appear
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.alpha = 1.0; // becomes solid when activated
+    self.active = YES;
+    
+    // becomes more opaque when activated
+    [UIView animateWithDuration:fadeInOutDuration animations:^{ self.alpha = activeAlpha; }];
     
     NSLog(@"touched filter");
+    
+    [self.delegate shadeBackgroundView];
     
     [self setNeedsDisplay]; // let the system know to update the view, probably want to do this with animation instead
 }
@@ -158,6 +167,7 @@
 {
     if ([self isActive]) {
         // check which web item is being selected, animate as necessary
+        // NSLog(@"touches moved to: %@",touches);
     }
 }
 
@@ -168,8 +178,12 @@
         // call methods in superview to update table view cells accordingly
     }
     
-    self.alpha = 0.75; // becomes transparent after selection finishes
-    self.active = false;
+    [self.delegate unshadeBackgroundView];
+    
+    // becomes more transparent after selection finishes
+    [UIView animateWithDuration:fadeInOutDuration animations:^{ self.alpha = inactiveAlpha; }];
+    
+    self.active = NO;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event

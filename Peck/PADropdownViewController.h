@@ -16,10 +16,11 @@
 #import <Foundation/Foundation.h>
 #import "PACoreDataProtocol.h"
 #import "PADropdownBar.h"
+#import "PAFilter.h"
 
 @protocol PADropdownViewControllerDelegate; //allows delegate to be referenced in interface
 
-@interface PADropdownViewController : UIViewController <PACoreDataProtocol, PADropdownBarDelegate>
+@interface PADropdownViewController : UIViewController <PACoreDataProtocol, PADropdownBarDelegate, PAFilterShaderDelegate>
 
 // viewcontroller that displays the primary content
 @property (nonatomic) UIViewController * primaryViewController;

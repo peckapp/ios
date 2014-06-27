@@ -15,10 +15,14 @@ typedef enum {
     PAFilterExploreMode
 } PAFilterMode;
 
+@protocol PAFilterShaderDelegate;
+
 @interface PAFilter : UIView
 
 // whether or not the filter is presented on the screen
 @property (nonatomic) BOOL presented;
+
+@property (nonatomic, weak) id<PAFilterShaderDelegate> delegate;
 
 // designated factory for the filter. use this for instantiation
 +(instancetype)filter;
@@ -28,5 +32,14 @@ typedef enum {
 
 // causes the filter element to rise into the screen with the specified mode
 - (void)presentUpwardForMode:(PAFilterMode)mode;
+
+@end
+
+
+@protocol PAFilterShaderDelegate
+
+- (void)shadeBackgroundView;
+
+- (void)unshadeBackgroundView;
 
 @end
