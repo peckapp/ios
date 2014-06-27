@@ -26,7 +26,7 @@
 static NSString * cellIdentifier = PACirclesIdentifier;
 static NSString * nibName = @"PACircleCell";
 
-CGRect cellFrame;
+CGFloat cellHeight;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -43,12 +43,11 @@ CGRect cellFrame;
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
     self.title = @"Circles";
-    
+
     _tableView.delegate=self;
     _tableView.dataSource=self;
     NSError *error = nil;
@@ -65,7 +64,7 @@ CGRect cellFrame;
         [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
-    cellFrame = cell.frame;
+    cellHeight = cell.frame.size.height;
 
     NSLog(@"View did load");
     
@@ -94,27 +93,6 @@ CGRect cellFrame;
     return [sectionInfo numberOfObjects]+1;
 }
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    PAEventCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    }
-
-    [self configureCell:cell atIndexPath:indexPath];
-
-    return cell;
-
-}
-
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return cellFrame.size.height;
-}
- */
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PACircleCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -130,15 +108,17 @@ CGRect cellFrame;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return cellFrame.size.height;
+    return cellHeight;
 }
 
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    /*
     if([indexPath row]==[_fetchedResultsController.fetchedObjects count]){
-        NSLog(@"Create a circle");
         [self performSegueWithIdentifier:@"createACircle" sender:self];
         
     }
+    */
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -164,6 +144,9 @@ CGRect cellFrame;
     
 }
 
+- (IBAction)addCircle:(id)sender {
+    [self performSegueWithIdentifier:@"createACircle" sender:self];
+}
 
 # pragma mark - PACirclesControllerDelegate
 
@@ -182,8 +165,7 @@ CGRect cellFrame;
 }
 */
 
-/*
-// Override to support editing the table view.
+
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
@@ -193,7 +175,19 @@ CGRect cellFrame;
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   
 }
-*/
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    
+    [super setEditing:editing animated:animated];
+    [self.tableView setEditing:editing animated:YES];
+    if (editing) {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    } else {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
+}
+
+
 
 /*
 // Override to support rearranging the table view.
@@ -213,8 +207,9 @@ CGRect cellFrame;
 
 #pragma mark - Navigation
 
-- (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue
+- (IBAction)unwindToCirclesViewController:(UIStoryboardSegue *)unwindSegue
 {
+
 }
 
 

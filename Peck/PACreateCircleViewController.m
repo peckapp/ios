@@ -13,7 +13,7 @@
 #import "HTAutocompleteManager.h"
 #import "PACircleScrollView.h"
 #import "PASyncManager.h"
-
+#import "HTAutocompleteManager.h"
 
 @interface PACreateCircleViewController ()
 @property (strong, nonatomic) PACircleScrollView *circleScrollView;
@@ -72,7 +72,6 @@
     
     [bar setItems:buttons];
     membersAutocompleteTextField.inputAccessoryView = bar;
-    // Do any additional setup after loading the view.
 }
 
 
@@ -107,7 +106,8 @@
         _addedPeers = [NSMutableArray array];
     }
 
-    [_addedPeers addObject:tempText];
+    Peer * tempPeer = [HTAutocompleteManager sharedManager].currentPeer;
+    [_addedPeers addObject:tempPeer];
     NSLog(@"peers added so far: %@", _addedPeers);
     UIImage *image = [UIImage imageNamed:@"Silhouette.png"];
     [self.circleScrollView addPeer:image WithName:tempText];
@@ -138,6 +138,7 @@
     }
     
 }
+
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     if(textField==membersAutocompleteTextField){

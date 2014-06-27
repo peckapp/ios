@@ -8,6 +8,9 @@
 
 #import "PAPeers.h"
 #import "PABST.h"
+#import "PAAppDelegate.h"
+#import "Peer.h"
+
 @interface PAPeers(){
     
 }
@@ -15,8 +18,13 @@
 @end
 
 @implementation PAPeers{
+    
 
 }
+
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 + (instancetype)peers {
     static PAPeers *_peers = nil;
@@ -30,15 +38,27 @@
 
 -(id)init{
     
-    NSArray *testPeers = @[@"John",@"Mark",@"Jason",@"Andrew", @"Jenny"];
     
     self.peerTree = [[PABST alloc] init];
     
-    for(int i=0; i<[testPeers count]; i++){
-        [self.peerTree addNode:self.peerTree WithName:testPeers[i]];
-    }
-    
+    [self addNewPeers];
     return self;
+}
+
+-(void)addNewPeers{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Peer" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults =[[_managedObjectContext executeFetchRequest:fetchRequest error:&error]mutableCopy];
+    
+    for(int i=0; i<[mutableFetchResults count]; i++){
+        Peer *tempPeer =mutableFetchResults[i];
+        [self.peerTree addNode:self.peerTree withPeer: tempPeer];
+    }
 }
 
 

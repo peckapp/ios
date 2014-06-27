@@ -46,7 +46,7 @@
         
         self.detailDescriptionLabel.text = [[self.detailItem valueForKey:@"descrip"] description];
         NSString *title =[[self.detailItem valueForKey:@"title"] description];
-        self.titleLabel.text =[[self.detailItem valueForKey:@"title"] description];
+        self.title =[[self.detailItem valueForKey:@"title"] description];
         self.photoView.image = [UIImage imageWithData:[[PAImageManager imageManager] ReadImage:title]];
         NSDate *date = [self.detailItem valueForKey:@"start_date"];
         NSString *stringFromDate = [self.formatter stringFromDate:date];

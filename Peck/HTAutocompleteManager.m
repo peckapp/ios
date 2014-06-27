@@ -319,14 +319,16 @@ static HTAutocompleteManager *sharedManager;
     }
     else if(textField.autocompleteType == HTAutocompleteTypeName){
         if(! [prefix isEqualToString:@""]){
-        PAPeers *peerTree1 = [PAPeers peers];
-        NSMutableArray *names = [NSMutableArray array];
-        names = [peerTree1.peerTree searchForName:prefix WithArray:names];
-        if([names count]>0){
-            NSString *finalName=names[0];
-            finalName = [finalName substringFromIndex:prefix.length];
-            return finalName;
-        }
+            PAPeers *peerTree1 = [PAPeers peers];
+            NSMutableArray *peers = [NSMutableArray array];
+            peers = [peerTree1.peerTree searchForName:prefix WithArray:peers];
+            if([peers count]>0){
+                Peer *tempPeer = peers[0];
+                NSString *finalName=tempPeer.name;
+                finalName = [finalName substringFromIndex:prefix.length];
+                _currentPeer=tempPeer;
+                return finalName;
+            }
         }
     }
     

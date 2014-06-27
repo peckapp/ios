@@ -7,13 +7,16 @@
 //
 
 #import "PABST.h"
+#import "Peer.h"
 
 @implementation PABST
 
 
--(void)addNode:(PABST*) root WithName:(NSString *)newName{
+-(void)addNode:(PABST*) root withPeer:(Peer *)newPeer{
+    NSString * newName = newPeer.name;
     if(_name==nil){
         _name=newName;
+        _peer=newPeer;
     }
     else{
         NSComparisonResult result = [_name compare:newName];
@@ -21,13 +24,13 @@
             if(!_right){
                 _right = [[PABST alloc] init];
             }
-            [_right addNode:root WithName:newName];
+            [_right addNode:root withPeer:newPeer];
         }
         else{
             if(!_left){
                 _left = [[PABST alloc] init];
             }
-            [_left addNode:root WithName:newName];
+            [_left addNode:root withPeer:newPeer];
         }
     }
 }
@@ -55,7 +58,7 @@
     else if([searchName length] <= [_name length]){
         NSString *temp = [_name substringToIndex:[searchName length]];
         if([temp isEqualToString:searchName]){
-            [currentNames addObject:_name];
+            [currentNames addObject:_peer];
             [currentNames arrayByAddingObjectsFromArray:[_right searchForName:searchName WithArray:currentNames]];
             [currentNames arrayByAddingObjectsFromArray:[_left searchForName:searchName WithArray:currentNames]];
             return currentNames;

@@ -7,16 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Peer.h"
 
 @interface PABST : NSObject
 
 @property (strong, nonatomic) NSString *name;
 
--(void)addNode:(PABST*)root WithName:newName;
+-(void)addNode:(PABST*)root withPeer:newPeer;
 -(BOOL)search:(NSString *)searchName;
 -(NSMutableArray*)searchForName:(NSString *)searchName WithArray:currentNames;
 
 @property PABST *right;
 @property PABST *left;
-
+@property Peer *peer;
 @end

@@ -16,7 +16,7 @@
 + (instancetype)globalSyncManager;
 -(void)updateEventInfo;
 -(void)postEvent:(NSDictionary *) dictionary;
--(void)deleteEvent:(NSString*)eventID;
+-(void)deleteEvent:(NSNumber*)eventID;
 -(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray*)members;
 -(void)updateCircleInfo;
 -(void)setUser;

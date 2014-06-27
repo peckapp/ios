@@ -30,7 +30,7 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    NSString * userID = [defaults objectForKey:@"user_id"];
+    NSNumber * userID = [defaults objectForKey:@"user_id"];
     NSLog(@"USER ID: %@", userID);
     if(!userID){
         NSLog(@"Set a new user");

@@ -43,7 +43,7 @@ static NSString * nibName = @"PAEventCell";
 UITableView *eventsTableView;
 UISearchBar * searchBar;
 
-CGRect cellFrame;
+CGFloat cellHeight;
 
 NSCache * imageCache;
 BOOL searching;
@@ -111,7 +111,7 @@ NSString *searchBarText;
         [eventsTableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [eventsTableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
-    cellFrame = cell.frame;
+    cellHeight = cell.frame.size.height;
 
     [[PASyncManager globalSyncManager] updateEventInfo];
     [[PASyncManager globalSyncManager] updatePeerInfo];
@@ -352,7 +352,7 @@ NSString *searchBarText;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return cellFrame.size.height;
+    return cellHeight;
 }
 
 
@@ -428,7 +428,7 @@ NSString *searchBarText;
     }
 
     cell.titleLabel.text = tempEvent.title;
-    NSString *imageID = tempEvent.id;
+    NSString *imageID = [tempEvent.id stringValue];
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
         // TODO: replace this URL with SharedClient URL and event image url
