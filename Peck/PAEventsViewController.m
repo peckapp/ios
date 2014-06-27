@@ -68,7 +68,6 @@ NSString *searchBarText;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     searching = NO;
     showingDetail = NO;
     NSError * error = nil;
@@ -112,6 +111,7 @@ NSString *searchBarText;
     cellFrame = cell.frame;
 
     [[PASyncManager globalSyncManager] updateEventInfo];
+    [[PASyncManager globalSyncManager] updatePeerInfo];
     
     [eventsTableView reloadData];
 }

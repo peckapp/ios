@@ -120,13 +120,6 @@
 }
 
 - (IBAction)createCircleButton:(id)sender {
-    /*PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
-    
-    Circle * circle = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext: _managedObjectContext];
-    
-    [circle setCircleName:titleTextField.text];
-    [circle setMembers:_addedPeers];*/
     
     NSDictionary *setCircle = [NSDictionary dictionaryWithObjectsAndKeys:
                             [NSNumber numberWithInt:1], @"institution_id",
@@ -134,8 +127,6 @@
                               [NSNumber numberWithInt:1], @"user_id",
                                 nil];
     [[PASyncManager globalSyncManager] postCircle:setCircle withMembers:_addedPeers];
-    
-    
     
     
 }

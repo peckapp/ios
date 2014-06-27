@@ -11,13 +11,12 @@
 #import "Event.h"
 #import "Circle.h"
 #import "PASessionManager.h"
+#import "Peer.h"
 
 @implementation PASyncManager
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
-
 
 
 + (instancetype)globalSyncManager {
@@ -59,6 +58,59 @@
 
 }
 
+
+-(void)updatePeerInfo{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+        
+        NSLog(@"in secondary thread");
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [appdelegate managedObjectContext];
+        
+        
+        [[PASessionManager sharedClient] GET:@"api/users"
+                                  parameters:nil
+                                     success:^
+         (NSURLSessionDataTask * __unused task, id JSON) {
+             NSLog(@"JSON: %@",JSON);
+             NSDictionary *eventsDictionary = (NSDictionary*)JSON;
+             NSArray *postsFromResponse = [eventsDictionary objectForKey:@"users"];
+             NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
+             for (NSDictionary *eventAttributes in postsFromResponse) {
+                 NSString *newID = [[eventAttributes objectForKey:@"id"] stringValue];
+                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Peer"];
+                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                 if(!eventAlreadyExists && ![[defaults objectForKey:@"user_id"] isEqualToString:newID]){
+                     NSLog(@"about to add the peer");
+                     Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
+                     [self setAttributesInPeer:peer withDictionary:eventAttributes];
+                     [mutableEvents addObject:peer];
+                     NSLog(@"PEER: %@",peer);
+                 }
+             }
+         }
+                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                         NSLog(@"ERROR: %@",error);
+                                     }];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //TODO: if there are any problems with the core data being added in the thread above,
+            // then we should add a separate managed object context and merge the two in this thread.
+            
+            
+        });
+    });
+
+}
+
+
+-(void)setAttributesInPeer:(Peer *)peer withDictionary:(NSDictionary *)dictionary
+{
+    NSLog(@"set attributes of peer");
+    peer.name = [dictionary objectForKey:@"first_name"];
+    NSString *tempString = [[dictionary objectForKey:@"id"] stringValue];
+    peer.id = tempString;
+}
 
 -(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray *)members{
     
@@ -130,7 +182,6 @@
 {
     NSLog(@"set attributes of event");
     circle.circleName = [dictionary objectForKey:@"circle_name"];
-    
     NSString *tempString = [[dictionary objectForKey:@"id"] stringValue];
     circle.id = tempString;
 }

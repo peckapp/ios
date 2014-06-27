@@ -20,4 +20,5 @@
 -(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray*)members;
 -(void)updateCircleInfo;
 -(void)setUser;
+-(void)updatePeerInfo;
 @end
