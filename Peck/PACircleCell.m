@@ -17,6 +17,7 @@
 @synthesize circleTitle;
 @synthesize members = _members;
 bool loadedImages;
+
 - (void)awakeFromNib
 {
     // Initialization code
@@ -27,8 +28,8 @@ bool loadedImages;
     tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector (selectProfile:)];
     tapRecognizer.cancelsTouchesInView = NO;
     [scrollView addGestureRecognizer:tapRecognizer];
-    scrollView.userInteractionEnabled =YES;
-    loadedImages=NO;
+    scrollView.userInteractionEnabled = YES;
+    loadedImages = NO;
 
 
 }
@@ -53,7 +54,7 @@ bool loadedImages;
     if(!loadedImages){
         for(int i = 0; i < _members; i++){
             NSLog(@"allocating image");
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(80*i, 0, 55, 44)];
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(80 * i, 0, 55, 44)];
             imageView.image = [UIImage imageNamed:@"profile-placeholder.png"];
             //use tag and i to get the correct image
             [scrollView addSubview:imageView];

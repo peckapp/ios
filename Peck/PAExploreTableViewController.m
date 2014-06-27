@@ -41,8 +41,8 @@ NSCache *imageCache;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.items = @[@"Item 1", @"Item 2", @"Item 3"];
-    self.title = @"Newsfeed";
+
+    self.title = @"Explore";
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -85,7 +85,8 @@ NSCache *imageCache;
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
         cell.imageView.image=image;
-    }else{
+    }
+    else{
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
@@ -113,6 +114,7 @@ NSCache *imageCache;
 {
     PAExploreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
+        // Configure cell by loading a nib.
         [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
@@ -123,12 +125,7 @@ NSCache *imageCache;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    }
-    return cell.frame.size.height;
+    return cellFrame.size.height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
