@@ -26,7 +26,7 @@
 static NSString * cellIdentifier = PACirclesIdentifier;
 static NSString * nibName = @"PACircleCell";
 
-CGRect cellFrame;
+CGFloat cellHeight;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -64,7 +64,7 @@ CGRect cellFrame;
         [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
-    cellFrame = cell.frame;
+    cellHeight = cell.frame.size.height;
 
     NSLog(@"View did load");
     
@@ -108,7 +108,7 @@ CGRect cellFrame;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return cellFrame.size.height;
+    return cellHeight;
 }
 
 
