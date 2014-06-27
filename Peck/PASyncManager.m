@@ -9,6 +9,7 @@
 #import "PASyncManager.h"
 #import "PAAppDelegate.h"
 #import "Event.h"
+#import "Circle.h"
 #import "PASessionManager.h"
 
 @implementation PASyncManager
@@ -29,11 +30,99 @@
     return _globalSyncManager;
 }
 
--(void)postEvent:(NSDictionary *)dictionary{
-    NSError *error=nil;
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:dictionary
-                                                       options:kNilOptions error:&error];
+-(void)setUser{
+        NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    
+                                    nil];
+    [[PASessionManager sharedClient] POST:@"api/circles"
+                                    parameters:dictionary
+                                    success:^
+    (NSURLSessionDataTask * __unused task, id JSON) {
+        NSLog(@"success: %@", JSON);
+    }
+failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+    NSLog(@"ERROR: %@",error);
+}];
+
+}
+
+
+-(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray *)members{
     
+    [[PASessionManager sharedClient] POST:@"api/circles"
+                               parameters:dictionary
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"success: %@", JSON);
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+    
+    /*
+    for(int i=0; i<[members count]; i++){
+        NSDictionary *tempDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        
+                                        , nil];
+        
+        
+    }*/
+    
+}
+
+-(void)updateCircleInfo{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+        
+        NSLog(@"in secondary thread");
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [appdelegate managedObjectContext];
+        
+        
+        [[PASessionManager sharedClient] GET:@"api/circles"
+                                  parameters:nil
+                                     success:^
+         (NSURLSessionDataTask * __unused task, id JSON) {
+             NSLog(@"JSON: %@",JSON);
+             NSDictionary *eventsDictionary = (NSDictionary*)JSON;
+             NSArray *postsFromResponse = [eventsDictionary objectForKey:@"circles"];
+             NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
+             for (NSDictionary *eventAttributes in postsFromResponse) {
+                 NSString *newID = [[eventAttributes objectForKey:@"id"] stringValue];
+                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Circle"];
+                 if(!eventAlreadyExists){
+                     NSLog(@"about to add the event");
+                     Circle * circle = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext: _managedObjectContext];
+                     [self setAttributesInCircle:circle withDictionary:eventAttributes];
+                     [mutableEvents addObject:circle];
+                     NSLog(@"CIRCLE: %@",circle);
+                 }
+             }
+         }
+                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                         NSLog(@"ERROR: %@",error);
+                                     }];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //TODO: if there are any problems with the core data being added in the thread above,
+            // then we should add a separate managed object context and merge the two in this thread.
+            
+            
+        });
+    });
+
+}
+
+-(void)setAttributesInCircle:(Circle *)circle withDictionary:(NSDictionary *)dictionary
+{
+    NSLog(@"set attributes of event");
+    circle.circleName = [dictionary objectForKey:@"circle_name"];
+    
+    NSString *tempString = [[dictionary objectForKey:@"id"] stringValue];
+    circle.id = tempString;
+}
+
+-(void)postEvent:(NSDictionary *)dictionary{
     
     [[PASessionManager sharedClient] POST:@"api/simple_events"
                               parameters:dictionary
@@ -44,6 +133,20 @@
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
                                   }];
+
+}
+
+-(void)deleteEvent:(NSString*)eventID{
+    
+    NSString *appendedURL = [@"api/simple_events/" stringByAppendingString:eventID];
+    [[PASessionManager sharedClient] DELETE:appendedURL
+                                parameters:nil success:^
+    (NSURLSessionDataTask * __unused task, id JSON) {
+        NSLog(@"success: %@", JSON);
+    }
+                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                        NSLog(@"ERROR: %@",error);
+                                    }];
 
 }
 
@@ -67,7 +170,7 @@
              NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
              for (NSDictionary *eventAttributes in postsFromResponse) {
                  NSString *newID = [[eventAttributes objectForKey:@"id"] stringValue];
-                 BOOL eventAlreadyExists = [self eventExists:newID];
+                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event"];
                  if(!eventAlreadyExists){
                      NSLog(@"about to add the event");
                      Event * event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
@@ -92,10 +195,10 @@
     
 }
 
--(BOOL)eventExists:(NSString *) newID{
+-(BOOL)objectExists:(NSString *) newID withType:(NSString*)type{
     NSFetchRequest * request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *events = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:_managedObjectContext];
-    [request setEntity:events];
+    NSEntityDescription *objects = [NSEntityDescription entityForName:type inManagedObjectContext:_managedObjectContext];
+    [request setEntity:objects];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id == %@", newID];
     [request setPredicate:predicate];
     

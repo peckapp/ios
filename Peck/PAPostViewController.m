@@ -426,7 +426,6 @@ UITableView *_tableView;
                                      _userEvents[5], @"event_description",
                                       _userEvents[3], @"start_date",
                                       _userEvents[3], @"end_date",
-                                     
                                       nil];
             
             [[PASyncManager globalSyncManager] postEvent: setEvent];
@@ -438,6 +437,8 @@ UITableView *_tableView;
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
             [_tableView reloadData];
     
+            
+            //TODO: perform correct transition
             //[self performSegueWithIdentifier:@"showEvents" sender:self];
         }
         
