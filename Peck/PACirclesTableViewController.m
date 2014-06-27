@@ -68,6 +68,10 @@ CGRect cellFrame;
     cellFrame = cell.frame;
 
     NSLog(@"View did load");
+    
+    [[PASyncManager globalSyncManager] updateCircleInfo];
+    [_tableView reloadData];
+    
 }
 
 - (void)didReceiveMemoryWarning
