@@ -53,7 +53,7 @@ bool loadedImages;
     if(!loadedImages){
         for(int i = 0; i < _members; i++){
             NSLog(@"allocating image");
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(80*i, 0, 55, 44)];
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(80 * i, 0, 55, 44)];
             imageView.image = [UIImage imageNamed:@"profile-placeholder.png"];
             //use tag and i to get the correct image
             [scrollView addSubview:imageView];

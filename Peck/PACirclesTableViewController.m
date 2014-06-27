@@ -23,6 +23,10 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+static NSString * cellIdentifier = PACirclesIdentifier;
+static NSString * nibName = @"PACircleCell";
+
+CGRect cellFrame;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -54,9 +58,16 @@
         abort();
     }
 
+    // Get the size of the cells
+    UITableViewCell * cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        // Configure cell by loading a nib.
+        [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
+    cellFrame = cell.frame;
+
     NSLog(@"View did load");
-    
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,18 +90,43 @@
     return [sectionInfo numberOfObjects]+1;
 }
 
+/*
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    PAEventCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
+
+    [self configureCell:cell atIndexPath:indexPath];
+
+    return cell;
+
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return cellFrame.size.height;
+}
+ */
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PACircleCell * cell = [self.tableView dequeueReusableCellWithIdentifier:@"PrototypeCell"];
+    PACircleCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        [_tableView registerNib:[UINib nibWithNibName:@"PACircleCell" bundle:nil]  forCellReuseIdentifier:@"PrototypeCell"];
-        cell = [_tableView dequeueReusableCellWithIdentifier:@"PrototypeCell"];
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil]  forCellReuseIdentifier:cellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
     
     [self configureCell:cell atIndexPath:indexPath];
   
     return cell;
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return cellFrame.size.height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

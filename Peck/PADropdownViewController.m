@@ -55,6 +55,7 @@
                                              itemCount:[self.secondaryViewControllerIdentifiers count]
                                               delegate:self];
 
+    // TODO: Frame is currently too big.
     // Create a frame for child view controllers
     self.frameForChildViewController = CGRectMake(0,
                                                   CGRectGetHeight(dropdownBar.frame),
