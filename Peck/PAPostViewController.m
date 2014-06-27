@@ -20,7 +20,6 @@
 @interface PAPostViewController () {}
 
 @property NSArray *detailKeys;
-@property NSArray *detailValues;
 
 @end
 
@@ -55,30 +54,18 @@ UITableView *_tableView;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    PAPeers *peerTree1 = [PAPeers peers];
-    NSString *name1 = peerTree1.peerTree.right.name;
-    NSLog(@"peerTree1 name1: %@", name1);
-    NSMutableArray *names = [NSMutableArray array];
-    names = [peerTree1.peerTree searchForName:@"Jo" WithArray:names];
-    NSLog(@"Names: %@", names);
-    BOOL nameExists = [peerTree1.peerTree search:@"Andrew"];
-    NSLog(@"andrew exists? %u", nameExists);
-    
-    chosenDate= [NSDate date];
+
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
-    self.photoView = [UIImage imageNamed:@"img-placeholder.png"];
     self.detailKeys = @[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
-    self.detailValues = @[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
 
-    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
-    gestureRecognizer.cancelsTouchesInView=NO;
-    [_tableView addGestureRecognizer:gestureRecognizer];
     // This code allows the user to dismiss the keyboard by pressing somewhere else
+    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
+    gestureRecognizer.cancelsTouchesInView = NO;
+    [self.tableView addGestureRecognizer:gestureRecognizer];
     
-    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+    self.userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
 
     // Calculate height for cells.
     PAPostCell * cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -96,10 +83,11 @@ UITableView *_tableView;
 }
 
 
-- (void) hideKeyboard{
+- (void) hideKeyboard
+{
      _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
     [self.view endEditing:NO];
-    }
+}
 
 # pragma mark - table view data source
 
@@ -207,7 +195,7 @@ UITableView *_tableView;
 
 - (void)configureCell:(PAPostCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
