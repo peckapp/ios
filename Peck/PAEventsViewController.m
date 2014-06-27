@@ -19,6 +19,9 @@
 #import "PASyncManager.h"
 #import "PAImageManager.h"
 
+#import "AFNetworking.h"
+#import "UIImageView+AFNetworking.h"
+
 @interface PAEventsViewController ()
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -421,7 +424,8 @@ NSString *searchBarText;
     NSString *imageID = tempEvent.id;
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
-        cell.photoView.image=image;
+        // TODO: replace this URL with SharedClient URL and event image url
+        [cell.photoView setImageWithURL:[NSURL URLWithString:@"http://thor.peckapp.com:3500/images/event.png"]placeholderImage:image];
     }else{
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
@@ -430,8 +434,8 @@ NSString *searchBarText;
             //NSData *data = tempEvent.photo;
             UIImage *image = [UIImage imageWithData:data];
             if(!image){
+                // TODO: replace this to cache image from server
                 image = [UIImage imageNamed:@"image-placeholder.png"];
-                
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"image id: %@", imageID);

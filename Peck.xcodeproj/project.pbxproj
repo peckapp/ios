@@ -88,12 +88,10 @@
 		DD898151195B7AA80079CDC9 /* pecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89814C195B7AA80079CDC9 /* pecks@2x.png */; };
 		DD898152195B7AA80079CDC9 /* post@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89814D195B7AA80079CDC9 /* post@2x.png */; };
 		DD898153195B7AA80079CDC9 /* profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89814E195B7AA80079CDC9 /* profile@2x.png */; };
-		DD898159195C83C40079CDC9 /* profile-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898158195C83C40079CDC9 /* profile-placeholder.png */; };
 		DD89816D195CAF6F0079CDC9 /* PAEventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD89816C195CAF6F0079CDC9 /* PAEventCell.xib */; };
 		DD898171195CAFF20079CDC9 /* Icon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89816E195CAFF20079CDC9 /* Icon-40@2x.png */; };
 		DD898172195CAFF20079CDC9 /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD89816F195CAFF20079CDC9 /* Icon-60@2x.png */; };
 		DD898173195CAFF20079CDC9 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898170195CAFF20079CDC9 /* Icon-Small@2x.png */; };
-		DDCD45BF195DA6D10032333F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86D59816193768BF00F38654 /* Main.storyboard */; };
 		DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAExploreCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */; };
 		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
@@ -683,14 +681,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDCD45BF195DA6D10032333F /* Main.storyboard in Resources */,
 				8689DDB519589E3600A6B61C /* filter_standard@2x.png in Resources */,
 				8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */,
 				DD898150195B7AA80079CDC9 /* explore@2x.png in Resources */,
 				DD898151195B7AA80079CDC9 /* pecks@2x.png in Resources */,
 				DD898171195CAFF20079CDC9 /* Icon-40@2x.png in Resources */,
 				DD89816D195CAF6F0079CDC9 /* PAEventCell.xib in Resources */,
-				DD898159195C83C40079CDC9 /* profile-placeholder.png in Resources */,
 				8671A2D1195B848D00700101 /* dropdown_circles@2x.png in Resources */,
 				8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */,
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
