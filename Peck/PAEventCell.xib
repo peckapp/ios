@@ -40,10 +40,10 @@
                 </subviews>
             </tableViewCellContentView>
             <connections>
-                <outlet property="endTime" destination="jEe-Kh-XUL" id="fde-Eq-yWh"/>
-                <outlet property="photoView" destination="hnB-bx-xgy" id="Tbc-Va-VKk"/>
-                <outlet property="startTime" destination="MkQ-i8-7NS" id="G8v-GN-geU"/>
-                <outlet property="titleLabel" destination="L8n-uC-mmT" id="ads-dG-APB"/>
+                <outlet property="endTime" destination="jEe-Kh-XUL" id="4jD-xt-vEB"/>
+                <outlet property="photoView" destination="hnB-bx-xgy" id="r5w-Gu-Lwr"/>
+                <outlet property="startTime" destination="MkQ-i8-7NS" id="MHV-EM-1Se"/>
+                <outlet property="titleLabel" destination="L8n-uC-mmT" id="sRO-9w-K1k"/>
             </connections>
         </tableViewCell>
     </objects>

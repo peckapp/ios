@@ -12,7 +12,7 @@
 
 - (void)awakeFromNib
 {
-    NSLog(@"cell awake");
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

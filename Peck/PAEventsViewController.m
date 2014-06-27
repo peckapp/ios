@@ -417,7 +417,6 @@ NSString *searchBarText;
         tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
     else
         tempEvent =[self.searchFetchedResultsController objectAtIndexPath:indexPath];
-    NSLog(@"changed cell text");
     cell.titleLabel.text = tempEvent.title;
     NSString *imageID = tempEvent.id;
     UIImage *image = [imageCache objectForKey:imageID];
