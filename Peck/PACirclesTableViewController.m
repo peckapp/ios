@@ -108,7 +108,7 @@
 - (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath row]==[_fetchedResultsController.fetchedObjects count]){
-        cell.circleTitle.text=@"Create a Circle";
+        cell.circleTitle.text=@"Create";
     }
     else{
         cell.delegate=self;
