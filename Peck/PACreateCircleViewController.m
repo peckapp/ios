@@ -94,23 +94,26 @@
 */
 
 -(void)chooseMember{
-    if(![membersAutocompleteTextField.text isEqualToString:@""]){
-    NSLog(@"choose a member");
-    NSString *tempText= membersAutocompleteTextField.text;
-    tempText = [tempText stringByAppendingString:membersAutocompleteTextField.autocompleteLabel.text];
-    //membersAutocompleteTextField.text = [tempText stringByAppendingString:@", "];
-    membersAutocompleteTextField.text=@"";
-    membersAutocompleteTextField.autocompleteLabel.text=@"";
-    [membersAutocompleteTextField forceRefreshAutocompleteText];
-    if(!_addedPeers){
-        _addedPeers = [NSMutableArray array];
-    }
+    //if(![membersAutocompleteTextField.text isEqualToString:@""]){
+    Peer *tempPeer = [HTAutocompleteManager sharedManager].currentPeer;
+    if(tempPeer){
+        NSLog(@"choose a member");
+        NSString *tempText= membersAutocompleteTextField.text;
+        tempText = [tempText stringByAppendingString:membersAutocompleteTextField.autocompleteLabel.text];
+        //membersAutocompleteTextField.text = [tempText stringByAppendingString:@", "];
+        membersAutocompleteTextField.text=@"";
+        membersAutocompleteTextField.autocompleteLabel.text=@"";
+        
+        if(!_addedPeers){
+            _addedPeers = [NSMutableArray array];
+        }
 
-    Peer * tempPeer = [HTAutocompleteManager sharedManager].currentPeer;
-    [_addedPeers addObject:tempPeer];
-    NSLog(@"peers added so far: %@", _addedPeers);
-    UIImage *image = [UIImage imageNamed:@"Silhouette.png"];
-    [self.circleScrollView addPeer:image WithName:tempText];
+        Peer * tempPeer = [HTAutocompleteManager sharedManager].currentPeer;
+        [_addedPeers addObject:tempPeer];
+        NSLog(@"peers added so far: %@", _addedPeers);
+        UIImage *image = [UIImage imageNamed:@"Silhouette.png"];
+        [self.circleScrollView addPeer:image WithName:tempText];
+        [membersAutocompleteTextField forceRefreshAutocompleteText];
     }
 }
 
@@ -120,14 +123,16 @@
 }
 
 - (IBAction)createCircleButton:(id)sender {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *userID = [defaults objectForKey: @"user_id"];
     
     NSDictionary *setCircle = [NSDictionary dictionaryWithObjectsAndKeys:
                             [NSNumber numberWithInt:1], @"institution_id",
                             titleTextField.text, @"circle_name",
-                              [NSNumber numberWithInt:1], @"user_id",
+                              userID, @"user_id",
                                 nil];
     [[PASyncManager globalSyncManager] postCircle:setCircle withMembers:_addedPeers];
-    
+    [[PASyncManager globalSyncManager] updateCircleInfo];
     
 }
 

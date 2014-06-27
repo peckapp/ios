@@ -15,5 +15,5 @@
 @property(nonatomic, assign) id <PACirclesControllerDelegate> delegate;
 @property (nonatomic, assign) NSInteger members;
 
--(void)addImages;
+-(void)addImages:(NSArray*)members;
 @end
