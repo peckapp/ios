@@ -15,6 +15,6 @@
 @property (nonatomic, retain) NSString * circleName;
 @property (nonatomic, retain) id members;
 @property (nonatomic, retain) NSNumber * numberOfMembers;
-@property (nonatomic, retain) NSString * id;
+@property (nonatomic, retain) NSNumber * id;
 
 @end

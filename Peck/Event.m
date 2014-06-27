@@ -2,7 +2,7 @@
 //  Event.m
 //  Peck
 //
-//  Created by John Karabinos on 6/18/14.
+//  Created by John Karabinos on 6/27/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -11,14 +11,14 @@
 
 @implementation Event
 
+@dynamic created_at;
 @dynamic descrip;
-@dynamic title;
+@dynamic end_date;
+@dynamic id;
 @dynamic location;
 @dynamic members;
 @dynamic start_date;
-@dynamic end_date;
+@dynamic title;
 @dynamic updated_at;
-@dynamic created_at;
-@dynamic id;
 
 @end

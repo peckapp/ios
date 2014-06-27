@@ -2,7 +2,7 @@
 //  Message.m
 //  Peck
 //
-//  Created by John Karabinos on 6/19/14.
+//  Created by John Karabinos on 6/27/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -12,9 +12,9 @@
 @implementation Message
 
 @dynamic created_at;
-@dynamic photo;
-@dynamic updated_at;
-@dynamic text;
 @dynamic id;
+@dynamic photo;
+@dynamic text;
+@dynamic updated_at;
 
 @end

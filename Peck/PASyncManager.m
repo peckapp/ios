@@ -46,7 +46,7 @@
         NSDictionary *postsFromResponse = (NSDictionary*)JSON;
         NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
         //get the most recent user added
-        NSString *userID = [[userDictionary objectForKey:@"id"] stringValue];
+        NSNumber *userID = [userDictionary objectForKey:@"id"];
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setObject:userID forKey:@"user_id"];
         //NSLog(@" the user id has been set: %@",[defaults objectForKey:@"user_id"]);
@@ -77,10 +77,10 @@
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"users"];
              NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
              for (NSDictionary *eventAttributes in postsFromResponse) {
-                 NSString *newID = [[eventAttributes objectForKey:@"id"] stringValue];
+                 NSNumber *newID = [eventAttributes objectForKey:@"id"];
                  BOOL eventAlreadyExists = [self objectExists:newID withType:@"Peer"];
                  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                 if(!eventAlreadyExists && ![[defaults objectForKey:@"user_id"] isEqualToString:newID]){
+                 if(!eventAlreadyExists && !([defaults objectForKey:@"user_id"]==newID)){
                      NSLog(@"about to add the peer");
                      Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
                      [self setAttributesInPeer:peer withDictionary:eventAttributes];
@@ -108,8 +108,7 @@
 {
     NSLog(@"set attributes of peer");
     peer.name = [dictionary objectForKey:@"first_name"];
-    NSString *tempString = [[dictionary objectForKey:@"id"] stringValue];
-    peer.id = tempString;
+    peer.id = [dictionary objectForKey:@"id"];
 }
 
 -(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray *)members{
@@ -124,14 +123,20 @@
                                       NSLog(@"ERROR: %@",error);
                                   }];
     
-    /*
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber * userID = [defaults objectForKey:@"user_id"];
+    
     for(int i=0; i<[members count]; i++){
+        Peer *tempPeer = members[i];
+        NSNumber *peerID = tempPeer.id;
+        
         NSDictionary *tempDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        
-                                        , nil];
+                                        peerID, @"user_id",
+                                        userID, @"invited_by",
+                                        nil];
         
         
-    }*/
+    }
     
 }
 
@@ -153,7 +158,7 @@
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"circles"];
              NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
              for (NSDictionary *eventAttributes in postsFromResponse) {
-                 NSString *newID = [[eventAttributes objectForKey:@"id"] stringValue];
+                 NSNumber *newID = [eventAttributes objectForKey:@"id"];
                  BOOL eventAlreadyExists = [self objectExists:newID withType:@"Circle"];
                  if(!eventAlreadyExists){
                      NSLog(@"about to add the event");
@@ -182,8 +187,7 @@
 {
     NSLog(@"set attributes of event");
     circle.circleName = [dictionary objectForKey:@"circle_name"];
-    NSString *tempString = [[dictionary objectForKey:@"id"] stringValue];
-    circle.id = tempString;
+    circle.id = [dictionary objectForKey:@"id"];
 }
 
 -(void)postEvent:(NSDictionary *)dictionary{
@@ -200,9 +204,9 @@
 
 }
 
--(void)deleteEvent:(NSString*)eventID{
+-(void)deleteEvent:(NSNumber*)eventID{
     
-    NSString *appendedURL = [@"api/simple_events/" stringByAppendingString:eventID];
+    NSString *appendedURL = [@"api/simple_events/" stringByAppendingString:[eventID stringValue]];
     [[PASessionManager sharedClient] DELETE:appendedURL
                                 parameters:nil success:^
     (NSURLSessionDataTask * __unused task, id JSON) {
@@ -233,7 +237,7 @@
              NSLog(@"posts from response: %@", postsFromResponse);
              NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
              for (NSDictionary *eventAttributes in postsFromResponse) {
-                 NSString *newID = [[eventAttributes objectForKey:@"id"] stringValue];
+                 NSNumber *newID = [eventAttributes objectForKey:@"id"];
                  BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event"];
                  if(!eventAlreadyExists){
                      NSLog(@"about to add the event");
@@ -259,7 +263,7 @@
     
 }
 
--(BOOL)objectExists:(NSString *) newID withType:(NSString*)type{
+-(BOOL)objectExists:(NSNumber *) newID withType:(NSString*)type{
     NSFetchRequest * request = [[NSFetchRequest alloc] init];
     NSEntityDescription *objects = [NSEntityDescription entityForName:type inManagedObjectContext:_managedObjectContext];
     [request setEntity:objects];
@@ -283,8 +287,7 @@
     event.title = [dictionary objectForKey:@"title"];
     //event.descrip = [dictionary objectForKey:@"event_description"];
     //event.location = [dictionary objectForKey:@"institution_id"];
-    NSString *tempString = [[dictionary objectForKey:@"id"] stringValue];
-    event.id = tempString;
+    event.id = [dictionary objectForKey:@"id"];
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
     //NSDateFormatter * df = [[NSDateFormatter alloc] init];
     //event.startDate = [df dateFromString:[attributes valueForKey:@"start_date"]];

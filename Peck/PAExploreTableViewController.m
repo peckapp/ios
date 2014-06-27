@@ -81,7 +81,7 @@ NSCache *imageCache;
 {
     Message *tempMessage = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempMessage.text;
-    NSString *imageID = tempMessage.id;
+    NSNumber *imageID = tempMessage.id;
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
         cell.imageView.image=image;

@@ -425,7 +425,7 @@ NSString *searchBarText;
     }
 
     cell.titleLabel.text = tempEvent.title;
-    NSString *imageID = tempEvent.id;
+    NSString *imageID = [tempEvent.id stringValue];
     UIImage *image = [imageCache objectForKey:imageID];
 
     if(image) {

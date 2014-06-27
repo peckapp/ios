@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "HTAutocompleteTextField.h"
+#import "PACreateCircleViewController.h"
+#import "Peer.h"
 
 typedef enum {
     HTAutocompleteTypeEmail, // Default
@@ -15,8 +17,11 @@ typedef enum {
     HTAutocompleteTypeName,
 } HTAutocompleteType;
 
+
 @interface HTAutocompleteManager : NSObject <HTAutocompleteDataSource>
 
 + (HTAutocompleteManager *)sharedManager;
+
+@property Peer *currentPeer;
 
 @end
