@@ -15,24 +15,27 @@
 #import "PAImageManager.h"
 #import "PASessionManager.h"
 #import "PASyncManager.h"
+#import "PAPostCell.h"
 
-@interface PAPostViewController () {
-    NSMutableArray * userEvents;
-}
+@interface PAPostViewController () {}
+
+@property NSArray *detailKeys;
+@property NSArray *detailValues;
 
 @end
 
 @implementation PAPostViewController
 
-//@synthesize tableView = _tableView;
-@synthesize eventItems = _eventItems;
-@synthesize eventSuggestions = _eventSuggestions;
-@synthesize controlSwitch = _controlSwitch;
-@synthesize photo;
-@synthesize userEvents = _userEvents;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
+static NSString *cellIdentifier = PAPostIdentifier;
+static NSString *nibName = @"PAPostCell";
+
+CGFloat cellHeight;
+
+
 
 int initialTVHeight;
 int initialRowHeight;
@@ -62,33 +65,28 @@ UITableView *_tableView;
     BOOL nameExists = [peerTree1.peerTree search:@"Andrew"];
     NSLog(@"andrew exists? %u", nameExists);
     
-    
-    
-    
     chosenDate= [NSDate date];
-    if(!_tableView){
-        titleThickness=88;
-        int topOffSet = titleThickness;
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, titleThickness, self.view.frame.size.width, self.view.frame.size.height-topOffSet)];
-        NSLog(@"table view height: %f", self.view.frame.size.height-topOffSet);
-        [self.view addSubview:_tableView];
-    }
-    _tableView.delegate=self;
-    _tableView.dataSource=self;
-    //_tableView.frame = CGRectMake(_tableView.frame.origin.x, 300, _tableView.frame.size.width, _tableView.frame.size.height);
-    initialTVHeight = _tableView.frame.size.height;
-    initialRowHeight = _tableView.rowHeight;
-    photo = [UIImage imageNamed:@"img-placeholder.png"];
-    _eventItems=@[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
-    _eventSuggestions=@[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
-    
-    //[_userEvents initWithArray:@[@"",@"",@"",@"",@"",@""]];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+
+    self.photoView = [UIImage imageNamed:@"img-placeholder.png"];
+    self.detailKeys = @[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
+    self.detailValues = @[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
+
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     gestureRecognizer.cancelsTouchesInView=NO;
     [_tableView addGestureRecognizer:gestureRecognizer];
     // This code allows the user to dismiss the keyboard by pressing somewhere else
     
     _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+
+    // Calculate height for cells.
+    PAPostCell * cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
+    cellHeight = cell.frame.size.height;
 }
 
 - (void)didReceiveMemoryWarning
@@ -97,16 +95,6 @@ UITableView *_tableView;
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void) hideKeyboard{
      _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
@@ -124,11 +112,12 @@ UITableView *_tableView;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return _eventItems.count;
+    return self.detailKeys.count;
 }
 
 #pragma mark - table view delegate
 
+/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:@"Cell"];
@@ -151,7 +140,7 @@ UITableView *_tableView;
             
             [cell.contentView addSubview:playerTextField];
             
-            UILabel * titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(cell.frame.origin.x+15, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height)];
+            UILabel * titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(cell.frame.origin.x + 15, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height)];
             //titleLabel.text =[eventItems objectAtIndex:[indexPath row]];
             [cell.contentView addSubview:titleLabel];
         
@@ -201,10 +190,33 @@ UITableView *_tableView;
     }
     return cell;
 }
+*/
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    PAPostCell * cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    [self configureCell:cell atIndexPath:indexPath];
+
+    return cell;
+}
+
+- (void)configureCell:(PAPostCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return cellHeight;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     if(([indexPath row]==1 && _controlSwitch.selectedSegmentIndex==0) || ([indexPath row]==2 && _controlSwitch.selectedSegmentIndex==1)){
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
                                                                  delegate: self
@@ -289,19 +301,19 @@ UITableView *_tableView;
 
 
 - (IBAction)segmentedControl:(id)sender {
-    photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
-    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-   _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
+    // photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
+    self.userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
     // Necessary in case the keyboard is up while switching the segmented control
     if(_controlSwitch.selectedSegmentIndex==0){
-        _tableView.rowHeight = initialRowHeight;
-        _eventItems=@[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
-        _eventSuggestions=@[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
+//        _tableView.rowHeight = initialRowHeight;
+//        self.detailKeys=@[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
+//        self.detailValues=@[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
     }
     else if(_controlSwitch.selectedSegmentIndex==1){
-        _tableView.rowHeight=100;
-        _eventItems=@[@"Who are you sharing with?", @"What's on your mind?",@"Add a photo"];
-        _eventSuggestions=@[@"Mom, Dad",@"My message",@""];
+//        _tableView.rowHeight=100;
+//        self.detailKeys=@[@"Who are you sharing with?", @"What's on your mind?",@"Add a photo"];
+//        =@[@"Mom, Dad",@"My message",@""];
     }
     [_tableView reloadData];
 }
@@ -368,10 +380,10 @@ UITableView *_tableView;
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     [self dismissViewControllerAnimated: YES completion: nil];
-    UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
-    photo = image;
-    UIImageView * imageView = (UIImageView *)[self.view viewWithTag:6];
-    imageView.image =photo;
+    //UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
+    // photo = image;
+    //UIImageView * imageView = (UIImageView *)[self.view viewWithTag:6];
+    //imageView.image =photo;
     [_tableView reloadData];
 }
 
@@ -432,8 +444,7 @@ UITableView *_tableView;
             
             [[PASyncManager globalSyncManager] updateEventInfo];
             
-            
-            photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
+
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
             [_tableView reloadData];
     
@@ -461,11 +472,11 @@ UITableView *_tableView;
             [message setText:_userEvents[1]];
             [message setCreated_at:[NSDate date]];
             [message setId:_userEvents[1]];
-            NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
-            [message setPhoto:imageData];
+            // NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
+            // [message setPhoto:imageData];
 
             
-            photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
+            //  photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
             [_tableView reloadData];
             //[self performSegueWithIdentifier:@"showFeed" sender:self];

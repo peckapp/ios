@@ -17,15 +17,11 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 - (IBAction)segmentedControl:(id)sender;
-
-//@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *controlSwitch;
-
 - (IBAction)okayButton:(id)sender;
 
-@property (strong, nonatomic) NSArray *eventItems;
-@property (strong, nonatomic) NSArray *eventSuggestions;
-@property (strong, nonatomic) UIImage *photo;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *controlSwitch;
+@property (weak, nonatomic) IBOutlet UIImage *photoView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (strong, nonatomic) NSMutableArray *userEvents;
 

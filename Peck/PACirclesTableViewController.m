@@ -138,10 +138,9 @@ CGFloat cellHeight;
         int numberOfMembers = (int)[tempCircle.members count];
         cell.members = numberOfMembers;
         cell.circleTitle.text = tempCircle.circleName;
-        [cell.scrollView setContentSize:CGSizeMake(80*(numberOfMembers), 0)];
+        [cell.scrollView setContentSize:CGSizeMake(80 * (numberOfMembers), 0)];
         [cell addImages];
     }
-    
 }
 
 - (IBAction)addCircle:(id)sender {

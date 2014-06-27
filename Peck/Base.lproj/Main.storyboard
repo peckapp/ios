@@ -623,22 +623,8 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="ZDX-Qv-276">
-                                <rect key="frame" x="0.0" y="62" width="320" height="442"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PostCell" id="GRi-7g-hnm">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GRi-7g-hnm" id="wpa-Bn-aWX">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="ve7-Oz-bnH">
-                                <rect key="frame" x="44" y="20" width="232" height="29"/>
+                                <rect key="frame" x="44" y="7" width="232" height="29"/>
                                 <segments>
                                     <segment title="Event"/>
                                     <segment title="Message"/>
@@ -647,20 +633,32 @@
                                     <action selector="segmentedControl:" destination="cUM-GN-TXW" eventType="valueChanged" id="qsp-3w-c9c"/>
                                 </connections>
                             </segmentedControl>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Kd1-Wk-JxO">
+                                <rect key="frame" x="0.0" y="43" width="320" height="461"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <imageView key="tableFooterView" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image-placeholder.png" id="Iot-5z-FEl">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                </imageView>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Post" id="Sn3-cJ-bi1">
                         <barButtonItem key="backBarButtonItem" title="Done" id="gmN-h9-gn7"/>
-                        <barButtonItem key="leftBarButtonItem" title="Edit" id="16S-ig-2eB"/>
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="8qK-GM-dkM"/>
                         <barButtonItem key="rightBarButtonItem" title="Done" id="s52-l2-6dI">
                             <connections>
                                 <action selector="okayButton:" destination="cUM-GN-TXW" id="1G6-xn-29y"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="controlSwitch" destination="ve7-Oz-bnH" id="h8c-Bx-fxG"/>
+                        <outlet property="controlSwitch" destination="ve7-Oz-bnH" id="2to-am-z2f"/>
+                        <outlet property="tableView" destination="Kd1-Wk-JxO" id="pJ9-Hn-3qR"/>
                         <segue destination="dbL-Fg-Sgg" kind="push" identifier="showFeed" id="7xt-IF-tkU"/>
                         <segue destination="pGg-6v-bdr" kind="push" identifier="showEvents" id="kbr-xc-iWf"/>
                     </connections>
