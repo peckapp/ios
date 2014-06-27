@@ -2,6 +2,7 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Circle" representedClassName="Circle" syncable="YES">
         <attribute name="circleName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="members" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="numberOfMembers" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
     </entity>
@@ -29,7 +30,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Circle" positionX="261" positionY="198" width="128" height="90"/>
+        <element name="Circle" positionX="261" positionY="198" width="128" height="105"/>
         <element name="Event" positionX="261" positionY="189" width="128" height="180"/>
         <element name="Message" positionX="261" positionY="261" width="128" height="118"/>
         <element name="Peer" positionX="261" positionY="261" width="128" height="75"/>

@@ -10,7 +10,7 @@
 #import "PACircleCell.h"
 #import "PAAppDelegate.h"
 #import "Circle.h"
-
+#import "PASyncManager.h"
 @interface PACirclesTableViewController ()
 
 @end
@@ -253,7 +253,7 @@ CGRect cellFrame;
                                                              initWithFetchRequest:fetchRequest
                                                              managedObjectContext:_managedObjectContext
                                                              sectionNameKeyPath:nil //this needs to be nil
-                                                             cacheName:@"Master"];
+                                                             cacheName:nil];
     
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;

@@ -239,6 +239,8 @@ NSString *searchBarText;
             break;
             
         case NSFetchedResultsChangeDelete:
+            //Event *tempEvent = (Event *)anObject;
+            [[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
             [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];

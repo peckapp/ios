@@ -15,6 +15,7 @@
 #import "PACoreDataProtocol.h"
 #import "PAConfigureViewController.h"
 #import "PADropdownViewController.h"
+#import "PASyncManager.h"
 
 @implementation PAAppDelegate
 
@@ -25,6 +26,17 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString * userID = [defaults objectForKey:@"user_id"];
+    NSLog(@"USER ID: %@", userID);
+    if(!userID){
+        NSLog(@"Set a new user");
+        [[PASyncManager globalSyncManager] setUser];
+    }
+    
     
     [FBLoginView class];
     UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
