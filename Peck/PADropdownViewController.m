@@ -59,7 +59,7 @@
     self.frameForChildViewController = CGRectMake(0,
                                                   CGRectGetHeight(dropdownBar.frame),
                                                   CGRectGetWidth(self.view.frame),
-                                                  CGRectGetHeight(self.view.frame) - CGRectGetHeight(dropdownBar.frame));
+                                                  CGRectGetHeight(self.view.frame) /*- CGRectGetHeight(dropdownBar.frame)*/);
 
     // Instantiate primary view controller
     NSLog(@"Instantiating primary view controller");
