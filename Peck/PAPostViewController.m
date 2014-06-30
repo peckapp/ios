@@ -16,30 +16,22 @@
 #import "PASessionManager.h"
 #import "PASyncManager.h"
 
-@interface PAPostViewController () {}
+#pragma mark Interface
 
+@interface PAPostViewController () {}
 
 @property BOOL startPickerIsOpen;
 @property BOOL endPickerIsOpen;
 
 @end
 
+#pragma mark - Implementation
+
 @implementation PAPostViewController
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
-static NSString *cellIdentifier = PAPostIdentifier;
-
-CGFloat cellHeight;
-
-
-
-int initialTVHeight;
-int initialRowHeight;
-int titleThickness;
-NSDate *chosenDate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -57,8 +49,6 @@ NSDate *chosenDate;
     self.tableView.dataSource = self;
 
     [self.photoButton addTarget:self action:@selector(selectPhoto) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
 
     self.startPickerIsOpen = NO;
     self.endPickerIsOpen = NO;
@@ -75,7 +65,7 @@ NSDate *chosenDate;
     // Dispose of any resources that can be recreated.
 }
 
-# pragma mark - table view data source
+# pragma mark table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -90,7 +80,7 @@ NSDate *chosenDate;
     return 10;
 }
 
-#pragma mark - table view delegate
+#pragma mark table view delegate
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -197,16 +187,6 @@ NSDate *chosenDate;
 }
 */
 
-/*
- UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
- delegate: self
- cancelButtonTitle: @"Cancel"
- destructiveButtonTitle: nil
- otherButtonTitles: @"Take a new photo", @"Choose from existing", nil];
- [actionSheet showInView:self.view];
- NSLog(@"add a photo");
- */
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 4 && !self.startPickerIsOpen) {
         return 0;
@@ -251,6 +231,8 @@ NSDate *chosenDate;
     }
 }
 
+# pragma mark image picker
+
 - (void) selectPhoto
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
@@ -259,6 +241,60 @@ NSDate *chosenDate;
                                                destructiveButtonTitle: nil
                                                     otherButtonTitles: @"Take a new photo", @"Choose from existing", nil];
     [actionSheet showInView:self.view];
+}
+
+- (void)takeNewPhotoFromCamera
+{
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+    {
+        UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+        controller.sourceType = UIImagePickerControllerSourceTypeCamera;
+        controller.delegate = self;
+        [self presentViewController: controller animated: YES completion: nil];
+    }
+}
+
+-(void)choosePhotoFromExistingImages
+{
+    NSLog(@"choose a photo");
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary])
+    {
+        UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+        controller.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        controller.modalPresentationStyle = UIModalPresentationCurrentContext;
+        controller.delegate = self;
+        [self presentViewController: controller animated: YES completion: nil];
+
+    }
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [self dismissViewControllerAnimated: YES completion: nil];
+    UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
+    self.photoButton.imageView.image = image;
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
+{
+    [self dismissViewControllerAnimated: YES completion: nil];
+}
+
+# pragma mark state control
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    switch (buttonIndex) {
+        case 0:
+            [self takeNewPhotoFromCamera];
+            break;
+        case 1:
+            [self choosePhotoFromExistingImages];
+        default:
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            break;
+    }
 }
 
 - (IBAction)segmentedControl:(id)sender
@@ -321,7 +357,6 @@ NSDate *chosenDate;
     NSLog(@"new frame height: %f", self.tableView.frame.size.height-216);
     if(self.tableView.frame.size.height==initialTVHeight){
     self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-(216+22));
-    // TODO: the keyboard height reads 216 but should not be hardcoded
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
 }
@@ -481,7 +516,6 @@ NSDate *chosenDate;
            
             
             [[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];
-            //TODO: Set the id to something other than the title
             //also set the image title to the id rather than the title
             
             
@@ -508,7 +542,6 @@ NSDate *chosenDate;
             [self.tableView reloadData];
     
             
-            //TODO: perform correct transition
             //[self performSegueWithIdentifier:@"showEvents" sender:self];
         }
         
