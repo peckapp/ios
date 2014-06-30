@@ -10,8 +10,8 @@
 
 @interface PAPostCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *detailKey;
-@property (weak, nonatomic) IBOutlet UILabel *detailValue;
+@property (weak, nonatomic) IBOutlet UILabel *detailTitle;
+@property (weak, nonatomic) IBOutlet UITextField *detailValue;
 
 
 @end
