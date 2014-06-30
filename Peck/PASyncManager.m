@@ -49,8 +49,6 @@
         NSNumber *userID = [userDictionary objectForKey:@"id"];
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setObject:userID forKey:@"user_id"];
-        //NSLog(@" the user id has been set: %@",[defaults objectForKey:@"user_id"]);
-        //get the user id with this line
     }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -113,31 +111,49 @@
 
 -(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray *)members{
     
-    [[PASessionManager sharedClient] POST:@"api/users"
+    [[PASessionManager sharedClient] POST:@"api/circles"
                                parameters:dictionary
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
+         NSDictionary *postsFromResponse = (NSDictionary*)JSON;
+         NSDictionary *circleDictionary = [postsFromResponse objectForKey:@"circle"];
+         NSNumber *circleID = [circleDictionary objectForKey:@"id"];
+         [self addMembersToCircle:circleID withMembers:members];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
                                   }];
     
+    
+   
+    
+}
+
+-(void)addMembersToCircle:(NSNumber*)circleID withMembers:(NSArray *)members{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSNumber * userID = [defaults objectForKey:@"user_id"];
     
     for(int i=0; i<[members count]; i++){
         Peer *tempPeer = members[i];
         NSNumber *peerID = tempPeer.id;
-        
         NSDictionary *tempDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                         peerID, @"user_id",
                                         userID, @"invited_by",
+                                        circleID, @"circle_id",
                                         nil];
         
+        [[PASessionManager sharedClient] POST:@"api/circle_members"
+                                   parameters:tempDictionary
+                                      success:^
+         (NSURLSessionDataTask * __unused task, id JSON) {
+             NSLog(@"success: %@", JSON);
+         }
+                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                          NSLog(@"ERROR: %@",error);
+                                      }];
         
     }
-    
 }
 
 -(void)updateCircleInfo{
@@ -185,9 +201,31 @@
 
 -(void)setAttributesInCircle:(Circle *)circle withDictionary:(NSDictionary *)dictionary
 {
-    NSLog(@"set attributes of event");
+    NSLog(@"set attributes of circle");
     circle.circleName = [dictionary objectForKey:@"circle_name"];
     circle.id = [dictionary objectForKey:@"id"];
+    
+    
+    
+    NSString *circleMembersURL = [@"api/circles/" stringByAppendingString:[circle.id stringValue]];
+    circleMembersURL = [circleMembersURL stringByAppendingString:@"/circle_members"];
+    [[PASessionManager sharedClient] GET:circleMembersURL
+                              parameters:nil
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSMutableArray *members = [NSMutableArray array];
+         NSDictionary *eventsDictionary = (NSDictionary*)JSON;
+         NSArray *postsFromResponse = [eventsDictionary objectForKey:@"circle_members"];
+         for(NSDictionary * peerAttributes in postsFromResponse){
+             NSNumber *memberID = [peerAttributes objectForKey:@"id"];
+             [members addObject:memberID];
+         }
+         circle.members = members;
+         NSLog(@"circle members: %@", members);
+     }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                 }];
 }
 
 -(void)postEvent:(NSDictionary *)dictionary{

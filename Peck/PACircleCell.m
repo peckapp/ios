@@ -49,14 +49,14 @@ bool loadedImages;
     //get the cell and the picture that has been selected and open that profile
 }
 
--(void)addImages{
+-(void)addImages: (NSArray *)members{
     //TODO: fix this code so that reloading the table view does not reallocate
     if(!loadedImages){
-        for(int i = 0; i < _members; i++){
+        for(int i = 0; i <[members count]; i++){
             NSLog(@"allocating image");
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(80 * i, 0, 55, 44)];
             imageView.image = [UIImage imageNamed:@"profile-placeholder.png"];
-            //use tag and i to get the correct image
+            //use the id's in members to get the correct images
             [scrollView addSubview:imageView];
         }
     }loadedImages=YES;

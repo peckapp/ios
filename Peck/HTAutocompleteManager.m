@@ -318,6 +318,7 @@ static HTAutocompleteManager *sharedManager;
         }
     }
     else if(textField.autocompleteType == HTAutocompleteTypeName){
+        _currentPeer=nil;
         if(! [prefix isEqualToString:@""]){
             PAPeers *peerTree1 = [PAPeers peers];
             NSMutableArray *peers = [NSMutableArray array];

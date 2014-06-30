@@ -139,7 +139,7 @@ CGFloat cellHeight;
         cell.members = numberOfMembers;
         cell.circleTitle.text = tempCircle.circleName;
         [cell.scrollView setContentSize:CGSizeMake(80*(numberOfMembers), 0)];
-        [cell addImages];
+        [cell addImages: tempCircle.members];
     }
     
 }

@@ -227,7 +227,11 @@
                                                 <segue destination="je6-6p-AOl" kind="unwind" unwindAction="unwindToCirclesViewController:" id="RmN-9T-qi7"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Done" id="H8w-rB-fY0"/>
+                                        <barButtonItem key="rightBarButtonItem" title="Done" id="H8w-rB-fY0">
+                                            <connections>
+                                                <action selector="createCircleButton:" destination="rxR-7o-blZ" id="s6Q-YO-9de"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -252,9 +256,6 @@
                                 <state key="normal" title="Create">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <action selector="createCircleButton:" destination="rxR-7o-blZ" eventType="touchUpInside" id="pJO-Wc-rvD"/>
-                                </connections>
                             </button>
                         </barButtonItem>
                     </navigationItem>
