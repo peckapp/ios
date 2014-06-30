@@ -15,7 +15,6 @@
 #import "PAImageManager.h"
 #import "PASessionManager.h"
 #import "PASyncManager.h"
-#import "PAPostCell.h"
 
 @interface PAPostViewController () {}
 
@@ -40,7 +39,6 @@ int initialTVHeight;
 int initialRowHeight;
 int titleThickness;
 NSDate *chosenDate;
-UITableView *_tableView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -108,7 +106,8 @@ UITableView *_tableView;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return self.detailTitles.count;
+    //return self.detailTitles.count;
+    return 7;
 }
 
 #pragma mark - table view delegate
@@ -191,53 +190,30 @@ UITableView *_tableView;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 
 {
-    NSString * nibName;
-    if ([indexPath row] == 0) {
-        nibName = @"PAPostCellNormal";
-    }
-    else if ([indexPath row] == 1) {
-        nibName = @"PAPostCellTall";
-    }
-    else {
-        nibName = @"PAPostCellTitle";
-    }
-
-    PAPostCell * cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    /*
+    UITableViewCell * cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
 
     [self configureCell:cell atIndexPath:indexPath];
+     */
 
+    UITableViewCell *cell = [super tableView:tableView
+                       cellForRowAtIndexPath:indexPath];
     return cell;
 }
 
-- (void)configureCell:(PAPostCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    cell.titleLabel.text = [self.detailTitles objectAtIndex:[indexPath row]];
-    cell.valueField.text = [self.detailValues objectAtIndex:[indexPath row]];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSString * nibName;
-    if ([indexPath row] == 0) {
-        nibName = @"PAPostCellNormal";
-        return 44;
-    }
-    else if ([indexPath row] == 1) {
-        nibName = @"PAPostCellTall";
-        return 88;
-    }
-    else {
-        nibName = @"PAPostCellTitle";
-        return 44;
-    }
+//    cell.titleLabel.text = [self.detailTitles objectAtIndex:[indexPath row]];
+//    cell.valueField.text = [self.detailValues objectAtIndex:[indexPath row]];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    /*
     if(([indexPath row]==1 && _controlSwitch.selectedSegmentIndex==0) || ([indexPath row]==2 && _controlSwitch.selectedSegmentIndex==1)){
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
                                                                  delegate: self
@@ -270,6 +246,7 @@ UITableView *_tableView;
     else{
         [_tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
+     */
 }
 
 - (void)pickerChanged:(id)sender
@@ -280,11 +257,11 @@ UITableView *_tableView;
 # pragma mark - text field delegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     //_tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
-    NSLog(@"new frame height: %f", _tableView.frame.size.height-216);
-    if(_tableView.frame.size.height==initialTVHeight){
-    _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height-(216+22));
+    NSLog(@"new frame height: %f", self.tableView.frame.size.height-216);
+    if(self.tableView.frame.size.height==initialTVHeight){
+    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-(216+22));
     // TODO: the keyboard height reads 216 but should not be hardcoded
-    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
 }
 
@@ -302,6 +279,7 @@ UITableView *_tableView;
 }
 
 -(void)updateEventArray{
+    /*
     
     int count=0;
     if(_controlSwitch.selectedSegmentIndex==0){
@@ -311,12 +289,13 @@ UITableView *_tableView;
         count=2;
     }
     for(int i=0; i<count; i++){
-        UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         UITextField * textField = (UITextField*) cell.contentView.subviews[0];
         NSString * text =textField.text;
         if(text!=nil)
             _userEvents[i]=text;
     }
+     */
    
 }
 
@@ -341,7 +320,7 @@ UITableView *_tableView;
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSIndexPath *indexPath = [_tableView indexPathForSelectedRow];
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     if(([indexPath row]==1 && _controlSwitch.selectedSegmentIndex==0) || ([indexPath row]==2 &&_controlSwitch.selectedSegmentIndex==1)){
         switch (buttonIndex) {
             case 0:
@@ -350,7 +329,7 @@ UITableView *_tableView;
             case 1:
                 [self choosePhotoFromExistingImages];
             default:
-                [_tableView deselectRowAtIndexPath:indexPath animated:YES];
+                [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
                 break;
         }
     }else if([indexPath row]==3 && _controlSwitch.selectedSegmentIndex==0){
@@ -369,7 +348,7 @@ UITableView *_tableView;
     [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
     NSString *stringFromDate = [formatter stringFromDate:chosenDate];
     _userEvents[3]=stringFromDate;
-    [_tableView reloadData];
+    [self.tableView reloadData];
 }
 
 
@@ -405,7 +384,7 @@ UITableView *_tableView;
     // photo = image;
     //UIImageView * imageView = (UIImageView *)[self.view viewWithTag:6];
     //imageView.image =photo;
-    [_tableView reloadData];
+    [self.tableView reloadData];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
@@ -467,7 +446,7 @@ UITableView *_tableView;
             
 
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-            [_tableView reloadData];
+            [self.tableView reloadData];
     
             
             //TODO: perform correct transition
@@ -499,7 +478,7 @@ UITableView *_tableView;
             
             //  photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-            [_tableView reloadData];
+            [self.tableView reloadData];
             //[self performSegueWithIdentifier:@"showFeed" sender:self];
 
         }
