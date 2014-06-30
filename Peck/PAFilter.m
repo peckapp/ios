@@ -157,7 +157,7 @@
     
     NSLog(@"touched filter");
     
-    [self.delegate shadeBackgroundView];
+    [self.delegate shadeBackgroundViewOverDuration:fadeInOutDuration];
     
     [self setNeedsDisplay]; // let the system know to update the view, probably want to do this with animation instead
 }
@@ -178,7 +178,7 @@
         // call methods in superview to update table view cells accordingly
     }
     
-    [self.delegate unshadeBackgroundView];
+    [self.delegate unshadeBackgroundViewOverDuration:fadeInOutDuration];
     
     // becomes more transparent after selection finishes
     [UIView animateWithDuration:fadeInOutDuration animations:^{ self.alpha = inactiveAlpha; }];

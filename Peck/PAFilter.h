@@ -38,8 +38,8 @@ typedef enum {
 
 @protocol PAFilterShaderDelegate
 
-- (void)shadeBackgroundView;
+- (void)shadeBackgroundViewOverDuration:(float)duration;
 
-- (void)unshadeBackgroundView;
+- (void)unshadeBackgroundViewOverDuration:(float)duration;
 
 @end

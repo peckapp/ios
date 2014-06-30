@@ -7,6 +7,7 @@
 //
 
 #import "PADropdownViewController.h"
+#import <Foundation/Foundation.h>
 
 #pragma mark Private members
 
@@ -16,6 +17,7 @@
 @property (nonatomic) NSArray * secondaryViewControllerIdentifiers;
 
 @property (nonatomic, retain) PAFilter * filter;
+@property (nonatomic, retain) UIView * gradientView;
 
 // Designates the frame for child view controllers.
 @property (nonatomic) CGRect frameForChildViewController;
@@ -83,6 +85,18 @@
     [self.view addSubview:dropdownBar];
     [self displayChildViewController:self.primaryViewController];
     
+    // gradient for filter
+    self.gradientView = [[UIView alloc] initWithFrame:self.frameForChildViewController];
+    self.gradientView.alpha = 0.0;
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = self.gradientView.frame;
+    gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor blackColor] CGColor], nil];
+    gradient.startPoint = CGPointMake(0.0, 0.0);
+    gradient.endPoint = CGPointMake(0.0, 1.0);
+    [self.gradientView.layer addSublayer:gradient];
+    [self.view addSubview:self.gradientView];
+    
+    // filter item
     self.filter = [PAFilter filter];
     self.filter.delegate = self;
     [self.view addSubview:self.filter];
@@ -294,14 +308,18 @@
     }
 }
 
-- (void)shadeBackgroundView
+- (void)shadeBackgroundViewOverDuration:(float)duration
 {
     NSLog(@"Darken background for filter");
+    [UIView animateWithDuration:duration animations:^{ self.gradientView.alpha = 0.8; }];
+    //[self.view bringSubviewToFront:self.gradientView];
 }
 
-- (void)unshadeBackgroundView
+- (void)unshadeBackgroundViewOverDuration:(float)duration
 {
     NSLog(@"Lighten background");
+    [self.view bringSubviewToFront:self.gradientView];
+    [UIView animateWithDuration:duration animations:^{ self.gradientView.alpha = 0.0; }];
 }
 
 @end

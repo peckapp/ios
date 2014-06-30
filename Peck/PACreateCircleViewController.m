@@ -52,7 +52,7 @@
     if(!self.circleScrollView){
         self.circleScrollView = [[PACircleScrollView alloc] initWithFrame:CGRectMake(100, 55, self.view.frame.size.width-100, 60)];
         [self.view addSubview:self.circleScrollView];
-        self.circleScrollView.delegate=self;
+        self.circleScrollView.delegate = self;
     }
     if(!_addedPeers){
         _addedPeers = [NSMutableArray array];

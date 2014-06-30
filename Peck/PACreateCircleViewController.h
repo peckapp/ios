@@ -16,7 +16,7 @@
 -(void)removePeer: (int) peer;
 @end
 
-@interface PACreateCircleViewController : UIViewController <UITextFieldDelegate>
+@interface PACreateCircleViewController : UIViewController <UITextFieldDelegate,UIScrollViewDelegate,PACirclePeersControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *titleTextField;
 
