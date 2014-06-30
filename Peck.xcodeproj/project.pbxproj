@@ -95,7 +95,9 @@
 		DDCD45BF195DA6D10032333F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86D59816193768BF00F38654 /* Main.storyboard */; };
 		DDCD45C1195DC8E60032333F /* profile-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DDCD45C0195DC8E60032333F /* profile-placeholder.png */; };
 		DDCD45C5195E05390032333F /* PAPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCD45C3195E05390032333F /* PAPostCell.m */; };
-		DDCD45C6195E05390032333F /* PAPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDCD45C4195E05390032333F /* PAPostCell.xib */; };
+		DDCD45C6195E05390032333F /* PAPostCellTitle.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDCD45C4195E05390032333F /* PAPostCellTitle.xib */; };
+		DDCD45C81961AC920032333F /* PAPostCellNormal.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDCD45C71961AC920032333F /* PAPostCellNormal.xib */; };
+		DDCD45CA1961ACC30032333F /* PAPostCellTall.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDCD45C91961ACC30032333F /* PAPostCellTall.xib */; };
 		DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAExploreCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */; };
 		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
@@ -255,7 +257,9 @@
 		DDCD45C0195DC8E60032333F /* profile-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile-placeholder.png"; sourceTree = "<group>"; };
 		DDCD45C2195E05390032333F /* PAPostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPostCell.h; sourceTree = "<group>"; };
 		DDCD45C3195E05390032333F /* PAPostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPostCell.m; sourceTree = "<group>"; };
-		DDCD45C4195E05390032333F /* PAPostCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAPostCell.xib; sourceTree = "<group>"; };
+		DDCD45C4195E05390032333F /* PAPostCellTitle.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAPostCellTitle.xib; sourceTree = "<group>"; };
+		DDCD45C71961AC920032333F /* PAPostCellNormal.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAPostCellNormal.xib; sourceTree = "<group>"; };
+		DDCD45C91961ACC30032333F /* PAPostCellTall.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAPostCellTall.xib; sourceTree = "<group>"; };
 		DDDAEDD819465DCB004CE102 /* PAExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreCell.h; sourceTree = "<group>"; };
 		DDDAEDD919465DCB004CE102 /* PAExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreCell.m; sourceTree = "<group>"; };
 		DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAExploreCell.xib; sourceTree = "<group>"; };
@@ -325,7 +329,9 @@
 				86292511193CBE000057CA41 /* PAPostViewController.m */,
 				DDCD45C2195E05390032333F /* PAPostCell.h */,
 				DDCD45C3195E05390032333F /* PAPostCell.m */,
-				DDCD45C4195E05390032333F /* PAPostCell.xib */,
+				DDCD45C4195E05390032333F /* PAPostCellTitle.xib */,
+				DDCD45C71961AC920032333F /* PAPostCellNormal.xib */,
+				DDCD45C91961ACC30032333F /* PAPostCellTall.xib */,
 			);
 			name = Post;
 			sourceTree = "<group>";
@@ -704,10 +710,11 @@
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
 				DD898152195B7AA80079CDC9 /* post@2x.png in Resources */,
+				DDCD45C81961AC920032333F /* PAPostCellNormal.xib in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
 				DD89814F195B7AA80079CDC9 /* circles@2x.png in Resources */,
 				8671A2CE195B848D00700101 /* dropdown_pecks@2x.png in Resources */,
-				DDCD45C6195E05390032333F /* PAPostCell.xib in Resources */,
+				DDCD45C6195E05390032333F /* PAPostCellTitle.xib in Resources */,
 				DD898139195B5AE20079CDC9 /* image-placeholder.png in Resources */,
 				DDCD45C1195DC8E60032333F /* profile-placeholder.png in Resources */,
 				86051D49194BB27200961541 /* Silhouette.png in Resources */,
@@ -721,6 +728,7 @@
 				DD898172195CAFF20079CDC9 /* Icon-60@2x.png in Resources */,
 				8689DDB319589E3600A6B61C /* filter_detail@2x.png in Resources */,
 				8671A2D2195B848D00700101 /* dropdown_profile@2x.png in Resources */,
+				DDCD45CA1961ACC30032333F /* PAPostCellTall.xib in Resources */,
 				8671A2CF195B848D00700101 /* dropdown_explore@2x.png in Resources */,
 				DD898153195B7AA80079CDC9 /* profile@2x.png in Resources */,
 				DD898136195B523F0079CDC9 /* button@2x.png in Resources */,

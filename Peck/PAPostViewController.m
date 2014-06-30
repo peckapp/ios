@@ -31,7 +31,6 @@
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 static NSString *cellIdentifier = PAPostIdentifier;
-static NSString *nibName = @"PAPostCell";
 
 CGFloat cellHeight;
 
@@ -68,12 +67,12 @@ UITableView *_tableView;
                           @"Invitations",
                           @"Privacy"];
 
-    NSArray * suggestions = @[@"My Birthday",
-                            @"BYOB",
-                            @"Mount Everest",
-                            @"January 1, 2015",
-                            @"Mom, Dad",
-                            @"Everyone"];
+    NSArray * suggestions = @[@"Title",
+                            @"Description",
+                            @"Location",
+                            @"Date",
+                            @"Invitations",
+                            @"Privacy"];
 
     self.detailValues = [NSMutableArray arrayWithArray:suggestions];
     
@@ -83,14 +82,6 @@ UITableView *_tableView;
     [self.tableView addGestureRecognizer:gestureRecognizer];
     
     self.userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-
-    // Calculate height for cells.
-    PAPostCell * cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    }
-    cellHeight = cell.frame.size.height;
 }
 
 - (void)didReceiveMemoryWarning
@@ -198,7 +189,19 @@ UITableView *_tableView;
 */
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+
 {
+    NSString * nibName;
+    if ([indexPath row] == 0) {
+        nibName = @"PAPostCellNormal";
+    }
+    else if ([indexPath row] == 1) {
+        nibName = @"PAPostCellTall";
+    }
+    else {
+        nibName = @"PAPostCellTitle";
+    }
+
     PAPostCell * cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
@@ -218,7 +221,19 @@ UITableView *_tableView;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return cellHeight;
+    NSString * nibName;
+    if ([indexPath row] == 0) {
+        nibName = @"PAPostCellNormal";
+        return 44;
+    }
+    else if ([indexPath row] == 1) {
+        nibName = @"PAPostCellTall";
+        return 88;
+    }
+    else {
+        nibName = @"PAPostCellTitle";
+        return 44;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
