@@ -57,22 +57,6 @@ NSDate *chosenDate;
     self.tableView.dataSource = self;
 
     self.tableView.tableHeaderView = self.photoView;
-
-    self.detailTitles = @[@"Title",
-                          @"Description",
-                          @"Location",
-                          @"Date & Time",
-                          @"Invitations",
-                          @"Privacy"];
-
-    NSArray * suggestions = @[@"Title",
-                            @"Description",
-                            @"Location",
-                            @"Date",
-                            @"Invitations",
-                            @"Privacy"];
-
-    self.detailValues = [NSMutableArray arrayWithArray:suggestions];
     
     // This code allows the user to dismiss the keyboard by pressing somewhere else
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
@@ -111,6 +95,36 @@ NSDate *chosenDate;
 }
 
 #pragma mark - table view delegate
+
+/*
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    if (self.controlSwitch.selectedSegmentIndex == 0) {
+        cell = self.cellIWantToShow;
+    }
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    CGFloat height = [super tableView:tableView heightForRowAtIndexPath:indexPath];
+    if (indexPath.section == 0 && hideStuff) {
+        height = [super tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+    }
+    return height;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSInteger count = [super tableView:tableView numberOfRowsInSection:section];
+
+    if (section == 0 && hideStuff) {
+        count -= hiddenCells.count;
+    }
+
+    return count;
+}
+*/
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -187,33 +201,34 @@ NSDate *chosenDate;
 }
 */
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-
-{
-    /*
-    UITableViewCell * cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    }
-
-    [self configureCell:cell atIndexPath:indexPath];
-     */
-
-    UITableViewCell *cell = [super tableView:tableView
-                       cellForRowAtIndexPath:indexPath];
-    return cell;
-}
-
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-//    cell.titleLabel.text = [self.detailTitles objectAtIndex:[indexPath row]];
-//    cell.valueField.text = [self.detailValues objectAtIndex:[indexPath row]];
-}
+/*
+ UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
+ delegate: self
+ cancelButtonTitle: @"Cancel"
+ destructiveButtonTitle: nil
+ otherButtonTitles: @"Take a new photo", @"Choose from existing", nil];
+ [actionSheet showInView:self.view];
+ NSLog(@"add a photo");
+ */
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
+    if (self.controlSwitch.selectedSegmentIndex == 0) {
+        if([indexPath row] == 1){
+            
+        }
+    }
+    else{
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+}
+
+- (IBAction)segmentedControl:(id)sender {
+}
+
+/*
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     if(([indexPath row]==1 && _controlSwitch.selectedSegmentIndex==0) || ([indexPath row]==2 && _controlSwitch.selectedSegmentIndex==1)){
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
                                                                  delegate: self
@@ -246,9 +261,10 @@ NSDate *chosenDate;
     else{
         [_tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
-     */
 }
+*/
 
+/*
 - (void)pickerChanged:(id)sender
 {
     chosenDate = [sender date];
@@ -279,7 +295,7 @@ NSDate *chosenDate;
 }
 
 -(void)updateEventArray{
-    /*
+
     
     int count=0;
     if(_controlSwitch.selectedSegmentIndex==0){
@@ -295,10 +311,8 @@ NSDate *chosenDate;
         if(text!=nil)
             _userEvents[i]=text;
     }
-     */
    
 }
-
 
 - (IBAction)segmentedControl:(id)sender {
     // photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
@@ -407,7 +421,7 @@ NSDate *chosenDate;
             [alert show];
         }
         else{
-           /* PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+            PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
             _managedObjectContext = [appdelegate managedObjectContext];
     
             Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
@@ -421,7 +435,7 @@ NSDate *chosenDate;
             
            
             
-            [[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];*/
+            [[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];
             //TODO: Set the id to something other than the title
             //also set the image title to the id rather than the title
             
@@ -484,5 +498,6 @@ NSDate *chosenDate;
         }
     }
 }
+*/
 
 @end
