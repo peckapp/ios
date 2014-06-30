@@ -49,6 +49,8 @@ NSCache * imageCache;
 BOOL searching;
 BOOL showingDetail;
 NSString *searchBarText;
+NSDate *today;
+NSInteger selectedDay;
 
 - (void)awakeFromNib
 {
@@ -71,6 +73,7 @@ NSString *searchBarText;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    selectedDay=0;
     searching = NO;
     showingDetail = NO;
     NSError * error = nil;
@@ -185,7 +188,22 @@ NSString *searchBarText;
     NSLog(@"creating the new predicate");
     NSLog(@"search bar text: %@", searchBarText);
     
-    [fetchRequest setPredicate:predicate];
+    
+    NSDate *selectedMorning = [self updateDate];
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setDay:1];
+    NSDate *selectedNight =[[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:selectedMorning options:0];
+
+    
+    NSPredicate *startDatePredicate = [NSPredicate predicateWithFormat:@"start_date > %@", selectedMorning];
+    NSPredicate *endDatePredicate = [NSPredicate predicateWithFormat:@"end_date < %@", selectedNight];
+    NSLog(@"the current date: %@", [NSDate date]);
+    
+    //[fetchRequest setPredicate:dayPredicate];
+    //[fetchRequest setPredicate:predicate];
+    NSArray *predicateArray = @[predicate, startDatePredicate, endDatePredicate];
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    [fetchRequest setPredicate:compoundPredicate];
     // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
     
@@ -207,6 +225,24 @@ NSString *searchBarText;
     self.searchFetchedResultsController = aFetchedResultsController;
     
     return _searchFetchedResultsController;
+}
+
+-(NSDate *)updateDate{
+    NSDate *currentDate = [NSDate date];
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitSecond  fromDate:[NSDate date]];
+    NSInteger hours = [components hour];
+    NSInteger minutes = [components minute];
+    NSInteger seconds = [components second];
+    
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setHour:-hours-4];
+    [dateComponents setMinute:-minutes];
+    [dateComponents setSecond:-seconds];
+    [dateComponents setDay:selectedDay];
+    
+    NSDate *selectedDayMorning = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:currentDate options:0];
+    NSLog(@"today (instance): %@", selectedDayMorning);
+    return selectedDayMorning;
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
@@ -509,13 +545,16 @@ NSString *searchBarText;
 
 - (IBAction)yesterdayButton:(id)sender {
     NSLog(@"Yesterday");
+    selectedDay--;
 }
 
 - (IBAction)todayButton:(id)sender {
     NSLog(@"Today");
+    selectedDay=0;
 }
 
 - (IBAction)tomorrowButton:(id)sender {
     NSLog(@"Tomorrow");
+    selectedDay++;
 }
 @end

@@ -21,4 +21,5 @@
 -(void)updateCircleInfo;
 -(void)setUser;
 -(void)updatePeerInfo;
+-(void)updateExploreInfo;
 @end
