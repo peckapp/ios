@@ -723,15 +723,19 @@
         <!--Post View Controller - Post-->
         <scene sceneID="yBA-au-b75">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fGt-fr-HsW" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="I0y-hH-f6V" customClass="PAPostViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="hlJ-pN-QPz">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <imageView key="tableHeaderView" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image-placeholder.png" id="hcH-t5-CRZ">
+                        <button key="tableHeaderView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="am3-QK-qV6">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
+                            <state key="normal" title="Button" image="image-placeholder.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
                         <sections>
                             <tableViewSection id="xxA-Mb-XCJ">
                                 <cells>
@@ -1012,11 +1016,10 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                     <connections>
                         <outlet property="controlSwitch" destination="3Lq-op-wBX" id="mmc-c1-jdp"/>
                         <outlet property="endTimeCell" destination="07o-Kz-9Ud" id="Re5-sP-7mC"/>
-                        <outlet property="photoView" destination="hcH-t5-CRZ" id="D69-5P-zgz"/>
+                        <outlet property="photoButton" destination="am3-QK-qV6" id="S2p-Vh-QXj"/>
                         <outlet property="startTimeCell" destination="Sj7-I4-hdV" id="IFv-3G-9ne"/>
                     </connections>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fGt-fr-HsW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="364" y="1199"/>
         </scene>

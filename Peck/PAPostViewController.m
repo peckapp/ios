@@ -56,7 +56,7 @@ NSDate *chosenDate;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
-    self.tableView.tableHeaderView = self.photoView;
+    [self.photoButton addTarget:self action:@selector(selectPhoto) forControlEvents:UIControlEventTouchUpInside];
     
     self.userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
 
@@ -249,6 +249,16 @@ NSDate *chosenDate;
     if (self.endPickerIsOpen == NO) {
         // Change labels
     }
+}
+
+- (void) selectPhoto
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
+                                                             delegate: self
+                                                    cancelButtonTitle: @"Cancel"
+                                               destructiveButtonTitle: nil
+                                                    otherButtonTitles: @"Take a new photo", @"Choose from existing", nil];
+    [actionSheet showInView:self.view];
 }
 
 - (IBAction)segmentedControl:(id)sender

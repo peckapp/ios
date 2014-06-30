@@ -19,8 +19,8 @@
 - (IBAction)segmentedControl:(id)sender;
 - (IBAction)constructResultAndExit:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UIButton *photoButton;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *controlSwitch;
-@property (weak, nonatomic) IBOutlet UIImageView *photoView;
 @property (weak, nonatomic) IBOutlet UITableViewCell *startTimeCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *endTimeCell;
 
