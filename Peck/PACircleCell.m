@@ -16,7 +16,7 @@
 @synthesize scrollView;
 @synthesize circleTitle;
 @synthesize members = _members;
-bool loadedImages;
+
 
 - (void)awakeFromNib
 {
@@ -29,7 +29,7 @@ bool loadedImages;
     tapRecognizer.cancelsTouchesInView = NO;
     [scrollView addGestureRecognizer:tapRecognizer];
     scrollView.userInteractionEnabled = YES;
-    loadedImages = NO;
+    _loadedImages = NO;
 
 
 }
@@ -51,7 +51,9 @@ bool loadedImages;
 
 -(void)addImages: (NSArray *)members{
     //TODO: fix this code so that reloading the table view does not reallocate
-    if(!loadedImages){
+    NSLog(@"number of members: %lu", (unsigned long)[members count]);
+    if(!_loadedImages){
+        
         for(int i = 0; i <[members count]; i++){
             NSLog(@"allocating image");
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(80 * i, 0, 55, 44)];
@@ -59,7 +61,7 @@ bool loadedImages;
             //use the id's in members to get the correct images
             [scrollView addSubview:imageView];
         }
-    }loadedImages=YES;
+    }_loadedImages=YES;
 }
 
 

@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property(nonatomic, assign) id <PACirclesControllerDelegate> delegate;
 @property (nonatomic, assign) NSInteger members;
+@property BOOL loadedImages;
 
 -(void)addImages:(NSArray*)members;
 @end
