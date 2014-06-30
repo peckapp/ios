@@ -7,7 +7,6 @@
 //
 
 #import "PADropdownViewController.h"
-#import "PAFilter.h"
 
 #pragma mark Private members
 
@@ -85,6 +84,7 @@
     [self displayChildViewController:self.primaryViewController];
     
     self.filter = [PAFilter filter];
+    self.filter.delegate = self;
     [self.view addSubview:self.filter];
     [self.filter presentUpwardForMode:PAFilterHomeMode];
 }
@@ -292,6 +292,16 @@
         [self.filter presentUpwardForMode:mode];
         [self.view bringSubviewToFront:self.filter];
     }
+}
+
+- (void)shadeBackgroundView
+{
+    NSLog(@"Darken background for filter");
+}
+
+- (void)unshadeBackgroundView
+{
+    NSLog(@"Lighten background");
 }
 
 @end
