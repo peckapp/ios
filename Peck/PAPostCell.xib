@@ -22,15 +22,15 @@
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Value" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Myv-TX-rqU">
                         <rect key="frame" x="137" y="7" width="163" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
                 </subviews>
             </tableViewCellContentView>
             <connections>
-                <outlet property="detailTitle" destination="1EU-pd-6y6" id="5KP-n0-Rl6"/>
-                <outlet property="detailValue" destination="Myv-TX-rqU" id="7Dy-oC-TUz"/>
+                <outlet property="titleLabel" destination="1EU-pd-6y6" id="L9h-w9-GQi"/>
+                <outlet property="valueField" destination="Myv-TX-rqU" id="4GL-k0-h6o"/>
             </connections>
         </tableViewCell>
     </objects>

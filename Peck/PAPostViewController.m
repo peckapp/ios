@@ -19,7 +19,8 @@
 
 @interface PAPostViewController () {}
 
-@property NSArray *detailKeys;
+@property NSArray *detailTitles;
+@property NSMutableArray *detailValues;
 
 @end
 
@@ -60,8 +61,22 @@ UITableView *_tableView;
 
     self.tableView.tableHeaderView = self.photoView;
 
-    self.detailKeys = @[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
+    self.detailTitles = @[@"Title",
+                          @"Description",
+                          @"Location",
+                          @"Date & Time",
+                          @"Invitations",
+                          @"Privacy"];
 
+    NSArray * suggestions = @[@"My Birthday",
+                            @"BYOB",
+                            @"Mount Everest",
+                            @"January 1, 2015",
+                            @"Mom, Dad",
+                            @"Everyone"];
+
+    self.detailValues = [NSMutableArray arrayWithArray:suggestions];
+    
     // This code allows the user to dismiss the keyboard by pressing somewhere else
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     gestureRecognizer.cancelsTouchesInView = NO;
@@ -102,7 +117,7 @@ UITableView *_tableView;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return self.detailKeys.count;
+    return self.detailTitles.count;
 }
 
 #pragma mark - table view delegate
@@ -197,7 +212,8 @@ UITableView *_tableView;
 
 - (void)configureCell:(PAPostCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    
+    cell.titleLabel.text = [self.detailTitles objectAtIndex:[indexPath row]];
+    cell.valueField.text = [self.detailValues objectAtIndex:[indexPath row]];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
