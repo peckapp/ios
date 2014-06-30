@@ -128,6 +128,7 @@ CGFloat cellHeight;
 {
     if([indexPath row]==[_fetchedResultsController.fetchedObjects count]){
         cell.circleTitle.text = @"Create";
+        
     }
     else{
         cell.delegate = self;
@@ -139,6 +140,7 @@ CGFloat cellHeight;
         cell.members = numberOfMembers;
         cell.circleTitle.text = tempCircle.circleName;
         [cell.scrollView setContentSize:CGSizeMake(80*(numberOfMembers), 0)];
+        NSLog(@"about to add the images");
         [cell addImages: tempCircle.members];
     }
     

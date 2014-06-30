@@ -143,7 +143,10 @@
                                         circleID, @"circle_id",
                                         nil];
         
-        [[PASessionManager sharedClient] POST:@"api/circle_members"
+        NSString *circleMembersURL = [@"api/circles/" stringByAppendingString:[circleID stringValue]];
+        circleMembersURL = [circleMembersURL stringByAppendingString:@"/circle_members"];
+        
+        [[PASessionManager sharedClient] POST:circleMembersURL
                                    parameters:tempDictionary
                                       success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
@@ -213,11 +216,13 @@
                               parameters:nil
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"circle members url: %@", circleMembersURL);
+         NSLog(@"the circle json: %@", JSON);
          NSMutableArray *members = [NSMutableArray array];
          NSDictionary *eventsDictionary = (NSDictionary*)JSON;
          NSArray *postsFromResponse = [eventsDictionary objectForKey:@"circle_members"];
          for(NSDictionary * peerAttributes in postsFromResponse){
-             NSNumber *memberID = [peerAttributes objectForKey:@"id"];
+             NSNumber *memberID = [peerAttributes objectForKey:@"user_id"];
              [members addObject:memberID];
          }
          circle.members = members;
