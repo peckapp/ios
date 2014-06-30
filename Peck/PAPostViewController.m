@@ -18,8 +18,6 @@
 
 @interface PAPostViewController () {}
 
-@property NSArray *detailTitles;
-@property NSMutableArray *detailValues;
 
 @property BOOL startPickerIsOpen;
 @property BOOL endPickerIsOpen;
@@ -216,20 +214,16 @@ NSDate *chosenDate;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 4) { // this is my picker cell
-        if (self.startPickerIsOpen) {
-            return 162;
-        } else {
+        if (!self.startPickerIsOpen) {
             return 0;
         }
     }
     if (indexPath.row == 6) { // this is my picker cell
-        if (self.endPickerIsOpen) {
-            return 162;
-        } else {
+        if (!self.endPickerIsOpen) {
             return 0;
         }
     }
-    return self.tableView.rowHeight;
+    return [super tableView:tableView heightForRowAtIndexPath:indexPath];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -237,23 +231,30 @@ NSDate *chosenDate;
     if (indexPath.row == 3) {
         self.endPickerIsOpen = NO;
         self.startPickerIsOpen = !self.startPickerIsOpen;
-        [UIView animateWithDuration:.4 animations:^{
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:4 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            [self.tableView reloadData];
-        }];
+
     }
     else if (indexPath.row == 5) {
         self.startPickerIsOpen = NO;
         self.endPickerIsOpen = !self.endPickerIsOpen;
-        [UIView animateWithDuration:.4 animations:^{
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:6 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            [self.tableView reloadData];
-        }];
+
     }
     else{
         self.startPickerIsOpen = NO;
         self.endPickerIsOpen = NO;
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+
+    [UIView animateWithDuration:.4 animations:^{
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadData];
+    }];
+
+    if (self.endPickerIsOpen == NO) {
+        // Change labels
+    }
+
+    if (self.endPickerIsOpen == NO) {
+        // Change labels
     }
 }
 
@@ -262,7 +263,7 @@ NSDate *chosenDate;
 
 }
 
-- (IBAction)constructEventAndExit:(id)sender
+- (IBAction)constructResultAndExit:(id)sender
 {
 
 }
