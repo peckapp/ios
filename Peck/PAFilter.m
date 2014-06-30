@@ -8,6 +8,7 @@
 
 #import "PAFilter.h"
 
+#define elementRadius 60
 #define edgeBuffer 20
 #define verticalTranslation @"transform.translation.y"
 
@@ -19,7 +20,8 @@
     
 }
 
-@property (nonatomic, retain) NSMutableArray * selections;
+@property (nonatomic, retain) NSMutableDictionary * filterSelections;
+@property (nonatomic, retain) UIImageView * selectedFilter;
 
 @property (nonatomic, retain) UIImage * standard;
 @property (nonatomic, retain) UIImage * detail;
@@ -67,7 +69,7 @@
 
 #pragma mark - Animation
 
-- (void)presentUpwardForMode:(PAFilterMode)mode
+- (void)presentUpwardForMode:(PAFilterType)mode
 {
     if (!self.presented) {
         NSString *keyPath = verticalTranslation;
@@ -157,7 +159,7 @@
     
     NSLog(@"touched filter");
     
-    [self.delegate shadeBackgroundView];
+    [self.delegate shadeBackgroundViewOverDuration:fadeInOutDuration];
     
     [self setNeedsDisplay]; // let the system know to update the view, probably want to do this with animation instead
 }
@@ -178,7 +180,7 @@
         // call methods in superview to update table view cells accordingly
     }
     
-    [self.delegate unshadeBackgroundView];
+    [self.delegate unshadeBackgroundViewOverDuration:fadeInOutDuration];
     
     // becomes more transparent after selection finishes
     [UIView animateWithDuration:fadeInOutDuration animations:^{ self.alpha = inactiveAlpha; }];
@@ -221,8 +223,8 @@
 
 - (CGRect) startingRect
 {
-    double height = 60;
-    double width = 60;
+    double height = 200;
+    double width = 200;
     double x = [[UIScreen mainScreen] bounds].size.width - width - edgeBuffer;
     double y = [[UIScreen mainScreen] bounds].size.height;
     return CGRectMake(x, y, height, width);

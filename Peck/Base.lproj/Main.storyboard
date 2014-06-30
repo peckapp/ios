@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.17" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
     <dependencies>
+        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.11"/>
     </dependencies>
     <scenes>
@@ -458,7 +459,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jgw-4o-OAg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-184" y="2843"/>
+            <point key="canvasLocation" x="-184" y="2743"/>
         </scene>
         <!--Events View Controller - Master-->
         <scene sceneID="VgW-fR-Quf">
@@ -480,12 +481,9 @@
                             </button>
                         </barButtonItem>
                         <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="mZ0-eo-jaw">
-                            <rect key="frame" x="96" y="6" width="128" height="33"/>
+                            <rect key="frame" x="96" y="5.5" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                            <state key="normal" title="Today">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
+                            <state key="normal" title="Today"/>
                             <connections>
                                 <action selector="todayButton:" destination="pGg-6v-bdr" eventType="touchUpInside" id="7jy-Oy-E3X"/>
                             </connections>
@@ -637,6 +635,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <sections/>
                             </tableView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="ve7-Oz-bnH">
                                 <rect key="frame" x="44" y="20" width="232" height="29"/>
@@ -662,8 +661,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="controlSwitch" destination="ve7-Oz-bnH" id="h8c-Bx-fxG"/>
-                        <segue destination="dbL-Fg-Sgg" kind="push" identifier="showFeed" id="7xt-IF-tkU"/>
-                        <segue destination="pGg-6v-bdr" kind="push" identifier="showEvents" id="kbr-xc-iWf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HDc-2x-wwf" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -680,8 +677,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="kbr-xc-iWf"/>
-        <segue reference="7xt-IF-tkU"/>
-    </inferredMetricsTieBreakers>
 </document>

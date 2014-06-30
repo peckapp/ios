@@ -20,7 +20,7 @@
 
 @protocol PADropdownViewControllerDelegate; //allows delegate to be referenced in interface
 
-@interface PADropdownViewController : UIViewController <PACoreDataProtocol, PADropdownBarDelegate, PAFilterShaderDelegate>
+@interface PADropdownViewController : UIViewController <PACoreDataProtocol, PADropdownBarDelegate, PAFilterDelegate>
 
 // viewcontroller that displays the primary content
 @property (nonatomic) UIViewController * primaryViewController;
