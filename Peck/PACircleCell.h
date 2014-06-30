@@ -8,13 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "PACirclesTableViewController.h"
+#import "PACircleScrollView.h"
 
 @interface PACircleCell : UITableViewCell <UIGestureRecognizerDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet PACircleScrollView *scrollView;
 @property(nonatomic, assign) id <PACirclesControllerDelegate> delegate;
 @property (nonatomic, assign) NSInteger members;
 @property BOOL loadedImages;
+@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
 
 -(void)addImages:(NSArray*)members;
 @end
