@@ -17,7 +17,7 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 - (IBAction)segmentedControl:(id)sender;
-- (IBAction)okayButton:(id)sender;
+- (IBAction)constructEventAndExit:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *controlSwitch;
 @property (weak, nonatomic) IBOutlet UIImageView *photoView;

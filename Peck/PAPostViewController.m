@@ -21,6 +21,9 @@
 @property NSArray *detailTitles;
 @property NSMutableArray *detailValues;
 
+@property BOOL startPickerIsOpen;
+@property BOOL endPickerIsOpen;
+
 @end
 
 @implementation PAPostViewController
@@ -91,7 +94,7 @@ NSDate *chosenDate;
 {
     // Return the number of rows in the section.
     //return self.detailTitles.count;
-    return 7;
+    return 9;
 }
 
 #pragma mark - table view delegate
@@ -211,19 +214,57 @@ NSDate *chosenDate;
  NSLog(@"add a photo");
  */
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (self.controlSwitch.selectedSegmentIndex == 0) {
-        if([indexPath row] == 1){
-            
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == 4) { // this is my picker cell
+        if (self.startPickerIsOpen) {
+            return 162;
+        } else {
+            return 0;
         }
     }
+    if (indexPath.row == 6) { // this is my picker cell
+        if (self.endPickerIsOpen) {
+            return 162;
+        } else {
+            return 0;
+        }
+    }
+    return self.tableView.rowHeight;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 3) {
+        self.endPickerIsOpen = NO;
+        self.startPickerIsOpen = !self.startPickerIsOpen;
+        [UIView animateWithDuration:.4 animations:^{
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:4 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView reloadData];
+        }];
+    }
+    else if (indexPath.row == 5) {
+        self.startPickerIsOpen = NO;
+        self.endPickerIsOpen = !self.endPickerIsOpen;
+        [UIView animateWithDuration:.4 animations:^{
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:6 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView reloadData];
+        }];
+    }
     else{
+        self.startPickerIsOpen = NO;
+        self.endPickerIsOpen = NO;
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
-- (IBAction)segmentedControl:(id)sender {
+- (IBAction)segmentedControl:(id)sender
+{
+
+}
+
+- (IBAction)constructEventAndExit:(id)sender
+{
+
 }
 
 /*
