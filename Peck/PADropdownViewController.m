@@ -300,12 +300,28 @@
     }
 }
 
-- (void)showFilterForMode:(PAFilterMode)mode
+- (void)showFilterForMode:(PAFilterType)mode
 {
     if (!self.filter.presented) {
         [self.filter presentUpwardForMode:mode];
         [self.view bringSubviewToFront:self.filter];
     }
+}
+
+- (BOOL)requestFilterMode:(PAFilterMode)mode
+{
+    // preliminary options, not necessarily reflective of final filter choices
+    if (mode == PAFilterStandardMode) {
+        // show all events
+        NSLog(@"Activate Filter for Standard Mode");
+    } else if (mode == PAFilterSubscribedMode) {
+        NSLog(@"Activate Filter for Subscribed Mode");
+    } else if (mode == PAFilterInvitedMode) {
+        NSLog(@"Activate Filter for Invited Mode");
+    } else if (mode == PAFilterDiningMode) {
+        NSLog(@"Activate Filter for Dining Mode");
+    }
+    return false;
 }
 
 - (void)shadeBackgroundViewOverDuration:(float)duration
@@ -321,5 +337,6 @@
     [self.view bringSubviewToFront:self.gradientView];
     [UIView animateWithDuration:duration animations:^{ self.gradientView.alpha = 0.0; }];
 }
+
 
 @end

@@ -13,16 +13,24 @@
 typedef enum {
     PAFilterHomeMode,
     PAFilterExploreMode
+} PAFilterType;
+
+// types for each filtermode
+typedef enum {
+    PAFilterStandardMode,
+    PAFilterDiningMode,
+    PAFilterSubscribedMode,
+    PAFilterInvitedMode
 } PAFilterMode;
 
-@protocol PAFilterShaderDelegate;
+@protocol PAFilterDelegate;
 
 @interface PAFilter : UIView
 
 // whether or not the filter is presented on the screen
 @property (nonatomic) BOOL presented;
 
-@property (nonatomic, weak) id<PAFilterShaderDelegate> delegate;
+@property (nonatomic, weak) id<PAFilterDelegate> delegate;
 
 // designated factory for the filter. use this for instantiation
 +(instancetype)filter;
@@ -31,15 +39,18 @@ typedef enum {
 - (void)dismissDownward;
 
 // causes the filter element to rise into the screen with the specified mode
-- (void)presentUpwardForMode:(PAFilterMode)mode;
+- (void)presentUpwardForMode:(PAFilterType)mode;
 
 @end
 
 
-@protocol PAFilterShaderDelegate
+@protocol PAFilterDelegate
 
+// background gradient animation triggers, duration is identical to the animation of the filter itself
 - (void)shadeBackgroundViewOverDuration:(float)duration;
-
 - (void)unshadeBackgroundViewOverDuration:(float)duration;
+
+// trigger changes in the filtered state of the home view controller
+- (BOOL)requestFilterMode:(PAFilterMode)mode;
 
 @end
