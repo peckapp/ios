@@ -20,8 +20,8 @@
 - (IBAction)okayButton:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *controlSwitch;
-@property (weak, nonatomic) IBOutlet UIImage *photoView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIImageView *photoView;
 
 @property (strong, nonatomic) NSMutableArray *userEvents;
 

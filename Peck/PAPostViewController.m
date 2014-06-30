@@ -58,6 +58,8 @@ UITableView *_tableView;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
+    self.tableView.tableHeaderView = self.photoView;
+
     self.detailKeys = @[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
 
     // This code allows the user to dismiss the keyboard by pressing somewhere else
@@ -85,7 +87,7 @@ UITableView *_tableView;
 
 - (void) hideKeyboard
 {
-     _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
+    // _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
     [self.view endEditing:NO];
 }
 
@@ -291,7 +293,7 @@ UITableView *_tableView;
 - (IBAction)segmentedControl:(id)sender {
     // photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
     self.userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-    self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
+    //self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
     // Necessary in case the keyboard is up while switching the segmented control
     if(_controlSwitch.selectedSegmentIndex==0){
 //        _tableView.rowHeight = initialRowHeight;
@@ -303,7 +305,7 @@ UITableView *_tableView;
 //        self.detailKeys=@[@"Who are you sharing with?", @"What's on your mind?",@"Add a photo"];
 //        =@[@"Mom, Dad",@"My message",@""];
     }
-    [_tableView reloadData];
+    [self.tableView reloadData];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex

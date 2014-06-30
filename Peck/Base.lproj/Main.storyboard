@@ -658,6 +658,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="controlSwitch" destination="ve7-Oz-bnH" id="2to-am-z2f"/>
+                        <outlet property="photoView" destination="Iot-5z-FEl" id="KVq-Tp-6xb"/>
                         <outlet property="tableView" destination="Kd1-Wk-JxO" id="pJ9-Hn-3qR"/>
                         <segue destination="dbL-Fg-Sgg" kind="push" identifier="showFeed" id="7xt-IF-tkU"/>
                         <segue destination="pGg-6v-bdr" kind="push" identifier="showEvents" id="kbr-xc-iWf"/>
