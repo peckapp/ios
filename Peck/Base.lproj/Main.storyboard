@@ -1011,7 +1011,9 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                     </navigationItem>
                     <connections>
                         <outlet property="controlSwitch" destination="3Lq-op-wBX" id="mmc-c1-jdp"/>
+                        <outlet property="endTimeCell" destination="07o-Kz-9Ud" id="Re5-sP-7mC"/>
                         <outlet property="photoView" destination="hcH-t5-CRZ" id="D69-5P-zgz"/>
+                        <outlet property="startTimeCell" destination="Sj7-I4-hdV" id="IFv-3G-9ne"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fGt-fr-HsW" userLabel="First Responder" sceneMemberID="firstResponder"/>

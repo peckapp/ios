@@ -45,7 +45,6 @@ NSDate *chosenDate;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
     }
     return self;
 }
@@ -59,25 +58,21 @@ NSDate *chosenDate;
 
     self.tableView.tableHeaderView = self.photoView;
     
-    // This code allows the user to dismiss the keyboard by pressing somewhere else
-    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
-    gestureRecognizer.cancelsTouchesInView = NO;
-    [self.tableView addGestureRecognizer:gestureRecognizer];
-    
     self.userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+
+    self.startPickerIsOpen = NO;
+    self.endPickerIsOpen = NO;
+
+    [UIView animateWithDuration:.4 animations:^{
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadData];
+    }];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-
-- (void) hideKeyboard
-{
-    // _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
-    [self.view endEditing:NO];
 }
 
 # pragma mark - table view data source
@@ -92,7 +87,7 @@ NSDate *chosenDate;
 {
     // Return the number of rows in the section.
     //return self.detailTitles.count;
-    return 9;
+    return 10;
 }
 
 #pragma mark - table view delegate
@@ -213,27 +208,26 @@ NSDate *chosenDate;
  */
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 4) { // this is my picker cell
-        if (!self.startPickerIsOpen) {
-            return 0;
-        }
+    if (indexPath.row == 4 && !self.startPickerIsOpen) {
+        return 0;
     }
-    if (indexPath.row == 6) { // this is my picker cell
-        if (!self.endPickerIsOpen) {
-            return 0;
-        }
+    else if (indexPath.row == 6 && !self.endPickerIsOpen) {
+        return 0;
     }
-    return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+    else {
+        return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+    }
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 3) {
+    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    if (cell == self.startTimeCell) {
         self.endPickerIsOpen = NO;
         self.startPickerIsOpen = !self.startPickerIsOpen;
 
     }
-    else if (indexPath.row == 5) {
+    else if (cell == self.endTimeCell) {
         self.startPickerIsOpen = NO;
         self.endPickerIsOpen = !self.endPickerIsOpen;
 
@@ -241,7 +235,6 @@ NSDate *chosenDate;
     else{
         self.startPickerIsOpen = NO;
         self.endPickerIsOpen = NO;
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 
     [UIView animateWithDuration:.4 animations:^{
@@ -249,7 +242,7 @@ NSDate *chosenDate;
         [self.tableView reloadData];
     }];
 
-    if (self.endPickerIsOpen == NO) {
+    if (self.startPickerIsOpen == NO) {
         // Change labels
     }
 
