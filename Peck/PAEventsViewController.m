@@ -46,7 +46,6 @@ UISearchBar * searchBar;
 CGFloat cellHeight;
 
 NSCache * imageCache;
-BOOL searching;
 BOOL showingDetail;
 NSString *searchBarText;
 NSDate *today;
@@ -61,7 +60,6 @@ NSInteger selectedDay;
 
 -(void)viewDidDisappear:(BOOL)animated{
     if(!showingDetail){
-        searching = NO;
         [eventsTableView reloadData];
     }
 }
@@ -75,7 +73,6 @@ NSInteger selectedDay;
     [super viewDidLoad];
     NSLog(@"View did load (events)");
     selectedDay=0;
-    searching = NO;
     showingDetail = NO;
     NSError * error = nil;
     if (![self.fetchedResultsController performFetch:&error])
@@ -195,67 +192,6 @@ NSInteger selectedDay;
     return _fetchedResultsController;
 }
 
--(NSFetchedResultsController *)searchFetchedResultsController{
-    if(_searchFetchedResultsController)
-        return _searchFetchedResultsController;
-    
-    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    // Edit the entity name as appropriate.
-    
-    NSString * eventString = @"Event";
-    NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
-    [fetchRequest setEntity:entity];
-    
-    
-    NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
-    if(searchBarText){
-        NSString *attributeName = @"title";
-        NSString *attributeValue = searchBarText;
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@",
-                              attributeName, attributeValue];
-        // the [c] dismisses case sensitivity
-        [predicateArray addObject:predicate];
-    }
-    
-    
-    NSDate *selectedMorning = [self updateDate];
-    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
-    [dateComponents setDay:1];
-    NSDate *selectedNight =[[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:selectedMorning options:0];
-
-    
-    NSPredicate *startDatePredicate = [NSPredicate predicateWithFormat:@"start_date > %@", selectedMorning];
-    NSPredicate *endDatePredicate = [NSPredicate predicateWithFormat:@"end_date < %@", selectedNight];
-    NSLog(@"the current date: %@", [NSDate date]);
-    
-    [predicateArray addObject:startDatePredicate];
-    [predicateArray addObject:endDatePredicate];
-    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
-    [fetchRequest setPredicate:compoundPredicate];
-    // Set the batch size to a suitable number.
-    [fetchRequest setFetchBatchSize:20];
-    
-    // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:YES];
-    NSArray *sortDescriptors = @[sortDescriptor];
-    
-    [fetchRequest setSortDescriptors:sortDescriptors];
-    
-    // Edit the section name key path and cache name if appropriate.
-    // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
-                                                             initWithFetchRequest:fetchRequest
-                                                             managedObjectContext:_managedObjectContext
-                                                             sectionNameKeyPath:nil //this needs to be nil
-                                                             cacheName:nil];
-    
-    aFetchedResultsController.delegate = self;
-    self.searchFetchedResultsController = aFetchedResultsController;
-    
-    return _searchFetchedResultsController;
-}
 
 -(NSDate *)updateDate{
     NSDate *currentDate = [NSDate date];
@@ -383,23 +319,13 @@ NSInteger selectedDay;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if(!searching)
-       return [[_fetchedResultsController sections] count];
-    else
-        return [[_searchFetchedResultsController sections] count];
+    return [[_fetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(!searching){
     id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
     return [sectionInfo numberOfObjects];
-    }
-    else{
-        id <NSFetchedResultsSectionInfo> sectionInfo = [[_searchFetchedResultsController sections] objectAtIndex:section];
-        return [sectionInfo numberOfObjects];
-
-    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -463,10 +389,7 @@ NSInteger selectedDay;
         showingDetail=YES;
         NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
         NSManagedObject *object;
-        if(!searching)
-            object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        else
-            object = [[self searchFetchedResultsController] objectAtIndexPath:indexPath];
+        object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setDetailItem:object];
     }
 }
@@ -486,12 +409,7 @@ NSInteger selectedDay;
 - (void)configureCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Event *tempEvent;
-    if(!searching) {
         tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    }
-    else {
-        tempEvent =[self.searchFetchedResultsController objectAtIndexPath:indexPath];
-    }
 
     cell.titleLabel.text = tempEvent.title;
     NSString *imageID = [tempEvent.id stringValue];
@@ -531,17 +449,17 @@ NSInteger selectedDay;
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     NSLog(@"Text did change");
     if([searchText isEqualToString:@""]){
-        searching = NO;
         searchBar.text = nil;
-        [eventsTableView reloadData];
+        searchBarText=nil;
+        _fetchedResultsController=nil;
+        [self reloadTheView];
         NSLog(@"User cancelled search");
     }else{
         NSLog(@"use the search fetch controller");
-        _searchFetchedResultsController = nil;
+        _fetchedResultsController = nil;
         searchBarText = searchText;
-        searching = YES;
         NSError * error = nil;
-        if (![self.searchFetchedResultsController performFetch:&error])
+        if (![self.fetchedResultsController performFetch:&error])
         {
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
@@ -566,9 +484,10 @@ NSInteger selectedDay;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
-    searching = NO;
     searchBar.text = nil;
-    [eventsTableView reloadData];
+    searchBarText=nil;
+     _fetchedResultsController = nil;
+    [self reloadTheView];
     NSLog(@"User cancelled search");
     [searchBar resignFirstResponder]; // if you want the keyboard to go away
 }
@@ -576,30 +495,27 @@ NSInteger selectedDay;
 - (IBAction)yesterdayButton:(id)sender {
     NSLog(@"Yesterday");
     selectedDay--;
-    _searchFetchedResultsController = nil;
-    searching = YES;
+    _fetchedResultsController = nil;
     [self reloadTheView];
 }
 
 - (IBAction)todayButton:(id)sender {
     selectedDay=0;
-    _searchFetchedResultsController = nil;
-    searching = YES;
+    _fetchedResultsController = nil;
     NSLog(@"Today");
     [self reloadTheView];
 }
 
 - (IBAction)tomorrowButton:(id)sender {
     selectedDay++;
-    _searchFetchedResultsController = nil;
-    searching = YES;
+    _fetchedResultsController = nil;
     NSLog(@"Tomorrow");
     [self reloadTheView];
 }
 
 -(void)reloadTheView{
     NSError *error=nil;
-    if (![self.searchFetchedResultsController performFetch:&error])
+    if (![self.fetchedResultsController performFetch:&error])
     {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
