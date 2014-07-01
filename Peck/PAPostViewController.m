@@ -563,7 +563,8 @@
             
             
             
-
+            
+            photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
             [self.tableView reloadData];
     
