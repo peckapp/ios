@@ -37,7 +37,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I8C-IW-9eh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-768" y="11"/>
+            <point key="canvasLocation" x="-1632" y="115"/>
         </scene>
         <!--Explore Table View Controller - Explore-->
         <scene sceneID="09g-Dv-sHg">
@@ -59,7 +59,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZzG-Tl-v6O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-456" y="1050"/>
+            <point key="canvasLocation" x="-720" y="938"/>
         </scene>
         <!--Navigation Controller - Explore-->
         <scene sceneID="RJ5-1c-Ets">
@@ -77,7 +77,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vlZ-OQ-IMw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-988" y="1050"/>
+            <point key="canvasLocation" x="-1252" y="938"/>
         </scene>
         <!--Navigation Controller - Pecks-->
         <scene sceneID="YWh-za-12c">
@@ -93,7 +93,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H3b-is-IFs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1304" y="11"/>
+            <point key="canvasLocation" x="-2168" y="115"/>
         </scene>
         <!--Explore Info View Controller - Detail-->
         <scene sceneID="Zfp-18-CXc">
@@ -126,7 +126,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EPX-0K-QGm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="92" y="1050"/>
+            <point key="canvasLocation" x="-172" y="938"/>
         </scene>
         <!--Navigation Controller - Events-->
         <scene sceneID="cUi-kZ-frf">
@@ -148,7 +148,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eq9-QA-ai8" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3259" y="2806"/>
+            <point key="canvasLocation" x="-3139" y="2446"/>
         </scene>
         <!--Circles Table View Controller - Circles-->
         <scene sceneID="I7Z-lZ-gzy">
@@ -183,7 +183,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D43-v5-Oqh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-384" y="3074"/>
+            <point key="canvasLocation" x="-726" y="3146"/>
         </scene>
         <!--Create Circle View Controller - Create a Circle-->
         <scene sceneID="cAH-N6-cUI">
@@ -271,7 +271,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IVU-TB-Tig" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="je6-6p-AOl" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="164" y="3074"/>
+            <point key="canvasLocation" x="-178" y="3146"/>
         </scene>
         <!--Table View Controller - Location-->
         <scene sceneID="3Zb-Sp-VdB">
@@ -420,7 +420,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NTI-Eb-F67" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-168" y="3995"/>
+            <point key="canvasLocation" x="-792" y="4059"/>
         </scene>
         <!--Navigation Controller - Circles-->
         <scene sceneID="fXo-bg-fUk">
@@ -437,7 +437,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Uw9-vz-hAL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-920" y="3074"/>
+            <point key="canvasLocation" x="-1262" y="3146"/>
         </scene>
         <!--Navigation Controller - More-->
         <scene sceneID="gC2-m0-3wP">
@@ -454,7 +454,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cIN-YJ-lYD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1252" y="3987"/>
+            <point key="canvasLocation" x="-1876" y="4051"/>
         </scene>
         <!--Profile Table View Controller - Profile-->
         <scene sceneID="yHh-cC-9rb">
@@ -558,7 +558,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jgw-4o-OAg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-716" y="3987"/>
+            <point key="canvasLocation" x="-1340" y="4051"/>
         </scene>
         <!--Events View Controller - Master-->
         <scene sceneID="VgW-fR-Quf">
@@ -608,7 +608,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Cn-md-YlS" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2731" y="2806"/>
+            <point key="canvasLocation" x="-2611" y="2446"/>
         </scene>
         <!--Event Info View Controller - Detail-->
         <scene sceneID="Cn3-H9-jdl">
@@ -640,7 +640,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lrm-kH-fPn" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2232" y="2806"/>
+            <point key="canvasLocation" x="-2112" y="2446"/>
         </scene>
         <!--Configure View Controller-->
         <scene sceneID="LG1-G8-7Oc">
@@ -677,24 +677,17 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="anK-Uj-DQI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2212" y="1276"/>
+            <point key="canvasLocation" x="-2956" y="1623"/>
         </scene>
         <!--Dropdown View Controller-->
         <scene sceneID="FTx-En-4cA">
             <objects>
                 <viewController id="wW3-aa-Zdw" customClass="PADropdownViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="ZEe-zS-gTk"/>
-                    <connections>
-                        <segue destination="COS-N3-QSc" kind="custom" identifier="none" id="kuf-lR-Bh5"/>
-                        <segue destination="YgY-YD-cce" kind="custom" identifier="none" id="ajr-VW-jxu"/>
-                        <segue destination="7ZG-zh-pMr" kind="custom" identifier="none" id="8ha-r1-TMl"/>
-                        <segue destination="hiW-cR-lbl" kind="custom" identifier="none" id="LpU-Yy-pyb"/>
-                        <segue destination="bif-qW-HUa" kind="custom" identifier="none" id="nIp-kd-O0M"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nyB-Wn-8gK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2212" y="2023"/>
+            <point key="canvasLocation" x="-2312" y="1623"/>
         </scene>
         <!--Navigation Controller - Add-->
         <scene sceneID="kh1-OH-BWn">
@@ -987,10 +980,8 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="O7R-Sx-xLx">
                                 <rect key="frame" x="16" y="5" width="71" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Cancel">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Cancel"/>
                                 <connections>
                                     <action selector="cancelResultAndExit:" destination="I0y-hH-f6V" eventType="touchUpInside" id="b8e-Oe-IqO"/>
                                 </connections>
