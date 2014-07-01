@@ -133,6 +133,9 @@
 {
     NSLog(@"%ld", (long)index);
     UIViewController * oldVC = self.activeViewController;
+    /*if([self.activeViewController isKindOfClass:[UINavigationController class]]){
+        oldVC = ((UINavigationController*) self.activeViewController).topViewController;
+    }*/
     UIViewController * newVC = self.secondaryViewControllers[index];
 
     self.view.userInteractionEnabled = NO;

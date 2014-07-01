@@ -225,7 +225,79 @@
 
 - (IBAction)returnResultAndExit:(id)sender
 {
+    if(_controlSwitch.selectedSegmentIndex==0){
+        if([self.titleField.text isEqualToString:@""] || [self.startTimeLabel.text isEqualToString:@""]){
+            NSLog(@"allert");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                                            message:@"You must enter an event name and time"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        else{
+            //[[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];
+            //[event setId:_userEvents[0]];
+            
+            
+            
+            NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      self.titleField.text,@"title",
+                                      self.descriptionField.text, @"event_description",
+                                      [NSNumber numberWithInt:1], @"institution_id",
+                                      self.startTimeLabel.text, @"start_date",
+                                      self.endTimeLabel.text, @"end_date",
+                                      nil];
+            
+            [[PASyncManager globalSyncManager] postEvent: setEvent];
+            
+            
+            
+            
+            self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
+            _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+            [self.tableView reloadData];
+            
+            
+            //[self performSegueWithIdentifier:@"showEvents" sender:self];
+        }
+        
+    }
+    /*
+    else if(_controlSwitch.selectedSegmentIndex==1){
+        if([_userEvents[1] isEqualToString:@""]){
+            NSLog(@"allert");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                                            message:@"You must enter a message"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        else{
+            PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+            _managedObjectContext = [appdelegate managedObjectContext];
+            
+            Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:_managedObjectContext];
+            [message setText:_userEvents[1]];
+            [message setCreated_at:[NSDate date]];
+            [message setId:_userEvents[1]];
+            // NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
+            // [message setPhoto:imageData];
+            
+            
+            //  photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
+            _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+            [self.tableView reloadData];
+            //[self performSegueWithIdentifier:@"showFeed" sender:self];
+            
+        }
+    }
+}
 
+*/
+    
+    
 }
 
 /*
