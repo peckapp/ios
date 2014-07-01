@@ -129,13 +129,38 @@
 
 #pragma mark PADropdownBarDelegate
 
+- (void) barDidSelectItemAtIndex:(NSInteger)index;
+{
+    [self hideChildViewController:self.activeViewController];
+    [self displayChildViewController:self.secondaryViewControllers[index]];
+
+}
+
+- (void) barDidDeselectItemAtIndex:(NSInteger)index;
+{
+    [self hideChildViewController:self.activeViewController];
+    [self displayChildViewController:self.primaryViewController];
+}
+
+- (void) barDidSlideRightToIndex:(NSInteger)index;
+{
+    [self hideChildViewController:self.activeViewController];
+    [self displayChildViewController:self.secondaryViewControllers[index]];
+}
+
+- (void) barDidSlideLeftToIndex:(NSInteger)index;
+{
+    [self hideChildViewController:self.activeViewController];
+    [self displayChildViewController:self.secondaryViewControllers[index]];
+}
+
+/*
 - (void) barDidSelectItemAtIndex:(NSInteger)index
 {
-    NSLog(@"%ld", (long)index);
     UIViewController * oldVC = self.activeViewController;
-    /*if([self.activeViewController isKindOfClass:[UINavigationController class]]){
+    if([self.activeViewController isKindOfClass:[UINavigationController class]]){
         oldVC = ((UINavigationController*) self.activeViewController).topViewController;
-    }*/
+    }
     UIViewController * newVC = self.secondaryViewControllers[index];
 
     self.view.userInteractionEnabled = NO;
@@ -176,7 +201,6 @@
 
 - (void) barDidDeselectItemAtIndex:(NSInteger)index
 {
-    NSLog(@"%ld", (long)index);
     UIViewController * oldVC = self.activeViewController;
     UIViewController * newVC = self.primaryViewController;
 
@@ -217,7 +241,6 @@
 
 - (void) barDidSlideLeftToIndex:(NSInteger)index
 {
-    NSLog(@"%ld", (long)index);
     UIViewController * oldVC = self.activeViewController;
     UIViewController * newVC = self.secondaryViewControllers[index];
 
@@ -341,6 +364,6 @@
     [self.view bringSubviewToFront:self.gradientView];
     [UIView animateWithDuration:duration animations:^{ self.gradientView.alpha = 0.0; }];
 }
-
+*/
 
 @end

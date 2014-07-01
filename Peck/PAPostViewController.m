@@ -75,7 +75,6 @@
 {
     NSInteger state = self.controlSwitch.selectedSegmentIndex;
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-    NSLog(@"selector state: %ld", (long)state);
     if (cell.tag == state || cell.tag == cellStateAlwaysOn) {
         return [super tableView:tableView heightForRowAtIndexPath:indexPath];
     }
@@ -140,7 +139,6 @@
         controller.modalPresentationStyle = UIModalPresentationCurrentContext;
         controller.delegate = self;
         [self presentViewController: controller animated: YES completion: nil];
-
     }
 }
 
