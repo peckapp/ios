@@ -83,8 +83,12 @@
 
     // Display views
     [self.view addSubview:dropdownBar];
-    [self displayChildViewController:self.primaryViewController];
     
+    [self addChildViewController:self.primaryViewController];
+    [self.view addSubview: self.primaryViewController.view];
+    [self.primaryViewController didMoveToParentViewController:self];
+    self.activeViewController = self.primaryViewController;
+
     // gradient for filter
     self.gradientView = [[UIView alloc] initWithFrame:self.frameForChildViewController];
     self.gradientView.alpha = 0.0;
@@ -112,6 +116,7 @@
 
 #pragma mark Manage ViewControllers
 
+/*
 - (void) displayChildViewController: (UIViewController*) newVC
 {
     [self addChildViewController:newVC];
@@ -126,9 +131,11 @@
     [oldVC.view removeFromSuperview];
     [oldVC removeFromParentViewController];
 }
+ */
 
 #pragma mark PADropdownBarDelegate
 
+/*
 - (void) barDidSelectItemAtIndex:(NSInteger)index;
 {
     [self hideChildViewController:self.activeViewController];
@@ -153,44 +160,37 @@
     [self hideChildViewController:self.activeViewController];
     [self displayChildViewController:self.secondaryViewControllers[index]];
 }
+*/
 
-/*
 - (void) barDidSelectItemAtIndex:(NSInteger)index
 {
     UIViewController * oldVC = self.activeViewController;
-    if([self.activeViewController isKindOfClass:[UINavigationController class]]){
-        oldVC = ((UINavigationController*) self.activeViewController).topViewController;
-    }
     UIViewController * newVC = self.secondaryViewControllers[index];
 
     self.view.userInteractionEnabled = NO;
+
+    // Hide child view controller
     [oldVC willMoveToParentViewController:nil];
-    [newVC willMoveToParentViewController:self];
-    [self hideChildViewController:oldVC];
+    [oldVC removeFromParentViewController];
 
-    UIView * oldView = oldVC.view;
-    UIView * newView = newVC.view;
-
-    [self.view insertSubview:oldView belowSubview:dropdownBar];
-    [self.view insertSubview:newView belowSubview:dropdownBar];
+    [self.view insertSubview:newVC.view belowSubview:dropdownBar];
 
     CGFloat distance = self.frameForChildViewController.size.height;
-    newView.transform = CGAffineTransformMakeTranslation(0.0, -distance);
+    newVC.view.transform = CGAffineTransformMakeTranslation(0.0, -distance);
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:0
                      animations:^{
-                         newView.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+                         newVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
                      }
                      completion:^(BOOL finished) {
-                         [oldVC removeFromParentViewController];
-                         [newVC removeFromParentViewController];
+                         [oldVC.view removeFromSuperview];
 
-                         [oldVC didMoveToParentViewController:nil];
+                         // Display child view controller
+                         [self addChildViewController:newVC];
                          [newVC didMoveToParentViewController:self];
-
-                         [self displayChildViewController:newVC];
+                         self.activeViewController = newVC;
                          self.view.userInteractionEnabled = YES;
                          
                      }];
@@ -205,33 +205,29 @@
     UIViewController * newVC = self.primaryViewController;
 
     self.view.userInteractionEnabled = NO;
+
+    // Hide child view controller
     [oldVC willMoveToParentViewController:nil];
-    [newVC willMoveToParentViewController:self];
-    [self hideChildViewController:oldVC];
+    [oldVC removeFromParentViewController];
 
-    UIView * oldView = oldVC.view;
-    UIView * newView = newVC.view;
-
-    [self.view insertSubview:newView belowSubview:dropdownBar];
-    [self.view insertSubview:oldView belowSubview:dropdownBar];
+    [self.view insertSubview:newVC.view belowSubview:oldVC.view];
 
     CGFloat distance = self.frameForChildViewController.size.height;
-    oldView.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+    oldVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:0
                      animations:^{
-                         oldView.transform = CGAffineTransformMakeTranslation(0.0, -distance);
+                         oldVC.view.transform = CGAffineTransformMakeTranslation(0.0, -distance);
                      }
                      completion:^(BOOL finished) {
-                         [oldVC removeFromParentViewController];
-                         [newVC removeFromParentViewController];
+                         [oldVC.view removeFromSuperview];
 
-                         [oldVC didMoveToParentViewController:nil];
+                         // Display child view controller
+                         [self addChildViewController:newVC];
                          [newVC didMoveToParentViewController:self];
-
-                         [self displayChildViewController:newVC];
+                         self.activeViewController = newVC;
                          self.view.userInteractionEnabled = YES;
                          
                          // show the dropdown filter for the home mode
@@ -245,75 +241,66 @@
     UIViewController * newVC = self.secondaryViewControllers[index];
 
     self.view.userInteractionEnabled = NO;
+
+    // Hide child view controller
     [oldVC willMoveToParentViewController:nil];
-    [newVC willMoveToParentViewController:self];
-    [self hideChildViewController:oldVC];
+    [oldVC removeFromParentViewController];
 
-    UIView * oldView = oldVC.view;
-    UIView * newView = newVC.view;
-
-    [self.view insertSubview:newView belowSubview:dropdownBar];
-    [self.view insertSubview:oldView belowSubview:dropdownBar];
+    [self.view insertSubview:newVC.view belowSubview:dropdownBar];
 
     CGFloat distance = self.frameForChildViewController.size.width;
-    oldView.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    newView.transform = CGAffineTransformMakeTranslation(-distance, 0.0);
+    oldVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+    newVC.view.transform = CGAffineTransformMakeTranslation(-distance, 0.0);
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:0
                      animations:^{
-                         oldView.transform = CGAffineTransformMakeTranslation(distance, 0.0);
-                         newView.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+                         oldVC.view.transform = CGAffineTransformMakeTranslation(distance, 0.0);
+                         newVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
                      }
                      completion:^(BOOL finished) {
-                         [oldVC removeFromParentViewController];
-                         [newVC removeFromParentViewController];
+                         [oldVC.view removeFromSuperview];
 
-                         [oldVC didMoveToParentViewController:nil];
+                         // Display child view controller
+                         [self addChildViewController:newVC];
                          [newVC didMoveToParentViewController:self];
-
-                         [self displayChildViewController:newVC];
+                         self.activeViewController = newVC;
                          self.view.userInteractionEnabled = YES;
                      }];
 }
 
 - (void) barDidSlideRightToIndex:(NSInteger)index
 {
-    NSLog(@"%ld", (long)index);
     UIViewController * oldVC = self.activeViewController;
     UIViewController * newVC = self.secondaryViewControllers[index];
 
     self.view.userInteractionEnabled = NO;
+
+    // Hide child view controller
     [oldVC willMoveToParentViewController:nil];
-    [newVC willMoveToParentViewController:self];
-    [self hideChildViewController:oldVC];
+    [oldVC removeFromParentViewController];
 
-    UIView * oldView = oldVC.view;
-    UIView * newView = newVC.view;
-
-    [self.view insertSubview:newView belowSubview:dropdownBar];
-    [self.view insertSubview:oldView belowSubview:dropdownBar];
+    [self.view insertSubview:newVC.view belowSubview:dropdownBar];
 
     CGFloat distance = self.frameForChildViewController.size.width;
-    oldView.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    newView.transform = CGAffineTransformMakeTranslation(distance, 0.0);
+    oldVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+    newVC.view.transform = CGAffineTransformMakeTranslation(distance, 0.0);
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:0
                      animations:^{
-                         oldView.transform = CGAffineTransformMakeTranslation(-distance, 0.0);
-                         newView.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+                         oldVC.view.transform = CGAffineTransformMakeTranslation(-distance, 0.0);
+                         newVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
                      }
                      completion:^(BOOL finished) {
-                         [oldVC removeFromParentViewController];
-                         [newVC removeFromParentViewController];
-
-                         [oldVC didMoveToParentViewController:nil];
-                         [newVC didMoveToParentViewController:self];
+                         [oldVC.view removeFromSuperview];
                          
-                         [self displayChildViewController:newVC];
+                         // Display child view controller
+                         [self addChildViewController:newVC];
+                         [newVC didMoveToParentViewController:self];
+                         self.activeViewController = newVC;
                          self.view.userInteractionEnabled = YES;
                      }];
 }
@@ -364,6 +351,5 @@
     [self.view bringSubviewToFront:self.gradientView];
     [UIView animateWithDuration:duration animations:^{ self.gradientView.alpha = 0.0; }];
 }
-*/
 
 @end
