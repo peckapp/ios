@@ -7,11 +7,17 @@
 //
 
 #import "PASyncManager.h"
+
+#import "webservice.h"
+
 #import "PAAppDelegate.h"
 #import "Event.h"
 #import "Circle.h"
 #import "PASessionManager.h"
 #import "Peer.h"
+#import "Institution.h"
+
+#define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
 @implementation PASyncManager
 @synthesize managedObjectContext = _managedObjectContext;
@@ -19,7 +25,8 @@
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 
-+ (instancetype)globalSyncManager {
++ (instancetype)globalSyncManager
+{
     static PASyncManager *_globalSyncManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -29,20 +36,20 @@
     return _globalSyncManager;
 }
 
--(void)setUser{
-    NSLog(@"setting the new user");
+#pragma mark - User actions
+
+-(void)ceateAnonymousUser
+{
+    NSLog(@"creating an anonymous new user");
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    @"John", @"first_name",
-                                    @"Doe", @"last_name",
-                                    @"guest", @"username",
                                     [NSNumber numberWithInt:1],@"institution_id",
-                                    @"apiKEY",@"api_key",
                                     nil];
-    [[PASessionManager sharedClient] POST:@"api/users"
+    
+    [[PASessionManager sharedClient] POST:usersAPI
                                     parameters:dictionary
                                     success:^
     (NSURLSessionDataTask * __unused task, id JSON) {
-        NSLog(@"success: %@", JSON);
+        NSLog(@"Anonymous user creation success: %@", JSON);
         NSDictionary *postsFromResponse = (NSDictionary*)JSON;
         NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
         //get the most recent user added
@@ -56,8 +63,35 @@
 
 }
 
+-(void)registerUserWithInfo:(NSDictionary *)userInfo
+{
+    if ([self validUserInfo:userInfo]) {
+        [[PASessionManager sharedClient] POST:usersAPI
+                                   parameters:userInfo
+                                      success:^(NSURLSessionDataTask * __unused task, id JSON) {
+            NSLog(@"Register user success: %@", JSON);
+            NSDictionary *postsFromResponse = (NSDictionary*)JSON;
+            NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
+            //get the most recent user added
+            NSNumber *userID = [userDictionary objectForKey:@"id"];
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setObject:userID forKey:@"user_id"];
+        }
+                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                          NSLog(@"ERROR: %@",error);
+                                      }];
+    }
+    
+}
 
--(void)updatePeerInfo{
+- (BOOL)validUserInfo:(NSDictionary*)userInfo
+{
+    // TODO: check the user info dictionary for validity and presence of required fields
+    return YES;
+}
+
+-(void)updatePeerInfo
+{
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         
@@ -66,23 +100,21 @@
         _managedObjectContext = [appdelegate managedObjectContext];
         
         
-        [[PASessionManager sharedClient] GET:@"api/users"
+        [[PASessionManager sharedClient] GET:usersAPI
                                   parameters:nil
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              NSLog(@"JSON: %@",JSON);
-             NSDictionary *eventsDictionary = (NSDictionary*)JSON;
-             NSArray *postsFromResponse = [eventsDictionary objectForKey:@"users"];
-             NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
-             for (NSDictionary *eventAttributes in postsFromResponse) {
-                 NSNumber *newID = [eventAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Peer"];
+             NSDictionary *usersDictionary = (NSDictionary*)JSON;
+             NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
+             for (NSDictionary *userAttributes in postsFromResponse) {
+                 NSNumber *newID = [userAttributes objectForKey:@"id"];
+                 BOOL userAlreadyExists = [self objectExists:newID withType:@"Peer"];
                  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                 if(!eventAlreadyExists && !([defaults objectForKey:@"user_id"]==newID)){
+                 if(!userAlreadyExists && !([defaults objectForKey:@"user_id"]==newID)){
                      NSLog(@"about to add the peer");
                      Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInPeer:peer withDictionary:eventAttributes];
-                     [mutableEvents addObject:peer];
+                     [self setAttributesInPeer:peer withDictionary:userAttributes];
                      NSLog(@"PEER: %@",peer);
                  }
              }
@@ -109,7 +141,60 @@
     peer.id = [dictionary objectForKey:@"id"];
 }
 
--(void)updateExploreInfo{
+#pragma mark - Institution actions
+
+- (void)updateAvailableInstitutionsWithCallback:(void (^)(BOOL))callbackBlock
+{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [appdelegate managedObjectContext];
+        
+        [[PASessionManager sharedClient] GET:institutionsAPI
+                                  parameters:nil
+                                     success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                         NSLog(@"update institutions JSON: %@",JSON);
+                                         NSDictionary *institutionsDictionary = (NSDictionary*)JSON;
+                                         NSArray *responseInstitutions = [institutionsDictionary objectForKey:@"institutions"];
+                                         for (NSDictionary *institutionAttributes in responseInstitutions) {
+                                             NSNumber * instID = [institutionAttributes objectForKey:@"id"];
+                                             BOOL institutionAlreadyExists = [self objectExists:instID withType:@"Institution"];
+                                             if ( !institutionAlreadyExists ) {
+                                                 NSLog(@"Adding Institution: %@",[institutionAttributes objectForKey:@"name"]);
+                                                 Institution * institution = [NSEntityDescription insertNewObjectForEntityForName:@"Institution" inManagedObjectContext:_managedObjectContext];
+                                                 [self setAttributesInInstitution:institution withDictionary:institutionAttributes];
+                                             }
+                                         }
+                                         callbackBlock(YES);
+                                     }
+                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                         NSLog(@"ERROR: %@",error);
+                                         callbackBlock(NO);
+                                     }];
+    });
+}
+
+-(void)setAttributesInInstitution:(Institution *)institution withDictionary:(NSDictionary *)dictionary
+{
+    // removes items not in the local model
+    NSMutableDictionary * alteredDict = [dictionary mutableCopy];
+    [alteredDict removeObjectsForKeys:@[@"configuration_id",@"api_key"]];
+    // changes text dates to NSDate objects
+    NSDateFormatter * df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:serverDateFormat];
+    [alteredDict setObject:[df dateFromString:[alteredDict objectForKey:@"created_at"]] forKey:@"created_at"];
+    [alteredDict setObject:[df dateFromString:[alteredDict objectForKey:@"updated_at"]] forKey:@"updated_at"];
+    
+    // mass assignment to the object
+    [institution setValuesForKeysWithDictionary:[alteredDict copy]];
+    
+    NSLog(@"set attributes of an institution");
+}
+
+#pragma mark - Explore tab actions
+
+-(void)updateExploreInfo
+{
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         NSLog(@"in secondary thread");
@@ -154,7 +239,10 @@
 //}
 
 
--(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray *)members{
+#pragma mark - Circles actions
+
+-(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray *)members
+{
     
     [[PASessionManager sharedClient] POST:@"api/circles"
                                parameters:dictionary
@@ -175,7 +263,8 @@
     
 }
 
--(void)addMembersToCircle:(NSNumber*)circleID withMembers:(NSArray *)members{
+-(void)addMembersToCircle:(NSNumber*)circleID withMembers:(NSArray *)members
+{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSNumber * userID = [defaults objectForKey:@"user_id"];
     
@@ -204,7 +293,8 @@
     }
 }
 
--(void)updateCircleInfo{
+-(void)updateCircleInfo
+{
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         
@@ -278,8 +368,10 @@
                                  }];
 }
 
--(void)postEvent:(NSDictionary *)dictionary{
-    
+#pragma mark - Events actions
+
+-(void)postEvent:(NSDictionary *)dictionary
+{
     [[PASessionManager sharedClient] POST:@"api/simple_events"
                               parameters:dictionary
                                  success:^
@@ -293,8 +385,8 @@
 
 }
 
--(void)deleteEvent:(NSNumber*)eventID{
-    
+-(void)deleteEvent:(NSNumber*)eventID
+{
     NSString *appendedURL = [@"api/simple_events/" stringByAppendingString:[eventID stringValue]];
     [[PASessionManager sharedClient] DELETE:appendedURL
                                 parameters:nil success:^
@@ -307,7 +399,8 @@
 
 }
 
--(void)updateEventInfo{
+-(void)updateEventInfo
+{
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         
@@ -351,7 +444,36 @@
     
 }
 
--(BOOL)objectExists:(NSNumber *) newID withType:(NSString*)type{
+-(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
+{
+    NSLog(@"set attributes of event");
+    event.title = [dictionary objectForKey:@"title"];
+    //event.descrip = [dictionary objectForKey:@"event_description"];
+    //event.location = [dictionary objectForKey:@"institution_id"];
+    event.id = [dictionary objectForKey:@"id"];
+    //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
+    NSDateFormatter * df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:serverDateFormat];
+    
+    event.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
+    event.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
+    // the below doesn't work due to current disparity between the json and coredata terminology
+    /*
+     NSDictionary *attributes = [[event entity] attributesByName];
+     for (NSString *attribute in attributes) {
+     id value = [dictionary objectForKey:attribute];
+     if (value == nil) {
+     continue;
+     }
+     [event setValue:value forKey:attribute];
+     }
+     */
+}
+
+#pragma mark - Utility Methods
+
+-(BOOL)objectExists:(NSNumber *) newID withType:(NSString*)type
+{
     NSFetchRequest * request = [[NSFetchRequest alloc] init];
     NSEntityDescription *objects = [NSEntityDescription entityForName:type inManagedObjectContext:_managedObjectContext];
     [request setEntity:objects];
@@ -367,32 +489,6 @@
     else {
         return YES;
     }
-}
-
--(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
-{
-    NSLog(@"set attributes of event");
-    event.title = [dictionary objectForKey:@"title"];
-    //event.descrip = [dictionary objectForKey:@"event_description"];
-    //event.location = [dictionary objectForKey:@"institution_id"];
-    event.id = [dictionary objectForKey:@"id"];
-    //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
-    NSDateFormatter * df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
-    
-    event.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
-    event.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
-    // the below doesn't work due to current disparity between the json and coredata terminology
-    /*
-     NSDictionary *attributes = [[event entity] attributesByName];
-     for (NSString *attribute in attributes) {
-     id value = [dictionary objectForKey:attribute];
-     if (value == nil) {
-     continue;
-     }
-     [event setValue:value forKey:attribute];
-     }
-     */
 }
 
 @end

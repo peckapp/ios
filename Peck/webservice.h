@@ -6,4 +6,6 @@
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
-# define simple_events @"api/simple_events"
+# define simple_eventsAPI @"api/simple_events"
+# define usersAPI @"api/users"
+# define institutionsAPI @"api/institutions"

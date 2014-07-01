@@ -7,9 +7,16 @@
 //
 
 #import "PAConfigureViewController.h"
+
+#import "PAAppDelegate.h"
 #import "PADropdownViewController.h"
 
+#import "PASyncManager.h"
+#import "Institution.h"
+
 @interface PAConfigureViewController ()
+
+@property (nonatomic,retain) NSArray * institutions;
 
 @end
 
@@ -27,13 +34,25 @@
 
 - (void)viewDidLoad
 {
-        [super viewDidLoad];
-       // Do any additional setup after loading the view.
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    
+    PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appDelegate managedObjectContext];
     
     schoolPicker.dataSource = self;
     schoolPicker.delegate = self;
     
     [schoolPicker reloadAllComponents];
+    
+    [[PASyncManager globalSyncManager] updateAvailableInstitutionsWithCallback:^(BOOL success) {
+        if (success) {
+            NSLog(@"executing callback for institution configurator");
+            self.institutions = [self fetchInstitutions];
+            [self.schoolPicker reloadAllComponents];
+        }
+    }];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -42,43 +61,66 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (NSArray*)fetchInstitutions
+{
+    NSManagedObjectContext *moc = _managedObjectContext;
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Institution" inManagedObjectContext:moc];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
+                                        initWithKey:@"name" ascending:YES];
+    [request setSortDescriptors:@[sortDescriptor]];
+    
+    NSError *error;
+    NSArray *array = [moc executeFetchRequest:request error:&error];
+    if (array == nil)
+    {
+        // Deal with error...
+    }
+    return array;
+}
+
 #pragma mark - Navigation
 
-- (NSInteger)numberOfComponentsInPickerView: (UIPickerView *)pickerView{
+- (NSInteger)numberOfComponentsInPickerView: (UIPickerView *)pickerView
+{
     return 1;
 }
 
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
-    return 2;
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    // the number of institutions in the current array
+    return self.institutions.count;
 }
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
-    NSString *path = [[NSBundle mainBundle] pathForResource:
-                      @"schools" ofType:@"plist"];
-    NSArray *colleges = [[NSArray alloc] initWithContentsOfFile:path];
-    return [colleges objectAtIndex:row];
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    Institution * institution = (Institution*)[self.institutions objectAtIndex:row];
+    return institution.name;
 }
 
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
-    NSString *path = [[NSBundle mainBundle] pathForResource:
-                      @"schools" ofType:@"plist"];
-    NSArray *colleges = [[NSArray alloc] initWithContentsOfFile:path];
-    NSString *college = [colleges objectAtIndexedSubscript:row];
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    Institution * institution = (Institution*)[self.institutions objectAtIndex:row];
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    [defaults setObject:college forKey:@"getCollege"];
-    //this line adds the selected college to defaults
-    //use the following line to get the college
-    //[defaults objectForKey:@"getCollege"];
-    
+    [defaults setObject:institution.id forKey:@"institution_id"];
+    NSLog(@"selected institution: %@",institution.name);
 }
 
 
-- (IBAction)continueButton:(id)sender {
+- (IBAction)continueButton:(id)sender
+{
+    PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
+    UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+    
+    [appDelegate.window setRootViewController:newRoot];
 }
 
 
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
     
     PADropdownViewController *dropdownController = (PADropdownViewController*)segue.destinationViewController;
     
