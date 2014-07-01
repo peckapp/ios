@@ -75,6 +75,7 @@
 		A4773C8F195A076800AB9831 /* PACreateCircleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C8E195A076800AB9831 /* PACreateCircleViewController.m */; };
 		A4794C1D19620746002BD272 /* profile-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DDCD45C0195DC8E60032333F /* profile-placeholder.png */; };
 		A4794C201962F103002BD272 /* Explore.m in Sources */ = {isa = PBXBuildFile; fileRef = A4794C1F1962F103002BD272 /* Explore.m */; };
+		A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4794C22196320AB002BD272 /* PAInvitationViewController.m */; };
 		A4925C07194A179A001AAC4A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C06194A179A001AAC4A /* Accounts.framework */; };
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
@@ -230,6 +231,8 @@
 		A4773C8E195A076800AB9831 /* PACreateCircleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACreateCircleViewController.m; sourceTree = "<group>"; };
 		A4794C1E1962F103002BD272 /* Explore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Explore.h; sourceTree = "<group>"; };
 		A4794C1F1962F103002BD272 /* Explore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Explore.m; sourceTree = "<group>"; };
+		A4794C21196320AB002BD272 /* PAInvitationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAInvitationViewController.h; sourceTree = "<group>"; };
+		A4794C22196320AB002BD272 /* PAInvitationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAInvitationViewController.m; sourceTree = "<group>"; };
 		A4925C06194A179A001AAC4A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A4925C08194A17A1001AAC4A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A4925C0A194A17AB001AAC4A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -321,6 +324,8 @@
 				A459A83C195DF4B800D1FB0E /* Message.m */,
 				86292510193CBE000057CA41 /* PAPostViewController.h */,
 				86292511193CBE000057CA41 /* PAPostViewController.m */,
+				A4794C21196320AB002BD272 /* PAInvitationViewController.h */,
+				A4794C22196320AB002BD272 /* PAInvitationViewController.m */,
 			);
 			name = Post;
 			sourceTree = "<group>";
@@ -798,6 +803,7 @@
 				A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */,
 				A459A843195DF50200D1FB0E /* Circle.m in Sources */,
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,
+				A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */,
 				A459A83D195DF4B800D1FB0E /* Message.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
