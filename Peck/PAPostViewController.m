@@ -16,6 +16,12 @@
 #import "PASessionManager.h"
 #import "PASyncManager.h"
 
+/*
+ State for each cell is defined by the cell's tag.
+ Only show the cell if the tag is the same as the
+ value of the control switch, or the same as the
+ value of cellStateAlwaysOn.
+ */
 #define cellStateAlwaysOff -2
 #define cellStateAlwaysOn -1
 
@@ -63,110 +69,6 @@
 
 #pragma mark table view delegate
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
-    if (self.controlSwitch.selectedSegmentIndex == 0) {
-        cell = self.cellIWantToShow;
-    }
-    return cell;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat height = [super tableView:tableView heightForRowAtIndexPath:indexPath];
-    if (indexPath.section == 0 && hideStuff) {
-        height = [super tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
-    }
-    return height;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    NSInteger count = [super tableView:tableView numberOfRowsInSection:section];
-
-    if (section == 0 && hideStuff) {
-        count -= hiddenCells.count;
-    }
-
-    return count;
-}
-*/
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        if ([indexPath section] == 0) {
-            
-            UITextField *playerTextField = [[UITextField alloc] initWithFrame:CGRectMake(140, 8, 185, 30)];
-            
-            playerTextField.adjustsFontSizeToFitWidth = YES;
-            playerTextField.textColor = [UIColor blackColor];
-            playerTextField.keyboardType = UIKeyboardTypeDefault;
-            playerTextField.returnKeyType = UIReturnKeyDone;
-            playerTextField.backgroundColor = [UIColor whiteColor];
-            playerTextField.autocorrectionType = UITextAutocorrectionTypeYes; // auto correction support
-            playerTextField.autocapitalizationType = UITextAutocapitalizationTypeSentences; // auto capitalization support
-            [playerTextField setEnabled: YES];
-            playerTextField.delegate = self;
-            
-            [cell.contentView addSubview:playerTextField];
-            
-            UILabel * titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(cell.frame.origin.x + 15, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height)];
-            //titleLabel.text =[eventItems objectAtIndex:[indexPath row]];
-            [cell.contentView addSubview:titleLabel];
-        
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(140, 0, 50, 44)];
-            imageView.image = photo;
-            [cell.contentView addSubview:imageView];
-            
-        }
-    }
-    
-    if ([indexPath section] == 0) {
-        cell.tag=[indexPath row];
-        UIImageView *imageView = (UIImageView *) cell.contentView.subviews[2];
-        imageView.frame = CGRectMake(140, 0, 60, 44);
-        imageView.tag = [indexPath row];
-        if([indexPath row] != 1 || _controlSwitch.selectedSegmentIndex==1){
-            imageView.image=nil;
-        }
-        UITextField * textField = (UITextField*) cell.contentView.subviews[0];
-        textField.hidden=NO;
-        [textField setUserInteractionEnabled:YES];
-        textField.placeholder = [_eventSuggestions objectAtIndex:[indexPath row]];
-        textField.text = [_userEvents objectAtIndex:[indexPath row]];
-        textField.tag = [indexPath row];
-        UILabel * title = (UILabel*) cell.contentView.subviews[1];
-        title.text = [_eventItems objectAtIndex:[indexPath row]];
-        if((_controlSwitch.selectedSegmentIndex==1 && [indexPath row]==2) || (_controlSwitch.selectedSegmentIndex==0 && [indexPath row]==1))//these are the locations of both of the "add a photo cells"
-        {
-            textField.hidden=YES;
-            imageView.image = photo;
-            if(_controlSwitch.selectedSegmentIndex==1){
-                imageView.frame = CGRectMake(120, 0, 140, 100);
-            }
-        }
-        if(_controlSwitch.selectedSegmentIndex==0)//Events
-        {
-            textField.frame = CGRectMake(140, 8, 185, 30);
-            if([indexPath row]==3){
-                //the date field
-                [textField setUserInteractionEnabled:NO];
-            }
-        }
-        if(_controlSwitch.selectedSegmentIndex==1)//Messages
-        {
-            textField.frame = CGRectMake(15, 45, 250, 30);
-        }
-    }
-    return cell;
-}
-*/
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -195,7 +97,7 @@
         self.endPickerIsOpen = !self.endPickerIsOpen;
 
     }
-    else{
+    else {
         self.startPickerIsOpen = NO;
         self.endPickerIsOpen = NO;
     }
@@ -274,7 +176,12 @@
 {
     if (self.startPickerIsOpen == NO) {
         self.startTimePickerCell.tag = cellStateAlwaysOff;
+
         // Update labels
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+        NSString *stringFromDate = [formatter stringFromDate:self.startTimePicker.date];
+        self.startTimeLabel.text = stringFromDate;
     }
     else {
         self.startTimePickerCell.tag = 0;
@@ -282,7 +189,12 @@
 
     if (self.endPickerIsOpen == NO) {
         self.endTimePickerCell.tag = cellStateAlwaysOff;
+
         // Update labels
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+        NSString *stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
+        self.endTimeLabel.text = stringFromDate;
     }
     else {
         self.endTimePickerCell.tag = 0;
@@ -305,10 +217,121 @@
     [self updateSection:0];
 }
 
-- (IBAction)constructResultAndExit:(id)sender
+- (IBAction)cancelResultAndExit:(id)sender
 {
 
 }
+
+- (IBAction)returnResultAndExit:(id)sender
+{
+
+}
+
+/*
+ - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+ if (self.controlSwitch.selectedSegmentIndex == 0) {
+ cell = self.cellIWantToShow;
+ }
+ return cell;
+ }
+
+ - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+ CGFloat height = [super tableView:tableView heightForRowAtIndexPath:indexPath];
+ if (indexPath.section == 0 && hideStuff) {
+ height = [super tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+ }
+ return height;
+ }
+
+ - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+ {
+ NSInteger count = [super tableView:tableView numberOfRowsInSection:section];
+
+ if (section == 0 && hideStuff) {
+ count -= hiddenCells.count;
+ }
+
+ return count;
+ }
+ */
+
+/*
+ - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+ UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:@"Cell"];
+ if (cell == nil) {
+ cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
+ cell.accessoryType = UITableViewCellAccessoryNone;
+ if ([indexPath section] == 0) {
+
+ UITextField *playerTextField = [[UITextField alloc] initWithFrame:CGRectMake(140, 8, 185, 30)];
+
+ playerTextField.adjustsFontSizeToFitWidth = YES;
+ playerTextField.textColor = [UIColor blackColor];
+ playerTextField.keyboardType = UIKeyboardTypeDefault;
+ playerTextField.returnKeyType = UIReturnKeyDone;
+ playerTextField.backgroundColor = [UIColor whiteColor];
+ playerTextField.autocorrectionType = UITextAutocorrectionTypeYes; // auto correction support
+ playerTextField.autocapitalizationType = UITextAutocapitalizationTypeSentences; // auto capitalization support
+ [playerTextField setEnabled: YES];
+ playerTextField.delegate = self;
+
+ [cell.contentView addSubview:playerTextField];
+
+ UILabel * titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(cell.frame.origin.x + 15, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height)];
+ //titleLabel.text =[eventItems objectAtIndex:[indexPath row]];
+ [cell.contentView addSubview:titleLabel];
+
+ UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(140, 0, 50, 44)];
+ imageView.image = photo;
+ [cell.contentView addSubview:imageView];
+
+ }
+ }
+
+ if ([indexPath section] == 0) {
+ cell.tag=[indexPath row];
+ UIImageView *imageView = (UIImageView *) cell.contentView.subviews[2];
+ imageView.frame = CGRectMake(140, 0, 60, 44);
+ imageView.tag = [indexPath row];
+ if([indexPath row] != 1 || _controlSwitch.selectedSegmentIndex==1){
+ imageView.image=nil;
+ }
+ UITextField * textField = (UITextField*) cell.contentView.subviews[0];
+ textField.hidden=NO;
+ [textField setUserInteractionEnabled:YES];
+ textField.placeholder = [_eventSuggestions objectAtIndex:[indexPath row]];
+ textField.text = [_userEvents objectAtIndex:[indexPath row]];
+ textField.tag = [indexPath row];
+ UILabel * title = (UILabel*) cell.contentView.subviews[1];
+ title.text = [_eventItems objectAtIndex:[indexPath row]];
+ if((_controlSwitch.selectedSegmentIndex==1 && [indexPath row]==2) || (_controlSwitch.selectedSegmentIndex==0 && [indexPath row]==1))//these are the locations of both of the "add a photo cells"
+ {
+ textField.hidden=YES;
+ imageView.image = photo;
+ if(_controlSwitch.selectedSegmentIndex==1){
+ imageView.frame = CGRectMake(120, 0, 140, 100);
+ }
+ }
+ if(_controlSwitch.selectedSegmentIndex==0)//Events
+ {
+ textField.frame = CGRectMake(140, 8, 185, 30);
+ if([indexPath row]==3){
+ //the date field
+ [textField setUserInteractionEnabled:NO];
+ }
+ }
+ if(_controlSwitch.selectedSegmentIndex==1)//Messages
+ {
+ textField.frame = CGRectMake(15, 45, 250, 30);
+ }
+ }
+ return cell;
+ }
+ */
+
 
 /*
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
