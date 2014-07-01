@@ -73,6 +73,7 @@ NSInteger selectedDay;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"View did load (events)");
     selectedDay=0;
     searching = NO;
     showingDetail = NO;
@@ -160,7 +161,6 @@ NSInteger selectedDay;
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     [dateComponents setDay:1];
     NSDate *selectedNight =[[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:selectedMorning options:0];
-    
     
     NSPredicate *startDatePredicate = [NSPredicate predicateWithFormat:@"start_date > %@", selectedMorning];
     NSPredicate *endDatePredicate = [NSPredicate predicateWithFormat:@"end_date < %@", selectedNight];

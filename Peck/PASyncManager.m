@@ -12,12 +12,13 @@
 #import "Circle.h"
 #import "PASessionManager.h"
 #import "Peer.h"
+#import "Explore.h"
 
 @implementation PASyncManager
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
+//NSDateFormatter * df;
 
 + (instancetype)globalSyncManager {
     static PASyncManager *_globalSyncManager = nil;
@@ -28,6 +29,8 @@
     
     return _globalSyncManager;
 }
+
+#pragma mark - User
 
 -(void)setUser{
     NSLog(@"setting the new user");
@@ -56,6 +59,7 @@
 
 }
 
+#pragma mark - Peer
 
 -(void)updatePeerInfo{
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
@@ -108,6 +112,7 @@
     peer.name = [dictionary objectForKey:@"first_name"];
     peer.id = [dictionary objectForKey:@"id"];
 }
+#pragma mark - Explore
 
 -(void)updateExploreInfo{
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
@@ -125,12 +130,12 @@
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"explore"];
              for (NSDictionary *eventAttributes in postsFromResponse) {
                  NSNumber *newID = [eventAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Peer"];
+                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Explore"];
                  if(!eventAlreadyExists){
-                     NSLog(@"about to add the peer");
-                     Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInPeer:peer withDictionary:eventAttributes];
-                     NSLog(@"PEER: %@",peer);
+                     NSLog(@"about to add the explore");
+                     Explore * explore = [NSEntityDescription insertNewObjectForEntityForName:@"Explore" inManagedObjectContext: _managedObjectContext];
+                     [self setAttributesInExplore:explore withDictionary:eventAttributes];
+                     NSLog(@"EXPLORE: %@",explore);
                  }
              }
          }
@@ -148,11 +153,16 @@
 
 }
 
-//setAttributesInExplore:(Explore *)explore withDictionary: (NSDictionary *)dictionary{
+-(void)setAttributesInExplore:(Explore *) explore withDictionary: (NSDictionary *)dictionary{
+    explore.title = [dictionary objectForKey:@"title"];
     
-    
-//}
+    NSDateFormatter * df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
+    explore.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
+    explore.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
+}
 
+#pragma mark - Circle
 
 -(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray *)members{
     
@@ -278,6 +288,8 @@
                                  }];
 }
 
+#pragma mark - Event
+
 -(void)postEvent:(NSDictionary *)dictionary{
     
     [[PASessionManager sharedClient] POST:@"api/simple_events"
@@ -285,7 +297,7 @@
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
-         [self updateEventInfo];
+         //[self updateEventInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -351,6 +363,36 @@
     
 }
 
+
+-(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
+{
+    NSLog(@"set attributes of event");
+    event.title = [dictionary objectForKey:@"title"];
+    //event.descrip = [dictionary objectForKey:@"event_description"];
+    //event.location = [dictionary objectForKey:@"institution_id"];
+    event.id = [dictionary objectForKey:@"id"];
+    //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
+    //if(!df){
+        NSDateFormatter * df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
+    //}
+    
+    event.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
+    event.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
+    // the below doesn't work due to current disparity between the json and coredata terminology
+    /*
+     NSDictionary *attributes = [[event entity] attributesByName];
+     for (NSString *attribute in attributes) {
+     id value = [dictionary objectForKey:attribute];
+     if (value == nil) {
+     continue;
+     }
+     [event setValue:value forKey:attribute];
+     }
+     */
+}
+
+
 -(BOOL)objectExists:(NSNumber *) newID withType:(NSString*)type{
     NSFetchRequest * request = [[NSFetchRequest alloc] init];
     NSEntityDescription *objects = [NSEntityDescription entityForName:type inManagedObjectContext:_managedObjectContext];
@@ -367,32 +409,6 @@
     else {
         return YES;
     }
-}
-
--(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
-{
-    NSLog(@"set attributes of event");
-    event.title = [dictionary objectForKey:@"title"];
-    //event.descrip = [dictionary objectForKey:@"event_description"];
-    //event.location = [dictionary objectForKey:@"institution_id"];
-    event.id = [dictionary objectForKey:@"id"];
-    //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
-    NSDateFormatter * df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
-    
-    event.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
-    event.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
-    // the below doesn't work due to current disparity between the json and coredata terminology
-    /*
-     NSDictionary *attributes = [[event entity] attributesByName];
-     for (NSString *attribute in attributes) {
-     id value = [dictionary objectForKey:attribute];
-     if (value == nil) {
-     continue;
-     }
-     [event setValue:value forKey:attribute];
-     }
-     */
 }
 
 @end

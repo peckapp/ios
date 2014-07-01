@@ -74,6 +74,7 @@
 		A4773C8C1959DD0E00AB9831 /* PAImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C8B1959DD0E00AB9831 /* PAImageManager.m */; };
 		A4773C8F195A076800AB9831 /* PACreateCircleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C8E195A076800AB9831 /* PACreateCircleViewController.m */; };
 		A4794C1D19620746002BD272 /* profile-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DDCD45C0195DC8E60032333F /* profile-placeholder.png */; };
+		A4794C201962F103002BD272 /* Explore.m in Sources */ = {isa = PBXBuildFile; fileRef = A4794C1F1962F103002BD272 /* Explore.m */; };
 		A4925C07194A179A001AAC4A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C06194A179A001AAC4A /* Accounts.framework */; };
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
@@ -227,6 +228,8 @@
 		A4773C8B1959DD0E00AB9831 /* PAImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAImageManager.m; sourceTree = "<group>"; };
 		A4773C8D195A076800AB9831 /* PACreateCircleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACreateCircleViewController.h; sourceTree = "<group>"; };
 		A4773C8E195A076800AB9831 /* PACreateCircleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACreateCircleViewController.m; sourceTree = "<group>"; };
+		A4794C1E1962F103002BD272 /* Explore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Explore.h; sourceTree = "<group>"; };
+		A4794C1F1962F103002BD272 /* Explore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Explore.m; sourceTree = "<group>"; };
 		A4925C06194A179A001AAC4A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A4925C08194A17A1001AAC4A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A4925C0A194A17AB001AAC4A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -558,6 +561,8 @@
 		DDDAEDE51947967A004CE102 /* Explore */ = {
 			isa = PBXGroup;
 			children = (
+				A4794C1E1962F103002BD272 /* Explore.h */,
+				A4794C1F1962F103002BD272 /* Explore.m */,
 				863843E1193CB7FD004110F5 /* PAExploreTableViewController.h */,
 				863843E2193CB7FD004110F5 /* PAExploreTableViewController.m */,
 				DDDAEDD819465DCB004CE102 /* PAExploreCell.h */,
@@ -789,6 +794,7 @@
 				DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */,
 				A459A840195DF4DD00D1FB0E /* Event.m in Sources */,
 				863843CF193CB393004110F5 /* PAProfileTableViewController.m in Sources */,
+				A4794C201962F103002BD272 /* Explore.m in Sources */,
 				A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */,
 				A459A843195DF50200D1FB0E /* Circle.m in Sources */,
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,

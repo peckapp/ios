@@ -285,7 +285,7 @@
 
                          [oldVC didMoveToParentViewController:nil];
                          [newVC didMoveToParentViewController:self];
-
+                         
                          [self displayChildViewController:newVC];
                          self.view.userInteractionEnabled = YES;
                      }];
