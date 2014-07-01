@@ -16,6 +16,9 @@
 #import "PASessionManager.h"
 #import "PASyncManager.h"
 
+#define cellStateAlwaysOff -2
+#define cellStateAlwaysOn -1
+
 #pragma mark Interface
 
 @interface PAPostViewController () {}
@@ -48,36 +51,14 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
-    [self.photoButton addTarget:self action:@selector(selectPhoto) forControlEvents:UIControlEventTouchUpInside];
-
-    self.startPickerIsOpen = NO;
-    self.endPickerIsOpen = NO;
-
-    [UIView animateWithDuration:.4 animations:^{
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView reloadData];
-    }];
+    [self.photoButton addTarget:self action:@selector(onPhotoSelect) forControlEvents:UIControlEventTouchUpInside];
+    [self.controlSwitch addTarget:self action:@selector(onControlSwitchChange) forControlEvents:UIControlEventValueChanged];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-# pragma mark table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    // Return the number of sections.
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    // Return the number of rows in the section.
-    //return self.detailTitles.count;
-    return 10;
 }
 
 #pragma mark table view delegate
@@ -187,16 +168,18 @@
 }
 */
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 4 && !self.startPickerIsOpen) {
-        return 0;
-    }
-    else if (indexPath.row == 6 && !self.endPickerIsOpen) {
-        return 0;
-    }
-    else {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger state = self.controlSwitch.selectedSegmentIndex;
+    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    NSLog(@"selector state: %ld", (long)state);
+    if (cell.tag == state || cell.tag == cellStateAlwaysOn) {
         return [super tableView:tableView heightForRowAtIndexPath:indexPath];
     }
+    else {
+        return 0;
+    }
+
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -217,23 +200,13 @@
         self.endPickerIsOpen = NO;
     }
 
-    [UIView animateWithDuration:.4 animations:^{
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView reloadData];
-    }];
-
-    if (self.startPickerIsOpen == NO) {
-        // Change labels
-    }
-
-    if (self.endPickerIsOpen == NO) {
-        // Change labels
-    }
+    [self updateDatePickers];
+    [self updateSection:0];
 }
 
 # pragma mark image picker
 
-- (void) selectPhoto
+- (void)onPhotoSelect
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
                                                              delegate: self
@@ -297,9 +270,39 @@
     }
 }
 
-- (IBAction)segmentedControl:(id)sender
+- (void)updateDatePickers
 {
+    if (self.startPickerIsOpen == NO) {
+        self.startTimePickerCell.tag = cellStateAlwaysOff;
+        // Update labels
+    }
+    else {
+        self.startTimePickerCell.tag = 0;
+    }
 
+    if (self.endPickerIsOpen == NO) {
+        self.endTimePickerCell.tag = cellStateAlwaysOff;
+        // Update labels
+    }
+    else {
+        self.endTimePickerCell.tag = 0;
+    }
+}
+
+- (void)updateSection:(NSInteger)sectionIndex
+{
+    [UIView animateWithDuration:.4 animations:^{
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadData];
+    }];
+}
+
+- (void)onControlSwitchChange
+{
+    self.startPickerIsOpen = NO;
+    self.endPickerIsOpen = NO;
+    [self updateDatePickers];
+    [self updateSection:0];
 }
 
 - (IBAction)constructResultAndExit:(id)sender
@@ -541,7 +544,7 @@
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
             [self.tableView reloadData];
     
-            
+
             //[self performSegueWithIdentifier:@"showEvents" sender:self];
         }
         
