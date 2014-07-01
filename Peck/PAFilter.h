@@ -35,6 +35,9 @@ typedef enum {
 // designated factory for the filter. use this for instantiation
 +(instancetype)filter;
 
+// sets the frame based on its superview after it has been added to that view
+- (void)setFrameBasedOnSuperview;
+
 // causes the filter element to drop below the screen
 - (void)dismissDownward;
 

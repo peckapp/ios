@@ -9,6 +9,8 @@
 #import "PAFilter.h"
 
 #define elementRadius 60
+#define areaWidth 200
+#define areaHeight 200
 #define edgeBuffer 20
 #define verticalTranslation @"transform.translation.y"
 
@@ -16,11 +18,12 @@
 #define inactiveAlpha 0.5
 #define fadeInOutDuration 0.2
 
+
 @interface PAFilter() {
     
 }
 
-@property (nonatomic, retain) NSMutableDictionary * filterSelections;
+@property (nonatomic, retain) NSMutableArray * filterSelections;
 @property (nonatomic, retain) UIImageView * selectedFilter;
 
 @property (nonatomic, retain) UIImage * standard;
@@ -45,26 +48,27 @@
     self = [super init];
     if (self) {
         
-        // TODO: make starting rect dynamically adjustable for different screen sizes
-        CGRect frame = [self startingRect];
-        
-        self.frame = frame;
-        //[self.layer setFrame:frame]; // possibly unnecessary
-        
         self.alpha = 0.75; // slightly transparent when unactivated
         
         self.presented = false;
         
         // sets the images, may want to do this using arrays later on
-        self.standard = [UIImage imageNamed:@"filter_standard.png"];
-        self.detail = [UIImage imageNamed:@"filter_detail.png"];
-        self.subscription = [UIImage imageNamed:@"filter_subscription.png"];
-        self.dining = [UIImage imageNamed:@"filter_dining.png"];
+        self.filterSelections = @[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filter_detail.png"]],
+                                  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filter_subscription.png"]],
+                                  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filter_dining.png"]]
+                                  ].mutableCopy;
+        self.selectedFilter = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filter_standard.png"]];
+        //self.selectedFilter.frame = [self centralFilterFrame];
+        [self addSubview:self.selectedFilter];
         
-        [self addSubview:[[UIImageView alloc] initWithImage:self.standard]];
     }
     
     return self;
+}
+
+- (void)setFrameBasedOnSuperview
+{    
+    self.frame = [self startingRect];
 }
 
 #pragma mark - Animation
@@ -221,13 +225,19 @@
 */
 # pragma mark - Utility methods
 
+- (CGRect) centralFilterFrame
+{
+    double x = areaWidth - elementRadius - edgeBuffer;
+    double y = areaHeight - elementRadius - edgeBuffer;
+    return CGRectMake(x, y, elementRadius, elementRadius);
+}
+
 - (CGRect) startingRect
 {
-    double height = 200;
-    double width = 200;
-    double x = [[UIScreen mainScreen] bounds].size.width - width - edgeBuffer;
-    double y = [[UIScreen mainScreen] bounds].size.height;
-    return CGRectMake(x, y, height, width);
+    self.superview;
+    double x = self.superview.frame.size.width - elementRadius - edgeBuffer;
+    double y = [[UIScreen mainScreen] bounds].size.height  - edgeBuffer;
+    return CGRectMake(x, y, elementRadius, elementRadius);
 }
 
 @end
