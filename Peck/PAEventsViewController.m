@@ -23,7 +23,7 @@
 
 #define statusBarHeight 20
 #define searchBarHeight 40
-
+#define cellHeight 88
 @interface PAEventsViewController ()
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -42,7 +42,7 @@ static NSString * nibName = @"PAEventCell";
 UITableView *eventsTableView;
 UISearchBar * searchBar;
 
-CGFloat cellHeight;
+//CGFloat  cellHeight;
 
 NSCache * imageCache;
 BOOL showingDetail;
@@ -64,7 +64,8 @@ NSInteger selectedDay;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    NSLog(@"view will appear");
+    [[PASyncManager globalSyncManager] updateEventInfo];
+    NSLog(@"view will appear (events)");
     showingDetail = NO;
 }
 
@@ -112,9 +113,9 @@ NSInteger selectedDay;
         [eventsTableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [eventsTableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
-    cellHeight = cell.frame.size.height;
+    //cellHeight = (CGFloat)cell.frame.size.height;
 
-    [[PASyncManager globalSyncManager] updateEventInfo];
+    //[[PASyncManager globalSyncManager] updateEventInfo];
     [[PASyncManager globalSyncManager] updatePeerInfo];
     
     [eventsTableView reloadData];
@@ -344,6 +345,7 @@ NSInteger selectedDay;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+     //NSLog(@"cell height (height for row): %f",cellHeight);
     return cellHeight;
 }
 
@@ -409,8 +411,8 @@ NSInteger selectedDay;
 - (void)configureCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Event *tempEvent;
-        tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
-
+    tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
     cell.titleLabel.text = tempEvent.title;
     NSString *imageID = [tempEvent.id stringValue];
     UIImage *image = [imageCache objectForKey:imageID];

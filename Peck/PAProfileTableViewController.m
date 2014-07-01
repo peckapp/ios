@@ -250,6 +250,7 @@ int currentTextField;
 }
 
 - (IBAction)saveChangesButton:(id)sender {
-    //will store the new profile information into core data
+    //will post the new profile information to the server
+    
 }
 @end
