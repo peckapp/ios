@@ -129,6 +129,32 @@
 
 #pragma mark PADropdownBarDelegate
 
+- (void) barDidSelectItemAtIndex:(NSInteger)index;
+{
+    [self hideChildViewController:self.activeViewController];
+    [self displayChildViewController:self.secondaryViewControllers[index]];
+
+}
+
+- (void) barDidDeselectItemAtIndex:(NSInteger)index;
+{
+    [self hideChildViewController:self.activeViewController];
+    [self displayChildViewController:self.primaryViewController];
+}
+
+- (void) barDidSlideRightToIndex:(NSInteger)index;
+{
+    [self hideChildViewController:self.activeViewController];
+    [self displayChildViewController:self.secondaryViewControllers[index]];
+}
+
+- (void) barDidSlideLeftToIndex:(NSInteger)index;
+{
+    [self hideChildViewController:self.activeViewController];
+    [self displayChildViewController:self.secondaryViewControllers[index]];
+}
+
+/*
 - (void) barDidSelectItemAtIndex:(NSInteger)index
 {
     UIViewController * oldVC = self.activeViewController;
@@ -335,6 +361,6 @@
     [self.view bringSubviewToFront:self.gradientView];
     [UIView animateWithDuration:duration animations:^{ self.gradientView.alpha = 0.0; }];
 }
-
+*/
 
 @end
