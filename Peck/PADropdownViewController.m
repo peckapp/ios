@@ -81,9 +81,7 @@
     }];
     self.secondaryViewControllers = [svcCollector copy];
 
-    // Display views
-    [self.view addSubview:dropdownBar];
-    
+    // Add primary as child view controller
     [self addChildViewController:self.primaryViewController];
     [self.view addSubview: self.primaryViewController.view];
     [self.primaryViewController didMoveToParentViewController:self];
@@ -106,6 +104,9 @@
     [self.view addSubview:self.filter];
     [self.filter setFrameBasedOnSuperview];
     [self.filter presentUpwardForMode:PAFilterHomeMode];
+
+    // Display dropdown bar
+    [self.view addSubview:dropdownBar];
 }
 
 - (void)didReceiveMemoryWarning
