@@ -430,7 +430,7 @@ UITableView *_tableView;
             
             [[PASyncManager globalSyncManager] postEvent: setEvent];
             
-            [[PASyncManager globalSyncManager] updateEventInfo];
+            
             
             
             photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];

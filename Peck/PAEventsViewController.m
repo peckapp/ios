@@ -49,6 +49,8 @@ NSCache * imageCache;
 BOOL searching;
 BOOL showingDetail;
 NSString *searchBarText;
+NSDate *today;
+NSInteger selectedDay;
 
 - (void)awakeFromNib
 {
@@ -71,6 +73,7 @@ NSString *searchBarText;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    selectedDay=0;
     searching = NO;
     showingDetail = NO;
     NSError * error = nil;
@@ -141,11 +144,39 @@ NSString *searchBarText;
     NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
+    
+    NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
+    if(searchBarText){
+        NSString *attributeName = @"title";
+        NSString *attributeValue = searchBarText;
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@",
+                                  attributeName, attributeValue];
+        // the [c] dismisses case sensitivity
+        [predicateArray addObject:predicate];
+    }
+    
+    
+    NSDate *selectedMorning = [self updateDate];
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setDay:1];
+    NSDate *selectedNight =[[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:selectedMorning options:0];
+    
+    
+    NSPredicate *startDatePredicate = [NSPredicate predicateWithFormat:@"start_date > %@", selectedMorning];
+    NSPredicate *endDatePredicate = [NSPredicate predicateWithFormat:@"end_date < %@", selectedNight];
+    NSLog(@"the current date: %@", [NSDate date]);
+    
+    [predicateArray addObject:startDatePredicate];
+    [predicateArray addObject:endDatePredicate];
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    [fetchRequest setPredicate:compoundPredicate];
+
+    
     // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -177,15 +208,32 @@ NSString *searchBarText;
     NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
-    NSString *attributeName = @"title";
-    NSString *attributeValue = searchBarText;
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@",
-                              attributeName, attributeValue];
-    // the [c] dismisses case sensitivity
-    NSLog(@"creating the new predicate");
-    NSLog(@"search bar text: %@", searchBarText);
     
-    [fetchRequest setPredicate:predicate];
+    NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
+    if(searchBarText){
+        NSString *attributeName = @"title";
+        NSString *attributeValue = searchBarText;
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@",
+                              attributeName, attributeValue];
+        // the [c] dismisses case sensitivity
+        [predicateArray addObject:predicate];
+    }
+    
+    
+    NSDate *selectedMorning = [self updateDate];
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setDay:1];
+    NSDate *selectedNight =[[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:selectedMorning options:0];
+
+    
+    NSPredicate *startDatePredicate = [NSPredicate predicateWithFormat:@"start_date > %@", selectedMorning];
+    NSPredicate *endDatePredicate = [NSPredicate predicateWithFormat:@"end_date < %@", selectedNight];
+    NSLog(@"the current date: %@", [NSDate date]);
+    
+    [predicateArray addObject:startDatePredicate];
+    [predicateArray addObject:endDatePredicate];
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    [fetchRequest setPredicate:compoundPredicate];
     // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
     
@@ -207,6 +255,24 @@ NSString *searchBarText;
     self.searchFetchedResultsController = aFetchedResultsController;
     
     return _searchFetchedResultsController;
+}
+
+-(NSDate *)updateDate{
+    NSDate *currentDate = [NSDate date];
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitSecond  fromDate:[NSDate date]];
+    NSInteger hours = [components hour];
+    NSInteger minutes = [components minute];
+    NSInteger seconds = [components second];
+    
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setHour:-hours-4];
+    [dateComponents setMinute:-minutes];
+    [dateComponents setSecond:-seconds];
+    [dateComponents setDay:selectedDay];
+    
+    NSDate *selectedDayMorning = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:currentDate options:0];
+    NSLog(@"today (instance): %@", selectedDayMorning);
+    return selectedDayMorning;
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
@@ -509,13 +575,36 @@ NSString *searchBarText;
 
 - (IBAction)yesterdayButton:(id)sender {
     NSLog(@"Yesterday");
+    selectedDay--;
+    _searchFetchedResultsController = nil;
+    searching = YES;
+    [self reloadTheView];
 }
 
 - (IBAction)todayButton:(id)sender {
+    selectedDay=0;
+    _searchFetchedResultsController = nil;
+    searching = YES;
     NSLog(@"Today");
+    [self reloadTheView];
 }
 
 - (IBAction)tomorrowButton:(id)sender {
+    selectedDay++;
+    _searchFetchedResultsController = nil;
+    searching = YES;
     NSLog(@"Tomorrow");
+    [self reloadTheView];
+}
+
+-(void)reloadTheView{
+    NSError *error=nil;
+    if (![self.searchFetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    [eventsTableView reloadData];
 }
 @end

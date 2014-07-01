@@ -73,6 +73,7 @@
 		A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C881959D2FE00AB9831 /* PASyncManager.m */; };
 		A4773C8C1959DD0E00AB9831 /* PAImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C8B1959DD0E00AB9831 /* PAImageManager.m */; };
 		A4773C8F195A076800AB9831 /* PACreateCircleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C8E195A076800AB9831 /* PACreateCircleViewController.m */; };
+		A4794C1D19620746002BD272 /* profile-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DDCD45C0195DC8E60032333F /* profile-placeholder.png */; };
 		A4925C07194A179A001AAC4A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C06194A179A001AAC4A /* Accounts.framework */; };
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
@@ -682,6 +683,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4794C1D19620746002BD272 /* profile-placeholder.png in Resources */,
 				86173751195E07F000F2A794 /* Main.storyboard in Resources */,
 				8689DDB519589E3600A6B61C /* filter_standard@2x.png in Resources */,
 				8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */,

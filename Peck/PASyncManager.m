@@ -109,6 +109,51 @@
     peer.id = [dictionary objectForKey:@"id"];
 }
 
+-(void)updateExploreInfo{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+        NSLog(@"in secondary thread");
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [appdelegate managedObjectContext];
+        
+        [[PASessionManager sharedClient] GET:@"api/explore"
+                                  parameters:nil
+                                     success:^
+         (NSURLSessionDataTask * __unused task, id JSON) {
+             NSLog(@"JSON: %@",JSON);
+             NSDictionary *eventsDictionary = (NSDictionary*)JSON;
+             NSArray *postsFromResponse = [eventsDictionary objectForKey:@"explore"];
+             for (NSDictionary *eventAttributes in postsFromResponse) {
+                 NSNumber *newID = [eventAttributes objectForKey:@"id"];
+                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Peer"];
+                 if(!eventAlreadyExists){
+                     NSLog(@"about to add the peer");
+                     Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
+                     [self setAttributesInPeer:peer withDictionary:eventAttributes];
+                     NSLog(@"PEER: %@",peer);
+                 }
+             }
+         }
+                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                         NSLog(@"ERROR: %@",error);
+                                     }];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //TODO: if there are any problems with the core data being added in the thread above,
+            // then we should add a separate managed object context and merge the two in this thread.
+            
+            
+        });
+    });
+
+}
+
+//setAttributesInExplore:(Explore *)explore withDictionary: (NSDictionary *)dictionary{
+    
+    
+//}
+
+
 -(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray *)members{
     
     [[PASessionManager sharedClient] POST:@"api/circles"
@@ -240,6 +285,7 @@
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
+         [self updateEventInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -296,8 +342,7 @@
                                      }];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            //TODO: if there are any problems with the core data being added in the thread above,
-            // then we should add a separate managed object context and merge the two in this thread.
+            
             
             
         });
@@ -332,10 +377,11 @@
     //event.location = [dictionary objectForKey:@"institution_id"];
     event.id = [dictionary objectForKey:@"id"];
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
-    //NSDateFormatter * df = [[NSDateFormatter alloc] init];
-    //event.startDate = [df dateFromString:[attributes valueForKey:@"start_date"]];
-    //event.endDate = [df dateFromString:[attributes valueForKey:@"end_date"]];
+    NSDateFormatter * df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
     
+    event.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
+    event.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
     // the below doesn't work due to current disparity between the json and coredata terminology
     /*
      NSDictionary *attributes = [[event entity] attributesByName];
