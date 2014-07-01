@@ -37,10 +37,10 @@
         CGFloat buttonWidth = CGRectGetWidth(frame) / count;
 
         NSArray *icons = @[[UIImage imageNamed:@"dropdown_pecks.png"],
-                          [UIImage imageNamed:@"dropdown_explore.png"],
-                          [UIImage imageNamed:@"dropdown_post.png"],
-                          [UIImage imageNamed:@"dropdown_circles.png"],
-                          [UIImage imageNamed:@"dropdown_profile.png"]];
+                           [UIImage imageNamed:@"dropdown_explore.png"],
+                           [UIImage imageNamed:@"dropdown_post.png"],
+                           [UIImage imageNamed:@"dropdown_circles.png"],
+                           [UIImage imageNamed:@"dropdown_profile.png"]];
 
         for (NSUInteger i = 0 ; i < count ; i++)
         {
