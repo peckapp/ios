@@ -18,11 +18,16 @@
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <userInfo/>
     </entity>
-    <entity name="Explore" syncable="YES">
+    <entity name="Explore" representedClassName="Explore" syncable="YES">
+        <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="end_date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="explore_description" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="members" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="start_date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <entity name="Institution" syncable="YES">
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>

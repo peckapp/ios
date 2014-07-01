@@ -16,35 +16,36 @@
 #import "PASessionManager.h"
 #import "PASyncManager.h"
 
-@interface PAPostViewController () {
-    NSMutableArray * userEvents;
-}
+/*
+ State for each cell is defined by the cell's tag.
+ Only show the cell if the tag is the same as the
+ value of the control switch, or the same as the
+ value of cellStateAlwaysOn.
+ */
+#define cellStateAlwaysOff -2
+#define cellStateAlwaysOn -1
+
+#pragma mark Interface
+
+@interface PAPostViewController () {}
+
+@property BOOL startPickerIsOpen;
+@property BOOL endPickerIsOpen;
 
 @end
 
+#pragma mark - Implementation
+
 @implementation PAPostViewController
 
-//@synthesize tableView = _tableView;
-@synthesize eventItems = _eventItems;
-@synthesize eventSuggestions = _eventSuggestions;
-@synthesize controlSwitch = _controlSwitch;
-@synthesize photo;
-@synthesize userEvents = _userEvents;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
-int initialTVHeight;
-int initialRowHeight;
-int titleThickness;
-NSDate *chosenDate;
-UITableView *_tableView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
     }
     return self;
 }
@@ -52,44 +53,14 @@ UITableView *_tableView;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    PAPeers *peerTree1 = [PAPeers peers];
-    NSString *name1 = peerTree1.peerTree.right.name;
-    NSLog(@"peerTree1 name1: %@", name1);
-    NSMutableArray *names = [NSMutableArray array];
-    names = [peerTree1.peerTree searchForName:@"Jo" WithArray:names];
-    NSLog(@"Names: %@", names);
-    BOOL nameExists = [peerTree1.peerTree search:@"Andrew"];
-    NSLog(@"andrew exists? %u", nameExists);
-    
-    
-    
-    
-    chosenDate= [NSDate date];
-    if(!_tableView){
-        titleThickness=88;
-        int topOffSet = titleThickness;
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, titleThickness, self.view.frame.size.width, self.view.frame.size.height-topOffSet)];
-        NSLog(@"table view height: %f", self.view.frame.size.height-topOffSet);
-        [self.view addSubview:_tableView];
-    }
-    _tableView.delegate=self;
-    _tableView.dataSource=self;
-    //_tableView.frame = CGRectMake(_tableView.frame.origin.x, 300, _tableView.frame.size.width, _tableView.frame.size.height);
-    initialTVHeight = _tableView.frame.size.height;
-    initialRowHeight = _tableView.rowHeight;
-    photo = [UIImage imageNamed:@"img-placeholder.png"];
-    _eventItems=@[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
-    _eventSuggestions=@[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
-    
-    //[_userEvents initWithArray:@[@"",@"",@"",@"",@"",@""]];
-    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
-    gestureRecognizer.cancelsTouchesInView=NO;
-    [_tableView addGestureRecognizer:gestureRecognizer];
-    // This code allows the user to dismiss the keyboard by pressing somewhere else
-    
-    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+
+    [self.photoButton addTarget:self action:@selector(onPhotoSelect) forControlEvents:UIControlEventTouchUpInside];
+    [self.controlSwitch addTarget:self action:@selector(onControlSwitchChange) forControlEvents:UIControlEventValueChanged];
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -97,114 +68,345 @@ UITableView *_tableView;
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
+#pragma mark table view delegate
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-- (void) hideKeyboard{
-     _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
-    [self.view endEditing:NO];
+    NSInteger state = self.controlSwitch.selectedSegmentIndex;
+    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    if (cell.tag == state || cell.tag == cellStateAlwaysOn) {
+        return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+    }
+    else {
+        return 0;
     }
 
-# pragma mark - table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    // Return the number of sections.
-    return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return the number of rows in the section.
-    return _eventItems.count;
+    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    if (cell == self.startTimeCell) {
+        self.endPickerIsOpen = NO;
+        self.startPickerIsOpen = !self.startPickerIsOpen;
+
+    }
+    else if (cell == self.endTimeCell) {
+        self.startPickerIsOpen = NO;
+        self.endPickerIsOpen = !self.endPickerIsOpen;
+
+    }
+    else {
+        self.startPickerIsOpen = NO;
+        self.endPickerIsOpen = NO;
+    }
+
+    [self updateDatePickers];
+    [self updateSection:0];
 }
 
-#pragma mark - table view delegate
+# pragma mark image picker
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)onPhotoSelect
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
+                                                             delegate: self
+                                                    cancelButtonTitle: @"Cancel"
+                                               destructiveButtonTitle: nil
+                                                    otherButtonTitles: @"Take a new photo", @"Choose from existing", nil];
+    [actionSheet showInView:self.view];
+}
 
-    UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        if ([indexPath section] == 0) {
+- (void)takeNewPhotoFromCamera
+{
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+    {
+        UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+        controller.sourceType = UIImagePickerControllerSourceTypeCamera;
+        controller.delegate = self;
+        [self presentViewController: controller animated: YES completion: nil];
+    }
+}
+
+-(void)choosePhotoFromExistingImages
+{
+    NSLog(@"choose a photo");
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary])
+    {
+        UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+        controller.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        controller.modalPresentationStyle = UIModalPresentationCurrentContext;
+        controller.delegate = self;
+        [self presentViewController: controller animated: YES completion: nil];
+    }
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [self dismissViewControllerAnimated: YES completion: nil];
+    UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
+    self.photoButton.imageView.image = image;
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
+{
+    [self dismissViewControllerAnimated: YES completion: nil];
+}
+
+# pragma mark state control
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    switch (buttonIndex) {
+        case 0:
+            [self takeNewPhotoFromCamera];
+            break;
+        case 1:
+            [self choosePhotoFromExistingImages];
+        default:
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            break;
+    }
+}
+
+- (void)updateDatePickers
+{
+    if (self.startPickerIsOpen == NO) {
+        self.startTimePickerCell.tag = cellStateAlwaysOff;
+
+        // Update labels
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+        NSString *stringFromDate = [formatter stringFromDate:self.startTimePicker.date];
+        self.startTimeLabel.text = stringFromDate;
+    }
+    else {
+        self.startTimePickerCell.tag = 0;
+    }
+
+    if (self.endPickerIsOpen == NO) {
+        self.endTimePickerCell.tag = cellStateAlwaysOff;
+
+        // Update labels
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+        NSString *stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
+        self.endTimeLabel.text = stringFromDate;
+    }
+    else {
+        self.endTimePickerCell.tag = 0;
+    }
+}
+
+- (void)updateSection:(NSInteger)sectionIndex
+{
+    [UIView animateWithDuration:.4 animations:^{
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadData];
+    }];
+}
+
+- (void)onControlSwitchChange
+{
+    self.startPickerIsOpen = NO;
+    self.endPickerIsOpen = NO;
+    [self updateDatePickers];
+    [self updateSection:0];
+}
+
+- (IBAction)cancelResultAndExit:(id)sender
+{
+
+}
+
+- (IBAction)returnResultAndExit:(id)sender
+{
+    if(_controlSwitch.selectedSegmentIndex==0){
+        if([self.titleField.text isEqualToString:@""] || [self.startTimeLabel.text isEqualToString:@""]){
+            NSLog(@"allert");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                                            message:@"You must enter an event name and time"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        else{
+            //[[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];
+            //[event setId:_userEvents[0]];
             
-            UITextField *playerTextField = [[UITextField alloc] initWithFrame:CGRectMake(140, 8, 185, 30)];
             
-            playerTextField.adjustsFontSizeToFitWidth = YES;
-            playerTextField.textColor = [UIColor blackColor];
-            playerTextField.keyboardType = UIKeyboardTypeDefault;
-            playerTextField.returnKeyType = UIReturnKeyDone;
-            playerTextField.backgroundColor = [UIColor whiteColor];
-            playerTextField.autocorrectionType = UITextAutocorrectionTypeYes; // auto correction support
-            playerTextField.autocapitalizationType = UITextAutocapitalizationTypeSentences; // auto capitalization support
-            [playerTextField setEnabled: YES];
-            playerTextField.delegate = self;
             
-            [cell.contentView addSubview:playerTextField];
+            NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      self.titleField.text,@"title",
+                                      self.descriptionField.text, @"event_description",
+                                      [NSNumber numberWithInt:1], @"institution_id",
+                                      self.startTimeLabel.text, @"start_date",
+                                      self.endTimeLabel.text, @"end_date",
+                                      nil];
             
-            UILabel * titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(cell.frame.origin.x+15, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height)];
-            //titleLabel.text =[eventItems objectAtIndex:[indexPath row]];
-            [cell.contentView addSubview:titleLabel];
+            [[PASyncManager globalSyncManager] postEvent: setEvent];
+            
+            
+            
+            
+            self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
+            _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+            [self.tableView reloadData];
+            
+            
+            //[self performSegueWithIdentifier:@"showEvents" sender:self];
+        }
         
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(140, 0, 50, 44)];
-            imageView.image = photo;
-            [cell.contentView addSubview:imageView];
+    }
+    /*
+    else if(_controlSwitch.selectedSegmentIndex==1){
+        if([_userEvents[1] isEqualToString:@""]){
+            NSLog(@"allert");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                                            message:@"You must enter a message"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        else{
+            PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+            _managedObjectContext = [appdelegate managedObjectContext];
+            
+            Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:_managedObjectContext];
+            [message setText:_userEvents[1]];
+            [message setCreated_at:[NSDate date]];
+            [message setId:_userEvents[1]];
+            // NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
+            // [message setPhoto:imageData];
+            
+            
+            //  photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
+            _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+            [self.tableView reloadData];
+            //[self performSegueWithIdentifier:@"showFeed" sender:self];
             
         }
     }
-    
-    if ([indexPath section] == 0) {
-        cell.tag=[indexPath row];
-        UIImageView *imageView = (UIImageView *) cell.contentView.subviews[2];
-        imageView.frame = CGRectMake(140, 0, 60, 44);
-        imageView.tag = [indexPath row];
-        if([indexPath row] != 1 || _controlSwitch.selectedSegmentIndex==1){
-            imageView.image=nil;
-        }
-        UITextField * textField = (UITextField*) cell.contentView.subviews[0];
-        textField.hidden=NO;
-        [textField setUserInteractionEnabled:YES];
-        textField.placeholder = [_eventSuggestions objectAtIndex:[indexPath row]];
-        textField.text = [_userEvents objectAtIndex:[indexPath row]];
-        textField.tag = [indexPath row];
-        UILabel * title = (UILabel*) cell.contentView.subviews[1];
-        title.text = [_eventItems objectAtIndex:[indexPath row]];
-        if((_controlSwitch.selectedSegmentIndex==1 && [indexPath row]==2) || (_controlSwitch.selectedSegmentIndex==0 && [indexPath row]==1))//these are the locations of both of the "add a photo cells"
-        {
-            textField.hidden=YES;
-            imageView.image = photo;
-            if(_controlSwitch.selectedSegmentIndex==1){
-                imageView.frame = CGRectMake(120, 0, 140, 100);
-            }
-        }
-        if(_controlSwitch.selectedSegmentIndex==0)//Events
-        {
-            textField.frame = CGRectMake(140, 8, 185, 30);
-            if([indexPath row]==3){
-                //the date field
-                [textField setUserInteractionEnabled:NO];
-            }
-        }
-        if(_controlSwitch.selectedSegmentIndex==1)//Messages
-        {
-            textField.frame = CGRectMake(15, 45, 250, 30);
-        }
-    }
-    return cell;
 }
 
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+*/
     
+    
+}
+
+/*
+ - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+ if (self.controlSwitch.selectedSegmentIndex == 0) {
+ cell = self.cellIWantToShow;
+ }
+ return cell;
+ }
+
+ - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+ CGFloat height = [super tableView:tableView heightForRowAtIndexPath:indexPath];
+ if (indexPath.section == 0 && hideStuff) {
+ height = [super tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+ }
+ return height;
+ }
+
+ - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+ {
+ NSInteger count = [super tableView:tableView numberOfRowsInSection:section];
+
+ if (section == 0 && hideStuff) {
+ count -= hiddenCells.count;
+ }
+
+ return count;
+ }
+ */
+
+/*
+ - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+ UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:@"Cell"];
+ if (cell == nil) {
+ cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
+ cell.accessoryType = UITableViewCellAccessoryNone;
+ if ([indexPath section] == 0) {
+
+ UITextField *playerTextField = [[UITextField alloc] initWithFrame:CGRectMake(140, 8, 185, 30)];
+
+ playerTextField.adjustsFontSizeToFitWidth = YES;
+ playerTextField.textColor = [UIColor blackColor];
+ playerTextField.keyboardType = UIKeyboardTypeDefault;
+ playerTextField.returnKeyType = UIReturnKeyDone;
+ playerTextField.backgroundColor = [UIColor whiteColor];
+ playerTextField.autocorrectionType = UITextAutocorrectionTypeYes; // auto correction support
+ playerTextField.autocapitalizationType = UITextAutocapitalizationTypeSentences; // auto capitalization support
+ [playerTextField setEnabled: YES];
+ playerTextField.delegate = self;
+
+ [cell.contentView addSubview:playerTextField];
+
+ UILabel * titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(cell.frame.origin.x + 15, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height)];
+ //titleLabel.text =[eventItems objectAtIndex:[indexPath row]];
+ [cell.contentView addSubview:titleLabel];
+
+ UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(140, 0, 50, 44)];
+ imageView.image = photo;
+ [cell.contentView addSubview:imageView];
+
+ }
+ }
+
+ if ([indexPath section] == 0) {
+ cell.tag=[indexPath row];
+ UIImageView *imageView = (UIImageView *) cell.contentView.subviews[2];
+ imageView.frame = CGRectMake(140, 0, 60, 44);
+ imageView.tag = [indexPath row];
+ if([indexPath row] != 1 || _controlSwitch.selectedSegmentIndex==1){
+ imageView.image=nil;
+ }
+ UITextField * textField = (UITextField*) cell.contentView.subviews[0];
+ textField.hidden=NO;
+ [textField setUserInteractionEnabled:YES];
+ textField.placeholder = [_eventSuggestions objectAtIndex:[indexPath row]];
+ textField.text = [_userEvents objectAtIndex:[indexPath row]];
+ textField.tag = [indexPath row];
+ UILabel * title = (UILabel*) cell.contentView.subviews[1];
+ title.text = [_eventItems objectAtIndex:[indexPath row]];
+ if((_controlSwitch.selectedSegmentIndex==1 && [indexPath row]==2) || (_controlSwitch.selectedSegmentIndex==0 && [indexPath row]==1))//these are the locations of both of the "add a photo cells"
+ {
+ textField.hidden=YES;
+ imageView.image = photo;
+ if(_controlSwitch.selectedSegmentIndex==1){
+ imageView.frame = CGRectMake(120, 0, 140, 100);
+ }
+ }
+ if(_controlSwitch.selectedSegmentIndex==0)//Events
+ {
+ textField.frame = CGRectMake(140, 8, 185, 30);
+ if([indexPath row]==3){
+ //the date field
+ [textField setUserInteractionEnabled:NO];
+ }
+ }
+ if(_controlSwitch.selectedSegmentIndex==1)//Messages
+ {
+ textField.frame = CGRectMake(15, 45, 250, 30);
+ }
+ }
+ return cell;
+ }
+ */
+
+
+/*
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     if(([indexPath row]==1 && _controlSwitch.selectedSegmentIndex==0) || ([indexPath row]==2 && _controlSwitch.selectedSegmentIndex==1)){
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
                                                                  delegate: self
@@ -238,7 +440,9 @@ UITableView *_tableView;
         [_tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
+*/
 
+/*
 - (void)pickerChanged:(id)sender
 {
     chosenDate = [sender date];
@@ -247,11 +451,10 @@ UITableView *_tableView;
 # pragma mark - text field delegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     //_tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
-    NSLog(@"new frame height: %f", _tableView.frame.size.height-216);
-    if(_tableView.frame.size.height==initialTVHeight){
-    _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height-(216+22));
-    // TODO: the keyboard height reads 216 but should not be hardcoded
-    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    NSLog(@"new frame height: %f", self.tableView.frame.size.height-216);
+    if(self.tableView.frame.size.height==initialTVHeight){
+    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-(216+22));
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
 }
 
@@ -269,6 +472,7 @@ UITableView *_tableView;
 }
 
 -(void)updateEventArray{
+
     
     int count=0;
     if(_controlSwitch.selectedSegmentIndex==0){
@@ -278,7 +482,7 @@ UITableView *_tableView;
         count=2;
     }
     for(int i=0; i<count; i++){
-        UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         UITextField * textField = (UITextField*) cell.contentView.subviews[0];
         NSString * text =textField.text;
         if(text!=nil)
@@ -287,28 +491,27 @@ UITableView *_tableView;
    
 }
 
-
 - (IBAction)segmentedControl:(id)sender {
-    photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
-    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-   _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
+    // photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
+    self.userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+    //self.tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, initialTVHeight);
     // Necessary in case the keyboard is up while switching the segmented control
     if(_controlSwitch.selectedSegmentIndex==0){
-        _tableView.rowHeight = initialRowHeight;
-        _eventItems=@[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
-        _eventSuggestions=@[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
+//        _tableView.rowHeight = initialRowHeight;
+//        self.detailKeys=@[@"Event Name", @"Add a Photo", @"Location", @"Date and Time", @"Who's Invited", @"Description"];
+//        self.detailValues=@[@"My Birthday!",@"",@"Mount Everest",@"January 1, 2015", @"Mom, Dad", @"BYOB"];
     }
     else if(_controlSwitch.selectedSegmentIndex==1){
-        _tableView.rowHeight=100;
-        _eventItems=@[@"Who are you sharing with?", @"What's on your mind?",@"Add a photo"];
-        _eventSuggestions=@[@"Mom, Dad",@"My message",@""];
+//        _tableView.rowHeight=100;
+//        self.detailKeys=@[@"Who are you sharing with?", @"What's on your mind?",@"Add a photo"];
+//        =@[@"Mom, Dad",@"My message",@""];
     }
-    [_tableView reloadData];
+    [self.tableView reloadData];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSIndexPath *indexPath = [_tableView indexPathForSelectedRow];
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     if(([indexPath row]==1 && _controlSwitch.selectedSegmentIndex==0) || ([indexPath row]==2 &&_controlSwitch.selectedSegmentIndex==1)){
         switch (buttonIndex) {
             case 0:
@@ -317,7 +520,7 @@ UITableView *_tableView;
             case 1:
                 [self choosePhotoFromExistingImages];
             default:
-                [_tableView deselectRowAtIndexPath:indexPath animated:YES];
+                [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
                 break;
         }
     }else if([indexPath row]==3 && _controlSwitch.selectedSegmentIndex==0){
@@ -336,7 +539,7 @@ UITableView *_tableView;
     [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
     NSString *stringFromDate = [formatter stringFromDate:chosenDate];
     _userEvents[3]=stringFromDate;
-    [_tableView reloadData];
+    [self.tableView reloadData];
 }
 
 
@@ -368,11 +571,11 @@ UITableView *_tableView;
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     [self dismissViewControllerAnimated: YES completion: nil];
-    UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
-    photo = image;
-    UIImageView * imageView = (UIImageView *)[self.view viewWithTag:6];
-    imageView.image =photo;
-    [_tableView reloadData];
+    //UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
+    // photo = image;
+    //UIImageView * imageView = (UIImageView *)[self.view viewWithTag:6];
+    //imageView.image =photo;
+    [self.tableView reloadData];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
@@ -395,7 +598,7 @@ UITableView *_tableView;
             [alert show];
         }
         else{
-           /* PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+            PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
             _managedObjectContext = [appdelegate managedObjectContext];
     
             Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:_managedObjectContext];
@@ -409,8 +612,7 @@ UITableView *_tableView;
             
            
             
-            [[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];*/
-            //TODO: Set the id to something other than the title
+            [[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];
             //also set the image title to the id rather than the title
             
             
@@ -435,10 +637,9 @@ UITableView *_tableView;
             
             photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-            [_tableView reloadData];
+            [self.tableView reloadData];
     
-            
-            //TODO: perform correct transition
+
             //[self performSegueWithIdentifier:@"showEvents" sender:self];
         }
         
@@ -461,17 +662,18 @@ UITableView *_tableView;
             [message setText:_userEvents[1]];
             [message setCreated_at:[NSDate date]];
             [message setId:_userEvents[1]];
-            NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
-            [message setPhoto:imageData];
+            // NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(photo)];
+            // [message setPhoto:imageData];
 
             
-            photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
+            //  photo = [UIImage imageNamed:@"ImagePlaceholder.jpeg"];
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-            [_tableView reloadData];
+            [self.tableView reloadData];
             //[self performSegueWithIdentifier:@"showFeed" sender:self];
 
         }
     }
 }
+*/
 
 @end

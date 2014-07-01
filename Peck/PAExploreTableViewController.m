@@ -11,6 +11,8 @@
 #import "PAAppDelegate.h"
 #import "PAExploreCell.h"
 #import "PAExploreInfoViewController.h"
+#import "Explore.h"
+#import "PASyncManager.h"
 
 @interface PAExploreTableViewController ()
 
@@ -56,6 +58,8 @@ NSCache *imageCache;
         cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
     cellHeight = cell.frame.size.height;
+    
+    [[PASyncManager globalSyncManager] updateExploreInfo];
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,19 +83,22 @@ NSCache *imageCache;
 
 - (void)configureCell:(PAExploreCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    Message *tempMessage = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.descriptionLabel.text = tempMessage.text;
-    NSNumber *imageID = tempMessage.id;
+    Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.descriptionLabel.text = tempExplore.explore_description;
+    cell.titleLabel.text = tempExplore.title;
+    NSNumber *imageID = tempExplore.id;
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
-        cell.imageView.image=image;
+        //cell.imageView.image=image;
     }
     else{
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
-            NSData *data = tempMessage.photo;
-            UIImage *image = [UIImage imageWithData:data];
+            //NSData *data = tempMessage.photo;
+            //UIImage *image = [UIImage imageWithData:data];
+            UIImage *
+            image;
             if(!image){
                 image = [UIImage imageNamed:@"image-placeholder.png"];
                 
@@ -205,7 +212,7 @@ NSCache *imageCache;
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
     
-    NSString * eventString = @"Message";
+    NSString * eventString = @"Explore";
     NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
@@ -220,7 +227,7 @@ NSCache *imageCache;
     
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:@"Master"];
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     

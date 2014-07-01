@@ -23,7 +23,7 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
+//NSDateFormatter * df;
 
 + (instancetype)globalSyncManager
 {
@@ -140,6 +140,7 @@
     peer.name = [dictionary objectForKey:@"first_name"];
     peer.id = [dictionary objectForKey:@"id"];
 }
+#pragma mark - Explore
 
 #pragma mark - Institution actions
 
@@ -210,12 +211,12 @@
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"explore"];
              for (NSDictionary *eventAttributes in postsFromResponse) {
                  NSNumber *newID = [eventAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Peer"];
+                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Explore"];
                  if(!eventAlreadyExists){
-                     NSLog(@"about to add the peer");
-                     Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInPeer:peer withDictionary:eventAttributes];
-                     NSLog(@"PEER: %@",peer);
+                     NSLog(@"about to add the explore");
+                     Explore * explore = [NSEntityDescription insertNewObjectForEntityForName:@"Explore" inManagedObjectContext: _managedObjectContext];
+                     [self setAttributesInExplore:explore withDictionary:eventAttributes];
+                     NSLog(@"EXPLORE: %@",explore);
                  }
              }
          }
@@ -233,11 +234,16 @@
 
 }
 
-//setAttributesInExplore:(Explore *)explore withDictionary: (NSDictionary *)dictionary{
+-(void)setAttributesInExplore:(Explore *) explore withDictionary: (NSDictionary *)dictionary{
+    explore.title = [dictionary objectForKey:@"title"];
     
-    
-//}
+    NSDateFormatter * df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
+    explore.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
+    explore.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
+}
 
+#pragma mark - Circle
 
 #pragma mark - Circles actions
 
@@ -377,7 +383,7 @@
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
-         [self updateEventInfo];
+         //[self updateEventInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -452,6 +458,7 @@
     //event.location = [dictionary objectForKey:@"institution_id"];
     event.id = [dictionary objectForKey:@"id"];
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
+    //if(!df){
     NSDateFormatter * df = [[NSDateFormatter alloc] init];
     [df setDateFormat:serverDateFormat];
     
@@ -468,6 +475,26 @@
      [event setValue:value forKey:attribute];
      }
      */
+    NSLog(@"finished setting the attributes of the event");
+}
+
+
+-(BOOL)objectExists:(NSNumber *) newID withType:(NSString*)type{
+    NSFetchRequest * request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *objects = [NSEntityDescription entityForName:type inManagedObjectContext:_managedObjectContext];
+    [request setEntity:objects];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id == %@", newID];
+    [request setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
+    //fetch events in order to check if the events we want to add already exist in core data
+    
+    if([mutableFetchResults count]==0)
+        return NO;
+    else {
+        return YES;
+    }
 }
 
 #pragma mark - Utility Methods
