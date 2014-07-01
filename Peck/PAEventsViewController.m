@@ -18,7 +18,6 @@
 #import "PAEvents.h"
 #import "PASyncManager.h"
 #import "PAImageManager.h"
-
 #import "AFNetworking.h"
 #import "UIImageView+AFNetworking.h"
 
@@ -65,6 +64,7 @@ NSInteger selectedDay;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    NSLog(@"view will appear");
     showingDetail = NO;
 }
 

@@ -373,12 +373,13 @@
     event.id = [dictionary objectForKey:@"id"];
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
     //if(!df){
-        NSDateFormatter * df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
+    NSDateFormatter * df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"];
     //}
-    
-    event.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
-    event.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
+    NSDate *start = [df dateFromString:[dictionary objectForKey:@"start_date"]];
+    event.start_date = start;
+    NSDate *end =[df dateFromString:[dictionary objectForKey:@"end_date"]];
+    event.end_date = end;
     // the below doesn't work due to current disparity between the json and coredata terminology
     /*
      NSDictionary *attributes = [[event entity] attributesByName];
@@ -390,6 +391,7 @@
      [event setValue:value forKey:attribute];
      }
      */
+    NSLog(@"finished setting the attributes of the event");
 }
 
 
