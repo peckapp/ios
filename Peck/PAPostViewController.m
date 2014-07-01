@@ -91,6 +91,7 @@ UITableView *_tableView;
     _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
 }
 
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
