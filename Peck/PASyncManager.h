@@ -37,5 +37,5 @@
 -(void)updatePeerInfo;
 
 -(void)updateExploreInfo;
-
+-(BOOL)objectExists:(NSNumber *)newID withType: (NSString *) type;
 @end

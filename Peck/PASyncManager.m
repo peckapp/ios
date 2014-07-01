@@ -15,6 +15,7 @@
 #import "Circle.h"
 #import "PASessionManager.h"
 #import "Peer.h"
+#import "Explore.h"
 #import "Institution.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
@@ -24,6 +25,7 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 //NSDateFormatter * df;
+
 
 + (instancetype)globalSyncManager
 {
@@ -450,6 +452,7 @@
     
 }
 
+
 -(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
 {
     NSLog(@"set attributes of event");
@@ -476,25 +479,6 @@
      }
      */
     NSLog(@"finished setting the attributes of the event");
-}
-
-
--(BOOL)objectExists:(NSNumber *) newID withType:(NSString*)type{
-    NSFetchRequest * request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *objects = [NSEntityDescription entityForName:type inManagedObjectContext:_managedObjectContext];
-    [request setEntity:objects];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id == %@", newID];
-    [request setPredicate:predicate];
-    
-    NSError *error = nil;
-    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
-    //fetch events in order to check if the events we want to add already exist in core data
-    
-    if([mutableFetchResults count]==0)
-        return NO;
-    else {
-        return YES;
-    }
 }
 
 #pragma mark - Utility Methods
