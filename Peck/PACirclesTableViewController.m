@@ -143,7 +143,6 @@ CGFloat cellHeight;
         NSLog(@"about to add the images");
         [cell addImages: tempCircle.members];
     }
-    
 }
 
 - (IBAction)addCircle:(id)sender {
