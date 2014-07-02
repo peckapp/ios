@@ -18,5 +18,6 @@
 
 // Parameter names
 #define user_id @"user_id"
+#define inst_id @"institution_id"
 #define api_key @"api_key"
 #define auth_token @"authentication_token"

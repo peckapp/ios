@@ -79,7 +79,7 @@
                                    parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                       success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                           // extract core dictionary from json
-                                          NSLog(@"Register user success: %@", JSON);
+                                          NSLog(@"Update user success: %@", JSON);
                                           NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                           NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
                                           
@@ -97,7 +97,8 @@
 
 - (void)authenticateUserWithInfo:(NSDictionary*)userInfo
 {
-    
+    // sends either email and password, or facebook token and link, to the server for authentication
+    // expects an authentication token to be returned in response
 }
 
 - (BOOL)validUserInfo:(NSDictionary*)userInfo
@@ -117,7 +118,7 @@
         
         
         [[PASessionManager sharedClient] GET:usersAPI
-                                  parameters:nil
+                                  parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              //NSLog(@"JSON: %@",JSON);
@@ -166,6 +167,7 @@
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
         
+        // no parameters needed here since the list of institutions is needed to get a user id
         [[PASessionManager sharedClient] GET:institutionsAPI
                                   parameters:nil
                                      success:^(NSURLSessionDataTask * __unused task, id JSON) {
@@ -218,7 +220,7 @@
         _managedObjectContext = [appdelegate managedObjectContext];
         
         [[PASessionManager sharedClient] GET:exploreAPI
-                                  parameters:nil
+                                  parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              //NSLog(@"explore JSON: %@",JSON);
@@ -323,7 +325,7 @@
         
         
         [[PASessionManager sharedClient] GET:circlesAPI
-                                  parameters:nil
+                                  parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              NSLog(@"update circle info JSON: %@",JSON);
@@ -367,7 +369,7 @@
     NSString *circleMembersURL = [@"api/circles/" stringByAppendingString:[circle.id stringValue]];
     circleMembersURL = [circleMembersURL stringByAppendingString:@"/circle_members"];
     [[PASessionManager sharedClient] GET:circleMembersURL
-                              parameters:nil
+                              parameters:[self authenticationParameters]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"circle members url: %@", circleMembersURL);
@@ -408,7 +410,7 @@
 {
     NSString *appendedURL = [@"api/simple_events/" stringByAppendingString:[eventID stringValue]];
     [[PASessionManager sharedClient] DELETE:appendedURL
-                                 parameters:nil
+                                 parameters:[self authenticationParameters]
                                     success:^
     (NSURLSessionDataTask * __unused task, id JSON) {
         NSLog(@"success: %@", JSON);
@@ -430,7 +432,7 @@
         
         
         [[PASessionManager sharedClient] GET:simple_eventsAPI
-                                  parameters:nil
+                                  parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              //NSLog(@"JSON: %@",JSON);
@@ -504,23 +506,46 @@
     }
 }
 
-- (NSDictionary*)applyWrapper:(NSString*)wrapperString toDictionary:(NSDictionary*)dictionary
+- (NSDictionary*)authenticationParameters
 {
-    NSMutableDictionary *baseDictionary = [[NSDictionary dictionaryWithObject:dictionary forKey:wrapperString] mutableCopy];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     NSNumber *userId = [defaults objectForKey:user_id];
-    [baseDictionary setObject:userId forKey:user_id];
+    if (userId != nil) {
+        [dict setObject:userId forKey:user_id];
+    }
+    
+    NSNumber *instId = [defaults objectForKey:inst_id];
+    if (instId != nil) {
+        [dict setObject:instId forKey:inst_id];
+    }
     
     NSString *apiKey = [defaults objectForKey:api_key];
-    [baseDictionary setObject:apiKey forKey:api_key];
+    if (apiKey != nil) {
+        [dict setObject:apiKey forKey:api_key];
+    }
     
     NSString *authToken = [defaults objectForKey:auth_token];
-    [baseDictionary setObject:authToken forKey:auth_token];
+    if (authToken != nil) {
+        [dict setObject:authToken forKey:auth_token];
+    }
+    
+    NSLog(@"authentication parameters: %@",dict);
+    
+    return [dict copy];
+}
+
+- (NSDictionary*)applyWrapper:(NSString*)wrapperString toDictionary:(NSDictionary*)dictionary
+{
+    NSMutableDictionary *baseDictionary = [[NSDictionary dictionaryWithObject:dictionary forKey:wrapperString] mutableCopy];
+    
+    [baseDictionary setValuesForKeysWithDictionary:[self authenticationParameters]];
     
     return [baseDictionary copy];
 }
+
 
 -(NSString*)currentInstitutionID
 {

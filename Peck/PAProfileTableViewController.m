@@ -8,9 +8,12 @@
 
 #import "PAProfileTableViewController.h"
 
+#import "PAAppDelegate.h"
+
 @interface PAProfileTableViewController ()
 
 - (IBAction)createAccount:(id)sender;
+- (IBAction)switchSchool:(id)sender;
 
 @end
 
@@ -90,6 +93,14 @@ int currentTextField;
     UIViewController *loginRoot = [loginStoryboard instantiateInitialViewController];
     
     [self presentViewController:loginRoot animated:YES completion:nil];
+}
+
+- (IBAction)switchSchool:(id)sender
+{
+    PAAppDelegate *appDel = (PAAppDelegate*)[[UIApplication sharedApplication] delegate];
+    UIViewController *configController = [appDel.mainStoryboard instantiateViewControllerWithIdentifier:@"configure"];
+    
+    [self presentViewController:configController animated:YES completion:nil];
 }
 
 #pragma mark - UIImagePickerDelegate

@@ -116,9 +116,14 @@
 {
     PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
-    UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+    // if this is root because of the initial download of the app
+    if ([appDelegate window].rootViewController == self) {
+        UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+        
+        [appDelegate.window setRootViewController:newRoot];
+    }
     
-    [appDelegate.window setRootViewController:newRoot];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

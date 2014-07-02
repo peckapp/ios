@@ -457,7 +457,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cIN-YJ-lYD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2372" y="3763"/>
+            <point key="canvasLocation" x="-2334" y="3827"/>
         </scene>
         <!--Profile Table View Controller - Profile-->
         <scene sceneID="yHh-cC-9rb">
@@ -547,6 +547,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Profile" id="QKi-VJ-Isw">
+                        <barButtonItem key="leftBarButtonItem" title="Institution" id="ggA-9z-5zz">
+                            <connections>
+                                <action selector="switchSchool:" destination="4gY-60-r3D" id="rPN-v9-Jf9"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Create" id="lTD-ud-37m">
                             <connections>
                                 <action selector="createAccount:" destination="4gY-60-r3D" id="QUk-F5-Ebp"/>
@@ -567,7 +572,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jgw-4o-OAg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1836" y="3763"/>
+            <point key="canvasLocation" x="-1768" y="3943"/>
         </scene>
         <!--Events View Controller - Master-->
         <scene sceneID="VgW-fR-Quf">

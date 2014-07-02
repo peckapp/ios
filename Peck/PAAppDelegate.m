@@ -32,16 +32,16 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     // institutional ID initialization
-    NSNumber * institutionID = [defaults objectForKey:@"institution_id"];
-    NSLog(@"USER ID: %@", institutionID);
-    if(!institutionID){
+    NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
+    NSLog(@"INSTITUTION ID: %@", institutionID);
+    if(institutionID == nil){
         NSLog(@"Open up the configure screen");
         initViewController = [self.mainStoryboard instantiateViewControllerWithIdentifier:@"configure"];
     }
     // user ID initialization
     NSNumber * userID = [defaults objectForKey:@"user_id"];
     NSLog(@"USER ID: %@", userID);
-    if(!userID){
+    if(userID == nil){
         NSLog(@"Set a new anonymous user");
         [[PASyncManager globalSyncManager] ceateAnonymousUser];
     }
