@@ -408,12 +408,28 @@ NSInteger selectedDay;
 }
  */
 
+
+-(NSString*)dateToString:(NSDate *)date{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:date];
+    NSInteger hour = [components hour];
+    NSInteger minute = [components minute];
+    NSString * dateString = [[@(hour) stringValue] stringByAppendingString:@":"];
+    dateString = [dateString stringByAppendingString:[@(minute) stringValue]];
+    return dateString;
+    
+    
+}
+
 - (void)configureCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Event *tempEvent;
     tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     cell.titleLabel.text = tempEvent.title;
+    cell.startTime.text = [self dateToString:tempEvent.start_date];
+    cell.endTime.text = [self dateToString:tempEvent.end_date];
+    
     NSString *imageID = [tempEvent.id stringValue];
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
