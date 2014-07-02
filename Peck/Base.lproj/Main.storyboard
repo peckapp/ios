@@ -180,6 +180,7 @@
                     <connections>
                         <outlet property="tableView" destination="j5U-Yp-073" id="oWF-hL-OqT"/>
                         <segue destination="rxR-7o-blZ" kind="modal" identifier="createACircle" id="lv2-Rn-WR6"/>
+                        <segue destination="Jac-oM-WgV" kind="push" identifier="selectProfile" id="dy9-Ix-bvt"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D43-v5-Oqh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -412,6 +413,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="1P4-hd-HpK"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="blurbTextView" destination="Ow5-Rk-YX3" id="NRb-ms-5rY"/>
@@ -738,11 +740,11 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="3Lq-op-wBX">
-                                                    <rect key="frame" x="59" y="14" width="203" height="29"/>
+                                                    <rect key="frame" x="20" y="14" width="280" height="29"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <segments>
                                                         <segment title="Event"/>
-                                                        <segment title="Message"/>
+                                                        <segment title="Announcement"/>
                                                     </segments>
                                                 </segmentedControl>
                                             </subviews>
@@ -912,7 +914,7 @@
                                             <segue destination="V6y-RR-AL1" kind="push" id="ea7-4c-mbn"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell autoresizesSubviews="NO" clipsSubviews="YES" tag="-1" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="rP6-XV-IiA">
+                                    <tableViewCell autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="rP6-XV-IiA">
                                         <rect key="frame" x="0.0" y="890" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rP6-XV-IiA" id="dEi-ZJ-cJa">
@@ -957,7 +959,7 @@
                                 <rect key="frame" x="233" y="5" width="71" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Done">
+                                <state key="normal" title="Send">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>

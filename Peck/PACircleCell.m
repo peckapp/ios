@@ -27,13 +27,15 @@
     // Initialization code
 
     /*[scrollView setScrollEnabled:YES];
-    //[scrollView setContentSize:CGSizeMake(800, 0)];
+    [scrollView setContentSize:CGSizeMake(800, 0)];
+     */
     UITapGestureRecognizer *tapRecognizer;
-    tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector (selectProfile:)];
+    tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:scrollView action:@selector (selectProfile:)];
     tapRecognizer.cancelsTouchesInView = NO;
     [scrollView addGestureRecognizer:tapRecognizer];
     scrollView.userInteractionEnabled = YES;
-     */
+    
+    
     _loadedImages = NO;
 
 
@@ -49,7 +51,7 @@
 -(void)selectProfile: (UIGestureRecognizer*) sender{
     //CGPoint tapPoint = [sender locationInView:scrollView];
     //NSLog(@"cell: %i, x location: %f", self.tag, tapPoint.x);
-    [_delegate Profile:2];
+    //[_delegate profile:2];
 
     //get the cell and the picture that has been selected and open that profile
 }

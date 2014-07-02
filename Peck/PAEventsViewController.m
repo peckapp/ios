@@ -49,6 +49,7 @@ BOOL showingDetail;
 NSString *searchBarText;
 NSDate *today;
 NSInteger selectedDay;
+CGRect initialTableViewRect;
 
 - (void)awakeFromNib
 {
@@ -67,9 +68,14 @@ NSInteger selectedDay;
     [[PASyncManager globalSyncManager] updateEventInfo];
     NSLog(@"view will appear (events)");
     showingDetail = NO;
-
+    [self registerForKeyboardNotifications];
     searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
     eventsTableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, (self.view.frame.size.height) - searchBarHeight);
+    initialTableViewRect= eventsTableView.frame;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [self deregisterFromKeyboardNotifications];
 }
 
 - (void)viewDidLoad
@@ -105,15 +111,6 @@ NSInteger selectedDay;
 
     eventsTableView.dataSource = self;
     eventsTableView.delegate = self;
-
-    // Get the size of the cells
-    UITableViewCell * cell = [eventsTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        // Configure cell by loading a nib.
-        [eventsTableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [eventsTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    }
-    //cellHeight = (CGFloat)cell.frame.size.height;
 
     //[[PASyncManager globalSyncManager] updateEventInfo];
     [[PASyncManager globalSyncManager] updatePeerInfo];
@@ -161,7 +158,7 @@ NSInteger selectedDay;
     NSDate *selectedNight =[[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:selectedMorning options:0];
     
     NSPredicate *startDatePredicate = [NSPredicate predicateWithFormat:@"start_date > %@", selectedMorning];
-    NSPredicate *endDatePredicate = [NSPredicate predicateWithFormat:@"end_date < %@", selectedNight];
+    NSPredicate *endDatePredicate = [NSPredicate predicateWithFormat:@"start_date < %@", selectedNight];
     NSLog(@"the current date: %@", [NSDate date]);
     
     [predicateArray addObject:startDatePredicate];
@@ -473,9 +470,10 @@ NSInteger selectedDay;
         [self reloadTheView];
         NSLog(@"User cancelled search");
     }else{
-        NSLog(@"use the search fetch controller");
         _fetchedResultsController = nil;
         searchBarText = searchText;
+        
+        
         NSError * error = nil;
         if (![self.fetchedResultsController performFetch:&error])
         {
@@ -541,4 +539,50 @@ NSInteger selectedDay;
     
     [eventsTableView reloadData];
 }
+
+#pragma mark - keyboard notifications
+
+- (void)registerForKeyboardNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+}
+
+- (void)deregisterFromKeyboardNotifications {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+    
+}
+
+
+- (void)keyboardWasShown:(NSNotification *)notification {
+    if(CGRectEqualToRect(eventsTableView.frame,initialTableViewRect)){
+        NSDictionary* info = [notification userInfo];
+        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+        eventsTableView.frame = CGRectMake(eventsTableView.frame.origin.x, eventsTableView.frame.origin.y, eventsTableView.frame.size.width, eventsTableView.frame.size.height-keyboardSize.height);
+    }
+}
+
+- (void)keyboardWillBeHidden:(NSNotification *)notification {
+    if(!CGRectEqualToRect(eventsTableView.frame,initialTableViewRect)){
+        NSDictionary* info = [notification userInfo];
+        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+        eventsTableView.frame = CGRectMake(eventsTableView.frame.origin.x, eventsTableView.frame.origin.y, eventsTableView.frame.size.width, eventsTableView.frame.size.height+keyboardSize.height);
+    }
+    
+}
+
 @end

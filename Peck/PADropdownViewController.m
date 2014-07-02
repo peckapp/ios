@@ -53,8 +53,8 @@
 
     // Initialize dropdownBar
     dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)
-                                             itemCount:[self.secondaryViewControllerIdentifiers count]
-                                              delegate:self];
+                                             itemCount:[self.secondaryViewControllerIdentifiers count]];
+    dropdownBar.delegate = self;
 
     // TODO: Frame is currently too big.
     // Create a frame for child view controllers

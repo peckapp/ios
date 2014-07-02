@@ -7,6 +7,7 @@
 //
 
 #import "PACircleScrollView.h"
+#import "PACircleCell.h"
 
 @implementation PACircleScrollView
 
@@ -19,9 +20,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self setScrollEnabled:YES];
-        
+        NSLog(@"the scroll view is being initialized with the frame");
         UITapGestureRecognizer *tapRecognizer;
-        tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectProfile:)];
+        tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeProfile:)];
         tapRecognizer.cancelsTouchesInView = NO;
         [self addGestureRecognizer:tapRecognizer];
         self.userInteractionEnabled =YES;
@@ -33,12 +34,13 @@
     return self;
 }
 
+
 -(id)init{
     
     [self setScrollEnabled:YES];
-    
+    NSLog(@"init normal style");
     UITapGestureRecognizer *tapRecognizer;
-    tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectProfile:)];
+    tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeProfile:)];
     tapRecognizer.cancelsTouchesInView = NO;
     [self addGestureRecognizer:tapRecognizer];
     self.userInteractionEnabled =YES;
@@ -54,12 +56,35 @@
 }
 */
 -(void)selectProfile: (UIGestureRecognizer*) sender{
+    NSLog(@"about to select the profile");
+    CGPoint tapPoint = [sender locationInView:self];
+    int peer = (int) tapPoint.x;
+    peer = (peer/80);
+    UIView *cell = [self findSuperViewWithClass:[PACircleCell class]];
+    NSLog(@"cell tag: %li", (long)cell.tag);
+    [self.delegate profile:peer withCircle:cell.tag];
+    //[self.delegate removePeer:peer];
+}
+
+- (UIView *)findSuperViewWithClass:(Class)superViewClass {
+    UIView *superView = self.superview;
+    UIView *foundSuperView = nil;
+    while (nil != superView && nil == foundSuperView) {
+        if ([superView isKindOfClass:superViewClass]) {
+            foundSuperView = superView;
+        } else {
+            superView = superView.superview;
+        }
+    }
+    return foundSuperView;
+}
+
+-(void)removeProfile: (UIGestureRecognizer*) sender{
     CGPoint tapPoint = [sender locationInView:self];
     int peer = (int) tapPoint.x;
     peer = (peer/80);
     [self.delegate removePeer:peer];
 }
-
 
 -(void)addPeer:(UIImage*)image WithName:(NSString*)name{
     [self setContentSize:CGSizeMake(80*(_numberOfMembers+1), 60)];
