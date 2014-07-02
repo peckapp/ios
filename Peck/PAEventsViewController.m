@@ -112,19 +112,28 @@ CGRect initialTableViewRect;
     eventsTableView.dataSource = self;
     eventsTableView.delegate = self;
 
-    // Get the size of the cells
-    UITableViewCell * cell = [eventsTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        // Configure cell by loading a nib.
-        [eventsTableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [eventsTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    }
-    //cellHeight = (CGFloat)cell.frame.size.height;
-
     //[[PASyncManager globalSyncManager] updateEventInfo];
     [[PASyncManager globalSyncManager] updatePeerInfo];
     
     [eventsTableView reloadData];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [[PASyncManager globalSyncManager] updateEventInfo];
+    NSLog(@"view will appear (events)");
+    showingDetail = NO;
+}
+
+- (void)viewWillLayoutSubviews
+{
+    searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
+    eventsTableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, self.view.frame.size.height - searchBarHeight);
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    if(!showingDetail){
+        [eventsTableView reloadData];
+    }
 }
 
 - (void)didReceiveMemoryWarning
