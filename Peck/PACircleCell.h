@@ -12,7 +12,7 @@
 
 @interface PACircleCell : UITableViewCell <UIGestureRecognizerDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
-@property (weak, nonatomic) IBOutlet PACircleScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet PACircleScrollView *scrollView;
 @property(nonatomic, assign) id <PACirclesControllerDelegate> delegate;
 @property (nonatomic, assign) NSInteger members;
 @property BOOL loadedImages;

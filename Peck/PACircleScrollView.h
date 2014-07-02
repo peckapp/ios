@@ -8,13 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "PACreateCircleViewController.h"
+#import "PACirclesTableViewController.h"
+
+@protocol PACircleControllerDelegate;
 
 @protocol PACirclePeersControllerDelegate;
+
 
 @interface PACircleScrollView : UIScrollView <UIGestureRecognizerDelegate>
 
 @property NSInteger numberOfMembers;
-@property (nonatomic, assign) id<PACirclePeersControllerDelegate,UIScrollViewDelegate> delegate;
+@property (nonatomic, assign) id<PACirclePeersControllerDelegate, UIScrollViewDelegate, PACirclesControllerDelegate> delegate;
 
 @property (strong, nonatomic) NSMutableArray * nameLabels;
 @property (strong, nonatomic) NSMutableArray * memberPhotos;

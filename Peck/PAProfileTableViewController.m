@@ -10,6 +10,8 @@
 
 @interface PAProfileTableViewController ()
 
+- (IBAction)createAccount:(id)sender;
+
 @end
 
 @implementation PAProfileTableViewController
@@ -79,6 +81,16 @@ int currentTextField;
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - Account Creation and Configuration
+
+- (IBAction)createAccount:(id)sender
+{
+    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
+    UIViewController *loginRoot = [loginStoryboard instantiateInitialViewController];
+    
+    [self presentViewController:loginRoot animated:YES completion:nil];
+}
 
 #pragma mark - UIImagePickerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info

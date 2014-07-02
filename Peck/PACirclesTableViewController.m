@@ -123,6 +123,7 @@ static NSString * nibName = @"PACircleCell";
     }
     else{
         cell.delegate = self;
+        cell.scrollView.delegate=self;
         cell.tag = [indexPath row];
         Circle * tempCircle = [_fetchedResultsController objectAtIndexPath:indexPath];
         //NSArray *members = tempCircle.members;
@@ -142,10 +143,33 @@ static NSString * nibName = @"PACircleCell";
 
 # pragma mark - PACirclesControllerDelegate
 
--(void)Profile: (int) userID{
-    UIStoryboard * storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController * controller = [storyboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
-    [self presentViewController:controller animated:YES completion:nil];
+-(void)profile:(int)member withCircle:(NSInteger)circle{
+    
+    NSLog(@"you have selected user %i", member);
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:circle inSection:0];
+    Circle *tempCircle = [_fetchedResultsController objectAtIndexPath:indexPath];
+    NSNumber *userID = tempCircle.members[member];
+    
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSString *attributeName = @"id";
+    NSNumber *attributeValue = userID;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@",
+                              attributeName, attributeValue];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    Peer *peer = mutableFetchResults[0];
+    
+    NSLog(@"the selected peer: %@", peer);
+    selectedPeer = peer;
+    [self performSegueWithIdentifier:@"selectProfile" sender:self];
 }
 
 /*
@@ -208,8 +232,11 @@ static NSString * nibName = @"PACircleCell";
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+   
+    if([[segue identifier] isEqualToString:@"selectProfile"]){
+        NSManagedObject *object = selectedPeer;
+        [[segue destinationViewController] setDetailItem:object];
+    }
 }
 
 
