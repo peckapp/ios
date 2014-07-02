@@ -107,7 +107,7 @@
     [self.view addSubview:dropdownBar];
 }
 
-- (void)viewWillLayoutSubviews
+- (void)viewWillAppear:(BOOL)animated
 {
     self.frameForChildViewController = CGRectMake(0,
                                                   dropdownBar.frame.size.height,
