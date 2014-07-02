@@ -43,12 +43,14 @@
 -(void)ceateAnonymousUser
 {
     NSLog(@"creating an anonymous new user");
+    int inst = (int)[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    [NSNumber numberWithInt:1],@"institution_id",
+                                    [NSNumber numberWithInt:inst],@"institution_id",
+                                    @"test_username",@"username",
                                     nil];
     
     [[PASessionManager sharedClient] POST:usersAPI
-                                    parameters:dictionary
+                                    parameters:[NSDictionary dictionaryWithObject:dictionary forKey:@"user"]
                                     success:^
     (NSURLSessionDataTask * __unused task, id JSON) {
         NSLog(@"Anonymous user creation success: %@", JSON);
@@ -60,9 +62,8 @@
         [defaults setObject:userID forKey:@"user_id"];
     }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"ERROR: %@\nREQUEST: %@\nRESPONSE: %@",error, task.originalRequest.allHTTPHeaderFields, task.response);
                                   }];
-
 }
 
 -(void)registerUserWithInfo:(NSDictionary *)userInfo
@@ -106,7 +107,7 @@
                                   parameters:nil
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"JSON: %@",JSON);
+             //NSLog(@"JSON: %@",JSON);
              NSDictionary *usersDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
              for (NSDictionary *userAttributes in postsFromResponse) {
@@ -117,7 +118,7 @@
                      NSLog(@"about to add the peer");
                      Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
                      [self setAttributesInPeer:peer withDictionary:userAttributes];
-                     NSLog(@"PEER: %@",peer);
+                     //NSLog(@"PEER: %@",peer);
                  }
              }
          }
@@ -142,7 +143,6 @@
     peer.name = [dictionary objectForKey:@"first_name"];
     peer.id = [dictionary objectForKey:@"id"];
 }
-#pragma mark - Explore
 
 #pragma mark - Institution actions
 
@@ -156,14 +156,14 @@
         [[PASessionManager sharedClient] GET:institutionsAPI
                                   parameters:nil
                                      success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                         NSLog(@"update institutions JSON: %@",JSON);
+                                         //NSLog(@"update institutions JSON: %@",JSON);
                                          NSDictionary *institutionsDictionary = (NSDictionary*)JSON;
                                          NSArray *responseInstitutions = [institutionsDictionary objectForKey:@"institutions"];
                                          for (NSDictionary *institutionAttributes in responseInstitutions) {
                                              NSNumber * instID = [institutionAttributes objectForKey:@"id"];
                                              BOOL institutionAlreadyExists = [self objectExists:instID withType:@"Institution"];
                                              if ( !institutionAlreadyExists ) {
-                                                 NSLog(@"Adding Institution: %@",[institutionAttributes objectForKey:@"name"]);
+                                                 //NSLog(@"Adding Institution: %@",[institutionAttributes objectForKey:@"name"]);
                                                  Institution * institution = [NSEntityDescription insertNewObjectForEntityForName:@"Institution" inManagedObjectContext:_managedObjectContext];
                                                  [self setAttributesInInstitution:institution withDictionary:institutionAttributes];
                                              }
@@ -208,7 +208,7 @@
                                   parameters:nil
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"JSON: %@",JSON);
+             //NSLog(@"explore SON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"explore"];
              for (NSDictionary *eventAttributes in postsFromResponse) {
@@ -218,7 +218,7 @@
                      NSLog(@"about to add the explore");
                      Explore * explore = [NSEntityDescription insertNewObjectForEntityForName:@"Explore" inManagedObjectContext: _managedObjectContext];
                      [self setAttributesInExplore:explore withDictionary:eventAttributes];
-                     NSLog(@"EXPLORE: %@",explore);
+                     //NSLog(@"EXPLORE: %@",explore);
                  }
              }
          }
@@ -245,8 +245,6 @@
     explore.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
 }
 
-#pragma mark - Circle
-
 #pragma mark - Circles actions
 
 -(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray *)members
@@ -256,7 +254,7 @@
                                parameters:dictionary
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"success: %@", JSON);
+         NSLog(@"post circle success: %@", JSON);
          NSDictionary *postsFromResponse = (NSDictionary*)JSON;
          NSDictionary *circleDictionary = [postsFromResponse objectForKey:@"circle"];
          NSNumber *circleID = [circleDictionary objectForKey:@"id"];
@@ -292,7 +290,7 @@
                                    parameters:tempDictionary
                                       success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"success: %@", JSON);
+             NSLog(@"add circle members success: %@", JSON);
          }
                                       failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                           NSLog(@"ERROR: %@",error);
@@ -315,7 +313,7 @@
                                   parameters:nil
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"JSON: %@",JSON);
+             NSLog(@"update circle info JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"circles"];
              NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
@@ -421,10 +419,10 @@
                                   parameters:nil
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"JSON: %@",JSON);
+             //NSLog(@"JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
-             NSLog(@"posts from response: %@", postsFromResponse);
+             NSLog(@"Update Event response: %@", postsFromResponse);
              NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
              for (NSDictionary *eventAttributes in postsFromResponse) {
                  NSNumber *newID = [eventAttributes objectForKey:@"id"];
@@ -441,12 +439,13 @@
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                          NSLog(@"ERROR: %@",error);
                                      }];
-        
+        /*
         dispatch_async(dispatch_get_main_queue(), ^{
             
             
             
         });
+         */
     });
 
     

@@ -39,14 +39,12 @@
         initViewController = [self.mainStoryboard instantiateViewControllerWithIdentifier:@"configure"];
     }
     // user ID initialization
-    /*
     NSNumber * userID = [defaults objectForKey:@"user_id"];
     NSLog(@"USER ID: %@", userID);
     if(!userID){
-        NSLog(@"Set a new user");
+        NSLog(@"Set a new anonymous user");
         [[PASyncManager globalSyncManager] ceateAnonymousUser];
     }
-     */
     
     [FBLoginView class];
     

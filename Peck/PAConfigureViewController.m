@@ -53,6 +53,9 @@
         }
     }];
     
+    // sets the default if they never scroll the pickerview
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[NSNumber numberWithInt:1] forKey:@"institution_id"];
 }
 
 - (void)didReceiveMemoryWarning
@@ -105,7 +108,7 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:institution.id forKey:@"institution_id"];
-    NSLog(@"selected institution: %@",institution.name);
+    NSLog(@"selected institution: %@ with id: %@",institution.name,institution.id);
 }
 
 
