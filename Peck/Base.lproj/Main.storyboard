@@ -67,6 +67,7 @@
                 <navigationController storyboardIdentifier="explore" title="Explore" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="YgY-YD-cce" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="FaF-Ex-tMg"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <size key="freeformSize" width="320" height="568"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="YHk-3p-VBI">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -645,7 +646,7 @@
         <!--Configure View Controller-->
         <scene sceneID="LG1-G8-7Oc">
             <objects>
-                <viewController storyboardIdentifier="ConfigureController" id="wXS-p9-cDv" customClass="PAConfigureViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="configure" useStoryboardIdentifierAsRestorationIdentifier="YES" id="wXS-p9-cDv" customClass="PAConfigureViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1I5-qc-I4i">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

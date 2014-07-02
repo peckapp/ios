@@ -8,9 +8,11 @@
 
 #import "PASessionManager.h"
 
+
+static NSString * const PALocalAPIBaseURLString = @"http://localhost:3000/";
 // extended lynda tutorial with some api features
-static NSString * const PATestAPIBaseURLString = @"http://thor.peckapp.com:3000/";
-static NSString * const PATestSecureAPIBaseURLString = @"https://thor.peckapp.com:3001/";
+static NSString * const PATestAPIBaseURLString = @"http://thor.peckapp.com:3200/";
+static NSString * const PATestSecureAPIBaseURLString = @"https://thor.peckapp.com:3201/";
 // development webservice
 static NSString * const PADevAPIBaseURLString = @"http://thor.peckapp.com:3500/";
 static NSString * const PADevProdAPIBaseURLString = @"http://thor.peckapp.com:3501/";
@@ -22,7 +24,7 @@ static NSString * const PADevSecureAPIBaseURLString = @"https://thor.peckapp.com
     static PASessionManager *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PADevAPIBaseURLString]];
+        _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PALocalAPIBaseURLString]];
         _sharedClient.requestSerializer = [AFJSONRequestSerializer serializer];
         [_sharedClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
         [_sharedClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];

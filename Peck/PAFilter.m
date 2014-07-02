@@ -234,9 +234,8 @@
 
 - (CGRect) startingRect
 {
-    self.superview;
     double x = self.superview.frame.size.width - elementRadius - edgeBuffer;
-    double y = [[UIScreen mainScreen] bounds].size.height  - edgeBuffer;
+    double y = [[UIScreen mainScreen] bounds].size.height;
     return CGRectMake(x, y, elementRadius, elementRadius);
 }
 

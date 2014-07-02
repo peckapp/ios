@@ -27,20 +27,30 @@
 {
     // Override point for customization after application launch.
     
+    UIViewController *initViewController;
+    _mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
+    // institutional ID initialization
+    NSNumber * institutionID = [defaults objectForKey:@"institution_id"];
+    NSLog(@"USER ID: %@", institutionID);
+    if(!institutionID){
+        NSLog(@"Open up the configure screen");
+        initViewController = [self.mainStoryboard instantiateViewControllerWithIdentifier:@"configure"];
+    }
+    // user ID initialization
     NSNumber * userID = [defaults objectForKey:@"user_id"];
     NSLog(@"USER ID: %@", userID);
     if(!userID){
-        NSLog(@"Set a new user");
-        [[PASyncManager globalSyncManager] setUser];
+        NSLog(@"Set a new anonymous user");
+        [[PASyncManager globalSyncManager] ceateAnonymousUser];
     }
     
-    
     [FBLoginView class];
-    UIStoryboard * storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *initViewController = [storyBoard instantiateInitialViewController];
+    
+    if (initViewController == nil) {
+        initViewController = [self.mainStoryboard instantiateInitialViewController];
+    }
     [self.window setRootViewController:initViewController];
     
     // Must remain after third-party SDK code
@@ -75,6 +85,10 @@
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+    
+    // for testing purposes
+    //[[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"institution_id"];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

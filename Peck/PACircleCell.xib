@@ -21,7 +21,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="OE9-FT-TlX" customClass="PACircleScrollView">
-                        <rect key="frame" x="20" y="45.5" width="300" height="73"/>
+                        <rect key="frame" x="20" y="46" width="300" height="73"/>
                     </scrollView>
                 </subviews>
             </tableViewCellContentView>

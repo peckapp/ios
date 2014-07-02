@@ -13,14 +13,29 @@
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
 + (instancetype)globalSyncManager;
+
+// methods for anonymous user creation and subsqquent registration
+// sends post request to server with institution_id and stores response user_id in NSUserDefaults
+-(void)ceateAnonymousUser;
+// sends post request to the server completing the user's other info after the registration process is triggered
+-(void)registerUserWithInfo:(NSDictionary*)userInfo;
+
+// methods for syncing institutions for the configuration phase
+-(void)updateAvailableInstitutionsWithCallback:(void(^)(BOOL sucess))callbackBlock;
+
+// methods for updating the locally stored events
 -(void)updateEventInfo;
 -(void)postEvent:(NSDictionary *) dictionary;
 -(void)deleteEvent:(NSNumber*)eventID;
+
+// methods for updating circles
 -(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray*)members;
 -(void)updateCircleInfo;
--(void)setUser;
+
 -(void)updatePeerInfo;
+
 -(void)updateExploreInfo;
 -(BOOL)objectExists:(NSNumber *)newID withType: (NSString *) type;
 @end

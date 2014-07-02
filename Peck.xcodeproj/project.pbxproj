@@ -10,6 +10,7 @@
 		86051D49194BB27200961541 /* Silhouette.png in Resources */ = {isa = PBXBuildFile; fileRef = 86051D48194BB27200961541 /* Silhouette.png */; };
 		86051D4D194BB64200961541 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86051D4A194BB3EB00961541 /* FacebookSDK.framework */; };
 		860A8D27195201A700C5B4A6 /* thor_peckapp_com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 860A8D26195201A700C5B4A6 /* thor_peckapp_com.cer */; };
+		860BE45E19632CC600E57A56 /* Institution.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE45D19632CC600E57A56 /* Institution.m */; };
 		86173751195E07F000F2A794 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86D59816193768BF00F38654 /* Main.storyboard */; };
 		86292512193CBE000057CA41 /* PAPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292511193CBE000057CA41 /* PAPostViewController.m */; };
 		86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292520193CBFD40057CA41 /* PAPeckCell.m */; };
@@ -102,6 +103,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		860BE46019632E4100E57A56 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 86D597F7193768BF00F38654 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 86D597FE193768BF00F38654;
+			remoteInfo = Peck;
+		};
+		860BE46219632E4300E57A56 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 86D597F7193768BF00F38654 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 86D597FE193768BF00F38654;
+			remoteInfo = Peck;
+		};
 		86D5982E193768C000F38654 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 86D597F7193768BF00F38654 /* Project object */;
@@ -129,6 +144,8 @@
 		86051D48194BB27200961541 /* Silhouette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Silhouette.png; sourceTree = "<group>"; };
 		86051D4A194BB3EB00961541 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		860A8D26195201A700C5B4A6 /* thor_peckapp_com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = thor_peckapp_com.cer; sourceTree = "<group>"; };
+		860BE45C19632CC600E57A56 /* Institution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Institution.h; sourceTree = "<group>"; };
+		860BE45D19632CC600E57A56 /* Institution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Institution.m; sourceTree = "<group>"; };
 		86292510193CBE000057CA41 /* PAPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPostViewController.h; sourceTree = "<group>"; };
 		86292511193CBE000057CA41 /* PAPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPostViewController.m; sourceTree = "<group>"; };
 		8629251F193CBFD40057CA41 /* PAPeckCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPeckCell.h; sourceTree = "<group>"; };
@@ -315,6 +332,15 @@
 			name = Graphics;
 			sourceTree = "<group>";
 		};
+		860BE45F19632CCE00E57A56 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				860BE45C19632CC600E57A56 /* Institution.h */,
+				860BE45D19632CC600E57A56 /* Institution.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		8629250D193CBB370057CA41 /* Post */ = {
 			isa = PBXGroup;
 			children = (
@@ -463,6 +489,7 @@
 				8629250D193CBB370057CA41 /* Post */,
 				867651EC19462E3500C14645 /* Webservice */,
 				86051D47194BB24900961541 /* Graphics */,
+				860BE45F19632CCE00E57A56 /* Models */,
 				86D59822193768BF00F38654 /* Images.xcassets */,
 				86D59819193768BF00F38654 /* Peck.xcdatamodeld */,
 				86D5980B193768BF00F38654 /* Supporting Files */,
@@ -645,6 +672,8 @@
 				86D5982F193768C000F38654 /* PBXTargetDependency */,
 				86E84FF1195B2058000874EB /* PBXTargetDependency */,
 				86DD9C2E195C721B0074096E /* PBXTargetDependency */,
+				860BE46119632E4100E57A56 /* PBXTargetDependency */,
+				860BE46319632E4300E57A56 /* PBXTargetDependency */,
 			);
 			name = PeckTests;
 			productName = PeckTests;
@@ -810,6 +839,7 @@
 				86D59821193768BF00F38654 /* PAEventInfoViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PeckInitialViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
+				860BE45E19632CC600E57A56 /* Institution.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
 				A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */,
 				863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */,
@@ -846,6 +876,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		860BE46119632E4100E57A56 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 86D597FE193768BF00F38654 /* Peck */;
+			targetProxy = 860BE46019632E4100E57A56 /* PBXContainerItemProxy */;
+		};
+		860BE46319632E4300E57A56 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 86D597FE193768BF00F38654 /* Peck */;
+			targetProxy = 860BE46219632E4300E57A56 /* PBXContainerItemProxy */;
+		};
 		86D5982F193768C000F38654 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 86D597FE193768BF00F38654 /* Peck */;
