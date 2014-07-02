@@ -118,24 +118,6 @@ CGRect initialTableViewRect;
     [eventsTableView reloadData];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [[PASyncManager globalSyncManager] updateEventInfo];
-    NSLog(@"view will appear (events)");
-    showingDetail = NO;
-}
-
-- (void)viewWillLayoutSubviews
-{
-    searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
-    eventsTableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, self.view.frame.size.height - searchBarHeight);
-}
-
-- (void)viewDidDisappear:(BOOL)animated{
-    if(!showingDetail){
-        [eventsTableView reloadData];
-    }
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
