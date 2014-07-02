@@ -19,16 +19,16 @@
 		863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CB193CB31C004110F5 /* PACirclesTableViewController.m */; };
 		863843CF193CB393004110F5 /* PAProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CE193CB393004110F5 /* PAProfileTableViewController.m */; };
 		863843DA193CB75F004110F5 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 863843D3193CB75F004110F5 /* Login.storyboard */; };
-		863843DB193CB75F004110F5 /* PeckInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D5193CB75F004110F5 /* PeckInitialViewController.m */; };
-		863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D7193CB75F004110F5 /* PeckLoginViewController.m */; };
-		863843DD193CB75F004110F5 /* PeckRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D9193CB75F004110F5 /* PeckRegisterViewController.m */; };
+		863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D5193CB75F004110F5 /* PAInitialViewController.m */; };
+		863843DD193CB75F004110F5 /* PARegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D9193CB75F004110F5 /* PARegisterViewController.m */; };
 		863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */; };
 		863843E3193CB7FD004110F5 /* PAExploreTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843E2193CB7FD004110F5 /* PAExploreTableViewController.m */; };
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
+		864D873D196470C100BCC01A /* facebook-login.png in Resources */ = {isa = PBXBuildFile; fileRef = 864D873B196470C100BCC01A /* facebook-login.png */; };
+		864D873E196470C100BCC01A /* facebook-logout.png in Resources */ = {isa = PBXBuildFile; fileRef = 864D873C196470C100BCC01A /* facebook-logout.png */; };
 		8671A2CE195B848D00700101 /* dropdown_pecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2C9195B848D00700101 /* dropdown_pecks@2x.png */; };
 		8671A2CF195B848D00700101 /* dropdown_explore@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CA195B848D00700101 /* dropdown_explore@2x.png */; };
 		8671A2D0195B848D00700101 /* dropdown_post@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CB195B848D00700101 /* dropdown_post@2x.png */; };
-		8671A2D1195B848D00700101 /* dropdown_circles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CC195B848D00700101 /* dropdown_circles@2x.png */; };
 		8671A2D2195B848D00700101 /* dropdown_profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CD195B848D00700101 /* dropdown_profile@2x.png */; };
 		867B52D619509F5000BEB37B /* PASessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D519509F5000BEB37B /* PASessionManager.m */; };
 		8689DD8B195871D200A6B61C /* PAFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8689DD8A195871D200A6B61C /* PAFilter.m */; };
@@ -36,6 +36,7 @@
 		8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB019589E3600A6B61C /* filter_dining@2x.png */; };
 		8689DDB519589E3600A6B61C /* filter_standard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB119589E3600A6B61C /* filter_standard@2x.png */; };
 		8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB219589E3600A6B61C /* filter_subscription@2x.png */; };
+		869A85AE1964855B00F254C1 /* dropdown_circles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 869A85AD1964855B00F254C1 /* dropdown_circles@2x.png */; };
 		869B8789195B2226001DF0A2 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 869B8788195B2226001DF0A2 /* Crashlytics.framework */; };
 		86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */; };
 		86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BFB4AF194B889100ADAB75 /* PADropdownBar.m */; };
@@ -159,21 +160,20 @@
 		863843CD193CB393004110F5 /* PAProfileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAProfileTableViewController.h; sourceTree = "<group>"; };
 		863843CE193CB393004110F5 /* PAProfileTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAProfileTableViewController.m; sourceTree = "<group>"; };
 		863843D3193CB75F004110F5 /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
-		863843D4193CB75F004110F5 /* PeckInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeckInitialViewController.h; sourceTree = "<group>"; };
-		863843D5193CB75F004110F5 /* PeckInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckInitialViewController.m; sourceTree = "<group>"; };
-		863843D6193CB75F004110F5 /* PeckLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeckLoginViewController.h; sourceTree = "<group>"; };
-		863843D7193CB75F004110F5 /* PeckLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckLoginViewController.m; sourceTree = "<group>"; };
-		863843D8193CB75F004110F5 /* PeckRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeckRegisterViewController.h; sourceTree = "<group>"; };
-		863843D9193CB75F004110F5 /* PeckRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckRegisterViewController.m; sourceTree = "<group>"; };
+		863843D4193CB75F004110F5 /* PAInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAInitialViewController.h; sourceTree = "<group>"; };
+		863843D5193CB75F004110F5 /* PAInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAInitialViewController.m; sourceTree = "<group>"; };
+		863843D8193CB75F004110F5 /* PARegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PARegisterViewController.h; sourceTree = "<group>"; };
+		863843D9193CB75F004110F5 /* PARegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PARegisterViewController.m; sourceTree = "<group>"; };
 		863843DE193CB7A4004110F5 /* PeckLoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeckLoadingViewController.h; sourceTree = "<group>"; };
 		863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckLoadingViewController.m; sourceTree = "<group>"; };
 		863843E1193CB7FD004110F5 /* PAExploreTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreTableViewController.h; sourceTree = "<group>"; };
 		863843E2193CB7FD004110F5 /* PAExploreTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreTableViewController.m; sourceTree = "<group>"; };
 		863843E6193CBA69004110F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		864D873B196470C100BCC01A /* facebook-login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-login.png"; sourceTree = "<group>"; };
+		864D873C196470C100BCC01A /* facebook-logout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-logout.png"; sourceTree = "<group>"; };
 		8671A2C9195B848D00700101 /* dropdown_pecks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_pecks@2x.png"; sourceTree = "<group>"; };
 		8671A2CA195B848D00700101 /* dropdown_explore@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_explore@2x.png"; sourceTree = "<group>"; };
 		8671A2CB195B848D00700101 /* dropdown_post@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_post@2x.png"; sourceTree = "<group>"; };
-		8671A2CC195B848D00700101 /* dropdown_circles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_circles@2x.png"; sourceTree = "<group>"; };
 		8671A2CD195B848D00700101 /* dropdown_profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_profile@2x.png"; sourceTree = "<group>"; };
 		867651ED19462E5200C14645 /* old_webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = old_webservice.h; sourceTree = "<group>"; };
 		867B52D419509F5000BEB37B /* PASessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASessionManager.h; sourceTree = "<group>"; };
@@ -185,6 +185,7 @@
 		8689DDB019589E3600A6B61C /* filter_dining@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_dining@2x.png"; sourceTree = "<group>"; };
 		8689DDB119589E3600A6B61C /* filter_standard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_standard@2x.png"; sourceTree = "<group>"; };
 		8689DDB219589E3600A6B61C /* filter_subscription@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_subscription@2x.png"; sourceTree = "<group>"; };
+		869A85AD1964855B00F254C1 /* dropdown_circles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_circles@2x.png"; sourceTree = "<group>"; };
 		869B8788195B2226001DF0A2 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		86BFB4AE194B889100ADAB75 /* PADropdownBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownBar.h; sourceTree = "<group>"; };
 		86BFB4AF194B889100ADAB75 /* PADropdownBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADropdownBar.m; sourceTree = "<group>"; };
@@ -321,6 +322,7 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				864D873A19646F9900BCC01A /* facebook */,
 				DDCD45C0195DC8E60032333F /* profile-placeholder.png */,
 				8671A2C8195B846800700101 /* dropdown2 */,
 				8671A2C6195B843800700101 /* dropdown */,
@@ -363,16 +365,23 @@
 			isa = PBXGroup;
 			children = (
 				863843D3193CB75F004110F5 /* Login.storyboard */,
-				863843D4193CB75F004110F5 /* PeckInitialViewController.h */,
-				863843D5193CB75F004110F5 /* PeckInitialViewController.m */,
-				863843D6193CB75F004110F5 /* PeckLoginViewController.h */,
-				863843D7193CB75F004110F5 /* PeckLoginViewController.m */,
-				863843D8193CB75F004110F5 /* PeckRegisterViewController.h */,
-				863843D9193CB75F004110F5 /* PeckRegisterViewController.m */,
+				863843D4193CB75F004110F5 /* PAInitialViewController.h */,
+				863843D5193CB75F004110F5 /* PAInitialViewController.m */,
+				863843D8193CB75F004110F5 /* PARegisterViewController.h */,
+				863843D9193CB75F004110F5 /* PARegisterViewController.m */,
 				863843DE193CB7A4004110F5 /* PeckLoadingViewController.h */,
 				863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */,
 			);
 			name = Login;
+			sourceTree = "<group>";
+		};
+		864D873A19646F9900BCC01A /* facebook */ = {
+			isa = PBXGroup;
+			children = (
+				864D873B196470C100BCC01A /* facebook-login.png */,
+				864D873C196470C100BCC01A /* facebook-logout.png */,
+			);
+			name = facebook;
 			sourceTree = "<group>";
 		};
 		8671A2C6195B843800700101 /* dropdown */ = {
@@ -404,7 +413,7 @@
 				8671A2C9195B848D00700101 /* dropdown_pecks@2x.png */,
 				8671A2CA195B848D00700101 /* dropdown_explore@2x.png */,
 				8671A2CB195B848D00700101 /* dropdown_post@2x.png */,
-				8671A2CC195B848D00700101 /* dropdown_circles@2x.png */,
+				869A85AD1964855B00F254C1 /* dropdown_circles@2x.png */,
 				8671A2CD195B848D00700101 /* dropdown_profile@2x.png */,
 			);
 			name = dropdown2;
@@ -730,15 +739,16 @@
 				A4794C1D19620746002BD272 /* profile-placeholder.png in Resources */,
 				86173751195E07F000F2A794 /* Main.storyboard in Resources */,
 				8689DDB519589E3600A6B61C /* filter_standard@2x.png in Resources */,
+				864D873D196470C100BCC01A /* facebook-login.png in Resources */,
 				8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */,
 				DD898150195B7AA80079CDC9 /* explore@2x.png in Resources */,
 				DD898151195B7AA80079CDC9 /* pecks@2x.png in Resources */,
 				DD898171195CAFF20079CDC9 /* Icon-40@2x.png in Resources */,
 				DD89816D195CAF6F0079CDC9 /* PAEventCell.xib in Resources */,
-				8671A2D1195B848D00700101 /* dropdown_circles@2x.png in Resources */,
 				8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */,
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
+				869A85AE1964855B00F254C1 /* dropdown_circles@2x.png in Resources */,
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
 				DD898152195B7AA80079CDC9 /* post@2x.png in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
@@ -751,6 +761,7 @@
 				DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */,
 				A4B772E719460C3200A31252 /* schools.plist in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
+				864D873E196470C100BCC01A /* facebook-logout.png in Resources */,
 				8671A2D0195B848D00700101 /* dropdown_post@2x.png in Resources */,
 				A463F38F19507FA300ED441F /* Property List.plist in Resources */,
 				DD898172195CAFF20079CDC9 /* Icon-60@2x.png in Resources */,
@@ -843,12 +854,11 @@
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				86D59821193768BF00F38654 /* PAEventInfoViewController.m in Sources */,
-				863843DB193CB75F004110F5 /* PeckInitialViewController.m in Sources */,
+				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
 				860BE45E19632CC600E57A56 /* Institution.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
 				A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */,
-				863843DC193CB75F004110F5 /* PeckLoginViewController.m in Sources */,
 				A4773C8C1959DD0E00AB9831 /* PAImageManager.m in Sources */,
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
 				A4773C8019589E8200AB9831 /* PAEvents.m in Sources */,
@@ -866,7 +876,7 @@
 				A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */,
 				A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */,
 				A463F384194B959800ED441F /* PACircleCell.m in Sources */,
-				863843DD193CB75F004110F5 /* PeckRegisterViewController.m in Sources */,
+				863843DD193CB75F004110F5 /* PARegisterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
