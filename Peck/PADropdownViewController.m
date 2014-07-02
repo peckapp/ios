@@ -52,21 +52,19 @@
                                                 PAProfileIdentifier];
 
     // Initialize dropdownBar
-    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 0)
+    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)
                                              itemCount:[self.secondaryViewControllerIdentifiers count]
                                               delegate:self];
 
     // TODO: Frame is currently too big.
     // Create a frame for child view controllers
-    self.frameForChildViewController = CGRectMake(0,
-                                                  CGRectGetHeight(dropdownBar.frame),
-                                                  CGRectGetWidth(self.view.frame),
-                                                  CGRectGetHeight(self.view.frame) - CGRectGetHeight(dropdownBar.frame));
+
+    NSLog(@"template frame height: %f", self.frameForChildViewController.size.height);
 
     // Instantiate primary view controller
     NSLog(@"Instantiating primary view controller");
     self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
-    self.primaryViewController.view.frame = self.frameForChildViewController;
+
 
     // Instantiate secondary view controllers
     NSLog(@"Instantiating secondary view controllers");
@@ -107,6 +105,19 @@
 
     // Display dropdown bar
     [self.view addSubview:dropdownBar];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.frameForChildViewController = CGRectMake(0,
+                                                  dropdownBar.frame.size.height,
+                                                  self.view.frame.size.width,
+                                                  self.view.frame.size.height - dropdownBar.frame.size.height);
+    self.primaryViewController.view.frame = self.frameForChildViewController;
+    [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
+        UIViewController *viewController = (UIViewController *)obj;
+        viewController.view.frame = self.frameForChildViewController;
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -170,6 +181,8 @@
 
     self.view.userInteractionEnabled = NO;
 
+    NSLog(@"old frame height: %f", oldVC.view.frame.size.height);
+
     // Hide child view controller
     [oldVC willMoveToParentViewController:nil];
     [oldVC removeFromParentViewController];
@@ -193,6 +206,8 @@
                          [newVC didMoveToParentViewController:self];
                          self.activeViewController = newVC;
                          self.view.userInteractionEnabled = YES;
+
+                         NSLog(@"new frame height: %f", newVC.view.frame.size.height);
                          
                      }];
     // dismisses filter as dropbown appears
@@ -206,6 +221,8 @@
     UIViewController * newVC = self.primaryViewController;
 
     self.view.userInteractionEnabled = NO;
+
+    NSLog(@"old frame height: %f", oldVC.view.frame.size.height);
 
     // Hide child view controller
     [oldVC willMoveToParentViewController:nil];
@@ -230,7 +247,9 @@
                          [newVC didMoveToParentViewController:self];
                          self.activeViewController = newVC;
                          self.view.userInteractionEnabled = YES;
-                         
+
+                         NSLog(@"new frame height: %f", newVC.view.frame.size.height);
+
                          // show the dropdown filter for the home mode
                          [self showFilterForMode:PAFilterHomeMode];
                      }];
