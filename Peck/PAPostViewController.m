@@ -103,7 +103,8 @@
     }
 
     [self updateDatePickers];
-    [self updateSection:0];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 # pragma mark image picker
@@ -200,20 +201,13 @@
     }
 }
 
-- (void)updateSection:(NSInteger)sectionIndex
-{
-    [UIView animateWithDuration:.4 animations:^{
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView reloadData];
-    }];
-}
-
 - (void)onControlSwitchChange
 {
     self.startPickerIsOpen = NO;
     self.endPickerIsOpen = NO;
     [self updateDatePickers];
-    [self updateSection:0];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 - (IBAction)cancelResultAndExit:(id)sender

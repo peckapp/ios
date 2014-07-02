@@ -11,7 +11,12 @@
 #import "PAAppDelegate.h"
 #import "Circle.h"
 #import "PASyncManager.h"
+
+#define cellHeight 100.0
+
 @interface PACirclesTableViewController ()
+
+@property NSIndexPath * selectedIndexPath;
 
 @end
 
@@ -25,8 +30,6 @@
 
 static NSString * cellIdentifier = PACirclesIdentifier;
 static NSString * nibName = @"PACircleCell";
-
-CGFloat cellHeight;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -56,17 +59,6 @@ CGFloat cellHeight;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-
-    // Get the size of the cells
-    UITableViewCell * cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        // Configure cell by loading a nib.
-        [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    }
-    cellHeight = cell.frame.size.height;
-
-    NSLog(@"View did load");
     
     [[PASyncManager globalSyncManager] updateCircleInfo];
     [_tableView reloadData];
@@ -108,20 +100,19 @@ CGFloat cellHeight;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(self.selectedIndexPath.row && indexPath.row == self.selectedIndexPath.row) {
+        return self.view.frame.size.height;
+    }
     return cellHeight;
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    /*
-    if([indexPath row]==[_fetchedResultsController.fetchedObjects count]){
-        [self performSegueWithIdentifier:@"createACircle" sender:self];
-        
-    }
-    */
 
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+    self.selectedIndexPath = indexPath;
+    [tableView beginUpdates];
+    [tableView endUpdates];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
 - (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
