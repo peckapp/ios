@@ -20,6 +20,7 @@
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
+
 @implementation PASyncManager
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
@@ -43,26 +44,31 @@
 -(void)ceateAnonymousUser
 {
     NSLog(@"creating an anonymous new user");
-    int inst = (int)[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
+    // creates an anonymous user sending just the currently chosen institution_id as a parameter
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    int inst = (int)[defaults objectForKey:@"institution_id"];
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithInt:inst],@"institution_id",
                                     @"test_username",@"username",
                                     nil];
     
     [[PASessionManager sharedClient] POST:usersAPI
-                                    parameters:[NSDictionary dictionaryWithObject:dictionary forKey:@"user"]
+                                    parameters:[self applyWrapper:@"user" toDictionary:dictionary]
                                     success:^
     (NSURLSessionDataTask * __unused task, id JSON) {
+        // response JSON contains a user_id and api_key that must be stored
         NSLog(@"Anonymous user creation success: %@", JSON);
         NSDictionary *postsFromResponse = (NSDictionary*)JSON;
         NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
-        //get the most recent user added
+        
+        //store new information from server response
         NSNumber *userID = [userDictionary objectForKey:@"id"];
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:userID forKey:@"user_id"];
+        [defaults setObject:userID forKey:user_id];
+        NSString *apiKey = [userDictionary objectForKey:api_key];
+        [defaults setObject:apiKey forKey:api_key];
     }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@\nREQUEST: %@\nRESPONSE: %@",error, task.originalRequest.allHTTPHeaderFields, task.response);
+                                      NSLog(@"ERROR: %@",error);
                                   }];
 }
 
@@ -70,7 +76,7 @@
 {
     if ([self validUserInfo:userInfo]) {
         [[PASessionManager sharedClient] POST:usersAPI
-                                   parameters:userInfo
+                                   parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                       success:^(NSURLSessionDataTask * __unused task, id JSON) {
             NSLog(@"Register user success: %@", JSON);
             NSDictionary *postsFromResponse = (NSDictionary*)JSON;
@@ -204,7 +210,7 @@
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
         
-        [[PASessionManager sharedClient] GET:@"api/explore"
+        [[PASessionManager sharedClient] GET:exploreAPI
                                   parameters:nil
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
@@ -250,15 +256,15 @@
 -(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray *)members
 {
     
-    [[PASessionManager sharedClient] POST:@"api/circles"
-                               parameters:dictionary
+    [[PASessionManager sharedClient] POST:circlesAPI
+                               parameters:[self applyWrapper:@"circle" toDictionary:dictionary]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"post circle success: %@", JSON);
          NSDictionary *postsFromResponse = (NSDictionary*)JSON;
          NSDictionary *circleDictionary = [postsFromResponse objectForKey:@"circle"];
          NSNumber *circleID = [circleDictionary objectForKey:@"id"];
-         [self addMembersToCircle:circleID withMembers:members];
+         [self addMembers:members ToCircle:circleID];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -269,7 +275,7 @@
     
 }
 
--(void)addMembersToCircle:(NSNumber*)circleID withMembers:(NSArray *)members
+-(void)addMembers:(NSArray *)members ToCircle:(NSNumber*)circleID
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSNumber * userID = [defaults objectForKey:@"user_id"];
@@ -309,7 +315,7 @@
         _managedObjectContext = [appdelegate managedObjectContext];
         
         
-        [[PASessionManager sharedClient] GET:@"api/circles"
+        [[PASessionManager sharedClient] GET:circlesAPI
                                   parameters:nil
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
@@ -378,8 +384,8 @@
 
 -(void)postEvent:(NSDictionary *)dictionary
 {
-    [[PASessionManager sharedClient] POST:@"api/simple_events"
-                              parameters:dictionary
+    [[PASessionManager sharedClient] POST:simple_eventsAPI
+                              parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
@@ -395,7 +401,8 @@
 {
     NSString *appendedURL = [@"api/simple_events/" stringByAppendingString:[eventID stringValue]];
     [[PASessionManager sharedClient] DELETE:appendedURL
-                                parameters:nil success:^
+                                 parameters:nil
+                                    success:^
     (NSURLSessionDataTask * __unused task, id JSON) {
         NSLog(@"success: %@", JSON);
     }
@@ -415,7 +422,7 @@
         _managedObjectContext = [appdelegate managedObjectContext];
         
         
-        [[PASessionManager sharedClient] GET:@"api/simple_events"
+        [[PASessionManager sharedClient] GET:simple_eventsAPI
                                   parameters:nil
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
@@ -499,6 +506,16 @@
     else {
         return YES;
     }
+}
+
+- (NSDictionary*)applyWrapper:(NSString*)wrapperString toDictionary:(NSDictionary*)dictionary
+{
+    return [NSDictionary dictionaryWithObject:dictionary forKey:wrapperString];
+}
+
+-(NSString*)currentInstitutionID
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
 }
 
 @end
