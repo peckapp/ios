@@ -18,13 +18,12 @@
 #define background [UIColor whiteColor]
 
 @interface PADropdownBar ()
-@property (nonatomic, strong) NSObject <PADropdownBarDelegate> * delegate;
 @property (nonatomic) UIButton * currentButton;
 @end
 
 @implementation PADropdownBar
 
-- (id) initWithFrame:(CGRect)frame itemCount:(NSUInteger)count delegate:(NSObject <PADropdownBarDelegate>*)dropdownDelegate;
+- (id) initWithFrame:(CGRect)frame itemCount:(NSUInteger)count
 {
     frame.size.height = statusBarHeight + barHeight + buffer * 2;
 
@@ -54,7 +53,6 @@
             [self addSubview:button];
         }
 
-        self.delegate = dropdownDelegate;
         self.currentButton = nil;
     }
     return self;
