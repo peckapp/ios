@@ -67,6 +67,9 @@ NSInteger selectedDay;
     [[PASyncManager globalSyncManager] updateEventInfo];
     NSLog(@"view will appear (events)");
     showingDetail = NO;
+
+    searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
+    eventsTableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, (self.view.frame.size.height) - searchBarHeight);
 }
 
 - (void)viewDidLoad
@@ -82,7 +85,7 @@ NSInteger selectedDay;
         abort();
     }
     if(!searchBar){
-        searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight)];
+        searchBar = [[UISearchBar alloc] init];
         searchBar.delegate = self;
         searchBar.showsCancelButton = NO;
         [self.view addSubview:searchBar];
@@ -96,10 +99,7 @@ NSInteger selectedDay;
     self.title = @"Events";
     
     if(!eventsTableView){
-        int tableViewY = searchBarHeight;
-        eventsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, tableViewY, self.view.frame.size.width, (self.view.frame.size.height) - tableViewY - statusBarHeight)];
-        NSLog(@"view height: %f", self.view.frame.size.height);
-        NSLog(@"table view height: %f", (self.view.frame.size.height) - tableViewY);
+        eventsTableView = [[UITableView alloc] init];
         [self.view addSubview:eventsTableView];
     }
 
