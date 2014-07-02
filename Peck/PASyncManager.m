@@ -293,7 +293,7 @@
         circleMembersURL = [circleMembersURL stringByAppendingString:@"/circle_members"];
         
         [[PASessionManager sharedClient] POST:circleMembersURL
-                                   parameters:tempDictionary
+                                   parameters:[self applyWrapper:@"circle_member" toDictionary:tempDictionary]
                                       success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              NSLog(@"add circle members success: %@", JSON);

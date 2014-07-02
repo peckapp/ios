@@ -180,6 +180,7 @@
                     <connections>
                         <outlet property="tableView" destination="j5U-Yp-073" id="oWF-hL-OqT"/>
                         <segue destination="rxR-7o-blZ" kind="modal" identifier="createACircle" id="lv2-Rn-WR6"/>
+                        <segue destination="Jac-oM-WgV" kind="push" identifier="selectProfile" id="dy9-Ix-bvt"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D43-v5-Oqh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -412,6 +413,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="1P4-hd-HpK"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="blurbTextView" destination="Ow5-Rk-YX3" id="NRb-ms-5rY"/>

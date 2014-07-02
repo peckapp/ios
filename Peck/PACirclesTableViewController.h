@@ -12,7 +12,7 @@
 
 @protocol PACirclesControllerDelegate <UITableViewDelegate>
 
--(void)Profile:(int) userID;
+-(void)profile:(int) member withCircle:(NSInteger)circle;
 
 @end
 
