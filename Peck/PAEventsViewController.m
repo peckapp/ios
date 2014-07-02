@@ -199,7 +199,7 @@ CGRect initialTableViewRect;
     NSInteger seconds = [components second];
     
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
-    [dateComponents setHour:-hours-4];
+    [dateComponents setHour:-hours];
     [dateComponents setMinute:-minutes];
     [dateComponents setSecond:-seconds];
     [dateComponents setDay:selectedDay];
@@ -410,9 +410,22 @@ CGRect initialTableViewRect;
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [calendar components:(NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:date];
     NSInteger hour = [components hour];
-    NSInteger minute = [components minute];
+    NSString * timeOfDay = @" AM";
+    NSLog(@"the hour: %li", (long)hour);
+    if(hour>12){
+        hour-=12;
+        timeOfDay = @" PM";
+    }
+    
+    NSString *minute = [@([components minute]) stringValue];
+    if(minute.length==1){
+        minute = [@"0" stringByAppendingString:minute];
+    }
+    
+    
     NSString * dateString = [[@(hour) stringValue] stringByAppendingString:@":"];
-    dateString = [dateString stringByAppendingString:[@(minute) stringValue]];
+    dateString = [dateString stringByAppendingString:minute];
+    dateString = [dateString stringByAppendingString:timeOfDay];
     return dateString;
     
     
@@ -424,6 +437,8 @@ CGRect initialTableViewRect;
     tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     cell.titleLabel.text = tempEvent.title;
+    NSLog(@"event: %@ has a start time of %@", tempEvent.title, tempEvent.start_date);
+    NSLog(@"the selected start moring is %@", [self updateDate]);
     cell.startTime.text = [self dateToString:tempEvent.start_date];
     cell.endTime.text = [self dateToString:tempEvent.end_date];
     

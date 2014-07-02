@@ -221,7 +221,7 @@
                                   parameters:nil
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"explore SON: %@",JSON);
+             //NSLog(@"explore JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"explore"];
              for (NSDictionary *eventAttributes in postsFromResponse) {
@@ -256,6 +256,7 @@
     [df setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
     explore.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
     explore.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
+    explore.id = [dictionary objectForKey:@"id"];
 }
 
 #pragma mark - Circles actions
