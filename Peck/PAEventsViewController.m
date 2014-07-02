@@ -67,9 +67,13 @@ NSInteger selectedDay;
     [[PASyncManager globalSyncManager] updateEventInfo];
     NSLog(@"view will appear (events)");
     showingDetail = NO;
-
+    [self registerForKeyboardNotifications];
     searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
     eventsTableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, (self.view.frame.size.height) - searchBarHeight);
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [self deregisterFromKeyboardNotifications];
 }
 
 - (void)viewDidLoad
@@ -473,9 +477,10 @@ NSInteger selectedDay;
         [self reloadTheView];
         NSLog(@"User cancelled search");
     }else{
-        NSLog(@"use the search fetch controller");
         _fetchedResultsController = nil;
         searchBarText = searchText;
+        
+        
         NSError * error = nil;
         if (![self.fetchedResultsController performFetch:&error])
         {
@@ -541,4 +546,46 @@ NSInteger selectedDay;
     
     [eventsTableView reloadData];
 }
+
+#pragma mark - keyboard notifications
+
+- (void)registerForKeyboardNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+}
+
+- (void)deregisterFromKeyboardNotifications {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+    
+}
+
+
+- (void)keyboardWasShown:(NSNotification *)notification {
+    NSDictionary* info = [notification userInfo];
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    eventsTableView.frame = CGRectMake(eventsTableView.frame.origin.x, eventsTableView.frame.origin.y, eventsTableView.frame.size.width, eventsTableView.frame.size.height-keyboardSize.height);
+}
+
+- (void)keyboardWillBeHidden:(NSNotification *)notification {
+    NSDictionary* info = [notification userInfo];
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    eventsTableView.frame = CGRectMake(eventsTableView.frame.origin.x, eventsTableView.frame.origin.y, eventsTableView.frame.size.width, eventsTableView.frame.size.height+keyboardSize.height);
+    
+}
+
 @end
