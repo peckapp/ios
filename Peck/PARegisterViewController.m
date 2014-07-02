@@ -36,8 +36,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
 	// Do any additional setup after loading the view.
+    
+    self.firstNameField.placeholder = @"John";
+    self.lastNameField.placeholder = @"Doe";
+    self.blurbTextView.text = @"";
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+    [self.view addGestureRecognizer:tap];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -57,38 +64,66 @@
     //[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:textField.tag inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [self hideKeyboard];
-    return YES;
+# pragma mark - Text Field Delegate
+
+-(BOOL)textFieldShouldReturn:(UITextField*)textField;
+{
+    if (textField == self.firstNameField) {
+        [self.lastNameField becomeFirstResponder];
+    } else if (textField == self.lastNameField) {
+        [self.blurbTextView becomeFirstResponder];
+        // performs the login segue as though the button was pressed
+        if ([self shouldPerformSegueWithIdentifier:@"register" sender:self]) {
+            [self performSegueWithIdentifier:@"register" sender:self];
+        }
+    } else {
+        [self.blurbTextView resignFirstResponder];
+        
+        if ([self shouldPerformSegueWithIdentifier:@"finish" sender:self]) {
+            [self performSegueWithIdentifier:@"finish" sender:self];
+        }
+    }
+    
+    return NO;
 }
+
     
 #pragma mark - Navigation
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
-    if ([identifier isEqualToString:@"register"]) {
-        // attempt login authentication with the server, if it suceeds, skip, otherwise continue as normal
-        BOOL loginSuceeds = NO;
+    if ([identifier isEqualToString:@"finish"]) {
+        // send registration information the server, if it suceeds continue, otherwise display error
         
-        if (loginSuceeds) {
-            // no need to register, already has an account
-            [self performSegueWithIdentifier:@"login" sender:self];
-            return NO;
-        } else {
-            return YES;
-        }
-        
-    } else if ([identifier isEqualToString:@"login"]) {
-        return YES;
-    } else {
-        // no other segues exist to be performed from this view controller
-        return NO;
+        return [self attemptRegistration];
     }
+    // no other segues exist to be performed from this view controller
+    return NO;
+    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     
+}
+
+# pragma mark - utilities
+
+- (BOOL)attemptRegistration
+{
+    // send current information to the server and check result
+    return YES;
+}
+
+- (void)dismissKeyboard
+{
+    // dismisses the keyboard
+    [self.view endEditing:YES];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self dismissKeyboard];
 }
 
 @end

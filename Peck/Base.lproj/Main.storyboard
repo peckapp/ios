@@ -545,7 +545,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Profile" id="QKi-VJ-Isw">
-                        <barButtonItem key="rightBarButtonItem" title="Create" id="lTD-ud-37m"/>
+                        <barButtonItem key="rightBarButtonItem" title="Create" id="lTD-ud-37m">
+                            <connections>
+                                <action selector="createAccount:" destination="4gY-60-r3D" id="QUk-F5-Ebp"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="800"/>
