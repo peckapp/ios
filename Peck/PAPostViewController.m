@@ -27,7 +27,9 @@
 
 #pragma mark Interface
 
-@interface PAPostViewController () {}
+@interface PAPostViewController () {
+
+}
 
 @property BOOL startPickerIsOpen;
 @property BOOL endPickerIsOpen;
@@ -219,24 +221,24 @@
 {
     if(_controlSwitch.selectedSegmentIndex==0){
         if([self.titleField.text isEqualToString:@""] || [self.startTimeLabel.text isEqualToString:@""]){
-            NSLog(@"allert");
+            NSLog(@"alllert");
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
                                                             message:@"You must enter an event name and time"
                                                            delegate:self
                                                   cancelButtonTitle:@"OK"
                                                   otherButtonTitles:nil];
             [alert show];
-        }
-        else{
+        
+        } else {
             //[[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];
             //[event setId:_userEvents[0]];
             
-            
+            NSNumber *instID = [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
             
             NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                                       self.titleField.text,@"title",
                                       self.descriptionField.text, @"event_description",
-                                      [NSNumber numberWithInt:1], @"institution_id",
+                                      instID, @"institution_id",
                                       self.startTimeLabel.text, @"start_date",
                                       self.endTimeLabel.text, @"end_date",
                                       nil];
@@ -252,6 +254,9 @@
             
             
             //[self performSegueWithIdentifier:@"showEvents" sender:self];
+            
+            // parent of self is a navigation controller, its parent is the dropdown controller
+            [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectCurrentItem];
         }
         
     }

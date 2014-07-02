@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *titleTextField;
 
 - (IBAction)createCircleButton:(id)sender;
+- (IBAction)cancelCreateCircle:(id)sender;
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
