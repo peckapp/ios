@@ -89,20 +89,20 @@
 {
     // TODO: need to perform appropriate handling of the user here, including sending the necessary information back to the server
     
-    //self.profilePictureView.profileID = user.id;
-    double delayInSeconds = 0.1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+    if ([self verifyFacebookLoginWithUser:user]) {
         
-        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
-                                                                 bundle: nil];
-        
-        UIViewController *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"configure"];
-        
-        [self presentViewController:controller animated:YES completion:nil];
-        
-        //[activityIndicator stopAnimating];
-    });
+        double delayInSeconds = 0.1;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            
+            [self performSegueWithIdentifier:@"login" sender:self];
+            
+        });
+    }
+    
+    
+    
+    
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
@@ -130,6 +130,23 @@
     
 }
 
+# pragma mark - Network Calls
+
+- (BOOL)correctLogin
+{
+    // TODO: merely for testing purposes, should interact with server to verify login
+    if ([self.emailField.text isEqualToString:@"test"]) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (BOOL)verifyFacebookLoginWithUser:(id<FBGraphUser>)user
+{
+    return YES;
+}
+
 # pragma mark - utilities
 
 - (void)dismissKeyboard
@@ -141,16 +158,6 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self dismissKeyboard];
-}
-
-- (BOOL)correctLogin
-{
-    // TODO: merely for testing purposes, should interact with server to verify login
-    if ([self.emailField.text isEqualToString:@"test"]) {
-        return YES;
-    } else {
-        return NO;
-    }
 }
 
 @end

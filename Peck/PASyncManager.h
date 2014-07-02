@@ -20,7 +20,9 @@
 // sends post request to server with institution_id and stores response user_id in NSUserDefaults
 -(void)ceateAnonymousUser;
 // sends post request to the server completing the user's other info after the registration process is triggered
--(void)registerUserWithInfo:(NSDictionary*)userInfo;
+-(void)updateUserWithInfo:(NSDictionary*)userInfo;
+// authenticates the user and updates the authentication token returned from the server
+- (void)authenticateUserWithInfo:(NSDictionary*)userInfo;
 
 // methods for syncing institutions for the configuration phase
 -(void)updateAvailableInstitutionsWithCallback:(void(^)(BOOL sucess))callbackBlock;
