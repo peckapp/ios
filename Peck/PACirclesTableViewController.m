@@ -11,6 +11,7 @@
 #import "PAAppDelegate.h"
 #import "Circle.h"
 #import "PASyncManager.h"
+#import "PAFriendProfileViewController.h"
 
 #define cellHeight 100.0
 
@@ -30,6 +31,8 @@
 
 static NSString * cellIdentifier = PACirclesIdentifier;
 static NSString * nibName = @"PACircleCell";
+
+Peer* selectedPeer;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
