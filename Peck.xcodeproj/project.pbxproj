@@ -20,7 +20,7 @@
 		863843CF193CB393004110F5 /* PAProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CE193CB393004110F5 /* PAProfileTableViewController.m */; };
 		863843DA193CB75F004110F5 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 863843D3193CB75F004110F5 /* Login.storyboard */; };
 		863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D5193CB75F004110F5 /* PAInitialViewController.m */; };
-		863843DD193CB75F004110F5 /* PeckRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D9193CB75F004110F5 /* PeckRegisterViewController.m */; };
+		863843DD193CB75F004110F5 /* PARegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D9193CB75F004110F5 /* PARegisterViewController.m */; };
 		863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */; };
 		863843E3193CB7FD004110F5 /* PAExploreTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843E2193CB7FD004110F5 /* PAExploreTableViewController.m */; };
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
@@ -161,8 +161,8 @@
 		863843D3193CB75F004110F5 /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		863843D4193CB75F004110F5 /* PAInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAInitialViewController.h; sourceTree = "<group>"; };
 		863843D5193CB75F004110F5 /* PAInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAInitialViewController.m; sourceTree = "<group>"; };
-		863843D8193CB75F004110F5 /* PeckRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeckRegisterViewController.h; sourceTree = "<group>"; };
-		863843D9193CB75F004110F5 /* PeckRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckRegisterViewController.m; sourceTree = "<group>"; };
+		863843D8193CB75F004110F5 /* PARegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PARegisterViewController.h; sourceTree = "<group>"; };
+		863843D9193CB75F004110F5 /* PARegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PARegisterViewController.m; sourceTree = "<group>"; };
 		863843DE193CB7A4004110F5 /* PeckLoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeckLoadingViewController.h; sourceTree = "<group>"; };
 		863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckLoadingViewController.m; sourceTree = "<group>"; };
 		863843E1193CB7FD004110F5 /* PAExploreTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreTableViewController.h; sourceTree = "<group>"; };
@@ -364,8 +364,8 @@
 				863843D3193CB75F004110F5 /* Login.storyboard */,
 				863843D4193CB75F004110F5 /* PAInitialViewController.h */,
 				863843D5193CB75F004110F5 /* PAInitialViewController.m */,
-				863843D8193CB75F004110F5 /* PeckRegisterViewController.h */,
-				863843D9193CB75F004110F5 /* PeckRegisterViewController.m */,
+				863843D8193CB75F004110F5 /* PARegisterViewController.h */,
+				863843D9193CB75F004110F5 /* PARegisterViewController.m */,
 				863843DE193CB7A4004110F5 /* PeckLoadingViewController.h */,
 				863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */,
 			);
@@ -870,7 +870,7 @@
 				A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */,
 				A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */,
 				A463F384194B959800ED441F /* PACircleCell.m in Sources */,
-				863843DD193CB75F004110F5 /* PeckRegisterViewController.m in Sources */,
+				863843DD193CB75F004110F5 /* PARegisterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

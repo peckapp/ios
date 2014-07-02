@@ -11,7 +11,10 @@
 
 @interface PAInitialViewController ()
 
-@property (strong,nonatomic) NSArray* schoolList;
+@property (weak, nonatomic) IBOutlet UITextField *emailField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordField;
+
+@property (weak, nonatomic) IBOutlet FBLoginView *fbLogin;
 
 @end
 
@@ -31,11 +34,14 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    
+    /*
     FBLoginView *loginView = [[FBLoginView alloc] init];
     loginView.frame = CGRectOffset(loginView.frame, (self.view.center.x - (loginView.frame.size.width / 2)), 375);
     loginView.delegate=self;
     [self.view addSubview:loginView];
+     */
+    
+    self.fbLogin.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning
@@ -65,6 +71,18 @@
         
         //[activityIndicator stopAnimating];
     });
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+    if ([identifier isEqualToString:@"login"]) {
+        //needs to validate the username and password entered by the user
+        return YES;
+    } else {
+        // shouldn't be any  other segues out of here. cancel triggers a modal dismissal
+        return NO;
+    }
+    
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.17" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Vgz-Kj-Ti8">
     <dependencies>
+        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.11"/>
     </dependencies>
     <scenes>
@@ -70,6 +71,22 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="Facebook Login" id="qbn-qi-yEx">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="default" indentationWidth="10" id="lx6-kb-Fkj">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lx6-kb-Fkj" id="H5K-YJ-JBa">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t9J-oO-SfW" customClass="FBLoginView">
+                                                    <rect key="frame" x="3" y="3" width="314" height="38.5"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="tbb-7d-huN" id="Ycl-Ge-byD"/>
@@ -78,21 +95,27 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="S1a-Rr-DzO">
                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="fXY-pR-SzW"/>
-                        <barButtonItem key="rightBarButtonItem" title="Login" id="qTi-IU-12O">
+                        <barButtonItem key="rightBarButtonItem" title="Login/Register" id="qTi-IU-12O">
                             <connections>
-                                <segue destination="xHz-0E-o4K" kind="push" id="oxD-Jc-b5O"/>
+                                <segue destination="xHz-0E-o4K" kind="push" identifier="register" id="oxD-Jc-b5O"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="emailField" destination="6zm-c6-v3j" id="0IK-wg-XFy"/>
+                        <outlet property="fbLogin" destination="t9J-oO-SfW" id="TB9-nN-Unm"/>
+                        <outlet property="passwordField" destination="tUc-gS-lYW" id="Vrx-Kk-Qxq"/>
+                        <segue destination="wlq-Oy-tGS" kind="push" identifier="login" id="4jd-cO-q31"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YoV-Ry-WA3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-323" y="125"/>
         </scene>
-        <!--Peck Register View Controller-->
+        <!--Register View Controller-->
         <scene sceneID="nJU-K2-fjk">
             <objects>
-                <tableViewController id="xHz-0E-o4K" customClass="PeckRegisterViewController" sceneMemberID="viewController">
+                <tableViewController id="xHz-0E-o4K" customClass="PARegisterViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="4Wu-CE-FRQ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -230,14 +253,23 @@
                     <navigationItem key="navigationItem" id="xIf-LZ-vy4">
                         <barButtonItem key="rightBarButtonItem" title="Finish" id="R6x-TO-xf0">
                             <connections>
-                                <segue destination="wlq-Oy-tGS" kind="push" id="1Si-Ye-Iz4"/>
+                                <segue destination="wlq-Oy-tGS" kind="push" identifier="finish" id="1Si-Ye-Iz4"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="blurbTextView" destination="ao7-AK-rRs" id="i0r-Qb-7Rp"/>
+                        <outlet property="facebookCell" destination="cap-fX-KHG" id="UyL-EK-B7i"/>
+                        <outlet property="firstNameField" destination="QMW-DH-ogl" id="HSG-xe-3AK"/>
+                        <outlet property="googleCell" destination="2fF-g7-bxh" id="qeT-lH-zrm"/>
+                        <outlet property="instagramCell" destination="fG7-YI-dDm" id="HQM-u2-3Kw"/>
+                        <outlet property="lastNameField" destination="W9x-h1-yYg" id="Uh3-Z4-w02"/>
+                        <outlet property="twitterCell" destination="uTI-0e-5Ed" id="9uG-tb-SYK"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iRj-3c-2oe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="149" y="125"/>
+            <point key="canvasLocation" x="169" y="537"/>
         </scene>
         <!--Peck Loading View Controller-->
         <scene sceneID="3bm-CU-1c5">
@@ -299,4 +331,7 @@ Your School</string>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="4jd-cO-q31"/>
+    </inferredMetricsTieBreakers>
 </document>
