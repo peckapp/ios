@@ -135,6 +135,7 @@
                     <tabBarItem key="tabBarItem" title="Events" id="t6u-Ov-roD"/>
                     <navigationItem key="navigationItem" id="SUg-ko-wCF"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <size key="freeformSize" width="320" height="568"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translucent="NO" id="yXu-0R-QUA">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
