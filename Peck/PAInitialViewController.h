@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
 
-@interface PeckInitialViewController : UIViewController <FBLoginViewDelegate>
+@interface PAInitialViewController : UITableViewController <FBLoginViewDelegate, UITableViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 
 @end

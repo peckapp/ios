@@ -45,6 +45,8 @@
         NSLog(@"Set a new anonymous user");
         [[PASyncManager globalSyncManager] ceateAnonymousUser];
     }
+    // saves NSUserDefaults to "disk"
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
     [FBLoginView class];
     

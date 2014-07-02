@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PeckRegisterViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface PeckRegisterViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) NSArray *registerItems;
 @property (strong, nonatomic) NSMutableArray *userRegistrationItems;

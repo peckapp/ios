@@ -104,7 +104,7 @@
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         
-        NSLog(@"in secondary thread");
+        NSLog(@"in secondary thread to update peer info");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
         
@@ -121,7 +121,7 @@
                  BOOL userAlreadyExists = [self objectExists:newID withType:@"Peer"];
                  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                  if(!userAlreadyExists && !([defaults objectForKey:@"user_id"]==newID)){
-                     NSLog(@"about to add the peer");
+                     //NSLog(@"about to add the peer");
                      Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
                      [self setAttributesInPeer:peer withDictionary:userAttributes];
                      //NSLog(@"PEER: %@",peer);
@@ -145,7 +145,7 @@
 
 -(void)setAttributesInPeer:(Peer *)peer withDictionary:(NSDictionary *)dictionary
 {
-    NSLog(@"set attributes of peer");
+    //NSLog(@"set attributes of peer");
     peer.name = [dictionary objectForKey:@"first_name"];
     peer.id = [dictionary objectForKey:@"id"];
 }
@@ -417,7 +417,7 @@
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         
-        NSLog(@"in secondary thread");
+        NSLog(@"in secondary thread to update events");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
         
@@ -429,17 +429,17 @@
              //NSLog(@"JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
-             NSLog(@"Update Event response: %@", postsFromResponse);
+             //NSLog(@"Update Event response: %@", postsFromResponse);
              NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
              for (NSDictionary *eventAttributes in postsFromResponse) {
                  NSNumber *newID = [eventAttributes objectForKey:@"id"];
                  BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event"];
                  if(!eventAlreadyExists){
-                     NSLog(@"about to add the event");
+                     //NSLog(@"adding an event to Core Data");
                      Event * event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
                      [self setAttributesInEvent:event withDictionary:eventAttributes];
                      [mutableEvents addObject:event];
-                     NSLog(@"EVENT: %@",event);
+                     //NSLog(@"EVENT: %@",event);
                  }
              }
          }
@@ -461,30 +461,19 @@
 
 -(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
 {
-    NSLog(@"set attributes of event");
+    //NSLog(@"set attributes of event");
     event.title = [dictionary objectForKey:@"title"];
-    //event.descrip = [dictionary objectForKey:@"event_description"];
+    event.descrip = [dictionary objectForKey:@"event_description"];
     //event.location = [dictionary objectForKey:@"institution_id"];
     event.id = [dictionary objectForKey:@"id"];
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
-    //if(!df){
+    
     NSDateFormatter * df = [[NSDateFormatter alloc] init];
     [df setDateFormat:serverDateFormat];
     
     event.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
     event.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
-    // the below doesn't work due to current disparity between the json and coredata terminology
-    /*
-     NSDictionary *attributes = [[event entity] attributesByName];
-     for (NSString *attribute in attributes) {
-     id value = [dictionary objectForKey:attribute];
-     if (value == nil) {
-     continue;
-     }
-     [event setValue:value forKey:attribute];
-     }
-     */
-    NSLog(@"finished setting the attributes of the event");
+    
 }
 
 #pragma mark - Utility Methods

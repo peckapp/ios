@@ -6,16 +6,16 @@
 //  Copyright (c) 2014 Peck App. All rights reserved.
 //
 
-#import "PeckInitialViewController.h"
+#import "PAInitialViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
 
-@interface PeckInitialViewController ()
+@interface PAInitialViewController ()
 
 @property (strong,nonatomic) NSArray* schoolList;
 
 @end
 
-@implementation PeckInitialViewController
+@implementation PAInitialViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -30,6 +30,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    
     FBLoginView *loginView = [[FBLoginView alloc] init];
     loginView.frame = CGRectOffset(loginView.frame, (self.view.center.x - (loginView.frame.size.width / 2)), 375);
     loginView.delegate=self;
@@ -57,7 +59,7 @@
         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main"
                                                                  bundle: nil];
         
-        UIViewController *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"ConfigureController"];
+        UIViewController *controller = [mainStoryboard instantiateViewControllerWithIdentifier: @"configure"];
         
         [self presentViewController:controller animated:YES completion:nil];
         
@@ -67,12 +69,7 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    //sets the school string in NSUserDefaults for future reference
-    //[[NSUserDefaults standardUserDefaults] setObject:self.schoolList[[self.schoolPicker selectedRowInComponent:0]] forKey:@"school"];
     
-    //sets the loginSaved BOOL to YES to avoid login screen in the future
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"loginSaved"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 
