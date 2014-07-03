@@ -59,8 +59,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.formatter = [[NSDateFormatter alloc] init];
-    [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+    if(!self.formatter){
+        self.formatter = [[NSDateFormatter alloc] init];
+        [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+    }
 	// Do any additional setup after loading the view, typically from a nib.
 
     [self configureView];

@@ -9,10 +9,15 @@
 #import "PAEventInfoTableViewController.h"
 
 @interface PAEventInfoTableViewController ()
+@property (nonatomic, retain) NSDateFormatter *formatter;
 
 @end
 
 @implementation PAEventInfoTableViewController
+
+@synthesize startTimeLabel = _startTimeLabel;
+@synthesize endTimeLabel = _endTimeLabel;
+@synthesize blurbTextView = _blurbTextView;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -32,6 +37,10 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    //if(!self.formatter){
+        self.formatter = [[NSDateFormatter alloc] init];
+        [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+    //}
 }
 
 - (void)didReceiveMemoryWarning
@@ -39,6 +48,36 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - managing the detail item
+
+- (void)setDetailItem:(id)newDetailItem
+{
+    if (_detailItem != newDetailItem) {
+        _detailItem = newDetailItem;
+        NSLog(@"the event: %@", _detailItem);
+        // Update the view.
+        [self configureView];
+    }
+}
+
+- (void)configureView
+{
+    // Update the user interface for the detail item.
+    
+    if (self.detailItem) {
+        
+        self.title = [self.detailItem valueForKey:@"title"];
+        NSLog(@"the start date: %@", [self.detailItem valueForKey:@"start_date"]);
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"MMM dd, yyyy h:mm a"];
+        NSString *dateFromString =[df stringFromDate:[self.detailItem valueForKey:@"start_date"]];
+        NSLog(@"date from string: %@", dateFromString);
+        self.startTimeLabel.text = dateFromString;
+        
+    }
+}
+
 
 #pragma mark - Table view data source
 
