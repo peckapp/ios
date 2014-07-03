@@ -29,6 +29,7 @@
 }
 
 - (IBAction)postButton:(id)sender {
+    NSLog(@"post (in cell)");
     PAEventInfoTableViewController *parent = (PAEventInfoTableViewController*)self.parentTableView;
     [parent postComment:self];
 

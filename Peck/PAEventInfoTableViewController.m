@@ -10,6 +10,7 @@
 #import "PACommentCell.h"
 #import "PAAppDelegate.h"
 #import "PASyncManager.h"
+#import "Comment.h"
 @interface PAEventInfoTableViewController ()
 @property (nonatomic, retain) NSDateFormatter *formatter;
 
@@ -54,7 +55,15 @@ BOOL reloaded = NO;
     [self.descriptionTextView setEditable:NO];
     [self configureView];
     heightDictionary = [[NSMutableDictionary alloc] init];
+    NSError * error = nil;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+
     [self.tableView reloadData];
+    
     
 }
 
@@ -143,6 +152,7 @@ BOOL reloaded = NO;
 #pragma mark - managing the fetched results controller
 
 -(NSFetchedResultsController *)fetchedResultsController{
+    NSLog(@"configuring the fetched results controller");
     if(_fetchedResultsController){
         return _fetchedResultsController;
     }
@@ -179,6 +189,65 @@ BOOL reloaded = NO;
     return _fetchedResultsController;
 }
 
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView beginUpdates];
+}
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{
+    NSLog(@"did change object");
+    UITableView *tableView = self.tableView;
+    
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:
+            [tableView
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [tableView
+             deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            [self configureCell:[tableView cellForRowAtIndexPath:indexPath]
+                    atIndexPath:indexPath];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            [tableView
+             deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            
+            [tableView
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
+{
+    [self.tableView endUpdates];
+}
 
 #pragma mark - Table view data source
 
@@ -211,6 +280,7 @@ BOOL reloaded = NO;
 }
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath{
+    cell.parentTableView=self;
     if([indexPath row]==0){
         //if it is the first cell. This is where the user will add a comment
         [cell.commentTextView setEditable:YES];
@@ -219,11 +289,11 @@ BOOL reloaded = NO;
         
     }
     else{
-    NSLog(@"Configure Cell");
-    cell.nameLabel.text = @"John Doe";
-    cell.parentTableView=self;
-    cell.tag = [indexPath row];
-    cell.commentTextView.text = @"this is the longest comment known to man. aaaaaaaaaaaaaa so long aaaaaaaaaa this comment is so so so so so so so so so longggggggggggggggggggggg i can't even believe how long it is! wow this comment is long oh my gosh i can't stop typing this long long comment.this is the longest comment known to man. aaaaaaaaaaaaaa so long aaaaaaaaaa this comment is so so so so so so so so so longggggggggggggggggggggg i can't even believe how long it is! wow this comment is long oh my gosh i can't stop typing this long long comment.";
+        Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+        NSLog(@"Configure Cell");
+        cell.nameLabel.text = @"John Doe";
+        cell.tag = [indexPath row];
+    cell.commentTextView.text = tempComment.content;
     }
     
 }
