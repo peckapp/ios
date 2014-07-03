@@ -13,8 +13,16 @@
 
 @interface PADropdownViewController () {}
 
-@property (nonatomic) NSString * primaryViewControllerIdentifier;
-@property (nonatomic) NSArray * secondaryViewControllerIdentifiers;
+// viewcontroller that displays the primary content
+@property (nonatomic) UIViewController * primaryViewController;
+
+// array of viewcontrollers that drop down on button clicks to display their content
+// order of the elements in the array determines their presentation order, left to right.
+@property (nonatomic) NSArray * secondaryViewControllers;
+
+// points temporarily to the viewcontroller that is active
+// this could be either the primary or one of the secondaries, depending on the current state
+@property (nonatomic) UIViewController * activeViewController;
 
 @property (nonatomic, retain) PAFilter * filter;
 @property (nonatomic, retain) UIView * gradientView;
@@ -269,17 +277,22 @@
     [self.view insertSubview:newVC.view belowSubview:dropdownBar];
 
     CGFloat distance = self.frameForChildViewController.size.width;
-    oldVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    newVC.view.transform = CGAffineTransformMakeTranslation(-distance, 0.0);
+    oldVC.view.transform = CGAffineTransformIdentity;
+    // using a transform breaks with the modal presentation of a viewcontroller. animation reflects this.
+    newVC.view.frame = CGRectMake(-distance, self.frameForChildViewController.origin.y,
+                                  self.frameForChildViewController.size.width, self.frameForChildViewController.size.height);
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:0
                      animations:^{
                          oldVC.view.transform = CGAffineTransformMakeTranslation(distance, 0.0);
-                         newVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+                         newVC.view.frame = CGRectMake(0.0, self.frameForChildViewController.origin.y,
+                                                       self.frameForChildViewController.size.width, self.frameForChildViewController.size.height);
                      }
                      completion:^(BOOL finished) {
+                         NSLog(@"newVC frame: %@",NSStringFromCGRect(newVC.view.frame));
+                         
                          [oldVC.view removeFromSuperview];
 
                          // Display child view controller
@@ -305,14 +318,17 @@
 
     CGFloat distance = self.frameForChildViewController.size.width;
     oldVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    newVC.view.transform = CGAffineTransformMakeTranslation(distance, 0.0);
+    // using a transform breaks with the modal presentation of s viewcontroller. animation reflects this.
+    newVC.view.frame = CGRectMake(distance, self.frameForChildViewController.origin.y,
+                                  self.frameForChildViewController.size.width, self.frameForChildViewController.size.height);
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:0
                      animations:^{
                          oldVC.view.transform = CGAffineTransformMakeTranslation(-distance, 0.0);
-                         newVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+                         newVC.view.frame = CGRectMake(0.0, self.frameForChildViewController.origin.y,
+                                                       self.frameForChildViewController.size.width, self.frameForChildViewController.size.height);
                      }
                      completion:^(BOOL finished) {
                          [oldVC.view removeFromSuperview];

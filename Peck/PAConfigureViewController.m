@@ -96,6 +96,7 @@
     // the number of institutions in the current array
     return self.institutions.count;
 }
+
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     Institution * institution = (Institution*)[self.institutions objectAtIndex:row];
@@ -121,9 +122,10 @@
         UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
         
         [appDelegate.window setRootViewController:newRoot];
-    }
+    } else {
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 
@@ -132,7 +134,7 @@
     
     PADropdownViewController *dropdownController = (PADropdownViewController*)segue.destinationViewController;
     
-    NSLog(@"%@",dropdownController.secondaryViewControllers);
+    //NSLog(@"%@",dropdownController.secondaryViewControllers);
     
     /*
     for (UINavigationController* navController in dropdownController.secondaryViewControllers) {
