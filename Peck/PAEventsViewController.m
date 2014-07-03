@@ -7,7 +7,7 @@
 //
 
 #import "PAEventsViewController.h"
-#import "PAEventInfoViewController.h"
+#import "PAEventInfoTableViewController.h"
 #import "PAPostViewController.h"
 #import "PAPecksViewController.h"
 #import "PAAppDelegate.h"

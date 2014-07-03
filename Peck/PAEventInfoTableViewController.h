@@ -7,7 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PACoreDataProtocol.h"
 
-@interface PAEventInfoTableViewController : UITableViewController
+@interface PAEventInfoTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol>
+
+
+
+@property (strong, nonatomic) id detailItem;
+@property (weak, nonatomic) IBOutlet UITextView *blurbTextView;
+@property (weak, nonatomic) IBOutlet UILabel *startTimeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *endTimeLabel;
 
 @end
