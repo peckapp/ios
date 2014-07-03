@@ -7,7 +7,8 @@
 //
 
 #import "PACommentCell.h"
-#import  "PAEventInfoTableViewController.h"
+#import "PAEventInfoTableViewController.h"
+#import "PASyncManager.h"
 
 @implementation PACommentCell
 
@@ -25,6 +26,12 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (IBAction)postButton:(id)sender {
+    PAEventInfoTableViewController *parent = (PAEventInfoTableViewController*)self.parentTableView;
+    [parent postComment:self];
+
 }
 
 - (IBAction)expandButton:(id)sender {

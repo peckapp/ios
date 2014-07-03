@@ -26,4 +26,5 @@
 
 - (void)expandTableViewCell:(PACommentCell *)cell;
 -(void)compressTableViewCell:(PACommentCell *)cell;
+-(void)postComment:(PACommentCell *)cell;
 @end

@@ -18,6 +18,7 @@
 @property BOOL expanded;
 @property (weak, nonatomic) UITableViewController *parentTableView;
 @property (weak, nonatomic) IBOutlet UIButton *expandButton;
+- (IBAction)postButton:(id)sender;
 
 - (IBAction)expandButton:(id)sender;
 
