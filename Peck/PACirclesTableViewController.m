@@ -18,6 +18,7 @@
 @interface PACirclesTableViewController ()
 
 @property NSIndexPath * selectedIndexPath;
+@property UIBarButtonItem * cancelCellButton;
 
 @end
 
@@ -51,6 +52,7 @@ Peer* selectedPeer;
     // self.clearsSelectionOnViewWillAppear = NO;
 
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    self.cancelCellButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(cancelSelection)];
     
     self.title = @"Circles";
 
@@ -113,6 +115,8 @@ Peer* selectedPeer;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     self.selectedIndexPath = indexPath;
+    self.tableView.scrollEnabled = NO;
+    self.navigationItem.leftBarButtonItem = self.cancelCellButton;
     [tableView beginUpdates];
     [tableView endUpdates];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
@@ -126,7 +130,7 @@ Peer* selectedPeer;
     }
     else{
         cell.delegate = self;
-        cell.scrollView.delegate=self;
+        cell.scrollView.delegate = self;
         cell.tag = [indexPath row];
         Circle * tempCircle = [_fetchedResultsController objectAtIndexPath:indexPath];
         //NSArray *members = tempCircle.members;
@@ -140,7 +144,19 @@ Peer* selectedPeer;
     }
 }
 
-- (IBAction)addCircle:(id)sender {
+- (void)cancelSelection
+{
+    self.selectedIndexPath = nil;
+    self.tableView.scrollEnabled = YES;
+    self.navigationItem.leftBarButtonItem = self.cancelCellButton;
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+    //[self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+}
+
+- (IBAction)addCircle:(id)sender
+{
+
     [self performSegueWithIdentifier:@"createACircle" sender:self];
 }
 
