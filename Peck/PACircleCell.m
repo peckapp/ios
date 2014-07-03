@@ -14,8 +14,6 @@
 #import "PACircleScrollView.h"
 #import "Peer.h"
 @implementation PACircleCell
-@synthesize scrollView;
-@synthesize circleTitle;
 @synthesize members = _members;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
@@ -30,10 +28,10 @@
     [scrollView setContentSize:CGSizeMake(800, 0)];
      */
     UITapGestureRecognizer *tapRecognizer;
-    tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:scrollView action:@selector (selectProfile:)];
+    tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self.scrollView action:@selector (selectProfile:)];
     tapRecognizer.cancelsTouchesInView = NO;
-    [scrollView addGestureRecognizer:tapRecognizer];
-    scrollView.userInteractionEnabled = YES;
+    [self.scrollView addGestureRecognizer:tapRecognizer];
+    self.scrollView.userInteractionEnabled = YES;
     
     
     _loadedImages = NO;
@@ -46,7 +44,12 @@
 {
     [super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
+    if (selected) {
+        [self expand];
+    }
+    else {
+        [self contract];
+    }
 }
 
 -(void)selectProfile: (UIGestureRecognizer*) sender{
@@ -60,7 +63,7 @@
 -(void)addImages: (NSArray *)members{
     //TODO: fix this code so that reloading the table view does not reallocate
     NSLog(@"number of members: %lu", (unsigned long)[members count]);
-    if([members count]!=scrollView.numberOfMembers){
+    if([members count] != self.scrollView.numberOfMembers){
         //TODO: this if statement is not very robust, unnecessary images will be added if one member is added to the circle.
         //consider changing it to if numberOfMembers==0 or something similar
         for(int i = 0; i <[members count]; i++){
@@ -70,9 +73,19 @@
             UIImage *image = [UIImage imageNamed:@"profile-placeholder.png"];
             NSString *name = tempPeer.name;
             //use the id's in members to get the correct images
-            [scrollView addPeer:image WithName:name];
+            [self.scrollView addPeer:image WithName:name];
         }
     }_loadedImages=YES;
+}
+
+- (void)expand
+{
+    self.commentsTable.hidden = NO;
+}
+
+- (void)contract
+{
+    self.commentsTable.hidden = YES;
 }
 
 
@@ -96,6 +109,20 @@
     
     
     return peer;
+}
+
+#pragma mark Table view data source
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 0;
+}
+
+#pragma mark Table view delegate
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return nil;
 }
 
 @end

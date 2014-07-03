@@ -33,6 +33,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="circleTitle" destination="cLy-A1-znm" id="wnS-l6-gPt"/>
+                <outlet property="commentsTable" destination="2b0-RU-6bd" id="Wvi-z5-lfa"/>
                 <outlet property="scrollView" destination="OE9-FT-TlX" id="Klf-S2-zCD"/>
             </connections>
         </tableViewCell>
