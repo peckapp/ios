@@ -14,8 +14,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
 @property (weak, nonatomic) IBOutlet UITableView *profileList;
-@property (strong, nonatomic) IBOutlet PACircleScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet UITableView *commentsTable;
 
 
 @property(nonatomic, assign) id <PACirclesControllerDelegate> delegate;

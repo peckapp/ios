@@ -28,11 +28,6 @@
     /*[scrollView setScrollEnabled:YES];
     [scrollView setContentSize:CGSizeMake(800, 0)];
      */
-    UITapGestureRecognizer *tapRecognizer;
-    tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self.scrollView action:@selector (selectProfile:)];
-    tapRecognizer.cancelsTouchesInView = NO;
-    [self.scrollView addGestureRecognizer:tapRecognizer];
-    self.scrollView.userInteractionEnabled = YES;
 
     _loadedImages = NO;
 
@@ -41,7 +36,7 @@
     self.profileList.delegate = self;
     self.profileList.dataSource = self;
 
-    self.profileList.transform = CGAffineTransformMakeRotation(M_PI_2);
+    self.profileList.transform = CGAffineTransformMakeRotation(-M_PI_2);
     self.profileList.frame = CGRectMake(0, 44.0, self.frame.size.width, 44.0);
 }
 
@@ -65,7 +60,9 @@
     //get the cell and the picture that has been selected and open that profile
 }
 
+
 -(void)addImages: (NSArray *)members{
+    /*
     //TODO: fix this code so that reloading the table view does not reallocate
     NSLog(@"number of members: %lu", (unsigned long)[members count]);
     if([members count] != self.scrollView.numberOfMembers){
@@ -81,18 +78,17 @@
             [self.scrollView addPeer:image WithName:name];
         }
     }_loadedImages=YES;
+     */
 }
 
 - (void)expand
 {
     // TODO: handle expansion
-    self.commentsTable.hidden = NO;
 }
 
 - (void)contract
 {
     // TODO: handle contraction
-    self.commentsTable.hidden = YES;
 }
 
 
@@ -132,6 +128,7 @@
 
 #pragma mark Table view delegate
 
+// TODO: display profile images on table cells
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView.tag == 0) {
@@ -144,7 +141,7 @@
             cell.backgroundColor = [UIColor lightGrayColor];
         }
 
-        cell.transform = CGAffineTransformMakeRotation(-M_PI_2);
+        cell.transform = CGAffineTransformMakeRotation(M_PI_2);
         return cell;
     }
     else {
