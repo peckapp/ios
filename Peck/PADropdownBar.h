@@ -17,6 +17,11 @@
 @end
 
 @interface PADropdownBar : UIView
+
 @property (nonatomic, strong) NSObject <PADropdownBarDelegate> * delegate;
+
 - (id) initWithFrame:(CGRect)frame itemCount:(NSUInteger)count;
+
+- (void)deselectCurrentItem;
+
 @end

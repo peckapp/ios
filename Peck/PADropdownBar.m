@@ -60,7 +60,7 @@
 
 - (void) selectItem:(UIButton *)sender
 {
-    int index = (int)sender.tag;
+    NSInteger index = sender.tag;
     [self.currentButton setSelected:NO];
 
     if (self.currentButton) {
@@ -89,6 +89,17 @@
         self.currentButton = sender;
         [sender setSelected:YES];
     }
+}
+
+- (void)deselectCurrentItem
+{
+    NSInteger index = self.currentButton.tag;
+    
+    [self.currentButton setSelected:NO];
+    
+    [self.delegate barDidDeselectItemAtIndex:index];
+    
+    self.currentButton = nil;
 }
 
 @end

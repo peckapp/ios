@@ -38,6 +38,7 @@
     
     _loadedImages = NO;
 
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
 
 }
 

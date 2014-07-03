@@ -123,17 +123,33 @@
 }
 
 - (IBAction)createCircleButton:(id)sender {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber *userID = [defaults objectForKey: @"user_id"];
-    
-    NSDictionary *setCircle = [NSDictionary dictionaryWithObjectsAndKeys:
-                            [NSNumber numberWithInt:1], @"institution_id",
-                            titleTextField.text, @"circle_name",
-                              userID, @"user_id",
-                                nil];
-    [[PASyncManager globalSyncManager] postCircle:setCircle withMembers:_addedPeers];
-    [[PASyncManager globalSyncManager] updateCircleInfo];
-    
+    // doesn't submit an titleless circle
+    BOOL titleIsEmpty = [titleTextField.text isEqualToString:@""];
+    if (!titleIsEmpty) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSNumber *userID = [defaults objectForKey: @"user_id"];
+        
+        NSDictionary *setCircle = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithInt:1], @"institution_id",
+                                   titleTextField.text, @"circle_name",
+                                   userID, @"user_id",
+                                   nil];
+        [[PASyncManager globalSyncManager] postCircle:setCircle withMembers:_addedPeers];
+        [[PASyncManager globalSyncManager] updateCircleInfo];
+    } else {
+        NSLog(@"attempted to create a circle without a title");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Title"
+                                                        message:@"You must enter a title for the circle"
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+- (IBAction)cancelCreateCircle:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)removePeer:(int) peer{
