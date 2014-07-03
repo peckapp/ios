@@ -36,6 +36,10 @@
 -(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray*)members;
 -(void)updateCircleInfo;
 
+//methods for comments
+-(void)postComment:(NSDictionary *)dictionary;
+-(void)updateComments;
+
 -(void)updatePeerInfo;
 
 -(void)updateExploreInfo;

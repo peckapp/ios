@@ -17,6 +17,7 @@
 #import "Peer.h"
 #import "Explore.h"
 #import "Institution.h"
+#import "Comment.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -483,6 +484,69 @@
     event.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
     event.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
     
+}
+
+#pragma mark - Comment actions
+
+-(void)postComment:(NSDictionary *)dictionary{
+    [[PASessionManager sharedClient] POST:commentsAPI
+                               parameters:[self applyWrapper:@"comment" toDictionary:dictionary]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"success: %@", JSON);
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+
+}
+
+-(void)updateComments{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+        
+        NSLog(@"in secondary thread to update comments");
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [appdelegate managedObjectContext];
+        
+        
+        [[PASessionManager sharedClient] GET:commentsAPI
+                                  parameters:[self authenticationParameters]
+                                     success:^
+         (NSURLSessionDataTask * __unused task, id JSON) {
+             //NSLog(@"JSON: %@",JSON);
+             NSDictionary *commentsDictionary = (NSDictionary*)JSON;
+             NSArray *postsFromResponse = [commentsDictionary objectForKey:@"comments"];
+             //NSLog(@"Update Event response: %@", postsFromResponse);
+             for (NSDictionary *commentAttributes in postsFromResponse) {
+                 NSNumber *newID = [commentAttributes objectForKey:@"id"];
+                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Comment"];
+                 if(!eventAlreadyExists){
+                     //NSLog(@"adding an event to Core Data");
+                     Comment * comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext: _managedObjectContext];
+                     [self setAttributesInComment:comment withDictionary:commentAttributes];
+                     //NSLog(@"EVENT: %@",event);
+                 }
+             }
+         }
+                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                         NSLog(@"ERROR: %@",error);
+                                     }];
+    });
+    
+
+}
+
+-(void)setAttributesInComment:(Comment*)comment  withDictionary:(NSDictionary *)dictionary{
+    comment.content = [dictionary objectForKey:@"content"];
+    
+    NSDateFormatter * df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:serverDateFormat];
+    comment.created_at = [df dateFromString:[dictionary objectForKey:@"created_at"]];
+    comment.id = [dictionary objectForKey:@"id"];
+    comment.peer_id = [dictionary objectForKey:@"user_id"];
+    comment.category = [dictionary objectForKey:@"category"];
+    comment.comment_from = [dictionary objectForKey:@"comment_from"];
 }
 
 #pragma mark - Utility Methods

@@ -8,7 +8,8 @@
 
 #import "PAEventInfoTableViewController.h"
 #import "PACommentCell.h"
-
+#import "PAAppDelegate.h"
+#import "PASyncManager.h"
 @interface PAEventInfoTableViewController ()
 @property (nonatomic, retain) NSDateFormatter *formatter;
 
@@ -57,10 +58,59 @@ BOOL reloaded = NO;
     
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [self registerForKeyboardNotifications];
+    [[PASyncManager globalSyncManager] updateComments];
+    
+}
+-(void)viewWillDisappear:(BOOL)animated{
+     [self deregisterFromKeyboardNotifications];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - managing the keyboard notifications
+
+- (void)registerForKeyboardNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+}
+
+- (void)deregisterFromKeyboardNotifications {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+    
+}
+
+- (void)keyboardWasShown:(NSNotification *)notification {
+    NSDictionary* info = [notification userInfo];
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+}
+
+- (void)keyboardWillBeHidden:(NSNotification *)notification {
+    
 }
 
 #pragma mark - managing the detail item
@@ -90,6 +140,45 @@ BOOL reloaded = NO;
     }
 }
 
+#pragma mark - managing the fetched results controller
+
+-(NSFetchedResultsController *)fetchedResultsController{
+    if(_fetchedResultsController){
+        return _fetchedResultsController;
+    }
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Comment" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    
+    // Set the batch size to a suitable number.
+    [fetchRequest setFetchBatchSize:20];
+    
+    // Edit the sort key as appropriate.
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"created_at" ascending:NO];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    // Edit the section name key path and cache name if appropriate.
+    // nil for section name key path means "no sections".
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
+                                                             initWithFetchRequest:fetchRequest
+                                                             managedObjectContext:_managedObjectContext
+                                                             sectionNameKeyPath:nil //this needs to be nil
+                                                             cacheName:nil];
+    
+    aFetchedResultsController.delegate = self;
+    self.fetchedResultsController = aFetchedResultsController;
+    
+    return _fetchedResultsController;
+}
+
 
 #pragma mark - Table view data source
 
@@ -102,9 +191,8 @@ BOOL reloaded = NO;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 
-    //id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
-    //return [sectionInfo numberOfObjects];
-    return 4;
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
+    return [sectionInfo numberOfObjects]+1;
 
 }
 
@@ -123,11 +211,20 @@ BOOL reloaded = NO;
 }
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath{
+    if([indexPath row]==0){
+        //if it is the first cell. This is where the user will add a comment
+        [cell.commentTextView setEditable:YES];
+        cell.commentTextView.text = @"";
+        cell.nameLabel.text = @"John Doe";
+        
+    }
+    else{
+    NSLog(@"Configure Cell");
     cell.nameLabel.text = @"John Doe";
     cell.parentTableView=self;
     cell.tag = [indexPath row];
     cell.commentTextView.text = @"this is the longest comment known to man. aaaaaaaaaaaaaa so long aaaaaaaaaa this comment is so so so so so so so so so longggggggggggggggggggggg i can't even believe how long it is! wow this comment is long oh my gosh i can't stop typing this long long comment.this is the longest comment known to man. aaaaaaaaaaaaaa so long aaaaaaaaaa this comment is so so so so so so so so so longggggggggggggggggggggg i can't even believe how long it is! wow this comment is long oh my gosh i can't stop typing this long long comment.";
-    
+    }
     
 }
 
@@ -144,6 +241,7 @@ BOOL reloaded = NO;
     }
     return 120;
 }
+
 
 /*
 // Override to support conditional editing of the table view.
@@ -195,10 +293,8 @@ BOOL reloaded = NO;
 */
 
 - (void)expandTableViewCell:(PACommentCell *)cell {
-    NSLog(@"expand table view cell");
     [cell.commentTextView sizeToFit];
-    [cell.commentTextView layoutSubviews];
-    NSLog(@"new frame size %f", cell.commentTextView.frame.size.height);
+    //[cell.commentTextView layoutSubviews];
     NSNumber *height = [NSNumber numberWithFloat:120];
     if(cell.commentTextView.frame.size.height>120){
         height = [NSNumber numberWithFloat:cell.commentTextView.frame.size.height];
@@ -207,7 +303,6 @@ BOOL reloaded = NO;
     [heightDictionary setValue:height forKey:cellTag];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
-    
 }
 
 -(void)compressTableViewCell:(PACommentCell *)cell{
@@ -216,6 +311,22 @@ BOOL reloaded = NO;
     [heightDictionary removeObjectForKey:cellTag];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
+}
+
+-(void)postComment:(PACommentCell *)cell{
+    NSLog(@"post comment");
+    NSString *commentText = cell.commentTextView.text;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *userID = [defaults objectForKey:@"user_id"];
+    
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                commentText, @"content",
+                                userID, @"user_id",
+                                @"Event", @"category",
+                                [self.detailItem valueForKey:@"id" ],@"comment_from",
+                                nil];
+    
+    [[PASyncManager globalSyncManager] postComment:dictionary];
 }
 
 @end

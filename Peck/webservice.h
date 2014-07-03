@@ -14,6 +14,7 @@
 # define circlesAPI @"api/circles"
 # define simple_eventsAPI @"api/simple_events"
 # define exploreAPI @"api/explore"
+# define commentsAPI @"api/comments"
 
 
 // Parameter names
