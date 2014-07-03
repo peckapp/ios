@@ -123,6 +123,7 @@ BOOL reloaded = NO;
 }
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath{
+    NSLog(@"Configure Cell");
     cell.nameLabel.text = @"John Doe";
     cell.parentTableView=self;
     cell.tag = [indexPath row];
@@ -197,7 +198,7 @@ BOOL reloaded = NO;
 - (void)expandTableViewCell:(PACommentCell *)cell {
     NSLog(@"expand table view cell");
     [cell.commentTextView sizeToFit];
-    [cell.commentTextView layoutSubviews];
+    //[cell.commentTextView layoutSubviews];
     NSLog(@"new frame size %f", cell.commentTextView.frame.size.height);
     NSNumber *height = [NSNumber numberWithFloat:120];
     if(cell.commentTextView.frame.size.height>120){
@@ -207,7 +208,6 @@ BOOL reloaded = NO;
     [heightDictionary setValue:height forKey:cellTag];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
-    
 }
 
 -(void)compressTableViewCell:(PACommentCell *)cell{
