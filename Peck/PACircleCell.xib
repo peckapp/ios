@@ -21,19 +21,19 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="OE9-FT-TlX" customClass="PACircleScrollView">
-                        <rect key="frame" x="0.0" y="45" width="320" height="70"/>
+                        <rect key="frame" x="0.0" y="129" width="320" height="70"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </scrollView>
-                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="2b0-RU-6bd">
-                        <rect key="frame" x="0.0" y="123" width="320" height="444"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="XZl-as-txS">
+                        <rect key="frame" x="0.0" y="45" width="320" height="70"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </tableView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
                 <outlet property="circleTitle" destination="cLy-A1-znm" id="wnS-l6-gPt"/>
-                <outlet property="commentsTable" destination="2b0-RU-6bd" id="Wvi-z5-lfa"/>
+                <outlet property="profileList" destination="XZl-as-txS" id="UkW-zs-zSR"/>
                 <outlet property="scrollView" destination="OE9-FT-TlX" id="Klf-S2-zCD"/>
             </connections>
         </tableViewCell>

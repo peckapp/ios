@@ -13,6 +13,7 @@
 @interface PACircleCell : UITableViewCell <UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
+@property (weak, nonatomic) IBOutlet UITableView *profileList;
 @property (strong, nonatomic) IBOutlet PACircleScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UITableView *commentsTable;
 

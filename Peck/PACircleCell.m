@@ -13,6 +13,7 @@
 #import "Circle.h"
 #import "PACircleScrollView.h"
 #import "Peer.h"
+
 @implementation PACircleCell
 @synthesize members = _members;
 @synthesize managedObjectContext = _managedObjectContext;
@@ -32,12 +33,16 @@
     tapRecognizer.cancelsTouchesInView = NO;
     [self.scrollView addGestureRecognizer:tapRecognizer];
     self.scrollView.userInteractionEnabled = YES;
-    
-    
+
     _loadedImages = NO;
 
     self.selectionStyle = UITableViewCellSelectionStyleNone;
 
+    self.profileList.delegate = self;
+    self.profileList.dataSource = self;
+
+    self.profileList.transform = CGAffineTransformMakeRotation(M_PI_2);
+    self.profileList.frame = CGRectMake(0, 44.0, self.frame.size.width, 44.0);
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -117,16 +122,39 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // TODO: return number of rows
-    return 0;
+    if (tableView.tag == 0) {
+        return 20;
+    }
+    else {
+        return 0;
+    }
 }
 
 #pragma mark Table view delegate
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO: instantiate cells
-    return nil;
+    if (tableView.tag == 0) {
+        UITableViewCell * cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+
+        if (indexPath.row % 2 == 0) {
+            cell.backgroundColor = [UIColor grayColor];
+        }
+        else {
+            cell.backgroundColor = [UIColor lightGrayColor];
+        }
+
+        cell.transform = CGAffineTransformMakeRotation(-M_PI_2);
+        return cell;
+    }
+    else {
+        return nil;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44;
 }
 
 @end
