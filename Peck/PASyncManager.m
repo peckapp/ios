@@ -534,14 +534,17 @@
     
     NSLog(@"authentication parameters: %@",dict);
     
-    return [dict copy];
+    return [NSDictionary dictionaryWithObject:dict forKey:@"authentication"];
 }
 
 - (NSDictionary*)applyWrapper:(NSString*)wrapperString toDictionary:(NSDictionary*)dictionary
 {
     NSMutableDictionary *baseDictionary = [[NSDictionary dictionaryWithObject:dictionary forKey:wrapperString] mutableCopy];
     
+    //[baseDictionary setObject:[self authenticationParameters] forKey:@"authentication"];
     [baseDictionary setValuesForKeysWithDictionary:[self authenticationParameters]];
+    
+    NSLog(@"baseDictionary: %@",baseDictionary);
     
     return [baseDictionary copy];
 }
