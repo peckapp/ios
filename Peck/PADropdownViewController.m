@@ -13,14 +13,26 @@
 
 @interface PADropdownViewController () {}
 
-@property (nonatomic) NSString * primaryViewControllerIdentifier;
-@property (nonatomic) NSArray * secondaryViewControllerIdentifiers;
+// viewcontroller that displays the primary content
+@property (nonatomic) UIViewController * primaryViewController;
+
+// array of viewcontrollers that drop down on button clicks to display their content
+// order of the elements in the array determines their presentation order, left to right.
+@property (nonatomic) NSArray * secondaryViewControllers;
+
+// points temporarily to the viewcontroller that is active
+// this could be either the primary or one of the secondaries, depending on the current state
+@property (nonatomic) UIViewController * activeViewController;
 
 @property (nonatomic, retain) PAFilter * filter;
 @property (nonatomic, retain) UIView * gradientView;
 
 // Designates the frame for child view controllers.
-@property (nonatomic) CGRect frameForChildViewController;
+@property (nonatomic) CGRect childFrameCenter;
+@property (nonatomic) CGRect childFrameLeft;
+@property (nonatomic) CGRect childFrameRight;
+@property (nonatomic) CGRect childFrameTop;
+@property (nonatomic) CGRect childFrameBottom;
 
 @end
 
@@ -51,33 +63,45 @@
                                                 PACirclesIdentifier,
                                                 PAProfileIdentifier];
 
-    // Initialize dropdownBar
-    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)
-                                             itemCount:[self.secondaryViewControllerIdentifiers count]];
-    dropdownBar.delegate = self;
-
-    // TODO: Frame is currently too big.
-    // Create a frame for child view controllers
-
-    NSLog(@"template frame height: %f", self.frameForChildViewController.size.height);
-
     // Instantiate primary view controller
     NSLog(@"Instantiating primary view controller");
     self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
 
-
     // Instantiate secondary view controllers
     NSLog(@"Instantiating secondary view controllers");
-    NSMutableArray * svcCollector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
+    NSMutableArray * collector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
     [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
         NSString * identifier = (NSString*)obj;
         UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
         viewController.tabBarItem.tag = idx;
         viewController.restorationIdentifier = identifier;
-        viewController.view.frame = self.frameForChildViewController;
-        [svcCollector insertObject:viewController atIndex:idx];
+        [collector insertObject:viewController atIndex:idx];
     }];
-    self.secondaryViewControllers = [svcCollector copy];
+    self.secondaryViewControllers = [collector copy];
+
+
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)
+                                             itemCount:[self.secondaryViewControllerIdentifiers count]];
+
+    self.childFrameCenter = CGRectMake(0,
+                                       dropdownBar.frame.size.height,
+                                       self.view.frame.size.width,
+                                       self.view.frame.size.height - dropdownBar.frame.size.height);
+
+    self.childFrameLeft = CGRectOffset(self.childFrameCenter, -self.childFrameCenter.size.width, 0.0);
+    self.childFrameRight = CGRectOffset(self.childFrameCenter, self.childFrameCenter.size.width, 0.0);
+    self.childFrameTop = CGRectOffset(self.childFrameCenter, 0.0, -self.childFrameCenter.size.height);
+    self.childFrameBottom = CGRectOffset(self.childFrameCenter, 0.0, self.childFrameCenter.size.height);
+
+    self.primaryViewController.view.frame = self.childFrameCenter;
+    [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
+        UIViewController *viewController = (UIViewController *)obj;
+        viewController.view.frame = self.childFrameCenter;
+    }];
 
     // Add primary as child view controller
     [self addChildViewController:self.primaryViewController];
@@ -86,7 +110,7 @@
     self.activeViewController = self.primaryViewController;
 
     // gradient for filter
-    self.gradientView = [[UIView alloc] initWithFrame:self.frameForChildViewController];
+    self.gradientView = [[UIView alloc] initWithFrame:self.childFrameCenter];
     self.gradientView.alpha = 0.0;
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = self.gradientView.frame;
@@ -95,29 +119,17 @@
     gradient.endPoint = CGPointMake(0.0, 1.0);
     [self.gradientView.layer addSublayer:gradient];
     [self.view addSubview:self.gradientView];
-    
-    // filter item
+
+    // Filter item
     self.filter = [PAFilter filter];
     self.filter.delegate = self;
     [self.view addSubview:self.filter];
     [self.filter setFrameBasedOnSuperview];
     [self.filter presentUpwardForMode:PAFilterHomeMode];
 
-    // Display dropdown bar
+    // Dropdown bar
+    dropdownBar.delegate = self;
     [self.view addSubview:dropdownBar];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    self.frameForChildViewController = CGRectMake(0,
-                                                  dropdownBar.frame.size.height,
-                                                  self.view.frame.size.width,
-                                                  self.view.frame.size.height - dropdownBar.frame.size.height);
-    self.primaryViewController.view.frame = self.frameForChildViewController;
-    [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
-        UIViewController *viewController = (UIViewController *)obj;
-        viewController.view.frame = self.frameForChildViewController;
-    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -181,22 +193,20 @@
 
     self.view.userInteractionEnabled = NO;
 
-    NSLog(@"old frame height: %f", oldVC.view.frame.size.height);
-
     // Hide child view controller
     [oldVC willMoveToParentViewController:nil];
     [oldVC removeFromParentViewController];
 
     [self.view insertSubview:newVC.view belowSubview:dropdownBar];
 
-    CGFloat distance = self.frameForChildViewController.size.height;
-    newVC.view.transform = CGAffineTransformMakeTranslation(0.0, -distance);
+    oldVC.view.frame = self.childFrameCenter;
+    newVC.view.frame = self.childFrameTop;
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:0
                      animations:^{
-                         newVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+                         newVC.view.frame = self.childFrameCenter;
                      }
                      completion:^(BOOL finished) {
                          [oldVC.view removeFromSuperview];
@@ -206,9 +216,6 @@
                          [newVC didMoveToParentViewController:self];
                          self.activeViewController = newVC;
                          self.view.userInteractionEnabled = YES;
-
-                         NSLog(@"new frame height: %f", newVC.view.frame.size.height);
-                         
                      }];
     // dismisses filter as dropbown appears
     [self hideFilter];
@@ -222,22 +229,20 @@
 
     self.view.userInteractionEnabled = NO;
 
-    NSLog(@"old frame height: %f", oldVC.view.frame.size.height);
-
     // Hide child view controller
     [oldVC willMoveToParentViewController:nil];
     [oldVC removeFromParentViewController];
 
     [self.view insertSubview:newVC.view belowSubview:oldVC.view];
 
-    CGFloat distance = self.frameForChildViewController.size.height;
-    oldVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+    oldVC.view.frame = self.childFrameCenter;
+    newVC.view.frame = self.childFrameCenter;
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:0
                      animations:^{
-                         oldVC.view.transform = CGAffineTransformMakeTranslation(0.0, -distance);
+                         oldVC.view.frame = self.childFrameTop;
                      }
                      completion:^(BOOL finished) {
                          [oldVC.view removeFromSuperview];
@@ -247,8 +252,6 @@
                          [newVC didMoveToParentViewController:self];
                          self.activeViewController = newVC;
                          self.view.userInteractionEnabled = YES;
-
-                         NSLog(@"new frame height: %f", newVC.view.frame.size.height);
 
                          // show the dropdown filter for the home mode
                          [self showFilterForMode:PAFilterHomeMode];
@@ -268,16 +271,15 @@
 
     [self.view insertSubview:newVC.view belowSubview:dropdownBar];
 
-    CGFloat distance = self.frameForChildViewController.size.width;
-    oldVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    newVC.view.transform = CGAffineTransformMakeTranslation(-distance, 0.0);
+    oldVC.view.frame = self.childFrameCenter;
+    newVC.view.frame = self.childFrameLeft;
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:0
                      animations:^{
-                         oldVC.view.transform = CGAffineTransformMakeTranslation(distance, 0.0);
-                         newVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+                         oldVC.view.frame = self.childFrameRight;
+                         newVC.view.frame = self.childFrameCenter;
                      }
                      completion:^(BOOL finished) {
                          [oldVC.view removeFromSuperview];
@@ -303,16 +305,15 @@
 
     [self.view insertSubview:newVC.view belowSubview:dropdownBar];
 
-    CGFloat distance = self.frameForChildViewController.size.width;
-    oldVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    newVC.view.transform = CGAffineTransformMakeTranslation(distance, 0.0);
+    oldVC.view.frame = self.childFrameCenter;
+    newVC.view.frame = self.childFrameRight;
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:0
                      animations:^{
-                         oldVC.view.transform = CGAffineTransformMakeTranslation(-distance, 0.0);
-                         newVC.view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+                         oldVC.view.frame = self.childFrameLeft;
+                         newVC.view.frame = self.childFrameCenter;
                      }
                      completion:^(BOOL finished) {
                          [oldVC.view removeFromSuperview];

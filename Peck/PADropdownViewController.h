@@ -22,20 +22,9 @@
 
 @interface PADropdownViewController : UIViewController <PACoreDataProtocol, PADropdownBarDelegate, PAFilterDelegate>
 
-// viewcontroller that displays the primary content
-@property (nonatomic) UIViewController * primaryViewController;
-
-// array of viewcontrollers that drop down on button clicks to display their content
-// order of the elements in the array determines their presentation order, left to right.
-// These viewControllers MUST have these properties:
-//  - custom PADropdownViewControllerSegues pointing to them in the storyboard
-//  - title properties set and their associates segues configured with identifiers containing the same string
-//  - tabBarItem properties set with UITabBarItems
-@property (nonatomic) NSArray * secondaryViewControllers;
-
-// points temporarily to the viewcontroller that is active
-// this could be either the primary or one of the secondaries, depending on the current state
-@property (nonatomic) UIViewController * activeViewController;
+// strings that indicate the storyboard identifiers of the various views for this controller
+@property (nonatomic) NSString * primaryViewControllerIdentifier;
+@property (nonatomic) NSArray * secondaryViewControllerIdentifiers;
 
 // Contains all the icons at the top of the screen,
 // handling touches to those items that cause their associated views to drop down

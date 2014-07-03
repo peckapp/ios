@@ -10,9 +10,13 @@
 #import "PACirclesTableViewController.h"
 #import "PACircleScrollView.h"
 
-@interface PACircleCell : UITableViewCell <UIGestureRecognizerDelegate>
+@interface PACircleCell : UITableViewCell <UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource>
+
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
 @property (strong, nonatomic) IBOutlet PACircleScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UITableView *commentsTable;
+
+
 @property(nonatomic, assign) id <PACirclesControllerDelegate> delegate;
 @property (nonatomic, assign) NSInteger members;
 @property BOOL loadedImages;
