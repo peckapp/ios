@@ -128,21 +128,4 @@
     }
 }
 
-
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    
-    PADropdownViewController *dropdownController = (PADropdownViewController*)segue.destinationViewController;
-    
-    //NSLog(@"%@",dropdownController.secondaryViewControllers);
-    
-    /*
-    for (UINavigationController* navController in dropdownController.secondaryViewControllers) {
-        UIViewController <PACoreDataProtocol> * viewController = (UIViewController <PACoreDataProtocol> *)navController.topViewController;
-        viewController.managedObjectContext = self.managedObjectContext;
-    }
-    */
-
-}
-
 @end
