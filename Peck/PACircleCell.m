@@ -80,11 +80,13 @@
 
 - (void)expand
 {
+    // TODO: handle expansion
     self.commentsTable.hidden = NO;
 }
 
 - (void)contract
 {
+    // TODO: handle contraction
     self.commentsTable.hidden = YES;
 }
 
@@ -115,6 +117,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    // TODO: return number of rows
     return 0;
 }
 
@@ -122,6 +125,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // TODO: instantiate cells
     return nil;
 }
 
