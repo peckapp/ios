@@ -411,7 +411,6 @@ CGRect initialTableViewRect;
     NSDateComponents *components = [calendar components:(NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:date];
     NSInteger hour = [components hour];
     NSString * timeOfDay = @" AM";
-    NSLog(@"the hour: %li", (long)hour);
     if(hour>12){
         hour-=12;
         timeOfDay = @" PM";
