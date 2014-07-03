@@ -86,6 +86,8 @@
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
 		A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */; };
 		A4E21F601964A749002A9800 /* PAEventInfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */; };
+		A4E21F6519659892002A9800 /* PACommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F6319659892002A9800 /* PACommentCell.m */; };
+		A4E21F6619659892002A9800 /* PACommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4E21F6419659892002A9800 /* PACommentCell.xib */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 		DD898136195B523F0079CDC9 /* button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898133195B523F0079CDC9 /* button@2x.png */; };
 		DD898137195B523F0079CDC9 /* button-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898134195B523F0079CDC9 /* button-selected@2x.png */; };
@@ -263,6 +265,9 @@
 		A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreInfoViewController.m; sourceTree = "<group>"; };
 		A4E21F5E1964A749002A9800 /* PAEventInfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEventInfoTableViewController.h; sourceTree = "<group>"; };
 		A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEventInfoTableViewController.m; sourceTree = "<group>"; };
+		A4E21F6219659892002A9800 /* PACommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACommentCell.h; sourceTree = "<group>"; };
+		A4E21F6319659892002A9800 /* PACommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACommentCell.m; sourceTree = "<group>"; };
+		A4E21F6419659892002A9800 /* PACommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PACommentCell.xib; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD898133195B523F0079CDC9 /* button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button@2x.png"; sourceTree = "<group>"; };
@@ -476,6 +481,7 @@
 		86D5980A193768BF00F38654 /* Peck */ = {
 			isa = PBXGroup;
 			children = (
+				A4E21F611965982C002A9800 /* Comment */,
 				DD89816E195CAFF20079CDC9 /* Icon-40@2x.png */,
 				DD89816F195CAFF20079CDC9 /* Icon-60@2x.png */,
 				DD898170195CAFF20079CDC9 /* Icon-Small@2x.png */,
@@ -570,6 +576,16 @@
 				A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */,
 			);
 			name = Configure;
+			sourceTree = "<group>";
+		};
+		A4E21F611965982C002A9800 /* Comment */ = {
+			isa = PBXGroup;
+			children = (
+				A4E21F6219659892002A9800 /* PACommentCell.h */,
+				A4E21F6319659892002A9800 /* PACommentCell.m */,
+				A4E21F6419659892002A9800 /* PACommentCell.xib */,
+			);
+			name = Comment;
 			sourceTree = "<group>";
 		};
 		DDDAEDE019475EE7004CE102 /* Pecks */ = {
@@ -754,6 +770,7 @@
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
 				DD89814F195B7AA80079CDC9 /* circles@2x.png in Resources */,
 				8671A2CE195B848D00700101 /* dropdown_pecks@2x.png in Resources */,
+				A4E21F6619659892002A9800 /* PACommentCell.xib in Resources */,
 				DD898139195B5AE20079CDC9 /* image-placeholder.png in Resources */,
 				86051D49194BB27200961541 /* Silhouette.png in Resources */,
 				860A8D27195201A700C5B4A6 /* thor_peckapp_com.cer in Resources */,
@@ -870,6 +887,7 @@
 				86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */,
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,
 				A433EAA6195B53D800DAA201 /* PACircleScrollView.m in Sources */,
+				A4E21F6519659892002A9800 /* PACommentCell.m in Sources */,
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,
 				86D5981E193768BF00F38654 /* PAEventsViewController.m in Sources */,
 				A40CF574195483140021C088 /* PABST.m in Sources */,

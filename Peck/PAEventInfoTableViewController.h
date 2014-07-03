@@ -8,14 +8,22 @@
 
 #import <UIKit/UIKit.h>
 #import "PACoreDataProtocol.h"
+@class PACommentCell;
 
 @interface PAEventInfoTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol>
 
-
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @property (strong, nonatomic) id detailItem;
-@property (weak, nonatomic) IBOutlet UITextView *blurbTextView;
+@property (weak, nonatomic) IBOutlet UITextView *descriptionTextView;
 @property (weak, nonatomic) IBOutlet UILabel *startTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *endTimeLabel;
 
+
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+- (void)expandTableViewCell:(PACommentCell *)cell;
+-(void)compressTableViewCell:(PACommentCell *)cell;
 @end

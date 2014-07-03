@@ -7,6 +7,7 @@
 //
 
 #import "PAEventInfoTableViewController.h"
+#import "PACommentCell.h"
 
 @interface PAEventInfoTableViewController ()
 @property (nonatomic, retain) NSDateFormatter *formatter;
@@ -17,8 +18,16 @@
 
 @synthesize startTimeLabel = _startTimeLabel;
 @synthesize endTimeLabel = _endTimeLabel;
-@synthesize blurbTextView = _blurbTextView;
+@synthesize descriptionTextView = _blurbTextView;
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+NSString * cellIdentifier = @"CommentCell";
+NSString * nibName = @"PACommentCell";
+NSMutableDictionary *heightDictionary;
+
+BOOL reloaded = NO;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -41,6 +50,11 @@
         self.formatter = [[NSDateFormatter alloc] init];
         [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
     //}
+    [self.descriptionTextView setEditable:NO];
+    [self configureView];
+    heightDictionary = [[NSMutableDictionary alloc] init];
+    [self.tableView reloadData];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -68,13 +82,11 @@
     if (self.detailItem) {
         
         self.title = [self.detailItem valueForKey:@"title"];
-        NSLog(@"the start date: %@", [self.detailItem valueForKey:@"start_date"]);
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"MMM dd, yyyy h:mm a"];
-        NSString *dateFromString =[df stringFromDate:[self.detailItem valueForKey:@"start_date"]];
-        NSLog(@"date from string: %@", dateFromString);
-        self.startTimeLabel.text = dateFromString;
-        
+        NSString *stringFromDate =[df stringFromDate:[self.detailItem valueForKey:@"start_date"]];
+        [self.startTimeLabel setText: stringFromDate];
+        [self.endTimeLabel setText:[df stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
     }
 }
 
@@ -83,28 +95,55 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+    //return [[_fetchedResultsController sections] count];
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+
+    //id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
+    //return [sectionInfo numberOfObjects];
+    return 4;
+
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    PACommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
     
-    // Configure the cell...
+    [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
 }
-*/
+
+-(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath{
+    cell.nameLabel.text = @"John Doe";
+    cell.parentTableView=self;
+    cell.tag = [indexPath row];
+    cell.commentTextView.text = @"this is the longest comment known to man. aaaaaaaaaaaaaa so long aaaaaaaaaa this comment is so so so so so so so so so longggggggggggggggggggggg i can't even believe how long it is! wow this comment is long oh my gosh i can't stop typing this long long comment.this is the longest comment known to man. aaaaaaaaaaaaaa so long aaaaaaaaaa this comment is so so so so so so so so so longggggggggggggggggggggg i can't even believe how long it is! wow this comment is long oh my gosh i can't stop typing this long long comment.";
+    
+    
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"height for row at index path");
+    //CGFloat height = ((PACommentCell*)[tableView cellForRowAtIndexPath:indexPath]).commentTextView.contentSize.height;
+    NSString * cellTag = [@([indexPath row]) stringValue];
+    
+    CGFloat height = [[heightDictionary valueForKey:cellTag] floatValue];
+    if(height){
+        NSLog(@"setting the new height of the frame %f", height);
+        return height;
+    }
+    return 120;
+}
 
 /*
 // Override to support conditional editing of the table view.
@@ -154,5 +193,29 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (void)expandTableViewCell:(PACommentCell *)cell {
+    NSLog(@"expand table view cell");
+    [cell.commentTextView sizeToFit];
+    [cell.commentTextView layoutSubviews];
+    NSLog(@"new frame size %f", cell.commentTextView.frame.size.height);
+    NSNumber *height = [NSNumber numberWithFloat:120];
+    if(cell.commentTextView.frame.size.height>120){
+        height = [NSNumber numberWithFloat:cell.commentTextView.frame.size.height];
+    }
+    NSString * cellTag = [@(cell.tag) stringValue];
+    [heightDictionary setValue:height forKey:cellTag];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+    
+}
+
+-(void)compressTableViewCell:(PACommentCell *)cell{
+    cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
+    NSString *cellTag = [@(cell.tag) stringValue];
+    [heightDictionary removeObjectForKey:cellTag];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+}
 
 @end
