@@ -97,10 +97,10 @@
      */
 }
 
-- (void)addMember:(NSNumber *)member
-{
-    Peer * p = [self getPeer:member];
-    [self.members addObject:p];
+-(void)updateCircleMembers:(NSMutableArray *)circleMembers{
+    //we will use members to configure the cells of the members
+    //it is an array of peers
+    self.members=circleMembers;
     [self.profilesTableView reloadData];
 }
 
@@ -115,31 +115,11 @@
 }
 
 
-- (Peer *)getPeer:(NSNumber*)peerID{
-    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
-    [fetchRequest setEntity:entity];
-    
-    NSString *attributeName = @"id";
-    NSNumber *attributeValue = peerID;
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@",
-                              attributeName, attributeValue];
-    [fetchRequest setPredicate:predicate];
-    
-    NSError *error = nil;
-    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
-    Peer *peer = mutableFetchResults[0];
-    
-    return peer;
-}
-
 #pragma mark Table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    
     if (tableView == self.profilesTableView) {
         return [self.members count] + 1;
     }
@@ -150,6 +130,11 @@
         return 0;
     }
 }
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
 
 #pragma mark Table view delegate
 

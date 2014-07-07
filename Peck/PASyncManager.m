@@ -329,7 +329,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"update circle info JSON: %@",JSON);
+             //NSLog(@"update circle info JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"circles"];
              NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
@@ -341,7 +341,7 @@
                      Circle * circle = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext: _managedObjectContext];
                      [self setAttributesInCircle:circle withDictionary:eventAttributes];
                      [mutableEvents addObject:circle];
-                     NSLog(@"CIRCLE: %@",circle);
+                     //NSLog(@"CIRCLE: %@",circle);
                  }
              }
          }
@@ -364,9 +364,36 @@
     NSLog(@"set attributes of circle");
     circle.circleName = [dictionary objectForKey:@"circle_name"];
     circle.id = [dictionary objectForKey:@"id"];
-    circle.members = (NSArray*)[dictionary objectForKey:@"circle_members"];
-    //beware, circle.members is set to a strange looking array
+    NSArray *members = (NSArray*)[dictionary objectForKey:@"circle_members"];
+    NSMutableArray *addedMembers = [[NSMutableArray alloc] init];
+    for(int i =0; i<[members count]; i++){
+        addedMembers[i]=[self getPeer:members[i]];
+    }
+    circle.members = addedMembers;
+    NSLog(@"circle.members: %@", circle.members);
 }
+
+- (Peer *)getPeer:(NSNumber*)peerID{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSString *attributeName = @"id";
+    NSNumber *attributeValue = peerID;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@",
+                              attributeName, attributeValue];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    Peer *peer = mutableFetchResults[0];
+    
+    return peer;
+}
+
 
 #pragma mark - Events actions
 
