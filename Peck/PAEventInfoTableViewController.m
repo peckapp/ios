@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
+
 #import "PAEventInfoTableViewController.h"
 #import "PACommentCell.h"
 #import "PAAppDelegate.h"
@@ -34,6 +35,8 @@ CGRect initialFrame;
 BOOL viewingEvent;
 
 BOOL reloaded = NO;
+
+#define reloadTime 3
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -80,8 +83,7 @@ BOOL reloaded = NO;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         while(viewingEvent) {
             [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple_event"];
-            NSLog(@"reload comments");
-            [NSThread sleepForTimeInterval:3];
+            [NSThread sleepForTimeInterval:reloadTime];
         }
     });
 }
@@ -128,7 +130,6 @@ BOOL reloaded = NO;
     if(CGRectEqualToRect(self.tableView.frame, initialFrame)){
         NSDictionary* info = [notification userInfo];
         CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
         self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -145,7 +146,6 @@ BOOL reloaded = NO;
 {
     if (_detailItem != newDetailItem) {
         _detailItem = newDetailItem;
-        NSLog(@"the event: %@", _detailItem);
         // Update the view.
         [self configureView];
     }
@@ -163,6 +163,7 @@ BOOL reloaded = NO;
         NSString *stringFromDate =[df stringFromDate:[self.detailItem valueForKey:@"start_date"]];
         [self.startTimeLabel setText: stringFromDate];
         [self.endTimeLabel setText:[df stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
+        self.descriptionTextView.text = [self.detailItem valueForKey:@"descrip"];
     }
 }
 

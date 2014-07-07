@@ -16,7 +16,6 @@
 
 @interface PACircleCell ()
 
-@property NSMutableArray * members;
 
 @end
 

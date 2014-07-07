@@ -49,7 +49,6 @@
 		86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59814193768BF00F38654 /* PAAppDelegate.m */; };
 		86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86D59819193768BF00F38654 /* Peck.xcdatamodeld */; };
 		86D5981E193768BF00F38654 /* PAEventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D5981D193768BF00F38654 /* PAEventsViewController.m */; };
-		86D59821193768BF00F38654 /* PAEventInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59820193768BF00F38654 /* PAEventInfoViewController.m */; };
 		86D59823193768BF00F38654 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86D59822193768BF00F38654 /* Images.xcassets */; };
 		86D5982A193768C000F38654 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59829193768C000F38654 /* XCTest.framework */; };
 		86D5982B193768C000F38654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D59802193768BF00F38654 /* Foundation.framework */; };
@@ -209,8 +208,6 @@
 		86D5981A193768BF00F38654 /* Peck.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Peck.xcdatamodel; sourceTree = "<group>"; };
 		86D5981C193768BF00F38654 /* PAEventsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PAEventsViewController.h; sourceTree = "<group>"; };
 		86D5981D193768BF00F38654 /* PAEventsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PAEventsViewController.m; sourceTree = "<group>"; };
-		86D5981F193768BF00F38654 /* PAEventInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PAEventInfoViewController.h; sourceTree = "<group>"; };
-		86D59820193768BF00F38654 /* PAEventInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PAEventInfoViewController.m; sourceTree = "<group>"; };
 		86D59822193768BF00F38654 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		86D59828193768C000F38654 /* PeckTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeckTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		86D59829193768C000F38654 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -613,8 +610,6 @@
 				86292524193CBFF80057CA41 /* PAEventCell.h */,
 				86292525193CBFF80057CA41 /* PAEventCell.m */,
 				DD89816C195CAF6F0079CDC9 /* PAEventCell.xib */,
-				86D5981F193768BF00F38654 /* PAEventInfoViewController.h */,
-				86D59820193768BF00F38654 /* PAEventInfoViewController.m */,
 				A4773C7E19589E8200AB9831 /* PAEvents.h */,
 				A4773C7F19589E8200AB9831 /* PAEvents.m */,
 				A4773C811958A27F00AB9831 /* PAEventBST.h */,
@@ -875,7 +870,6 @@
 				A459A83D195DF4B800D1FB0E /* Message.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
-				86D59821193768BF00F38654 /* PAEventInfoViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
 				860BE45E19632CC600E57A56 /* Institution.m in Sources */,

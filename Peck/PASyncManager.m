@@ -337,7 +337,7 @@
                  NSNumber *newID = [eventAttributes objectForKey:@"id"];
                  BOOL eventAlreadyExists = [self objectExists:newID withType:@"Circle"];
                  if(!eventAlreadyExists){
-                     NSLog(@"about to add the event");
+                     NSLog(@"about to add the circle");
                      Circle * circle = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext: _managedObjectContext];
                      [self setAttributesInCircle:circle withDictionary:eventAttributes];
                      [mutableEvents addObject:circle];
@@ -364,10 +364,9 @@
     NSLog(@"set attributes of circle");
     circle.circleName = [dictionary objectForKey:@"circle_name"];
     circle.id = [dictionary objectForKey:@"id"];
+    circle.members = (NSArray*)[dictionary objectForKey:@"circle_members"];
     
-    
-    
-    NSString *circleMembersURL = [@"api/circles/" stringByAppendingString:[circle.id stringValue]];
+    /*NSString *circleMembersURL = [@"api/circles/" stringByAppendingString:[circle.id stringValue]];
     circleMembersURL = [circleMembersURL stringByAppendingString:@"/circle_members"];
     [[PASessionManager sharedClient] GET:circleMembersURL
                               parameters:[self authenticationParameters]
@@ -387,7 +386,7 @@
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                      NSLog(@"ERROR: %@",error);
-                                 }];
+                                 }];*/
 }
 
 #pragma mark - Events actions
@@ -471,7 +470,6 @@
 
 -(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
 {
-    //NSLog(@"set attributes of event");
     event.title = [dictionary objectForKey:@"title"];
     event.descrip = [dictionary objectForKey:@"event_description"];
     //event.location = [dictionary objectForKey:@"institution_id"];

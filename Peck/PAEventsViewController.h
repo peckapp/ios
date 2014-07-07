@@ -5,6 +5,8 @@
 //  Created by Aaron Taylor on 5/29/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
+//  This view controller displays the homepage of the user, where all events that the user is subscribed to will appear.
+//  Selecting an event will push the PAEventsInfoViewController, which will display more detail about the event
 
 #import <UIKit/UIKit.h>
 

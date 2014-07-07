@@ -136,8 +136,9 @@ Peer* selectedPeer;
     Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
     cell.circleTitle.text = c.circleName;
 
-    [c.members enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [cell addMember:c.members[idx]];
+    if([cell.members count]!=[c.members count])
+        [c.members enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [cell addMember:c.members[idx]];
     }];
 }
 

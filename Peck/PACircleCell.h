@@ -22,6 +22,6 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (weak, nonatomic) IBOutlet UITableView *commentsTableView;
-
+@property (strong, nonatomic) NSMutableArray *members;
 - (void)addMember:(NSNumber *)member;
 @end
