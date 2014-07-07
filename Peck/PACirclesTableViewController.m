@@ -67,6 +67,8 @@ Peer* selectedPeer;
 
     self.keyboardTextField = [[UITextField alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 44.0)];
     self.keyboardTextField.backgroundColor = [UIColor whiteColor];
+    self.keyboardTextField.placeholder = @"Invite someone to the group";
+    [self.keyboardTextField setReturnKeyType:UIReturnKeySend];
 
     // Stupid workaround for letting buttons capture keyboard input
     self.textCapture = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
