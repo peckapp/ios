@@ -19,6 +19,8 @@
 
 @property NSIndexPath * selectedIndexPath;
 @property UIBarButtonItem * cancelCellButton;
+@property (strong, nonatomic) UITextField * keyboardTextField;
+@property (strong, nonatomic) UITextField * textCapture;
 
 @end
 
@@ -62,7 +64,15 @@ Peer* selectedPeer;
     
     [[PASyncManager globalSyncManager] updateCircleInfo];
     [self.tableView reloadData];
-    
+
+    self.keyboardTextField = [[UITextField alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 44.0)];
+    self.keyboardTextField.backgroundColor = [UIColor whiteColor];
+
+    // Stupid workaround for letting buttons capture keyboard input
+    self.textCapture = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    self.textCapture.hidden = YES;
+    self.textCapture.inputAccessoryView = self.keyboardTextField;
+    [self.view addSubview:self.textCapture];
 }
 
 - (void)didReceiveMemoryWarning
@@ -135,6 +145,9 @@ Peer* selectedPeer;
 {
     Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
     cell.circleTitle.text = c.circleName;
+
+    cell.textCapture = self.textCapture;
+    cell.keyboardTextField = self.keyboardTextField;
 
     /*if([cell.members count]!=[c.members count])
         [c.members enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {

@@ -24,6 +24,9 @@
 @property (weak, nonatomic) IBOutlet UITableView *commentsTableView;
 @property (strong, nonatomic) NSMutableArray *members;
 
+@property (strong, nonatomic) UITextField * textCapture;
+@property (strong, nonatomic) UITextField * keyboardTextField;
+
 - (void)addMember:(NSNumber *)member;
 -(void)updateCircleMembers:(NSArray *)circleMembers;
 @end

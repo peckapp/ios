@@ -16,9 +16,6 @@
 
 @interface PACircleCell ()
 
-@property (strong, nonatomic) UIView * keyboardBar;
-@property (strong, nonatomic) UITextField * textCapture;
-
 @end
 
 @implementation PACircleCell
@@ -46,14 +43,6 @@
     self.profilesTableView.frame = CGRectMake(0, 44.0, self.frame.size.width, 44.0);
 
     self.members = [[NSMutableArray alloc] init];
-
-    self.keyboardBar = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.frame.size.width, 88.0)];
-
-    // Stupid workaround for letting buttons capture keyboard input
-    self.textCapture = [[UITextField alloc] initWithFrame:self.frame];
-    self.textCapture.hidden = YES;
-    self.textCapture.inputAccessoryView = self.keyboardBar;
-    [self addSubview:self.textCapture];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -102,6 +91,11 @@
     //it is an array of peers
     self.members=circleMembers;
     [self.profilesTableView reloadData];
+}
+
+- (void)addMember:(NSNumber *)member
+{
+
 }
 
 - (void)expand
@@ -188,6 +182,7 @@
     if (tableView == self.profilesTableView) {
         if (indexPath.row == [self.members count]) {
             [self.textCapture becomeFirstResponder];
+            [self.keyboardTextField becomeFirstResponder];
         }
     }
     else if (tableView == self.commentsTableView) {
