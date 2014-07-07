@@ -33,7 +33,7 @@
 -(void)deleteEvent:(NSNumber*)eventID;
 
 // methods for updating circles
--(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray*)members;
+-(void)postCircle: (NSDictionary *) dictionary;
 -(void)updateCircleInfo;
 
 //methods for comments

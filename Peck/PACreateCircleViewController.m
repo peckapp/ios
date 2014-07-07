@@ -109,7 +109,7 @@
         }
 
         Peer * tempPeer = [HTAutocompleteManager sharedManager].currentPeer;
-        [_addedPeers addObject:tempPeer];
+        [_addedPeers addObject:tempPeer.id];
         NSLog(@"peers added so far: %@", _addedPeers);
         UIImage *image = [UIImage imageNamed:@"Silhouette.png"];
         [self.circleScrollView addPeer:image WithName:tempText];
@@ -133,8 +133,9 @@
                                    [NSNumber numberWithInt:1], @"institution_id",
                                    titleTextField.text, @"circle_name",
                                    userID, @"user_id",
+                                   _addedPeers,@"circle_members",
                                    nil];
-        [[PASyncManager globalSyncManager] postCircle:setCircle withMembers:_addedPeers];
+        [[PASyncManager globalSyncManager] postCircle:setCircle];
         [[PASyncManager globalSyncManager] updateCircleInfo];
     } else {
         NSLog(@"attempted to create a circle without a title");

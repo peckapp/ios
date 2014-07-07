@@ -24,6 +24,5 @@
 @property (weak, nonatomic) IBOutlet UITableView *commentsTableView;
 @property (strong, nonatomic) NSMutableArray *members;
 
-- (void)addMember:(NSNumber *)member;
 -(void)updateCircleMembers:(NSArray *)circleMembers;
 @end

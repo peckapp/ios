@@ -264,18 +264,18 @@
 
 #pragma mark - Circles actions
 
--(void)postCircle: (NSDictionary *) dictionary withMembers:(NSArray *)members
+-(void)postCircle: (NSDictionary *) dictionary
 {
     
     [[PASessionManager sharedClient] POST:circlesAPI
                                parameters:[self applyWrapper:@"circle" toDictionary:dictionary]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"post circle success: %@", JSON);
+         /*NSLog(@"post circle success: %@", JSON);
          NSDictionary *postsFromResponse = (NSDictionary*)JSON;
          NSDictionary *circleDictionary = [postsFromResponse objectForKey:@"circle"];
-         NSNumber *circleID = [circleDictionary objectForKey:@"id"];
-         [self addMembers:members ToCircle:circleID];
+         //NSNumber *circleID = [circleDictionary objectForKey:@"id"];
+         //[self addMembers:members ToCircle:circleID];*/
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -286,7 +286,7 @@
     
 }
 
--(void)addMembers:(NSArray *)members ToCircle:(NSNumber*)circleID
+/*-(void)addMembers:(NSArray *)members ToCircle:(NSNumber*)circleID
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSNumber * userID = [defaults objectForKey:@"user_id"];
@@ -313,7 +313,7 @@
                                       }];
         
     }
-}
+}*/
 
 -(void)updateCircleInfo
 {
