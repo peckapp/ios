@@ -38,7 +38,7 @@
 
 //methods for comments
 -(void)postComment:(NSDictionary *)dictionary;
--(void)updateComments;
+-(void)updateCommentsFrom: (NSString *)comment_from withCategory:(NSString *)category;
 
 -(void)updatePeerInfo;
 

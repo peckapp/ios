@@ -71,7 +71,8 @@ BOOL reloaded = NO;
 
 -(void)viewWillAppear:(BOOL)animated{
     [self registerForKeyboardNotifications];
-    [[PASyncManager globalSyncManager] updateComments];
+    NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
+    [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple_event"];
     initialFrame = self.tableView.frame;
     
 }

@@ -501,7 +501,7 @@
 
 }
 
--(void)updateComments{
+-(void)updateCommentsFrom: (NSString *)comment_from withCategory:(NSString *)category{
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         
@@ -509,6 +509,12 @@
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
         
+        NSString *specificCommentURL = [commentsAPI stringByAppendingString:@"?"];
+        specificCommentURL = [specificCommentURL stringByAppendingString:@"category="];
+        specificCommentURL = [specificCommentURL stringByAppendingString:category];
+        specificCommentURL = [specificCommentURL stringByAppendingString:@"&"];
+        specificCommentURL = [specificCommentURL stringByAppendingString:@"comment_from="];
+        specificCommentURL = [specificCommentURL stringByAppendingString:comment_from];
         
         [[PASessionManager sharedClient] GET:commentsAPI
                                   parameters:[self authenticationParameters]
