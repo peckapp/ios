@@ -205,7 +205,6 @@ CGRect initialTableViewRect;
     [dateComponents setDay:selectedDay];
     
     NSDate *selectedDayMorning = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:currentDate options:0];
-    NSLog(@"today (instance): %@", selectedDayMorning);
     return selectedDayMorning;
 }
 
@@ -436,8 +435,6 @@ CGRect initialTableViewRect;
     tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     cell.titleLabel.text = tempEvent.title;
-    NSLog(@"event: %@ has a start time of %@", tempEvent.title, tempEvent.start_date);
-    NSLog(@"the selected start moring is %@", [self updateDate]);
     cell.startTime.text = [self dateToString:tempEvent.start_date];
     cell.endTime.text = [self dateToString:tempEvent.end_date];
     

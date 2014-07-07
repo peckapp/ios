@@ -28,6 +28,7 @@
 NSString * cellIdentifier = @"CommentCell";
 NSString * nibName = @"PACommentCell";
 NSMutableDictionary *heightDictionary;
+CGRect initialFrame;
 
 BOOL reloaded = NO;
 - (id)initWithStyle:(UITableViewStyle)style
@@ -52,6 +53,7 @@ BOOL reloaded = NO;
         self.formatter = [[NSDateFormatter alloc] init];
         [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
     //}
+    
     [self.descriptionTextView setEditable:NO];
     [self configureView];
     heightDictionary = [[NSMutableDictionary alloc] init];
@@ -70,6 +72,7 @@ BOOL reloaded = NO;
 -(void)viewWillAppear:(BOOL)animated{
     [self registerForKeyboardNotifications];
     [[PASyncManager globalSyncManager] updateComments];
+    initialFrame = self.tableView.frame;
     
 }
 -(void)viewWillDisappear:(BOOL)animated{
@@ -110,16 +113,18 @@ BOOL reloaded = NO;
 }
 
 - (void)keyboardWasShown:(NSNotification *)notification {
-    NSDictionary* info = [notification userInfo];
-    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    if(CGRectEqualToRect(self.tableView.frame, initialFrame)){
+        NSDictionary* info = [notification userInfo];
+        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
 }
 
 - (void)keyboardWillBeHidden:(NSNotification *)notification {
-    
+        self.tableView.frame = initialFrame;
 }
 
 #pragma mark - managing the detail item
@@ -165,6 +170,17 @@ BOOL reloaded = NO;
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Comment" inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
+    
+    NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
+    
+    NSPredicate *commentFromPredicate = [NSPredicate predicateWithFormat:@"comment_from = %@", [self.detailItem valueForKey:@"id"]];
+    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", @"simple_event"];
+    
+    [predicateArray addObject:commentFromPredicate];
+    [predicateArray addObject:categoryPredicate];
+    
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    [fetchRequest setPredicate:compoundPredicate];
     
     // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
@@ -312,6 +328,12 @@ BOOL reloaded = NO;
     return 120;
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    PACommentCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [cell.commentTextView resignFirstResponder];
+    
+}
 
 /*
 // Override to support conditional editing of the table view.
@@ -392,7 +414,7 @@ BOOL reloaded = NO;
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 commentText, @"content",
                                 userID, @"user_id",
-                                @"Event", @"category",
+                                @"simple_event", @"category",
                                 [self.detailItem valueForKey:@"id" ],@"comment_from",
                                 nil];
     
