@@ -118,8 +118,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView.tag == 0) {
+    if (tableView == self.profilesTableView) {
         return 20;
+    }
+    else if (tableView == self.commentsTableView) {
+        return 0;
     }
     else {
         return 0;
@@ -131,7 +134,7 @@
 // TODO: display profile images on table cells
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (tableView.tag == 0) {
+    if (tableView == self.profilesTableView) {
         UITableViewCell * cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
 
         if (indexPath.row % 2 == 0) {
@@ -144,6 +147,9 @@
         cell.transform = CGAffineTransformMakeRotation(M_PI_2);
         return cell;
     }
+    else if (tableView == self.commentsTableView) {
+        return nil;
+    }
     else {
         return nil;
     }
@@ -151,7 +157,15 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44;
+    if (tableView == self.profilesTableView) {
+        return 44;
+    }
+    else if (tableView == self.commentsTableView) {
+        return 44;
+    }
+    else {
+        return 44;
+    }
 }
 
 @end

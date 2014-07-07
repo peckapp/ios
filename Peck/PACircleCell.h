@@ -23,6 +23,8 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (weak, nonatomic) IBOutlet UITableView *profilesTableView;
+@property (weak, nonatomic) IBOutlet UITableView *commentsTableView;
 
 -(void)addImages:(NSArray*)members;
 @end
