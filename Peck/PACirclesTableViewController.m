@@ -47,7 +47,6 @@ Peer* selectedPeer;
 {
     [super viewDidLoad];
 
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.cancelCellButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(cancelSelection)];
     
     self.title = @"Circles";
@@ -118,49 +117,35 @@ Peer* selectedPeer;
     [self.tableView endUpdates];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     self.tableView.scrollEnabled = NO;
-
-}
-
-
-// TODO: configure cell so that it displays the correct label
-- (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-    /*
-    if([indexPath row]==[_fetchedResultsController.fetchedObjects count]){
-        cell.circleTitle.text = @"Create";
-        
-    }
-     */
-
-    /*
-    cell.delegate = self;
-    cell.scrollView.delegate = self;
-    cell.tag = [indexPath row];
-    Circle * tempCircle = [_fetchedResultsController objectAtIndexPath:indexPath];
-    //NSArray *members = tempCircle.members;
-    NSLog(@"Circle members: %@", tempCircle.members);
-    int numberOfMembers = (int)[tempCircle.members count];
-    cell.members = numberOfMembers;
-    cell.circleTitle.text = tempCircle.circleName;
-    [cell.scrollView setContentSize:CGSizeMake(80*(numberOfMembers), 0)];
-    NSLog(@"about to add the images");
-    [cell addImages: tempCircle.members];
-     */
 }
 
 - (void)cancelSelection
 {
-    self.selectedIndexPath = nil;
     self.tableView.scrollEnabled = YES;
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    self.navigationItem.leftBarButtonItem = nil;
+    [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
+
+    self.selectedIndexPath = nil;
+
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
-    //[self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+}
+
+- (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
+    cell.members = (int)[c.members count];
+    cell.circleTitle.text = c.circleName;
+    //[cell addImages: c.members];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
 }
 
 - (IBAction)addCircle:(id)sender
 {
-
     [self performSegueWithIdentifier:@"createACircle" sender:self];
 }
 
