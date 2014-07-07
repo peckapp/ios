@@ -14,8 +14,13 @@
 #import "PACircleScrollView.h"
 #import "Peer.h"
 
+@interface PACircleCell ()
+
+@property NSMutableArray * members;
+
+@end
+
 @implementation PACircleCell
-@synthesize members = _members;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -33,11 +38,13 @@
 
     self.selectionStyle = UITableViewCellSelectionStyleNone;
 
-    self.profileList.delegate = self;
-    self.profileList.dataSource = self;
+    self.profilesTableView.delegate = self;
+    self.profilesTableView.dataSource = self;
 
-    self.profileList.transform = CGAffineTransformMakeRotation(-M_PI_2);
-    self.profileList.frame = CGRectMake(0, 44.0, self.frame.size.width, 44.0);
+    self.profilesTableView.transform = CGAffineTransformMakeRotation(-M_PI_2);
+    self.profilesTableView.frame = CGRectMake(0, 44.0, self.frame.size.width, 44.0);
+
+    self.members = [[NSMutableArray alloc] init];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -81,6 +88,15 @@
      */
 }
 
+- (void)addMember:(NSNumber *)member
+{
+    Peer * p = [self getPeer:member];
+    [self.members addObject:p];
+    [self.profilesTableView reloadData];
+
+    NSLog(@"Number of members: %d", [self.members count]);
+}
+
 - (void)expand
 {
     // TODO: handle expansion
@@ -92,7 +108,7 @@
 }
 
 
--(Peer *)peer:(NSNumber*)peerID{
+- (Peer *)getPeer:(NSNumber*)peerID{
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     
@@ -119,7 +135,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == self.profilesTableView) {
-        return 20;
+        return [self.members count];
     }
     else if (tableView == self.commentsTableView) {
         return 0;

@@ -134,9 +134,11 @@ Peer* selectedPeer;
 - (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
-    cell.members = (int)[c.members count];
     cell.circleTitle.text = c.circleName;
-    //[cell addImages: c.members];
+
+    [c.members enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [cell addMember:c.members[idx]];
+    }];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

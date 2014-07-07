@@ -13,18 +13,15 @@
 @interface PACircleCell : UITableViewCell <UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
-@property (weak, nonatomic) IBOutlet UITableView *profileList;
-
+@property (weak, nonatomic) IBOutlet UITableView *profilesTableView;
 
 @property(nonatomic, assign) id <PACirclesControllerDelegate> delegate;
-@property (nonatomic, assign) NSInteger members;
 @property BOOL loadedImages;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-@property (weak, nonatomic) IBOutlet UITableView *profilesTableView;
 @property (weak, nonatomic) IBOutlet UITableView *commentsTableView;
 
--(void)addImages:(NSArray*)members;
+- (void)addMember:(NSNumber *)member;
 @end
