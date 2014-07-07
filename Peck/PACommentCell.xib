@@ -64,6 +64,7 @@
                 <outlet property="commentTextView" destination="Apq-cS-vo8" id="3LA-7S-H2a"/>
                 <outlet property="expandButton" destination="L92-Wj-u3K" id="7va-e9-Vkd"/>
                 <outlet property="nameLabel" destination="Iq5-9U-yu5" id="8dC-qA-vOF"/>
+                <outlet property="postButton" destination="gcg-Ko-G6d" id="ihB-g0-1kc"/>
                 <outlet property="postTimeLabel" destination="6W9-lz-ZGt" id="NsI-GF-dwq"/>
                 <outlet property="profilePicture" destination="yZ1-D1-W7r" id="4B6-r0-Wt9"/>
             </connections>

@@ -301,13 +301,19 @@ BOOL reloaded = NO;
     if([indexPath row]==0){
         //if it is the first cell. This is where the user will add a comment
         [cell.commentTextView setEditable:YES];
+        [cell.commentTextView setScrollEnabled:YES];
+        [cell.postButton setHidden:NO];
         cell.commentTextView.text = @"";
         cell.nameLabel.text = @"John Doe";
+        [cell.expandButton setHidden:YES];
         
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
-        NSLog(@"Configure Cell");
+        [cell.commentTextView setEditable:NO];
+        [cell.commentTextView setScrollEnabled:NO];
+        [cell.expandButton setHidden:NO];
+        [cell.postButton setHidden:YES];
         cell.nameLabel.text = @"John Doe";
         cell.tag = [indexPath row];
     cell.commentTextView.text = tempComment.content;
@@ -334,6 +340,10 @@ BOOL reloaded = NO;
     PACommentCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     [cell.commentTextView resignFirstResponder];
     
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 /*
