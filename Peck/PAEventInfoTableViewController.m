@@ -31,6 +31,7 @@ NSString * cellIdentifier = @"CommentCell";
 NSString * nibName = @"PACommentCell";
 NSMutableDictionary *heightDictionary;
 CGRect initialFrame;
+BOOL viewingEvent;
 
 BOOL reloaded = NO;
 - (id)initWithStyle:(UITableViewStyle)style
@@ -72,14 +73,22 @@ BOOL reloaded = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    viewingEvent=YES;
     [self registerForKeyboardNotifications];
     NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
-    [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple_event"];
     initialFrame = self.tableView.frame;
-    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        while(viewingEvent) {
+            [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple_event"];
+            NSLog(@"reload comments");
+            [NSThread sleepForTimeInterval:3];
+        }
+    });
 }
+
 -(void)viewWillDisappear:(BOOL)animated{
-     [self deregisterFromKeyboardNotifications];
+    viewingEvent=NO;
+    [self deregisterFromKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning
