@@ -364,7 +364,19 @@
     NSLog(@"set attributes of circle");
     circle.circleName = [dictionary objectForKey:@"circle_name"];
     circle.id = [dictionary objectForKey:@"id"];
-    circle.members = (NSArray*)[dictionary objectForKey:@"circle_members"];
+    NSArray *members = (NSArray*)[dictionary objectForKey:@"circle_members"];
+    NSLog(@"members: %@",members);
+    if([members count]>0){
+        NSLog(@"first member %@",members[0]);
+    }
+    NSMutableArray *addedMembers = [[NSMutableArray alloc] init];
+    for(int i =0; i<[members count];i++){
+        int member =[members[i] integerValue];
+        NSNumber *newMember = [NSNumber numberWithInt:member];
+        [addedMembers addObject:newMember];
+    }
+    NSLog(@"added members: %@", addedMembers);
+    circle.members=addedMembers;
     
     /*NSString *circleMembersURL = [@"api/circles/" stringByAppendingString:[circle.id stringValue]];
     circleMembersURL = [circleMembersURL stringByAppendingString:@"/circle_members"];

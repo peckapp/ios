@@ -28,7 +28,7 @@ static NSString * const PADevSecureAPIBaseURLString = @"https://thor.peckapp.com
         _sharedClient.requestSerializer = [AFJSONRequestSerializer serializer];
         [_sharedClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
         [_sharedClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        _sharedClient.responseSerializer = [AFJSONResponseSerializer serializer];
+        _sharedClient.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
     });
     
     return _sharedClient;
