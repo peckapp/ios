@@ -19,7 +19,7 @@
 
 @property NSIndexPath * selectedIndexPath;
 @property UIBarButtonItem * cancelCellButton;
-@property (strong, nonatomic) UITextField * keyboardTextField;
+@property (strong, nonatomic) UITextField * inviteTextField;
 @property (strong, nonatomic) UITextField * textCapture;
 
 @end
@@ -65,15 +65,21 @@ Peer* selectedPeer;
     [[PASyncManager globalSyncManager] updateCircleInfo];
     [self.tableView reloadData];
 
-    self.keyboardTextField = [[UITextField alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 44.0)];
-    self.keyboardTextField.backgroundColor = [UIColor whiteColor];
-    self.keyboardTextField.placeholder = @"Invite someone to the group";
-    [self.keyboardTextField setReturnKeyType:UIReturnKeySend];
+    UIView * accessory = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 44.0)];
+    accessory.backgroundColor = [UIColor whiteColor];
+
+    self.inviteTextField = [[UITextField alloc] initWithFrame:CGRectMake(8.0, 8.0, self.view.frame.size.width - 16.0 , 28.0)];
+    self.inviteTextField.backgroundColor = [UIColor whiteColor];
+    self.inviteTextField.placeholder = @"Invite someone to the group";
+    [self.inviteTextField setBorderStyle:UITextBorderStyleRoundedRect];
+    [self.inviteTextField setReturnKeyType:UIReturnKeySend];
+
+    [accessory addSubview:self.inviteTextField];
 
     // Stupid workaround for letting buttons capture keyboard input
     self.textCapture = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.textCapture.hidden = YES;
-    self.textCapture.inputAccessoryView = self.keyboardTextField;
+    self.textCapture.inputAccessoryView = accessory;
     [self.view addSubview:self.textCapture];
 }
 
@@ -149,7 +155,7 @@ Peer* selectedPeer;
     cell.circleTitle.text = c.circleName;
 
     cell.textCapture = self.textCapture;
-    cell.keyboardTextField = self.keyboardTextField;
+    cell.keyboardTextField = self.inviteTextField;
 
     /*if([cell.members count]!=[c.members count])
         [c.members enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {

@@ -22,7 +22,7 @@
 #import "UIImageView+AFNetworking.h"
 
 #define statusBarHeight 20
-#define searchBarHeight 40
+#define searchBarHeight 44
 #define cellHeight 88
 @interface PAEventsViewController ()
 
@@ -39,7 +39,7 @@
 static NSString * cellIdentifier = PAPrimaryIdentifier;
 static NSString * nibName = @"PAEventCell";
 
-UITableView *eventsTableView;
+UITableView * eventsTableView;
 UISearchBar * searchBar;
 
 //CGFloat  cellHeight;
