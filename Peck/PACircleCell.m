@@ -135,7 +135,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == self.profilesTableView) {
-        return [self.members count];
+        return [self.members count] + 1;
     }
     else if (tableView == self.commentsTableView) {
         return 0;
@@ -153,7 +153,10 @@
     if (tableView == self.profilesTableView) {
         UITableViewCell * cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
 
-        if (indexPath.row % 2 == 0) {
+        if (indexPath.row == [self.members count]) {
+            cell.backgroundColor = [UIColor blackColor];
+        }
+        else if (indexPath.row % 2 == 0) {
             cell.backgroundColor = [UIColor grayColor];
         }
         else {
@@ -181,6 +184,21 @@
     }
     else {
         return 44;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (tableView == self.profilesTableView) {
+        if (indexPath.row == [self.members count]) {
+            // TODO: Add a member
+        }
+    }
+    else if (tableView == self.commentsTableView) {
+
+    }
+    else {
+
     }
 }
 
