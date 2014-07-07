@@ -12,6 +12,8 @@
 #import "PASyncManager.h"
 #import "Comment.h"
 @interface PAEventInfoTableViewController ()
+
+-(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
 @property (nonatomic, retain) NSDateFormatter *formatter;
 
 @end
@@ -232,12 +234,14 @@ BOOL reloaded = NO;
     
     switch(type)
     {
-        case NSFetchedResultsChangeInsert:
+        case NSFetchedResultsChangeInsert:{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
             [tableView
-             insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+             //the cell must be inserted below the post cell
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
-            
+        }
         case NSFetchedResultsChangeDelete:
             [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
@@ -245,10 +249,11 @@ BOOL reloaded = NO;
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:[tableView cellForRowAtIndexPath:indexPath]
-                    atIndexPath:indexPath];
+        {
+            PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:indexPath];
+            [self configureCell:cell atIndexPath:indexPath];
             break;
-            
+        }
         case NSFetchedResultsChangeMove:
             [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
@@ -297,6 +302,7 @@ BOOL reloaded = NO;
 }
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath{
+    NSLog(@"configure cell");
     cell.parentTableView=self;
     if([indexPath row]==0){
         //if it is the first cell. This is where the user will add a comment
@@ -310,6 +316,9 @@ BOOL reloaded = NO;
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+        if(cell.expanded==NO){
+            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
+        }
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
         [cell.expandButton setHidden:NO];
@@ -419,17 +428,27 @@ BOOL reloaded = NO;
 -(void)postComment:(PACommentCell *)cell{
     NSLog(@"post comment");
     NSString *commentText = cell.commentTextView.text;
+    cell.commentTextView.text=@"";
+    [cell.commentTextView resignFirstResponder];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSNumber *userID = [defaults objectForKey:@"user_id"];
+    NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
     
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 commentText, @"content",
                                 userID, @"user_id",
                                 @"simple_event", @"category",
                                 [self.detailItem valueForKey:@"id" ],@"comment_from",
+                                institutionID, @"institution_id",
                                 nil];
     
     [[PASyncManager globalSyncManager] postComment:dictionary];
+    [self reloadComments];
+}
+
+-(void)reloadComments{
+    
+    
 }
 
 @end
