@@ -256,7 +256,7 @@
             //[self performSegueWithIdentifier:@"showEvents" sender:self];
             
             // parent of self is a navigation controller, its parent is the dropdown controller
-            [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectCurrentItem];
+            [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];
         }
         
     }

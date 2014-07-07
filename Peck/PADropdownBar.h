@@ -10,18 +10,18 @@
 
 @class PADropdownBar;
 @protocol PADropdownBarDelegate
-- (void) barDidSelectItemAtIndex:(NSInteger)index;
-- (void) barDidDeselectItemAtIndex:(NSInteger)index;
-- (void) barDidSlideRightToIndex:(NSInteger)index;
-- (void) barDidSlideLeftToIndex:(NSInteger)index;
+- (void)barDidSelectItemAtIndex:(NSInteger)index;
+- (void)barDidDeselectItemAtIndex:(NSInteger)index;
+- (void)barDidSlideRightToIndex:(NSInteger)index;
+- (void)barDidSlideLeftToIndex:(NSInteger)index;
 @end
 
 @interface PADropdownBar : UIView
 
 @property (nonatomic, strong) NSObject <PADropdownBarDelegate> * delegate;
 
-- (id) initWithFrame:(CGRect)frame itemCount:(NSUInteger)count;
-
-- (void)deselectCurrentItem;
+- (id)initWithFrame:(CGRect)frame itemCount:(NSUInteger)count;
+- (void)selectItemAtIndex:(NSInteger)index;
+- (void)deselectAllItems;
 
 @end
