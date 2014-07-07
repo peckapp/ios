@@ -494,6 +494,13 @@
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
+         NSDictionary *commentsDictionary = (NSDictionary*)JSON;
+         NSDictionary *commentAtrributes= [commentsDictionary objectForKey:@"comment"];
+         NSLog(@"comment atrributes: %@", commentAtrributes);
+         NSNumber *comment_from = [commentAtrributes objectForKey:@"comment_from"];
+         NSString *commentFromString = [comment_from stringValue];
+         NSString *categoty = [commentAtrributes objectForKey:@"category"];
+         [self updateCommentsFrom:commentFromString withCategory:categoty];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -516,7 +523,7 @@
         specificCommentURL = [specificCommentURL stringByAppendingString:@"comment_from="];
         specificCommentURL = [specificCommentURL stringByAppendingString:comment_from];
         
-        [[PASessionManager sharedClient] GET:commentsAPI
+        [[PASessionManager sharedClient] GET:specificCommentURL
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
