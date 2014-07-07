@@ -18,7 +18,10 @@
 #define background [UIColor whiteColor]
 
 @interface PADropdownBar ()
-@property (nonatomic) UIButton * currentButton;
+
+@property (nonatomic) NSInteger currentIndex;
+@property (strong, nonatomic) NSArray * buttons;
+
 @end
 
 @implementation PADropdownBar
@@ -41,6 +44,7 @@
                            [UIImage imageNamed:@"dropdown_circles.png"],
                            [UIImage imageNamed:@"dropdown_profile.png"]];
 
+        NSMutableArray * collector = [[NSMutableArray alloc] init];
         for (NSUInteger i = 0 ; i < count ; i++)
         {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -51,9 +55,11 @@
             button.backgroundColor = [UIColor clearColor];
             button.frame = CGRectMake(i * buttonWidth, statusBarHeight + buffer, buttonWidth, barHeight);
             [self addSubview:button];
+            [collector addObject:button];
         }
 
-        self.currentButton = nil;
+        self.buttons = [collector copy];
+        self.currentIndex = -1;
     }
     return self;
 }
@@ -61,45 +67,41 @@
 - (void) selectItem:(UIButton *)sender
 {
     NSInteger index = sender.tag;
-    [self.currentButton setSelected:NO];
-
-    if (self.currentButton) {
-        int currentIndex = (int)self.currentButton.tag;
-
-        if (currentIndex == index) {
-            NSLog(@"Secondary was already selected, switch to primary");
-            [self.delegate barDidDeselectItemAtIndex:index];
-            self.currentButton = nil;
-        }
-        else {
-            NSLog(@"A different secondary was selected, switch to that one");
-            if (index < currentIndex) {
-                [self.delegate barDidSlideLeftToIndex:index];
-            }
-            else {
-                [self.delegate barDidSlideRightToIndex:index];
-            }
-            self.currentButton = sender;
-            [sender setSelected:YES];
-        }
+    if (index == self.currentIndex) {
+        [self deselectAllItems];
     }
     else {
-        NSLog(@"Primary controller was selected, switch to secondary");
-        [self.delegate barDidSelectItemAtIndex:index];
-        self.currentButton = sender;
-        [sender setSelected:YES];
+        [self selectItemAtIndex:index];
     }
 }
 
-- (void)deselectCurrentItem
+- (void)selectItemAtIndex:(NSInteger)index
 {
-    NSInteger index = self.currentButton.tag;
-    
-    [self.currentButton setSelected:NO];
-    
-    [self.delegate barDidDeselectItemAtIndex:index];
-    
-    self.currentButton = nil;
+    if (self.currentIndex == -1) {
+        [self.delegate barDidSelectItemAtIndex:index];
+    }
+    else {
+        if (index < self.currentIndex) {
+            [self.delegate barDidSlideLeftToIndex:index];
+        }
+        else {
+            [self.delegate barDidSlideRightToIndex:index];
+        }
+
+        [self.buttons[self.currentIndex] setSelected:NO];
+    }
+
+    self.currentIndex = index;
+    [self.buttons[index] setSelected:YES];
+}
+
+- (void)deselectAllItems
+{
+    if (self.currentIndex != -1) {
+        [self.delegate barDidDeselectItemAtIndex:self.currentIndex];
+        [self.buttons[self.currentIndex] setSelected:NO];
+        self.currentIndex = -1;
+    }
 }
 
 @end

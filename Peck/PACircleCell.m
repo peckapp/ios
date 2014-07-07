@@ -126,7 +126,6 @@
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
     Peer *peer = mutableFetchResults[0];
     
-    
     return peer;
 }
 
