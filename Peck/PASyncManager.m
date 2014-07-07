@@ -364,41 +364,8 @@
     NSLog(@"set attributes of circle");
     circle.circleName = [dictionary objectForKey:@"circle_name"];
     circle.id = [dictionary objectForKey:@"id"];
-    NSArray *members = (NSArray*)[dictionary objectForKey:@"circle_members"];
-    NSLog(@"members: %@",members);
-    if([members count]>0){
-        NSLog(@"first member %@",members[0]);
-    }
-    NSMutableArray *addedMembers = [[NSMutableArray alloc] init];
-    for(int i =0; i<[members count];i++){
-        int member =[members[i] integerValue];
-        NSNumber *newMember = [NSNumber numberWithInt:member];
-        [addedMembers addObject:newMember];
-    }
-    NSLog(@"added members: %@", addedMembers);
-    circle.members=addedMembers;
-    
-    /*NSString *circleMembersURL = [@"api/circles/" stringByAppendingString:[circle.id stringValue]];
-    circleMembersURL = [circleMembersURL stringByAppendingString:@"/circle_members"];
-    [[PASessionManager sharedClient] GET:circleMembersURL
-                              parameters:[self authenticationParameters]
-                                 success:^
-     (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"circle members url: %@", circleMembersURL);
-         NSLog(@"the circle json: %@", JSON);
-         NSMutableArray *members = [NSMutableArray array];
-         NSDictionary *eventsDictionary = (NSDictionary*)JSON;
-         NSArray *postsFromResponse = [eventsDictionary objectForKey:@"circle_members"];
-         for(NSDictionary * peerAttributes in postsFromResponse){
-             NSNumber *memberID = [peerAttributes objectForKey:@"user_id"];
-             [members addObject:memberID];
-         }
-         circle.members = members;
-         NSLog(@"circle members: %@", members);
-     }
-                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
-                                 }];*/
+    circle.members = (NSArray*)[dictionary objectForKey:@"circle_members"];
+    //beware, circle.members is set to a strange looking array
 }
 
 #pragma mark - Events actions
