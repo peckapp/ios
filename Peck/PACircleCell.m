@@ -16,6 +16,8 @@
 
 @interface PACircleCell ()
 
+@property (strong, nonatomic) UIView * keyboardBar;
+@property (strong, nonatomic) UITextField * textCapture;
 
 @end
 
@@ -44,6 +46,14 @@
     self.profilesTableView.frame = CGRectMake(0, 44.0, self.frame.size.width, 44.0);
 
     self.members = [[NSMutableArray alloc] init];
+
+    self.keyboardBar = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.frame.size.width, 88.0)];
+
+    // Stupid workaround for letting buttons capture keyboard input
+    self.textCapture = [[UITextField alloc] initWithFrame:self.frame];
+    self.textCapture.hidden = YES;
+    self.textCapture.inputAccessoryView = self.keyboardBar;
+    [self addSubview:self.textCapture];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -92,8 +102,6 @@
     Peer * p = [self getPeer:member];
     [self.members addObject:p];
     [self.profilesTableView reloadData];
-
-    NSLog(@"Number of members: %d", [self.members count]);
 }
 
 - (void)expand
@@ -148,8 +156,13 @@
 // TODO: display profile images on table cells
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"circleSubcell"];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"circleSubcell"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+
     if (tableView == self.profilesTableView) {
-        UITableViewCell * cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
 
         if (indexPath.row == [self.members count]) {
             cell.backgroundColor = [UIColor blackColor];
@@ -189,7 +202,7 @@
 {
     if (tableView == self.profilesTableView) {
         if (indexPath.row == [self.members count]) {
-            // TODO: Add a member
+            [self.textCapture becomeFirstResponder];
         }
     }
     else if (tableView == self.commentsTableView) {
