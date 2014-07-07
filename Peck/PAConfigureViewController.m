@@ -50,12 +50,12 @@
             NSLog(@"executing callback for institution configurator");
             self.institutions = [self fetchInstitutions];
             [self.schoolPicker reloadAllComponents];
+            
+            [self selectCurrentDefaultIfExists];
         }
     }];
     
-    // sets the default if they never scroll the pickerview
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:[NSNumber numberWithInt:1] forKey:@"institution_id"];
+    [self selectCurrentDefaultIfExists];
 }
 
 - (void)didReceiveMemoryWarning
@@ -82,6 +82,28 @@
         // Deal with error...
     }
     return array;
+}
+
+- (void)selectCurrentDefaultIfExists
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber * instId = [defaults objectForKey:@"institution_id"];
+    if (instId != nil) {
+        // selects currently chosen institution
+        [schoolPicker selectRow:[self indexForInstitutionId:instId.integerValue] inComponent:0 animated:NO];
+    }
+}
+
+- (NSInteger)indexForInstitutionId:(NSInteger)instId
+{
+    int len = (int)self.institutions.count;
+    for (int pos = 0; pos < len; pos++) {
+        Institution * inst = (Institution*)self.institutions[pos];
+        if (inst.id.integerValue == instId) {
+            return pos;
+        }
+    }
+    return 0;
 }
 
 #pragma mark - Navigation
@@ -115,6 +137,12 @@
 
 - (IBAction)continueButton:(id)sender
 {
+    // sets the default if they never scroll the pickerview
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"institution_id"] == nil) {
+        [defaults setObject:[NSNumber numberWithInt:1] forKey:@"institution_id"];
+    }
+    
     PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
     // if this is root because of the initial download of the app

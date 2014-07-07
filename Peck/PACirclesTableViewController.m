@@ -25,7 +25,6 @@
 @implementation PACirclesTableViewController
 
 @synthesize circles = _circles;
-@synthesize tableView = _tableView;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -47,17 +46,14 @@ Peer* selectedPeer;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
 
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.cancelCellButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(cancelSelection)];
     
     self.title = @"Circles";
 
-    _tableView.delegate=self;
-    _tableView.dataSource=self;
+    self.tableView.delegate=self;
+    self.tableView.dataSource=self;
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error])
     {
@@ -66,7 +62,7 @@ Peer* selectedPeer;
     }
     
     [[PASyncManager globalSyncManager] updateCircleInfo];
-    [_tableView reloadData];
+    [self.tableView reloadData];
     
 }
 
@@ -87,9 +83,11 @@ Peer* selectedPeer;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
-    return [sectionInfo numberOfObjects]+1;
+    return [sectionInfo numberOfObjects];
 }
 
+
+// TODO: Initialize cells with members
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PACircleCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -105,50 +103,56 @@ Peer* selectedPeer;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(self.selectedIndexPath.row && indexPath.row == self.selectedIndexPath.row) {
+    if((self.selectedIndexPath != nil) && (indexPath.row == self.selectedIndexPath.row)) {
         return self.view.frame.size.height;
     }
     return cellHeight;
 }
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     self.selectedIndexPath = indexPath;
-    self.tableView.scrollEnabled = NO;
     self.navigationItem.leftBarButtonItem = self.cancelCellButton;
-    [tableView beginUpdates];
-    [tableView endUpdates];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    self.tableView.scrollEnabled = NO;
+
 }
 
+
+// TODO: configure cell so that it displays the correct label
 - (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+    /*
     if([indexPath row]==[_fetchedResultsController.fetchedObjects count]){
         cell.circleTitle.text = @"Create";
         
     }
-    else{
-        cell.delegate = self;
-        cell.scrollView.delegate = self;
-        cell.tag = [indexPath row];
-        Circle * tempCircle = [_fetchedResultsController objectAtIndexPath:indexPath];
-        //NSArray *members = tempCircle.members;
-        NSLog(@"Circle members: %@", tempCircle.members);
-        int numberOfMembers = (int)[tempCircle.members count];
-        cell.members = numberOfMembers;
-        cell.circleTitle.text = tempCircle.circleName;
-        [cell.scrollView setContentSize:CGSizeMake(80*(numberOfMembers), 0)];
-        NSLog(@"about to add the images");
-        [cell addImages: tempCircle.members];
-    }
+     */
+
+    /*
+    cell.delegate = self;
+    cell.scrollView.delegate = self;
+    cell.tag = [indexPath row];
+    Circle * tempCircle = [_fetchedResultsController objectAtIndexPath:indexPath];
+    //NSArray *members = tempCircle.members;
+    NSLog(@"Circle members: %@", tempCircle.members);
+    int numberOfMembers = (int)[tempCircle.members count];
+    cell.members = numberOfMembers;
+    cell.circleTitle.text = tempCircle.circleName;
+    [cell.scrollView setContentSize:CGSizeMake(80*(numberOfMembers), 0)];
+    NSLog(@"about to add the images");
+    [cell addImages: tempCircle.members];
+     */
 }
 
 - (void)cancelSelection
 {
     self.selectedIndexPath = nil;
     self.tableView.scrollEnabled = YES;
-    self.navigationItem.leftBarButtonItem = self.cancelCellButton;
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
     //[self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
@@ -194,16 +198,6 @@ Peer* selectedPeer;
         [self performSegueWithIdentifier:@"selectProfile" sender:self];
     }
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -304,18 +298,18 @@ Peer* selectedPeer;
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
-    [_tableView beginUpdates];
+    [self.tableView beginUpdates];
 }
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
     switch(type) {
         case NSFetchedResultsChangeInsert:
-            [_tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeDelete:
-            [_tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
 }
@@ -324,7 +318,7 @@ Peer* selectedPeer;
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
     NSLog(@"did change object");
-    UITableView *tableView = _tableView;
+    UITableView *tableView = self.tableView;
     
     switch(type)
     {
@@ -359,7 +353,7 @@ Peer* selectedPeer;
 
 - (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
 {
-    [_tableView endUpdates];
+    [self.tableView endUpdates];
 }
 
 
