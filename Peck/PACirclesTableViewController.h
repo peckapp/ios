@@ -17,7 +17,7 @@
 
 @end
 
-@interface PACirclesTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, PACirclesControllerDelegate>
+@interface PACirclesTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, PACirclesControllerDelegate, UITextFieldDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray * circles;
 

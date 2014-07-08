@@ -37,6 +37,8 @@ static NSString * cellIdentifier = PACirclesIdentifier;
 static NSString * nibName = @"PACircleCell";
 
 Peer* selectedPeer;
+CGRect initialFrame;
+int selectedCell;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -45,6 +47,13 @@ Peer* selectedPeer;
         // Custom initialization
     }
     return self;
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [self registerForKeyboardNotifications];
+    initialFrame=self.tableView.frame;
+}
+-(void)viewDidDisappear:(BOOL)animated{
+    [self deregisterFromKeyboardNotifications];
 }
 
 - (void)viewDidLoad
@@ -77,7 +86,8 @@ Peer* selectedPeer;
     self.inviteTextField.placeholder = @"Invite someone to the group";
     [self.inviteTextField setBorderStyle:UITextBorderStyleRoundedRect];
     [self.inviteTextField setReturnKeyType:UIReturnKeySend];
-
+    self.inviteTextField.delegate=self;
+    
     [accessory addSubview:self.inviteTextField];
 
     // Stupid workaround for letting buttons capture keyboard input
@@ -97,6 +107,14 @@ Peer* selectedPeer;
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - text field delegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    //TODO: this is where we will send a new member to a circle that is already created
+    NSLog(@"add a new member");
+    
+    return NO;
+}
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -109,6 +127,10 @@ Peer* selectedPeer;
 {
     id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
     return [sectionInfo numberOfObjects];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [self dismissKeyboard:self];
 }
 
 
@@ -187,6 +209,7 @@ Peer* selectedPeer;
     Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
     cell.circleTitle.text = c.circleName;
     cell.delegate = self;
+    cell.tag=[indexPath row];
 
     /*if([cell.members count]!=[c.members count])
         [c.members enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -238,7 +261,7 @@ Peer* selectedPeer;
 - (void)promptToAddMemberToCircleCell:(PACircleCell *)cell
 {
     NSLog(@"!!!");
-
+    selectedCell=cell.tag;
     // Look at how terrible this is.
     [self.textCapture becomeFirstResponder];
     [self.inviteTextField becomeFirstResponder];
@@ -367,6 +390,47 @@ Peer* selectedPeer;
 - (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
 {
     [self.tableView endUpdates];
+}
+
+#pragma mark - managing the keyboard notifications
+
+- (void)registerForKeyboardNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+}
+
+- (void)deregisterFromKeyboardNotifications {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+    
+}
+
+- (void)keyboardWasShown:(NSNotification *)notification {
+    if(CGRectEqualToRect(self.tableView.frame, initialFrame)){
+        NSDictionary* info = [notification userInfo];
+        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+        self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:selectedCell inSection:0];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+}
+
+- (void)keyboardWillBeHidden:(NSNotification *)notification {
+    self.tableView.frame = initialFrame;
 }
 
 
