@@ -18,10 +18,11 @@
 
 @interface PACirclesTableViewController ()
 
-@property NSIndexPath * selectedIndexPath;
-@property UIBarButtonItem * cancelCellButton;
+@property (strong, nonatomic) NSIndexPath * selectedIndexPath;
+@property (strong, nonatomic) UIBarButtonItem * cancelCellButton;
 @property (strong, nonatomic) HTAutocompleteTextField * inviteTextField;
 @property (strong, nonatomic) UITextField * textCapture;
+@property (strong, nonatomic) UITapGestureRecognizer * tapRecognizer;
 
 @end
 
@@ -84,6 +85,10 @@ Peer* selectedPeer;
     self.textCapture.hidden = YES;
     self.textCapture.inputAccessoryView = accessory;
     [self.view addSubview:self.textCapture];
+
+    self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
+    self.tapRecognizer.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:self.tapRecognizer];
 }
 
 - (void)didReceiveMemoryWarning
@@ -237,6 +242,13 @@ Peer* selectedPeer;
     // Look at how terrible this is.
     [self.textCapture becomeFirstResponder];
     [self.inviteTextField becomeFirstResponder];
+}
+
+- (void)dismissKeyboard:(id)sender
+{
+    NSLog(@"???");
+    [self.inviteTextField resignFirstResponder];
+    [self.textCapture resignFirstResponder];
 }
 
 #pragma mark - Navigation
