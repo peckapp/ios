@@ -181,10 +181,7 @@
 {
     if (tableView == self.profilesTableView) {
         if (indexPath.row == [self.members count]) {
-
-            // Look at how terrible this is.
-            [self.textCapture becomeFirstResponder];
-            [self.keyboardTextField becomeFirstResponder];
+            [self.delegate promptToAddMemberToCircleCell:self];
         }
     }
     else if (tableView == self.commentsTableView) {

@@ -144,6 +144,27 @@ Peer* selectedPeer;
     self.tableView.scrollEnabled = NO;
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }
+}
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+
+    [super setEditing:editing animated:animated];
+    [self.tableView setEditing:editing animated:YES];
+    if (editing) {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    } else {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
+}
+
 - (void)cancelSelection
 {
     self.tableView.scrollEnabled = YES;
@@ -160,9 +181,7 @@ Peer* selectedPeer;
 {
     Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
     cell.circleTitle.text = c.circleName;
-
-    cell.textCapture = self.textCapture;
-    cell.keyboardTextField = self.inviteTextField;
+    cell.delegate = self;
 
     /*if([cell.members count]!=[c.members count])
         [c.members enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -211,44 +230,14 @@ Peer* selectedPeer;
     }
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)promptToAddMemberToCircleCell:(PACircleCell *)cell
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    NSLog(@"!!!");
+
+    // Look at how terrible this is.
+    [self.textCapture becomeFirstResponder];
+    [self.inviteTextField becomeFirstResponder];
 }
-
-- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
-    
-    [super setEditing:editing animated:animated];
-    [self.tableView setEditing:editing animated:YES];
-    if (editing) {
-        self.navigationItem.rightBarButtonItem.enabled = NO;
-    } else {
-        self.navigationItem.rightBarButtonItem.enabled = YES;
-    }
-}
-
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Navigation
 

@@ -11,6 +11,7 @@
 #import "PACircleScrollView.h"
 #import "Peer.h"
 
+@class PACircleViewController;
 @protocol PACirclePeersControllerDelegate <NSObject>
 
 -(void)removePeer: (int) peer;

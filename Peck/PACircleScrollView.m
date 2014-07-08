@@ -62,7 +62,7 @@
     peer = (peer/80);
     UIView *cell = [self findSuperViewWithClass:[PACircleCell class]];
     NSLog(@"cell tag: %li", (long)cell.tag);
-    [self.delegate profile:peer withCircle:cell.tag];
+    //[self.delegate profile:peer withCircle:cell.tag];
     //[self.delegate removePeer:peer];
 }
 
@@ -83,7 +83,7 @@
     CGPoint tapPoint = [sender locationInView:self];
     int peer = (int) tapPoint.x;
     peer = (peer/80);
-    [self.delegate removePeer:peer];
+    //[self.delegate removePeer:peer];
 }
 
 -(void)addPeer:(UIImage*)image WithName:(NSString*)name{
