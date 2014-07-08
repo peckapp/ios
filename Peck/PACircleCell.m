@@ -13,6 +13,7 @@
 #import "Circle.h"
 #import "PACircleScrollView.h"
 #import "Peer.h"
+#import "PACommentCell.h"
 
 @interface PACircleCell ()
 
@@ -23,6 +24,8 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+NSString * commentCellIdentifier = @"CircleCommentCell";
+NSString * commentCellNibName = @"PACommentCell";
 
 - (void)awakeFromNib
 {
@@ -42,6 +45,10 @@
     self.profilesTableView.transform = CGAffineTransformMakeRotation(-M_PI_2);
     self.profilesTableView.frame = CGRectMake(0, 44.0, self.frame.size.width, 44.0);
 
+    self.commentsTableView.delegate=self;
+    self.commentsTableView.dataSource=self;
+    
+    
     self.members = [[NSMutableArray alloc] init];
 }
 
@@ -118,7 +125,7 @@
         return [self.members count] + 1;
     }
     else if (tableView == self.commentsTableView) {
-        return 0;
+        return 3;
     }
     else {
         return 0;
@@ -135,13 +142,14 @@
 // TODO: display profile images on table cells
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"circleSubcell"];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"circleSubcell"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
-
     if (tableView == self.profilesTableView) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"circleSubcell"];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"circleSubcell"];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+
+    
 
         if (indexPath.row == [self.members count]) {
             cell.backgroundColor = [UIColor blackColor];
@@ -157,11 +165,24 @@
         return cell;
     }
     else if (tableView == self.commentsTableView) {
-        return nil;
+        PACommentCell *cell = [tableView dequeueReusableCellWithIdentifier:commentCellIdentifier];
+        if (cell == nil) {
+            [tableView registerNib:[UINib nibWithNibName:commentCellNibName bundle:nil] forCellReuseIdentifier:commentCellIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:commentCellIdentifier];
+        }
+        [self configureCell:cell atIndexPath:indexPath];
+        return cell;
+
+        
     }
     else {
         return nil;
     }
+}
+
+-(void)configureCell:(PACommentCell *)cell atIndexPath:(NSIndexPath *)indexPath{
+    
+    cell.nameLabel.text = @"John Doe";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -170,7 +191,7 @@
         return 44;
     }
     else if (tableView == self.commentsTableView) {
-        return 44;
+        return 120;
     }
     else {
         return 44;
