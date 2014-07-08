@@ -12,6 +12,7 @@
 #import "Circle.h"
 #import "PASyncManager.h"
 #import "PAFriendProfileViewController.h"
+#import "HTAutocompleteManager.h"
 
 #define cellHeight 100.0
 
@@ -19,7 +20,7 @@
 
 @property NSIndexPath * selectedIndexPath;
 @property UIBarButtonItem * cancelCellButton;
-@property (strong, nonatomic) UITextField * inviteTextField;
+@property (strong, nonatomic) HTAutocompleteTextField * inviteTextField;
 @property (strong, nonatomic) UITextField * textCapture;
 
 @end
@@ -68,7 +69,9 @@ Peer* selectedPeer;
     UIView * accessory = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 44.0)];
     accessory.backgroundColor = [UIColor whiteColor];
 
-    self.inviteTextField = [[UITextField alloc] initWithFrame:CGRectMake(8.0, 8.0, self.view.frame.size.width - 16.0 , 28.0)];
+    self.inviteTextField = [[HTAutocompleteTextField alloc] initWithFrame:CGRectMake(8.0, 8.0, self.view.frame.size.width - 16.0 , 28.0)];
+    self.inviteTextField.autocompleteDataSource = [HTAutocompleteManager sharedManager];
+    self.inviteTextField.autocompleteType = HTAutocompleteTypeName;
     self.inviteTextField.backgroundColor = [UIColor whiteColor];
     self.inviteTextField.placeholder = @"Invite someone to the group";
     [self.inviteTextField setBorderStyle:UITextBorderStyleRoundedRect];
@@ -126,6 +129,10 @@ Peer* selectedPeer;
     return cellHeight;
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -162,11 +169,6 @@ Peer* selectedPeer;
             [cell addMember:c.members[idx]];
     }];*/
     [cell updateCircleMembers:c.members];
-}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return NO;
 }
 
 - (IBAction)addCircle:(id)sender
