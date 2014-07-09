@@ -49,6 +49,9 @@ NSString * commentCellNibName = @"PACommentCell";
     self.commentsTableView.delegate=self;
     self.commentsTableView.dataSource=self;
     
+    NSLog(@"frame height: %f", self.frame.size.height);
+    //self.commentsTableView.frame = CGRectMake(0, 100, self.frame.size.width, self.frame.size.height-200);
+    
     
     self.members = [[NSMutableArray alloc] init];
 }
