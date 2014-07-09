@@ -285,8 +285,7 @@ BOOL reloaded = NO;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    //return [[_fetchedResultsController sections] count];
-    return 1;
+    return [[_fetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -326,16 +325,13 @@ BOOL reloaded = NO;
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
-        if(cell.expanded==NO){
-            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
-        }
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
         [cell.expandButton setHidden:NO];
         [cell.postButton setHidden:YES];
         cell.nameLabel.text = @"John Doe";
         cell.tag = [indexPath row];
-    cell.commentTextView.text = tempComment.content;
+        cell.commentTextView.text = tempComment.content;
     }
     
 }

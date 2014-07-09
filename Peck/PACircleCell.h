@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "PACirclesTableViewController.h"
 #import "PACircleScrollView.h"
+#import "Circle.h"
 
-@interface PACircleCell : UITableViewCell <UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface PACircleCell : UITableViewCell <NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
 @property (weak, nonatomic) IBOutlet UITableView *profilesTableView;
@@ -20,12 +21,15 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @property (weak, nonatomic) IBOutlet UITableView *commentsTableView;
 @property (strong, nonatomic) NSMutableArray *members;
 
 @property (strong, nonatomic) UITextField * textCapture;
 @property (strong, nonatomic) UITextField * keyboardTextField;
+
+@property (strong, nonatomic) Circle *circle;
 
 - (void)addMember:(NSNumber *)member;
 -(void)updateCircleMembers:(NSArray *)circleMembers;

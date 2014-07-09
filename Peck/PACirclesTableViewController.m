@@ -13,6 +13,7 @@
 #import "PASyncManager.h"
 #import "PAFriendProfileViewController.h"
 #import "HTAutocompleteManager.h"
+#import "PACommentCell.h"
 
 #define cellHeight 100.0
 
@@ -38,7 +39,9 @@ static NSString * nibName = @"PACircleCell";
 
 Peer* selectedPeer;
 CGRect initialFrame;
+CGRect initialCommentTableFrame;
 int selectedCell;
+BOOL viewingCell;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -141,6 +144,7 @@ int selectedCell;
     if (cell == nil) {
         [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil]  forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        initialCommentTableFrame=cell.commentsTableView.frame;
     }
     
     [self configureCell:cell atIndexPath:indexPath];
@@ -163,12 +167,14 @@ int selectedCell;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    viewingCell=YES;
     self.selectedIndexPath = indexPath;
     self.navigationItem.leftBarButtonItem = self.cancelCellButton;
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     self.tableView.scrollEnabled = NO;
+    
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -194,6 +200,8 @@ int selectedCell;
 
 - (void)cancelSelection
 {
+    [self dismissCommentKeyboard];
+    viewingCell=NO;
     self.tableView.scrollEnabled = YES;
     self.navigationItem.leftBarButtonItem = nil;
     [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
@@ -215,6 +223,7 @@ int selectedCell;
         [c.members enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [cell addMember:c.members[idx]];
     }];*/
+    cell.circle=c;
     [cell updateCircleMembers:c.members];
 }
 
@@ -420,18 +429,40 @@ int selectedCell;
 }
 
 - (void)keyboardWasShown:(NSNotification *)notification {
-    if(CGRectEqualToRect(self.tableView.frame, initialFrame)){
-        NSDictionary* info = [notification userInfo];
-        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    NSDictionary* info = [notification userInfo];
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    if(CGRectEqualToRect(self.tableView.frame, initialFrame)&&viewingCell==NO){
         self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:selectedCell inSection:0];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
+    else if(viewingCell){
+        PACircleCell *circleCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+        if(CGRectEqualToRect(circleCell.commentsTableView.frame,initialCommentTableFrame)){
+            NSLog(@"shorten the frame");
+            //initialCommentTableFrame=circleCell.commentsTableView.frame;
+            CGRect modifiedFrame = circleCell.commentsTableView.frame;
+            modifiedFrame.size = CGSizeMake(modifiedFrame.size.width, modifiedFrame.size.height-keyboardSize.height);
+            circleCell.commentsTableView.frame = modifiedFrame;
+        }
+    }
 }
 
 - (void)keyboardWillBeHidden:(NSNotification *)notification {
+    if(viewingCell){
+        PACircleCell *circleCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+        circleCell.commentsTableView.frame=initialCommentTableFrame;
+    }
+    
     self.tableView.frame = initialFrame;
 }
 
+-(void)dismissCommentKeyboard{
+    PACircleCell *circleCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    PACommentCell *commentCell = (PACommentCell*)[circleCell.commentsTableView cellForRowAtIndexPath:indexPath];
+    [commentCell.commentTextView resignFirstResponder];
+}
 
 @end

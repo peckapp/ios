@@ -14,6 +14,7 @@
 #import "PACircleScrollView.h"
 #import "Peer.h"
 #import "PACommentCell.h"
+#import "Comment.h"
 
 @interface PACircleCell ()
 
@@ -125,7 +126,8 @@ NSString * commentCellNibName = @"PACommentCell";
         return [self.members count] + 1;
     }
     else if (tableView == self.commentsTableView) {
-        return 3;
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
+        return [sectionInfo numberOfObjects]+1;
     }
     else {
         return 0;
@@ -181,7 +183,25 @@ NSString * commentCellNibName = @"PACommentCell";
 }
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath:(NSIndexPath *)indexPath{
-    
+    cell.parentTableViewCell=self;
+    if([indexPath row]==0){
+        [cell.commentTextView setEditable:YES];
+        [cell.commentTextView setScrollEnabled:YES];
+        [cell.postButton setHidden:NO];
+        cell.commentTextView.text = @"";
+        cell.nameLabel.text = @"John Doe";
+        [cell.expandButton setHidden:YES];
+    }
+    else{
+        Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+        [cell.commentTextView setEditable:NO];
+        [cell.commentTextView setScrollEnabled:NO];
+        [cell.expandButton setHidden:NO];
+        [cell.postButton setHidden:YES];
+        cell.nameLabel.text = @"John Doe";
+        cell.tag = [indexPath row];
+        cell.commentTextView.text = tempComment.content;
+    }
     cell.nameLabel.text = @"John Doe";
 }
 
@@ -211,6 +231,119 @@ NSString * commentCellNibName = @"PACommentCell";
     else {
 
     }
+}
+#pragma mark - managing the fetched results controller
+
+-(NSFetchedResultsController *)fetchedResultsController{
+    NSLog(@"configuring the fetched results controller");
+    if(_fetchedResultsController){
+        return _fetchedResultsController;
+    }
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Comment" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    
+    NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
+    
+    NSPredicate *commentFromPredicate = [NSPredicate predicateWithFormat:@"comment_from = %@", [self.circle valueForKey:@"id"]];
+    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", @"circle"];
+    
+    [predicateArray addObject:commentFromPredicate];
+    [predicateArray addObject:categoryPredicate];
+    
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    [fetchRequest setPredicate:compoundPredicate];
+    
+    // Set the batch size to a suitable number.
+    [fetchRequest setFetchBatchSize:20];
+    
+    // Edit the sort key as appropriate.
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"created_at" ascending:NO];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    // Edit the section name key path and cache name if appropriate.
+    // nil for section name key path means "no sections".
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
+                                                             initWithFetchRequest:fetchRequest
+                                                             managedObjectContext:_managedObjectContext
+                                                             sectionNameKeyPath:nil //this needs to be nil
+                                                             cacheName:nil];
+    
+    aFetchedResultsController.delegate = self;
+    self.fetchedResultsController = aFetchedResultsController;
+    
+    return _fetchedResultsController;
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.commentsTableView beginUpdates];
+}
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [self.commentsTableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.commentsTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{
+    NSLog(@"did change object");
+    UITableView *tableView = self.commentsTableView;
+    
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
+            [tableView
+             //the cell must be inserted below the post cell
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        }
+        case NSFetchedResultsChangeDelete:
+            [tableView
+             deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+        {
+            PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:indexPath];
+            [self configureCell:cell atIndexPath:indexPath];
+            break;
+        }
+        case NSFetchedResultsChangeMove:
+            [tableView
+             deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            
+            [tableView
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
+{
+    [self.commentsTableView endUpdates];
 }
 
 @end
