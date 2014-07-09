@@ -66,6 +66,7 @@ CGRect initialTableViewRect;
 
 -(void)viewWillAppear:(BOOL)animated{
     [[PASyncManager globalSyncManager] updateEventInfo];
+    [[PASyncManager globalSyncManager] updateDiningInfo];
     NSLog(@"view will appear (events)");
     showingDetail = NO;
     [self registerForKeyboardNotifications];
@@ -347,8 +348,12 @@ CGRect initialTableViewRect;
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if(tableView == eventsTableView){
+    Event *selectedEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
+    if([selectedEvent.type isEqualToString:@"simple"]){
         [self performSegueWithIdentifier:@"showEventDetail" sender:self];
+    }
+    else if([selectedEvent.type isEqualToString:@"dining"]){
+        [self performSegueWithIdentifier:@"showDiningDetail" sender:self];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -384,6 +389,12 @@ CGRect initialTableViewRect;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showEventDetail"]) {
+        showingDetail=YES;
+        NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
+        NSManagedObject *object;
+        object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        [[segue destinationViewController] setDetailItem:object];
+    }else if([[segue identifier] isEqualToString:@"showDiningDetail"]){
         showingDetail=YES;
         NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
         NSManagedObject *object;

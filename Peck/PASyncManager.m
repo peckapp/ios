@@ -18,6 +18,7 @@
 #import "Explore.h"
 #import "Institution.h"
 #import "Comment.h"
+#import "PACirclesTableViewController.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -284,12 +285,12 @@
     
 }
 
--(void)postCircleMember:(NSDictionary *) dictionary{
+-(void)postCircleMember:(NSDictionary *) dictionary forCircle:(Circle*)circle withSender:(id)sender{
     [[PASessionManager sharedClient] POST:circle_membersAPI
                                parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         
+         [self updateModifiedCircle:circle withSender:sender];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -297,35 +298,26 @@
     
 
 }
+-(void)updateModifiedCircle:(Circle*)circle withSender:(id)sender{
+    NSString* circleMembersURL = [circle_membersAPI stringByAppendingString:@"?"];
+    circleMembersURL = [circleMembersURL stringByAppendingString:@"circle_id="];
+    circleMembersURL = [circleMembersURL stringByAppendingString:[circle.id stringValue]];
+    [[PASessionManager sharedClient] GET:circleMembersURL
+                              parameters:[self authenticationParameters]
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"The JSON: %@",JSON);
+         NSDictionary *dictionary = (NSDictionary*)JSON ;
+         NSArray*members = [dictionary objectForKey:@"circle_members"];
+         circle.members = members;
+         PACirclesTableViewController *tableViewSender = (PACirclesTableViewController*)sender;
+         [tableViewSender.tableView reloadData];
+     }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                 }];
+}
 
-/*-(void)addMembers:(NSArray *)members ToCircle:(NSNumber*)circleID
-{
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber * userID = [defaults objectForKey:@"user_id"];
-    
-    for(int i=0; i<[members count]; i++){
-        Peer *tempPeer = members[i];
-        NSNumber *peerID = tempPeer.id;
-        NSDictionary *tempDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        peerID, @"user_id",
-                                        userID, @"invited_by",
-                                        circleID, @"circle_id",
-                                        nil];
-        
-        NSString *circleMembersURL = [@"api/circles/" stringByAppendingString:[circleID stringValue]];
-        circleMembersURL = [circleMembersURL stringByAppendingString:@"/circle_members"];
-        
-        [[PASessionManager sharedClient] POST:circleMembersURL
-                                   parameters:[self applyWrapper:@"circle_member" toDictionary:tempDictionary]
-                                      success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                          NSLog(@"add circle members success: %@", JSON);
-                                      }
-                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                          NSLog(@"ERROR: %@",error);
-                                      }];
-        
-    }
-}*/
 
 -(void)updateCircleInfo
 {
@@ -342,17 +334,15 @@
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              //NSLog(@"update circle info JSON: %@",JSON);
-             NSDictionary *eventsDictionary = (NSDictionary*)JSON;
-             NSArray *postsFromResponse = [eventsDictionary objectForKey:@"circles"];
-             NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
-             for (NSDictionary *eventAttributes in postsFromResponse) {
-                 NSNumber *newID = [eventAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Circle"];
-                 if(!eventAlreadyExists){
+             NSDictionary *circlesDictionary = (NSDictionary*)JSON;
+             NSArray *postsFromResponse = [circlesDictionary objectForKey:@"circles"];
+             for (NSDictionary *circleAttributes in postsFromResponse) {
+                 NSNumber *newID = [circleAttributes objectForKey:@"id"];
+                 BOOL circleAlreadyExists = [self objectExists:newID withType:@"Circle"];
+                 if(!circleAlreadyExists){
                      NSLog(@"about to add the circle");
                      Circle * circle = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInCircle:circle withDictionary:eventAttributes];
-                     [mutableEvents addObject:circle];
+                     [self setAttributesInCircle:circle withDictionary:circleAttributes];
                      //NSLog(@"CIRCLE: %@",circle);
                  }
              }
@@ -404,6 +394,49 @@
     Peer *peer = mutableFetchResults[0];
     
     return peer;
+}
+#pragma mark - Dining actions
+
+-(void)updateDiningInfo{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+        
+        NSLog(@"in secondary thread to update dining");
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [appdelegate managedObjectContext];
+        
+        [[PASessionManager sharedClient] GET:dining_opportunitiesAPI
+                                  parameters:[self authenticationParameters]
+                                     success:^
+         (NSURLSessionDataTask * __unused task, id JSON) {
+             //NSLog(@"JSON: %@",JSON);
+             NSDictionary *diningDictionary = (NSDictionary*)JSON;
+             NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_opportunities"];
+             //NSLog(@"Update Event response: %@", postsFromResponse);
+             for (NSDictionary *diningAttributes in postsFromResponse){
+                 NSNumber *newID = [diningAttributes objectForKey:@"id"];
+                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event"];
+                 if(!eventAlreadyExists){
+                     //NSLog(@"adding an event to Core Data");
+                     Event * diningEvent = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
+                     [self setAttributesInDiningEvent:diningEvent withDictionary:diningAttributes];
+                     //NSLog(@"EVENT: %@",event);
+                 }
+             }
+         }
+                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                         NSLog(@"ERROR: %@",error);
+                                     }];
+    });
+    
+}
+
+-(void)setAttributesInDiningEvent:(Event*)diningEvent withDictionary:(NSDictionary*)dictionary{
+    diningEvent.title= [dictionary objectForKey:@"dining_opportunity_type"];
+    diningEvent.start_date = [NSDate date];
+    diningEvent.end_date = [NSDate date];
+    diningEvent.type = @"dining";
+    diningEvent.id = [dictionary objectForKey:@"id"];
 }
 
 
@@ -492,6 +525,7 @@
     event.descrip = [dictionary objectForKey:@"event_description"];
     //event.location = [dictionary objectForKey:@"institution_id"];
     event.id = [dictionary objectForKey:@"id"];
+    event.type = @"simple";
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
     
     NSDateFormatter * df = [[NSDateFormatter alloc] init];
@@ -585,7 +619,7 @@
     NSFetchRequest * request = [[NSFetchRequest alloc] init];
     NSEntityDescription *objects = [NSEntityDescription entityForName:type inManagedObjectContext:_managedObjectContext];
     [request setEntity:objects];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id == %@", newID];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id = %@", newID];
     [request setPredicate:predicate];
     
     NSError *error = nil;

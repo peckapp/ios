@@ -63,12 +63,13 @@
 		A433EAA6195B53D800DAA201 /* PACircleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA5195B53D800DAA201 /* PACircleScrollView.m */; };
 		A459A83A195DF37400D1FB0E /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = A459A839195DF37400D1FB0E /* Peer.m */; };
 		A459A83D195DF4B800D1FB0E /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A459A83C195DF4B800D1FB0E /* Message.m */; };
-		A459A840195DF4DD00D1FB0E /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A459A83F195DF4DD00D1FB0E /* Event.m */; };
 		A459A843195DF50200D1FB0E /* Circle.m in Sources */ = {isa = PBXBuildFile; fileRef = A459A842195DF50200D1FB0E /* Circle.m */; };
 		A463F384194B959800ED441F /* PACircleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F382194B959800ED441F /* PACircleCell.m */; };
 		A463F385194B959800ED441F /* PACircleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A463F383194B959800ED441F /* PACircleCell.xib */; };
 		A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */; };
 		A463F38F19507FA300ED441F /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = A463F38E19507FA300ED441F /* Property List.plist */; };
+		A46F08FD196DBD7300CFA5D0 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F08FC196DBD7300CFA5D0 /* Event.m */; };
+		A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */; };
 		A4773C8019589E8200AB9831 /* PAEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C7F19589E8200AB9831 /* PAEvents.m */; };
 		A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C821958A27F00AB9831 /* PAEventBST.m */; };
 		A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C881959D2FE00AB9831 /* PASyncManager.m */; };
@@ -228,8 +229,6 @@
 		A459A839195DF37400D1FB0E /* Peer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peer.m; sourceTree = "<group>"; };
 		A459A83B195DF4B800D1FB0E /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		A459A83C195DF4B800D1FB0E /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		A459A83E195DF4DD00D1FB0E /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
-		A459A83F195DF4DD00D1FB0E /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A459A841195DF50200D1FB0E /* Circle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Circle.h; sourceTree = "<group>"; };
 		A459A842195DF50200D1FB0E /* Circle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Circle.m; sourceTree = "<group>"; };
 		A463F381194B959800ED441F /* PACircleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleCell.h; sourceTree = "<group>"; };
@@ -238,6 +237,10 @@
 		A463F386194F3A4B00ED441F /* PAFriendProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFriendProfileViewController.h; sourceTree = "<group>"; };
 		A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFriendProfileViewController.m; sourceTree = "<group>"; };
 		A463F38E19507FA300ED441F /* Property List.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Property List.plist"; sourceTree = "<group>"; };
+		A46F08FB196DBD7300CFA5D0 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		A46F08FC196DBD7300CFA5D0 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
+		A46F08FF196DC11800CFA5D0 /* PADiningPlacesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningPlacesTableViewController.h; sourceTree = "<group>"; };
+		A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningPlacesTableViewController.m; sourceTree = "<group>"; };
 		A4773C7E19589E8200AB9831 /* PAEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEvents.h; sourceTree = "<group>"; };
 		A4773C7F19589E8200AB9831 /* PAEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEvents.m; sourceTree = "<group>"; };
 		A4773C811958A27F00AB9831 /* PAEventBST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEventBST.h; sourceTree = "<group>"; };
@@ -354,8 +357,6 @@
 		8629250D193CBB370057CA41 /* Post */ = {
 			isa = PBXGroup;
 			children = (
-				A459A83E195DF4DD00D1FB0E /* Event.h */,
-				A459A83F195DF4DD00D1FB0E /* Event.m */,
 				A459A83B195DF4B800D1FB0E /* Message.h */,
 				A459A83C195DF4B800D1FB0E /* Message.m */,
 				86292510193CBE000057CA41 /* PAPostViewController.h */,
@@ -481,6 +482,7 @@
 		86D5980A193768BF00F38654 /* Peck */ = {
 			isa = PBXGroup;
 			children = (
+				A46F08FE196DC0E700CFA5D0 /* Dining */,
 				A4E21F611965982C002A9800 /* Comment */,
 				DD89816E195CAFF20079CDC9 /* Icon-40@2x.png */,
 				DD89816F195CAFF20079CDC9 /* Icon-60@2x.png */,
@@ -569,6 +571,15 @@
 			name = AutocompleteManager;
 			sourceTree = "<group>";
 		};
+		A46F08FE196DC0E700CFA5D0 /* Dining */ = {
+			isa = PBXGroup;
+			children = (
+				A46F08FF196DC11800CFA5D0 /* PADiningPlacesTableViewController.h */,
+				A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */,
+			);
+			name = Dining;
+			sourceTree = "<group>";
+		};
 		A4B772DD1945F8DB00A31252 /* Configure */ = {
 			isa = PBXGroup;
 			children = (
@@ -605,6 +616,8 @@
 		DDDAEDE419479665004CE102 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				A46F08FB196DBD7300CFA5D0 /* Event.h */,
+				A46F08FC196DBD7300CFA5D0 /* Event.m */,
 				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
 				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
 				86292524193CBFF80057CA41 /* PAEventCell.h */,
@@ -859,14 +872,15 @@
 				A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */,
 				86D59811193768BF00F38654 /* main.m in Sources */,
 				DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */,
+				A46F08FD196DBD7300CFA5D0 /* Event.m in Sources */,
 				A4E21F601964A749002A9800 /* PAEventInfoTableViewController.m in Sources */,
-				A459A840195DF4DD00D1FB0E /* Event.m in Sources */,
 				863843CF193CB393004110F5 /* PAProfileTableViewController.m in Sources */,
 				A4794C201962F103002BD272 /* Explore.m in Sources */,
 				A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */,
 				A459A843195DF50200D1FB0E /* Circle.m in Sources */,
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,
 				A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */,
+				A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */,
 				A459A83D195DF4B800D1FB0E /* Message.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,

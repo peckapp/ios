@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Circle.h"
 
 @interface PASyncManager : NSObject
 
@@ -27,14 +28,17 @@
 // methods for syncing institutions for the configuration phase
 -(void)updateAvailableInstitutionsWithCallback:(void(^)(BOOL sucess))callbackBlock;
 
-// methods for updating the locally stored events
+// methods for updating events
 -(void)updateEventInfo;
 -(void)postEvent:(NSDictionary *) dictionary;
 -(void)deleteEvent:(NSNumber*)eventID;
 
+// methods for updating dining
+-(void)updateDiningInfo;
+
 // methods for updating circles
 -(void)postCircle: (NSDictionary *) dictionary;
--(void)postCircleMember:(NSDictionary *) dictionary;
+-(void)postCircleMember:(NSDictionary *) dictionary forCircle:(Circle*)circle withSender:(id)sender;
 -(void)updateCircleInfo;
 
 //methods for comments

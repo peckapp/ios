@@ -610,43 +610,40 @@
                     </navigationItem>
                     <size key="freeformSize" width="320" height="568"/>
                     <connections>
-                        <segue destination="Ah7-4n-0Wa" kind="push" identifier="showEventDetailOld" id="Zjz-hZ-Td6"/>
                         <segue destination="rpt-SB-vsa" kind="push" identifier="showEventDetail" id="bE3-cA-K6X"/>
+                        <segue destination="sCG-OO-lYg" kind="push" identifier="showDiningDetail" id="ryJ-rI-fQC"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Cn-md-YlS" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2611" y="2446"/>
         </scene>
-        <!--Event Info View Controller - Detail-->
-        <scene sceneID="Cn3-H9-jdl">
+        <!--Dining Places Table View Controller-->
+        <scene sceneID="y0w-kJ-4Bb">
             <objects>
-                <viewController title="Detail" id="Ah7-4n-0Wa" customClass="PAEventInfoViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="MMQ-IT-qOo">
+                <tableViewController id="sCG-OO-lYg" customClass="PADiningPlacesTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7nE-HW-BdO">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image-placeholder.png" id="WcH-m6-uGK">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="233"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="date and time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dgm-Xq-AXV">
-                                <rect key="frame" x="20" y="241" width="280" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Detail" id="cra-N8-TIN"/>
-                    <connections>
-                        <outlet property="dateLabel" destination="dgm-Xq-AXV" id="i9n-M1-e4q"/>
-                        <outlet property="photoView" destination="WcH-m6-uGK" id="PkQ-3N-SRB"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lrm-kH-fPn" sceneMemberID="firstResponder"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="JKI-FQ-dM9">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JKI-FQ-dM9" id="H88-1P-3uA">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="sCG-OO-lYg" id="7Ed-wK-upt"/>
+                            <outlet property="delegate" destination="sCG-OO-lYg" id="Jm5-Jn-OGB"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="988-Cr-e3D"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EqN-yo-LIY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2112" y="2446"/>
         </scene>

@@ -155,7 +155,7 @@ BOOL viewingCircles;
                                    instituion_id, @"institution_id",
                                    circle_id, @"circle_id",
                                     nil];
-        [[PASyncManager globalSyncManager] postCircleMember:newMember];
+        [[PASyncManager globalSyncManager] postCircleMember:newMember forCircle:selectedCircle withSender:self];
     }
 
     
