@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 #import "PACoreDataProtocol.h"
+#import "Peer.h"
+@class PACommentCell;
 
 @protocol PACirclesControllerDelegate <UITableViewDelegate>
 
@@ -26,5 +28,8 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+-(void)dismissCommentKeyboard;
+-(void)postComment:(PACommentCell*)cell;
+-(void)showProfileOf:(Peer*)member;
 @end
 

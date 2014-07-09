@@ -54,7 +54,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    profilePicture.image = [UIImage imageNamed:@"Silhouette.png"];
     [blurbTextView setEditable:NO];
     blurbTextView.layer.borderWidth=.5f;
     blurbTextView.layer.borderColor = [[UIColor grayColor] CGColor];

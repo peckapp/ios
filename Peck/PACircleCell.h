@@ -30,7 +30,9 @@
 @property (strong, nonatomic) UITextField * keyboardTextField;
 
 @property (strong, nonatomic) Circle *circle;
+@property (weak, nonatomic) UITableViewController *parentViewController;
 
-- (void)addMember:(NSNumber *)member;
+-(void)addMember:(NSNumber *)member;
 -(void)updateCircleMembers:(NSArray *)circleMembers;
+-(void)performFetch;
 @end

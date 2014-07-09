@@ -34,12 +34,12 @@
 
 // methods for updating circles
 -(void)postCircle: (NSDictionary *) dictionary;
+-(void)postCircleMember:(NSDictionary *) dictionary;
 -(void)updateCircleInfo;
 
 //methods for comments
 -(void)postComment:(NSDictionary *)dictionary;
 -(void)updateCommentsFrom: (NSString *)comment_from withCategory:(NSString *)category;
--(void)updateCommentsImmediatelyFrom: (NSString *)comment_from withCategory:(NSString *)category;
 
 -(void)updatePeerInfo;
 

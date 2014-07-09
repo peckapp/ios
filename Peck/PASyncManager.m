@@ -280,10 +280,22 @@
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
                                   }];
-    
-    
    
     
+}
+
+-(void)postCircleMember:(NSDictionary *) dictionary{
+    [[PASessionManager sharedClient] POST:circle_membersAPI
+                               parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+    
+
 }
 
 /*-(void)addMembers:(NSArray *)members ToCircle:(NSNumber*)circleID
@@ -542,7 +554,7 @@
                      //NSLog(@"adding an event to Core Data");
                      Comment * comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext: _managedObjectContext];
                      [self setAttributesInComment:comment withDictionary:commentAttributes];
-                     //NSLog(@"EVENT: %@",event);
+                     NSLog(@"COMMENT: %@",comment);
                  }
              }
          }

@@ -16,7 +16,7 @@
 #import "PACommentCell.h"
 
 #define cellHeight 100.0
-
+#define reloadTime 3
 @interface PACirclesTableViewController ()
 
 @property (strong, nonatomic) NSIndexPath * selectedIndexPath;
@@ -41,7 +41,9 @@ Peer* selectedPeer;
 CGRect initialFrame;
 CGRect initialCommentTableFrame;
 int selectedCell;
+Circle* selectedCircle;
 BOOL viewingCell;
+BOOL viewingCircles;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -52,17 +54,33 @@ BOOL viewingCell;
     return self;
 }
 -(void)viewWillAppear:(BOOL)animated{
+    
+    viewingCircles=YES;
     [self registerForKeyboardNotifications];
     initialFrame=self.tableView.frame;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        while(viewingCircles){
+            if(viewingCell){
+                PACircleCell *selectedCircleCell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+                NSString* circleID =[selectedCircleCell.circle.id stringValue];
+                [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
+                [NSThread sleepForTimeInterval:reloadTime];
+                
+            }
+        }
+    });
+
 }
--(void)viewDidDisappear:(BOOL)animated{
+-(void)viewWillDisappear:(BOOL)animated{
+    viewingCircles=NO;
     [self deregisterFromKeyboardNotifications];
 }
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    viewingCell=NO;
     self.cancelCellButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(cancelSelection)];
     
     self.title = @"Circles";
@@ -115,9 +133,34 @@ BOOL viewingCell;
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     //TODO: this is where we will send a new member to a circle that is already created
     NSLog(@"add a new member");
-    
+    HTAutocompleteTextField *tempTextField = (HTAutocompleteTextField *)textField;
+    [self addMemberWithTextField:tempTextField];
     return NO;
 }
+-(void)addMemberWithTextField:(HTAutocompleteTextField *)textField{
+    Peer *tempPeer = [HTAutocompleteManager sharedManager].currentPeer;
+    if(tempPeer){
+        textField.text=@"";
+        textField.autocompleteLabel.text=@"";
+        Peer * tempPeer = [HTAutocompleteManager sharedManager].currentPeer;
+        NSLog(@"new member id: %@", tempPeer.id);
+        [textField forceRefreshAutocompleteText];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSNumber* invited_by = [defaults objectForKey:@"user_id"];
+        NSNumber* instituion_id = [defaults objectForKey:@"institution_id"];
+        NSNumber* circle_id = selectedCircle.id;
+        NSDictionary *newMember = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   invited_by, @"invited_by",
+                                   tempPeer.id, @"user_id",
+                                   instituion_id, @"institution_id",
+                                   circle_id, @"circle_id",
+                                    nil];
+        [[PASyncManager globalSyncManager] postCircleMember:newMember];
+    }
+
+    
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -167,13 +210,15 @@ BOOL viewingCell;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    viewingCell=YES;
+    PACircleCell *cell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell performFetch];
     self.selectedIndexPath = indexPath;
     self.navigationItem.leftBarButtonItem = self.cancelCellButton;
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     self.tableView.scrollEnabled = NO;
+    viewingCell=YES;
     
 }
 
@@ -214,15 +259,12 @@ BOOL viewingCell;
 
 - (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"configure cell");
     Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
     cell.circleTitle.text = c.circleName;
     cell.delegate = self;
     cell.tag=[indexPath row];
-
-    /*if([cell.members count]!=[c.members count])
-        [c.members enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [cell addMember:c.members[idx]];
-    }];*/
+    cell.parentViewController=self;
     cell.circle=c;
     [cell updateCircleMembers:c.members];
 }
@@ -271,6 +313,7 @@ BOOL viewingCell;
 {
     NSLog(@"!!!");
     selectedCell=cell.tag;
+    selectedCircle=cell.circle;
     // Look at how terrible this is.
     [self.textCapture becomeFirstResponder];
     [self.inviteTextField becomeFirstResponder];
@@ -445,6 +488,8 @@ BOOL viewingCell;
             CGRect modifiedFrame = circleCell.commentsTableView.frame;
             modifiedFrame.size = CGSizeMake(modifiedFrame.size.width, modifiedFrame.size.height-keyboardSize.height);
             circleCell.commentsTableView.frame = modifiedFrame;
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            [circleCell.commentsTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
     }
 }
@@ -463,6 +508,32 @@ BOOL viewingCell;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     PACommentCell *commentCell = (PACommentCell*)[circleCell.commentsTableView cellForRowAtIndexPath:indexPath];
     [commentCell.commentTextView resignFirstResponder];
+}
+
+-(void)postComment:(PACommentCell *)cell{
+    NSLog(@"post the comment");
+    NSString *commentText = cell.commentTextView.text;
+    cell.commentTextView.text=@"";
+    [cell.commentTextView resignFirstResponder];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *userID = [defaults objectForKey:@"user_id"];
+    NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
+    PACircleCell *selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+    
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                commentText, @"content",
+                                userID, @"user_id",
+                                @"circles", @"category",
+                                selectedCell.circle.id, @"comment_from",
+                                institutionID, @"institution_id",
+                                nil];
+    
+    [[PASyncManager globalSyncManager] postComment:dictionary];
+}
+
+-(void)showProfileOf:(Peer *)member{
+    selectedPeer=member;
+    [self performSegueWithIdentifier:@"selectProfile" sender:self];
 }
 
 @end

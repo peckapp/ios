@@ -15,7 +15,7 @@
 # define simple_eventsAPI @"api/simple_events"
 # define exploreAPI @"api/explore"
 # define commentsAPI @"api/comments"
-
+# define circle_membersAPI @"api/circle_members"
 
 // Parameter names
 #define user_id @"user_id"

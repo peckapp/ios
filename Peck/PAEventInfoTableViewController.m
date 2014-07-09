@@ -352,7 +352,7 @@ BOOL reloaded = NO;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    PACommentCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    PACommentCell *cell = (PACommentCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     [cell.commentTextView resignFirstResponder];
     
 }

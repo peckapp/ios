@@ -183,7 +183,7 @@ NSString * commentCellNibName = @"PACommentCell";
 }
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath:(NSIndexPath *)indexPath{
-    cell.parentTableViewCell=self;
+    cell.parentTableView = self.parentViewController;
     if([indexPath row]==0){
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
@@ -224,6 +224,12 @@ NSString * commentCellNibName = @"PACommentCell";
         if (indexPath.row == [self.members count]) {
             [self.delegate promptToAddMemberToCircleCell:self];
         }
+        else{
+            NSLog(@"view the member");
+            PACirclesTableViewController *parent = (PACirclesTableViewController *) self.parentViewController;
+            Peer *member = self.members[[indexPath row]];
+            [parent showProfileOf:member];
+        }
     }
     else if (tableView == self.commentsTableView) {
 
@@ -235,7 +241,7 @@ NSString * commentCellNibName = @"PACommentCell";
 #pragma mark - managing the fetched results controller
 
 -(NSFetchedResultsController *)fetchedResultsController{
-    NSLog(@"configuring the fetched results controller");
+    NSLog(@"configuring the fetched results controller (circle cell)");
     if(_fetchedResultsController){
         return _fetchedResultsController;
     }
@@ -250,9 +256,9 @@ NSString * commentCellNibName = @"PACommentCell";
     
     
     NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
-    
-    NSPredicate *commentFromPredicate = [NSPredicate predicateWithFormat:@"comment_from = %@", [self.circle valueForKey:@"id"]];
-    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", @"circle"];
+    NSLog(@"circle ID: %@", self.circle.id);
+    NSPredicate *commentFromPredicate = [NSPredicate predicateWithFormat:@"comment_from = %@", self.circle.id];
+    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", @"circles"];
     
     [predicateArray addObject:commentFromPredicate];
     [predicateArray addObject:categoryPredicate];
@@ -345,5 +351,24 @@ NSString * commentCellNibName = @"PACommentCell";
 {
     [self.commentsTableView endUpdates];
 }
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    if(scrollView==self.commentsTableView){
+        PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentViewController;
+        [parent dismissCommentKeyboard];
+    }
+}
+
+-(void)performFetch{
+    self.fetchedResultsController=nil;
+    NSError *error=nil;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    [self.commentsTableView reloadData];
+
+}
+
 
 @end

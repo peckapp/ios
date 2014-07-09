@@ -17,9 +17,10 @@
 @property (weak, nonatomic) IBOutlet UITextView *commentTextView;
 @property BOOL expanded;
 @property (weak, nonatomic) UITableViewController *parentTableView;
-@property (weak, nonatomic) UITableViewCell *parentTableViewCell;
+@property (weak, nonatomic) UITableViewController *parentCircleTableView;
 @property (weak, nonatomic) IBOutlet UIButton *expandButton;
 @property (weak, nonatomic) IBOutlet UIButton *postButton;
+
 - (IBAction)postButton:(id)sender;
 
 - (IBAction)expandButton:(id)sender;
