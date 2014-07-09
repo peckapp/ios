@@ -395,6 +395,7 @@ CGRect initialTableViewRect;
         object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setDetailItem:object];
     }else if([[segue identifier] isEqualToString:@"showDiningDetail"]){
+        
         showingDetail=YES;
         NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
         NSManagedObject *object;

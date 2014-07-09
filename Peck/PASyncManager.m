@@ -19,6 +19,7 @@
 #import "Institution.h"
 #import "Comment.h"
 #import "PACirclesTableViewController.h"
+#import "DiningPlace.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -439,6 +440,44 @@
     diningEvent.id = [dictionary objectForKey:@"id"];
 }
 
+
+-(void)updateDiningPlaces:(NSNumber*)diningEventID{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+        NSString * diningPlacesURL = [dining_placesAPI stringByAppendingString:@"?"];
+        diningPlacesURL = [diningPlacesURL stringByAppendingString:@"dining_opportunity="];
+        diningPlacesURL = [diningPlacesURL stringByAppendingString:[diningEventID stringValue]];
+        NSLog(@"in secondary thread to update dining");
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [appdelegate managedObjectContext];
+        
+        [[PASessionManager sharedClient] GET:diningPlacesURL
+                                  parameters:[self authenticationParameters]
+                                     success:^
+         (NSURLSessionDataTask * __unused task, id JSON) {
+             //NSLog(@"JSON: %@",JSON);
+             NSDictionary *diningDictionary = (NSDictionary*)JSON;
+             NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_places"];
+             for (NSDictionary *diningAttributes in postsFromResponse){
+                 NSNumber *newID = [diningAttributes objectForKey:@"id"];
+                 BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace"];
+                 if(!diningPlaceAlreadyExists){
+                     DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
+                     [self setAttributesInDiningPlace:diningPlace withDictionary:diningAttributes];
+                 }
+             }
+         }
+                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                         NSLog(@"ERROR: %@",error);
+                                     }];
+    });
+
+}
+
+-(void)setAttributesInDiningPlace:(DiningPlace*)diningPlace withDictionary:(NSDictionary*)dictionary{
+    diningPlace.name = [dictionary objectForKey:@"name"];
+    diningPlace.id = [dictionary objectForKey:@"id"];
+}
 
 #pragma mark - Events actions
 

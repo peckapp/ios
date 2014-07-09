@@ -35,6 +35,7 @@
 
 // methods for updating dining
 -(void)updateDiningInfo;
+-(void)updateDiningPlaces:(NSNumber*)diningEventID;
 
 // methods for updating circles
 -(void)postCircle: (NSDictionary *) dictionary;

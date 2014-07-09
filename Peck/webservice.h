@@ -17,6 +17,7 @@
 # define commentsAPI @"api/comments"
 # define circle_membersAPI @"api/circle_members"
 # define dining_opportunitiesAPI @"api/dining_opportunities"
+# define dining_placesAPI @"api/dining_places"
 
 // Parameter names
 #define user_id @"user_id"
