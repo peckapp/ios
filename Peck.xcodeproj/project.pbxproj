@@ -72,6 +72,8 @@
 		A46F0919196F14A000CFA5D0 /* DiningPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0918196F14A000CFA5D0 /* DiningPlace.m */; };
 		A46F091F196F14A100CFA5D0 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F091E196F14A100CFA5D0 /* Event.m */; };
 		A46F0922196F25BD00CFA5D0 /* DiningPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0921196F25BD00CFA5D0 /* DiningPeriod.m */; };
+		A46F0926196F2A7600CFA5D0 /* PADiningCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0924196F2A7600CFA5D0 /* PADiningCell.m */; };
+		A46F0927196F2A7600CFA5D0 /* PADiningCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A46F0925196F2A7600CFA5D0 /* PADiningCell.xib */; };
 		A4773C8019589E8200AB9831 /* PAEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C7F19589E8200AB9831 /* PAEvents.m */; };
 		A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C821958A27F00AB9831 /* PAEventBST.m */; };
 		A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C881959D2FE00AB9831 /* PASyncManager.m */; };
@@ -247,6 +249,9 @@
 		A46F091E196F14A100CFA5D0 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A46F0920196F25BD00CFA5D0 /* DiningPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPeriod.h; sourceTree = "<group>"; };
 		A46F0921196F25BD00CFA5D0 /* DiningPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPeriod.m; sourceTree = "<group>"; };
+		A46F0923196F2A7600CFA5D0 /* PADiningCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningCell.h; sourceTree = "<group>"; };
+		A46F0924196F2A7600CFA5D0 /* PADiningCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningCell.m; sourceTree = "<group>"; };
+		A46F0925196F2A7600CFA5D0 /* PADiningCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PADiningCell.xib; sourceTree = "<group>"; };
 		A4773C7E19589E8200AB9831 /* PAEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEvents.h; sourceTree = "<group>"; };
 		A4773C7F19589E8200AB9831 /* PAEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEvents.m; sourceTree = "<group>"; };
 		A4773C811958A27F00AB9831 /* PAEventBST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEventBST.h; sourceTree = "<group>"; };
@@ -586,6 +591,9 @@
 				A46F0918196F14A000CFA5D0 /* DiningPlace.m */,
 				A46F08FF196DC11800CFA5D0 /* PADiningPlacesTableViewController.h */,
 				A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */,
+				A46F0923196F2A7600CFA5D0 /* PADiningCell.h */,
+				A46F0924196F2A7600CFA5D0 /* PADiningCell.m */,
+				A46F0925196F2A7600CFA5D0 /* PADiningCell.xib */,
 			);
 			name = Dining;
 			sourceTree = "<group>";
@@ -802,6 +810,7 @@
 				A4B772E719460C3200A31252 /* schools.plist in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
 				864D873E196470C100BCC01A /* facebook-logout.png in Resources */,
+				A46F0927196F2A7600CFA5D0 /* PADiningCell.xib in Resources */,
 				8671A2D0195B848D00700101 /* dropdown_post@2x.png in Resources */,
 				A463F38F19507FA300ED441F /* Property List.plist in Resources */,
 				DD898172195CAFF20079CDC9 /* Icon-60@2x.png in Resources */,
@@ -921,6 +930,7 @@
 				A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */,
 				A463F384194B959800ED441F /* PACircleCell.m in Sources */,
 				863843DD193CB75F004110F5 /* PARegisterViewController.m in Sources */,
+				A46F0926196F2A7600CFA5D0 /* PADiningCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

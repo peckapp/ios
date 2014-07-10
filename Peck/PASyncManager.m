@@ -513,7 +513,7 @@
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
     if([mutableFetchResults count]>0){
         //this should always be true
-        //in fact there should always be one object in mutable fetch results
+        //in fact, there should always be one object in mutable fetch results
         DiningPlace *tempDiningPlace = mutableFetchResults[0];
         [tempDiningPlace addDining_opportunityObject:diningEvent];
         
@@ -560,7 +560,7 @@
                         DiningPeriod * diningPeriod = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPeriod" inManagedObjectContext: _managedObjectContext];
                         [self setAttributesInDiningPeriod:diningPeriod withDictionary:diningAttributes withDiningEvent:diningOpportunity withDiningPlace:diningPlace];
                     }
-                }[viewController addDiningPeriod];
+                }[viewController setDiningPeriods];
         }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {

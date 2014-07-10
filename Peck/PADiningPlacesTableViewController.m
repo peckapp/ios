@@ -12,6 +12,7 @@
 #import "Event.h"
 #import "PASyncManager.h"
 #import "DiningPeriod.h"
+#import "PADiningCell.h"
 
 @interface PADiningPlacesTableViewController ()
 @property NSArray* diningPlaces;
@@ -39,6 +40,7 @@
     [super viewDidLoad];
     
     [self configureView];
+    [self setDiningPeriods];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -83,7 +85,7 @@
         [self.tableView reloadData];
     }
 }
--(void)addDiningPeriod{
+-(void)setDiningPeriods{
     NSSet *dining = [self.detailItem valueForKey:@"dining_period"];
     //we may have to do additional sorting with the place and day of the week
     //when there are more dining opportunities
@@ -118,25 +120,59 @@
     
 }
 
-
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 120;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningCell" forIndexPath:indexPath];
+    PADiningCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningCell"];
+    if (cell == nil) {
+        [tableView registerNib:[UINib nibWithNibName:@"PADiningCell" bundle:nil] forCellReuseIdentifier:@"diningCell"];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"diningCell"];
+    }
+
     
     [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
 }
 
--(void)configureCell:(UITableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+-(void)configureCell:(PADiningCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    cell=(PADiningCell*)cell;
     DiningPlace *tempDiningPlace = self.diningPlaces[indexPath.row];
     if([self.diningPeriods count]>indexPath.row){
         DiningPeriod *tempPeriod = self.diningPeriods[indexPath.row];
-        NSLog(@"temp period start: %@",tempPeriod.start_date);
-        NSLog(@"number of dining periods: %lu", (unsigned long)[self.diningPeriods count]);
+        cell.startLabel.text = [self dateToString:tempPeriod.start_date];
+        cell.endLabel.text = [self dateToString:tempPeriod.end_date];
     }
-    cell.textLabel.text=tempDiningPlace.name;
+    [cell.nameLabel setText:tempDiningPlace.name];
+    
+}
+
+-(NSString*)dateToString:(NSDate *)date{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:date];
+    NSInteger hour = [components hour];
+    NSString * timeOfDay = @" AM";
+    if(hour>12){
+        hour-=12;
+        timeOfDay = @" PM";
+    }
+    
+    NSString *minute = [@([components minute]) stringValue];
+    if(minute.length==1){
+        minute = [@"0" stringByAppendingString:minute];
+    }
+    
+    
+    NSString * dateString = [[@(hour) stringValue] stringByAppendingString:@":"];
+    dateString = [dateString stringByAppendingString:minute];
+    dateString = [dateString stringByAppendingString:timeOfDay];
+    return dateString;
+    
+    
 }
 
 /*
