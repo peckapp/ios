@@ -7,6 +7,7 @@
 //
 
 #import "Event.h"
+#import "DiningPeriod.h"
 #import "DiningPlace.h"
 
 
@@ -23,5 +24,6 @@
 @dynamic updated_at;
 @dynamic type;
 @dynamic dining_place;
+@dynamic dining_period;
 
 @end

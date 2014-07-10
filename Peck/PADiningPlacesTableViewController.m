@@ -10,9 +10,12 @@
 #import "PAAppDelegate.h"
 #import "DiningPlace.h"
 #import "Event.h"
+#import "PASyncManager.h"
+#import "DiningPeriod.h"
 
 @interface PADiningPlacesTableViewController ()
 @property NSArray* diningPlaces;
+@property NSArray* diningPeriods;
 
 @end
 
@@ -71,8 +74,19 @@
         NSSet *dining = [self.detailItem valueForKey:@"dining_place"];
         self.diningPlaces = [dining allObjects];
         //NSLog(@"dining places: %@", self.diningPlaces);
+        for(int i=0; i<[self.diningPlaces count];i++){
+            DiningPlace *tempDiningPlace = self.diningPlaces[i];
+            [[PASyncManager globalSyncManager] getDiningPeriodForPlace:tempDiningPlace andOpportunity:self.detailItem];
+        }
         [self.tableView reloadData];
     }
+}
+-(void)addDiningPeriod{
+    NSSet *dining = [self.detailItem valueForKey:@"dining_period"];
+    //we may have to do additional sorting with the place and day of the week
+    //when there are more dining opportunities
+    self.diningPlaces = [dining allObjects];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
@@ -102,7 +116,10 @@
 
 -(void)configureCell:(UITableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     DiningPlace *tempDiningPlace = self.diningPlaces[indexPath.row];
-    
+    if([self.diningPeriods count]>indexPath.row){
+        DiningPeriod *tempPeriod = self.diningPeriods[indexPath.row];
+        NSLog(@"temp period start: %@",tempPeriod.start_date);
+    }
     cell.textLabel.text=tempDiningPlace.name;
 }
 

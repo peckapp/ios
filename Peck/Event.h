@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class DiningPlace;
+@class DiningPeriod, DiningPlace;
 
 @interface Event : NSManagedObject
 
@@ -24,6 +24,7 @@
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSSet *dining_place;
+@property (nonatomic, retain) NSSet *dining_period;
 @end
 
 @interface Event (CoreDataGeneratedAccessors)
@@ -32,5 +33,10 @@
 - (void)removeDining_placeObject:(DiningPlace *)value;
 - (void)addDining_place:(NSSet *)values;
 - (void)removeDining_place:(NSSet *)values;
+
+- (void)addDining_periodObject:(DiningPeriod *)value;
+- (void)removeDining_periodObject:(DiningPeriod *)value;
+- (void)addDining_period:(NSSet *)values;
+- (void)removeDining_period:(NSSet *)values;
 
 @end

@@ -69,8 +69,9 @@
 		A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */; };
 		A463F38F19507FA300ED441F /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = A463F38E19507FA300ED441F /* Property List.plist */; };
 		A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */; };
-		A46F090D196EE15400CFA5D0 /* DiningPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F090C196EE15400CFA5D0 /* DiningPlace.m */; };
-		A46F0910196EE15400CFA5D0 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F090F196EE15400CFA5D0 /* Event.m */; };
+		A46F0919196F14A000CFA5D0 /* DiningPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0918196F14A000CFA5D0 /* DiningPlace.m */; };
+		A46F091C196F14A100CFA5D0 /* DiningPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F091B196F14A100CFA5D0 /* DiningPeriod.m */; };
+		A46F091F196F14A100CFA5D0 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F091E196F14A100CFA5D0 /* Event.m */; };
 		A4773C8019589E8200AB9831 /* PAEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C7F19589E8200AB9831 /* PAEvents.m */; };
 		A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C821958A27F00AB9831 /* PAEventBST.m */; };
 		A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C881959D2FE00AB9831 /* PASyncManager.m */; };
@@ -240,10 +241,12 @@
 		A463F38E19507FA300ED441F /* Property List.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Property List.plist"; sourceTree = "<group>"; };
 		A46F08FF196DC11800CFA5D0 /* PADiningPlacesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningPlacesTableViewController.h; sourceTree = "<group>"; };
 		A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningPlacesTableViewController.m; sourceTree = "<group>"; };
-		A46F090B196EE15400CFA5D0 /* DiningPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPlace.h; sourceTree = "<group>"; };
-		A46F090C196EE15400CFA5D0 /* DiningPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPlace.m; sourceTree = "<group>"; };
-		A46F090E196EE15400CFA5D0 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
-		A46F090F196EE15400CFA5D0 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
+		A46F0917196F14A000CFA5D0 /* DiningPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPlace.h; sourceTree = "<group>"; };
+		A46F0918196F14A000CFA5D0 /* DiningPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPlace.m; sourceTree = "<group>"; };
+		A46F091A196F14A100CFA5D0 /* DiningPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPeriod.h; sourceTree = "<group>"; };
+		A46F091B196F14A100CFA5D0 /* DiningPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPeriod.m; sourceTree = "<group>"; };
+		A46F091D196F14A100CFA5D0 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		A46F091E196F14A100CFA5D0 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A4773C7E19589E8200AB9831 /* PAEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEvents.h; sourceTree = "<group>"; };
 		A4773C7F19589E8200AB9831 /* PAEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEvents.m; sourceTree = "<group>"; };
 		A4773C811958A27F00AB9831 /* PAEventBST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEventBST.h; sourceTree = "<group>"; };
@@ -577,8 +580,10 @@
 		A46F08FE196DC0E700CFA5D0 /* Dining */ = {
 			isa = PBXGroup;
 			children = (
-				A46F090B196EE15400CFA5D0 /* DiningPlace.h */,
-				A46F090C196EE15400CFA5D0 /* DiningPlace.m */,
+				A46F091A196F14A100CFA5D0 /* DiningPeriod.h */,
+				A46F091B196F14A100CFA5D0 /* DiningPeriod.m */,
+				A46F0917196F14A000CFA5D0 /* DiningPlace.h */,
+				A46F0918196F14A000CFA5D0 /* DiningPlace.m */,
 				A46F08FF196DC11800CFA5D0 /* PADiningPlacesTableViewController.h */,
 				A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */,
 			);
@@ -621,8 +626,8 @@
 		DDDAEDE419479665004CE102 /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				A46F090E196EE15400CFA5D0 /* Event.h */,
-				A46F090F196EE15400CFA5D0 /* Event.m */,
+				A46F091D196F14A100CFA5D0 /* Event.h */,
+				A46F091E196F14A100CFA5D0 /* Event.m */,
 				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
 				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
 				86292524193CBFF80057CA41 /* PAEventCell.h */,
@@ -871,7 +876,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A46F0910196EE15400CFA5D0 /* Event.m in Sources */,
 				8689DD8B195871D200A6B61C /* PAFilter.m in Sources */,
 				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
 				863843E3193CB7FD004110F5 /* PAExploreTableViewController.m in Sources */,
@@ -883,12 +887,14 @@
 				A4794C201962F103002BD272 /* Explore.m in Sources */,
 				A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */,
 				A459A843195DF50200D1FB0E /* Circle.m in Sources */,
-				A46F090D196EE15400CFA5D0 /* DiningPlace.m in Sources */,
+				A46F0919196F14A000CFA5D0 /* DiningPlace.m in Sources */,
+				A46F091F196F14A100CFA5D0 /* Event.m in Sources */,
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,
 				A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */,
 				A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */,
 				A459A83D195DF4B800D1FB0E /* Message.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
+				A46F091C196F14A100CFA5D0 /* DiningPeriod.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
