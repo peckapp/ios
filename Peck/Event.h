@@ -2,13 +2,14 @@
 //  Event.h
 //  Peck
 //
-//  Created by John Karabinos on 7/9/14.
+//  Created by John Karabinos on 7/10/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class DiningPlace;
 
 @interface Event : NSManagedObject
 
@@ -22,5 +23,14 @@
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSString * type;
+@property (nonatomic, retain) NSSet *dining_place;
+@end
+
+@interface Event (CoreDataGeneratedAccessors)
+
+- (void)addDining_placeObject:(DiningPlace *)value;
+- (void)removeDining_placeObject:(DiningPlace *)value;
+- (void)addDining_place:(NSSet *)values;
+- (void)removeDining_place:(NSSet *)values;
 
 @end

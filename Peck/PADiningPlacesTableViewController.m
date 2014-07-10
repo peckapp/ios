@@ -7,12 +7,20 @@
 //
 
 #import "PADiningPlacesTableViewController.h"
+#import "PAAppDelegate.h"
+#import "DiningPlace.h"
+#import "Event.h"
 
 @interface PADiningPlacesTableViewController ()
+@property NSArray* diningPlaces;
 
 @end
 
 @implementation PADiningPlacesTableViewController
+
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -59,36 +67,44 @@
     if (self.detailItem) {
         
         self.title = [self.detailItem valueForKey:@"title"];
+        
+        NSSet *dining = [self.detailItem valueForKey:@"dining_place"];
+        self.diningPlaces = [dining allObjects];
+        //NSLog(@"dining places: %@", self.diningPlaces);
+        [self.tableView reloadData];
     }
 }
-
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+    
+    return [self.diningPlaces count];
+    
 }
 
-/*
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningCell" forIndexPath:indexPath];
     
-    // Configure the cell...
+    [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
 }
-*/
+
+-(void)configureCell:(UITableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    DiningPlace *tempDiningPlace = self.diningPlaces[indexPath.row];
+    
+    cell.textLabel.text=tempDiningPlace.name;
+}
 
 /*
 // Override to support conditional editing of the table view.

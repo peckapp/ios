@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "Circle.h"
+#import "Event.h"
+#import "PADiningPlacesTableViewController.h"
 
 @interface PASyncManager : NSObject
 
@@ -35,7 +37,7 @@
 
 // methods for updating dining
 -(void)updateDiningInfo;
--(void)updateDiningPlaces:(NSNumber*)diningEventID;
+-(void)updateDiningPlaces:(Event*)diningEvent forController:(PADiningPlacesTableViewController*)viewController;
 
 // methods for updating circles
 -(void)postCircle: (NSDictionary *) dictionary;

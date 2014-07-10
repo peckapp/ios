@@ -400,6 +400,8 @@ CGRect initialTableViewRect;
         NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
         NSManagedObject *object;
         object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        Event *diningEvent=(Event*)object;
+        [[PASyncManager globalSyncManager] updateDiningPlaces:diningEvent forController:[segue destinationViewController]];
         [[segue destinationViewController] setDetailItem:object];
     }
 }

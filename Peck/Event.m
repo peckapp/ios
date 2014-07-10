@@ -2,11 +2,12 @@
 //  Event.m
 //  Peck
 //
-//  Created by John Karabinos on 7/9/14.
+//  Created by John Karabinos on 7/10/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
 #import "Event.h"
+#import "DiningPlace.h"
 
 
 @implementation Event
@@ -21,5 +22,6 @@
 @dynamic title;
 @dynamic updated_at;
 @dynamic type;
+@dynamic dining_place;
 
 @end

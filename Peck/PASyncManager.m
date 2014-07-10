@@ -20,6 +20,7 @@
 #import "Comment.h"
 #import "PACirclesTableViewController.h"
 #import "DiningPlace.h"
+#import "PADiningPlacesTableViewController.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -441,12 +442,13 @@
 }
 
 
--(void)updateDiningPlaces:(NSNumber*)diningEventID{
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-    dispatch_async(queue, ^{
+-(void)updateDiningPlaces:(Event*)diningEvent forController:(PADiningPlacesTableViewController*)viewController{
+   // dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+   // dispatch_async(queue, ^{
         NSString * diningPlacesURL = [dining_placesAPI stringByAppendingString:@"?"];
-        diningPlacesURL = [diningPlacesURL stringByAppendingString:@"dining_opportunity="];
-        diningPlacesURL = [diningPlacesURL stringByAppendingString:[diningEventID stringValue]];
+        diningPlacesURL = [diningPlacesURL stringByAppendingString:@"dining_opportunity_id="];
+        diningPlacesURL = [diningPlacesURL stringByAppendingString:[diningEvent.id stringValue]];
+        diningPlacesURL = [diningPlacesURL stringByAppendingString:@"&day_of_week=monday"];
         NSLog(@"in secondary thread to update dining");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
@@ -462,21 +464,43 @@
                  NSNumber *newID = [diningAttributes objectForKey:@"id"];
                  BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace"];
                  if(!diningPlaceAlreadyExists){
+                     NSLog(@"setting dining place");
                      DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInDiningPlace:diningPlace withDictionary:diningAttributes];
+                     [self setAttributesInDiningPlace:diningPlace withDictionary:diningAttributes withDiningEvent:diningEvent];
+                 }else{
+                     DiningPlace *tempDiningPlace =[self diningPlace: newID IsInOpportunity:diningEvent];
+                     if(tempDiningPlace){
+                         [tempDiningPlace addDining_opportunityObject:diningEvent];
+                     }
                  }
              }
+             [viewController configureView];
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                          NSLog(@"ERROR: %@",error);
                                      }];
-    });
+    //});
 
 }
 
--(void)setAttributesInDiningPlace:(DiningPlace*)diningPlace withDictionary:(NSDictionary*)dictionary{
+-(DiningPlace*)diningPlace:(NSNumber*)diningPlaceID IsInOpportunity:(Event*)diningEvent{
+    NSSet*dining = diningEvent.dining_place;
+    NSArray*diningPlaces = [dining allObjects];
+    for(int i=0; i<[diningPlaces count]; i++){
+        DiningPlace *tempDiningPlace = diningPlaces[i];
+        if(tempDiningPlace.id==diningPlaceID){
+            return tempDiningPlace;
+        }
+    }
+    return nil;
+}
+
+-(void)setAttributesInDiningPlace:(DiningPlace*)diningPlace withDictionary:(NSDictionary*)dictionary withDiningEvent:(Event*)diningEvent{
     diningPlace.name = [dictionary objectForKey:@"name"];
     diningPlace.id = [dictionary objectForKey:@"id"];
+    //[diningPlace.dining_opportunities addObject:diningOpportunity];
+    [diningPlace addDining_opportunityObject:diningEvent];
+    //NSLog(@"dining places in sync: %@:", [diningPlace valueForKeyPath:@"dining_opportunity.dining_place"]);
 }
 
 #pragma mark - Events actions

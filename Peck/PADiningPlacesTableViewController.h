@@ -9,9 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "PACoreDataProtocol.h"
 
-@interface PADiningPlacesTableViewController : UITableViewController <PACoreDataProtocol>
+@interface PADiningPlacesTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol>
 
 
 @property (strong, nonatomic) id detailItem;
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+- (void)configureView;
 @end
