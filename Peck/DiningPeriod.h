@@ -18,6 +18,7 @@
 @property (nonatomic, retain) NSNumber * id;
 @property (nonatomic, retain) NSNumber * opportunity_id;
 @property (nonatomic, retain) NSNumber * place_id;
+@property (nonatomic, retain) NSNumber * day_of_week;
 @property (nonatomic, retain) NSSet *dining_opportunity;
 @property (nonatomic, retain) NSSet *dining_place;
 @end

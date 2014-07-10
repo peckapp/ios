@@ -437,16 +437,19 @@
 
 -(void)setAttributesInDiningEvent:(Event*)diningEvent withDictionary:(NSDictionary*)dictionary{
     diningEvent.title= [dictionary objectForKey:@"dining_opportunity_type"];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    /*NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:serverDateFormat];
     NSString* start = [dictionary objectForKey:@"start_time"];
     if(![start isKindOfClass:[NSNull class]]){
         diningEvent.start_date = [formatter dateFromString:start];
     }
+    
     NSString* end = [dictionary objectForKey:@"end_time"];
     if(![end isKindOfClass:[NSNull class]]){
         diningEvent.end_date = [formatter dateFromString:end];
-    }
+    }*/
+    diningEvent.start_date=[NSDate date];
+    diningEvent.end_date=[NSDate date];
     diningEvent.type = @"dining";
     diningEvent.id = [dictionary objectForKey:@"id"];
 }
@@ -542,12 +545,11 @@
      diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningOpportunity.id stringValue]];
      diningPeriodsURL = [diningPeriodsURL stringByAppendingString:@"&dining_place_id="];
      diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningPlace.id stringValue]];
+    diningPeriodsURL = [diningPeriodsURL stringByAppendingString:@"&day_of_week=0"];
     
      [[PASessionManager sharedClient] GET:diningPeriodsURL
      parameters:[self authenticationParameters]
      success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                [df setDateFormat:serverDateFormat];
                 NSDictionary *periods = (NSDictionary*)JSON;
                 NSArray * diningPeriodArray = [periods objectForKey:@"dining_periods"];
                 for (NSDictionary *diningAttributes in diningPeriodArray){
@@ -567,9 +569,11 @@
 }
 
 -(void)setAttributesInDiningPeriod:(DiningPeriod*)diningPeriod withDictionary:(NSDictionary*)dictionary withDiningEvent:(Event*)diningEvent withDiningPlace:(DiningPlace*)diningPlace{
-    
-    diningPeriod.start_date =[dictionary objectForKey:@"start_time"];
-    diningPeriod.end_date = [dictionary objectForKey:@"end_time"];
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:serverDateFormat];
+    diningPeriod.start_date =[df dateFromString:[dictionary objectForKey:@"start_time"]];
+    diningPeriod.end_date = [df dateFromString:[dictionary objectForKey:@"end_time"]];
+    diningPeriod.day_of_week = [dictionary objectForKey:@"day_of_week"];
     diningPeriod.id = [dictionary objectForKey:@"id"];
     [diningPeriod addDining_opportunityObject:diningEvent];
     [diningPeriod addDining_placeObject:diningPlace];

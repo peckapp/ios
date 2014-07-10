@@ -18,6 +18,7 @@
 @dynamic id;
 @dynamic opportunity_id;
 @dynamic place_id;
+@dynamic day_of_week;
 @dynamic dining_opportunity;
 @dynamic dining_place;
 

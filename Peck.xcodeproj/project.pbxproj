@@ -70,8 +70,8 @@
 		A463F38F19507FA300ED441F /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = A463F38E19507FA300ED441F /* Property List.plist */; };
 		A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */; };
 		A46F0919196F14A000CFA5D0 /* DiningPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0918196F14A000CFA5D0 /* DiningPlace.m */; };
-		A46F091C196F14A100CFA5D0 /* DiningPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F091B196F14A100CFA5D0 /* DiningPeriod.m */; };
 		A46F091F196F14A100CFA5D0 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F091E196F14A100CFA5D0 /* Event.m */; };
+		A46F0922196F25BD00CFA5D0 /* DiningPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0921196F25BD00CFA5D0 /* DiningPeriod.m */; };
 		A4773C8019589E8200AB9831 /* PAEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C7F19589E8200AB9831 /* PAEvents.m */; };
 		A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C821958A27F00AB9831 /* PAEventBST.m */; };
 		A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C881959D2FE00AB9831 /* PASyncManager.m */; };
@@ -243,10 +243,10 @@
 		A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningPlacesTableViewController.m; sourceTree = "<group>"; };
 		A46F0917196F14A000CFA5D0 /* DiningPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPlace.h; sourceTree = "<group>"; };
 		A46F0918196F14A000CFA5D0 /* DiningPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPlace.m; sourceTree = "<group>"; };
-		A46F091A196F14A100CFA5D0 /* DiningPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPeriod.h; sourceTree = "<group>"; };
-		A46F091B196F14A100CFA5D0 /* DiningPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPeriod.m; sourceTree = "<group>"; };
 		A46F091D196F14A100CFA5D0 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		A46F091E196F14A100CFA5D0 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
+		A46F0920196F25BD00CFA5D0 /* DiningPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPeriod.h; sourceTree = "<group>"; };
+		A46F0921196F25BD00CFA5D0 /* DiningPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPeriod.m; sourceTree = "<group>"; };
 		A4773C7E19589E8200AB9831 /* PAEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEvents.h; sourceTree = "<group>"; };
 		A4773C7F19589E8200AB9831 /* PAEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEvents.m; sourceTree = "<group>"; };
 		A4773C811958A27F00AB9831 /* PAEventBST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEventBST.h; sourceTree = "<group>"; };
@@ -580,8 +580,8 @@
 		A46F08FE196DC0E700CFA5D0 /* Dining */ = {
 			isa = PBXGroup;
 			children = (
-				A46F091A196F14A100CFA5D0 /* DiningPeriod.h */,
-				A46F091B196F14A100CFA5D0 /* DiningPeriod.m */,
+				A46F0920196F25BD00CFA5D0 /* DiningPeriod.h */,
+				A46F0921196F25BD00CFA5D0 /* DiningPeriod.m */,
 				A46F0917196F14A000CFA5D0 /* DiningPlace.h */,
 				A46F0918196F14A000CFA5D0 /* DiningPlace.m */,
 				A46F08FF196DC11800CFA5D0 /* PADiningPlacesTableViewController.h */,
@@ -878,6 +878,7 @@
 			files = (
 				8689DD8B195871D200A6B61C /* PAFilter.m in Sources */,
 				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
+				A46F0922196F25BD00CFA5D0 /* DiningPeriod.m in Sources */,
 				863843E3193CB7FD004110F5 /* PAExploreTableViewController.m in Sources */,
 				A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */,
 				86D59811193768BF00F38654 /* main.m in Sources */,
@@ -894,7 +895,6 @@
 				A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */,
 				A459A83D195DF4B800D1FB0E /* Message.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
-				A46F091C196F14A100CFA5D0 /* DiningPeriod.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,

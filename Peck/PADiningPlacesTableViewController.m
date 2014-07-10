@@ -73,10 +73,12 @@
         
         NSSet *dining = [self.detailItem valueForKey:@"dining_place"];
         self.diningPlaces = [dining allObjects];
-        //NSLog(@"dining places: %@", self.diningPlaces);
+        
+        //this loop ensures that the dining periods are added in the same order as the
+        //dining places, but there is most likely a more efficient way to accomplish this
         for(int i=0; i<[self.diningPlaces count];i++){
             DiningPlace *tempDiningPlace = self.diningPlaces[i];
-            [[PASyncManager globalSyncManager] getDiningPeriodForPlace:tempDiningPlace andOpportunity:self.detailItem];
+            [[PASyncManager globalSyncManager] getDiningPeriodForPlace:tempDiningPlace andOpportunity:self.detailItem withViewController:self];
         }
         [self.tableView reloadData];
     }
@@ -85,7 +87,20 @@
     NSSet *dining = [self.detailItem valueForKey:@"dining_period"];
     //we may have to do additional sorting with the place and day of the week
     //when there are more dining opportunities
-    self.diningPlaces = [dining allObjects];
+    
+    NSArray*givenDiningPeriods = [dining allObjects];
+    NSMutableArray *finalDiningPeriods = [[NSMutableArray alloc] init];
+    
+    //probably not the best way to do this
+    for(int i=0;i<[givenDiningPeriods count];i++){
+        DiningPeriod *tempDiningPeriod = givenDiningPeriods[i];
+        NSNumber*dayOfWeek = [NSNumber numberWithInt:0];
+        if(tempDiningPeriod.day_of_week==dayOfWeek){
+            [finalDiningPeriods addObject:tempDiningPeriod];
+        }
+    }
+    self.diningPeriods=finalDiningPeriods;
+    
     [self.tableView reloadData];
 }
 
@@ -119,6 +134,7 @@
     if([self.diningPeriods count]>indexPath.row){
         DiningPeriod *tempPeriod = self.diningPeriods[indexPath.row];
         NSLog(@"temp period start: %@",tempPeriod.start_date);
+        NSLog(@"number of dining periods: %lu", (unsigned long)[self.diningPeriods count]);
     }
     cell.textLabel.text=tempDiningPlace.name;
 }
