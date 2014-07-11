@@ -539,33 +539,37 @@
     [diningPlace addDining_opportunityObject:diningEvent];
 }
 
--(void)getDiningPeriodForPlace:(DiningPlace*)diningPlace andOpportunity:(Event*)diningOpportunity withViewController:(PADiningPlacesTableViewController*)viewController{
+-(void)getDiningPeriodForPlaces:(NSArray*)diningPlaces andOpportunity:(Event*)diningOpportunity withViewController:(PADiningPlacesTableViewController*)viewController{
+    for(int i=0; i<[diningPlaces count];i++){
+        DiningPlace *diningPlace = diningPlaces[i];
+        
+        NSString* diningPeriodsURL = [dining_periodsAPI stringByAppendingString:@"?dining_opportunity_id="];
+        diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningOpportunity.id stringValue]];
+        diningPeriodsURL = [diningPeriodsURL stringByAppendingString:@"&dining_place_id="];
+        diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningPlace.id stringValue]];
+        diningPeriodsURL = [diningPeriodsURL stringByAppendingString:@"&day_of_week=0"];
     
-     NSString* diningPeriodsURL = [dining_periodsAPI stringByAppendingString:@"?dining_opportunity_id="];
-     diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningOpportunity.id stringValue]];
-     diningPeriodsURL = [diningPeriodsURL stringByAppendingString:@"&dining_place_id="];
-     diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningPlace.id stringValue]];
-    diningPeriodsURL = [diningPeriodsURL stringByAppendingString:@"&day_of_week=0"];
-    
-     [[PASessionManager sharedClient] GET:diningPeriodsURL
-     parameters:[self authenticationParameters]
-     success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                NSDictionary *periods = (NSDictionary*)JSON;
-                NSArray * diningPeriodArray = [periods objectForKey:@"dining_periods"];
-                for (NSDictionary *diningAttributes in diningPeriodArray){
-                    NSNumber *newID = [diningAttributes objectForKey:@"id"];
-                    BOOL diningPeriodAlreadyExists = [self objectExists:newID withType:@"DiningPeriod"];
-                    if(!diningPeriodAlreadyExists){
-                        NSLog(@"setting dining period");
-                        DiningPeriod * diningPeriod = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPeriod" inManagedObjectContext: _managedObjectContext];
-                        [self setAttributesInDiningPeriod:diningPeriod withDictionary:diningAttributes withDiningEvent:diningOpportunity withDiningPlace:diningPlace];
-                    }
-                }[viewController setDiningPeriods];
-        }
+        [[PASessionManager sharedClient] GET:diningPeriodsURL
+                                  parameters:[self authenticationParameters]
+                                     success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                         NSDictionary *periods = (NSDictionary*)JSON;
+                                         NSArray * diningPeriodArray = [periods objectForKey:@"dining_periods"];
+                                         for (NSDictionary *diningAttributes in diningPeriodArray){
+                                             NSNumber *newID = [diningAttributes objectForKey:@"id"];
+                                             BOOL diningPeriodAlreadyExists = [self objectExists:newID withType:@"DiningPeriod"];
+                                             if(!diningPeriodAlreadyExists){
+                                                 NSLog(@"setting dining period");
+                                                 DiningPeriod * diningPeriod = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPeriod" inManagedObjectContext: _managedObjectContext];
+                                                 [self setAttributesInDiningPeriod:diningPeriod withDictionary:diningAttributes withDiningEvent:diningOpportunity withDiningPlace:diningPlace];
+                                             }
+                                         }
+                                        [viewController setDiningPeriods];
+                                     }
      
-                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
      }];
+    }
 }
 
 -(void)setAttributesInDiningPeriod:(DiningPeriod*)diningPeriod withDictionary:(NSDictionary*)dictionary withDiningEvent:(Event*)diningEvent withDiningPlace:(DiningPlace*)diningPlace{

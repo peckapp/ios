@@ -76,11 +76,8 @@
         NSSet *dining = [self.detailItem valueForKey:@"dining_place"];
         self.diningPlaces = [dining allObjects];
         
-        //this loop ensures that the dining periods are added in the same order as the
-        //dining places, but there is most likely a more efficient way to accomplish this
-        for(int i=0; i<[self.diningPlaces count];i++){
-            DiningPlace *tempDiningPlace = self.diningPlaces[i];
-            [[PASyncManager globalSyncManager] getDiningPeriodForPlace:tempDiningPlace andOpportunity:self.detailItem withViewController:self];
+        if([self.diningPlaces count]>0){
+            [[PASyncManager globalSyncManager] getDiningPeriodForPlaces:self.diningPlaces andOpportunity:self.detailItem withViewController:self];
         }
         [self.tableView reloadData];
     }
