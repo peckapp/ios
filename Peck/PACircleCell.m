@@ -205,17 +205,31 @@ UITextView *textViewHelper;
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
         [cell.expandButton setHidden:NO];
+        if([self textViewIsSmallerThanFrame:tempComment.content]){
+            [cell.expandButton setHidden:YES];
+        }
         [cell.postButton setHidden:YES];
         cell.nameLabel.text = @"John Doe";
         cell.tag = [indexPath row];
         cell.commentTextView.text = tempComment.content;
-        //[cell.commentTextView sizeThatFits:CGSizeMake(self.frame.size.width, 120)];
-        NSString* cellTag = [@(cell.tag) stringValue];
+        
+        /*NSString* cellTag = [@(cell.tag) stringValue];
         if(![heightDictionary objectForKey:cellTag]){
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
-        }
+        }*/
+        //this fixes the problem where a cell's text view would occasionally be cut off when first loaded
     }
     cell.nameLabel.text = @"John Doe";
+}
+-(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
+    textViewHelper.frame = CGRectMake(0, 0, 98, 0);
+    [textViewHelper setHidden:YES];
+    textViewHelper.text = text;
+    [textViewHelper sizeToFit];
+    if(textViewHelper.frame.size.height>119){
+        return NO;
+    }
+    return YES;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
