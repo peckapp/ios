@@ -213,9 +213,12 @@ UITextView *textViewHelper;
         cell.tag = [indexPath row];
         cell.commentTextView.text = tempComment.content;
         
-        /*NSString* cellTag = [@(cell.tag) stringValue];
-        if(![heightDictionary objectForKey:cellTag]){
+
+        /*if(!cell.expanded){
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
+        }
+        else{
+            [cell.commentTextView sizeToFit];
         }*/
         //this fixes the problem where a cell's text view would occasionally be cut off when first loaded
     }
