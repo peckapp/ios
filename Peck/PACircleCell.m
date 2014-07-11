@@ -27,6 +27,8 @@
 
 NSString * commentCellIdentifier = @"CircleCommentCell";
 NSString * commentCellNibName = @"PACommentCell";
+NSMutableDictionary *heightDictionary;
+UITextView *textViewHelper;
 
 - (void)awakeFromNib
 {
@@ -52,8 +54,10 @@ NSString * commentCellNibName = @"PACommentCell";
     NSLog(@"frame height: %f", self.frame.size.height);
     //self.commentsTableView.frame = CGRectMake(0, 100, self.frame.size.width, self.frame.size.height-200);
     
-    
+    heightDictionary = [[NSMutableDictionary alloc] init];
     self.members = [[NSMutableArray alloc] init];
+    textViewHelper = [[UITextView alloc] init];
+    [textViewHelper setHidden:YES];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -186,7 +190,8 @@ NSString * commentCellNibName = @"PACommentCell";
 }
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath:(NSIndexPath *)indexPath{
-    cell.parentTableView = self.parentViewController;
+    cell.parentCircleTableView = self.parentViewController;
+    cell.tag = indexPath.row;
     if([indexPath row]==0){
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
@@ -200,12 +205,34 @@ NSString * commentCellNibName = @"PACommentCell";
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
         [cell.expandButton setHidden:NO];
+        if([self textViewIsSmallerThanFrame:tempComment.content]){
+            [cell.expandButton setHidden:YES];
+        }
         [cell.postButton setHidden:YES];
         cell.nameLabel.text = @"John Doe";
         cell.tag = [indexPath row];
         cell.commentTextView.text = tempComment.content;
+        
+
+        /*if(!cell.expanded){
+            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
+        }
+        else{
+            [cell.commentTextView sizeToFit];
+        }*/
+        //this fixes the problem where a cell's text view would occasionally be cut off when first loaded
     }
     cell.nameLabel.text = @"John Doe";
+}
+-(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
+    textViewHelper.frame = CGRectMake(0, 0, 98, 0);
+    [textViewHelper setHidden:YES];
+    textViewHelper.text = text;
+    [textViewHelper sizeToFit];
+    if(textViewHelper.frame.size.height>119){
+        return NO;
+    }
+    return YES;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -214,7 +241,13 @@ NSString * commentCellNibName = @"PACommentCell";
         return 44;
     }
     else if (tableView == self.commentsTableView) {
+        NSString * cellTag = [@([indexPath row]) stringValue];
+        CGFloat height = [[heightDictionary valueForKey:cellTag] floatValue];
+        if(height){
+            return height;
+        }
         return 120;
+
     }
     else {
         return 44;
@@ -373,5 +406,25 @@ NSString * commentCellNibName = @"PACommentCell";
 
 }
 
+-(void)expand:(PACommentCell*)cell{
+    NSLog(@"Expand cell");
+    [cell.commentTextView sizeToFit];
+    NSNumber *height = [NSNumber numberWithFloat:120];
+    if(cell.commentTextView.frame.size.height>120){
+        height = [NSNumber numberWithFloat:cell.commentTextView.frame.size.height];
+    }
+    NSString * cellTag = [@(cell.tag) stringValue];
+    [heightDictionary setValue:height forKey:cellTag];
+    [self.commentsTableView beginUpdates];
+    [self.commentsTableView endUpdates];
 
+}
+-(void)compress:(PACommentCell*)cell{
+    cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
+    NSString *cellTag = [@(cell.tag) stringValue];
+    [heightDictionary removeObjectForKey:cellTag];
+    [self.commentsTableView beginUpdates];
+    [self.commentsTableView endUpdates];
+
+}
 @end

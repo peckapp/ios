@@ -88,12 +88,12 @@
     <elements>
         <element name="Circle" positionX="261" positionY="198" width="128" height="105"/>
         <element name="Comment" positionX="207" positionY="288" width="128" height="135"/>
+        <element name="DiningPeriod" positionX="90" positionY="351" width="128" height="165"/>
+        <element name="DiningPlace" positionX="-108" positionY="441" width="128" height="178"/>
         <element name="Event" positionX="124" positionY="467" width="128" height="223"/>
         <element name="Explore" positionX="261" positionY="261" width="128" height="178"/>
         <element name="Institution" positionX="-54" positionY="189" width="128" height="210"/>
         <element name="Message" positionX="261" positionY="261" width="128" height="118"/>
         <element name="Peer" positionX="261" positionY="261" width="128" height="75"/>
-        <element name="DiningPlace" positionX="-108" positionY="441" width="128" height="178"/>
-        <element name="DiningPeriod" positionX="90" positionY="351" width="128" height="163"/>
     </elements>
 </model>

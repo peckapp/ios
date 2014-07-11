@@ -34,8 +34,8 @@
 - (IBAction)postButton:(id)sender {
     NSLog(@"post (in cell)");
     if(self.parentTableView){
-    PAEventInfoTableViewController *parent = (PAEventInfoTableViewController*)self.parentTableView;
-    [parent postComment:self];
+        PAEventInfoTableViewController *parent = (PAEventInfoTableViewController*)self.parentTableView;
+        [parent postComment:self];
     }
     else if(self.parentCircleTableView){
         PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentCircleTableView;
@@ -47,13 +47,23 @@
 - (IBAction)expandButton:(id)sender {
     NSLog(@"expand the cell");
     if(self.expanded==NO){
-        PAEventInfoTableViewController *parent = (PAEventInfoTableViewController*)self.parentTableView;
-        [parent expandTableViewCell:self];
+        if(self.parentTableView){
+            PAEventInfoTableViewController *parent = (PAEventInfoTableViewController*)self.parentTableView;
+            [parent expandTableViewCell:self];
+        }else if(self.parentCircleTableView){
+            PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentCircleTableView;
+            [parent expandTableViewCell:self];
+        }
         [self.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
     }
     else{
-        PAEventInfoTableViewController *parent = (PAEventInfoTableViewController*)self.parentTableView;
-        [parent compressTableViewCell:self];
+        if(self.parentTableView){
+            PAEventInfoTableViewController *parent = (PAEventInfoTableViewController*)self.parentTableView;
+            [parent compressTableViewCell:self];
+        }else if(self.parentCircleTableView){
+            PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentCircleTableView;
+            [parent compressTableViewCell:self];
+        }
         [self.expandButton setTitle:@"More" forState:UIControlStateNormal];
     }
     self.expanded = !self.expanded;

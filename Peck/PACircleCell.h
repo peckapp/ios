@@ -35,4 +35,6 @@
 -(void)addMember:(NSNumber *)member;
 -(void)updateCircleMembers:(NSArray *)circleMembers;
 -(void)performFetch;
+-(void)expand:(PACommentCell*)cell;
+-(void)compress:(PACommentCell*)cell;
 @end

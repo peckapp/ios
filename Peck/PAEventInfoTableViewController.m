@@ -33,6 +33,7 @@ NSString * nibName = @"PACommentCell";
 NSMutableDictionary *heightDictionary;
 CGRect initialFrame;
 BOOL viewingEvent;
+UITextView *textViewHelper;
 
 BOOL reloaded = NO;
 
@@ -60,6 +61,8 @@ BOOL reloaded = NO;
         [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
     //}
     
+    textViewHelper = [[UITextView alloc] init];
+    [textViewHelper setHidden:YES];
     [self.descriptionTextView setEditable:NO];
     [self configureView];
     heightDictionary = [[NSMutableDictionary alloc] init];
@@ -328,12 +331,26 @@ BOOL reloaded = NO;
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
         [cell.expandButton setHidden:NO];
+        if([self textViewIsSmallerThanFrame:tempComment.content]){
+            [cell.expandButton setHidden:YES];
+        }
         [cell.postButton setHidden:YES];
         cell.nameLabel.text = @"John Doe";
         cell.tag = [indexPath row];
         cell.commentTextView.text = tempComment.content;
     }
     
+}
+
+-(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
+    textViewHelper.frame = CGRectMake(0, 0, 98, 0);
+    [textViewHelper setHidden:YES];
+    textViewHelper.text = text;
+    [textViewHelper sizeToFit];
+    if(textViewHelper.frame.size.height>119){
+        return NO;
+    }
+    return YES;
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

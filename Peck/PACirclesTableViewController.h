@@ -31,5 +31,7 @@
 -(void)dismissCommentKeyboard;
 -(void)postComment:(PACommentCell*)cell;
 -(void)showProfileOf:(Peer*)member;
+-(void)expandTableViewCell:(PACommentCell *)cell;
+-(void)compressTableViewCell:(PACommentCell *)cell;
 @end
 

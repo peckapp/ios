@@ -16,7 +16,6 @@
 
 @interface PADiningPlacesTableViewController ()
 @property NSArray* diningPlaces;
-@property NSArray* diningPeriods;
 
 @end
 
@@ -40,7 +39,7 @@
     [super viewDidLoad];
     
     [self configureView];
-    [self setDiningPeriods];
+    [self reloadDiningPeriods];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -76,33 +75,14 @@
         NSSet *dining = [self.detailItem valueForKey:@"dining_place"];
         self.diningPlaces = [dining allObjects];
         
-        //this loop ensures that the dining periods are added in the same order as the
-        //dining places, but there is most likely a more efficient way to accomplish this
         for(int i=0; i<[self.diningPlaces count];i++){
             DiningPlace *tempDiningPlace = self.diningPlaces[i];
-            [[PASyncManager globalSyncManager] getDiningPeriodForPlace:tempDiningPlace andOpportunity:self.detailItem withViewController:self];
+            [[PASyncManager globalSyncManager] getDiningPeriodForPlace:tempDiningPlace andOpportunity:self.detailItem withViewController:self forNumberAdded:i];
         }
         [self.tableView reloadData];
     }
 }
--(void)setDiningPeriods{
-    NSSet *dining = [self.detailItem valueForKey:@"dining_period"];
-    //we may have to do additional sorting with the place and day of the week
-    //when there are more dining opportunities
-    
-    NSArray*givenDiningPeriods = [dining allObjects];
-    NSMutableArray *finalDiningPeriods = [[NSMutableArray alloc] init];
-    
-    //probably not the best way to do this
-    for(int i=0;i<[givenDiningPeriods count];i++){
-        DiningPeriod *tempDiningPeriod = givenDiningPeriods[i];
-        NSNumber*dayOfWeek = [NSNumber numberWithInt:0];
-        if(tempDiningPeriod.day_of_week==dayOfWeek){
-            [finalDiningPeriods addObject:tempDiningPeriod];
-        }
-    }
-    self.diningPeriods=finalDiningPeriods;
-    
+-(void)reloadDiningPeriods{
     [self.tableView reloadData];
 }
 
@@ -142,12 +122,27 @@
 -(void)configureCell:(PADiningCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     cell=(PADiningCell*)cell;
     DiningPlace *tempDiningPlace = self.diningPlaces[indexPath.row];
-    if([self.diningPeriods count]>indexPath.row){
-        DiningPeriod *tempPeriod = self.diningPeriods[indexPath.row];
-        cell.startLabel.text = [self dateToString:tempPeriod.start_date];
-        cell.endLabel.text = [self dateToString:tempPeriod.end_date];
+    
+    DiningPeriod *tempDiningPeriod = [self diningPeriodFromPlace:tempDiningPlace];
+    if(tempDiningPeriod){
+        cell.startLabel.text = [self dateToString:tempDiningPeriod.start_date];
+        cell.endLabel.text = [self dateToString:tempDiningPeriod.end_date];
     }
     [cell.nameLabel setText:tempDiningPlace.name];
+    
+}
+-(DiningPeriod*)diningPeriodFromPlace:(DiningPlace*)diningPlace {
+    NSSet*dining = diningPlace.dining_period;
+    NSArray*diningPeriods = [dining allObjects];
+    for(int i=0;i<[diningPeriods count];i++){
+        DiningPeriod *tempDiningPeriod = diningPeriods[i];
+        if(tempDiningPeriod.day_of_week==[NSNumber numberWithInt:0] && tempDiningPeriod.place_id==diningPlace.id &&tempDiningPeriod.opportunity_id==[self.detailItem valueForKey:@"id"]){
+            return tempDiningPeriod;
+        }
+    }
+    return nil;
+    
+    
     
 }
 
