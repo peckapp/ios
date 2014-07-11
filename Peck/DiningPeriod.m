@@ -2,7 +2,7 @@
 //  DiningPeriod.m
 //  Peck
 //
-//  Created by John Karabinos on 7/10/14.
+//  Created by John Karabinos on 7/11/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -13,12 +13,12 @@
 
 @implementation DiningPeriod
 
-@dynamic start_date;
+@dynamic day_of_week;
 @dynamic end_date;
 @dynamic id;
 @dynamic opportunity_id;
 @dynamic place_id;
-@dynamic day_of_week;
+@dynamic start_date;
 @dynamic dining_opportunity;
 @dynamic dining_place;
 

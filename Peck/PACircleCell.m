@@ -28,6 +28,7 @@
 NSString * commentCellIdentifier = @"CircleCommentCell";
 NSString * commentCellNibName = @"PACommentCell";
 NSMutableDictionary *heightDictionary;
+UITextView *textViewHelper;
 
 - (void)awakeFromNib
 {
@@ -55,6 +56,8 @@ NSMutableDictionary *heightDictionary;
     
     heightDictionary = [[NSMutableDictionary alloc] init];
     self.members = [[NSMutableArray alloc] init];
+    textViewHelper = [[UITextView alloc] init];
+    [textViewHelper setHidden:YES];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -206,6 +209,11 @@ NSMutableDictionary *heightDictionary;
         cell.nameLabel.text = @"John Doe";
         cell.tag = [indexPath row];
         cell.commentTextView.text = tempComment.content;
+        //[cell.commentTextView sizeThatFits:CGSizeMake(self.frame.size.width, 120)];
+        NSString* cellTag = [@(cell.tag) stringValue];
+        if(![heightDictionary objectForKey:cellTag]){
+            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
+        }
     }
     cell.nameLabel.text = @"John Doe";
 }

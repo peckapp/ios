@@ -2,7 +2,7 @@
 //  DiningPeriod.h
 //  Peck
 //
-//  Created by John Karabinos on 7/10/14.
+//  Created by John Karabinos on 7/11/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -13,12 +13,12 @@
 
 @interface DiningPeriod : NSManagedObject
 
-@property (nonatomic, retain) NSDate * start_date;
+@property (nonatomic, retain) NSNumber * day_of_week;
 @property (nonatomic, retain) NSDate * end_date;
 @property (nonatomic, retain) NSNumber * id;
 @property (nonatomic, retain) NSNumber * opportunity_id;
 @property (nonatomic, retain) NSNumber * place_id;
-@property (nonatomic, retain) NSNumber * day_of_week;
+@property (nonatomic, retain) NSDate * start_date;
 @property (nonatomic, retain) NSSet *dining_opportunity;
 @property (nonatomic, retain) NSSet *dining_place;
 @end

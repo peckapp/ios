@@ -38,7 +38,7 @@
 // methods for updating dining
 -(void)updateDiningInfo;
 -(void)updateDiningPlaces:(Event*)diningEvent forController:(PADiningPlacesTableViewController*)viewController;
--(void)getDiningPeriodForPlaces:(NSArray*)diningPlaces andOpportunity:(Event*)diningOpportunity withViewController:(PADiningPlacesTableViewController*)viewController;
+-(void)getDiningPeriodForPlace:(DiningPlace*)diningPlace andOpportunity:(Event*)diningOpportunity withViewController:(PADiningPlacesTableViewController*)viewController forNumberAdded:(NSInteger)numberAdded;
 
 // methods for updating circles
 -(void)postCircle: (NSDictionary *) dictionary;

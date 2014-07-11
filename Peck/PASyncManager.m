@@ -539,9 +539,7 @@
     [diningPlace addDining_opportunityObject:diningEvent];
 }
 
--(void)getDiningPeriodForPlaces:(NSArray*)diningPlaces andOpportunity:(Event*)diningOpportunity withViewController:(PADiningPlacesTableViewController*)viewController{
-    for(int i=0; i<[diningPlaces count];i++){
-        DiningPlace *diningPlace = diningPlaces[i];
+-(void)getDiningPeriodForPlace:(DiningPlace*)diningPlace andOpportunity:(Event*)diningOpportunity withViewController:(PADiningPlacesTableViewController*)viewController forNumberAdded:(NSInteger)numberAdded{
         
         NSString* diningPeriodsURL = [dining_periodsAPI stringByAppendingString:@"?dining_opportunity_id="];
         diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningOpportunity.id stringValue]];
@@ -563,13 +561,13 @@
                                                  [self setAttributesInDiningPeriod:diningPeriod withDictionary:diningAttributes withDiningEvent:diningOpportunity withDiningPlace:diningPlace];
                                              }
                                          }
-                                        [viewController setDiningPeriods];
+                                         [viewController reloadDiningPeriods];
                                      }
      
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
      }];
-    }
+    
 }
 
 -(void)setAttributesInDiningPeriod:(DiningPeriod*)diningPeriod withDictionary:(NSDictionary*)dictionary withDiningEvent:(Event*)diningEvent withDiningPlace:(DiningPlace*)diningPlace{
@@ -581,6 +579,8 @@
     diningPeriod.id = [dictionary objectForKey:@"id"];
     [diningPeriod addDining_opportunityObject:diningEvent];
     [diningPeriod addDining_placeObject:diningPlace];
+    diningPeriod.place_id=diningPlace.id;
+    diningPeriod.opportunity_id = diningEvent.id;
     
 }
 #pragma mark - Events actions

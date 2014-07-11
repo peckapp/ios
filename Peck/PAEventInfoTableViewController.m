@@ -332,6 +332,7 @@ BOOL reloaded = NO;
         cell.nameLabel.text = @"John Doe";
         cell.tag = [indexPath row];
         cell.commentTextView.text = tempComment.content;
+        
     }
     
 }
