@@ -40,7 +40,7 @@ static NSString * nibName = @"PACircleCell";
 Peer* selectedPeer;
 CGRect initialFrame;
 CGRect initialCommentTableFrame;
-int selectedCell;
+NSInteger selectedCell;
 Circle* selectedCircle;
 BOOL viewingCell;
 BOOL viewingCircles;
@@ -531,9 +531,22 @@ BOOL viewingCircles;
     [[PASyncManager globalSyncManager] postComment:dictionary];
 }
 
+- (void)expandTableViewCell:(PACommentCell *)cell {
+    NSLog(@"still expanding!!");
+    PACircleCell *circleCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+    [circleCell expand:cell];
+}
+
+-(void)compressTableViewCell:(PACommentCell *)cell{
+    PACircleCell *circleCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+    [circleCell compress:cell];
+}
+
+
 -(void)showProfileOf:(Peer *)member{
     selectedPeer=member;
     [self performSegueWithIdentifier:@"selectProfile" sender:self];
 }
+
 
 @end

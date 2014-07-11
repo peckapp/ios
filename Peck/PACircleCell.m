@@ -27,6 +27,7 @@
 
 NSString * commentCellIdentifier = @"CircleCommentCell";
 NSString * commentCellNibName = @"PACommentCell";
+NSMutableDictionary *heightDictionary;
 
 - (void)awakeFromNib
 {
@@ -52,7 +53,7 @@ NSString * commentCellNibName = @"PACommentCell";
     NSLog(@"frame height: %f", self.frame.size.height);
     //self.commentsTableView.frame = CGRectMake(0, 100, self.frame.size.width, self.frame.size.height-200);
     
-    
+    heightDictionary = [[NSMutableDictionary alloc] init];
     self.members = [[NSMutableArray alloc] init];
 }
 
@@ -186,7 +187,8 @@ NSString * commentCellNibName = @"PACommentCell";
 }
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath:(NSIndexPath *)indexPath{
-    cell.parentTableView = self.parentViewController;
+    cell.parentCircleTableView = self.parentViewController;
+    cell.tag = indexPath.row;
     if([indexPath row]==0){
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
@@ -214,7 +216,13 @@ NSString * commentCellNibName = @"PACommentCell";
         return 44;
     }
     else if (tableView == self.commentsTableView) {
+        NSString * cellTag = [@([indexPath row]) stringValue];
+        CGFloat height = [[heightDictionary valueForKey:cellTag] floatValue];
+        if(height){
+            return height;
+        }
         return 120;
+
     }
     else {
         return 44;
@@ -373,5 +381,25 @@ NSString * commentCellNibName = @"PACommentCell";
 
 }
 
+-(void)expand:(PACommentCell*)cell{
+    NSLog(@"Expand cell");
+    [cell.commentTextView sizeToFit];
+    NSNumber *height = [NSNumber numberWithFloat:120];
+    if(cell.commentTextView.frame.size.height>120){
+        height = [NSNumber numberWithFloat:cell.commentTextView.frame.size.height];
+    }
+    NSString * cellTag = [@(cell.tag) stringValue];
+    [heightDictionary setValue:height forKey:cellTag];
+    [self.commentsTableView beginUpdates];
+    [self.commentsTableView endUpdates];
 
+}
+-(void)compress:(PACommentCell*)cell{
+    cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
+    NSString *cellTag = [@(cell.tag) stringValue];
+    [heightDictionary removeObjectForKey:cellTag];
+    [self.commentsTableView beginUpdates];
+    [self.commentsTableView endUpdates];
+
+}
 @end
