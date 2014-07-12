@@ -407,7 +407,12 @@
         NSLog(@"in secondary thread to update dining");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
-        NSString* diningOpportunitiesURL = [dining_opportunitiesAPI stringByAppendingString:@"?day_of_week=0"];
+        
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSDateComponents *components = [calendar components:(NSWeekdayCalendarUnit) fromDate:[NSDate date]];
+        
+        NSString* diningOpportunitiesURL = [dining_opportunitiesAPI stringByAppendingString:@"?day_of_week="];
+        diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[@([components weekday]-1) stringValue]];
         
         [[PASessionManager sharedClient] GET:diningOpportunitiesURL
                                   parameters:[self authenticationParameters]
@@ -461,7 +466,12 @@
         NSString * diningPlacesURL = [dining_placesAPI stringByAppendingString:@"?"];
         diningPlacesURL = [diningPlacesURL stringByAppendingString:@"dining_opportunity_id="];
         diningPlacesURL = [diningPlacesURL stringByAppendingString:[diningEvent.id stringValue]];
-        diningPlacesURL = [diningPlacesURL stringByAppendingString:@"&day_of_week=0"];
+    
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSDateComponents *components = [calendar components:(NSWeekdayCalendarUnit) fromDate:[NSDate date]];
+    
+        diningPlacesURL = [diningPlacesURL stringByAppendingString:@"&day_of_week="];
+        diningPlacesURL = [diningPlacesURL stringByAppendingString:[@([components weekday]-1) stringValue]];
         NSLog(@"in secondary thread to update dining");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
@@ -545,7 +555,9 @@
         diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningOpportunity.id stringValue]];
         diningPeriodsURL = [diningPeriodsURL stringByAppendingString:@"&dining_place_id="];
         diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningPlace.id stringValue]];
-        diningPeriodsURL = [diningPeriodsURL stringByAppendingString:@"&day_of_week=0"];
+        NSDateComponents *components = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:[NSDate date]];
+        diningPeriodsURL = [diningPeriodsURL stringByAppendingString:@"&day_of_week="];
+    diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[@([components weekday]-1) stringValue]];
     
         [[PASessionManager sharedClient] GET:diningPeriodsURL
                                   parameters:[self authenticationParameters]

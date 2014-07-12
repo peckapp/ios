@@ -134,9 +134,11 @@
 -(DiningPeriod*)diningPeriodFromPlace:(DiningPlace*)diningPlace {
     NSSet*dining = diningPlace.dining_period;
     NSArray*diningPeriods = [dining allObjects];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSWeekdayCalendarUnit) fromDate:[NSDate date]];
     for(int i=0;i<[diningPeriods count];i++){
         DiningPeriod *tempDiningPeriod = diningPeriods[i];
-        if(tempDiningPeriod.day_of_week==[NSNumber numberWithInt:0] && tempDiningPeriod.place_id==diningPlace.id &&tempDiningPeriod.opportunity_id==[self.detailItem valueForKey:@"id"]){
+        if([tempDiningPeriod.day_of_week integerValue]==([components weekday]-1) && tempDiningPeriod.place_id==diningPlace.id &&tempDiningPeriod.opportunity_id==[self.detailItem valueForKey:@"id"]){
             return tempDiningPeriod;
         }
     }

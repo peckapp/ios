@@ -83,6 +83,7 @@ CGRect initialTableViewRect;
 {
     [super viewDidLoad];
     NSLog(@"View did load (events)");
+    
     selectedDay=0;
     showingDetail = NO;
     NSError * error = nil;
