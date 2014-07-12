@@ -17,6 +17,10 @@ static NSString * const PATestSecureAPIBaseURLString = @"https://thor.peckapp.co
 static NSString * const PADevAPIBaseURLString = @"http://thor.peckapp.com:3500/";
 static NSString * const PADevProdAPIBaseURLString = @"http://thor.peckapp.com:3501/";
 static NSString * const PADevSecureAPIBaseURLString = @"https://thor.peckapp.com:3502/";
+// Production Webservice
+static NSString * const PAStagingAPIBaseURLString = @"http://buri.peckapp.com:3500/";
+static NSString * const PAProdAPIBaseURLString = @"http://buri.peckapp.com:3501/";
+static NSString * const PAProdSecureAPIBaseURLString = @"https://buri.peckapp.com:3502/";
 
 @implementation PASessionManager
 
