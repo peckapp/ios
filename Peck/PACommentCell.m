@@ -17,9 +17,10 @@
 
 - (void)awakeFromNib
 {
-    //TODO: add a "..." to the end of comments that don't fit in the text view
+    
     [commentTextView setEditable:NO];
     [commentTextView setScrollEnabled:NO];
+    
     _expanded=NO;
     // Initialization code
 }

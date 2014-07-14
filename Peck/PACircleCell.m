@@ -191,7 +191,7 @@ UITextView *textViewHelper;
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath:(NSIndexPath *)indexPath{
     cell.parentCircleTableView = self.parentViewController;
-    cell.tag = indexPath.row;
+    cell.tag = indexPath.row-1;
     if([indexPath row]==0){
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
@@ -210,9 +210,8 @@ UITextView *textViewHelper;
         }
         [cell.postButton setHidden:YES];
         cell.nameLabel.text = @"John Doe";
-        cell.tag = [indexPath row];
         cell.commentTextView.text = tempComment.content;
-        
+        cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, cell.frame.size.height);
 
         /*if(!cell.expanded){
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
@@ -241,10 +240,15 @@ UITextView *textViewHelper;
         return 44;
     }
     else if (tableView == self.commentsTableView) {
-        NSString * cellTag = [@([indexPath row]) stringValue];
-        CGFloat height = [[heightDictionary valueForKey:cellTag] floatValue];
-        if(height){
-            return height;
+        if(indexPath.row>0){
+            if([_fetchedResultsController.fetchedObjects count]>=[indexPath row]){
+                Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+                NSString * commentID = [comment.id stringValue];
+                CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
+                if(height){
+                    return height;
+                }
+            }
         }
         return 120;
 
@@ -413,16 +417,20 @@ UITextView *textViewHelper;
     if(cell.commentTextView.frame.size.height>120){
         height = [NSNumber numberWithFloat:cell.commentTextView.frame.size.height];
     }
-    NSString * cellTag = [@(cell.tag) stringValue];
-    [heightDictionary setValue:height forKey:cellTag];
+    Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
+    
+    NSString * commentID = [comment.id stringValue];
+    
+    [heightDictionary setValue:height forKey:commentID];
     [self.commentsTableView beginUpdates];
     [self.commentsTableView endUpdates];
 
 }
 -(void)compress:(PACommentCell*)cell{
     cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
-    NSString *cellTag = [@(cell.tag) stringValue];
-    [heightDictionary removeObjectForKey:cellTag];
+    Comment *comment = _fetchedResultsController.fetchedObjects[cell.tag];
+    NSString *commentID = [comment.id stringValue];
+    [heightDictionary removeObjectForKey:commentID];
     [self.commentsTableView beginUpdates];
     [self.commentsTableView endUpdates];
 
