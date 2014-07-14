@@ -14,7 +14,6 @@
 
 @dynamic circleName;
 @dynamic id;
-@dynamic members;
 @dynamic numberOfMembers;
 @dynamic circle_members;
 

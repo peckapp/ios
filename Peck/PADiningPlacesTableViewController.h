@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PACoreDataProtocol.h"
 #import "DiningPeriod.h"
+#import "DiningPlace.h"
 
 @interface PADiningPlacesTableViewController : UITableViewController <PACoreDataProtocol>
 

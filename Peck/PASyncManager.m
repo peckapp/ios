@@ -287,12 +287,14 @@
     
 }
 
--(void)postCircleMember:(NSDictionary *) dictionary forCircle:(Circle*)circle withSender:(id)sender{
+-(void)postCircleMember:(Peer*)newMember withDictionary:(NSDictionary *) dictionary forCircle:(Circle*)circle withSender:(id)sender{
     [[PASessionManager sharedClient] POST:circle_membersAPI
                                parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         [self updateModifiedCircle:circle withSender:sender];
+         [circle addCircle_membersObject:newMember];
+         PACirclesTableViewController *tableViewSender = (PACirclesTableViewController*)sender;
+         [tableViewSender.tableView reloadData];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -300,7 +302,7 @@
     
 
 }
--(void)updateModifiedCircle:(Circle*)circle withSender:(id)sender{
+/*-(void)updateModifiedCircle:(Circle*)circle withSender:(id)sender forPeer:(Peer*)newMember{
     NSString* circleMembersURL = [circle_membersAPI stringByAppendingString:@"?"];
     circleMembersURL = [circleMembersURL stringByAppendingString:@"circle_id="];
     circleMembersURL = [circleMembersURL stringByAppendingString:[circle.id stringValue]];
@@ -311,6 +313,7 @@
          NSLog(@"The JSON: %@",JSON);
          NSDictionary *dictionary = (NSDictionary*)JSON ;
          NSArray*members = [dictionary objectForKey:@"circle_members"];
+         Peer *addedMember =
          circle.members = members;
          PACirclesTableViewController *tableViewSender = (PACirclesTableViewController*)sender;
          [tableViewSender.tableView reloadData];
@@ -319,7 +322,7 @@
                                      NSLog(@"ERROR: %@",error);
                                  }];
 }
-
+*/
 
 -(void)updateCircleInfo
 {

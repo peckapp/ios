@@ -43,7 +43,7 @@
 
 // methods for updating circles
 -(void)postCircle: (NSDictionary *) dictionary;
--(void)postCircleMember:(NSDictionary *) dictionary forCircle:(Circle*)circle withSender:(id)sender;
+-(void)postCircleMember:(Peer*)newMember withDictionary:(NSDictionary *) dictionary forCircle:(Circle*)circle withSender:(id)sender;
 -(void)updateCircleInfo;
 
 //methods for comments

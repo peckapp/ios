@@ -155,7 +155,7 @@ BOOL viewingCircles;
                                    instituion_id, @"institution_id",
                                    circle_id, @"circle_id",
                                     nil];
-        [[PASyncManager globalSyncManager] postCircleMember:newMember forCircle:selectedCircle withSender:self];
+        [[PASyncManager globalSyncManager] postCircleMember:tempPeer withDictionary:newMember forCircle:selectedCircle withSender:self ];
     }
 
     
@@ -286,7 +286,7 @@ BOOL viewingCircles;
 
 # pragma mark - PACirclesControllerDelegate
 
--(void)profile:(int)member withCircle:(NSInteger)circle{
+/*-(void)profile:(int)member withCircle:(NSInteger)circle{
     
     NSLog(@"you have selected user %i", member);
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:circle inSection:0];
@@ -317,7 +317,7 @@ BOOL viewingCircles;
         selectedPeer = peer;
         [self performSegueWithIdentifier:@"selectProfile" sender:self];
     }
-}
+}*/
 
 - (void)promptToAddMemberToCircleCell:(PACircleCell *)cell
 {
