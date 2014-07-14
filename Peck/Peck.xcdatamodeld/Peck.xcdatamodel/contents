@@ -5,7 +5,7 @@
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="members" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="numberOfMembers" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="circle_members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Peer" syncable="YES"/>
+        <relationship name="circle_members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Peer" inverseName="circles" inverseEntity="Peer" syncable="YES"/>
     </entity>
     <entity name="Comment" representedClassName="Comment" syncable="YES">
         <attribute name="category" optional="YES" attributeType="String" syncable="YES"/>
@@ -85,9 +85,10 @@
     <entity name="Peer" representedClassName="Peer" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="circles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Circle" inverseName="circle_members" inverseEntity="Circle" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Circle" positionX="261" positionY="198" width="128" height="118"/>
+        <element name="Circle" positionX="261" positionY="198" width="128" height="30"/>
         <element name="Comment" positionX="207" positionY="288" width="128" height="135"/>
         <element name="DiningPeriod" positionX="90" positionY="351" width="128" height="165"/>
         <element name="DiningPlace" positionX="-108" positionY="441" width="128" height="178"/>
@@ -95,6 +96,6 @@
         <element name="Explore" positionX="261" positionY="261" width="128" height="178"/>
         <element name="Institution" positionX="-54" positionY="189" width="128" height="210"/>
         <element name="Message" positionX="261" positionY="261" width="128" height="118"/>
-        <element name="Peer" positionX="261" positionY="261" width="128" height="73"/>
+        <element name="Peer" positionX="261" positionY="261" width="128" height="30"/>
     </elements>
 </model>
