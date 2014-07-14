@@ -8,16 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "PACoreDataProtocol.h"
+#import "DiningPeriod.h"
 
-@interface PADiningPlacesTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol>
+@interface PADiningPlacesTableViewController : UITableViewController <PACoreDataProtocol>
 
 
 @property (strong, nonatomic) id detailItem;
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 -(void)configureView;
 -(void)reloadDiningPeriods;
+-(void)fetchDiningPlace:(DiningPeriod*)diningPeriod;
+-(void)addDiningPlace:(DiningPlace*) diningPlace withPeriod:(DiningPeriod*)diningPeriod;
 @end

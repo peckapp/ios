@@ -15,7 +15,7 @@
 #import "PADiningCell.h"
 
 @interface PADiningPlacesTableViewController ()
-@property NSArray* diningPlaces;
+@property NSMutableArray* diningPlaces;
 
 @end
 
@@ -37,7 +37,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.diningPlaces = [[NSMutableArray alloc] init];
     [self configureView];
     [self reloadDiningPeriods];
     // Uncomment the following line to preserve selection between presentations.
@@ -60,7 +60,7 @@
     if (_detailItem != newDetailItem) {
         _detailItem = newDetailItem;
         // Update the view.
-        [self configureView];
+        //[self configureView];
     }
 }
 
@@ -72,13 +72,15 @@
         
         self.title = [self.detailItem valueForKey:@"title"];
         
-        NSSet *dining = [self.detailItem valueForKey:@"dining_place"];
+        [self fetchDiningPeriods];
+        
+       /* NSSet *dining = [self.detailItem valueForKey:@"dining_place"];
         self.diningPlaces = [dining allObjects];
         
         for(int i=0; i<[self.diningPlaces count];i++){
             DiningPlace *tempDiningPlace = self.diningPlaces[i];
             [[PASyncManager globalSyncManager] getDiningPeriodForPlace:tempDiningPlace andOpportunity:self.detailItem withViewController:self forNumberAdded:i];
-        }
+        }*/
         [self.tableView reloadData];
     }
 }
@@ -86,6 +88,76 @@
     [self.tableView reloadData];
 }
 
+-(void)fetchDiningPeriods{
+    
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"DiningPeriod" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSString *attributeName = @"opportunity_id";
+    NSNumber *attributeValue = [self.detailItem valueForKey:@"id"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@",
+                              attributeName, attributeValue];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSWeekdayCalendarUnit) fromDate:[NSDate date]];
+    NSNumber * day = [NSNumber numberWithLong:([components weekday]-1)];
+    
+    NSPredicate *dayPredicate = [NSPredicate predicateWithFormat:@"day_of_week = %@", day];
+    NSArray* predicateArray = [[NSArray alloc] initWithObjects:predicate, dayPredicate, nil];
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    [fetchRequest setPredicate:compoundPredicate];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    if([mutableFetchResults count]>0){
+        
+        for(int i=0; i<[mutableFetchResults count];i++){
+            DiningPeriod *tempDiningPeriod = mutableFetchResults[i];
+            [self fetchDiningPlace:tempDiningPeriod];
+        }
+    }
+    else{
+        [[PASyncManager globalSyncManager] updateDiningPeriods:self.detailItem forViewController:self];
+    }
+}
+
+-(void)fetchDiningPlace:(DiningPeriod*)diningPeriod{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"DiningPlace" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSString *attributeName = @"id";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@",attributeName, diningPeriod.place_id];
+    
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    
+    if([mutableFetchResults count]>0){
+        DiningPlace *tempDiningPlace = mutableFetchResults[0];
+        tempDiningPlace.start_date = diningPeriod.start_date;
+        tempDiningPlace.end_date = diningPeriod.end_date;
+        [self.diningPlaces addObject:tempDiningPlace];
+        [self.tableView reloadData];
+    }
+    else{
+        [[PASyncManager globalSyncManager] updateDiningPlaces:diningPeriod forController:self];
+    }
+}
+
+-(void)addDiningPlace:(DiningPlace*) diningPlace withPeriod:(DiningPeriod*)diningPeriod{
+    diningPlace.start_date = diningPeriod.start_date;
+    diningPlace.end_date = diningPeriod.end_date;
+    [self.diningPlaces addObject:diningPlace];
+    [self.tableView reloadData];
+}
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -123,11 +195,13 @@
     cell=(PADiningCell*)cell;
     DiningPlace *tempDiningPlace = self.diningPlaces[indexPath.row];
     
-    DiningPeriod *tempDiningPeriod = [self diningPeriodFromPlace:tempDiningPlace];
+    /*DiningPeriod *tempDiningPeriod = [self diningPeriodFromPlace:tempDiningPlace];
     if(tempDiningPeriod){
         cell.startLabel.text = [self dateToString:tempDiningPeriod.start_date];
         cell.endLabel.text = [self dateToString:tempDiningPeriod.end_date];
-    }
+    }*/
+    cell.startLabel.text = [self dateToString:tempDiningPlace.start_date];
+    cell.endLabel.text = [self dateToString:tempDiningPlace.end_date];
     [cell.nameLabel setText:tempDiningPlace.name];
     
 }
