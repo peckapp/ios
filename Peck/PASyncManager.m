@@ -22,6 +22,7 @@
 #import "DiningPlace.h"
 #import "PADiningPlacesTableViewController.h"
 #import "DiningPeriod.h"
+#import "MenuItem.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -552,6 +553,49 @@
     diningPeriod.opportunity_id = diningEvent.id;
     
 }
+#pragma mark - Menu Item actions
+
+-(void)updateMenuItemsForOpportunity:(Event*)diningOpportunity andPlace:(DiningPlace*)diningPlace{
+    NSString * menuItemsURL = [menu_itemsAPI stringByAppendingString:@"?dining_opportunity_id="];
+    menuItemsURL = [menuItemsURL stringByAppendingString:[diningOpportunity.id stringValue]];
+    menuItemsURL = [menuItemsURL stringByAppendingString:@"&date_available="];
+    
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yyyy-MM-dd"];
+    NSString *today = [df stringFromDate:[NSDate date]];
+    menuItemsURL = [menuItemsURL stringByAppendingString:today];
+    
+    [[PASessionManager sharedClient] GET:menuItemsURL
+                              parameters:[self authenticationParameters]
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSDictionary *items = (NSDictionary*)JSON;
+         NSArray * menuItemArray = [items objectForKey:@"menu_items"];
+         for (NSDictionary *menuItemAttributes in menuItemArray){
+             NSNumber *newID = [menuItemAttributes objectForKey:@"id"];
+             BOOL menuItemAlreadyExists = [self objectExists:newID withType:@"MenuItem"];
+             if(!menuItemAlreadyExists){
+                 NSLog(@"setting menu Item");
+                 MenuItem * menuItem = [NSEntityDescription insertNewObjectForEntityForName:@"MenuItem" inManagedObjectContext: _managedObjectContext];
+                 [self setAttributesInMenuItem:menuItem withDictionary:menuItemAttributes andPlace:diningPlace andOpportunity:diningOpportunity];
+             }
+         }
+    }
+     
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                 }];
+
+    
+}
+
+-(void)setAttributesInMenuItem:(MenuItem*)menuItem withDictionary:(NSDictionary*)dictionary andPlace:(DiningPlace*)place andOpportunity:(Event*)opportunity{
+    menuItem.name = [dictionary objectForKey:@"name"];
+    menuItem.id = [dictionary objectForKey:@"id"];
+    menuItem.dining_opportunity_id =opportunity.id;
+    menuItem.dining_place_id =[dictionary objectForKey:@"dining_place_id"];
+}
+
 #pragma mark - Events actions
 
 -(void)postEvent:(NSDictionary *)dictionary

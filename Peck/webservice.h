@@ -19,6 +19,7 @@
 # define dining_opportunitiesAPI @"api/dining_opportunities"
 # define dining_placesAPI @"api/dining_places"
 # define dining_periodsAPI @"api/dining_periods"
+# define menu_itemsAPI @"api/menu_items"
 // Parameter names
 #define user_id @"user_id"
 #define inst_id @"institution_id"

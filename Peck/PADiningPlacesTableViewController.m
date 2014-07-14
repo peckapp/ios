@@ -186,6 +186,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(self.selectedIndexPath==nil){
+        DiningPlace *tempDiningPlace = self.diningPlaces[indexPath.row];
+        PADiningCell *cell = (PADiningCell*)[tableView cellForRowAtIndexPath:indexPath];
+        cell.diningOpportunity=self.detailItem;
+        cell.diningPlace=tempDiningPlace;
+        [cell performFetch];
+        [[PASyncManager globalSyncManager] updateMenuItemsForOpportunity:self.detailItem andPlace:tempDiningPlace];
         self.selectedIndexPath = indexPath;
         [tableView beginUpdates];
         [tableView endUpdates];

@@ -410,7 +410,6 @@ UITextView *textViewHelper;
         abort();
     }
     [self.commentsTableView reloadData];
-
 }
 
 -(void)expand:(PACommentCell*)cell{

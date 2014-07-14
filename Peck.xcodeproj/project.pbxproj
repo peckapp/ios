@@ -71,6 +71,7 @@
 		A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4119743A05007E3C3A /* DiningPlace.m */; };
 		A4677D4519743A05007E3C3A /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4419743A05007E3C3A /* Event.m */; };
 		A4677D4819743A05007E3C3A /* DiningPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4719743A05007E3C3A /* DiningPeriod.m */; };
+		A4677D4E19746F45007E3C3A /* MenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4D19746F45007E3C3A /* MenuItem.m */; };
 		A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */; };
 		A46F0926196F2A7600CFA5D0 /* PADiningCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0924196F2A7600CFA5D0 /* PADiningCell.m */; };
 		A46F0927196F2A7600CFA5D0 /* PADiningCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A46F0925196F2A7600CFA5D0 /* PADiningCell.xib */; };
@@ -247,6 +248,8 @@
 		A4677D4419743A05007E3C3A /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A4677D4619743A05007E3C3A /* DiningPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPeriod.h; sourceTree = "<group>"; };
 		A4677D4719743A05007E3C3A /* DiningPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPeriod.m; sourceTree = "<group>"; };
+		A4677D4C19746F45007E3C3A /* MenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItem.h; sourceTree = "<group>"; };
+		A4677D4D19746F45007E3C3A /* MenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItem.m; sourceTree = "<group>"; };
 		A46F08FF196DC11800CFA5D0 /* PADiningPlacesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningPlacesTableViewController.h; sourceTree = "<group>"; };
 		A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningPlacesTableViewController.m; sourceTree = "<group>"; };
 		A46F0923196F2A7600CFA5D0 /* PADiningCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningCell.h; sourceTree = "<group>"; };
@@ -585,6 +588,8 @@
 		A46F08FE196DC0E700CFA5D0 /* Dining */ = {
 			isa = PBXGroup;
 			children = (
+				A4677D4C19746F45007E3C3A /* MenuItem.h */,
+				A4677D4D19746F45007E3C3A /* MenuItem.m */,
 				A4677D4619743A05007E3C3A /* DiningPeriod.h */,
 				A4677D4719743A05007E3C3A /* DiningPeriod.m */,
 				A4677D4019743A05007E3C3A /* DiningPlace.h */,
@@ -930,6 +935,7 @@
 				A4677D3F19743A05007E3C3A /* Circle.m in Sources */,
 				A463F384194B959800ED441F /* PACircleCell.m in Sources */,
 				863843DD193CB75F004110F5 /* PARegisterViewController.m in Sources */,
+				A4677D4E19746F45007E3C3A /* MenuItem.m in Sources */,
 				A46F0926196F2A7600CFA5D0 /* PADiningCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -40,6 +40,7 @@
 -(void)updateDiningPlaces:(DiningPeriod*)diningPeriod forController:(PADiningPlacesTableViewController*)viewController;
 //-(void)getDiningPeriodForPlace:(DiningPlace*)diningPlace andOpportunity:(Event*)diningOpportunity withViewController:(PADiningPlacesTableViewController*)viewController forNumberAdded:(NSInteger)numberAdded;
 -(void)updateDiningPeriods:(Event*)diningOpportunity forViewController:(PADiningPlacesTableViewController*)viewController;
+-(void)updateMenuItemsForOpportunity:(Event*)diningOpportunity andPlace:(DiningPlace*)diningPlace;
 
 // methods for updating circles
 -(void)postCircle: (NSDictionary *) dictionary;
