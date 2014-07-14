@@ -14,8 +14,11 @@
 #import "DiningPeriod.h"
 #import "PADiningCell.h"
 
+
+
 @interface PADiningPlacesTableViewController ()
 @property NSMutableArray* diningPlaces;
+@property NSIndexPath* selectedIndexPath;
 
 @end
 
@@ -24,6 +27,8 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
+#define cellHeight 120
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -37,7 +42,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.selectedIndexPath=nil;
     self.diningPlaces = [[NSMutableArray alloc] init];
+    //self.tableView.rowHeight=120;
     [self configureView];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -145,6 +152,7 @@
     diningPlace.start_date = diningPeriod.start_date;
     diningPlace.end_date = diningPeriod.end_date;
     [self.diningPlaces addObject:diningPlace];
+    
     [self.tableView reloadData];
 }
 #pragma mark - Table view data source
@@ -163,8 +171,36 @@
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 120;
+    NSLog(@"height for row");
+    if((self.selectedIndexPath != nil) && (indexPath.row == self.selectedIndexPath.row)) {
+        return self.view.frame.size.height;
+    }
+    return cellHeight;
 }
+
+
+
+#pragma mark - table view delegate
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(self.selectedIndexPath==nil){
+        self.selectedIndexPath = indexPath;
+        [tableView beginUpdates];
+        [tableView endUpdates];
+        [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        [tableView setScrollEnabled:NO];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }else{
+        [tableView setScrollEnabled:YES];
+        self.selectedIndexPath=nil;
+        [tableView beginUpdates];
+        [tableView endUpdates];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

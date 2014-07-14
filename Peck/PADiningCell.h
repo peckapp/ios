@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PADiningCell : UITableViewCell
+@interface PADiningCell : UITableViewCell <UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *startLabel;
 @property (weak, nonatomic) IBOutlet UILabel *endLabel;
 
+@property (weak, nonatomic) IBOutlet UITableView *menuItemsTableView;
 
 @end

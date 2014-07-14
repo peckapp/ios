@@ -216,11 +216,13 @@ UITextView *textViewHelper;
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
         if(height){
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, height);
+            //cell.expanded=YES;
+           // cell.
         }
         else{
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 110);
         }
-        // this fixes the problem where the comment text would ocassionally be cut off when first loaded
+        // this fixes the problem where the comment text would occasionally be cut off when first loaded
     }
     cell.nameLabel.text = @"John Doe";
 }
