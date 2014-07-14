@@ -19,7 +19,6 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 -(void)configureView;
--(void)reloadDiningPeriods;
 -(void)fetchDiningPlace:(DiningPeriod*)diningPeriod;
 -(void)addDiningPlace:(DiningPlace*) diningPlace withPeriod:(DiningPeriod*)diningPeriod;
 @end

@@ -39,7 +39,6 @@
     [super viewDidLoad];
     self.diningPlaces = [[NSMutableArray alloc] init];
     [self configureView];
-    [self reloadDiningPeriods];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -73,20 +72,10 @@
         self.title = [self.detailItem valueForKey:@"title"];
         
         [self fetchDiningPeriods];
-        
-       /* NSSet *dining = [self.detailItem valueForKey:@"dining_place"];
-        self.diningPlaces = [dining allObjects];
-        
-        for(int i=0; i<[self.diningPlaces count];i++){
-            DiningPlace *tempDiningPlace = self.diningPlaces[i];
-            [[PASyncManager globalSyncManager] getDiningPeriodForPlace:tempDiningPlace andOpportunity:self.detailItem withViewController:self forNumberAdded:i];
-        }*/
         [self.tableView reloadData];
     }
 }
--(void)reloadDiningPeriods{
-    [self.tableView reloadData];
-}
+
 
 -(void)fetchDiningPeriods{
     
@@ -195,28 +184,10 @@
     cell=(PADiningCell*)cell;
     DiningPlace *tempDiningPlace = self.diningPlaces[indexPath.row];
     
-    /*DiningPeriod *tempDiningPeriod = [self diningPeriodFromPlace:tempDiningPlace];
-    if(tempDiningPeriod){
-        cell.startLabel.text = [self dateToString:tempDiningPeriod.start_date];
-        cell.endLabel.text = [self dateToString:tempDiningPeriod.end_date];
-    }*/
     cell.startLabel.text = [self dateToString:tempDiningPlace.start_date];
     cell.endLabel.text = [self dateToString:tempDiningPlace.end_date];
     [cell.nameLabel setText:tempDiningPlace.name];
     
-}
--(DiningPeriod*)diningPeriodFromPlace:(DiningPlace*)diningPlace {
-    NSSet*dining = diningPlace.dining_period;
-    NSArray*diningPeriods = [dining allObjects];
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [calendar components:(NSWeekdayCalendarUnit) fromDate:[NSDate date]];
-    for(int i=0;i<[diningPeriods count];i++){
-        DiningPeriod *tempDiningPeriod = diningPeriods[i];
-        if([tempDiningPeriod.day_of_week integerValue]==([components weekday]-1) && tempDiningPeriod.place_id==diningPlace.id &&tempDiningPeriod.opportunity_id==[self.detailItem valueForKey:@"id"]){
-            return tempDiningPeriod;
-        }
-    }
-    return nil;
 }
 
 -(NSString*)dateToString:(NSDate *)date{

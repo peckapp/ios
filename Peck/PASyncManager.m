@@ -421,18 +421,14 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"JSON: %@",JSON);
              NSDictionary *diningDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_opportunities"];
-             //NSLog(@"Update Event response: %@", postsFromResponse);
              for (NSDictionary *diningAttributes in postsFromResponse){
                  NSNumber *newID = [diningAttributes objectForKey:@"id"];
                  BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event"];
                  if(!eventAlreadyExists){
-                     //NSLog(@"adding a dining event to Core Data");
                      Event * diningEvent = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
                      [self setAttributesInDiningEvent:diningEvent withDictionary:diningAttributes];
-                     //NSLog(@"EVENT: %@",event);
                  }
              }
          }
@@ -489,58 +485,14 @@
                      DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
                      [self setAttributesInDiningPlace:diningPlace withDictionary:diningAttributes];
                      [viewController addDiningPlace:diningPlace withPeriod:diningPeriod];
-                 }/*else{
-                     DiningPlace *tempDiningPlace =[self diningPlace: newID IsInOpportunity:diningEvent];
-                     if(!tempDiningPlace){
-                         [self addDiningOpportunity:diningEvent toDiningPlace:newID];
-                     }
-                 }*/
+                 }
              }
-             
-             //[viewController configureView];
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                          NSLog(@"ERROR: %@",error);
                                      }];
     //});
 
-}
--(void)addDiningOpportunity:(Event*)diningEvent toDiningPlace:(NSNumber*)diningPlaceID{
-    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"DiningPlace" inManagedObjectContext:self.managedObjectContext];
-    [fetchRequest setEntity:entity];
-    
-    NSString *attributeName = @"id";
-    NSNumber *attributeValue = diningPlaceID;
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@",
-                              attributeName, attributeValue];
-    [fetchRequest setPredicate:predicate];
-    
-    NSError *error = nil;
-    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
-    if([mutableFetchResults count]>0){
-        //this should always be true
-        //in fact, there should always be one object in mutable fetch results
-        DiningPlace *tempDiningPlace = mutableFetchResults[0];
-        [tempDiningPlace addDining_opportunityObject:diningEvent];
-        
-    }
-
-}
-
--(DiningPlace*)diningPlace:(NSNumber*)diningPlaceID IsInOpportunity:(Event*)diningEvent{
-    NSSet*dining = diningEvent.dining_place;
-    NSArray*diningPlaces = [dining allObjects];
-    for(int i=0; i<[diningPlaces count]; i++){
-        DiningPlace *tempDiningPlace = diningPlaces[i];
-        if(tempDiningPlace.id==diningPlaceID){
-            return tempDiningPlace;
-        }
-    }
-    return nil;
 }
 
 -(void)setAttributesInDiningPlace:(DiningPlace*)diningPlace withDictionary:(NSDictionary*)dictionary {
@@ -593,8 +545,6 @@
     diningPeriod.end_date = [df dateFromString:[dictionary objectForKey:@"end_time"]];
     diningPeriod.day_of_week = [dictionary objectForKey:@"day_of_week"];
     diningPeriod.id = [dictionary objectForKey:@"id"];
-    [diningPeriod addDining_opportunityObject:diningEvent];
-    //[diningPeriod addDining_placeObject:diningPlace];
     diningPeriod.place_id=[dictionary objectForKey:@"dining_place_id"];
     diningPeriod.opportunity_id = diningEvent.id;
     
