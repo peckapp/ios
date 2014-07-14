@@ -211,7 +211,7 @@ UITextView *textViewHelper;
         [cell.postButton setHidden:YES];
         cell.nameLabel.text = @"John Doe";
         cell.commentTextView.text = tempComment.content;
-        cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, cell.frame.size.height);
+        //cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, cell.frame.size.height);
 
         /*if(!cell.expanded){
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
@@ -272,7 +272,7 @@ UITextView *textViewHelper;
         }
     }
     else if (tableView == self.commentsTableView) {
-
+        [self.commentsTableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     else {
 

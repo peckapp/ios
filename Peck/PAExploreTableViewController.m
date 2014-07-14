@@ -136,7 +136,8 @@ NSCache *imageCache;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self performSegueWithIdentifier:@"showMessageDetail" sender:self];
+    //[self performSegueWithIdentifier:@"showMessageDetail" sender:self];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 /*
