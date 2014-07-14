@@ -211,15 +211,16 @@ UITextView *textViewHelper;
         [cell.postButton setHidden:YES];
         cell.nameLabel.text = @"John Doe";
         cell.commentTextView.text = tempComment.content;
-        //cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, cell.frame.size.height);
-
-        /*if(!cell.expanded){
-            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
+        
+        NSString * commentID = [tempComment.id stringValue];
+        CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
+        if(height){
+            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, height);
         }
         else{
-            [cell.commentTextView sizeToFit];
-        }*/
-        //this fixes the problem where a cell's text view would occasionally be cut off when first loaded
+            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 110);
+        }
+        // this fixes the problem where the comment text would ocassionally be cut off when first loaded
     }
     cell.nameLabel.text = @"John Doe";
 }

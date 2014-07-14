@@ -172,7 +172,7 @@ BOOL viewingCircles;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
-    return [sectionInfo numberOfObjects];
+    return [sectionInfo numberOfObjects]+1;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
@@ -259,24 +259,22 @@ BOOL viewingCircles;
 
 - (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    
-
-    Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
-    //NSLog(@"configure cell for circle %@", c);
-    cell.circleTitle.text = c.circleName;
-    cell.delegate = self;
     cell.tag=[indexPath row];
-    cell.parentViewController=self;
-    cell.circle=c;
-    NSSet*members = c.circle_members;
-    [cell updateCircleMembers:[members allObjects]];
-    NSArray *peers = [c.circle_members allObjects];
-    NSLog(@"circle: %@",c.circleName);
-    for(int j =0; j<[peers count]; j++){
-        Peer *temp = peers[j];
-        NSLog(@"member: %@",temp.id);
+    if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
+        cell.circleTitle.text=@"New";
+        
     }
-
+    else{
+        Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
+        //NSLog(@"configure cell for circle %@", c);
+        cell.circleTitle.text = c.circleName;
+        cell.delegate = self;
+        
+        cell.parentViewController=self;
+        cell.circle=c;
+        NSSet*members = c.circle_members;
+        [cell updateCircleMembers:[members allObjects]];
+    }
 }
 
 - (IBAction)addCircle:(id)sender
