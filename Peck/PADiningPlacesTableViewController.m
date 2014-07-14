@@ -143,9 +143,6 @@
         }
     }
     return nil;
-    
-    
-    
 }
 
 -(NSString*)dateToString:(NSDate *)date{

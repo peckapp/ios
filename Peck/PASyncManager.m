@@ -368,14 +368,18 @@
 {
     NSLog(@"set attributes of circle");
     circle.circleName = [dictionary objectForKey:@"circle_name"];
+    NSLog(@"circle name: %@", circle.circleName);
     circle.id = [dictionary objectForKey:@"id"];
     NSArray *members = (NSArray*)[dictionary objectForKey:@"circle_members"];
     NSMutableArray *addedMembers = [[NSMutableArray alloc] init];
     for(int i =0; i<[members count]; i++){
         addedMembers[i]=[self getPeer:members[i]];
+        [circle addCircle_membersObject:[self getPeer:members[i]]];
+        
     }
-    circle.members = addedMembers;
-    NSLog(@"circle.members: %@", circle.members);
+        //NSLog(@"circle members: %@", circle.circle_members);
+    //circle.members = addedMembers;
+    
 }
 
 - (Peer *)getPeer:(NSNumber*)peerID{

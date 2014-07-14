@@ -259,14 +259,24 @@ BOOL viewingCircles;
 
 - (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"configure cell");
+    
+
     Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
+    //NSLog(@"configure cell for circle %@", c);
     cell.circleTitle.text = c.circleName;
     cell.delegate = self;
     cell.tag=[indexPath row];
     cell.parentViewController=self;
     cell.circle=c;
-    [cell updateCircleMembers:c.members];
+    NSSet*members = c.circle_members;
+    [cell updateCircleMembers:[members allObjects]];
+    NSArray *peers = [c.circle_members allObjects];
+    NSLog(@"circle: %@",c.circleName);
+    for(int j =0; j<[peers count]; j++){
+        Peer *temp = peers[j];
+        NSLog(@"member: %@",temp.id);
+    }
+
 }
 
 - (IBAction)addCircle:(id)sender
