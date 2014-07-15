@@ -349,6 +349,7 @@ BOOL reloaded = NO;
         cell.tag = [indexPath row]-1;
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
+        
         NSString * commentID = [tempComment.id stringValue];
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
         if(height){
@@ -357,11 +358,12 @@ BOOL reloaded = NO;
             [cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
         }
         else{
-            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, compressedTextViewHeight);
+            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
+            //using the default cell height used to show half a line, but now with autolayout constraints it displays correctly
             cell.expanded=NO;
             [cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
         }
-
+        
     }
     
 }
@@ -464,7 +466,7 @@ BOOL reloaded = NO;
     NSLog(@"new height: %f", newHeight);
     NSNumber *height = [NSNumber numberWithFloat: defaultCellHeight];
     if(tempText.frame.size.height>defaultCellHeight){
-        height = [NSNumber numberWithFloat:tempText.frame.size.height];
+        height = [NSNumber numberWithFloat:tempText.frame.size.height+1];
     }
     Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
     
