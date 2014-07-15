@@ -20,7 +20,7 @@
     
     [commentTextView setEditable:NO];
     [commentTextView setScrollEnabled:NO];
-    
+    commentTextView.frame= CGRectMake(98, 0, 222, 110);
     _expanded=NO;
     // Initialization code
 }
