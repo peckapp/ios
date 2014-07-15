@@ -37,6 +37,8 @@ UITextView *textViewHelper;
 
 BOOL reloaded = NO;
 
+#define defaultCellHeight 120
+#define compressedTextViewHeight 110
 #define reloadTime 3
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -336,8 +338,22 @@ BOOL reloaded = NO;
         }
         [cell.postButton setHidden:YES];
         cell.nameLabel.text = @"John Doe";
-        cell.tag = [indexPath row];
+        cell.tag = [indexPath row]-1;
         cell.commentTextView.text = tempComment.content;
+        
+        NSString * commentID = [tempComment.id stringValue];
+        CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
+        if(height){
+            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, height);
+            cell.expanded=YES;
+            [cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
+        }
+        else{
+            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, compressedTextViewHeight);
+            cell.expanded=NO;
+            [cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
+        }
+
     }
     
 }
@@ -355,17 +371,17 @@ BOOL reloaded = NO;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"height for row at index path");
-    //CGFloat height = ((PACommentCell*)[tableView cellForRowAtIndexPath:indexPath]).commentTextView.contentSize.height;
-    NSString * cellTag = [@([indexPath row]) stringValue];
-    
-    CGFloat height = [[heightDictionary valueForKey:cellTag] floatValue];
-    if(height){
-        NSLog(@"setting the new height of the frame %f", height);
-        return height;
+    if(indexPath.row>0){
+        if([_fetchedResultsController.fetchedObjects count]>=[indexPath row]){
+            Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+            NSString * commentID = [comment.id stringValue];
+            CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
+            if(height){
+                return height;
+            }
+        }
     }
-    return 120;
-}
+    return defaultCellHeight;}
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -429,21 +445,26 @@ BOOL reloaded = NO;
 
 - (void)expandTableViewCell:(PACommentCell *)cell {
     [cell.commentTextView sizeToFit];
-    //[cell.commentTextView layoutSubviews];
-    NSNumber *height = [NSNumber numberWithFloat:120];
-    if(cell.commentTextView.frame.size.height>120){
+    
+    NSNumber *height = [NSNumber numberWithFloat: defaultCellHeight];
+    if(cell.commentTextView.frame.size.height>defaultCellHeight){
         height = [NSNumber numberWithFloat:cell.commentTextView.frame.size.height];
     }
-    NSString * cellTag = [@(cell.tag) stringValue];
-    [heightDictionary setValue:height forKey:cellTag];
+    Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
+    
+    NSString * commentID = [comment.id stringValue];
+    
+    [heightDictionary setValue:height forKey:commentID];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }
 
 -(void)compressTableViewCell:(PACommentCell *)cell{
-    cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
-    NSString *cellTag = [@(cell.tag) stringValue];
-    [heightDictionary removeObjectForKey:cellTag];
+    
+    cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
+    Comment *comment = _fetchedResultsController.fetchedObjects[cell.tag];
+    NSString *commentID = [comment.id stringValue];
+    [heightDictionary removeObjectForKey:commentID];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }
