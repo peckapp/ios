@@ -10,7 +10,7 @@
 
 #import "PAEventInfoTableViewController.h"
 
-@interface PACommentCell : UITableViewCell
+@interface PACommentCell : UITableViewCell <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *postTimeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *profilePicture;

@@ -15,14 +15,40 @@
 
 @synthesize nameLabel, postTimeLabel, profilePicture, commentTextView, expandButton;
 
+#define commentPlaceholder @"add a comment"
+
 - (void)awakeFromNib
 {
     
     [commentTextView setEditable:NO];
     [commentTextView setScrollEnabled:NO];
     commentTextView.frame= CGRectMake(98, 0, 222, 110);
+    [commentTextView setText:commentPlaceholder];
+    [commentTextView setTextColor:[UIColor lightGrayColor]];
+    commentTextView.delegate=self;
+    
     _expanded=NO;
     // Initialization code
+}
+
+
+
+- (BOOL) textViewShouldBeginEditing:(UITextView *)textView
+{
+    if (commentTextView.textColor == [UIColor lightGrayColor]) {
+        commentTextView.text = @"";
+        commentTextView.textColor = [UIColor blackColor];
+    }
+    
+    return YES;
+}
+
+-(void) textViewDidChange:(UITextView *)textView
+{
+    if(self.parentTableView){
+        PAEventInfoTableViewController* parent = (PAEventInfoTableViewController*) self.parentTableView;
+        parent.commentText = textView.text;
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

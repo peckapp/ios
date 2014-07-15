@@ -35,6 +35,7 @@ CGRect initialFrame;
 BOOL viewingEvent;
 UITextView *textViewHelper;
 
+
 BOOL reloaded = NO;
 
 #define defaultCellHeight 120
@@ -323,7 +324,15 @@ BOOL reloaded = NO;
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
         [cell.postButton setHidden:NO];
-        cell.commentTextView.text = @"";
+        if([self.commentText isEqualToString:@""] || self.commentText==nil){
+            
+            cell.commentTextView.textColor = [UIColor lightGrayColor];
+            cell.commentTextView.text = @"add a comment";
+        }
+        else{
+            cell.commentTextView.textColor = [UIColor blackColor];
+            cell.commentTextView.text = self.commentText;
+        }
         cell.nameLabel.text = @"John Doe";
         [cell.expandButton setHidden:YES];
         
@@ -340,7 +349,7 @@ BOOL reloaded = NO;
         cell.nameLabel.text = @"John Doe";
         cell.tag = [indexPath row]-1;
         cell.commentTextView.text = tempComment.content;
-        
+        [cell.commentTextView setTextColor:[UIColor blackColor]];
         NSString * commentID = [tempComment.id stringValue];
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
         if(height){
@@ -386,6 +395,7 @@ BOOL reloaded = NO;
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     PACommentCell *cell = (PACommentCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     [cell.commentTextView resignFirstResponder];
     
 }
@@ -470,6 +480,10 @@ BOOL reloaded = NO;
 }
 
 -(void)postComment:(PACommentCell *)cell{
+    self.commentText=nil;
+    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+    
     NSLog(@"post comment");
     NSString *commentText = cell.commentTextView.text;
     cell.commentTextView.text=@"";
