@@ -30,6 +30,11 @@ NSString * commentCellNibName = @"PACommentCell";
 NSMutableDictionary *heightDictionary;
 UITextView *textViewHelper;
 
+#define defaultCellHeight 120;
+#define compressedTextViewHeight 110;
+//the compressed text view height is used to avoid seeing half of the last line of the text view.
+//It should be changed manually if the default text view height is changed
+
 - (void)awakeFromNib
 {
     // Initialization code
@@ -216,11 +221,14 @@ UITextView *textViewHelper;
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
         if(height){
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, height);
-            //cell.expanded=YES;
-           // cell.
+            cell.expanded=YES;
+            [cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
         }
         else{
-            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 110);
+            float compressedHeight = compressedTextViewHeight;
+            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, compressedHeight);
+            cell.expanded=NO;
+            [cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
         }
         // this fixes the problem where the comment text would occasionally be cut off when first loaded
     }
@@ -253,7 +261,7 @@ UITextView *textViewHelper;
                 }
             }
         }
-        return 120;
+        return defaultCellHeight;
 
     }
     else {
@@ -415,8 +423,9 @@ UITextView *textViewHelper;
 -(void)expand:(PACommentCell*)cell{
     NSLog(@"Expand cell");
     [cell.commentTextView sizeToFit];
-    NSNumber *height = [NSNumber numberWithFloat:120];
-    if(cell.commentTextView.frame.size.height>120){
+    float defaultHeight=defaultCellHeight;
+    NSNumber *height = [NSNumber numberWithFloat: defaultHeight];
+    if(cell.commentTextView.frame.size.height>defaultHeight){
         height = [NSNumber numberWithFloat:cell.commentTextView.frame.size.height];
     }
     Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
@@ -429,7 +438,8 @@ UITextView *textViewHelper;
 
 }
 -(void)compress:(PACommentCell*)cell{
-    cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, 119);
+    float defaultHeight= defaultCellHeight;
+    cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultHeight);
     Comment *comment = _fetchedResultsController.fetchedObjects[cell.tag];
     NSString *commentID = [comment.id stringValue];
     [heightDictionary removeObjectForKey:commentID];
