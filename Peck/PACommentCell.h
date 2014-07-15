@@ -20,7 +20,7 @@
 @property (weak, nonatomic) UITableViewController *parentCircleTableView;
 @property (weak, nonatomic) IBOutlet UIButton *expandButton;
 @property (weak, nonatomic) IBOutlet UIButton *postButton;
-
+@property (weak, nonatomic) UITableViewCell *parentCell;
 - (IBAction)postButton:(id)sender;
 
 - (IBAction)expandButton:(id)sender;

@@ -10,6 +10,7 @@
 #import "PAEventInfoTableViewController.h"
 #import "PASyncManager.h"
 #import "PACirclesTableViewController.h"
+#import "PACircleCell.h"
 
 @implementation PACommentCell
 
@@ -47,6 +48,9 @@
 {
     if(self.parentTableView){
         PAEventInfoTableViewController* parent = (PAEventInfoTableViewController*) self.parentTableView;
+        parent.commentText = textView.text;
+    }else if(self.parentCell){
+        PACircleCell* parent = (PACircleCell*)self.parentCell;
         parent.commentText = textView.text;
     }
 }

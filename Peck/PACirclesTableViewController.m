@@ -519,16 +519,22 @@ BOOL viewingCircles;
 }
 
 -(void)postComment:(PACommentCell *)cell{
-    NSLog(@"post the comment");
-    NSString *commentText = cell.commentTextView.text;
-    cell.commentTextView.text=@"";
-    [cell.commentTextView resignFirstResponder];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber *userID = [defaults objectForKey:@"user_id"];
-    NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
-    PACircleCell *selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+   
+    if(cell.commentTextView.textColor==[UIColor blackColor] && ![cell.commentTextView.text isEqualToString:@""]){
+        PACircleCell *selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+        selectedCell.commentText=nil;
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [selectedCell.commentsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+        NSLog(@"post the comment");
+        NSString *commentText = cell.commentTextView.text;
+        cell.commentTextView.text=@"";
+        [cell.commentTextView resignFirstResponder];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSNumber *userID = [defaults objectForKey:@"user_id"];
+        NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
+   
     
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+        NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 commentText, @"content",
                                 userID, @"user_id",
                                 @"circles", @"category",
@@ -536,7 +542,8 @@ BOOL viewingCircles;
                                 institutionID, @"institution_id",
                                 nil];
     
-    [[PASyncManager globalSyncManager] postComment:dictionary];
+        [[PASyncManager globalSyncManager] postComment:dictionary];
+    }
 }
 
 - (void)expandTableViewCell:(PACommentCell *)cell {

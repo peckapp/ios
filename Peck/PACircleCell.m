@@ -196,12 +196,21 @@ UITextView *textViewHelper;
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath:(NSIndexPath *)indexPath{
     cell.parentCircleTableView = self.parentViewController;
+    cell.parentCell=self;
     cell.tag = indexPath.row-1;
     if([indexPath row]==0){
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
         [cell.postButton setHidden:NO];
-        cell.commentTextView.text = @"";
+        if([self.commentText isEqualToString:@""] || self.commentText==nil){
+            cell.commentTextView.textColor = [UIColor lightGrayColor];
+            cell.commentTextView.text = @"add a comment";
+        }
+        else{
+            cell.commentTextView.textColor = [UIColor blackColor];
+            cell.commentTextView.text = self.commentText;
+        }
+
         cell.nameLabel.text = @"John Doe";
         [cell.expandButton setHidden:YES];
     }
@@ -216,6 +225,7 @@ UITextView *textViewHelper;
         [cell.postButton setHidden:YES];
         cell.nameLabel.text = @"John Doe";
         cell.commentTextView.text = tempComment.content;
+        [cell.commentTextView setTextColor:[UIColor blackColor]];
         
         NSString * commentID = [tempComment.id stringValue];
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
@@ -404,6 +414,8 @@ UITextView *textViewHelper;
 }
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     if(scrollView==self.commentsTableView){
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.commentsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
         PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentViewController;
         [parent dismissCommentKeyboard];
     }

@@ -325,7 +325,6 @@ BOOL reloaded = NO;
         [cell.commentTextView setScrollEnabled:YES];
         [cell.postButton setHidden:NO];
         if([self.commentText isEqualToString:@""] || self.commentText==nil){
-            
             cell.commentTextView.textColor = [UIColor lightGrayColor];
             cell.commentTextView.text = @"add a comment";
         }
@@ -480,19 +479,20 @@ BOOL reloaded = NO;
 }
 
 -(void)postComment:(PACommentCell *)cell{
-    self.commentText=nil;
-    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+    if(cell.commentTextView.textColor==[UIColor blackColor] && ![cell.commentTextView.text isEqualToString:@""]){
+        self.commentText=nil;
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     
-    NSLog(@"post comment");
-    NSString *commentText = cell.commentTextView.text;
-    cell.commentTextView.text=@"";
-    [cell.commentTextView resignFirstResponder];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber *userID = [defaults objectForKey:@"user_id"];
-    NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
+        NSLog(@"post comment");
+        NSString *commentText = cell.commentTextView.text;
+        cell.commentTextView.text=@"";
+        [cell.commentTextView resignFirstResponder];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSNumber *userID = [defaults objectForKey:@"user_id"];
+        NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
     
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+        NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 commentText, @"content",
                                 userID, @"user_id",
                                 @"simple", @"category",
@@ -500,8 +500,9 @@ BOOL reloaded = NO;
                                 institutionID, @"institution_id",
                                 nil];
     
-    [[PASyncManager globalSyncManager] postComment:dictionary];
-    [self reloadComments];
+        [[PASyncManager globalSyncManager] postComment:dictionary];
+        [self reloadComments];
+    }
 }
 
 -(void)reloadComments{
