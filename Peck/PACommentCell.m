@@ -23,7 +23,7 @@
     
     [commentTextView setEditable:NO];
     [commentTextView setScrollEnabled:NO];
-    commentTextView.frame= CGRectMake(98, 0, 222, 110);
+    //commentTextView.frame= CGRectMake(98, 0, 222, 110);
     [commentTextView setText:commentPlaceholder];
     [commentTextView setTextColor:[UIColor lightGrayColor]];
     commentTextView.delegate=self;

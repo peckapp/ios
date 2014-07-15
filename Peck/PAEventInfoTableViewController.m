@@ -453,11 +453,18 @@ BOOL reloaded = NO;
 */
 
 - (void)expandTableViewCell:(PACommentCell *)cell {
-    [cell.commentTextView sizeToFit];
+    UITextView *tempText = [[UITextView alloc] initWithFrame:cell.commentTextView.frame];
+    tempText.text = cell.commentTextView.text;
     
+    //[cell addSubview:tempText];
+    [tempText setFont:[UIFont systemFontOfSize:14]];
+    [tempText sizeToFit];
+    [cell.commentTextView sizeToFit];
+    float newHeight = tempText.frame.size.height;
+    NSLog(@"new height: %f", newHeight);
     NSNumber *height = [NSNumber numberWithFloat: defaultCellHeight];
-    if(cell.commentTextView.frame.size.height>defaultCellHeight){
-        height = [NSNumber numberWithFloat:cell.commentTextView.frame.size.height];
+    if(tempText.frame.size.height>defaultCellHeight){
+        height = [NSNumber numberWithFloat:tempText.frame.size.height];
     }
     Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
     
@@ -470,7 +477,7 @@ BOOL reloaded = NO;
 
 -(void)compressTableViewCell:(PACommentCell *)cell{
     
-    cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
+    //cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
     Comment *comment = _fetchedResultsController.fetchedObjects[cell.tag];
     NSString *commentID = [comment.id stringValue];
     [heightDictionary removeObjectForKey:commentID];
