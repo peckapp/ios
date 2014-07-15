@@ -249,7 +249,7 @@ UITextView *textViewHelper;
     [textViewHelper setHidden:YES];
     textViewHelper.text = text;
     [textViewHelper sizeToFit];
-    if(textViewHelper.frame.size.height>119){
+    if(textViewHelper.frame.size.height>compressedTextViewHeight){
         return NO;
     }
     return YES;
