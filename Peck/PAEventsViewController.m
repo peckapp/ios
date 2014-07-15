@@ -20,6 +20,7 @@
 #import "PAImageManager.h"
 #import "AFNetworking.h"
 #import "UIImageView+AFNetworking.h"
+#import "PADiningOpportunityCell.h"
 
 #define statusBarHeight 20
 #define searchBarHeight 44
@@ -329,21 +330,41 @@ CGRect initialTableViewRect;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    Event * currentEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
+    if([currentEvent.type isEqualToString:@"dining"]){
+        PADiningOpportunityCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningOppCell"];
+        if(cell==nil){
+            [tableView registerNib:[UINib nibWithNibName:@"PADiningOpportunityCell" bundle:nil] forCellReuseIdentifier:@"diningOppCell"];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"diningOppCell"];
+        }
+        [self configureDiningCell:cell atIndexPath:indexPath];
+        return cell;
+    }
     PAEventCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
-    
     [self configureCell:cell atIndexPath:indexPath];
-    
     return cell;
+    
+}
+
+-(void)configureDiningCell:(PADiningOpportunityCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    Event* tempDiningEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
+    cell.nameLabel.text = tempDiningEvent.title;
+    cell.startTimeLabel.text = [self dateToString:tempDiningEvent.start_date];
+    cell.endTimeLabel.text = [self dateToString:tempDiningEvent.end_date];
     
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
      //NSLog(@"cell height (height for row): %f",cellHeight);
+    Event * tempEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
+    if([tempEvent.type isEqualToString:@"dining"]){
+        return 44;
+    }
     return cellHeight;
 }
 

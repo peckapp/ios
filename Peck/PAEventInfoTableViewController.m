@@ -85,7 +85,7 @@ BOOL reloaded = NO;
     initialFrame = self.tableView.frame;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         while(viewingEvent) {
-            [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple_event"];
+            [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple"];
             [NSThread sleepForTimeInterval:reloadTime];
         }
     });
@@ -190,7 +190,7 @@ BOOL reloaded = NO;
     NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
     
     NSPredicate *commentFromPredicate = [NSPredicate predicateWithFormat:@"comment_from = %@", [self.detailItem valueForKey:@"id"]];
-    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", @"simple_event"];
+    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", @"simple"];
     
     [predicateArray addObject:commentFromPredicate];
     [predicateArray addObject:categoryPredicate];
@@ -460,7 +460,7 @@ BOOL reloaded = NO;
     NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 commentText, @"content",
                                 userID, @"user_id",
-                                @"simple_event", @"category",
+                                @"simple", @"category",
                                 [self.detailItem valueForKey:@"id" ],@"comment_from",
                                 institutionID, @"institution_id",
                                 nil];

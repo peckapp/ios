@@ -72,6 +72,8 @@
 		A4677D4519743A05007E3C3A /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4419743A05007E3C3A /* Event.m */; };
 		A4677D4819743A05007E3C3A /* DiningPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4719743A05007E3C3A /* DiningPeriod.m */; };
 		A4677D4E19746F45007E3C3A /* MenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4D19746F45007E3C3A /* MenuItem.m */; };
+		A4677D52197562B1007E3C3A /* PADiningOpportunityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D50197562B1007E3C3A /* PADiningOpportunityCell.m */; };
+		A4677D53197562B1007E3C3A /* PADiningOpportunityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4677D51197562B1007E3C3A /* PADiningOpportunityCell.xib */; };
 		A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */; };
 		A46F0926196F2A7600CFA5D0 /* PADiningCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A46F0924196F2A7600CFA5D0 /* PADiningCell.m */; };
 		A46F0927196F2A7600CFA5D0 /* PADiningCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A46F0925196F2A7600CFA5D0 /* PADiningCell.xib */; };
@@ -250,6 +252,9 @@
 		A4677D4719743A05007E3C3A /* DiningPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPeriod.m; sourceTree = "<group>"; };
 		A4677D4C19746F45007E3C3A /* MenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItem.h; sourceTree = "<group>"; };
 		A4677D4D19746F45007E3C3A /* MenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItem.m; sourceTree = "<group>"; };
+		A4677D4F197562B1007E3C3A /* PADiningOpportunityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningOpportunityCell.h; sourceTree = "<group>"; };
+		A4677D50197562B1007E3C3A /* PADiningOpportunityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningOpportunityCell.m; sourceTree = "<group>"; };
+		A4677D51197562B1007E3C3A /* PADiningOpportunityCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PADiningOpportunityCell.xib; sourceTree = "<group>"; };
 		A46F08FF196DC11800CFA5D0 /* PADiningPlacesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningPlacesTableViewController.h; sourceTree = "<group>"; };
 		A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningPlacesTableViewController.m; sourceTree = "<group>"; };
 		A46F0923196F2A7600CFA5D0 /* PADiningCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningCell.h; sourceTree = "<group>"; };
@@ -599,6 +604,9 @@
 				A46F0923196F2A7600CFA5D0 /* PADiningCell.h */,
 				A46F0924196F2A7600CFA5D0 /* PADiningCell.m */,
 				A46F0925196F2A7600CFA5D0 /* PADiningCell.xib */,
+				A4677D4F197562B1007E3C3A /* PADiningOpportunityCell.h */,
+				A4677D50197562B1007E3C3A /* PADiningOpportunityCell.m */,
+				A4677D51197562B1007E3C3A /* PADiningOpportunityCell.xib */,
 			);
 			name = Dining;
 			sourceTree = "<group>";
@@ -799,6 +807,7 @@
 				DD89816D195CAF6F0079CDC9 /* PAEventCell.xib in Resources */,
 				8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */,
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
+				A4677D53197562B1007E3C3A /* PADiningOpportunityCell.xib in Resources */,
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
 				869A85AE1964855B00F254C1 /* dropdown_circles@2x.png in Resources */,
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
@@ -917,6 +926,7 @@
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
 				A4773C8019589E8200AB9831 /* PAEvents.m in Sources */,
 				A4773C8F195A076800AB9831 /* PACreateCircleViewController.m in Sources */,
+				A4677D52197562B1007E3C3A /* PADiningOpportunityCell.m in Sources */,
 				86292527193CBFF80057CA41 /* PAEventCell.m in Sources */,
 				A4677D3C197437EC007E3C3A /* Peer.m in Sources */,
 				A4E21F6F1965F0E0002A9800 /* Comment.m in Sources */,
