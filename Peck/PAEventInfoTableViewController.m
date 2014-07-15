@@ -256,6 +256,7 @@ BOOL reloaded = NO;
              //the cell must be inserted below the post cell
              insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
+            
             break;
         }
         case NSFetchedResultsChangeDelete:
@@ -490,14 +491,15 @@ BOOL reloaded = NO;
 
 -(void)postComment:(PACommentCell *)cell{
     if(cell.commentTextView.textColor==[UIColor blackColor] && ![cell.commentTextView.text isEqualToString:@""]){
+        [cell.commentTextView resignFirstResponder];
         self.commentText=nil;
-        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+        NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     
         NSLog(@"post comment");
         NSString *commentText = cell.commentTextView.text;
         cell.commentTextView.text=@"";
-        [cell.commentTextView resignFirstResponder];
+        
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSNumber *userID = [defaults objectForKey:@"user_id"];
         NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
@@ -511,13 +513,9 @@ BOOL reloaded = NO;
                                 nil];
     
         [[PASyncManager globalSyncManager] postComment:dictionary];
-        [self reloadComments];
+        
     }
 }
 
--(void)reloadComments{
-    
-    
-}
 
 @end

@@ -262,9 +262,11 @@ BOOL viewingCircles;
     cell.tag=[indexPath row];
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
         cell.circleTitle.text=@"New";
+        [cell.profilesTableView setHidden:YES];
         
     }
     else{
+        [cell.profilesTableView setHidden:NO];
         Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
         //NSLog(@"configure cell for circle %@", c);
         cell.circleTitle.text = c.circleName;
@@ -521,6 +523,7 @@ BOOL viewingCircles;
 -(void)postComment:(PACommentCell *)cell{
    
     if(cell.commentTextView.textColor==[UIColor blackColor] && ![cell.commentTextView.text isEqualToString:@""]){
+        [cell.commentTextView resignFirstResponder];
         PACircleCell *selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
         selectedCell.commentText=nil;
         NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -528,7 +531,7 @@ BOOL viewingCircles;
         NSLog(@"post the comment");
         NSString *commentText = cell.commentTextView.text;
         cell.commentTextView.text=@"";
-        [cell.commentTextView resignFirstResponder];
+        
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSNumber *userID = [defaults objectForKey:@"user_id"];
         NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
