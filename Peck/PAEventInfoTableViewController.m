@@ -369,7 +369,8 @@ BOOL reloaded = NO;
 }
 
 -(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
-    textViewHelper.frame = CGRectMake(0, 0, 98, 0);
+    textViewHelper.frame = CGRectMake(0, 0, 222, 0);
+    [textViewHelper setFont:[UIFont systemFontOfSize:14]];
     [textViewHelper setHidden:YES];
     textViewHelper.text = text;
     [textViewHelper sizeToFit];
@@ -455,18 +456,18 @@ BOOL reloaded = NO;
 */
 
 - (void)expandTableViewCell:(PACommentCell *)cell {
-    UITextView *tempText = [[UITextView alloc] initWithFrame:cell.commentTextView.frame];
-    tempText.text = cell.commentTextView.text;
+    textViewHelper.frame = cell.commentTextView.frame;
+    textViewHelper.text=cell.commentTextView.text;
     
-    //[cell addSubview:tempText];
-    [tempText setFont:[UIFont systemFontOfSize:14]];
-    [tempText sizeToFit];
-    [cell.commentTextView sizeToFit];
-    float newHeight = tempText.frame.size.height;
+    [textViewHelper setFont:[UIFont systemFontOfSize:14]];
+    [textViewHelper sizeToFit];
+    
+    float newHeight = textViewHelper.frame.size.height;
     NSLog(@"new height: %f", newHeight);
     NSNumber *height = [NSNumber numberWithFloat: defaultCellHeight];
-    if(tempText.frame.size.height>defaultCellHeight){
-        height = [NSNumber numberWithFloat:tempText.frame.size.height+1];
+    if(textViewHelper.frame.size.height>defaultCellHeight){
+        height = [NSNumber numberWithFloat:textViewHelper.frame.size.height+1];
+        //without the +1, the bottom line would not be displayed
     }
     Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
     

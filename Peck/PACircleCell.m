@@ -235,8 +235,7 @@ UITextView *textViewHelper;
             [cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
         }
         else{
-            float compressedHeight = compressedTextViewHeight;
-            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, compressedHeight);
+            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
             cell.expanded=NO;
             [cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
         }
@@ -245,7 +244,8 @@ UITextView *textViewHelper;
     cell.nameLabel.text = @"John Doe";
 }
 -(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
-    textViewHelper.frame = CGRectMake(0, 0, 98, 0);
+    textViewHelper.frame = CGRectMake(0, 0, 222, 0);
+    [textViewHelper setFont:[UIFont systemFontOfSize:14]];
     [textViewHelper setHidden:YES];
     textViewHelper.text = text;
     [textViewHelper sizeToFit];
@@ -433,11 +433,16 @@ UITextView *textViewHelper;
 }
 
 -(void)expand:(PACommentCell*)cell{
-    NSLog(@"Expand cell");
-    [cell.commentTextView sizeToFit];
+    textViewHelper.frame = cell.commentTextView.frame;
+    textViewHelper.text=cell.commentTextView.text;
+    
+    [textViewHelper setFont:[UIFont systemFontOfSize:14]];
+    [textViewHelper sizeToFit];
+    
+    
     NSNumber *height = [NSNumber numberWithFloat: defaultCellHeight];
-    if(cell.commentTextView.frame.size.height>defaultCellHeight){
-        height = [NSNumber numberWithFloat:cell.commentTextView.frame.size.height];
+    if(textViewHelper.frame.size.height>defaultCellHeight){
+        height = [NSNumber numberWithFloat:textViewHelper.frame.size.height+1];
     }
     Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
     
