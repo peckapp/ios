@@ -21,7 +21,7 @@
 
 @property (strong, nonatomic) NSIndexPath * selectedIndexPath;
 @property (strong, nonatomic) UIBarButtonItem * cancelCellButton;
-@property (strong, nonatomic) HTAutocompleteTextField * inviteTextField;
+@property (strong, nonatomic) UITextField * inviteTextField;
 @property (strong, nonatomic) UITextField * textCapture;
 @property (strong, nonatomic) UITapGestureRecognizer * tapRecognizer;
 
@@ -83,7 +83,7 @@ BOOL viewingCircles;
     viewingCell=NO;
     self.cancelCellButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(cancelSelection)];
     
-    self.title = @"Circles";
+    //self.title = @"Circles";
 
     self.tableView.delegate=self;
     self.tableView.dataSource=self;
@@ -100,9 +100,9 @@ BOOL viewingCircles;
     UIView * accessory = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 44.0)];
     accessory.backgroundColor = [UIColor whiteColor];
 
-    self.inviteTextField = [[HTAutocompleteTextField alloc] initWithFrame:CGRectMake(8.0, 8.0, self.view.frame.size.width - 16.0 , 28.0)];
-    self.inviteTextField.autocompleteDataSource = [HTAutocompleteManager sharedManager];
-    self.inviteTextField.autocompleteType = HTAutocompleteTypeName;
+    self.inviteTextField = [[UITextField alloc] initWithFrame:CGRectMake(8.0, 8.0, self.view.frame.size.width - 16.0 , 28.0)];
+    //self.inviteTextField.autocompleteDataSource = [HTAutocompleteManager sharedManager];
+    //self.inviteTextField.autocompleteType = HTAutocompleteTypeName;
     self.inviteTextField.backgroundColor = [UIColor whiteColor];
     self.inviteTextField.placeholder = @"Invite someone to the group";
     [self.inviteTextField setBorderStyle:UITextBorderStyleRoundedRect];
@@ -135,7 +135,7 @@ BOOL viewingCircles;
 
 #pragma mark - text field delegate
 
--(void)textFieldDidChange:(HTAutocompleteTextField*)textField{
+-(void)textFieldDidChange:(UITextField*)textField{
     NSLog(@"textfield text: %@",textField.text);
     //NSLog(@"row: %i, section: %i",[self.selectedIndexPath row], [self.selectedIndexPath section]);
     PACircleCell * selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
@@ -143,7 +143,7 @@ BOOL viewingCircles;
     [selectedCell.suggestedMembersTableView reloadData];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+/*- (BOOL)textFieldShouldReturn:(UITextField *)textField {
     //TODO: this is where we will send a new member to a circle that is already created
     NSLog(@"add a new member");
     HTAutocompleteTextField *tempTextField = (HTAutocompleteTextField *)textField;
@@ -172,7 +172,7 @@ BOOL viewingCircles;
     }
 
     
-}
+}*/
 
 -(void)addMember:(Peer*)newMember{
     self.inviteTextField.text=@"";
@@ -242,16 +242,37 @@ BOOL viewingCircles;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PACircleCell *cell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    cell.addingMembers=NO;
-    [self configureCell:cell atIndexPath:indexPath];
-    [cell performFetch];
-    self.selectedIndexPath = indexPath;
-    self.navigationItem.leftBarButtonItem = self.cancelCellButton;
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-    self.tableView.scrollEnabled = NO;
-    viewingCell=YES;
+    if(!viewingCell){
+        
+        cell.addingMembers=NO;
+        [self configureCell:cell atIndexPath:indexPath];
+        [cell performFetch];
+        self.selectedIndexPath = indexPath;
+        self.navigationItem.leftBarButtonItem = self.cancelCellButton;
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        self.tableView.scrollEnabled = NO;
+        viewingCell=YES;
+    }else if(viewingCell && cell.addingMembers){
+        cell.addingMembers=NO;
+        [self configureCell:cell atIndexPath:indexPath];
+        [cell performFetch];
+        
+    }else if(viewingCell && !cell.addingMembers){
+        [self dismissCommentKeyboard];
+        self.inviteTextField.text=@"";
+        viewingCell=NO;
+        self.tableView.scrollEnabled = YES;
+        self.navigationItem.leftBarButtonItem = nil;
+        [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
+        PACircleCell *selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+        selectedCell.addingMembers=NO;
+        self.selectedIndexPath = nil;
+        [self dismissKeyboard:self];
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
+    }
     
 }
 
@@ -386,6 +407,7 @@ BOOL viewingCircles;
     // Look at how terrible this is.
     [self.textCapture becomeFirstResponder];
     [self.inviteTextField becomeFirstResponder];
+    
 }
 
 - (void)dismissKeyboard:(id)sender

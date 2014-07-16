@@ -421,6 +421,7 @@
         <!--Navigation Controller - Circles-->
         <scene sceneID="fXo-bg-fUk">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Uw9-vz-hAL" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController storyboardIdentifier="circles" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="hiW-cR-lbl" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Circles" id="SMl-bH-uN3"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
@@ -431,7 +432,6 @@
                         <segue destination="inP-uB-7M9" kind="relationship" relationship="rootViewController" id="euH-pq-bGt"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Uw9-vz-hAL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1256" y="2834"/>
         </scene>
