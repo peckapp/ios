@@ -245,15 +245,15 @@ BOOL viewingCircles;
     if(!viewingCell){
         
         cell.addingMembers=NO;
-        [self configureCell:cell atIndexPath:indexPath];
+        
         [cell performFetch];
         self.selectedIndexPath = indexPath;
-        self.navigationItem.leftBarButtonItem = self.cancelCellButton;
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
         self.tableView.scrollEnabled = NO;
         viewingCell=YES;
+        [self configureCell:cell atIndexPath:indexPath];
     }else if(viewingCell && cell.addingMembers){
         cell.addingMembers=NO;
         [self configureCell:cell atIndexPath:indexPath];
@@ -264,7 +264,6 @@ BOOL viewingCircles;
         self.inviteTextField.text=@"";
         viewingCell=NO;
         self.tableView.scrollEnabled = YES;
-        self.navigationItem.leftBarButtonItem = nil;
         [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
         PACircleCell *selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
         selectedCell.addingMembers=NO;
@@ -321,8 +320,15 @@ BOOL viewingCircles;
         [cell.profilesTableView setHidden:YES];
         [cell.suggestedMembersTableView setHidden:NO];
         [cell.commentsTableView setHidden:YES];
+        [cell.titleTextField setHidden:YES];
+        if(viewingCell){
+            [cell.titleTextField setHidden:NO];
+            [cell.profilesTableView setHidden:NO];
+        }
+        
     }
     else{
+        [cell.titleTextField setHidden:YES];
         [cell.profilesTableView setHidden:NO];
         if(!cell.addingMembers){
             [cell.suggestedMembersTableView setHidden:YES];

@@ -306,9 +306,9 @@ UITextView *textViewHelper;
         }
         else{
             NSLog(@"view the member");
-            PACirclesTableViewController *parent = (PACirclesTableViewController *) self.parentViewController;
+            /*PACirclesTableViewController *parent = (PACirclesTableViewController *) self.parentViewController;
             Peer *member = self.members[[indexPath row]];
-            [parent showProfileOf:member];
+            [parent showProfileOf:member];*/
         }
     }
     else if (tableView == self.commentsTableView) {

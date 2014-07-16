@@ -32,6 +32,7 @@
 
 @property (strong, nonatomic) UITextField * textCapture;
 @property (strong, nonatomic) UITextField * keyboardTextField;
+@property (weak, nonatomic) IBOutlet UITextField *titleTextField;
 
 @property (strong, nonatomic) Circle *circle;
 @property (weak, nonatomic) UITableViewController *parentViewController;
