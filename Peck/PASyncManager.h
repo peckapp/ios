@@ -26,6 +26,8 @@
 -(void)updateUserWithInfo:(NSDictionary*)userInfo;
 // authenticates the user and updates the authentication token returned from the server
 - (void)authenticateUserWithInfo:(NSDictionary*)userInfo;
+// sends patch request to the server when the registration process is complete
+-(void)registerUserWithInfo:(NSDictionary*)userInfo;
 
 // methods for syncing institutions for the configuration phase
 -(void)updateAvailableInstitutionsWithCallback:(void(^)(BOOL sucess))callbackBlock;

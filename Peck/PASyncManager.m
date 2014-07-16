@@ -104,6 +104,28 @@
 {
     // sends either email and password, or facebook token and link, to the server for authentication
     // expects an authentication token to be returned in response
+    
+}
+
+-(void)registerUserWithInfo:(NSDictionary*)userInfo{
+    [[PASessionManager sharedClient] PATCH:usersAPI
+                               parameters:[self applyWrapper:@"user" toDictionary:userInfo]
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      NSLog(@"user register success: %@", JSON);
+                                      NSDictionary *postsFromResponse = (NSDictionary*)JSON;
+                                      NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
+                                      NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                      NSString* firstName = [userDictionary objectForKey:@"first_name"];
+                                      NSString* lastName = [userDictionary objectForKey:@"last_name"];
+                                      NSString* email = [userDictionary objectForKey:@"email"];
+                                      [defaults setObject:firstName forKey:@"first_name"];
+                                      [defaults setObject:lastName forKey:@"last_name"];
+                                      [defaults setObject:email forKey:@"email"];
+                                  }
+     
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
 }
 
 - (BOOL)validUserInfo:(NSDictionary*)userInfo
@@ -767,6 +789,9 @@
     comment.category = [dictionary objectForKey:@"category"];
     comment.comment_from = [dictionary objectForKey:@"comment_from"];
 }
+
+
+
 
 #pragma mark - Utility Methods
 
