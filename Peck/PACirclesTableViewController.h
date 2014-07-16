@@ -33,5 +33,7 @@
 -(void)showProfileOf:(Peer*)member;
 -(void)expandTableViewCell:(PACommentCell *)cell;
 -(void)compressTableViewCell:(PACommentCell *)cell;
+- (void)dismissKeyboard:(id)sender;
+-(void)addMember:(Peer*)newMember;
 @end
 

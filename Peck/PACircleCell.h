@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
 @property (weak, nonatomic) IBOutlet UITableView *profilesTableView;
 
+@property (weak, nonatomic) IBOutlet UITableView *suggestedMembersTableView;
+
 @property(nonatomic, assign) id <PACirclesControllerDelegate> delegate;
 @property BOOL loadedImages;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -26,12 +28,14 @@
 @property (weak, nonatomic) IBOutlet UITableView *commentsTableView;
 @property (strong, nonatomic) NSMutableArray *members;
 @property (strong, nonatomic) NSString* commentText;
+@property (strong, nonatomic) NSMutableArray * suggestedMembers;
 
 @property (strong, nonatomic) UITextField * textCapture;
 @property (strong, nonatomic) UITextField * keyboardTextField;
 
 @property (strong, nonatomic) Circle *circle;
 @property (weak, nonatomic) UITableViewController *parentViewController;
+@property BOOL addingMembers;
 
 -(void)addMember:(NSNumber *)member;
 -(void)updateCircleMembers:(NSArray *)circleMembers;

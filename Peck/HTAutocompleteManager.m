@@ -8,10 +8,17 @@
 
 #import "HTAutocompleteManager.h"
 #import "PAPeers.h"
+#import "PAAppDelegate.h"
+
 
 static HTAutocompleteManager *sharedManager;
 
 @implementation HTAutocompleteManager
+
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
 
 + (HTAutocompleteManager *)sharedManager
 {
@@ -318,7 +325,7 @@ static HTAutocompleteManager *sharedManager;
         }
     }
     else if(textField.autocompleteType == HTAutocompleteTypeName){
-        _currentPeer=nil;
+        /*_currentPeer=nil;
         if(! [prefix isEqualToString:@""]){
             PAPeers *peerTree1 = [PAPeers peers];
             NSMutableArray *peers = [NSMutableArray array];
@@ -330,7 +337,41 @@ static HTAutocompleteManager *sharedManager;
                 _currentPeer=tempPeer;
                 return finalName;
             }
+        }*/
+        
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [appdelegate managedObjectContext];
+        
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        // Edit the entity name as appropriate.
+        
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
+        [fetchRequest setEntity:entity];
+        
+        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"name BEGINSWITH[c] %@", prefix];
+        
+        [fetchRequest setPredicate:predicate];
+        
+        // Set the batch size to a suitable number.
+        [fetchRequest setFetchBatchSize:20];
+        
+        // Edit the sort key as appropriate.
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:NO];
+        NSArray *sortDescriptors = @[sortDescriptor];
+        
+        [fetchRequest setSortDescriptors:sortDescriptors];
+        
+        NSError *error = nil;
+        NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+        if([mutableFetchResults count]>0){
+            Peer* tempPeer = mutableFetchResults[0];
+            _currentPeer=tempPeer;
+            self.suggestedPeers=mutableFetchResults;
+            NSString *finalName=tempPeer.name;
+            finalName = [finalName substringFromIndex:prefix.length];
+            return finalName;
         }
+        
     }
     
     return @"";

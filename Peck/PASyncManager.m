@@ -23,6 +23,7 @@
 #import "PADiningPlacesTableViewController.h"
 #import "DiningPeriod.h"
 #import "MenuItem.h"
+#import "PACircleCell.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -108,7 +109,12 @@
 }
 
 -(void)registerUserWithInfo:(NSDictionary*)userInfo{
-    [[PASessionManager sharedClient] PATCH:usersAPI
+    NSString* registerURL = [usersAPI stringByAppendingString:@"/"];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber* userID = [defaults objectForKey:@"user_id"];
+    registerURL = [registerURL stringByAppendingString:[userID stringValue]];
+    registerURL = [registerURL stringByAppendingString:@"super_create"];
+    [[PASessionManager sharedClient] PATCH:registerURL
                                parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                       NSLog(@"user register success: %@", JSON);
@@ -181,7 +187,9 @@
 -(void)setAttributesInPeer:(Peer *)peer withDictionary:(NSDictionary *)dictionary
 {
     //NSLog(@"set attributes of peer");
-    peer.name = [dictionary objectForKey:@"first_name"];
+    NSString* fullName = [[dictionary objectForKey:@"first_name"] stringByAppendingString:@" "];
+    fullName = [fullName stringByAppendingString:[dictionary objectForKey:@"last_name"]];
+    peer.name = fullName;
     peer.id = [dictionary objectForKey:@"id"];
 }
 
@@ -316,8 +324,8 @@
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          [circle addCircle_membersObject:newMember];
-         PACirclesTableViewController *tableViewSender = (PACirclesTableViewController*)sender;
-         [tableViewSender.tableView reloadData];
+         PACircleCell *circleCell = (PACircleCell*)sender;
+         [circleCell.profilesTableView reloadData];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);

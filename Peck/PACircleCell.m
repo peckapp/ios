@@ -56,6 +56,9 @@ UITextView *textViewHelper;
     self.commentsTableView.delegate=self;
     self.commentsTableView.dataSource=self;
     
+    self.suggestedMembersTableView.delegate=self;
+    self.suggestedMembersTableView.dataSource=self;
+    
     NSLog(@"frame height: %f", self.frame.size.height);
     //self.commentsTableView.frame = CGRectMake(0, 100, self.frame.size.width, self.frame.size.height-200);
     
@@ -141,6 +144,9 @@ UITextView *textViewHelper;
         id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
         return [sectionInfo numberOfObjects]+1;
     }
+    else if(tableView== self.suggestedMembersTableView){
+        return [self.suggestedMembers count];
+    }
     else {
         return 0;
     }
@@ -186,12 +192,24 @@ UITextView *textViewHelper;
         }
         [self configureCell:cell atIndexPath:indexPath];
         return cell;
-
-        
+    }
+    else if(tableView == self.suggestedMembersTableView){
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"suggestedMember"];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"suggestedMember"];
+        }
+        [self configureSuggestedMemberCell:cell atIndexPath:indexPath];
+        return cell;
     }
     else {
         return nil;
     }
+}
+
+-(void)configureSuggestedMemberCell:(UITableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    Peer * suggestedMember = self.suggestedMembers[indexPath.row];
+    NSLog(@"name: %@", suggestedMember.name);
+    cell.textLabel.text = suggestedMember.name;
 }
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath:(NSIndexPath *)indexPath{
@@ -283,6 +301,7 @@ UITextView *textViewHelper;
 {
     if (tableView == self.profilesTableView) {
         if (indexPath.row == [self.members count]) {
+            self.addingMembers=YES;
             [self.delegate promptToAddMemberToCircleCell:self];
         }
         else{
@@ -294,6 +313,11 @@ UITextView *textViewHelper;
     }
     else if (tableView == self.commentsTableView) {
         [self.commentsTableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+    else if(tableView == self.suggestedMembersTableView){
+        Peer * newMember = self.suggestedMembers[indexPath.row];
+        PACirclesTableViewController *parent = (PACirclesTableViewController*) self.parentViewController;
+        [parent addMember:newMember];
     }
     else {
 
@@ -418,6 +442,10 @@ UITextView *textViewHelper;
         [self.commentsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
         PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentViewController;
         [parent dismissCommentKeyboard];
+    }
+    else if(scrollView==self.suggestedMembersTableView){
+        PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentViewController;
+        [parent dismissKeyboard:self];
     }
 }
 
