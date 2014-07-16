@@ -153,9 +153,9 @@
         <!--Circles Table View Controller - Circles-->
         <scene sceneID="I7Z-lZ-gzy">
             <objects>
-                <tableViewController id="inP-uB-7M9" customClass="PACirclesTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="circles" useStoryboardIdentifierAsRestorationIdentifier="YES" id="inP-uB-7M9" customClass="PACirclesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="j5U-Yp-073">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
@@ -417,23 +417,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NTI-Eb-F67" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-172" y="3755"/>
-        </scene>
-        <!--Navigation Controller - Circles-->
-        <scene sceneID="fXo-bg-fUk">
-            <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Uw9-vz-hAL" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <navigationController storyboardIdentifier="circles" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="hiW-cR-lbl" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Circles" id="SMl-bH-uN3"/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="EwE-O6-gtf">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="inP-uB-7M9" kind="relationship" relationship="rootViewController" id="euH-pq-bGt"/>
-                    </connections>
-                </navigationController>
-            </objects>
-            <point key="canvasLocation" x="-1256" y="2834"/>
         </scene>
         <!--Navigation Controller - More-->
         <scene sceneID="gC2-m0-3wP">

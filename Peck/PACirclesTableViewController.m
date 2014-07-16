@@ -54,7 +54,7 @@ BOOL viewingCircles;
     return self;
 }
 -(void)viewWillAppear:(BOOL)animated{
-    
+    [[PASyncManager globalSyncManager] updateCircleInfo];
     viewingCircles=YES;
     [self registerForKeyboardNotifications];
     initialFrame=self.tableView.frame;
@@ -94,7 +94,7 @@ BOOL viewingCircles;
         abort();
     }
     
-    [[PASyncManager globalSyncManager] updateCircleInfo];
+    
     [self.tableView reloadData];
 
     UIView * accessory = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 44.0)];
@@ -591,7 +591,7 @@ BOOL viewingCircles;
         circleCell.commentsTableView.frame=initialCommentTableFrame;
     }
     
-    self.tableView.frame = initialFrame;
+    //self.tableView.frame = initialFrame;
 }
 
 -(void)dismissCommentKeyboard{
