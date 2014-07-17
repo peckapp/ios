@@ -489,7 +489,7 @@
 -(void)setAttributesInDiningEvent:(Event*)diningEvent withDictionary:(NSDictionary*)dictionary{
     diningEvent.title= [dictionary objectForKey:@"dining_opportunity_type"];
     diningEvent.start_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]];
-    diningEvent.end_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]];
+    diningEvent.end_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_time"] doubleValue]];
     diningEvent.type = @"dining";
     diningEvent.id = [dictionary objectForKey:@"id"];
 }
