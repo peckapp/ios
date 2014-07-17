@@ -129,7 +129,9 @@
                                       [defaults setObject:firstName forKey:@"first_name"];
                                       [defaults setObject:lastName forKey:@"last_name"];
                                       [defaults setObject:email forKey:@"email"];
-                                      [defaults setObject:blurb forKey:@"blurb"];
+                                      if(![blurb isKindOfClass:[NSNull class]]){
+                                          [defaults setObject:blurb forKey:@"blurb"];
+                                      }
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -309,16 +311,17 @@
 
 -(void)postCircle: (NSDictionary *) dictionary
 {
-    
+
     [[PASessionManager sharedClient] POST:circlesAPI
                                parameters:[self applyWrapper:@"circle" toDictionary:dictionary]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         /*NSLog(@"post circle success: %@", JSON);
-         NSDictionary *postsFromResponse = (NSDictionary*)JSON;
+         NSLog(@"post circle success: %@", JSON);
+         /*NSDictionary *postsFromResponse = (NSDictionary*)JSON;
          NSDictionary *circleDictionary = [postsFromResponse objectForKey:@"circle"];
          //NSNumber *circleID = [circleDictionary objectForKey:@"id"];
          //[self addMembers:members ToCircle:circleID];*/
+         [self updateCircleInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -485,17 +488,6 @@
 
 -(void)setAttributesInDiningEvent:(Event*)diningEvent withDictionary:(NSDictionary*)dictionary{
     diningEvent.title= [dictionary objectForKey:@"dining_opportunity_type"];
-    /*NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:serverDateFormat];
-    NSString* start = [dictionary objectForKey:@"start_time"];
-    if(![start isKindOfClass:[NSNull class]]){
-        diningEvent.start_date = [formatter dateFromString:start];
-    }
-    
-    NSString* end = [dictionary objectForKey:@"end_time"];
-    if(![end isKindOfClass:[NSNull class]]){
-        diningEvent.end_date = [formatter dateFromString:end];
-    }*/
     diningEvent.start_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]];
     diningEvent.end_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]];
     diningEvent.type = @"dining";
