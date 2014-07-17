@@ -87,10 +87,6 @@
     }
     else if (textField == self.lastNameField) {
         [self.passwordField1 becomeFirstResponder];
-        // performs the login segue as though the button was pressed
-        /*if ([self shouldPerformSegueWithIdentifier:@"register" sender:self]) {
-            [self performSegueWithIdentifier:@"register" sender:self];
-        }*/
     }
     else if(textField == self.passwordField1){
         [self.passwordField2 becomeFirstResponder];
@@ -103,10 +99,6 @@
     }
     else {
         [self.blurbTextView resignFirstResponder];
-        
-        /*if ([self shouldPerformSegueWithIdentifier:@"finish" sender:self]) {
-            [self performSegueWithIdentifier:@"finish" sender:self];
-        }*/
     }
     
     return NO;

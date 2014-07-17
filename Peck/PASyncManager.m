@@ -124,9 +124,13 @@
                                       NSString* firstName = [userDictionary objectForKey:@"first_name"];
                                       NSString* lastName = [userDictionary objectForKey:@"last_name"];
                                       NSString* email = [userDictionary objectForKey:@"email"];
+                                      NSString* blurb = [userDictionary objectForKey:@"blurb"];
                                       [defaults setObject:firstName forKey:@"first_name"];
                                       [defaults setObject:lastName forKey:@"last_name"];
-                                      [defaults setObject:email forKey:@"email"];
+                                      if(![email isKindOfClass:[NSNull class]]){
+                                          [defaults setObject:email forKey:@"email"];
+                                      }
+                                      [defaults setObject:blurb forKey:@"blurb"];
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -295,8 +299,8 @@
     
     NSDateFormatter * df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
-    explore.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
-    explore.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];
+    explore.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]];
+    explore.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]];
     explore.id = [dictionary objectForKey:@"id"];
 }
 

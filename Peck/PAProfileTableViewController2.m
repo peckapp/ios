@@ -8,6 +8,7 @@
 
 #import "PAProfileTableViewController2.h"
 #import "PAAppDelegate.h"
+#import "PASyncManager.h"
 
 @interface PAProfileTableViewController2 ()
 
@@ -32,18 +33,28 @@ int currentTextField;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.title = @"Profile";
-    UITapGestureRecognizer *tapRecognizer;
-    tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector (changePicture)];
-    //[profilePicture addGestureRecognizer:tapRecognizer];
-    //profilePicture.userInteractionEnabled = YES; // very important for UIImageView
-    tapRecognizer.cancelsTouchesInView=NO;
-    
-    
-    infoTextView.layer.borderWidth=.5f;
+    infoTextView.layer.borderWidth=.3f;
     infoTextView.layer.borderColor = [[UIColor grayColor] CGColor];
     infoTextView.layer.cornerRadius = 8;
     
-    self.tableView.delegate=self;
+    self.firstNameTextField.delegate=self;
+    self.lastNameTextField.delegate=self;
+    self.emailTextField.delegate=self;
+    self.passwordTextField.delegate=self;
+    //self.infoTextView.delegate=self;
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    self.firstNameTextField.text = [defaults objectForKey:@"first_name"];
+    self.lastNameTextField.text = [defaults objectForKey:@"last_name"];
+    self.emailTextField.text = [defaults objectForKey:@"email"];
+    NSString*blurb = [defaults objectForKey:@"blurb"];
+    NSLog(@"blurb: %@",blurb);
+    self.infoTextView.text = [defaults objectForKey:@"blurb"];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -145,22 +156,38 @@ int currentTextField;
     }
 }
 
+#pragma mark - text field delegate
 
-- (void)viewWillAppear:(BOOL)animated {
+-(BOOL)textFieldShouldReturn:(UITextField*)textField;
+{
     
-    [super viewWillAppear:animated];
+    if (textField == self.firstNameTextField) {
+        [self.lastNameTextField becomeFirstResponder];
+        NSLog(@"next");
+    }
+    else if (textField == self.lastNameTextField) {
+        [self.emailTextField becomeFirstResponder];
+    }
+    else if(textField == self.emailTextField){
+        [self.passwordTextField becomeFirstResponder];
+    }
+    else if (textField == self.passwordTextField){
+        [self.infoTextView becomeFirstResponder];
+    }else{
+        [self.infoTextView resignFirstResponder];
+    }
+    
+    return NO;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    
-    [super viewWillDisappear:animated];
-    
-}
 
+#pragma mark - scroll view delegate
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self.view endEditing:YES];
 }
+
+#pragma mark - table view deleagate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -174,6 +201,19 @@ int currentTextField;
 - (IBAction)saveChangesButton:(id)sender {
     //will post the new profile information to the server
     NSLog(@"change my profile");
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber* institutionID = [defaults objectForKey:@"institution_id"];
+    NSNumber* userID = [defaults objectForKey:@"user_id"];
+    
+    NSDictionary *updatedInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 self.emailTextField.text, @"email",
+                                 self.firstNameTextField.text, @"first_name",
+                                 self.lastNameTextField.text, @"last_name",
+                                 self.infoTextView.text, @"blurb",
+                                 userID, @"id",
+                                 institutionID, @"institution_id",
+                                 nil];
+    [[PASyncManager globalSyncManager] registerUserWithInfo:updatedInfo];
     
 }
 @end
