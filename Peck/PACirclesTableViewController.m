@@ -245,6 +245,9 @@ BOOL viewingCircles;
     if(!viewingCell){
         
         cell.addingMembers=NO;
+        /*if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
+            cell.addingMembers=YES;
+        }*/
         
         [cell performFetch];
         self.selectedIndexPath = indexPath;
@@ -269,6 +272,7 @@ BOOL viewingCircles;
         selectedCell.addingMembers=NO;
         self.selectedIndexPath = nil;
         [self dismissKeyboard:self];
+        [self configureCell:cell atIndexPath:indexPath];
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
     }

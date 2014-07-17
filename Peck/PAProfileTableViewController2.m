@@ -41,7 +41,6 @@ int currentTextField;
     self.lastNameTextField.delegate=self;
     self.emailTextField.delegate=self;
     self.passwordTextField.delegate=self;
-    //self.infoTextView.delegate=self;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -210,8 +209,10 @@ int currentTextField;
                                  self.firstNameTextField.text, @"first_name",
                                  self.lastNameTextField.text, @"last_name",
                                  self.infoTextView.text, @"blurb",
-                                 userID, @"id",
-                                 institutionID, @"institution_id",
+                                 self.passwordTextField.text,@"password",
+                                 self.passwordTextField.text, @"password_confirmation",
+                                 //userID, @"id",
+                                 //institutionID, @"institution_id",
                                  nil];
     [[PASyncManager globalSyncManager] registerUserWithInfo:updatedInfo];
     

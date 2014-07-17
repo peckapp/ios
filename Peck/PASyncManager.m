@@ -113,6 +113,7 @@
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSNumber* userID = [defaults objectForKey:@"user_id"];
     registerURL = [registerURL stringByAppendingString:[userID stringValue]];
+    registerURL = [registerURL stringByAppendingString:@"/"];
     registerURL = [registerURL stringByAppendingString:@"super_create"];
     [[PASessionManager sharedClient] PATCH:registerURL
                                parameters:[self applyWrapper:@"user" toDictionary:userInfo]
@@ -127,9 +128,7 @@
                                       NSString* blurb = [userDictionary objectForKey:@"blurb"];
                                       [defaults setObject:firstName forKey:@"first_name"];
                                       [defaults setObject:lastName forKey:@"last_name"];
-                                      if(![email isKindOfClass:[NSNull class]]){
-                                          [defaults setObject:email forKey:@"email"];
-                                      }
+                                      [defaults setObject:email forKey:@"email"];
                                       [defaults setObject:blurb forKey:@"blurb"];
                                   }
      
@@ -167,8 +166,10 @@
                  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                  if(!userAlreadyExists && !([defaults objectForKey:@"user_id"]==newID)){
                      //NSLog(@"about to add the peer");
-                     Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInPeer:peer withDictionary:userAttributes];
+                     if(![[userAttributes objectForKey:@"first_name"] isKindOfClass:[NSNull class]]){
+                         Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
+                         [self setAttributesInPeer:peer withDictionary:userAttributes];
+                     }
                      //NSLog(@"PEER: %@",peer);
                  }
              }
@@ -495,8 +496,8 @@
     if(![end isKindOfClass:[NSNull class]]){
         diningEvent.end_date = [formatter dateFromString:end];
     }*/
-    diningEvent.start_date=[NSDate date];
-    diningEvent.end_date=[NSDate date];
+    diningEvent.start_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]];
+    diningEvent.end_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]];
     diningEvent.type = @"dining";
     diningEvent.id = [dictionary objectForKey:@"id"];
 }
