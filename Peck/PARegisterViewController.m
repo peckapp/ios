@@ -195,4 +195,8 @@
     [self dismissKeyboard];
 }
 
+-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"selected the path");
+}
+
 @end
