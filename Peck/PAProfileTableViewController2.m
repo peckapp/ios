@@ -42,6 +42,13 @@ int currentTextField;
     self.emailTextField.delegate=self;
     self.passwordTextField.delegate=self;
     self.confirmPasswordTextField.delegate=self;
+    
+    
+    UITapGestureRecognizer *tapRecognizer;
+    tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changePicture)];
+    tapRecognizer.cancelsTouchesInView = NO;
+    [profilePicture addGestureRecognizer:tapRecognizer];
+    profilePicture.userInteractionEnabled = YES;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
