@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *instagramCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *twitterCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *googleCell;
+- (IBAction)cancelButton:(id)sender;
 
 @end
 
@@ -191,4 +192,9 @@
     NSLog(@"selected the path");
 }
 
+- (IBAction)cancelButton:(id)sender {
+    [self dismissKeyboard];
+    // dismiss the current login process to return to the main app
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 @end

@@ -12,8 +12,9 @@
 
 @interface PAProfileTableViewController2 ()
 
-- (IBAction)createAccount:(id)sender;
-- (IBAction)switchSchool:(id)sender;
+- (IBAction)login:(id)sender;
+
+- (IBAction)registerAccount:(id)sender;
 
 @end
 
@@ -91,13 +92,21 @@ int currentTextField;
 
 #pragma mark - Account Creation and Configuration
 
-- (IBAction)createAccount:(id)sender
+- (IBAction)login:(id)sender
 {
     UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
     UIViewController *loginRoot = [loginStoryboard instantiateInitialViewController];
     
     [self presentViewController:loginRoot animated:YES completion:nil];
 }
+
+- (IBAction)registerAccount:(id)sender {
+    NSLog(@"reg");
+    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
+    UIViewController *registerControllet = [loginStoryboard instantiateViewControllerWithIdentifier:@"register"];
+    [self presentViewController:registerControllet animated:YES completion:nil];
+}
+
 
 - (IBAction)switchSchool:(id)sender
 {

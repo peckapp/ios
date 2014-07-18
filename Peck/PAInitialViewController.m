@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet FBLoginView *fbLogin;
 
 - (IBAction)cancelLogin:(id)sender;
+- (IBAction)finishLogin:(id)sender;
+
 
 @end
 
@@ -83,6 +85,10 @@
     [self dismissKeyboard];
     // dismiss the current login process to return to the main app
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)finishLogin:(id)sender {
+    NSLog(@"finish the login");
 }
 
 - (void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user

@@ -77,7 +77,7 @@
     NSDictionary* passwordChange = [NSDictionary dictionaryWithObjectsAndKeys:
                                     self.oldPasswordField.text, @"old_password",
                                     self.passwordField.text, @"password",
-                                    self.confirmPasswordField, @"password_confirmation",
+                                    self.confirmPasswordField.text, @"password_confirmation",
                                     nil];
     [[PASyncManager globalSyncManager] updateUserWithInfo:passwordChange];
     
