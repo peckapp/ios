@@ -15,6 +15,7 @@
 #import "Peer.h"
 #import "PACommentCell.h"
 #import "Comment.h"
+#import "PASyncManager.h"
 
 @interface PACircleCell ()
 
@@ -315,8 +316,9 @@ UITextView *textViewHelper;
         [self.commentsTableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     else if(tableView == self.suggestedMembersTableView){
+        PACirclesTableViewController* parent = (PACirclesTableViewController*)self.parentViewController;
+        
         Peer * newMember = self.suggestedMembers[indexPath.row];
-        PACirclesTableViewController *parent = (PACirclesTableViewController*) self.parentViewController;
         [parent addMember:newMember];
     }
     else {
@@ -446,6 +448,7 @@ UITextView *textViewHelper;
     else if(scrollView==self.suggestedMembersTableView){
         PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentViewController;
         [parent dismissKeyboard:self];
+        [parent dismissCircleTitleKeyboard];
     }
 }
 
@@ -489,5 +492,25 @@ UITextView *textViewHelper;
     [self.commentsTableView beginUpdates];
     [self.commentsTableView endUpdates];
 
+}
+- (IBAction)createCircleButton:(id)sender {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber* userID = [defaults objectForKey:@"user_id"];
+    NSNumber* institutionID= [defaults objectForKey:@"institution_id"];
+    
+    NSMutableArray* circleMembers = [[NSMutableArray alloc] init];
+    for(int i=0;i<[self.members count];i++){
+        Peer * tempPeer = self.members[i];
+        [circleMembers addObject:tempPeer.id];
+    }
+    
+    NSDictionary * newCircle = [NSDictionary dictionaryWithObjectsAndKeys:
+                                userID, @"user_id",
+                                institutionID, @"institution_id",
+                                self.titleTextField.text, @"title",
+                                circleMembers, @"circle_members",
+                                nil];
+    [[PASyncManager globalSyncManager] postCircle:newCircle];
+    
 }
 @end

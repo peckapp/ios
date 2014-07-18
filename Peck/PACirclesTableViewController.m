@@ -24,6 +24,7 @@
 @property (strong, nonatomic) UITextField * inviteTextField;
 @property (strong, nonatomic) UITextField * textCapture;
 @property (strong, nonatomic) UITapGestureRecognizer * tapRecognizer;
+@property (strong, nonatomic) NSMutableArray* addedPeers;
 
 @end
 
@@ -60,7 +61,8 @@ BOOL viewingCircles;
     initialFrame=self.tableView.frame;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         while(viewingCircles){
-            if(viewingCell){
+            if(viewingCell&&self.selectedIndexPath.row!=[_fetchedResultsController.fetchedObjects count]){
+                //if you are viewing a cell that is not the final (create circle) cell
                 PACircleCell *selectedCircleCell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
                 NSString* circleID =[selectedCircleCell.circle.id stringValue];
                 [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
@@ -80,6 +82,7 @@ BOOL viewingCircles;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.addedPeers = [[NSMutableArray alloc] init];
     viewingCell=NO;
     self.cancelCellButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(cancelSelection)];
     
@@ -122,9 +125,9 @@ BOOL viewingCircles;
     self.textCapture.inputAccessoryView = accessory;
     [self.view addSubview:self.textCapture];
 
-    self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
+   /* self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
     self.tapRecognizer.cancelsTouchesInView = NO;
-    [self.view addGestureRecognizer:self.tapRecognizer];
+    [self.view addGestureRecognizer:self.tapRecognizer];*/
 }
 
 - (void)didReceiveMemoryWarning
@@ -179,17 +182,23 @@ BOOL viewingCircles;
     PACircleCell* selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
     selectedCell.suggestedMembers=nil;
     [selectedCell.suggestedMembersTableView reloadData];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber* invited_by = [defaults objectForKey:@"user_id"];
-    NSNumber* instituion_id = [defaults objectForKey:@"institution_id"];
-    NSNumber* circle_id = selectedCircle.id;
-    NSDictionary *newCircleMember = [NSDictionary dictionaryWithObjectsAndKeys:
-                               invited_by, @"invited_by",
-                               newMember.id, @"user_id",
-                               instituion_id, @"institution_id",
-                               circle_id, @"circle_id",
-                               nil];
-    [[PASyncManager globalSyncManager] postCircleMember:newMember withDictionary:newCircleMember forCircle:selectedCircle withSender:selectedCell];
+    
+    if(self.selectedIndexPath.row!=[_fetchedResultsController.fetchedObjects count]){
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSNumber* invited_by = [defaults objectForKey:@"user_id"];
+        NSNumber* instituion_id = [defaults objectForKey:@"institution_id"];
+        NSNumber* circle_id = selectedCircle.id;
+        NSDictionary *newCircleMember = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         invited_by, @"invited_by",
+                                         newMember.id, @"user_id",
+                                         instituion_id, @"institution_id",
+                                         circle_id, @"circle_id",
+                                         nil];
+        [[PASyncManager globalSyncManager] postCircleMember:newMember withDictionary:newCircleMember forCircle:selectedCircle withSender:selectedCell];
+    }else{
+        [self.addedPeers addObject:newMember];
+        [selectedCell updateCircleMembers:self.addedPeers];
+    }
 }
 
 #pragma mark - Table view data source
@@ -245,7 +254,10 @@ BOOL viewingCircles;
     if(!viewingCell){
         
         cell.addingMembers=NO;
+        if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
+            [cell updateCircleMembers:nil];
         
+        }
         [cell performFetch];
         self.selectedIndexPath = indexPath;
         [self.tableView beginUpdates];
@@ -260,7 +272,9 @@ BOOL viewingCircles;
         [cell performFetch];
         
     }else if(viewingCell && !cell.addingMembers){
+        [self dismissCircleTitleKeyboard];
         [self dismissCommentKeyboard];
+        [self.addedPeers removeAllObjects];
         self.inviteTextField.text=@"";
         viewingCell=NO;
         self.tableView.scrollEnabled = YES;
@@ -269,6 +283,7 @@ BOOL viewingCircles;
         selectedCell.addingMembers=NO;
         self.selectedIndexPath = nil;
         [self dismissKeyboard:self];
+        [self configureCell:cell atIndexPath:indexPath];
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
     }
@@ -302,7 +317,7 @@ BOOL viewingCircles;
     self.inviteTextField.text=@"";
     viewingCell=NO;
     self.tableView.scrollEnabled = YES;
-    self.navigationItem.leftBarButtonItem = nil;
+    
     [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
     PACircleCell *selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
     selectedCell.addingMembers=NO;
@@ -321,15 +336,18 @@ BOOL viewingCircles;
         [cell.suggestedMembersTableView setHidden:NO];
         [cell.commentsTableView setHidden:YES];
         [cell.titleTextField setHidden:YES];
+        [cell.createCircleButton setHidden:YES];
         if(viewingCell){
             [cell.titleTextField setHidden:NO];
             [cell.profilesTableView setHidden:NO];
+            [cell.createCircleButton setHidden:NO];
         }
         
     }
     else{
         [cell.titleTextField setHidden:YES];
         [cell.profilesTableView setHidden:NO];
+        [cell.createCircleButton setHidden:YES];
         if(!cell.addingMembers){
             [cell.suggestedMembersTableView setHidden:YES];
             [cell.commentsTableView setHidden:NO];
@@ -423,6 +441,11 @@ BOOL viewingCircles;
     [self.textCapture resignFirstResponder];
 }
 
+-(void)dismissCircleTitleKeyboard{
+    PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+    [cell.titleTextField resignFirstResponder];
+    
+}
 #pragma mark - Navigation
 
 - (IBAction)unwindToCirclesViewController:(UIStoryboardSegue *)unwindSegue
