@@ -152,7 +152,8 @@
         [appDelegate.window setRootViewController:newRoot];
     } else {
     
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self.navigationController popViewControllerAnimated:YES];
+        //[self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

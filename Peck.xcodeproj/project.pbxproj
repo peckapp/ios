@@ -64,6 +64,7 @@
 		A43BF0EE197819480009B7AD /* PASubscriptionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */; };
 		A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0F01978198D0009B7AD /* PASubscriptionCell.m */; };
 		A43BF0F31978198D0009B7AD /* PASubscriptionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A43BF0F11978198D0009B7AD /* PASubscriptionCell.xib */; };
+		A43BF0F6197978690009B7AD /* PAChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0F5197978690009B7AD /* PAChangePasswordViewController.m */; };
 		A459A83D195DF4B800D1FB0E /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A459A83C195DF4B800D1FB0E /* Message.m */; };
 		A463F384194B959800ED441F /* PACircleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F382194B959800ED441F /* PACircleCell.m */; };
 		A463F385194B959800ED441F /* PACircleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A463F383194B959800ED441F /* PACircleCell.xib */; };
@@ -240,6 +241,8 @@
 		A43BF0EF1978198D0009B7AD /* PASubscriptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASubscriptionCell.h; sourceTree = "<group>"; };
 		A43BF0F01978198D0009B7AD /* PASubscriptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASubscriptionCell.m; sourceTree = "<group>"; };
 		A43BF0F11978198D0009B7AD /* PASubscriptionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PASubscriptionCell.xib; sourceTree = "<group>"; };
+		A43BF0F4197978690009B7AD /* PAChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAChangePasswordViewController.h; sourceTree = "<group>"; };
+		A43BF0F5197978690009B7AD /* PAChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAChangePasswordViewController.m; sourceTree = "<group>"; };
 		A459A83B195DF4B800D1FB0E /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		A459A83C195DF4B800D1FB0E /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		A463F381194B959800ED441F /* PACircleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleCell.h; sourceTree = "<group>"; };
@@ -726,6 +729,8 @@
 			children = (
 				A43BF0E8197813200009B7AD /* PAProfileTableViewController2.h */,
 				A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */,
+				A43BF0F4197978690009B7AD /* PAChangePasswordViewController.h */,
+				A43BF0F5197978690009B7AD /* PAChangePasswordViewController.m */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -953,6 +958,7 @@
 				86292527193CBFF80057CA41 /* PAEventCell.m in Sources */,
 				A4677D3C197437EC007E3C3A /* Peer.m in Sources */,
 				A4E21F6F1965F0E0002A9800 /* Comment.m in Sources */,
+				A43BF0F6197978690009B7AD /* PAChangePasswordViewController.m in Sources */,
 				867B52D619509F5000BEB37B /* PASessionManager.m in Sources */,
 				A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */,
 				86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */,

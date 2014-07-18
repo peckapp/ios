@@ -256,7 +256,7 @@ BOOL viewingCircles;
         cell.addingMembers=NO;
         if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
             [cell updateCircleMembers:nil];
-        
+            cell.titleTextField.text=@"";
         }
         [cell performFetch];
         self.selectedIndexPath = indexPath;

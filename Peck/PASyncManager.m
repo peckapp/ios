@@ -80,24 +80,33 @@
 
 -(void)updateUserWithInfo:(NSDictionary *)userInfo
 {
-    if ([self validUserInfo:userInfo]) {
-        [[PASessionManager sharedClient] POST:usersAPI
-                                   parameters:[self applyWrapper:@"user" toDictionary:userInfo]
-                                      success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                          // extract core dictionary from json
-                                          NSLog(@"Update user success: %@", JSON);
-                                          NSDictionary *postsFromResponse = (NSDictionary*)JSON;
-                                          NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
-                                          
-                                          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                                          
-                                          NSNumber *userID = [userDictionary objectForKey:@"id"];
-                                          [defaults setObject:userID forKey:@"user_id"];
+    NSString* updateURL = [usersAPI stringByAppendingString:@"/"];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber* userID = [defaults objectForKey:@"user_id"];
+    updateURL = [updateURL stringByAppendingString:[userID stringValue]];
+    updateURL = [updateURL stringByAppendingString:@"/update"];
+    
+    [[PASessionManager sharedClient] PATCH:updateURL
+                                parameters:[self applyWrapper:@"user" toDictionary:userInfo]
+                                    success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                        // extract core dictionary from json
+                                        NSLog(@"Update user success: %@", JSON);
+                                        NSDictionary *postsFromResponse = (NSDictionary*)JSON;
+                                        NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
+                                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                        NSString* email = [userDictionary objectForKey:@"email"];
+                                        NSString* blurb = [userDictionary objectForKey:@"blurb"];
+                                        NSString* firstName = [userDictionary objectForKey:@"first_name"];
+                                        NSString* lastName = [userDictionary objectForKey:@"last_name"];
+                                        
+                                        [defaults setObject:email forKey:@"email"];
+                                        [defaults setObject:blurb forKey:@"blurb"];
+                                        [defaults setObject:firstName forKey:@"first_name"];
+                                        [defaults setObject:lastName forKey:@"last_name"];
                                       }
                                       failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                           NSLog(@"ERROR: %@",error);
                                       }];
-    }
     
 }
 
@@ -113,8 +122,7 @@
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSNumber* userID = [defaults objectForKey:@"user_id"];
     registerURL = [registerURL stringByAppendingString:[userID stringValue]];
-    registerURL = [registerURL stringByAppendingString:@"/"];
-    registerURL = [registerURL stringByAppendingString:@"super_create"];
+    registerURL = [registerURL stringByAppendingString:@"/super_create"];
     [[PASessionManager sharedClient] PATCH:registerURL
                                parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {

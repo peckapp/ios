@@ -20,7 +20,7 @@
 @implementation PAProfileTableViewController2
 
 @synthesize profilePicture;
-@synthesize emailTextField, twitterTextField, facebookTextField, infoTextView, firstNameTextField, lastNameTextField, passwordTextField;
+@synthesize emailTextField, twitterTextField, facebookTextField, infoTextView, firstNameTextField, lastNameTextField;
 int currentTextField;
 
 - (void)viewDidLoad
@@ -40,9 +40,6 @@ int currentTextField;
     self.firstNameTextField.delegate=self;
     self.lastNameTextField.delegate=self;
     self.emailTextField.delegate=self;
-    self.passwordTextField.delegate=self;
-    self.confirmPasswordTextField.delegate=self;
-    
     
     UITapGestureRecognizer *tapRecognizer;
     tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changePicture)];
@@ -174,10 +171,6 @@ int currentTextField;
         [self.emailTextField becomeFirstResponder];
     }else if(textField == self.emailTextField){
         [self.infoTextView becomeFirstResponder];
-    }else if (textField == self.passwordTextField){
-        [self.confirmPasswordTextField becomeFirstResponder];
-    }else if(textField == self.confirmPasswordTextField){
-        [self.infoTextView becomeFirstResponder];
         NSIndexPath* indexPath = [NSIndexPath indexPathForRow:3 inSection:1];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }else{
@@ -198,9 +191,9 @@ int currentTextField;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if(indexPath.row==1 && indexPath.section==0){
+    /*if(indexPath.row==1 && indexPath.section==0){
         [self switchSchool:self];
-    }
+    }*/
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -214,7 +207,7 @@ int currentTextField;
                                  self.lastNameTextField.text, @"last_name",
                                  self.infoTextView.text, @"blurb",
                                  nil];
-    [[PASyncManager globalSyncManager] registerUserWithInfo:updatedInfo];
+    [[PASyncManager globalSyncManager] updateUserWithInfo:updatedInfo];
     
 }
 @end
