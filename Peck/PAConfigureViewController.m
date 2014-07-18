@@ -119,10 +119,15 @@
     return self.institutions.count;
 }
 
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+- (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     Institution * institution = (Institution*)[self.institutions objectAtIndex:row];
-    return institution.name;
+    NSDictionary* attributeDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        [UIColor whiteColor], NSForegroundColorAttributeName,
+                                        [UIFont systemFontOfSize:12], NSFontAttributeName,
+                                        nil];
+    NSAttributedString* institutionName = [[NSAttributedString alloc] initWithString:institution.name attributes:attributeDictionary];
+    return institutionName;
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component

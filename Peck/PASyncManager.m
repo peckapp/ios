@@ -754,45 +754,46 @@
 }
 
 -(void)updateCommentsFrom: (NSString *)comment_from withCategory:(NSString *)category{
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-    dispatch_async(queue, ^{
+    if(comment_from){
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+        dispatch_async(queue, ^{
         
-        NSLog(@"in secondary thread to update comments");
-        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-        _managedObjectContext = [appdelegate managedObjectContext];
+            NSLog(@"in secondary thread to update comments");
+            PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+            _managedObjectContext = [appdelegate managedObjectContext];
         
-        NSString *specificCommentURL = [commentsAPI stringByAppendingString:@"?"];
-        specificCommentURL = [specificCommentURL stringByAppendingString:@"category="];
-        specificCommentURL = [specificCommentURL stringByAppendingString:category];
-        specificCommentURL = [specificCommentURL stringByAppendingString:@"&"];
-        specificCommentURL = [specificCommentURL stringByAppendingString:@"comment_from="];
-        specificCommentURL = [specificCommentURL stringByAppendingString:comment_from];
+            NSString *specificCommentURL = [commentsAPI stringByAppendingString:@"?"];
+            specificCommentURL = [specificCommentURL stringByAppendingString:@"category="];
+            specificCommentURL = [specificCommentURL stringByAppendingString:category];
+            specificCommentURL = [specificCommentURL stringByAppendingString:@"&"];
+            specificCommentURL = [specificCommentURL stringByAppendingString:@"comment_from="];
+            specificCommentURL = [specificCommentURL stringByAppendingString:comment_from];
         
-        [[PASessionManager sharedClient] GET:specificCommentURL
-                                  parameters:[self authenticationParameters]
-                                     success:^
-         (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"JSON: %@",JSON);
-             NSDictionary *commentsDictionary = (NSDictionary*)JSON;
-             NSArray *postsFromResponse = [commentsDictionary objectForKey:@"comments"];
-             //NSLog(@"Update Event response: %@", postsFromResponse);
-             for (NSDictionary *commentAttributes in postsFromResponse) {
-                 NSNumber *newID = [commentAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Comment"];
-                 if(!eventAlreadyExists){
-                     //NSLog(@"adding an event to Core Data");
-                     Comment * comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInComment:comment withDictionary:commentAttributes];
-                     NSLog(@"COMMENT: %@",comment);
+            [[PASessionManager sharedClient] GET:specificCommentURL
+                                      parameters:[self authenticationParameters]
+                                         success:^
+             (NSURLSessionDataTask * __unused task, id JSON) {
+                 //NSLog(@"JSON: %@",JSON);
+                 NSDictionary *commentsDictionary = (NSDictionary*)JSON;
+                 NSArray *postsFromResponse = [commentsDictionary objectForKey:@"comments"];
+                 //NSLog(@"Update Event response: %@", postsFromResponse);
+                 for (NSDictionary *commentAttributes in postsFromResponse) {
+                     NSNumber *newID = [commentAttributes objectForKey:@"id"];
+                     BOOL eventAlreadyExists = [self objectExists:newID withType:@"Comment"];
+                     if(!eventAlreadyExists){
+                         //NSLog(@"adding an event to Core Data");
+                         Comment * comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext: _managedObjectContext];
+                         [self setAttributesInComment:comment withDictionary:commentAttributes];
+                         NSLog(@"COMMENT: %@",comment);
+                     }
                  }
              }
-         }
-                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                         NSLog(@"ERROR: %@",error);
-                                     }];
-    });
+                                         failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                             NSLog(@"ERROR: %@",error);
+                                         }];
+        });
     
-
+    }
 }
 
 -(void)setAttributesInComment:(Comment*)comment  withDictionary:(NSDictionary *)dictionary{

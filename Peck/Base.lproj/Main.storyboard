@@ -961,7 +961,7 @@
             </objects>
             <point key="canvasLocation" x="-2112" y="3146"/>
         </scene>
-        <!--Configure View Controller-->
+        <!--Configure View Controller - Institution-->
         <scene sceneID="LG1-G8-7Oc">
             <objects>
                 <viewController storyboardIdentifier="configure" useStoryboardIdentifierAsRestorationIdentifier="YES" id="wXS-p9-cDv" customClass="PAConfigureViewController" sceneMemberID="viewController">
@@ -969,18 +969,24 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sidebar_background.jpg" id="HXT-Ta-cJd">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                             <pickerView contentMode="scaleToFill" id="mwy-j0-j7f">
-                                <rect key="frame" x="0.0" y="119.5" width="320" height="162"/>
+                                <rect key="frame" x="0.0" y="231" width="320" height="162"/>
                             </pickerView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Your School" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zCA-h1-rbn">
                                 <rect key="frame" x="63" y="62.5" width="195" height="33"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="BIs-yt-8be">
-                                <rect key="frame" x="121" y="343" width="79" height="30"/>
+                                <rect key="frame" x="121" y="436" width="79" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Continue">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -990,7 +996,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="Od7-Ig-eKl"/>
+                    <navigationItem key="navigationItem" title="Institution" id="Od7-Ig-eKl"/>
                     <connections>
                         <outlet property="schoolPicker" destination="mwy-j0-j7f" id="Xfx-pl-OnF"/>
                     </connections>
@@ -1305,6 +1311,7 @@
     <resources>
         <image name="image-placeholder.png" width="600" height="600"/>
         <image name="profile-placeholder.png" width="1024" height="1024"/>
+        <image name="sidebar_background.jpg" width="640" height="1136"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

@@ -65,6 +65,7 @@
 		A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0F01978198D0009B7AD /* PASubscriptionCell.m */; };
 		A43BF0F31978198D0009B7AD /* PASubscriptionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A43BF0F11978198D0009B7AD /* PASubscriptionCell.xib */; };
 		A43BF0F6197978690009B7AD /* PAChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0F5197978690009B7AD /* PAChangePasswordViewController.m */; };
+		A43BF0F8197992490009B7AD /* sidebar_background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A43BF0F7197992490009B7AD /* sidebar_background.jpg */; };
 		A459A83D195DF4B800D1FB0E /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A459A83C195DF4B800D1FB0E /* Message.m */; };
 		A463F384194B959800ED441F /* PACircleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F382194B959800ED441F /* PACircleCell.m */; };
 		A463F385194B959800ED441F /* PACircleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A463F383194B959800ED441F /* PACircleCell.xib */; };
@@ -243,6 +244,7 @@
 		A43BF0F11978198D0009B7AD /* PASubscriptionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PASubscriptionCell.xib; sourceTree = "<group>"; };
 		A43BF0F4197978690009B7AD /* PAChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAChangePasswordViewController.h; sourceTree = "<group>"; };
 		A43BF0F5197978690009B7AD /* PAChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAChangePasswordViewController.m; sourceTree = "<group>"; };
+		A43BF0F7197992490009B7AD /* sidebar_background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sidebar_background.jpg; sourceTree = "<group>"; };
 		A459A83B195DF4B800D1FB0E /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		A459A83C195DF4B800D1FB0E /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		A463F381194B959800ED441F /* PACircleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleCell.h; sourceTree = "<group>"; };
@@ -360,6 +362,7 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				A43BF0F7197992490009B7AD /* sidebar_background.jpg */,
 				864D873A19646F9900BCC01A /* facebook */,
 				DDCD45C0195DC8E60032333F /* profile-placeholder.png */,
 				8671A2C8195B846800700101 /* dropdown2 */,
@@ -828,6 +831,7 @@
 				864D873D196470C100BCC01A /* facebook-login.png in Resources */,
 				8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */,
 				DD898150195B7AA80079CDC9 /* explore@2x.png in Resources */,
+				A43BF0F8197992490009B7AD /* sidebar_background.jpg in Resources */,
 				DD898151195B7AA80079CDC9 /* pecks@2x.png in Resources */,
 				DD898171195CAFF20079CDC9 /* Icon-40@2x.png in Resources */,
 				DD89816D195CAF6F0079CDC9 /* PAEventCell.xib in Resources */,
