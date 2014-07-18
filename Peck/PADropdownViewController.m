@@ -84,52 +84,55 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)
                                              itemCount:[self.secondaryViewControllerIdentifiers count]];
 
-    self.childFrameCenter = CGRectMake(0,
+        self.childFrameCenter = CGRectMake(0,
                                        dropdownBar.frame.size.height,
                                        self.view.frame.size.width,
                                        self.view.frame.size.height - dropdownBar.frame.size.height);
 
-    self.childFrameLeft = CGRectOffset(self.childFrameCenter, -self.childFrameCenter.size.width, 0.0);
-    self.childFrameRight = CGRectOffset(self.childFrameCenter, self.childFrameCenter.size.width, 0.0);
-    self.childFrameTop = CGRectOffset(self.childFrameCenter, 0.0, -self.childFrameCenter.size.height);
-    self.childFrameBottom = CGRectOffset(self.childFrameCenter, 0.0, self.childFrameCenter.size.height);
+        self.childFrameLeft = CGRectOffset(self.childFrameCenter, -self.childFrameCenter.size.width, 0.0);
+        self.childFrameRight = CGRectOffset(self.childFrameCenter, self.childFrameCenter.size.width, 0.0);
+        self.childFrameTop = CGRectOffset(self.childFrameCenter, 0.0, -self.childFrameCenter.size.height);
+        self.childFrameBottom = CGRectOffset(self.childFrameCenter, 0.0, self.childFrameCenter.size.height);
 
-    self.primaryViewController.view.frame = self.childFrameCenter;
-    [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
+        self.primaryViewController.view.frame = self.childFrameCenter;
+        [self.secondaryViewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
         UIViewController *viewController = (UIViewController *)obj;
         viewController.view.frame = self.childFrameCenter;
-    }];
+        }];
 
-    // Add primary as child view controller
-    [self addChildViewController:self.primaryViewController];
-    [self.view addSubview: self.primaryViewController.view];
-    [self.primaryViewController didMoveToParentViewController:self];
-    self.activeViewController = self.primaryViewController;
+        // Add primary as child view controller
+        [self addChildViewController:self.primaryViewController];
+        [self.view addSubview: self.primaryViewController.view];
+        [self.primaryViewController didMoveToParentViewController:self];
+        self.activeViewController = self.primaryViewController;
+        
+        // gradient for filter
+        self.gradientView = [[UIView alloc] initWithFrame:self.childFrameCenter];
+        self.gradientView.alpha = 0.0;
+        CAGradientLayer *gradient = [CAGradientLayer layer];
+        gradient.frame = self.gradientView.frame;
+        gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor blackColor] CGColor], nil];
+        gradient.startPoint = CGPointMake(0.0, 0.0);
+        gradient.endPoint = CGPointMake(0.0, 1.0);
+        [self.gradientView.layer addSublayer:gradient];
+        [self.view addSubview:self.gradientView];
 
-    // gradient for filter
-    self.gradientView = [[UIView alloc] initWithFrame:self.childFrameCenter];
-    self.gradientView.alpha = 0.0;
-    CAGradientLayer *gradient = [CAGradientLayer layer];
-    gradient.frame = self.gradientView.frame;
-    gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor blackColor] CGColor], nil];
-    gradient.startPoint = CGPointMake(0.0, 0.0);
-    gradient.endPoint = CGPointMake(0.0, 1.0);
-    [self.gradientView.layer addSublayer:gradient];
-    [self.view addSubview:self.gradientView];
+        // Filter item
+        self.filter = [PAFilter filter];
+        self.filter.delegate = self;
+        [self.view addSubview:self.filter];
+        [self.filter setFrameBasedOnSuperview];
+        [self.filter presentUpwardForMode:PAFilterHomeMode];
 
-    // Filter item
-    self.filter = [PAFilter filter];
-    self.filter.delegate = self;
-    [self.view addSubview:self.filter];
-    [self.filter setFrameBasedOnSuperview];
-    [self.filter presentUpwardForMode:PAFilterHomeMode];
-
-    // Dropdown bar
-    dropdownBar.delegate = self;
-    [self.view addSubview:dropdownBar];
+        // Dropdown bar
+        dropdownBar.delegate = self;
+        [self.view addSubview:dropdownBar];
+    });
 }
 
 - (void)didReceiveMemoryWarning
