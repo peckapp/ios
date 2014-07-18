@@ -119,15 +119,17 @@
     return self.institutions.count;
 }
 
-- (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component  reusingView:(UIView *)view
 {
     Institution * institution = (Institution*)[self.institutions objectAtIndex:row];
-    NSDictionary* attributeDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        [UIColor whiteColor], NSForegroundColorAttributeName,
-                                        [UIFont systemFontOfSize:12], NSFontAttributeName,
-                                        nil];
-    NSAttributedString* institutionName = [[NSAttributedString alloc] initWithString:institution.name attributes:attributeDictionary];
-    return institutionName;
+    
+    UILabel * institutionLabel = [[UILabel alloc] init];
+    //institutionLabel.frame = CGRectMake(0, 0, 90, 20);
+    institutionLabel.font = [UIFont systemFontOfSize:30];
+    institutionLabel.text = institution.name;
+    institutionLabel.textColor = [UIColor whiteColor];
+    institutionLabel.textAlignment = NSTextAlignmentCenter;
+    return institutionLabel;
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
@@ -139,6 +141,10 @@
     NSLog(@"selected institution: %@ with id: %@",institution.name,institution.id);
 }
 
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
+    return 40;
+}
 
 - (IBAction)continueButton:(id)sender
 {

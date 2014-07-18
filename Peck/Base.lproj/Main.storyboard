@@ -974,7 +974,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <pickerView contentMode="scaleToFill" id="mwy-j0-j7f">
-                                <rect key="frame" x="0.0" y="231" width="320" height="162"/>
+                                <rect key="frame" x="0.0" y="176" width="320" height="162"/>
                             </pickerView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Your School" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zCA-h1-rbn">
                                 <rect key="frame" x="63" y="62.5" width="195" height="33"/>
