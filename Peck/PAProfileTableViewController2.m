@@ -41,6 +41,7 @@ int currentTextField;
     self.lastNameTextField.delegate=self;
     self.emailTextField.delegate=self;
     self.passwordTextField.delegate=self;
+    self.confirmPasswordTextField.delegate=self;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -162,16 +163,16 @@ int currentTextField;
     
     if (textField == self.firstNameTextField) {
         [self.lastNameTextField becomeFirstResponder];
-        NSLog(@"next");
-    }
-    else if (textField == self.lastNameTextField) {
+    }else if (textField == self.lastNameTextField) {
         [self.emailTextField becomeFirstResponder];
-    }
-    else if(textField == self.emailTextField){
+    }else if(textField == self.emailTextField){
         [self.passwordTextField becomeFirstResponder];
-    }
-    else if (textField == self.passwordTextField){
+    }else if (textField == self.passwordTextField){
+        [self.confirmPasswordTextField becomeFirstResponder];
+    }else if(textField == self.confirmPasswordTextField){
         [self.infoTextView becomeFirstResponder];
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:5 inSection:1];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }else{
         [self.infoTextView resignFirstResponder];
     }
@@ -190,19 +191,15 @@ int currentTextField;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if(indexPath.row==0 && indexPath.section==0){
-        [self changePicture];
+    if(indexPath.row==1 && indexPath.section==0){
+        [self switchSchool:self];
     }
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (IBAction)saveChangesButton:(id)sender {
     //will post the new profile information to the server
     NSLog(@"change my profile");
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber* institutionID = [defaults objectForKey:@"institution_id"];
-    NSNumber* userID = [defaults objectForKey:@"user_id"];
     
     NSDictionary *updatedInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                  self.emailTextField.text, @"email",
@@ -211,8 +208,6 @@ int currentTextField;
                                  self.infoTextView.text, @"blurb",
                                  self.passwordTextField.text,@"password",
                                  self.passwordTextField.text, @"password_confirmation",
-                                 //userID, @"id",
-                                 //institutionID, @"institution_id",
                                  nil];
     [[PASyncManager globalSyncManager] registerUserWithInfo:updatedInfo];
     
