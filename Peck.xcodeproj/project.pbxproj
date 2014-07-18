@@ -66,6 +66,10 @@
 		A43BF0F31978198D0009B7AD /* PASubscriptionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A43BF0F11978198D0009B7AD /* PASubscriptionCell.xib */; };
 		A43BF0F6197978690009B7AD /* PAChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0F5197978690009B7AD /* PAChangePasswordViewController.m */; };
 		A43BF0F8197992490009B7AD /* sidebar_background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A43BF0F7197992490009B7AD /* sidebar_background.jpg */; };
+		A43BF0FB1979B0B60009B7AD /* PAInvitationsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0FA1979B0B60009B7AD /* PAInvitationsTableViewController.m */; };
+		A43BF0FF1979B4A50009B7AD /* PAInvitationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0FD1979B4A50009B7AD /* PAInvitationCell.m */; };
+		A43BF1001979B4A50009B7AD /* PAInvitationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A43BF0FE1979B4A50009B7AD /* PAInvitationCell.xib */; };
+		A43BF1021979BC240009B7AD /* circles.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A43BF1011979BC240009B7AD /* circles.jpeg */; };
 		A459A83D195DF4B800D1FB0E /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A459A83C195DF4B800D1FB0E /* Message.m */; };
 		A463F384194B959800ED441F /* PACircleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F382194B959800ED441F /* PACircleCell.m */; };
 		A463F385194B959800ED441F /* PACircleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A463F383194B959800ED441F /* PACircleCell.xib */; };
@@ -245,6 +249,12 @@
 		A43BF0F4197978690009B7AD /* PAChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAChangePasswordViewController.h; sourceTree = "<group>"; };
 		A43BF0F5197978690009B7AD /* PAChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAChangePasswordViewController.m; sourceTree = "<group>"; };
 		A43BF0F7197992490009B7AD /* sidebar_background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sidebar_background.jpg; sourceTree = "<group>"; };
+		A43BF0F91979B0B60009B7AD /* PAInvitationsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAInvitationsTableViewController.h; sourceTree = "<group>"; };
+		A43BF0FA1979B0B60009B7AD /* PAInvitationsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAInvitationsTableViewController.m; sourceTree = "<group>"; };
+		A43BF0FC1979B4A50009B7AD /* PAInvitationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAInvitationCell.h; sourceTree = "<group>"; };
+		A43BF0FD1979B4A50009B7AD /* PAInvitationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAInvitationCell.m; sourceTree = "<group>"; };
+		A43BF0FE1979B4A50009B7AD /* PAInvitationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAInvitationCell.xib; sourceTree = "<group>"; };
+		A43BF1011979BC240009B7AD /* circles.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = circles.jpeg; sourceTree = "<group>"; };
 		A459A83B195DF4B800D1FB0E /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		A459A83C195DF4B800D1FB0E /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		A463F381194B959800ED441F /* PACircleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleCell.h; sourceTree = "<group>"; };
@@ -362,6 +372,7 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				A43BF1011979BC240009B7AD /* circles.jpeg */,
 				A43BF0F7197992490009B7AD /* sidebar_background.jpg */,
 				864D873A19646F9900BCC01A /* facebook */,
 				DDCD45C0195DC8E60032333F /* profile-placeholder.png */,
@@ -396,6 +407,11 @@
 				86292511193CBE000057CA41 /* PAPostViewController.m */,
 				A4794C21196320AB002BD272 /* PAInvitationViewController.h */,
 				A4794C22196320AB002BD272 /* PAInvitationViewController.m */,
+				A43BF0F91979B0B60009B7AD /* PAInvitationsTableViewController.h */,
+				A43BF0FA1979B0B60009B7AD /* PAInvitationsTableViewController.m */,
+				A43BF0FC1979B4A50009B7AD /* PAInvitationCell.h */,
+				A43BF0FD1979B4A50009B7AD /* PAInvitationCell.m */,
+				A43BF0FE1979B4A50009B7AD /* PAInvitationCell.xib */,
 			);
 			name = Post;
 			sourceTree = "<group>";
@@ -832,6 +848,7 @@
 				8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */,
 				DD898150195B7AA80079CDC9 /* explore@2x.png in Resources */,
 				A43BF0F8197992490009B7AD /* sidebar_background.jpg in Resources */,
+				A43BF1021979BC240009B7AD /* circles.jpeg in Resources */,
 				DD898151195B7AA80079CDC9 /* pecks@2x.png in Resources */,
 				DD898171195CAFF20079CDC9 /* Icon-40@2x.png in Resources */,
 				DD89816D195CAF6F0079CDC9 /* PAEventCell.xib in Resources */,
@@ -839,6 +856,7 @@
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
 				A4677D53197562B1007E3C3A /* PADiningOpportunityCell.xib in Resources */,
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
+				A43BF1001979B4A50009B7AD /* PAInvitationCell.xib in Resources */,
 				869A85AE1964855B00F254C1 /* dropdown_circles@2x.png in Resources */,
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
 				DD898152195B7AA80079CDC9 /* post@2x.png in Resources */,
@@ -930,6 +948,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A43BF0FF1979B4A50009B7AD /* PAInvitationCell.m in Sources */,
 				A43BF0EE197819480009B7AD /* PASubscriptionsTableViewController.m in Sources */,
 				8689DD8B195871D200A6B61C /* PAFilter.m in Sources */,
 				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
@@ -943,6 +962,7 @@
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,
 				A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */,
 				A4677D4519743A05007E3C3A /* Event.m in Sources */,
+				A43BF0FB1979B0B60009B7AD /* PAInvitationsTableViewController.m in Sources */,
 				A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */,
 				A459A83D195DF4B800D1FB0E /* Message.m in Sources */,
 				A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */,

@@ -89,6 +89,12 @@
 
 - (IBAction)finishLogin:(id)sender {
     NSLog(@"finish the login");
+    NSDictionary* loginInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                               self.emailField.text,@"email",
+                               self.passwordField.text, @"password",
+                               nil];
+
+    //send this info to the server and get an authentication token back
 }
 
 - (void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user
