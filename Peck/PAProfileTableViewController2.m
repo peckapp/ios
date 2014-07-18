@@ -173,12 +173,12 @@ int currentTextField;
     }else if (textField == self.lastNameTextField) {
         [self.emailTextField becomeFirstResponder];
     }else if(textField == self.emailTextField){
-        [self.passwordTextField becomeFirstResponder];
+        [self.infoTextView becomeFirstResponder];
     }else if (textField == self.passwordTextField){
         [self.confirmPasswordTextField becomeFirstResponder];
     }else if(textField == self.confirmPasswordTextField){
         [self.infoTextView becomeFirstResponder];
-        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:5 inSection:1];
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:3 inSection:1];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }else{
         [self.infoTextView resignFirstResponder];
@@ -213,8 +213,6 @@ int currentTextField;
                                  self.firstNameTextField.text, @"first_name",
                                  self.lastNameTextField.text, @"last_name",
                                  self.infoTextView.text, @"blurb",
-                                 self.passwordTextField.text,@"password",
-                                 self.passwordTextField.text, @"password_confirmation",
                                  nil];
     [[PASyncManager globalSyncManager] registerUserWithInfo:updatedInfo];
     
