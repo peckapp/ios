@@ -10,10 +10,8 @@
 
 
 static NSString * const PALocalAPIBaseURLString = @"http://localhost:3000/";
-// extended lynda tutorial with some api features
-static NSString * const PATestAPIBaseURLString = @"http://thor.peckapp.com:3200/";
-static NSString * const PATestSecureAPIBaseURLString = @"https://thor.peckapp.com:3201/";
 // development webservice
+static NSString * const PARailsServerBUS = @"http://thor.peckapp.com:3000/"; // must be running from command line on the server to work
 static NSString * const PADevAPIBaseURLString = @"http://thor.peckapp.com:3500/";
 static NSString * const PADevProdAPIBaseURLString = @"http://thor.peckapp.com:3501/";
 static NSString * const PADevSecureAPIBaseURLString = @"https://thor.peckapp.com:3502/";
