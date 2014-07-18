@@ -246,8 +246,8 @@
     [alteredDict setObject:[df dateFromString:[alteredDict objectForKey:@"created_at"]] forKey:@"created_at"];
     [alteredDict setObject:[df dateFromString:[alteredDict objectForKey:@"updated_at"]] forKey:@"updated_at"];*/
     
-    [alteredDict setObject:[NSDate dateWithTimeIntervalSince1970:[[alteredDict objectForKey:@"created_at"] doubleValue]] forKey:@"created_at"];
-    [alteredDict setObject:[NSDate dateWithTimeIntervalSince1970:[[alteredDict objectForKey:@"updated_at"] doubleValue]] forKey:@"updated_at"];
+    [alteredDict setObject:[NSDate dateWithTimeIntervalSince1970:[[alteredDict objectForKey:@"created_at"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]] forKey:@"created_at"];
+    [alteredDict setObject:[NSDate dateWithTimeIntervalSince1970:[[alteredDict objectForKey:@"updated_at"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]] forKey:@"updated_at"];
     
     // mass assignment to the object
     [institution setValuesForKeysWithDictionary:[alteredDict copy]];
@@ -302,8 +302,8 @@
     
     NSDateFormatter * df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
-    explore.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]];
-    explore.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]];
+    explore.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    explore.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     explore.id = [dictionary objectForKey:@"id"];
 }
 
@@ -488,8 +488,8 @@
 
 -(void)setAttributesInDiningEvent:(Event*)diningEvent withDictionary:(NSDictionary*)dictionary{
     diningEvent.title= [dictionary objectForKey:@"dining_opportunity_type"];
-    diningEvent.start_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]];
-    diningEvent.end_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_time"] doubleValue]];
+    diningEvent.start_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    diningEvent.end_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_time"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     diningEvent.type = @"dining";
     diningEvent.id = [dictionary objectForKey:@"id"];
 }
@@ -578,8 +578,8 @@
     //NSDateFormatter *df = [[NSDateFormatter alloc] init];
     //[df setDateFormat:serverDateFormat];
 
-    diningPeriod.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]];
-    diningPeriod.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_time"] doubleValue]];
+    diningPeriod.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    diningPeriod.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_time"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     //diningPeriod.start_date =[df dateFromString:[dictionary objectForKey:@"start_time"]];
     //diningPeriod.end_date = [df dateFromString:[dictionary objectForKey:@"end_time"]];
     diningPeriod.day_of_week = [dictionary objectForKey:@"day_of_week"];
@@ -726,8 +726,8 @@
     event.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
     event.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];*/
     
-    event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]];
-    event.end_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]];
+    event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    event.end_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     
 }
 
@@ -801,7 +801,7 @@
    /* NSDateFormatter * df = [[NSDateFormatter alloc] init];
     [df setDateFormat:serverDateFormat];
     comment.created_at = [df dateFromString:[dictionary objectForKey:@"created_at"]];*/
-    comment.created_at = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"created_at"] doubleValue]];
+    comment.created_at = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"created_at"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     comment.id = [dictionary objectForKey:@"id"];
     comment.peer_id = [dictionary objectForKey:@"user_id"];
     comment.category = [dictionary objectForKey:@"category"];
