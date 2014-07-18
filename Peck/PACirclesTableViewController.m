@@ -125,9 +125,9 @@ BOOL viewingCircles;
     self.textCapture.inputAccessoryView = accessory;
     [self.view addSubview:self.textCapture];
 
-    self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
+   /* self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
     self.tapRecognizer.cancelsTouchesInView = NO;
-    [self.view addGestureRecognizer:self.tapRecognizer];
+    [self.view addGestureRecognizer:self.tapRecognizer];*/
 }
 
 - (void)didReceiveMemoryWarning

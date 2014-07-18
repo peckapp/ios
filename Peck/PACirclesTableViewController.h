@@ -35,5 +35,6 @@
 -(void)compressTableViewCell:(PACommentCell *)cell;
 - (void)dismissKeyboard:(id)sender;
 -(void)addMember:(Peer*)newMember;
+-(void)dismissCircleTitleKeyboard;
 @end
 

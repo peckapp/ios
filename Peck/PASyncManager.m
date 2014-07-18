@@ -718,14 +718,6 @@
     event.id = [dictionary objectForKey:@"id"];
     event.type = @"simple";
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
-    
-    /*
-    NSDateFormatter * df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:serverDateFormat];
-    
-    event.start_date = [df dateFromString:[dictionary valueForKey:@"start_date"]];
-    event.end_date = [df dateFromString:[dictionary valueForKey:@"end_date"]];*/
-    
     event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     event.end_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     

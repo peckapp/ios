@@ -448,6 +448,7 @@ UITextView *textViewHelper;
     else if(scrollView==self.suggestedMembersTableView){
         PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentViewController;
         [parent dismissKeyboard:self];
+        [parent dismissCircleTitleKeyboard];
     }
 }
 
