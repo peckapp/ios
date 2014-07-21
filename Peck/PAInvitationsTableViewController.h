@@ -18,6 +18,7 @@
 @property (strong, nonatomic) NSMutableDictionary* invitedPeople;
 @property (strong, nonatomic) NSMutableDictionary* invitedCircles;
 
+@property (weak, nonatomic) IBOutlet UITableView *invitedPeopleTableView;
 @property (strong, nonatomic) UIViewController* parentPostViewController;
 - (IBAction)addInvites:(id)sender;
 @end

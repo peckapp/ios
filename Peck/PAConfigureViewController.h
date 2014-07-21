@@ -18,4 +18,5 @@
 
 @property (strong, nonatomic) IBOutlet UIPickerView *schoolPicker;
 
+-(void)updateInstitutions;
 @end

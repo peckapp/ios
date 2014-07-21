@@ -8,6 +8,7 @@
 
 #import "PAInitialViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "PASyncManager.h"
 
 @interface PAInitialViewController ()
 
@@ -93,8 +94,8 @@
                                self.emailField.text,@"email",
                                self.passwordField.text, @"password",
                                nil];
-
-    //send this info to the server and get an authentication token back
+    [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo];
+    
 }
 
 - (void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user

@@ -48,18 +48,14 @@
 
 #pragma mark - User actions
 
--(void)ceateAnonymousUser
+-(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock
 {
     NSLog(@"creating an anonymous new user");
-    // creates an anonymous user sending just the currently chosen institution_id as a parameter
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    int inst = (int)[defaults objectForKey:@"institution_id"];
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    [NSNumber numberWithInt:inst],@"institution_id",
-                                    nil];
     
     [[PASessionManager sharedClient] POST:usersAPI
-                                    parameters:[self applyWrapper:@"user" toDictionary:dictionary]
+                                    parameters:nil
                                     success:^
     (NSURLSessionDataTask * __unused task, id JSON) {
         // response JSON contains a user_id and api_key that must be stored
@@ -72,9 +68,12 @@
         [defaults setObject:userID forKey:user_id];
         NSString *apiKey = [userDictionary objectForKey:api_key];
         [defaults setObject:apiKey forKey:api_key];
+        
+        callbackBlock(YES);
     }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
+                                      callbackBlock(NO);
                                   }];
 }
 
@@ -114,6 +113,7 @@
 {
     // sends either email and password, or facebook token and link, to the server for authentication
     // expects an authentication token to be returned in response
+    //[PASessionManager sharedClient]
     
 }
 
@@ -140,6 +140,7 @@
                                       if(![blurb isKindOfClass:[NSNull class]]){
                                           [defaults setObject:blurb forKey:@"blurb"];
                                       }
+                                      [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -219,7 +220,7 @@
         
         // no parameters needed here since the list of institutions is needed to get a user id
         [[PASessionManager sharedClient] GET:institutionsAPI
-                                  parameters:nil
+                                  parameters:[self authenticationParameters]
                                      success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                          //NSLog(@"update institutions JSON: %@",JSON);
                                          NSDictionary *institutionsDictionary = (NSDictionary*)JSON;

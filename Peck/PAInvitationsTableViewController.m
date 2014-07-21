@@ -47,6 +47,15 @@
     self.invitedCircles = [[NSMutableDictionary alloc] init];
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"Invite a circle or friend...";
+    
+    self.invitedPeopleTableView.delegate = self;
+    self.invitedPeopleTableView.dataSource = self;
+    
+    self.invitedPeopleTableView.transform = CGAffineTransformMakeRotation(-M_PI_2);
+    
+    self.invitedPeopleTableView.frame = CGRectMake(0, 44, self.view.frame.size.width, 44);
+    self.invitedPeopleTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -110,6 +119,7 @@
     
     
     [self.tableView reloadData];
+    [self.invitedPeopleTableView reloadData];
     
 }
 
@@ -124,27 +134,57 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [self.suggestedInvites count];
+    if(tableView==self.tableView){
+        return [self.suggestedInvites count];
+    }else{
+        return [self.invitedPeople count]+[self.invitedCircles count];
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if(tableView==self.invitedPeopleTableView){
+        return 44;
+    }
     return 71;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PAInvitationCell * cell = [tableView dequeueReusableCellWithIdentifier:@"invitationCell"];
-    if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:@"PAInvitationCell" bundle:nil]  forCellReuseIdentifier:@"invitationCell"];
-        cell = [tableView dequeueReusableCellWithIdentifier:@"invitationCell"];
+    
+    if(tableView==self.tableView){
+        PAInvitationCell * cell = [tableView dequeueReusableCellWithIdentifier:@"invitationCell"];
+        if (cell == nil) {
+            [tableView registerNib:[UINib nibWithNibName:@"PAInvitationCell" bundle:nil]  forCellReuseIdentifier:@"invitationCell"];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"invitationCell"];
+        }
+    
+        [self configureCell:cell atIndexPath:indexPath];
+        return cell;
     }
-    
-    
-    [self configureCell:cell atIndexPath:indexPath];
-    
-    return cell;
+    else{
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"invite"];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"invite"];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        [self configurePreviewCell:cell atIndexPath:indexPath];
+        return cell;
+
+    }
 }
 
+-(void)configurePreviewCell:(UITableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    if([self.invitedCircles count]>indexPath.row){
+        cell.backgroundColor = [UIColor blackColor];
+    }
+    
+
+    else {
+        cell.backgroundColor = [UIColor lightGrayColor];
+    }
+    
+    cell.transform = CGAffineTransformMakeRotation(M_PI_2);
+}
 
 -(void)configureCell:(PAInvitationCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     if([self.suggestedInvites[indexPath.row] isKindOfClass:[Circle class]]){
@@ -160,24 +200,23 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    if([self.suggestedInvites[indexPath.row] isKindOfClass:[Circle class]]){
-        Circle* tempCircle = self.suggestedInvites[indexPath.row];
-        [self.invitedCircles setObject:tempCircle.id forKey:[tempCircle.id stringValue]];
-        /*NSArray* members = [tempCircle.circle_members allObjects];
-        for(int i = 0; i<[members count]; i++){
-            Peer* tempPeer = members[i];
+    if(tableView==self.tableView){
+        if([self.suggestedInvites[indexPath.row] isKindOfClass:[Circle class]]){
+            Circle* tempCircle = self.suggestedInvites[indexPath.row];
+            [self.invitedCircles setObject:tempCircle.id forKey:[tempCircle.id stringValue]];
+        }else if([self.suggestedInvites[indexPath.row] isKindOfClass:[Peer class]]){
+            Peer* tempPeer = self.suggestedInvites[indexPath.row];
             [self.invitedPeople setObject:tempPeer.id forKey:[tempPeer.id stringValue]];
-        }*/
-    }else if([self.suggestedInvites[indexPath.row] isKindOfClass:[Peer class]]){
-        Peer* tempPeer = self.suggestedInvites[indexPath.row];
-        [self.invitedPeople setObject:tempPeer.id forKey:[tempPeer.id stringValue]];
+        }
+        NSLog(@"invited people: %@", self.invitedPeople);
+        NSLog(@"invited circles: %@", self.invitedCircles);
+        self.searchBar.text=@"";
+        [self searchBar:self.searchBar textDidChange:@""];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
-    NSLog(@"invited people: %@", self.invitedPeople);
-    NSLog(@"invited circles: %@", self.invitedCircles);
-    self.searchBar.text=@"";
-    [self searchBar:self.searchBar textDidChange:@""];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    else{
+        
+    }
     
     
 }

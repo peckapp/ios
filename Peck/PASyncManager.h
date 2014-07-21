@@ -21,7 +21,7 @@
 
 // methods for anonymous user creation and subsqquent registration
 // sends post request to server with institution_id and stores response user_id in NSUserDefaults
--(void)ceateAnonymousUser;
+-(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock;
 // sends post request to the server completing the user's other info after the registration process is triggered
 -(void)updateUserWithInfo:(NSDictionary*)userInfo;
 // authenticates the user and updates the authentication token returned from the server

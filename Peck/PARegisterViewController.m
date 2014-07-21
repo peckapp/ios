@@ -51,8 +51,8 @@
     self.emailField.delegate=self;
     
     self.emailField.placeholder = @"email@yourinstitution.edu";
-    self.passwordField1.placeholder = @"******";
-    self.passwordField2.placeholder = @"******";
+    self.passwordField1.placeholder = @"********";
+    self.passwordField2.placeholder = @"********";
     
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];

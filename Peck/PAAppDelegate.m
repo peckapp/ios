@@ -34,17 +34,29 @@
     // institutional ID initialization
     NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
     NSLog(@"INSTITUTION ID: %@", institutionID);
-    if(institutionID == nil){
-        NSLog(@"Open up the configure screen");
-        initViewController = [self.mainStoryboard instantiateViewControllerWithIdentifier:@"configure"];
-    }
+    
     // user ID initialization
     NSNumber * userID = [defaults objectForKey:@"user_id"];
     NSLog(@"USER ID: %@", userID);
-    if(userID == nil){
-        NSLog(@"Set a new anonymous user");
-        [[PASyncManager globalSyncManager] ceateAnonymousUser];
+    
+    if(institutionID == nil){
+        NSLog(@"Open up the configure screen");
+        initViewController = [self.mainStoryboard instantiateViewControllerWithIdentifier:@"configure"];
+
+        if(userID == nil){
+            
+            [[PASyncManager globalSyncManager] ceateAnonymousUser:^(BOOL success) {
+                if (success) {
+                    NSLog(@"Sucessfully set a new anonymous user");
+                    PAConfigureViewController* configure = (PAConfigureViewController*) initViewController;
+                    [configure updateInstitutions];
+                } else {
+                    NSLog(@"Anonymous user creation unsucessful");
+                }
+            }];
+        }
     }
+
     // saves NSUserDefaults to "disk"
     [[NSUserDefaults standardUserDefaults] synchronize];
     

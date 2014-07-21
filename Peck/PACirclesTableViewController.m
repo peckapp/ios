@@ -267,27 +267,35 @@ BOOL viewingCircles;
         viewingCell=YES;
         [self configureCell:cell atIndexPath:indexPath];
     }else if(viewingCell && cell.addingMembers){
-        cell.addingMembers=NO;
-        [self configureCell:cell atIndexPath:indexPath];
-        [cell performFetch];
+        if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
+            [self condenseCircleCell:cell atIndexPath:indexPath];
+        }
+        else{
+            cell.addingMembers=NO;
+            [self configureCell:cell atIndexPath:indexPath];
+            [cell performFetch];
+        }
         
     }else if(viewingCell && !cell.addingMembers){
-        [self dismissCircleTitleKeyboard];
-        [self dismissCommentKeyboard];
-        [self.addedPeers removeAllObjects];
-        self.inviteTextField.text=@"";
-        viewingCell=NO;
-        self.tableView.scrollEnabled = YES;
-        [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
-        PACircleCell *selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
-        selectedCell.addingMembers=NO;
-        self.selectedIndexPath = nil;
-        [self dismissKeyboard:self];
-        [self configureCell:cell atIndexPath:indexPath];
-        [self.tableView beginUpdates];
-        [self.tableView endUpdates];
+        [self condenseCircleCell:cell atIndexPath:indexPath];
     }
     
+}
+
+-(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    [self dismissCircleTitleKeyboard];
+    [self dismissCommentKeyboard];
+    [self.addedPeers removeAllObjects];
+    self.inviteTextField.text=@"";
+    viewingCell=NO;
+    self.tableView.scrollEnabled = YES;
+    [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
+    cell.addingMembers=NO;
+    self.selectedIndexPath = nil;
+    [self dismissKeyboard:self];
+    [self configureCell:cell atIndexPath:indexPath];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -330,6 +338,7 @@ BOOL viewingCircles;
 - (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     cell.tag=[indexPath row];
+    cell.parentViewController=self;
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
         cell.circleTitle.text=@"New";
         [cell.profilesTableView setHidden:YES];
@@ -362,7 +371,7 @@ BOOL viewingCircles;
         cell.circleTitle.text = c.circleName;
         cell.delegate = self;
         
-        cell.parentViewController=self;
+        
         cell.circle=c;
         NSSet*members = c.circle_members;
         [cell updateCircleMembers:[members allObjects]];

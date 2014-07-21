@@ -45,6 +45,11 @@
     
     [schoolPicker reloadAllComponents];
     
+    
+    [self selectCurrentDefaultIfExists];
+}
+
+-(void)updateInstitutions{
     [[PASyncManager globalSyncManager] updateAvailableInstitutionsWithCallback:^(BOOL success) {
         if (success) {
             NSLog(@"executing callback for institution configurator");
@@ -54,8 +59,7 @@
             [self selectCurrentDefaultIfExists];
         }
     }];
-    
-    [self selectCurrentDefaultIfExists];
+
 }
 
 - (void)didReceiveMemoryWarning

@@ -303,7 +303,8 @@ UITextView *textViewHelper;
     if (tableView == self.profilesTableView) {
         if (indexPath.row == [self.members count]) {
             self.addingMembers=YES;
-            [self.delegate promptToAddMemberToCircleCell:self];
+            PACirclesTableViewController* parent= (PACirclesTableViewController*)self.parentViewController;
+            [parent promptToAddMemberToCircleCell:self];
         }
         else{
             NSLog(@"view the member");
@@ -507,7 +508,7 @@ UITextView *textViewHelper;
     NSDictionary * newCircle = [NSDictionary dictionaryWithObjectsAndKeys:
                                 userID, @"user_id",
                                 institutionID, @"institution_id",
-                                self.titleTextField.text, @"title",
+                                self.titleTextField.text, @"circle_name",
                                 circleMembers, @"circle_members",
                                 nil];
     [[PASyncManager globalSyncManager] postCircle:newCircle];

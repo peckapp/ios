@@ -37,7 +37,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *publicSwitch;
 
 @property (strong, nonatomic) NSMutableArray *userEvents;
-@property (strong, nonatomic) NSArray* invitedPeople;
-@property (strong, nonatomic) NSArray* invitedCircles;
+@property (weak, nonatomic) NSArray* invitedPeople;
+@property (weak, nonatomic) NSArray* invitedCircles;
 
 @end
