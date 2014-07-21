@@ -283,6 +283,9 @@ UITextView *textViewHelper;
         text = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
         text = [text stringByAppendingString:[defaults objectForKey:@"last_name"]];
     }
+    text = [text stringByAppendingString:@" "];
+    text = [text stringByAppendingString:[self dateToString:comment.created_at]];
+    
     return text;
 }
 

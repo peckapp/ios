@@ -808,7 +808,7 @@
    /* NSDateFormatter * df = [[NSDateFormatter alloc] init];
     [df setDateFormat:serverDateFormat];
     comment.created_at = [df dateFromString:[dictionary objectForKey:@"created_at"]];*/
-    comment.created_at = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"created_at"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    comment.created_at = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"created_at"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     comment.id = [dictionary objectForKey:@"id"];
     comment.peer_id = [dictionary objectForKey:@"user_id"];
     comment.category = [dictionary objectForKey:@"category"];
