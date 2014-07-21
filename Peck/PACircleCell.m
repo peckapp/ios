@@ -32,7 +32,8 @@ NSString * commentCellNibName = @"PACommentCell";
 NSMutableDictionary *heightDictionary;
 UITextView *textViewHelper;
 
-#define defaultCellHeight 120
+#define defaultCellHeight 72
+#define cellY 22
 #define compressedTextViewHeight 110
 //the compressed text view height is used to avoid seeing half of the last line of the text view.
 //It should be changed manually if the default text view height is changed
@@ -215,6 +216,7 @@ UITextView *textViewHelper;
 }
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"configure cell");
     cell.parentCircleTableView = self.parentViewController;
     cell.parentCell=self;
     cell.tag = indexPath.row-1;
@@ -243,25 +245,9 @@ UITextView *textViewHelper;
             [cell.expandButton setHidden:YES];
         }
         [cell.postButton setHidden:YES];
-        cell.nameLabel.text=@"John Doe";
+        cell.nameLabel.text=[self nameLabelTextForComment:tempComment];
         
-        cell.commentTextView.text = @"John Doe\n\n";
-        
-        if(tempComment.peer_id){
-            Peer* tempPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:tempComment.peer_id];;
-            if(tempPeer){
-                cell.commentTextView.text = [tempPeer.name stringByAppendingString:@"\n\n"];
-            }
-        }
-        
-        NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
-        NSLog(@"comment id: %@ my id: %@",tempComment.peer_id, [defaults objectForKey:@"user_id"]);
-        if([[defaults objectForKey:@"user_id"] integerValue]==[tempComment.peer_id integerValue]){
-            cell.commentTextView.text = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
-            cell.commentTextView.text = [cell.commentTextView.text stringByAppendingString:[defaults objectForKey:@"last_name"]];
-            cell.commentTextView.text = [cell.commentTextView.text stringByAppendingString:@"\n\n"];
-        }
-        cell.commentTextView.text = [cell.commentTextView.text stringByAppendingString:tempComment.content];
+        cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
         
         
@@ -281,9 +267,23 @@ UITextView *textViewHelper;
     }
 }
 
--(NSString*)setCommentText:(Comment*)comment{
-    NSString* commentText = @"John Doe\n\n";
-    return commentText;
+
+-(NSString*)nameLabelTextForComment:(Comment*)comment{
+    NSString* text = @"Unknown";
+    if(comment.peer_id){
+        Peer* tempPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];;
+        if(tempPeer){
+           text=tempPeer.name;
+        }
+    }
+    
+    NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"comment id: %@ my id: %@",comment.peer_id, [defaults objectForKey:@"user_id"]);
+    if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
+        text = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
+        text = [text stringByAppendingString:[defaults objectForKey:@"last_name"]];
+    }
+    return text;
 }
 
 -(NSString*)dateToString:(NSDate *)date{
@@ -317,7 +317,7 @@ UITextView *textViewHelper;
     [textViewHelper setHidden:YES];
     textViewHelper.text = text;
     [textViewHelper sizeToFit];
-    if(textViewHelper.frame.size.height>compressedTextViewHeight){
+    if(textViewHelper.frame.size.height>defaultCellHeight){
         return NO;
     }
     return YES;
@@ -335,11 +335,11 @@ UITextView *textViewHelper;
                 NSString * commentID = [comment.id stringValue];
                 CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
                 if(height){
-                    return height;
+                    return height+cellY;
                 }
             }
         }
-        return defaultCellHeight;
+        return defaultCellHeight+cellY;
 
     }
     else {
