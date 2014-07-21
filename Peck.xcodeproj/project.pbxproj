@@ -101,6 +101,7 @@
 		A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */; };
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
 		A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */; };
+		A4C8C347197D8F3F008F9F85 /* PAFetchManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C8C346197D8F3F008F9F85 /* PAFetchManager.m */; };
 		A4E21F601964A749002A9800 /* PAEventInfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */; };
 		A4E21F6519659892002A9800 /* PACommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F6319659892002A9800 /* PACommentCell.m */; };
 		A4E21F6619659892002A9800 /* PACommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4E21F6419659892002A9800 /* PACommentCell.xib */; };
@@ -306,6 +307,8 @@
 		A4B772E619460C3200A31252 /* schools.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = schools.plist; sourceTree = "<group>"; };
 		A4BDFE6D195329650020EFD5 /* PAExploreInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreInfoViewController.h; sourceTree = "<group>"; };
 		A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreInfoViewController.m; sourceTree = "<group>"; };
+		A4C8C345197D8F3F008F9F85 /* PAFetchManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFetchManager.h; sourceTree = "<group>"; };
+		A4C8C346197D8F3F008F9F85 /* PAFetchManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFetchManager.m; sourceTree = "<group>"; };
 		A4E21F5E1964A749002A9800 /* PAEventInfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEventInfoTableViewController.h; sourceTree = "<group>"; };
 		A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEventInfoTableViewController.m; sourceTree = "<group>"; };
 		A4E21F6219659892002A9800 /* PACommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACommentCell.h; sourceTree = "<group>"; };
@@ -531,6 +534,7 @@
 		86D5980A193768BF00F38654 /* Peck */ = {
 			isa = PBXGroup;
 			children = (
+				A4C8C344197D8F0E008F9F85 /* Fetch Manager */,
 				A43BF0EB197819250009B7AD /* Subscriptions */,
 				A46F08FE196DC0E700CFA5D0 /* Dining */,
 				A4E21F611965982C002A9800 /* Comment */,
@@ -661,6 +665,15 @@
 				A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */,
 			);
 			name = Configure;
+			sourceTree = "<group>";
+		};
+		A4C8C344197D8F0E008F9F85 /* Fetch Manager */ = {
+			isa = PBXGroup;
+			children = (
+				A4C8C345197D8F3F008F9F85 /* PAFetchManager.h */,
+				A4C8C346197D8F3F008F9F85 /* PAFetchManager.m */,
+			);
+			name = "Fetch Manager";
 			sourceTree = "<group>";
 		};
 		A4E21F611965982C002A9800 /* Comment */ = {
@@ -973,6 +986,7 @@
 				860BE45E19632CC600E57A56 /* Institution.m in Sources */,
 				A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
+				A4C8C347197D8F3F008F9F85 /* PAFetchManager.m in Sources */,
 				A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */,
 				A4773C8C1959DD0E00AB9831 /* PAImageManager.m in Sources */,
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,

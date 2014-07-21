@@ -43,6 +43,8 @@
     schoolPicker.dataSource = self;
     schoolPicker.delegate = self;
     
+    [self updateInstitutions];
+    
     [schoolPicker reloadAllComponents];
     
     

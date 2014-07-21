@@ -762,6 +762,7 @@
             NSLog(@"in secondary thread to update comments");
             PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
             _managedObjectContext = [appdelegate managedObjectContext];
+            _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
             NSString *specificCommentURL = [commentsAPI stringByAppendingString:@"?"];
             specificCommentURL = [specificCommentURL stringByAppendingString:@"category="];
@@ -783,8 +784,12 @@
                      BOOL eventAlreadyExists = [self objectExists:newID withType:@"Comment"];
                      if(!eventAlreadyExists){
                          //NSLog(@"adding an event to Core Data");
+                         [self.persistentStoreCoordinator lock];
                          Comment * comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext: _managedObjectContext];
                          [self setAttributesInComment:comment withDictionary:commentAttributes];
+                         NSError* error = nil;
+                         [_managedObjectContext save:&error];
+                         [self.persistentStoreCoordinator unlock];
                          NSLog(@"COMMENT: %@",comment);
                      }
                  }

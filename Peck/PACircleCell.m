@@ -16,6 +16,7 @@
 #import "PACommentCell.h"
 #import "Comment.h"
 #import "PASyncManager.h"
+#import "PAFetchManager.h"
 
 @interface PACircleCell ()
 
@@ -229,8 +230,8 @@ UITextView *textViewHelper;
             cell.commentTextView.textColor = [UIColor blackColor];
             cell.commentTextView.text = self.commentText;
         }
-
-        cell.nameLabel.text = @"John Doe";
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        cell.nameLabel.text = [defaults objectForKey:@"name"];
         [cell.expandButton setHidden:YES];
     }
     else{
@@ -242,9 +243,27 @@ UITextView *textViewHelper;
             [cell.expandButton setHidden:YES];
         }
         [cell.postButton setHidden:YES];
-        cell.nameLabel.text = @"John Doe";
-        cell.commentTextView.text = tempComment.content;
+        cell.nameLabel.text=@"John Doe";
+        
+        cell.commentTextView.text = @"John Doe\n\n";
+        
+        if(tempComment.peer_id){
+            Peer* tempPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:tempComment.peer_id];;
+            if(tempPeer){
+                cell.commentTextView.text = [tempPeer.name stringByAppendingString:@"\n\n"];
+            }
+        }
+        
+        NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
+        NSLog(@"comment id: %@ my id: %@",tempComment.peer_id, [defaults objectForKey:@"user_id"]);
+        if([[defaults objectForKey:@"user_id"] integerValue]==[tempComment.peer_id integerValue]){
+            cell.commentTextView.text = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
+            cell.commentTextView.text = [cell.commentTextView.text stringByAppendingString:[defaults objectForKey:@"last_name"]];
+            cell.commentTextView.text = [cell.commentTextView.text stringByAppendingString:@"\n\n"];
+        }
+        cell.commentTextView.text = [cell.commentTextView.text stringByAppendingString:tempComment.content];
         [cell.commentTextView setTextColor:[UIColor blackColor]];
+        
         
         NSString * commentID = [tempComment.id stringValue];
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
@@ -260,8 +279,38 @@ UITextView *textViewHelper;
         }
         // this fixes the problem where the comment text would occasionally be cut off when first loaded
     }
-    cell.nameLabel.text = @"John Doe";
 }
+
+-(NSString*)setCommentText:(Comment*)comment{
+    NSString* commentText = @"John Doe\n\n";
+    return commentText;
+}
+
+-(NSString*)dateToString:(NSDate *)date{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:date];
+    NSInteger hour = [components hour];
+    NSString * timeOfDay = @" AM";
+    if(hour>12){
+        hour-=12;
+        timeOfDay = @" PM";
+    }
+    
+    NSString *minute = [@([components minute]) stringValue];
+    if(minute.length==1){
+        minute = [@"0" stringByAppendingString:minute];
+    }
+    
+    
+    NSString * dateString = [[@(hour) stringValue] stringByAppendingString:@":"];
+    dateString = [dateString stringByAppendingString:minute];
+    dateString = [dateString stringByAppendingString:timeOfDay];
+    return dateString;
+    
+    
+}
+
+
 -(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
     textViewHelper.frame = CGRectMake(0, 0, 222, 0);
     [textViewHelper setFont:[UIFont systemFontOfSize:14]];
