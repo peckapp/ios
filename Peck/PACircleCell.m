@@ -233,8 +233,12 @@ UITextView *textViewHelper;
             cell.commentTextView.text = self.commentText;
         }
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        cell.nameLabel.text = [defaults objectForKey:@"name"];
+        NSString* userName = [[[defaults objectForKey:@"first_name"] stringByAppendingString:@" "] stringByAppendingString:[defaults objectForKey:@"last_name"]];
+        cell.nameLabel.text=userName;
+        //this will be blank when the user has not yet registered or is not logged in
         [cell.expandButton setHidden:YES];
+        
+        
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
