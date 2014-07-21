@@ -12,6 +12,8 @@
 #import "Peer.h"
 #import "PAAppDelegate.h"
 #import "PASyncManager.h"
+#import "PAPostViewController.h"
+
 
 @interface PAInvitationsTableViewController ()
 
@@ -41,7 +43,8 @@
     self.tableView.dataSource = self;
     
     self.suggestedInvites = [[NSMutableArray alloc] init];
-    self.invitedPeople = [[NSMutableArray alloc] init];
+    self.invitedPeople = [[NSMutableDictionary alloc] init];
+    self.invitedCircles = [[NSMutableDictionary alloc] init];
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"Invite a circle or friend...";
     // Uncomment the following line to preserve selection between presentations.
@@ -84,6 +87,24 @@
     NSError *circleError = nil;
     NSMutableArray *mutableCircleFetchResults = [[_managedObjectContext executeFetchRequest:circleFetchRequest error:&circleError] mutableCopy];
 
+    
+    
+    for(int i=0;i<[mutableFetchResults count];i++){
+        Peer* tempPeer = mutableFetchResults[i];
+        if([self.invitedPeople objectForKey:[tempPeer.id stringValue]]){
+            [mutableFetchResults removeObjectAtIndex:i];
+            i--;
+        }
+    }
+    
+    for(int i=0;i<[mutableCircleFetchResults count];i++){
+        Circle* tempCircle = mutableCircleFetchResults[i];
+        if([self.invitedCircles objectForKey:[tempCircle.id stringValue]]){
+            [mutableCircleFetchResults removeObjectAtIndex:i];
+            i--;
+        }
+    }
+    
     self.suggestedInvites=(NSMutableArray*)[mutableCircleFetchResults arrayByAddingObjectsFromArray:mutableFetchResults];
     
     
@@ -142,19 +163,23 @@
     
     if([self.suggestedInvites[indexPath.row] isKindOfClass:[Circle class]]){
         Circle* tempCircle = self.suggestedInvites[indexPath.row];
-        NSArray* members = [tempCircle.circle_members allObjects];
+        [self.invitedCircles setObject:tempCircle.id forKey:[tempCircle.id stringValue]];
+        /*NSArray* members = [tempCircle.circle_members allObjects];
         for(int i = 0; i<[members count]; i++){
             Peer* tempPeer = members[i];
-            [self.invitedPeople addObject:tempPeer.id];
-        }
+            [self.invitedPeople setObject:tempPeer.id forKey:[tempPeer.id stringValue]];
+        }*/
     }else if([self.suggestedInvites[indexPath.row] isKindOfClass:[Peer class]]){
         Peer* tempPeer = self.suggestedInvites[indexPath.row];
-        [self.invitedPeople addObject:tempPeer.id];
+        [self.invitedPeople setObject:tempPeer.id forKey:[tempPeer.id stringValue]];
     }
     NSLog(@"invited people: %@", self.invitedPeople);
+    NSLog(@"invited circles: %@", self.invitedCircles);
     self.searchBar.text=@"";
     [self searchBar:self.searchBar textDidChange:@""];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    
 }
 
 #pragma mark - Navigation
@@ -171,4 +196,13 @@
     [self.searchBar resignFirstResponder];
 }
 
+- (IBAction)addInvites:(id)sender {
+    NSLog(@"invite the people");
+    PAPostViewController* parent = (PAPostViewController*)self.parentPostViewController;
+    parent.invitedPeople = [self.invitedPeople allValues];
+    parent.invitedCircles = [self.invitedCircles allValues];
+    [self.view endEditing:YES];
+    [self.navigationController popViewControllerAnimated:YES];
+
+}
 @end

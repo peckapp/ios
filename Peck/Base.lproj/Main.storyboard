@@ -336,7 +336,21 @@
                             <outlet property="delegate" destination="V6y-RR-AL1" id="Tuy-uB-RSj"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Invitations" id="Hrl-NV-8TP"/>
+                    <navigationItem key="navigationItem" title="Invitations" id="Hrl-NV-8TP">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="U75-ie-PEw">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="oAe-Zg-lcw">
+                                <rect key="frame" x="233" y="5" width="71" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Invite">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="addInvites:" destination="V6y-RR-AL1" eventType="touchUpInside" id="93p-Kk-jJE"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="searchBar" destination="xBa-zJ-cBt" id="cA1-7t-khf"/>
                     </connections>
@@ -1191,7 +1205,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="People" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0ac-ay-zIq">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Invites" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0ac-ay-zIq">
                                                     <rect key="frame" x="20" y="11" width="54" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1207,7 +1221,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="V6y-RR-AL1" kind="push" id="ea7-4c-mbn"/>
+                                            <segue destination="V6y-RR-AL1" kind="push" identifier="showInvites" id="ea7-4c-mbn"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="rP6-XV-IiA">
@@ -1271,6 +1285,7 @@
                         <outlet property="endTimeLabel" destination="duc-Ip-07G" id="Mai-qR-lF7"/>
                         <outlet property="endTimePicker" destination="94V-47-cME" id="k09-3Y-PQL"/>
                         <outlet property="endTimePickerCell" destination="R2m-3q-4Vl" id="jb0-wH-y5Q"/>
+                        <outlet property="inviteCell" destination="6oR-6Z-kx8" id="vYU-FA-DcJ"/>
                         <outlet property="locationLabel" destination="ncI-fE-gNr" id="V6O-9R-qZq"/>
                         <outlet property="peopleLabel" destination="nPQ-Hg-jfA" id="kfx-lG-rRO"/>
                         <outlet property="photoButton" destination="am3-QK-qV6" id="S2p-Vh-QXj"/>

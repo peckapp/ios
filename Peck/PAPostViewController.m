@@ -15,6 +15,7 @@
 #import "PAImageManager.h"
 #import "PASessionManager.h"
 #import "PASyncManager.h"
+#import "PAInvitationsTableViewController.h"
 
 /*
  State for each cell is defined by the cell's tag.
@@ -62,8 +63,28 @@
 
     [self.photoButton addTarget:self action:@selector(onPhotoSelect) forControlEvents:UIControlEventTouchUpInside];
     [self.controlSwitch addTarget:self action:@selector(onControlSwitchChange) forControlEvents:UIControlEventValueChanged];
+    
+    self.invitedPeople = [[NSArray alloc] init];
+    self.invitedCircles = [[NSArray alloc] init];
 }
 
+
+-(void)viewWillAppear:(BOOL)animated{
+    if([self.invitedCircles count]+[self.invitedPeople count]==0){
+        self.peopleLabel.text=@"None";
+    }else{
+        if([self.invitedCircles count]==1){
+            self.peopleLabel.text = [[@([self.invitedCircles count]) stringValue] stringByAppendingString:@" circle, "];
+        }else{
+            self.peopleLabel.text = [[@([self.invitedCircles count]) stringValue] stringByAppendingString:@" circles, "];
+        }
+        if([self.invitedPeople count]==1){
+            self.peopleLabel.text = [self.peopleLabel.text stringByAppendingString:[[@([self.invitedPeople count]) stringValue] stringByAppendingString: @" person"]];
+        }else{
+            self.peopleLabel.text = [self.peopleLabel.text stringByAppendingString:[[@([self.invitedPeople count]) stringValue] stringByAppendingString: @" people"]];
+        }
+    }
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -104,10 +125,11 @@
         self.startPickerIsOpen = NO;
         self.endPickerIsOpen = NO;
     }
-
+    
     [self updateDatePickers];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 # pragma mark image picker
@@ -217,6 +239,18 @@
 {
 
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if([segue.identifier isEqualToString:@"showInvites"]){
+        NSLog(@"set the parent");
+        PAInvitationsTableViewController* childController = [segue destinationViewController];
+        childController.parentPostViewController = self;
+    }
+}
+
+
+
 
 - (IBAction)returnResultAndExit:(id)sender
 {

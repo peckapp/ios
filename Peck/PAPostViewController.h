@@ -33,8 +33,11 @@
 @property (weak, nonatomic) IBOutlet UIDatePicker *endTimePicker;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *peopleLabel;
+@property (weak, nonatomic) IBOutlet UITableViewCell *inviteCell;
 @property (weak, nonatomic) IBOutlet UISwitch *publicSwitch;
 
 @property (strong, nonatomic) NSMutableArray *userEvents;
+@property (strong, nonatomic) NSArray* invitedPeople;
+@property (strong, nonatomic) NSArray* invitedCircles;
 
 @end
