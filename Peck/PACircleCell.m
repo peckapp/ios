@@ -34,7 +34,6 @@ UITextView *textViewHelper;
 
 #define defaultCellHeight 72
 #define cellY 22
-#define compressedTextViewHeight 110
 //the compressed text view height is used to avoid seeing half of the last line of the text view.
 //It should be changed manually if the default text view height is changed
 
@@ -237,8 +236,6 @@ UITextView *textViewHelper;
         cell.nameLabel.text=userName;
         //this will be blank when the user has not yet registered or is not logged in
         [cell.expandButton setHidden:YES];
-        
-        
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
@@ -253,7 +250,6 @@ UITextView *textViewHelper;
         
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
-        
         
         NSString * commentID = [tempComment.id stringValue];
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
@@ -308,13 +304,10 @@ UITextView *textViewHelper;
         minute = [@"0" stringByAppendingString:minute];
     }
     
-    
     NSString * dateString = [[@(hour) stringValue] stringByAppendingString:@":"];
     dateString = [dateString stringByAppendingString:minute];
     dateString = [dateString stringByAppendingString:timeOfDay];
     return dateString;
-    
-    
 }
 
 

@@ -12,6 +12,8 @@
 #import "PAAppDelegate.h"
 #import "PASyncManager.h"
 #import "Comment.h"
+#import "PAFetchManager.h"
+
 @interface PAEventInfoTableViewController ()
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
@@ -38,8 +40,8 @@ UITextView *textViewHelper;
 
 BOOL reloaded = NO;
 
-#define defaultCellHeight 120
-#define compressedTextViewHeight 110
+#define defaultCellHeight 72
+#define cellY 22
 #define reloadTime 3
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -333,7 +335,9 @@ BOOL reloaded = NO;
             cell.commentTextView.textColor = [UIColor blackColor];
             cell.commentTextView.text = self.commentText;
         }
-        cell.nameLabel.text = @"John Doe";
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        NSString* userName = [[[defaults objectForKey:@"first_name"] stringByAppendingString:@" "] stringByAppendingString:[defaults objectForKey:@"last_name"]];
+        cell.nameLabel.text=userName;
         [cell.expandButton setHidden:YES];
         
     }
@@ -346,7 +350,7 @@ BOOL reloaded = NO;
             [cell.expandButton setHidden:YES];
         }
         [cell.postButton setHidden:YES];
-        cell.nameLabel.text = @"John Doe";
+        cell.nameLabel.text = [self nameLabelTextForComment:tempComment];
         cell.tag = [indexPath row]-1;
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
@@ -369,13 +373,56 @@ BOOL reloaded = NO;
     
 }
 
+-(NSString*)nameLabelTextForComment:(Comment*)comment{
+    NSString* text = @"Unknown";
+    if(comment.peer_id){
+        Peer* tempPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];;
+        if(tempPeer){
+            text=tempPeer.name;
+        }
+    }
+    
+    NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"comment id: %@ my id: %@",comment.peer_id, [defaults objectForKey:@"user_id"]);
+    if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
+        text = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
+        text = [text stringByAppendingString:[defaults objectForKey:@"last_name"]];
+    }
+    text = [text stringByAppendingString:@" "];
+    text = [text stringByAppendingString:[self dateToString:comment.created_at]];
+    
+    return text;
+}
+
+-(NSString*)dateToString:(NSDate *)date{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:date];
+    NSInteger hour = [components hour];
+    NSString * timeOfDay = @" AM";
+    if(hour>12){
+        hour-=12;
+        timeOfDay = @" PM";
+    }
+    
+    NSString *minute = [@([components minute]) stringValue];
+    if(minute.length==1){
+        minute = [@"0" stringByAppendingString:minute];
+    }
+    
+    NSString * dateString = [[@(hour) stringValue] stringByAppendingString:@":"];
+    dateString = [dateString stringByAppendingString:minute];
+    dateString = [dateString stringByAppendingString:timeOfDay];
+    return dateString;
+}
+
+
 -(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
     textViewHelper.frame = CGRectMake(0, 0, 222, 0);
     [textViewHelper setFont:[UIFont systemFontOfSize:14]];
     [textViewHelper setHidden:YES];
     textViewHelper.text = text;
     [textViewHelper sizeToFit];
-    if(textViewHelper.frame.size.height>compressedTextViewHeight){
+    if(textViewHelper.frame.size.height>defaultCellHeight){
         return NO;
     }
     return YES;
@@ -389,11 +436,12 @@ BOOL reloaded = NO;
             NSString * commentID = [comment.id stringValue];
             CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
             if(height){
-                return height;
+                return height+cellY;
             }
         }
     }
-    return defaultCellHeight;}
+    return defaultCellHeight+cellY;
+}
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
