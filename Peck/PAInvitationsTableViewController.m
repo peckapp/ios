@@ -43,8 +43,11 @@
     self.tableView.dataSource = self;
     
     self.suggestedInvites = [[NSMutableArray alloc] init];
-    self.invitedPeople = [[NSMutableDictionary alloc] init];
-    self.invitedCircles = [[NSMutableDictionary alloc] init];
+    if(!self.invitedPeople){
+        self.invitedPeople = [[NSMutableDictionary alloc] init];
+    }if(!self.invitedCircles){
+        self.invitedCircles = [[NSMutableDictionary alloc] init];
+    }
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"Invite a circle or friend...";
     
@@ -240,6 +243,9 @@
     PAPostViewController* parent = (PAPostViewController*)self.parentPostViewController;
     parent.invitedPeople = [self.invitedPeople allValues];
     parent.invitedCircles = [self.invitedCircles allValues];
+    
+    parent.invitedPeopleDictionary = self.invitedPeople;
+    parent.invitedCirclesDictionary = self.invitedCircles;
     [self.view endEditing:YES];
     [self.navigationController popViewControllerAnimated:YES];
 

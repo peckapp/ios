@@ -64,8 +64,7 @@
     [self.photoButton addTarget:self action:@selector(onPhotoSelect) forControlEvents:UIControlEventTouchUpInside];
     [self.controlSwitch addTarget:self action:@selector(onControlSwitchChange) forControlEvents:UIControlEventValueChanged];
     
-    self.invitedPeople = [[NSArray alloc] init];
-    self.invitedCircles = [[NSArray alloc] init];
+    
 }
 
 
@@ -246,6 +245,8 @@
         NSLog(@"set the parent");
         PAInvitationsTableViewController* childController = [segue destinationViewController];
         childController.parentPostViewController = self;
+        childController.invitedCircles = self.invitedCirclesDictionary;
+        childController.invitedPeople = self.invitedPeopleDictionary;
     }
 }
 
