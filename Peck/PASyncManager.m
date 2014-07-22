@@ -118,7 +118,7 @@
      [userInfo objectForKey:@"email" ], @"email",
      [userInfo objectForKey:@"password"], @"password",
      nil];*/
-    [[PASessionManager sharedClient] POST: @"api/sessions"
+    [[PASessionManager sharedClient] POST: @"api/access"
                                parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON){
                                       NSLog(@"LOGIN JSON: %@",JSON);
