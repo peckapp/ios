@@ -34,7 +34,7 @@
 
 // methods for updating events
 -(void)updateEventInfo;
--(void)postEvent:(NSDictionary *) dictionary;
+-(void)postEvent:(NSDictionary *) dictionary withImage:(NSData*)imageData;
 -(void)deleteEvent:(NSNumber*)eventID;
 
 // methods for updating dining

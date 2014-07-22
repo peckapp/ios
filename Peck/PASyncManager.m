@@ -675,11 +675,13 @@
 
 #pragma mark - Events actions
 
--(void)postEvent:(NSDictionary *)dictionary
+-(void)postEvent:(NSDictionary *)dictionary withImage:(NSData*)imageData
 {
+   // NSURL* path = [NSURL URLWithString:filePath];
+    
     [[PASessionManager sharedClient] POST:simple_eventsAPI
-                              parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary]
-                                 success:^
+                               parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+                                   [formData appendPartWithFileData:imageData name:@"image" fileName:@"event_photo" mimeType:@"image/png"];}                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
          //[self updateEventInfo];

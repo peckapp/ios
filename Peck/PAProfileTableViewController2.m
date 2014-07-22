@@ -23,6 +23,7 @@
 @synthesize profilePicture;
 @synthesize emailTextField, twitterTextField, facebookTextField, infoTextView, firstNameTextField, lastNameTextField;
 int currentTextField;
+BOOL loggedIn;
 
 - (void)viewDidLoad
 {
@@ -59,7 +60,16 @@ int currentTextField;
     NSLog(@"blurb: %@",blurb);
     self.infoTextView.text = [defaults objectForKey:@"blurb"];
     
-    
+    if([defaults objectForKey:@"authentication_token"]){
+        loggedIn=YES;
+        NSLog(@"logged in");
+        self.loginButton.titleLabel.text = @"Logout";
+    }
+    else{
+        loggedIn=NO;
+        NSLog(@"logged out");
+        self.loginButton.titleLabel.text = @"Login";
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -94,10 +104,25 @@ int currentTextField;
 
 - (IBAction)login:(id)sender
 {
-    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
-    UIViewController *loginRoot = [loginStoryboard instantiateInitialViewController];
-    
-    [self presentViewController:loginRoot animated:YES completion:nil];
+    if(!loggedIn){
+        UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
+        UIViewController *loginRoot = [loginStoryboard instantiateInitialViewController];
+        [self presentViewController:loginRoot animated:YES completion:nil];
+    }else{
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        [defaults removeObjectForKey:@"authentication_token"];
+        [defaults removeObjectForKey:@"first_name"];
+        [defaults removeObjectForKey:@"last_name"];
+        [defaults removeObjectForKey:@"blurb"];
+        [defaults removeObjectForKey:@"email"];
+        
+        self.emailTextField.text=@"";
+        self.firstNameTextField.text=@"";
+        self.infoTextView.text = @"";
+        self.lastNameTextField.text = @"";
+        [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
+        loggedIn=NO;
+    }
 }
 
 - (IBAction)registerAccount:(id)sender {

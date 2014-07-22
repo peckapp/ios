@@ -343,6 +343,7 @@ BOOL reloaded = NO;
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+        cell.commentID = tempComment.id;
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
         [cell.expandButton setHidden:NO];
@@ -518,9 +519,9 @@ BOOL reloaded = NO;
         height = [NSNumber numberWithFloat:textViewHelper.frame.size.height+1];
         //without the +1, the bottom line would not be displayed
     }
-    Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
+    //Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
     
-    NSString * commentID = [comment.id stringValue];
+    NSString * commentID = [cell.commentID stringValue];
     
     [heightDictionary setValue:height forKey:commentID];
     [self.tableView beginUpdates];
@@ -530,8 +531,8 @@ BOOL reloaded = NO;
 -(void)compressTableViewCell:(PACommentCell *)cell{
     
     //cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
-    Comment *comment = _fetchedResultsController.fetchedObjects[cell.tag];
-    NSString *commentID = [comment.id stringValue];
+    //Comment *comment = _fetchedResultsController.fetchedObjects[cell.tag];
+    NSString *commentID = [cell.commentID stringValue];
     [heightDictionary removeObjectForKey:commentID];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
