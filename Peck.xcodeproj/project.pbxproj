@@ -395,6 +395,7 @@
 		860BE45F19632CCE00E57A56 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A40CF56219547A730021C088 /* Peers */,
 				860BE45C19632CC600E57A56 /* Institution.h */,
 				860BE45D19632CC600E57A56 /* Institution.m */,
 			);
@@ -440,6 +441,17 @@
 				864D873C196470C100BCC01A /* facebook-logout.png */,
 			);
 			name = facebook;
+			sourceTree = "<group>";
+		};
+		86613BE2197DD7D4004914B2 /* Dropdown */ = {
+			isa = PBXGroup;
+			children = (
+				86BFB4AE194B889100ADAB75 /* PADropdownBar.h */,
+				86BFB4AF194B889100ADAB75 /* PADropdownBar.m */,
+				86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */,
+				86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */,
+			);
+			name = Dropdown;
 			sourceTree = "<group>";
 		};
 		8671A2C6195B843800700101 /* dropdown */ = {
@@ -534,36 +546,32 @@
 		86D5980A193768BF00F38654 /* Peck */ = {
 			isa = PBXGroup;
 			children = (
-				A4C8C344197D8F0E008F9F85 /* Fetch Manager */,
-				A43BF0EB197819250009B7AD /* Subscriptions */,
-				A46F08FE196DC0E700CFA5D0 /* Dining */,
-				A4E21F611965982C002A9800 /* Comment */,
 				DD89816E195CAFF20079CDC9 /* Icon-40@2x.png */,
 				DD89816F195CAFF20079CDC9 /* Icon-60@2x.png */,
 				DD898170195CAFF20079CDC9 /* Icon-Small@2x.png */,
 				A433EAA3195B43C700DAA201 /* AutocompleteManager */,
-				A40CF56219547A730021C088 /* Peers */,
 				868572281943787300287A73 /* PACoreDataProtocol.h */,
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
 				86D59816193768BF00F38654 /* Main.storyboard */,
-				86BFB4AE194B889100ADAB75 /* PADropdownBar.h */,
-				86BFB4AF194B889100ADAB75 /* PADropdownBar.m */,
-				86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */,
-				86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */,
+				86613BE2197DD7D4004914B2 /* Dropdown */,
 				8689DD89195871D200A6B61C /* PAFilter.h */,
 				8689DD8A195871D200A6B61C /* PAFilter.m */,
-				A4B772DD1945F8DB00A31252 /* Configure */,
+				A4C8C344197D8F0E008F9F85 /* Fetch Manager */,
 				DDDAEDE419479665004CE102 /* Events */,
+				A46F08FE196DC0E700CFA5D0 /* Dining */,
 				DDDAEDE019475EE7004CE102 /* Pecks */,
 				DDDAEDE51947967A004CE102 /* Explore */,
 				8629250D193CBB370057CA41 /* Post */,
 				DDDAEDE7194796BA004CE102 /* Circles */,
 				DDDAEDE8194796C6004CE102 /* Profile */,
+				A4E21F611965982C002A9800 /* Comment */,
+				A43BF0EB197819250009B7AD /* Subscriptions */,
+				A4B772DD1945F8DB00A31252 /* Configure */,
 				863843D2193CB739004110F5 /* Login */,
+				860BE45F19632CCE00E57A56 /* Models */,
 				867651EC19462E3500C14645 /* Webservice */,
 				86051D47194BB24900961541 /* Graphics */,
-				860BE45F19632CCE00E57A56 /* Models */,
 				86D59822193768BF00F38654 /* Images.xcassets */,
 				86D59819193768BF00F38654 /* Peck.xcdatamodeld */,
 				86D5980B193768BF00F38654 /* Supporting Files */,
