@@ -10,6 +10,7 @@
 
 #import "PACoreDataProtocol.h"
 #import "Peer.h"
+@class PACircleCell;
 @class PACommentCell;
 
 @protocol PACirclesControllerDelegate <UITableViewDelegate>
@@ -36,5 +37,6 @@
 - (void)dismissKeyboard:(id)sender;
 -(void)addMember:(Peer*)newMember;
 -(void)dismissCircleTitleKeyboard;
+-(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath;
 @end
 

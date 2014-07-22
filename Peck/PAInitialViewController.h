@@ -10,6 +10,6 @@
 #import <FacebookSDK/FacebookSDK.h>
 
 @interface PAInitialViewController : UITableViewController <FBLoginViewDelegate, UITableViewDelegate, UITextFieldDelegate>
-
+-(void)showAlert;
 
 @end

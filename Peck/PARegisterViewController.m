@@ -97,11 +97,9 @@
     }
     else if(textField == self.emailField){
         [self.blurbTextView becomeFirstResponder];
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:5 inSection:0];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
-    else {
-        [self.blurbTextView resignFirstResponder];
-    }
-    
     return NO;
 }
 
@@ -183,8 +181,7 @@
     [self.view endEditing:YES];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self dismissKeyboard];
 }
 

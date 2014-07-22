@@ -93,7 +93,7 @@
                                    self.emailField.text,@"email",
                                    self.passwordField.text, @"password",
                                    nil];
-        [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo];
+        [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self];
     }
 }
 
@@ -171,6 +171,16 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self dismissKeyboard];
+}
+
+-(void)showAlert{
+    NSLog(@"wrong information");
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Incorrect email or password"
+                                                    message:@"Please enter a valid email and password"
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
 }
 
 @end

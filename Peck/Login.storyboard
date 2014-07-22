@@ -46,7 +46,7 @@
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6zm-c6-v3j">
                                                     <rect key="frame" x="75" y="7" width="225" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="next"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="tbb-7d-huN" id="sSP-d9-mvV"/>
                                                     </connections>
@@ -466,6 +466,6 @@ Your School</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="1Si-Ye-Iz4"/>
+        <segue reference="4jd-cO-q31"/>
     </inferredMetricsTieBreakers>
 </document>
