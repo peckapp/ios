@@ -77,6 +77,7 @@ CGRect initialTableViewRect;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
+    [self.view endEditing:YES];
     [self deregisterFromKeyboardNotifications];
 }
 
