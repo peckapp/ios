@@ -32,7 +32,7 @@ NSString * commentCellNibName = @"PACommentCell";
 NSMutableDictionary *heightDictionary;
 UITextView *textViewHelper;
 
-#define defaultCellHeight 72
+#define defaultCellHeight 51
 #define cellY 22
 //the compressed text view height is used to avoid seeing half of the last line of the text view.
 //It should be changed manually if the default text view height is changed

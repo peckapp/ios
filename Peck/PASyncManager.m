@@ -113,8 +113,22 @@
 {
     // sends either email and password, or facebook token and link, to the server for authentication
     // expects an authentication token to be returned in response
-    //[PASessionManager sharedClient]
-    
+       
+    /*NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+     [self authenticationParameters],@"authentication",
+     [userInfo objectForKey:@"email" ], @"email",
+     [userInfo objectForKey:@"password"], @"password",
+     nil];*/
+    [[PASessionManager sharedClient] POST: @"api/sessions"
+                               parameters:[self applyWrapper:@"user" toDictionary:userInfo]
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON){
+                                      NSLog(@"LOGIN JSON: %@",JSON);
+                                  }
+     
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+
 }
 
 -(void)registerUserWithInfo:(NSDictionary*)userInfo{
