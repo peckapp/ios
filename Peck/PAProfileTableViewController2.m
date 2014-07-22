@@ -63,12 +63,12 @@ BOOL loggedIn;
     if([defaults objectForKey:@"authentication_token"]){
         loggedIn=YES;
         NSLog(@"logged in");
-        self.loginButton.titleLabel.text = @"Logout";
+        [self.loginButton setTitle:@"Logout" forState:UIControlStateNormal];
     }
     else{
         loggedIn=NO;
         NSLog(@"logged out");
-        self.loginButton.titleLabel.text = @"Login";
+        [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
     }
 }
 
