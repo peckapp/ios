@@ -45,6 +45,8 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+CGRect initialTableViewFrame;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -64,11 +66,14 @@
     [self.photoButton addTarget:self action:@selector(onPhotoSelect) forControlEvents:UIControlEventTouchUpInside];
     [self.controlSwitch addTarget:self action:@selector(onControlSwitchChange) forControlEvents:UIControlEventValueChanged];
     
+    self.locationTextField.delegate = self;
+    
     
 }
 
 
 -(void)viewWillAppear:(BOOL)animated{
+    [self registerForKeyboardNotifications];
     if([self.invitedCircles count]+[self.invitedPeople count]==0){
         self.peopleLabel.text=@"None";
     }else{
@@ -83,6 +88,11 @@
             self.peopleLabel.text = [self.peopleLabel.text stringByAppendingString:[[@([self.invitedPeople count]) stringValue] stringByAppendingString: @" people"]];
         }
     }
+    initialTableViewFrame = self.tableView.frame;
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    [self.view endEditing:YES];
+    [self deregisterFromKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning
@@ -90,6 +100,48 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+#pragma mark - managing the keyboard notifications
+
+- (void)registerForKeyboardNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+}
+
+- (void)deregisterFromKeyboardNotifications {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+    
+}
+
+- (void)keyboardWasShown:(NSNotification *)notification {
+    NSDictionary* info = [notification userInfo];
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    if(CGRectEqualToRect(initialTableViewFrame, self.tableView.frame)){
+        self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
+    }
+    
+}
+
+- (void)keyboardWillBeHidden:(NSNotification *)notification {
+    self.tableView.frame = initialTableViewFrame;
+}
+
 
 #pragma mark table view delegate
 
@@ -250,6 +302,15 @@
     }
 }
 
+# pragma mark - text field delegate
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+    
+    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:7 inSection:0];
+    [self.tableView scrollToRowAtIndexPath: indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    
+    return YES;
+}
 
 
 

@@ -31,10 +31,10 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *endTimePickerCell;
 @property (weak, nonatomic) IBOutlet UIDatePicker *startTimePicker;
 @property (weak, nonatomic) IBOutlet UIDatePicker *endTimePicker;
-@property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *peopleLabel;
 @property (weak, nonatomic) IBOutlet UITableViewCell *inviteCell;
 @property (weak, nonatomic) IBOutlet UISwitch *publicSwitch;
+@property (weak, nonatomic) IBOutlet UITextField *locationTextField;
 
 @property (strong, nonatomic) NSMutableArray *userEvents;
 @property (strong, nonatomic) NSArray* invitedPeople;

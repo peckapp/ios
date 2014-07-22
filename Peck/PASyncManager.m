@@ -122,6 +122,26 @@
                                parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON){
                                       NSLog(@"LOGIN JSON: %@",JSON);
+                                      NSDictionary *postsFromResponse = (NSDictionary*)JSON;
+                                      NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
+                                      NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                      NSString* firstName = [userDictionary objectForKey:@"first_name"];
+                                      NSString* lastName = [userDictionary objectForKey:@"last_name"];
+                                      NSString* email = [userDictionary objectForKey:@"email"];
+                                      NSString* blurb = [userDictionary objectForKey:@"blurb"];
+                                      NSNumber* userID = [userDictionary objectForKey:@"id"];
+                                      NSString* apiKey = [userDictionary objectForKey:@"api_key"];
+                                      
+                                      [defaults setObject:firstName forKey:@"first_name"];
+                                      [defaults setObject:lastName forKey:@"last_name"];
+                                      [defaults setObject:email forKey:@"email"];
+                                      [defaults setObject:userID forKey:@"user_id"];
+                                      [defaults setObject:apiKey forKey:@"api_key"];
+                                      if(![blurb isKindOfClass:[NSNull class]]){
+                                          [defaults setObject:blurb forKey:@"blurb"];
+                                      }
+                                      [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
+
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
