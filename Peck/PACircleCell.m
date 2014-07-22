@@ -556,6 +556,7 @@ UITextView *textViewHelper;
         Peer * tempPeer = self.members[i];
         [circleMembers addObject:tempPeer.id];
     }
+    [circleMembers addObject:[defaults objectForKey:@"user_id"]];
     
     NSDictionary * newCircle = [NSDictionary dictionaryWithObjectsAndKeys:
                                 userID, @"user_id",
@@ -563,7 +564,16 @@ UITextView *textViewHelper;
                                 self.titleTextField.text, @"circle_name",
                                 circleMembers, @"circle_members",
                                 nil];
+    
+    [self endEditing:YES];
+    PACirclesTableViewController* parent = (PACirclesTableViewController*)self.parentViewController;
+    [parent dismissCircleTitleKeyboard];
+    [parent dismissKeyboard:self];
+    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[parent.fetchedResultsController.fetchedObjects count] inSection:0];
+    [parent condenseCircleCell:self atIndexPath:indexPath];
+    
     [[PASyncManager globalSyncManager] postCircle:newCircle];
+    
     
 }
 @end
