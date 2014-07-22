@@ -55,22 +55,21 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     [[PASessionManager sharedClient] POST:usersAPI
-                                    parameters:nil
-                                    success:^
-    (NSURLSessionDataTask * __unused task, id JSON) {
-        // response JSON contains a user_id and api_key that must be stored
-        NSLog(@"Anonymous user creation success: %@", JSON);
-        NSDictionary *postsFromResponse = (NSDictionary*)JSON;
-        NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
-        
-        //store new information from server response
-        NSNumber *userID = [userDictionary objectForKey:@"id"];
-        [defaults setObject:userID forKey:user_id];
-        NSString *apiKey = [userDictionary objectForKey:api_key];
-        [defaults setObject:apiKey forKey:api_key];
-        
-        callbackBlock(YES);
-    }
+                               parameters:nil
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      // response JSON contains a user_id and api_key that must be stored
+                                      NSLog(@"Anonymous user creation success: %@", JSON);
+                                      NSDictionary *postsFromResponse = (NSDictionary*)JSON;
+                                      NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
+                                      
+                                      //store new information from server response
+                                      NSNumber *userID = [userDictionary objectForKey:@"id"];
+                                      [defaults setObject:userID forKey:user_id];
+                                      NSString *apiKey = [userDictionary objectForKey:api_key];
+                                      [defaults setObject:apiKey forKey:api_key];
+                                      
+                                      callbackBlock(YES);
+                                  }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
                                       callbackBlock(NO);
