@@ -224,6 +224,16 @@ CGRect initialTableViewFrame;
     [self dismissViewControllerAnimated: YES completion: nil];
     UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
     self.photoButton.imageView.image = image;
+    
+    // stores the image locally so that we can use the file path to send it to the server
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                      @"event_photo.png" ];
+    NSData* data = UIImagePNGRepresentation(image);
+    [data writeToFile:path atomically:YES];
+    NSLog(@"path: %@", path);
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
@@ -332,12 +342,15 @@ CGRect initialTableViewFrame;
             
             NSNumber *instID = [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
             
+            NSData* imageData =UIImagePNGRepresentation(self.photoButton.imageView.image);
+            
             NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                                       self.titleField.text,@"title",
                                       self.descriptionField.text, @"event_description",
                                       instID, @"institution_id",
                                       self.startTimeLabel.text, @"start_date",
                                       self.endTimeLabel.text, @"end_date",
+                                      imageData, @"image",
                                       nil];
             
             [[PASyncManager globalSyncManager] postEvent: setEvent];

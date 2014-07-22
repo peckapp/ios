@@ -82,7 +82,7 @@
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSNumber* userID = [defaults objectForKey:@"user_id"];
     updateURL = [updateURL stringByAppendingString:[userID stringValue]];
-    updateURL = [updateURL stringByAppendingString:@"/update"];
+    //updateURL = [updateURL stringByAppendingString:@"/update"];
     
     [[PASessionManager sharedClient] PATCH:updateURL
                                 parameters:[self applyWrapper:@"user" toDictionary:userInfo]
