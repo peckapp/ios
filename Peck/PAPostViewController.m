@@ -342,7 +342,7 @@ CGRect initialTableViewFrame;
             
             NSNumber *instID = [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
             
-            NSData* imageData =UIImagePNGRepresentation(self.photoButton.imageView.image);
+            NSData* imageData =UIImagePNGRepresentation([UIImage imageNamed:@"profile_placeholder.png"]);
             
             NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                                       self.titleField.text,@"title",
