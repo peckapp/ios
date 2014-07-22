@@ -40,7 +40,7 @@ UITextView *textViewHelper;
 
 BOOL reloaded = NO;
 
-#define defaultCellHeight 72
+#define defaultCellHeight 51
 #define cellY 22
 #define reloadTime 3
 - (id)initWithStyle:(UITableViewStyle)style
