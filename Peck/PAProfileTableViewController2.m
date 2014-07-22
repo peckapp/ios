@@ -206,15 +206,10 @@ BOOL loggedIn;
     if (textField == self.firstNameTextField) {
         [self.lastNameTextField becomeFirstResponder];
     }else if (textField == self.lastNameTextField) {
-        [self.emailTextField becomeFirstResponder];
-    }else if(textField == self.emailTextField){
         [self.infoTextView becomeFirstResponder];
         NSIndexPath* indexPath = [NSIndexPath indexPathForRow:3 inSection:1];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }else{
-        [self.infoTextView resignFirstResponder];
     }
-    
     return NO;
 }
 
