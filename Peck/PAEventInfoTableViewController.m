@@ -98,6 +98,7 @@ BOOL reloaded = NO;
 
 -(void)viewWillDisappear:(BOOL)animated{
     viewingEvent=NO;
+    [self.view endEditing:YES];
     [self deregisterFromKeyboardNotifications];
 }
 
