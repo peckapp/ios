@@ -377,7 +377,7 @@ CGRect initialTableViewRect;
         NSData *imageData = [NSData dataWithContentsOfURL:imageURL];
         UIImage *image = [UIImage imageWithData:imageData];
 
-        //[cell.photoView setImageWithURL:[NSURL URLWithString:@"http://thor.peckapp.com:3500/images/event.png"]placeholderImage:image];
+        [cell.photoView setImageWithURL:[NSURL URLWithString:@"http://thor.peckapp.com:3500/images/event.png"]placeholderImage:image];
     }
     else {
 
@@ -393,7 +393,7 @@ CGRect initialTableViewRect;
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"image id: %@", imageID);
                 [imageCache setObject:image forKey:imageID];
-                // cell.photoView.image = image;
+                cell.photoView.image = image;
 
                 //reload the cell to display the image
                 //this will be called at most one time for each cell
