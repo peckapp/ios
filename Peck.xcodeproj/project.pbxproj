@@ -11,6 +11,7 @@
 		86051D4D194BB64200961541 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86051D4A194BB3EB00961541 /* FacebookSDK.framework */; };
 		860A8D27195201A700C5B4A6 /* thor_peckapp_com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 860A8D26195201A700C5B4A6 /* thor_peckapp_com.cer */; };
 		860BE45E19632CC600E57A56 /* Institution.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE45D19632CC600E57A56 /* Institution.m */; };
+		860EB42F1980660400F1E665 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 860EB42E1980660400F1E665 /* UIImage+ImageEffects.m */; };
 		86173751195E07F000F2A794 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86D59816193768BF00F38654 /* Main.storyboard */; };
 		86292512193CBE000057CA41 /* PAPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292511193CBE000057CA41 /* PAPostViewController.m */; };
 		86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292520193CBFD40057CA41 /* PAPeckCell.m */; };
@@ -172,6 +173,8 @@
 		860A8D26195201A700C5B4A6 /* thor_peckapp_com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = thor_peckapp_com.cer; sourceTree = "<group>"; };
 		860BE45C19632CC600E57A56 /* Institution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Institution.h; sourceTree = "<group>"; };
 		860BE45D19632CC600E57A56 /* Institution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Institution.m; sourceTree = "<group>"; };
+		860EB42D1980660400F1E665 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
+		860EB42E1980660400F1E665 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		86292510193CBE000057CA41 /* PAPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPostViewController.h; sourceTree = "<group>"; };
 		86292511193CBE000057CA41 /* PAPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPostViewController.m; sourceTree = "<group>"; };
 		8629251F193CBFD40057CA41 /* PAPeckCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPeckCell.h; sourceTree = "<group>"; };
@@ -385,6 +388,8 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				860EB42D1980660400F1E665 /* UIImage+ImageEffects.h */,
+				860EB42E1980660400F1E665 /* UIImage+ImageEffects.m */,
 				DD5751B719803BF800BF52A8 /* event-placeholder.png */,
 				A43BF1011979BC240009B7AD /* circles.jpeg */,
 				A43BF0F7197992490009B7AD /* sidebar_background.jpg */,
@@ -989,6 +994,7 @@
 			files = (
 				A43BF0FF1979B4A50009B7AD /* PAInvitationCell.m in Sources */,
 				A43BF0EE197819480009B7AD /* PASubscriptionsTableViewController.m in Sources */,
+				860EB42F1980660400F1E665 /* UIImage+ImageEffects.m in Sources */,
 				8689DD8B195871D200A6B61C /* PAFilter.m in Sources */,
 				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
 				863843E3193CB7FD004110F5 /* PAExploreTableViewController.m in Sources */,
