@@ -479,7 +479,7 @@ CGRect initialTableViewRect;
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
         // TODO: replace this URL with SharedClient URL and event image url
-        [cell.photoView setImageWithURL:[NSURL URLWithString:@"http://thor.peckapp.com:3500/images/event.png"]placeholderImage:image];
+        [cell.photoView setImageWithURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]placeholderImage:image];
     }else{
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);

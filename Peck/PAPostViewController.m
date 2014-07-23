@@ -344,9 +344,9 @@
             NSString *documentsDirectory = [paths objectAtIndex:0];
             NSString* path = [documentsDirectory stringByAppendingPathComponent:
                               @"event_photo.png" ];
-            NSData* data = UIImagePNGRepresentation(self.photoButton.imageView.image);
+            NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
             [data writeToFile:path atomically:YES];
-            NSLog(@"path: %@", path);
+            //NSLog(@"path: %@", path);
             
             NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                                       self.titleField.text,@"title",

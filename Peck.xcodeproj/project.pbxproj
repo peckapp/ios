@@ -78,7 +78,6 @@
 		A4677D3C197437EC007E3C3A /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D3B197437EC007E3C3A /* Peer.m */; };
 		A4677D3F19743A05007E3C3A /* Circle.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D3E19743A05007E3C3A /* Circle.m */; };
 		A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4119743A05007E3C3A /* DiningPlace.m */; };
-		A4677D4519743A05007E3C3A /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4419743A05007E3C3A /* Event.m */; };
 		A4677D4819743A05007E3C3A /* DiningPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4719743A05007E3C3A /* DiningPeriod.m */; };
 		A4677D4E19746F45007E3C3A /* MenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4D19746F45007E3C3A /* MenuItem.m */; };
 		A4677D52197562B1007E3C3A /* PADiningOpportunityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D50197562B1007E3C3A /* PADiningOpportunityCell.m */; };
@@ -102,6 +101,8 @@
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
 		A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */; };
 		A4C8C347197D8F3F008F9F85 /* PAFetchManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C8C346197D8F3F008F9F85 /* PAFetchManager.m */; };
+		A4C8C34A19800A63008F9F85 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C8C34919800A63008F9F85 /* Subscription.m */; };
+		A4C8C34D19802B42008F9F85 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C8C34C19802B42008F9F85 /* Event.m */; };
 		A4E21F601964A749002A9800 /* PAEventInfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */; };
 		A4E21F6519659892002A9800 /* PACommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F6319659892002A9800 /* PACommentCell.m */; };
 		A4E21F6619659892002A9800 /* PACommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4E21F6419659892002A9800 /* PACommentCell.xib */; };
@@ -270,8 +271,6 @@
 		A4677D3E19743A05007E3C3A /* Circle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Circle.m; sourceTree = "<group>"; };
 		A4677D4019743A05007E3C3A /* DiningPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPlace.h; sourceTree = "<group>"; };
 		A4677D4119743A05007E3C3A /* DiningPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPlace.m; sourceTree = "<group>"; };
-		A4677D4319743A05007E3C3A /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
-		A4677D4419743A05007E3C3A /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A4677D4619743A05007E3C3A /* DiningPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPeriod.h; sourceTree = "<group>"; };
 		A4677D4719743A05007E3C3A /* DiningPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPeriod.m; sourceTree = "<group>"; };
 		A4677D4C19746F45007E3C3A /* MenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItem.h; sourceTree = "<group>"; };
@@ -309,6 +308,10 @@
 		A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreInfoViewController.m; sourceTree = "<group>"; };
 		A4C8C345197D8F3F008F9F85 /* PAFetchManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFetchManager.h; sourceTree = "<group>"; };
 		A4C8C346197D8F3F008F9F85 /* PAFetchManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFetchManager.m; sourceTree = "<group>"; };
+		A4C8C34819800A63008F9F85 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
+		A4C8C34919800A63008F9F85 /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Subscription.m; sourceTree = "<group>"; };
+		A4C8C34B19802B42008F9F85 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		A4C8C34C19802B42008F9F85 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A4E21F5E1964A749002A9800 /* PAEventInfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEventInfoTableViewController.h; sourceTree = "<group>"; };
 		A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEventInfoTableViewController.m; sourceTree = "<group>"; };
 		A4E21F6219659892002A9800 /* PACommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACommentCell.h; sourceTree = "<group>"; };
@@ -636,6 +639,8 @@
 		A43BF0EB197819250009B7AD /* Subscriptions */ = {
 			isa = PBXGroup;
 			children = (
+				A4C8C34819800A63008F9F85 /* Subscription.h */,
+				A4C8C34919800A63008F9F85 /* Subscription.m */,
 				A43BF0EC197819480009B7AD /* PASubscriptionsTableViewController.h */,
 				A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */,
 				A43BF0EF1978198D0009B7AD /* PASubscriptionCell.h */,
@@ -711,8 +716,8 @@
 		DDDAEDE419479665004CE102 /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				A4677D4319743A05007E3C3A /* Event.h */,
-				A4677D4419743A05007E3C3A /* Event.m */,
+				A4C8C34B19802B42008F9F85 /* Event.h */,
+				A4C8C34C19802B42008F9F85 /* Event.m */,
 				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
 				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
 				86292524193CBFF80057CA41 /* PAEventCell.h */,
@@ -982,7 +987,6 @@
 				A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */,
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,
 				A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */,
-				A4677D4519743A05007E3C3A /* Event.m in Sources */,
 				A43BF0FB1979B0B60009B7AD /* PAInvitationsTableViewController.m in Sources */,
 				A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */,
 				A459A83D195DF4B800D1FB0E /* Message.m in Sources */,
@@ -992,6 +996,7 @@
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
 				860BE45E19632CC600E57A56 /* Institution.m in Sources */,
+				A4C8C34D19802B42008F9F85 /* Event.m in Sources */,
 				A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
 				A4C8C347197D8F3F008F9F85 /* PAFetchManager.m in Sources */,
@@ -1006,6 +1011,7 @@
 				A4E21F6F1965F0E0002A9800 /* Comment.m in Sources */,
 				A43BF0F6197978690009B7AD /* PAChangePasswordViewController.m in Sources */,
 				867B52D619509F5000BEB37B /* PASessionManager.m in Sources */,
+				A4C8C34A19800A63008F9F85 /* Subscription.m in Sources */,
 				A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */,
 				86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */,
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,

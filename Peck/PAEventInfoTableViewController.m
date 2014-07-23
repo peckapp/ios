@@ -13,6 +13,8 @@
 #import "PASyncManager.h"
 #import "Comment.h"
 #import "PAFetchManager.h"
+#import "UIImageView+AFNetworking.h"
+
 
 @interface PAEventInfoTableViewController ()
 
@@ -173,6 +175,8 @@ BOOL reloaded = NO;
         [self.startTimeLabel setText: stringFromDate];
         [self.endTimeLabel setText:[df stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
         self.descriptionTextView.text = [self.detailItem valueForKey:@"descrip"];
+        UIImage* image = [UIImage imageNamed:@"image-placeholder.png"];
+        [self.eventPhoto setImageWithURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"imageURL"]]] placeholderImage:image];
     }
 }
 

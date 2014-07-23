@@ -8,6 +8,8 @@
 
 #import "PASubscriptionsTableViewController.h"
 #import "PASubscriptionCell.h"
+#import "PAFetchManager.h"
+#import "Subscription.h"
 
 @interface PASubscriptionsTableViewController ()
 
@@ -28,6 +30,12 @@
 {
     [super viewDidLoad];
     
+    NSLog(@"view did load");
+    
+    self.departmentSubscriptions = [[PAFetchManager sharedFetchManager] fetchSubscriptionsForCategory:@"department"];
+    self.clubSubscriptions = [[PAFetchManager sharedFetchManager] fetchSubscriptionsForCategory:@"club"];
+    self.athleticSubscriptions = [[PAFetchManager sharedFetchManager] fetchSubscriptionsForCategory:@"athletic"];
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -45,16 +53,17 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 1;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 3;
+    if(section==0)
+        return [self.departmentSubscriptions count];
+    else
+        return [self.clubSubscriptions count];
 }
 
 
@@ -74,11 +83,31 @@
 
 
 -(void)configureCell:(PASubscriptionCell*)cell atIndexPath:(NSIndexPath*)indexPath{
-    cell.subscriptionTitle.text = @"subscription";
-    
+    if(indexPath.section==0){
+        Subscription* tempSubscription = self.departmentSubscriptions[indexPath.row];
+        cell.subscriptionTitle.text = tempSubscription.name;
+    }else if(indexPath.section==1){
+        Subscription* tempSubscription = self.clubSubscriptions[indexPath.row];
+        cell.subscriptionTitle.text = tempSubscription.name;
+    }else if(indexPath.section==2){
+        Subscription* tempSubscription = self.athleticSubscriptions[indexPath.row];
+        cell.subscriptionTitle.text = tempSubscription.name;
+    }
     
 }
 
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    
+    if(section==0){
+        return @"Departments";
+    }else if(section==1){
+        return @"Clubs";
+    }else{
+        return @"Athletics";
+    }
+}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

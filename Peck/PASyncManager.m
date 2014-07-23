@@ -26,6 +26,7 @@
 #import "PACircleCell.h"
 #import "PAInitialViewController.h"
 #import "PAChangePasswordViewController.h"
+#import "Subscription.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -78,13 +79,15 @@
                                   }];
 }
 
--(void)updateUserWithInfo:(NSDictionary *)userInfo
+-(void)updateUserWithInfo:(NSDictionary *)userInfo withImage:(NSString*)filePath
 {
     NSString* updateURL = [usersAPI stringByAppendingString:@"/"];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSNumber* userID = [defaults objectForKey:@"user_id"];
     updateURL = [updateURL stringByAppendingString:[userID stringValue]];
     //updateURL = [updateURL stringByAppendingString:@"/update"];
+    
+    NSURL* path = [NSURL URLWithString:filePath];
     
     [[PASessionManager sharedClient] PATCH:updateURL
                                 parameters:[self applyWrapper:@"user" toDictionary:userInfo]
@@ -205,6 +208,9 @@
                                            NSLog(@"show alert");
                                            PAChangePasswordViewController* sender = (PAChangePasswordViewController*)controller;
                                            [sender showWrongPasswordAlert];
+                                       }else if([[userDictionary objectForKey:@"response"] isEqualToString:@"password was successfully changed!"]){
+                                           PAChangePasswordViewController* sender = (PAChangePasswordViewController*)controller;
+                                           [sender showSuccessAlert];
                                        }
                                    }
      
@@ -238,7 +244,7 @@
              NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
              for (NSDictionary *userAttributes in postsFromResponse) {
                  NSNumber *newID = [userAttributes objectForKey:@"id"];
-                 BOOL userAlreadyExists = [self objectExists:newID withType:@"Peer"];
+                 BOOL userAlreadyExists = [self objectExists:newID withType:@"Peer" andCategory:nil];
                  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                  if(!userAlreadyExists && !([defaults objectForKey:@"user_id"]==newID)){
                      //NSLog(@"about to add the peer");
@@ -292,7 +298,7 @@
                                          NSArray *responseInstitutions = [institutionsDictionary objectForKey:@"institutions"];
                                          for (NSDictionary *institutionAttributes in responseInstitutions) {
                                              NSNumber * instID = [institutionAttributes objectForKey:@"id"];
-                                             BOOL institutionAlreadyExists = [self objectExists:instID withType:@"Institution"];
+                                             BOOL institutionAlreadyExists = [self objectExists:instID withType:@"Institution" andCategory:nil];
                                              if ( !institutionAlreadyExists ) {
                                                  //NSLog(@"Adding Institution: %@",[institutionAttributes objectForKey:@"name"]);
                                                  Institution * institution = [NSEntityDescription insertNewObjectForEntityForName:@"Institution" inManagedObjectContext:_managedObjectContext];
@@ -348,7 +354,7 @@
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"explore"];
              for (NSDictionary *eventAttributes in postsFromResponse) {
                  NSNumber *newID = [eventAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Explore"];
+                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Explore" andCategory:nil];
                  if(!eventAlreadyExists){
                      NSLog(@"about to add the explore");
                      Explore * explore = [NSEntityDescription insertNewObjectForEntityForName:@"Explore" inManagedObjectContext: _managedObjectContext];
@@ -465,7 +471,7 @@
              NSArray *postsFromResponse = [circlesDictionary objectForKey:@"circles"];
              for (NSDictionary *circleAttributes in postsFromResponse) {
                  NSNumber *newID = [circleAttributes objectForKey:@"id"];
-                 BOOL circleAlreadyExists = [self objectExists:newID withType:@"Circle"];
+                 BOOL circleAlreadyExists = [self objectExists:newID withType:@"Circle" andCategory:nil];
                  if(!circleAlreadyExists){
                      NSLog(@"about to add the circle");
                      Circle * circle = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext: _managedObjectContext];
@@ -551,7 +557,7 @@
              NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_opportunities"];
              for (NSDictionary *diningAttributes in postsFromResponse){
                  NSNumber *newID = [diningAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event"];
+                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event" andCategory:nil];
                  if(!eventAlreadyExists){
                      Event * diningEvent = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
                      [self setAttributesInDiningEvent:diningEvent withDictionary:diningAttributes];
@@ -594,7 +600,7 @@
              NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_places"];
              for (NSDictionary *diningAttributes in postsFromResponse){
                  NSNumber *newID = [diningAttributes objectForKey:@"id"];
-                 BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace"];
+                 BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace" andCategory:nil];
                  if(!diningPlaceAlreadyExists){
                      NSLog(@"setting dining place");
                      DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
@@ -634,7 +640,7 @@
          NSMutableArray *diningPeriods = [[NSMutableArray alloc] init];
          for (NSDictionary *diningAttributes in diningPeriodArray){
              NSNumber *newID = [diningAttributes objectForKey:@"id"];
-             BOOL diningPeriodAlreadyExists = [self objectExists:newID withType:@"DiningPeriod"];
+             BOOL diningPeriodAlreadyExists = [self objectExists:newID withType:@"DiningPeriod" andCategory:nil];
              if(!diningPeriodAlreadyExists){
                  NSLog(@"setting dining period");
                  DiningPeriod * diningPeriod = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPeriod" inManagedObjectContext: _managedObjectContext];
@@ -687,7 +693,7 @@
          NSArray * menuItemArray = [items objectForKey:@"menu_items"];
          for (NSDictionary *menuItemAttributes in menuItemArray){
              NSNumber *newID = [menuItemAttributes objectForKey:@"id"];
-             BOOL menuItemAlreadyExists = [self objectExists:newID withType:@"MenuItem"];
+             BOOL menuItemAlreadyExists = [self objectExists:newID withType:@"MenuItem" andCategory:nil];
              if(!menuItemAlreadyExists){
                  NSLog(@"setting menu Item");
                  MenuItem * menuItem = [NSEntityDescription insertNewObjectForEntityForName:@"MenuItem" inManagedObjectContext: _managedObjectContext];
@@ -712,13 +718,20 @@
 
 #pragma mark - Events actions
 
--(void)postEvent:(NSDictionary *)dictionary withImage:(NSData*)imageData
+-(void)postEvent:(NSDictionary *)dictionary withImage:(NSData*)filePath
 {
-   // NSURL* path = [NSURL URLWithString:filePath];
+   /* NSURL* path = [NSURL URLWithString:filePath];
     
+    UIImage* image = [UIImage imageNamed:@"profile-placeholder.png"];
+    NSData* imageData2 = UIImagePNGRepresentation(image);*/
+    
+    
+    
+    NSLog(@"file path: %@", filePath);
     [[PASessionManager sharedClient] POST:simple_eventsAPI
-                               parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-                                   [formData appendPartWithFileData:imageData name:@"image" fileName:@"event_photo" mimeType:@"image/png"];}
+                               parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary]
+                                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:filePath name:@"image" fileName:@"event_photo.jpeg" mimeType:@"image/jpeg"];}      //constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+                                   //[formData appendPartWithFileURL:path name:@"image" fileName:@"event_photo.png" mimeType:@"image/png" error:nil];}
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
@@ -766,7 +779,7 @@
              NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
              for (NSDictionary *eventAttributes in postsFromResponse) {
                  NSNumber *newID = [eventAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event"];
+                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event" andCategory:nil];
                  if(!eventAlreadyExists){
                      //NSLog(@"adding an event to Core Data");
                      Event * event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
@@ -802,7 +815,7 @@
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
     event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     event.end_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
-    
+    event.imageURL = [dictionary objectForKey:@"image"];
 }
 
 #pragma mark - Comment actions
@@ -854,7 +867,7 @@
                  //NSLog(@"Update Event response: %@", postsFromResponse);
                  for (NSDictionary *commentAttributes in postsFromResponse) {
                      NSNumber *newID = [commentAttributes objectForKey:@"id"];
-                     BOOL eventAlreadyExists = [self objectExists:newID withType:@"Comment"];
+                     BOOL eventAlreadyExists = [self objectExists:newID withType:@"Comment" andCategory:nil];
                      if(!eventAlreadyExists){
                          //NSLog(@"adding an event to Core Data");
                          [self.persistentStoreCoordinator lock];
@@ -889,17 +902,141 @@
 }
 
 
+#pragma mark - suscription actions
+
+-(void)updateSubscriptions{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* institutionID = [[defaults objectForKey:@"institution_id"] stringValue];
+    
+    NSString* departmentSubscriptionURL = @"api/departments?institution_id=";
+    departmentSubscriptionURL = [departmentSubscriptionURL stringByAppendingString:institutionID];
+    
+    [[PASessionManager sharedClient] GET:departmentSubscriptionURL
+                              parameters:[self authenticationParameters]
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"Subscription JSON: %@",JSON);
+         NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
+         NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"departments"];
+         for (NSDictionary *departmentAttributes in postsFromResponse) {
+             NSNumber *newID = [departmentAttributes objectForKey:@"id"];
+             BOOL departmentAlreadyExists = [self objectExists:newID withType:@"Subscription" andCategory:@"department"];
+             if(!departmentAlreadyExists){
+                 NSLog(@"adding an event to Core Data");
+                 [self.persistentStoreCoordinator lock];
+                 Subscription* subscription = [NSEntityDescription insertNewObjectForEntityForName:@"Subscription" inManagedObjectContext: _managedObjectContext];
+                 [self setAttributesInSubscription:subscription withDictionary:departmentAttributes andCategory:@"department"];
+                 NSError* error = nil;
+                 [_managedObjectContext save:&error];
+                 [self.persistentStoreCoordinator unlock];
+                 NSLog(@"SUBSCRIPTION: %@",subscription);
+             }
+         }
+
+     }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                 }];
+    
+    NSString* clubSubscriptionURL = @"api/clubs?institution_id=";
+    clubSubscriptionURL = [clubSubscriptionURL stringByAppendingString:institutionID];
+    
+    [[PASessionManager sharedClient] GET:clubSubscriptionURL
+                              parameters:[self authenticationParameters]
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"Subscription JSON: %@",JSON);
+         NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
+         NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"clubs"];
+         for (NSDictionary *clubAttributes in postsFromResponse) {
+             NSNumber *newID = [clubAttributes objectForKey:@"id"];
+             BOOL clubAlreadyExists = [self objectExists:newID withType:@"Subscription" andCategory:@"club"];
+             if(!clubAlreadyExists){
+                 NSLog(@"adding a subscription to Core Data");
+                 [self.persistentStoreCoordinator lock];
+                 Subscription* subscription = [NSEntityDescription insertNewObjectForEntityForName:@"Subscription" inManagedObjectContext: _managedObjectContext];
+                 [self setAttributesInSubscription:subscription withDictionary:clubAttributes andCategory:@"club"];
+                 NSError* error = nil;
+                 [_managedObjectContext save:&error];
+                 [self.persistentStoreCoordinator unlock];
+                 NSLog(@"SUBSCRIPTION: %@",subscription);
+             }
+         }
+         
+     }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                 }];
+    
+    
+    NSString* athleticSubscriptionURL = @"api/athletic_teams?institution_id=";
+    athleticSubscriptionURL = [athleticSubscriptionURL stringByAppendingString:institutionID];
+    
+    [[PASessionManager sharedClient] GET:athleticSubscriptionURL
+                              parameters:[self authenticationParameters]
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"Subscription JSON: %@",JSON);
+         NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
+         NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"athletic_teams"];
+         for (NSDictionary *athleticAttributes in postsFromResponse) {
+             NSNumber *newID = [athleticAttributes objectForKey:@"id"];
+             BOOL athleticAlreadyExists = [self objectExists:newID withType:@"Subscription" andCategory:@"athletic"];
+             if(!athleticAlreadyExists){
+                 NSLog(@"adding a subscription to Core Data");
+                 [self.persistentStoreCoordinator lock];
+                 Subscription* subscription = [NSEntityDescription insertNewObjectForEntityForName:@"Subscription" inManagedObjectContext: _managedObjectContext];
+                 [self setAttributesInSubscription:subscription withDictionary:athleticAttributes andCategory:@"athletic"];
+                 NSError* error = nil;
+                 [_managedObjectContext save:&error];
+                 [self.persistentStoreCoordinator unlock];
+                 NSLog(@"SUBSCRIPTION: %@",subscription);
+             }
+         }
+         
+     }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                 }];
+
+}
+
+-(void)setAttributesInSubscription:(Subscription*)subscription withDictionary:(NSDictionary*)dictionary andCategory:(NSString*)category{
+    if([category isEqualToString:@"department"]){
+        subscription.name = [dictionary objectForKey:@"name"];
+    }else if([category isEqualToString:@"club"]){
+        subscription.name = [dictionary objectForKey:@"club_name"];
+    }else if([category isEqualToString:@"athletic"]){
+        NSString* sportName = [[dictionary objectForKey:@"gender"] stringByAppendingString:@"'s "];
+        subscription.name = [sportName stringByAppendingString:[dictionary objectForKey:@"sport_name"]];
+    }
+    subscription.id = [dictionary objectForKey:@"id"];
+    subscription.category = category;
+}
 
 
 #pragma mark - Utility Methods
 
--(BOOL)objectExists:(NSNumber *) newID withType:(NSString*)type
+
+
+-(BOOL)objectExists:(NSNumber *) newID withType:(NSString*)type andCategory:(NSString*)category
 {
     NSFetchRequest * request = [[NSFetchRequest alloc] init];
     NSEntityDescription *objects = [NSEntityDescription entityForName:type inManagedObjectContext:_managedObjectContext];
     [request setEntity:objects];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id = %@", newID];
-    [request setPredicate:predicate];
+    NSMutableArray*predicateArray = [[NSMutableArray alloc] init];
+    [predicateArray addObject:predicate];
+    //[request setPredicate:predicate];
+    
+    if(category!=nil){
+        NSPredicate* categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@",category];
+        [predicateArray addObject:categoryPredicate];
+    }
+    
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    [request setPredicate:compoundPredicate];
+
     
     NSError *error = nil;
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
