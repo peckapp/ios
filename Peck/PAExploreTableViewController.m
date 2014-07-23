@@ -14,6 +14,8 @@
 #import "Explore.h"
 #import "PASyncManager.h"
 
+#define cellHeight 340
+
 @interface PAExploreTableViewController ()
 
 @end
@@ -26,8 +28,6 @@
 
 static NSString * cellIdentifier = PAExploreIdentifier;
 static NSString * nibName = @"PAExploreCell";
-
-CGFloat cellHeight;
 
 NSCache *imageCache;
 
@@ -51,13 +51,6 @@ NSCache *imageCache;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    }
-    cellHeight = cell.frame.size.height;
     
     [[PASyncManager globalSyncManager] updateExploreInfo];
 }
