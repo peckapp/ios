@@ -25,6 +25,7 @@
 #import "MenuItem.h"
 #import "PACircleCell.h"
 #import "PAInitialViewController.h"
+#import "PAChangePasswordViewController.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -185,6 +186,33 @@
                                   }];
 }
 
+
+-(void)changePassword:(NSDictionary*)passwordInfo forViewController:(UIViewController*)controller{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString* passwordURL = [usersAPI stringByAppendingString:@"/"];
+    passwordURL = [passwordURL stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
+    passwordURL = [passwordURL stringByAppendingString:@"/change_password"];
+    NSLog(@"passwordURL: %@", passwordURL);
+    
+    [[PASessionManager sharedClient] PATCH:passwordURL
+                                parameters:[self applyWrapper:@"user" toDictionary:passwordInfo]
+                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                       NSLog(@"password JSON: %@",JSON);
+                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
+                                       NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
+                                       if([[userDictionary objectForKey:@"response"] isEqualToString:@"Old password was wrong"]){
+                                           NSLog(@"show alert");
+                                           PAChangePasswordViewController* sender = (PAChangePasswordViewController*)controller;
+                                           [sender showWrongPasswordAlert];
+                                       }
+                                   }
+     
+     
+                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                       NSLog(@"ERROR: %@",error);
+                                   }];
+}
 - (BOOL)validUserInfo:(NSDictionary*)userInfo
 {
     // TODO: check the user info dictionary for validity and presence of required fields
@@ -422,8 +450,13 @@
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
         
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         
-        [[PASessionManager sharedClient] GET:circlesAPI
+        NSString* circlesURL = [usersAPI stringByAppendingString:@"/"];
+        circlesURL = [circlesURL stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
+        circlesURL = [circlesURL stringByAppendingString:@"/circles"];
+        
+        [[PASessionManager sharedClient] GET:circlesURL
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
@@ -685,10 +718,11 @@
     
     [[PASessionManager sharedClient] POST:simple_eventsAPI
                                parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-                                   [formData appendPartWithFileData:imageData name:@"image" fileName:@"event_photo" mimeType:@"image/png"];}                                  success:^
+                                   [formData appendPartWithFileData:imageData name:@"image" fileName:@"event_photo" mimeType:@"image/png"];}
+                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
-         //[self updateEventInfo];
+         [self updateEventInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
