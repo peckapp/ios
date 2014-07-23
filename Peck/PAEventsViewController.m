@@ -477,7 +477,7 @@ CGRect initialTableViewRect;
     cell.startTime.text = [self dateToString:tempEvent.start_date];
     cell.endTime.text = [self dateToString:tempEvent.end_date];
     
-    //[[UIImageView sharedImageCache] cachedImageForRequest:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]];
+    
     NSString *imageID = [tempEvent.id stringValue];
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
@@ -486,12 +486,11 @@ CGRect initialTableViewRect;
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
-            UIImageView* imageView = [[UIImageView alloc] init];
-            UIImage* image = [UIImage imageNamed:@"image-placeholder.png"];
-            [imageView setImageWithURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]placeholderImage:image];
+            UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]]];
             
-            if(imageView.image==nil){
-                imageView.image = image;
+            UIImage* placeholderImage = [UIImage imageNamed:@"image-placeholder.png"];
+            if(img==nil){
+                img = placeholderImage;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"image id: %@", imageID);
@@ -500,14 +499,14 @@ CGRect initialTableViewRect;
                 
                 
                 
-                [imageCache setObject:imageView.image forKey:imageID];
-                cell.photoView.image =imageView.image;
+                [imageCache setObject:img forKey:imageID];
+                cell.photoView.image =img;
                 
                 //reload the cell to display the image
                 //this will be called at most one time for each cell
                 //because the image will be loaded into the cache
                 //after the first time
-                [eventsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+                //[eventsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
             });
         });
     }
