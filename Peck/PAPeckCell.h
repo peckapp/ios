@@ -10,5 +10,6 @@
 
 @interface PAPeckCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIView *profileTemplateView;
+@property (weak, nonatomic) IBOutlet UIView *profileTemplateSubview;
 
 @end

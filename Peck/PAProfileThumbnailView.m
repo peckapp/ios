@@ -17,16 +17,21 @@
 
 @implementation PAProfileThumbnailView
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CGRect)frame subFrame:(CGRect)subFrame image:(UIImage *)image
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.profileButton = [[UIButton alloc] initWithFrame:self.bounds];
-        [self.profileButton addTarget:self action:@selector(onProfileTap:) forControlEvents:UIControlEventTouchUpInside];
-        [self.profileButton setImage:[UIImage imageNamed:@"profile-placeholder"] forState:UIControlStateNormal];
-        self.profileButton.layer.cornerRadius = self.profileButton.frame.size.width / 2;
-        self.profileButton.clipsToBounds = YES;
-        [self addSubview:self.profileButton];
+
+        UIButton * button = [[UIButton alloc]initWithFrame:frame];
+        UIImageView * imageView = [[UIImageView alloc] initWithFrame:subFrame];
+
+        imageView.image = image;
+        imageView.layer.cornerRadius = subFrame.size.width / 2;
+        imageView.clipsToBounds = YES;
+
+        imageView.userInteractionEnabled=NO;
+        [button addSubview:imageView];
+        [self addSubview:button];
     }
     return self;
 }

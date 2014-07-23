@@ -12,4 +12,6 @@
 
 @property (nonatomic) UIImage * profileImage;
 
+- (id)initWithFrame:(CGRect)frame subFrame:(CGRect)subFrame image:(UIImage *)image;
+
 @end

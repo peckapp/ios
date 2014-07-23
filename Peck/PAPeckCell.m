@@ -13,9 +13,10 @@
 
 - (void)awakeFromNib
 {
-    PAProfileThumbnailView * profileThumbnail = [[PAProfileThumbnailView alloc] initWithFrame:self.profileTemplateView.frame];
+    PAProfileThumbnailView * profileThumbnail = [[PAProfileThumbnailView alloc] initWithFrame:self.profileTemplateView.frame subFrame:self.profileTemplateSubview.frame image:[UIImage imageNamed:@"profile-placeholder"]];
     [self addSubview:profileThumbnail];
     self.profileTemplateView.hidden = true;
+    self.profileTemplateSubview.hidden = true;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
