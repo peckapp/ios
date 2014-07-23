@@ -484,9 +484,8 @@ CGRect initialTableViewRect;
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
-            NSData *data = [[PAImageManager imageManager] ReadImage:tempEvent.title];
-            //NSData *data = tempEvent.photo;
-            UIImage *image = [UIImage imageWithData:data];
+            UIImageView* imageView = [[UIImageView alloc] init];
+            [imageView setImageWithURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]placeholderImage:image];
             if(!image){
                 // TODO: replace this to cache image from server
                 image = [UIImage imageNamed:@"image-placeholder.png"];
