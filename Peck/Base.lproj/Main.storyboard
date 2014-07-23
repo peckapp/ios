@@ -430,7 +430,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="AF5-E1-6m8" kind="push" id="cp1-g2-ctw"/>
+                                            <segue destination="AF5-E1-6m8" kind="push" identifier="showSubscriptions" id="cp1-g2-ctw"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="TjG-it-dj1">
@@ -900,6 +900,7 @@
                     <connections>
                         <outlet property="descriptionTextView" destination="cc6-zl-oCX" id="xiQ-IL-0nw"/>
                         <outlet property="endTimeLabel" destination="qf1-5w-VLx" id="F1x-qd-Xxt"/>
+                        <outlet property="eventPhoto" destination="mur-Tb-M35" id="Mds-qs-jnN"/>
                         <outlet property="startTimeLabel" destination="qQ0-0X-Re8" id="3GI-Az-Va3"/>
                     </connections>
                 </tableViewController>

@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *descriptionTextView;
 @property (weak, nonatomic) IBOutlet UILabel *startTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *endTimeLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *eventPhoto;
 
 @property (strong, nonatomic) NSString* commentText;
 

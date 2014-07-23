@@ -10,4 +10,8 @@
 
 @interface PASubscriptionsTableViewController : UITableViewController
 
+@property (strong, nonatomic) NSMutableArray* departmentSubscriptions;
+@property (strong, nonatomic) NSMutableArray* clubSubscriptions;
+@property (strong, nonatomic) NSMutableArray* athleticSubscriptions;
+
 @end

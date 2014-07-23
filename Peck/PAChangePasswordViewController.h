@@ -14,5 +14,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *confirmPasswordField;
 - (IBAction)changePasswordButton:(id)sender;
 -(void)showWrongPasswordAlert;
+-(void)showSuccessAlert;
 
 @end

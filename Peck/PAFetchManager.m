@@ -56,5 +56,60 @@
 
 }
 
+-(void)logoutUser{
+    [self removeAllCircles];
+}
+
+-(void)removeAllCircles{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest * allCircles = [[NSFetchRequest alloc] init];
+    [allCircles setEntity:[NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext]];
+    [allCircles setIncludesPropertyValues:NO]; //only fetch the managedObjectID
+    
+    NSError * error = nil;
+    NSArray * circles = [_managedObjectContext executeFetchRequest:allCircles error:&error];
+    //error handling goes here
+    for (NSManagedObject * circle in circles) {
+        [_managedObjectContext deleteObject:circle];
+    }
+    NSError *saveError = nil;
+    [_managedObjectContext save:&saveError];
+}
+
+-(void)removeAllEvents{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest * allEvents = [[NSFetchRequest alloc] init];
+    [allEvents setEntity:[NSEntityDescription entityForName:@"Event" inManagedObjectContext:_managedObjectContext]];
+    [allEvents setIncludesPropertyValues:NO]; //only fetch the managedObjectID
+    
+    NSError * error = nil;
+    NSArray * events = [_managedObjectContext executeFetchRequest:allEvents error:&error];
+    //error handling goes here
+    for (NSManagedObject * event in events) {
+        [_managedObjectContext deleteObject:event];
+    }
+    NSError *saveError = nil;
+    [_managedObjectContext save:&saveError];
+}
+
+-(NSMutableArray*)fetchSubscriptionsForCategory:(NSString*)category{
+    
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Subscription" inManagedObjectContext:_managedObjectContext]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"category like %@",
+                              category];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    return mutableFetchResults;
+}
 
 @end

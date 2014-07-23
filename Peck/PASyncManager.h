@@ -23,7 +23,7 @@
 // sends post request to server with institution_id and stores response user_id in NSUserDefaults
 -(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock;
 // sends post request to the server completing the user's other info after the registration process is triggered
--(void)updateUserWithInfo:(NSDictionary*)userInfo;
+-(void)updateUserWithInfo:(NSDictionary*)userInfo withImage:(NSString*)filePath;
 // authenticates the user and updates the authentication token returned from the server
 - (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UIViewController*)controller;
 // sends patch request to the server when the registration process is complete
@@ -37,7 +37,7 @@
 
 // methods for updating events
 -(void)updateEventInfo;
--(void)postEvent:(NSDictionary *) dictionary withImage:(NSData*)imageData;
+-(void)postEvent:(NSDictionary *) dictionary withImage:(NSData*)filePath;
 -(void)deleteEvent:(NSNumber*)eventID;
 
 // methods for updating dining
@@ -59,5 +59,9 @@
 -(void)updatePeerInfo;
 
 -(void)updateExploreInfo;
+
+//methods for subscriptions
+-(void)updateSubscriptions;
+
 -(BOOL)objectExists:(NSNumber *)newID withType: (NSString *) type;
 @end

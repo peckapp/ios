@@ -2,7 +2,7 @@
 //  Event.h
 //  Peck
 //
-//  Created by John Karabinos on 7/14/14.
+//  Created by John Karabinos on 7/23/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -22,5 +22,6 @@
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSDate * updated_at;
+@property (nonatomic, retain) NSString * imageURL;
 
 @end

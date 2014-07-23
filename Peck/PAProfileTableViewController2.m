@@ -9,6 +9,7 @@
 #import "PAProfileTableViewController2.h"
 #import "PAAppDelegate.h"
 #import "PASyncManager.h"
+#import "PAFetchManager.h"
 
 @interface PAProfileTableViewController2 ()
 
@@ -93,16 +94,21 @@ BOOL loggedIn;
     [actionSheet showInView:self.view];
     
 }
-/*
+
  #pragma mark - Navigation
  
- // In a storyboard-based application, you will often want to do a little preparation before navigation
+ 
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
  {
+     
+     if([[segue identifier] isEqualToString:@"showSubscriptions"]){
+         NSLog(@"update subscriptions");
+         [[PASyncManager globalSyncManager] updateSubscriptions];
+     }
  // Get the new view controller using [segue destinationViewController].
  // Pass the selected object to the new view controller.
  }
- */
+ 
 
 #pragma mark - Account Creation and Configuration
 
@@ -113,6 +119,8 @@ BOOL loggedIn;
         UIViewController *loginRoot = [loginStoryboard instantiateInitialViewController];
         [self presentViewController:loginRoot animated:YES completion:nil];
     }else{
+        [[PAFetchManager sharedFetchManager] logoutUser];
+        
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         [defaults removeObjectForKey:@"authentication_token"];
         [defaults removeObjectForKey:@"first_name"];
@@ -240,7 +248,19 @@ BOOL loggedIn;
                                  self.lastNameTextField.text, @"last_name",
                                  self.infoTextView.text, @"blurb",
                                  nil];
-    [[PASyncManager globalSyncManager] updateUserWithInfo:updatedInfo];
+    
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                      @"profile_photo.png" ];
+    NSData* data = UIImagePNGRepresentation(self.profilePicture.image);
+    [data writeToFile:path atomically:YES];
+    NSLog(@"path: %@", path);
+
+    
+    [[PASyncManager globalSyncManager] updateUserWithInfo:updatedInfo withImage:path];
     
 }
 @end

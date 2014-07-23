@@ -19,5 +19,7 @@
 +(instancetype)sharedFetchManager;
 
 -(Peer*)getPeerWithID:(NSNumber*)peerID;
+-(void)logoutUser;
+-(NSMutableArray*)fetchSubscriptionsForCategory:(NSString*)category;
 
 @end

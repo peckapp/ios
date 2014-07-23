@@ -122,4 +122,14 @@
                                           otherButtonTitles:nil];
     [alert show];
 }
+
+-(void)showSuccessAlert{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Change Successful!"
+                                                    message:@"Congrats on changing your password"
+                                                   delegate:self
+                                          cancelButtonTitle:@"Thanks"
+                                          otherButtonTitles:nil];
+    [alert show];
+   
+}
 @end
