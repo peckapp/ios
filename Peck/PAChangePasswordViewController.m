@@ -74,16 +74,52 @@
 
 
 - (IBAction)changePasswordButton:(id)sender {
-    NSDictionary* newPassword = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 self.passwordField.text, @"password",
-                                 self.confirmPasswordField.text, @"password_confirmation",
-                                 nil];
+    if(![self.passwordField.text isEqualToString:@""] && ![self.oldPasswordField.text isEqualToString:@""] && ![self.confirmPasswordField.text isEqualToString:@""]){
     
-    NSDictionary* passwordChange = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    self.oldPasswordField.text, @"password",
-                                    newPassword, @"new_password",
-                                    nil];
-    [[PASyncManager globalSyncManager] changePassword:passwordChange];
+        if([self.passwordField.text isEqualToString:self.confirmPasswordField.text]){
+            NSDictionary* newPassword = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         self.passwordField.text, @"password",
+                                         self.confirmPasswordField.text, @"password_confirmation",
+                                         nil];
     
+            NSDictionary* passwordChange = [NSDictionary dictionaryWithObjectsAndKeys:
+                                            self.oldPasswordField.text, @"password",
+                                            newPassword, @"new_password",
+                                            nil];
+            [[PASyncManager globalSyncManager] changePassword:passwordChange forViewController:self];
+        }else{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Different Passwords"
+                                                            message:@"Your new password must match the confirmation password"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+
+        }
+        
+    }else{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                                        message:@"Please fill in all fields"
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+
+    }
+    
+    
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [self.view endEditing:YES];;
+}
+
+-(void)showWrongPasswordAlert{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Incorrect Password"
+                                                    message:@"Please enter your previous password"
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
 }
 @end

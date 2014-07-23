@@ -29,7 +29,7 @@
 // sends patch request to the server when the registration process is complete
 -(void)registerUserWithInfo:(NSDictionary*)userInfo;
 
--(void)changePassword:(NSDictionary*)passwordInfo;
+-(void)changePassword:(NSDictionary*)passwordInfo forViewController:(UIViewController*)controller;
 
 
 // methods for syncing institutions for the configuration phase

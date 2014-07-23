@@ -25,6 +25,7 @@
 #import "MenuItem.h"
 #import "PACircleCell.h"
 #import "PAInitialViewController.h"
+#import "PAChangePasswordViewController.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -186,7 +187,7 @@
 }
 
 
--(void)changePassword:(NSDictionary*)passwordInfo{
+-(void)changePassword:(NSDictionary*)passwordInfo forViewController:(UIViewController*)controller{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     
     NSString* passwordURL = [usersAPI stringByAppendingString:@"/"];
@@ -198,6 +199,13 @@
                                 parameters:[self applyWrapper:@"user" toDictionary:passwordInfo]
                                    success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                        NSLog(@"password JSON: %@",JSON);
+                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
+                                       NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
+                                       if([[userDictionary objectForKey:@"response"] isEqualToString:@"Old password was wrong"]){
+                                           NSLog(@"show alert");
+                                           PAChangePasswordViewController* sender = (PAChangePasswordViewController*)controller;
+                                           [sender showWrongPasswordAlert];
+                                       }
                                    }
      
      
@@ -710,10 +718,11 @@
     
     [[PASessionManager sharedClient] POST:simple_eventsAPI
                                parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-                                   [formData appendPartWithFileData:imageData name:@"image" fileName:@"event_photo" mimeType:@"image/png"];}                                  success:^
+                                   [formData appendPartWithFileData:imageData name:@"image" fileName:@"event_photo" mimeType:@"image/png"];}
+                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
-         //[self updateEventInfo];
+         [self updateEventInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
