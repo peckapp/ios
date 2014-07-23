@@ -21,7 +21,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.profileButton = [[UIButton alloc] initWithFrame:frame];
+        self.profileButton = [[UIButton alloc] initWithFrame:self.bounds];
         [self.profileButton addTarget:self action:@selector(onProfileTap:) forControlEvents:UIControlEventTouchUpInside];
         [self.profileButton setImage:[UIImage imageNamed:@"profile-placeholder"] forState:UIControlStateNormal];
         self.profileButton.layer.cornerRadius = self.profileButton.frame.size.width / 2;
