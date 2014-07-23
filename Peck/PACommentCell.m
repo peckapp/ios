@@ -11,6 +11,7 @@
 #import "PASyncManager.h"
 #import "PACirclesTableViewController.h"
 #import "PACircleCell.h"
+#import "PAProfileThumbnailView.h"
 
 @implementation PACommentCell
 
@@ -30,6 +31,9 @@
     
     _expanded=NO;
     // Initialization code
+
+    PAProfileThumbnailView * profileThumbnail = [[PAProfileThumbnailView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+    [self addSubview:profileThumbnail];
 }
 
 

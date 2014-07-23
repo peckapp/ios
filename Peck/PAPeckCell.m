@@ -7,12 +7,15 @@
 //
 
 #import "PAPeckCell.h"
+#import "PAProfileThumbnailView.h"
 
 @implementation PAPeckCell
 
 - (void)awakeFromNib
 {
-    // Initialization code
+    PAProfileThumbnailView * profileThumbnail = [[PAProfileThumbnailView alloc] initWithFrame:self.profileTemplateView.frame];
+    [self addSubview:profileThumbnail];
+    self.profileTemplateView.hidden = true;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

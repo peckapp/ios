@@ -72,6 +72,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="profile-placeholder.png" width="1024" height="1024"/>
+        <image name="profile-placeholder.png" width="1067" height="1067"/>
     </resources>
 </document>
