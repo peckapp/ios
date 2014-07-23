@@ -108,6 +108,8 @@
 		A4E21F6619659892002A9800 /* PACommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4E21F6419659892002A9800 /* PACommentCell.xib */; };
 		A4E21F6F1965F0E0002A9800 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F6E1965F0E0002A9800 /* Comment.m */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
+		DD5751B41980356100BF52A8 /* PAPeckInviteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD5751B31980356100BF52A8 /* PAPeckInviteCell.xib */; };
+		DD59ADED197FF071006B4A61 /* PAProfileThumbnailView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD59ADEC197FF071006B4A61 /* PAProfileThumbnailView.m */; };
 		DD898136195B523F0079CDC9 /* button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898133195B523F0079CDC9 /* button@2x.png */; };
 		DD898137195B523F0079CDC9 /* button-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898134195B523F0079CDC9 /* button-selected@2x.png */; };
 		DD898139195B5AE20079CDC9 /* image-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898138195B5AE20079CDC9 /* image-placeholder.png */; };
@@ -321,6 +323,9 @@
 		A4E21F6E1965F0E0002A9800 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD5751B31980356100BF52A8 /* PAPeckInviteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAPeckInviteCell.xib; sourceTree = "<group>"; };
+		DD59ADEB197FF071006B4A61 /* PAProfileThumbnailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAProfileThumbnailView.h; sourceTree = "<group>"; };
+		DD59ADEC197FF071006B4A61 /* PAProfileThumbnailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAProfileThumbnailView.m; sourceTree = "<group>"; };
 		DD898133195B523F0079CDC9 /* button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button@2x.png"; sourceTree = "<group>"; };
 		DD898134195B523F0079CDC9 /* button-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-selected@2x.png"; sourceTree = "<group>"; };
 		DD898138195B5AE20079CDC9 /* image-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-placeholder.png"; sourceTree = "<group>"; };
@@ -557,6 +562,8 @@
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
 				86D59816193768BF00F38654 /* Main.storyboard */,
+				DD59ADEB197FF071006B4A61 /* PAProfileThumbnailView.h */,
+				DD59ADEC197FF071006B4A61 /* PAProfileThumbnailView.m */,
 				86613BE2197DD7D4004914B2 /* Dropdown */,
 				8689DD89195871D200A6B61C /* PAFilter.h */,
 				8689DD8A195871D200A6B61C /* PAFilter.m */,
@@ -709,6 +716,7 @@
 				8629251F193CBFD40057CA41 /* PAPeckCell.h */,
 				86292520193CBFD40057CA41 /* PAPeckCell.m */,
 				86292521193CBFD40057CA41 /* PAPeckCell.xib */,
+				DD5751B31980356100BF52A8 /* PAPeckInviteCell.xib */,
 			);
 			name = Pecks;
 			sourceTree = "<group>";
@@ -882,6 +890,7 @@
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
 				A4677D53197562B1007E3C3A /* PADiningOpportunityCell.xib in Resources */,
 				86D5980F193768BF00F38654 /* InfoPlist.strings in Resources */,
+				DD5751B41980356100BF52A8 /* PAPeckInviteCell.xib in Resources */,
 				A43BF1001979B4A50009B7AD /* PAInvitationCell.xib in Resources */,
 				869A85AE1964855B00F254C1 /* dropdown_circles@2x.png in Resources */,
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
@@ -991,6 +1000,7 @@
 				A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */,
 				A459A83D195DF4B800D1FB0E /* Message.m in Sources */,
 				A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */,
+				DD59ADED197FF071006B4A61 /* PAProfileThumbnailView.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
