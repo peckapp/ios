@@ -20,6 +20,7 @@
 
 -(Peer*)getPeerWithID:(NSNumber*)peerID;
 -(void)logoutUser;
+-(void)loginUser;
 -(NSMutableArray*)fetchSubscriptionsForCategory:(NSString*)category;
 
 @end

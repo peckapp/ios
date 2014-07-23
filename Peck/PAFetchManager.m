@@ -9,7 +9,7 @@
 #import "PAFetchManager.h"
 #import "PAAppDelegate.h"
 #import "Peer.h"
-
+#import "PASyncManager.h"
 
 @implementation PAFetchManager
 
@@ -58,6 +58,17 @@
 
 -(void)logoutUser{
     [self removeAllCircles];
+}
+
+-(void)loginUser{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    Peer* oldUser = [self getPeerWithID:[defaults objectForKey:@"user_id"]];
+    [_managedObjectContext deleteObject:oldUser];
+    
+    [[PASyncManager globalSyncManager] updatePeerInfo];
 }
 
 -(void)removeAllCircles{

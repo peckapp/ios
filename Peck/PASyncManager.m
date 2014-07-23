@@ -27,6 +27,7 @@
 #import "PAInitialViewController.h"
 #import "PAChangePasswordViewController.h"
 #import "Subscription.h"
+#import "PAFetchManager.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -127,6 +128,9 @@
                                parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON){
                                       NSLog(@"LOGIN JSON: %@",JSON);
+                                      
+                                      
+                                      
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                       NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
                                       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -146,6 +150,9 @@
                                           [defaults setObject:blurb forKey:@"blurb"];
                                       }
                                       [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
+                                      
+                                      [[PAFetchManager sharedFetchManager] loginUser];
+                                      
                                       [controller dismissViewControllerAnimated:YES completion:nil];
                                   }
      
