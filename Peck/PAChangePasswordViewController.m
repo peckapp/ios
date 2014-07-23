@@ -74,12 +74,16 @@
 
 
 - (IBAction)changePasswordButton:(id)sender {
+    NSDictionary* newPassword = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 self.passwordField.text, @"password",
+                                 self.confirmPasswordField.text, @"password_confirmation",
+                                 nil];
+    
     NSDictionary* passwordChange = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    self.oldPasswordField.text, @"old_password",
-                                    self.passwordField.text, @"password",
-                                    self.confirmPasswordField.text, @"password_confirmation",
+                                    self.oldPasswordField.text, @"password",
+                                    newPassword, @"new_password",
                                     nil];
-    [[PASyncManager globalSyncManager] updateUserWithInfo:passwordChange];
+    [[PASyncManager globalSyncManager] changePassword:passwordChange];
     
 }
 @end

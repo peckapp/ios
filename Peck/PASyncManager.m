@@ -185,6 +185,26 @@
                                   }];
 }
 
+
+-(void)changePassword:(NSDictionary*)passwordInfo{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString* passwordURL = [usersAPI stringByAppendingString:@"/"];
+    passwordURL = [passwordURL stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
+    passwordURL = [passwordURL stringByAppendingString:@"/change_password"];
+    NSLog(@"passwordURL: %@", passwordURL);
+    
+    [[PASessionManager sharedClient] PATCH:passwordURL
+                                parameters:[self applyWrapper:@"user" toDictionary:passwordInfo]
+                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                       NSLog(@"password JSON: %@",JSON);
+                                   }
+     
+     
+                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                       NSLog(@"ERROR: %@",error);
+                                   }];
+}
 - (BOOL)validUserInfo:(NSDictionary*)userInfo
 {
     // TODO: check the user info dictionary for validity and presence of required fields
@@ -422,8 +442,13 @@
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
         
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         
-        [[PASessionManager sharedClient] GET:circlesAPI
+        NSString* circlesURL = [usersAPI stringByAppendingString:@"/"];
+        circlesURL = [circlesURL stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
+        circlesURL = [circlesURL stringByAppendingString:@"/circles"];
+        
+        [[PASessionManager sharedClient] GET:circlesURL
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
