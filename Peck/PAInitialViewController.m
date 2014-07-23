@@ -71,9 +71,7 @@
     } else if (textField == self.passwordField) {
         [self.passwordField resignFirstResponder];
         // performs the login segue as though the button was pressed
-        if ([self shouldPerformSegueWithIdentifier:@"register" sender:self]) {
-            [self performSegueWithIdentifier:@"register" sender:self];
-        }
+        [self finishLogin:self];
     }
     
     return NO;
@@ -90,13 +88,15 @@
 
 - (IBAction)finishLogin:(id)sender {
     NSLog(@"finish the login");
-    NSDictionary* loginInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                               self.emailField.text,@"email",
-                               self.passwordField.text, @"password",
-                               nil];
-    [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo];
-    
+    if(![self.emailField.text isEqualToString:@""] && ![self.passwordField.text isEqualToString:@""]){
+        NSDictionary* loginInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   self.emailField.text,@"email",
+                                   self.passwordField.text, @"password",
+                                   nil];
+        [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self];
+    }
 }
+
 
 - (void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user
 {
@@ -171,6 +171,16 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self dismissKeyboard];
+}
+
+-(void)showAlert{
+    NSLog(@"wrong information");
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Incorrect email or password"
+                                                    message:@"Please enter a valid email and password"
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
 }
 
 @end

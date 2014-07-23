@@ -25,7 +25,7 @@
 // sends post request to the server completing the user's other info after the registration process is triggered
 -(void)updateUserWithInfo:(NSDictionary*)userInfo;
 // authenticates the user and updates the authentication token returned from the server
-- (void)authenticateUserWithInfo:(NSDictionary*)userInfo;
+- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UIViewController*)controller;
 // sends patch request to the server when the registration process is complete
 -(void)registerUserWithInfo:(NSDictionary*)userInfo;
 
@@ -34,7 +34,7 @@
 
 // methods for updating events
 -(void)updateEventInfo;
--(void)postEvent:(NSDictionary *) dictionary;
+-(void)postEvent:(NSDictionary *) dictionary withImage:(NSData*)imageData;
 -(void)deleteEvent:(NSNumber*)eventID;
 
 // methods for updating dining

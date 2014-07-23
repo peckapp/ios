@@ -74,6 +74,12 @@ BOOL viewingCircles;
 
 }
 -(void)viewWillDisappear:(BOOL)animated{
+    if(viewingCell){
+        PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+        [cell endEditing:YES];
+        [self dismissKeyboard:self];
+        [self dismissCircleTitleKeyboard];
+    }
     viewingCircles=NO;
     [self deregisterFromKeyboardNotifications];
 }

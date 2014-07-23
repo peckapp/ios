@@ -34,6 +34,7 @@
 
 @property BOOL startPickerIsOpen;
 @property BOOL endPickerIsOpen;
+@property CGRect initialTableViewFrame;
 
 @end
 
@@ -45,7 +46,6 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-CGRect initialTableViewFrame;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -71,6 +71,9 @@ CGRect initialTableViewFrame;
     
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    _initialTableViewFrame = self.tableView.frame;
+}
 
 -(void)viewWillAppear:(BOOL)animated{
     [self registerForKeyboardNotifications];
@@ -88,7 +91,7 @@ CGRect initialTableViewFrame;
             self.peopleLabel.text = [self.peopleLabel.text stringByAppendingString:[[@([self.invitedPeople count]) stringValue] stringByAppendingString: @" people"]];
         }
     }
-    initialTableViewFrame = self.tableView.frame;
+    
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [self.view endEditing:YES];
@@ -132,14 +135,14 @@ CGRect initialTableViewFrame;
 - (void)keyboardWasShown:(NSNotification *)notification {
     NSDictionary* info = [notification userInfo];
     CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    if(CGRectEqualToRect(initialTableViewFrame, self.tableView.frame)){
+    if(CGRectEqualToRect(_initialTableViewFrame, self.tableView.frame)){
         self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
     }
     
 }
 
 - (void)keyboardWillBeHidden:(NSNotification *)notification {
-    self.tableView.frame = initialTableViewFrame;
+    self.tableView.frame = _initialTableViewFrame;
 }
 
 
@@ -226,14 +229,7 @@ CGRect initialTableViewFrame;
     self.photoButton.imageView.image = image;
     
     // stores the image locally so that we can use the file path to send it to the server
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                         NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString* path = [documentsDirectory stringByAppendingPathComponent:
-                      @"event_photo.png" ];
-    NSData* data = UIImagePNGRepresentation(image);
-    [data writeToFile:path atomically:YES];
-    NSLog(@"path: %@", path);
+   
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
@@ -342,7 +338,15 @@ CGRect initialTableViewFrame;
             
             NSNumber *instID = [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
             
-            NSData* imageData =UIImagePNGRepresentation([UIImage imageNamed:@"profile_placeholder.png"]);
+            
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                 NSUserDomainMask, YES);
+            NSString *documentsDirectory = [paths objectAtIndex:0];
+            NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                              @"event_photo.png" ];
+            NSData* data = UIImagePNGRepresentation(self.photoButton.imageView.image);
+            [data writeToFile:path atomically:YES];
+            NSLog(@"path: %@", path);
             
             NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                                       self.titleField.text,@"title",
@@ -350,10 +354,9 @@ CGRect initialTableViewFrame;
                                       instID, @"institution_id",
                                       self.startTimeLabel.text, @"start_date",
                                       self.endTimeLabel.text, @"end_date",
-                                      imageData, @"image",
                                       nil];
             
-            [[PASyncManager globalSyncManager] postEvent: setEvent];
+            [[PASyncManager globalSyncManager] postEvent: setEvent withImage:data];
             
             
             

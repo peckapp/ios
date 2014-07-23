@@ -239,6 +239,7 @@ UITextView *textViewHelper;
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+        cell.commentID = tempComment.id;
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
         [cell.expandButton setHidden:NO];
@@ -317,6 +318,7 @@ UITextView *textViewHelper;
     [textViewHelper setHidden:YES];
     textViewHelper.text = text;
     [textViewHelper sizeToFit];
+    
     if(textViewHelper.frame.size.height>defaultCellHeight){
         return NO;
     }
@@ -525,9 +527,9 @@ UITextView *textViewHelper;
     if(textViewHelper.frame.size.height>defaultCellHeight){
         height = [NSNumber numberWithFloat:textViewHelper.frame.size.height+1];
     }
-    Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
+    //Comment* comment = cell.comment; //_fetchedResultsController.fetchedObjects[cell.tag];
     
-    NSString * commentID = [comment.id stringValue];
+    NSString * commentID = [cell.commentID stringValue];
     
     [heightDictionary setValue:height forKey:commentID];
     [self.commentsTableView beginUpdates];
@@ -535,9 +537,10 @@ UITextView *textViewHelper;
 
 }
 -(void)compress:(PACommentCell*)cell{
-    cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
-    Comment *comment = _fetchedResultsController.fetchedObjects[cell.tag];
-    NSString *commentID = [comment.id stringValue];
+    //cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
+    
+    //Comment *comment = cell.comment;//_fetchedResultsController.fetchedObjects[cell.tag];
+    NSString *commentID = [cell.commentID stringValue];
     [heightDictionary removeObjectForKey:commentID];
     [self.commentsTableView beginUpdates];
     [self.commentsTableView endUpdates];
@@ -553,6 +556,7 @@ UITextView *textViewHelper;
         Peer * tempPeer = self.members[i];
         [circleMembers addObject:tempPeer.id];
     }
+    [circleMembers addObject:[defaults objectForKey:@"user_id"]];
     
     NSDictionary * newCircle = [NSDictionary dictionaryWithObjectsAndKeys:
                                 userID, @"user_id",
@@ -560,7 +564,16 @@ UITextView *textViewHelper;
                                 self.titleTextField.text, @"circle_name",
                                 circleMembers, @"circle_members",
                                 nil];
+    
+    [self endEditing:YES];
+    PACirclesTableViewController* parent = (PACirclesTableViewController*)self.parentViewController;
+    [parent dismissCircleTitleKeyboard];
+    [parent dismissKeyboard:self];
+    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[parent.fetchedResultsController.fetchedObjects count] inSection:0];
+    [parent condenseCircleCell:self atIndexPath:indexPath];
+    
     [[PASyncManager globalSyncManager] postCircle:newCircle];
+    
     
 }
 @end

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "PAEventInfoTableViewController.h"
+#import "Comment.h"
 
 @interface PACommentCell : UITableViewCell <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
@@ -21,6 +22,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *expandButton;
 @property (weak, nonatomic) IBOutlet UIButton *postButton;
 @property (weak, nonatomic) UITableViewCell *parentCell;
+@property (weak, nonatomic) NSNumber* commentID;
+
 - (IBAction)postButton:(id)sender;
 
 - (IBAction)expandButton:(id)sender;

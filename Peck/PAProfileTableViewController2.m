@@ -23,6 +23,7 @@
 @synthesize profilePicture;
 @synthesize emailTextField, twitterTextField, facebookTextField, infoTextView, firstNameTextField, lastNameTextField;
 int currentTextField;
+BOOL loggedIn;
 
 - (void)viewDidLoad
 {
@@ -59,7 +60,20 @@ int currentTextField;
     NSLog(@"blurb: %@",blurb);
     self.infoTextView.text = [defaults objectForKey:@"blurb"];
     
-    
+    if([defaults objectForKey:@"authentication_token"]){
+        loggedIn=YES;
+        NSLog(@"logged in");
+        [self.loginButton setTitle:@"Logout" forState:UIControlStateNormal];
+    }
+    else{
+        loggedIn=NO;
+        NSLog(@"logged out");
+        [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
+    }
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [self.view endEditing:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -94,10 +108,25 @@ int currentTextField;
 
 - (IBAction)login:(id)sender
 {
-    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
-    UIViewController *loginRoot = [loginStoryboard instantiateInitialViewController];
-    
-    [self presentViewController:loginRoot animated:YES completion:nil];
+    if(!loggedIn){
+        UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
+        UIViewController *loginRoot = [loginStoryboard instantiateInitialViewController];
+        [self presentViewController:loginRoot animated:YES completion:nil];
+    }else{
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        [defaults removeObjectForKey:@"authentication_token"];
+        [defaults removeObjectForKey:@"first_name"];
+        [defaults removeObjectForKey:@"last_name"];
+        [defaults removeObjectForKey:@"blurb"];
+        [defaults removeObjectForKey:@"email"];
+        
+        self.emailTextField.text=@"";
+        self.firstNameTextField.text=@"";
+        self.infoTextView.text = @"";
+        self.lastNameTextField.text = @"";
+        [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
+        loggedIn=NO;
+    }
 }
 
 - (IBAction)registerAccount:(id)sender {
@@ -177,15 +206,10 @@ int currentTextField;
     if (textField == self.firstNameTextField) {
         [self.lastNameTextField becomeFirstResponder];
     }else if (textField == self.lastNameTextField) {
-        [self.emailTextField becomeFirstResponder];
-    }else if(textField == self.emailTextField){
         [self.infoTextView becomeFirstResponder];
         NSIndexPath* indexPath = [NSIndexPath indexPathForRow:3 inSection:1];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }else{
-        [self.infoTextView resignFirstResponder];
     }
-    
     return NO;
 }
 

@@ -24,6 +24,7 @@
 #import "DiningPeriod.h"
 #import "MenuItem.h"
 #import "PACircleCell.h"
+#import "PAInitialViewController.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -108,7 +109,7 @@
     
 }
 
-- (void)authenticateUserWithInfo:(NSDictionary*)userInfo
+- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller
 {
     // sends either email and password, or facebook token and link, to the server for authentication
     // expects an authentication token to be returned in response
@@ -141,11 +142,14 @@
                                           [defaults setObject:blurb forKey:@"blurb"];
                                       }
                                       [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
-
+                                      [controller dismissViewControllerAnimated:YES completion:nil];
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
+                                      PAInitialViewController* sender = (PAInitialViewController*)controller;
+                                      [sender showAlert];
+                                      
                                   }];
 
 }
@@ -675,11 +679,13 @@
 
 #pragma mark - Events actions
 
--(void)postEvent:(NSDictionary *)dictionary
+-(void)postEvent:(NSDictionary *)dictionary withImage:(NSData*)imageData
 {
+   // NSURL* path = [NSURL URLWithString:filePath];
+    
     [[PASessionManager sharedClient] POST:simple_eventsAPI
-                              parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary]
-                                 success:^
+                               parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+                                   [formData appendPartWithFileData:imageData name:@"image" fileName:@"event_photo" mimeType:@"image/png"];}                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
          //[self updateEventInfo];
