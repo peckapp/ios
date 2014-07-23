@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Subscription.h"
 
 @interface PASubscriptionCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *subscriptionTitle;
 - (IBAction)switchSubscription:(id)sender;
-
+@property (weak, nonatomic) IBOutlet UISwitch *subscriptionSwitch;
+@property (weak, nonatomic) Subscription* subscription;
 @end

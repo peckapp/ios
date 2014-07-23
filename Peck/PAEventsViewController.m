@@ -68,6 +68,7 @@ CGRect initialTableViewRect;
 -(void)viewWillAppear:(BOOL)animated{
     [[PASyncManager globalSyncManager] updateEventInfo];
     [[PASyncManager globalSyncManager] updateDiningInfo];
+    
     NSLog(@"view will appear (events)");
     showingDetail = NO;
     [self registerForKeyboardNotifications];
@@ -117,6 +118,7 @@ CGRect initialTableViewRect;
     eventsTableView.delegate = self;
 
     //[[PASyncManager globalSyncManager] updateEventInfo];
+    [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
     
     [eventsTableView reloadData];
@@ -510,6 +512,51 @@ CGRect initialTableViewRect;
     return dateString;
     
     
+}
+
+
+- (void)configureCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    Event *tempEvent;
+    tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    cell.titleLabel.text = tempEvent.title;
+    cell.startTime.text = [self dateToString:tempEvent.start_date];
+    cell.endTime.text = [self dateToString:tempEvent.end_date];
+    
+    
+    NSString *imageID = [tempEvent.id stringValue];
+    UIImage *image = [imageCache objectForKey:imageID];
+    if(image){
+        cell.photoView.image = image;
+    }else{
+        
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+        dispatch_async(queue, ^{
+            UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]]];
+            
+            UIImage* placeholderImage = [UIImage imageNamed:@"image-placeholder.png"];
+            if(img==nil){
+                img = placeholderImage;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"image id: %@", imageID);
+                
+                // change image here
+                
+                
+                
+                [imageCache setObject:img forKey:imageID];
+                cell.photoView.image =img;
+                
+                //reload the cell to display the image
+                //this will be called at most one time for each cell
+                //because the image will be loaded into the cache
+                //after the first time
+                //[eventsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+            });
+        });
+    }
 }
 
 #pragma mark - Search Bar Delegate
