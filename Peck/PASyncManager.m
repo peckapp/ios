@@ -939,7 +939,7 @@
                  NSLog(@"SUBSCRIPTION: %@",subscription);
              }
          }
-
+         [self updateSubscriptionsForCategory:@"department"];
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                      NSLog(@"ERROR: %@",error);
@@ -969,7 +969,7 @@
                  NSLog(@"SUBSCRIPTION: %@",subscription);
              }
          }
-         
+         [self updateSubscriptionsForCategory:@"club"];
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                      NSLog(@"ERROR: %@",error);
@@ -1000,6 +1000,7 @@
                  NSLog(@"SUBSCRIPTION: %@",subscription);
              }
          }
+         [self updateSubscriptionsForCategory:@"athletic"];
          
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -1019,6 +1020,53 @@
     }
     subscription.id = [dictionary objectForKey:@"id"];
     subscription.category = category;
+}
+
+
+-(void)postSubscription:(NSDictionary*)dictionary{
+    
+    [[PASessionManager sharedClient] POST:subscriptionsAPI
+                               parameters:[self applyWrapper:@"subscription" toDictionary:dictionary]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"success: %@", JSON);
+         
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+
+}
+
+-(void)updateSubscriptionsForCategory:(NSString*)category{
+    //three calls will be made to this method. It is necessary because the subscriptions must already be loaded into core date before we attemp to change its properties
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString* subscriptionURL = [subscriptionsAPI stringByAppendingString:@"?user_id="];
+    subscriptionURL = [subscriptionURL stringByAppendingString:[[defaults objectForKey:@"user_id" ] stringValue]];
+    subscriptionURL = [subscriptionURL stringByAppendingString:@"&institution="];
+    subscriptionURL = [subscriptionURL stringByAppendingString:[[defaults objectForKey:@"institution_id"] stringValue]];
+    subscriptionURL = [subscriptionURL stringByAppendingString:@"&category="];
+    subscriptionURL = [subscriptionURL stringByAppendingString:category];
+    
+    [[PASessionManager sharedClient] GET:subscriptionURL
+                              parameters:[self authenticationParameters]
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"Subscription JSON: %@",JSON);
+         NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
+         NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"subscriptions"];
+         for (NSDictionary *subscriptionAttributes in postsFromResponse) {
+             NSNumber* subID = [subscriptionAttributes objectForKey:@"subscribed_to"];
+             [[PAFetchManager sharedFetchManager] setSubscribedTrue:subID withCategory:category];
+        }
+         
+         
+     }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                 }];
+
 }
 
 

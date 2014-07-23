@@ -103,7 +103,7 @@ BOOL loggedIn;
      
      if([[segue identifier] isEqualToString:@"showSubscriptions"]){
          NSLog(@"update subscriptions");
-         [[PASyncManager globalSyncManager] updateSubscriptions];
+         
      }
  // Get the new view controller using [segue destinationViewController].
  // Pass the selected object to the new view controller.

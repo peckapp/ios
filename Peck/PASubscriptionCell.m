@@ -7,6 +7,8 @@
 //
 
 #import "PASubscriptionCell.h"
+#import "Subscription.h"
+#import "PASyncManager.h"
 
 @implementation PASubscriptionCell
 
@@ -23,7 +25,25 @@
 }
 
 - (IBAction)switchSubscription:(id)sender {
-    NSLog(@"switched the subscription");
+    
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber* institutionID = [defaults objectForKey:@"institution_id"];
+    NSNumber* userID = [defaults objectForKey:@"user_id"];
+    
+    if(self.subscriptionSwitch.on){
+        NSDictionary* subscriptionDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                self.subscription.id, @"subscribed_to",
+                                                institutionID, @"institution_id",
+                                                userID, @"user_id",
+                                                self.subscription.category, @"category",
+                                                nil];
+
+        [[PASyncManager globalSyncManager] postSubscription:subscriptionDictionary];
+        
+    }else{
+        NSLog(@"remove subscription");
+    }
     
 }
 @end

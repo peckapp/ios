@@ -10,6 +10,7 @@
 #import "PAAppDelegate.h"
 #import "Peer.h"
 #import "PASyncManager.h"
+#import "Subscription.h"
 
 @implementation PAFetchManager
 
@@ -61,12 +62,18 @@
 }
 
 -(void)loginUser{
+    // This method removes the peer from core data with id equal to the new logged in user's id.
+    // It protects against logging in on a friends phone and being able to invite yourself to events and circles
+    // The method then updates the peers (in order to load the now logged out user into core data)
+    
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     Peer* oldUser = [self getPeerWithID:[defaults objectForKey:@"user_id"]];
-    [_managedObjectContext deleteObject:oldUser];
+    if(oldUser){
+        [_managedObjectContext deleteObject:oldUser];
+    }
     
     [[PASyncManager globalSyncManager] updatePeerInfo];
 }
@@ -121,6 +128,30 @@
     NSError *error = nil;
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
     return mutableFetchResults;
+}
+
+-(void)setSubscribedTrue:(NSNumber*)subID withCategory:(NSString *)category{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Subscription" inManagedObjectContext:_managedObjectContext]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id = %@",
+                              subID];
+    NSPredicate* categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", category];
+    
+    NSArray* predicateArray = [NSArray arrayWithObjects:categoryPredicate, predicate, nil];
+    NSPredicate* compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    
+    [fetchRequest setPredicate:compoundPredicate];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    if([mutableFetchResults count]>0){
+        Subscription* tempSubscription = mutableFetchResults[0];
+        tempSubscription.subscribed = [NSNumber numberWithBool:YES];
+    }
+
 }
 
 @end

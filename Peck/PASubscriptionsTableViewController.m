@@ -83,17 +83,22 @@
 
 
 -(void)configureCell:(PASubscriptionCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    Subscription* tempSubscription;
     if(indexPath.section==0){
-        Subscription* tempSubscription = self.departmentSubscriptions[indexPath.row];
-        cell.subscriptionTitle.text = tempSubscription.name;
+        tempSubscription = self.departmentSubscriptions[indexPath.row];
     }else if(indexPath.section==1){
-        Subscription* tempSubscription = self.clubSubscriptions[indexPath.row];
-        cell.subscriptionTitle.text = tempSubscription.name;
+        tempSubscription = self.clubSubscriptions[indexPath.row];
     }else if(indexPath.section==2){
-        Subscription* tempSubscription = self.athleticSubscriptions[indexPath.row];
-        cell.subscriptionTitle.text = tempSubscription.name;
+        tempSubscription = self.athleticSubscriptions[indexPath.row];
     }
-    
+    cell.subscriptionTitle.text = tempSubscription.name;
+    cell.subscription = tempSubscription;
+    BOOL subscribed = [tempSubscription.subscribed boolValue];
+    if(subscribed){
+        cell.subscriptionSwitch.on =YES;
+    }else{
+        cell.subscriptionSwitch.on = NO;
+    }
 }
 
 

@@ -68,6 +68,7 @@ CGRect initialTableViewRect;
 -(void)viewWillAppear:(BOOL)animated{
     [[PASyncManager globalSyncManager] updateEventInfo];
     [[PASyncManager globalSyncManager] updateDiningInfo];
+    
     NSLog(@"view will appear (events)");
     showingDetail = NO;
     [self registerForKeyboardNotifications];
@@ -117,6 +118,7 @@ CGRect initialTableViewRect;
     eventsTableView.delegate = self;
 
     //[[PASyncManager globalSyncManager] updateEventInfo];
+    [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
     
     [eventsTableView reloadData];

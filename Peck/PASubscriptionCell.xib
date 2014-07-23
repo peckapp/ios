@@ -30,6 +30,7 @@
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="subscriptionSwitch" destination="efP-gY-crj" id="5rh-bf-y8G"/>
                 <outlet property="subscriptionTitle" destination="hQK-fw-NDZ" id="BFh-zJ-L4H"/>
             </connections>
         </tableViewCell>
