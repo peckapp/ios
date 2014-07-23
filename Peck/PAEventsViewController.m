@@ -477,6 +477,7 @@ CGRect initialTableViewRect;
     cell.startTime.text = [self dateToString:tempEvent.start_date];
     cell.endTime.text = [self dateToString:tempEvent.end_date];
     
+    //[[UIImageView sharedImageCache] cachedImageForRequest:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]];
     NSString *imageID = [tempEvent.id stringValue];
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
@@ -486,10 +487,11 @@ CGRect initialTableViewRect;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
             UIImageView* imageView = [[UIImageView alloc] init];
+            UIImage* image = [UIImage imageNamed:@"image-placeholder.png"];
             [imageView setImageWithURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]placeholderImage:image];
-            if(!imageView.image){
-                // this will never happen as long as there is an image named missing on the server
-                imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
+            
+            if(imageView.image==nil){
+                imageView.image = image;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"image id: %@", imageID);
@@ -498,8 +500,8 @@ CGRect initialTableViewRect;
                 
                 
                 
-                [imageCache setObject:image forKey:imageID];
-                cell.photoView.image =image;
+                [imageCache setObject:imageView.image forKey:imageID];
+                cell.photoView.image =imageView.image;
                 
                 //reload the cell to display the image
                 //this will be called at most one time for each cell
