@@ -41,7 +41,6 @@
 static NSString * cellIdentifier = PAPrimaryIdentifier;
 static NSString * nibName = @"PAEventCell";
 
-UITableView * eventsTableView;
 UISearchBar * searchBar;
 
 //CGFloat  cellHeight;
@@ -56,31 +55,6 @@ CGRect initialTableViewRect;
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    
-
-}
-
--(void)viewDidDisappear:(BOOL)animated{
-    if(!showingDetail){
-        [eventsTableView reloadData];
-    }
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    [[PASyncManager globalSyncManager] updateEventInfo];
-    [[PASyncManager globalSyncManager] updateDiningInfo];
-    
-    NSLog(@"view will appear (events)");
-    showingDetail = NO;
-    [self registerForKeyboardNotifications];
-    searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
-    eventsTableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, (self.view.frame.size.height) - searchBarHeight);
-    initialTableViewRect= eventsTableView.frame;
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [self.view endEditing:YES];
-    [self deregisterFromKeyboardNotifications];
 }
 
 - (void)viewDidLoad
@@ -110,19 +84,48 @@ CGRect initialTableViewRect;
        
     self.title = @"Events";
     
-    if(!eventsTableView){
-        eventsTableView = [[UITableView alloc] init];
-        [self.view addSubview:eventsTableView];
+    if(!self.tableView){
+        self.tableView = [[UITableView alloc] init];
+        [self.view addSubview:self.tableView];
     }
 
-    eventsTableView.dataSource = self;
-    eventsTableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
 
     //[[PASyncManager globalSyncManager] updateEventInfo];
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
     
-    [eventsTableView reloadData];
+    [self.tableView reloadData];
+
+    UIView * backView = [[UIView alloc] init];
+    backView.backgroundColor = [UIColor blackColor];
+    [self.tableView setBackgroundView:backView];
+
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [[PASyncManager globalSyncManager] updateEventInfo];
+    [[PASyncManager globalSyncManager] updateDiningInfo];
+
+    NSLog(@"view will appear (events)");
+    showingDetail = NO;
+    [self registerForKeyboardNotifications];
+    searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
+    self.tableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, (self.view.frame.size.height) - searchBarHeight);
+    initialTableViewRect= self.tableView.frame;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [self.view endEditing:YES];
+    [self deregisterFromKeyboardNotifications];
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    if(!showingDetail){
+        [self.tableView reloadData];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -217,18 +220,18 @@ CGRect initialTableViewRect;
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
-    [eventsTableView beginUpdates];
+    [self.tableView beginUpdates];
 }
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
     switch(type) {
         case NSFetchedResultsChangeInsert:
-            [eventsTableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeDelete:
-            [eventsTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
 }
@@ -237,12 +240,11 @@ CGRect initialTableViewRect;
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
     NSLog(@"did change object");
-    UITableView *tableView = eventsTableView;
     
     switch(type)
     {
         case NSFetchedResultsChangeInsert:
-            [tableView
+            [self.tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
@@ -250,22 +252,22 @@ CGRect initialTableViewRect;
         case NSFetchedResultsChangeDelete:
             //Event *tempEvent = (Event *)anObject;
             [[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
-            [tableView
+            [self.tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:[tableView cellForRowAtIndexPath:indexPath]
+            [self configureCell:[self.tableView cellForRowAtIndexPath:indexPath]
                     atIndexPath:indexPath];
             break;
             
         case NSFetchedResultsChangeMove:
-            [tableView
+            [self.tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             
-            [tableView
+            [self.tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
@@ -274,7 +276,7 @@ CGRect initialTableViewRect;
 
 - (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
 {
-    [eventsTableView endUpdates];
+    [self.tableView endUpdates];
 }
 
 #pragma mark - Table View
@@ -416,14 +418,14 @@ CGRect initialTableViewRect;
 {
     if ([[segue identifier] isEqualToString:@"showEventDetail"]) {
         showingDetail=YES;
-        NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         NSManagedObject *object;
         object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setDetailItem:object];
     }else if([[segue identifier] isEqualToString:@"showDiningDetail"]){
         
         showingDetail=YES;
-        NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         NSManagedObject *object;
         object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         //Event *diningEvent=(Event*)object;
@@ -478,21 +480,25 @@ CGRect initialTableViewRect;
     cell.titleLabel.text = tempEvent.title;
     cell.startTime.text = [self dateToString:tempEvent.start_date];
     cell.endTime.text = [self dateToString:tempEvent.end_date];
+
+    cell.clipsToBounds = YES;
     
     
     NSString *imageID = [tempEvent.id stringValue];
     UIImage *image = [imageCache objectForKey:imageID];
-    if(image){
-        cell.photoView.image = image;
-    }else{
-        
+    if (image) {
+        UIImageView * imageView = [[UIImageView alloc] initWithFrame:cell.frame];
+        imageView.image = image;
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        cell.backgroundView = imageView;
+    }
+    else {
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
             UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]]];
-            
-            UIImage* placeholderImage = [UIImage imageNamed:@"image-placeholder.png"];
-            if(img==nil){
-                img = placeholderImage;
+
+            if(img == nil) {
+                img = [UIImage imageNamed:@"image-placeholder.png"];
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"image id: %@", imageID);
@@ -503,6 +509,7 @@ CGRect initialTableViewRect;
                 [imageCache setObject:blurredImage forKey:imageID];
                 UIImageView * imageView = [[UIImageView alloc] initWithFrame:cell.frame];
                 imageView.image = blurredImage;
+                imageView.contentMode = UIViewContentModeScaleAspectFill;
                 cell.backgroundView = imageView;
                 
                 //reload the cell to display the image
@@ -538,7 +545,7 @@ CGRect initialTableViewRect;
             abort();
         }
     
-        [eventsTableView reloadData];
+        [self.tableView reloadData];
     }
 }
 
@@ -594,7 +601,7 @@ CGRect initialTableViewRect;
         abort();
     }
     
-    [eventsTableView reloadData];
+    [self.tableView reloadData];
 }
 
 #pragma mark - keyboard notifications
@@ -626,18 +633,18 @@ CGRect initialTableViewRect;
 
 
 - (void)keyboardWasShown:(NSNotification *)notification {
-    if(CGRectEqualToRect(eventsTableView.frame,initialTableViewRect)){
+    if(CGRectEqualToRect(self.tableView.frame,initialTableViewRect)){
         NSDictionary* info = [notification userInfo];
         CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-        eventsTableView.frame = CGRectMake(eventsTableView.frame.origin.x, eventsTableView.frame.origin.y, eventsTableView.frame.size.width, eventsTableView.frame.size.height-keyboardSize.height);
+        self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
     }
 }
 
 - (void)keyboardWillBeHidden:(NSNotification *)notification {
-    if(!CGRectEqualToRect(eventsTableView.frame,initialTableViewRect)){
+    if(!CGRectEqualToRect(self.tableView.frame, initialTableViewRect)){
         NSDictionary* info = [notification userInfo];
         CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-        eventsTableView.frame = CGRectMake(eventsTableView.frame.origin.x, eventsTableView.frame.origin.y, eventsTableView.frame.size.width, eventsTableView.frame.size.height+keyboardSize.height);
+        self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height+keyboardSize.height);
     }
     
 }

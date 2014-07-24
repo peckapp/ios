@@ -19,7 +19,11 @@
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+@property (strong, nonatomic) UITableView * tableView;
+
 - (IBAction)yesterdayButton:(id)sender;
 - (IBAction)todayButton:(id)sender;
 - (IBAction)tomorrowButton:(id)sender;
+
 @end
