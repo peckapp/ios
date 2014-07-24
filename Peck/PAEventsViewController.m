@@ -116,6 +116,7 @@ CGRect initialTableViewRect;
     searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
     self.tableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, (self.view.frame.size.height) - searchBarHeight);
     initialTableViewRect= self.tableView.frame;
+
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -480,7 +481,7 @@ CGRect initialTableViewRect;
         CGFloat cellPosition = (i * cellHeight) + cellHeight / 2;
         CGFloat scrollPosition = scrollView.contentOffset.y + (self.view.frame.size.height / 2);
         CGRect frame = cell.backgroundView.frame;
-        frame.origin.y = (scrollPosition - cellPosition) / 4;
+        frame.origin.y = (scrollPosition - cellPosition) / 3;
         cell.backgroundView.frame = frame;
     }
 }
