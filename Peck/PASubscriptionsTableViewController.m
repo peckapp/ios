@@ -69,8 +69,10 @@
     // Return the number of rows in the section.
     if(section==0)
         return [self.departmentSubscriptions count];
-    else
+    else if(section==1)
         return [self.clubSubscriptions count];
+    else
+        return [self.athleticSubscriptions count];
 }
 
 
