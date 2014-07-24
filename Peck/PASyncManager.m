@@ -28,6 +28,7 @@
 #import "PAChangePasswordViewController.h"
 #import "Subscription.h"
 #import "PAFetchManager.h"
+#import "PAEventsViewController.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -742,7 +743,7 @@
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
-         [self updateEventInfo];
+         [self updateEventInfoForViewController:nil];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -765,7 +766,7 @@
 
 }
 
--(void)updateEventInfo
+-(void)updateEventInfoForViewController:(UIViewController*)controller
 {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
@@ -793,8 +794,18 @@
                      [self setAttributesInEvent:event withDictionary:eventAttributes];
                      [mutableEvents addObject:event];
                      //NSLog(@"EVENT: %@",event);
-                 }
+                    }
+             }if([controller isKindOfClass:[PAEventsViewController class]]){
+                 PAEventsViewController* sender = (PAEventsViewController*)controller;
+                 [sender cacheImages];
+                 /*UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:event.imageURL]]]];
+                  if(img==nil){
+                  img = [UIImage imageNamed:@"image-placeholder.png"];
+                  }
+                  [sender.imageCache setObject:img forKey:[event.id stringValue]];*/
              }
+
+             
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                          NSLog(@"ERROR: %@",error);
@@ -1039,6 +1050,38 @@
 
 }
 
+-(void)deleteSubscriptions:(NSMutableArray*)array{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* stringFromArray = @"[";
+    for(int i =0; i<[array count];i++){
+        stringFromArray = [stringFromArray stringByAppendingString:[array[i] stringValue]];
+        if(i!=([array count]-1)){
+            stringFromArray = [stringFromArray stringByAppendingString:@","];
+        }
+    }
+    stringFromArray = [stringFromArray stringByAppendingString:@"]"];
+    NSString* deleteURL = [subscriptionsAPI stringByAppendingString:@"/"];
+    deleteURL = [deleteURL stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
+    deleteURL = [deleteURL stringByAppendingString:@"?"];
+    deleteURL = [deleteURL stringByAppendingString:@"subscriptions="];
+    deleteURL = [deleteURL stringByAppendingString:stringFromArray];
+    
+    NSLog(@"deleteURL: %@", deleteURL);
+    
+    [[PASessionManager sharedClient] DELETE:deleteURL
+                                 parameters:[self authenticationParameters]
+                                    success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"success: %@", JSON);
+     }
+                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                        NSLog(@"ERROR: %@",error);
+                                    }];
+
+    
+    
+}
+
 -(void)updateSubscriptionsForCategory:(NSString*)category{
     //three calls will be made to this method. It is necessary because the subscriptions must already be loaded into core date before we attemp to change its properties
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -1059,7 +1102,10 @@
          NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"subscriptions"];
          for (NSDictionary *subscriptionAttributes in postsFromResponse) {
              NSNumber* subID = [subscriptionAttributes objectForKey:@"subscribed_to"];
-             [[PAFetchManager sharedFetchManager] setSubscribedTrue:subID withCategory:category];
+             NSNumber* subscriptionID = [subscriptionAttributes objectForKey:@"id"];
+             //the sub id is the id of the department, club, or athletic team that the user is subscribed to
+             //and the subscription id is the is of the acutal subscription (link between the user and subscription)
+             [[PAFetchManager sharedFetchManager] setSubscribedTrue:subID withCategory:category andSubscriptionID:subscriptionID];
         }
          
          

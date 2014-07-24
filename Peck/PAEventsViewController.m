@@ -45,7 +45,7 @@ UISearchBar * searchBar;
 
 //CGFloat  cellHeight;
 
-NSCache * imageCache;
+//NSCache * imageCache;
 BOOL showingDetail;
 NSString *searchBarText;
 NSDate *today;
@@ -66,7 +66,7 @@ CGRect initialTableViewRect;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [[PASyncManager globalSyncManager] updateEventInfo];
+    [[PASyncManager globalSyncManager] updateEventInfoForViewController:self];
     [[PASyncManager globalSyncManager] updateDiningInfo];
     
     NSLog(@"view will appear (events)");
@@ -75,6 +75,7 @@ CGRect initialTableViewRect;
     searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
     eventsTableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, (self.view.frame.size.height) - searchBarHeight);
     initialTableViewRect= eventsTableView.frame;
+    [self cacheImages];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -103,8 +104,8 @@ CGRect initialTableViewRect;
     }
     
     
-    if(!imageCache){
-        imageCache = [[NSCache alloc] init];
+    if(!self.imageCache){
+        self.imageCache = [[NSCache alloc] init];
     }
        
     self.title = @"Events";
@@ -128,6 +129,32 @@ CGRect initialTableViewRect;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+-(void)cacheImages{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Event" inManagedObjectContext:_managedObjectContext]];
+   
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    
+    for(int i =0; i<[mutableFetchResults count];i++){
+        Event* event = mutableFetchResults[i];
+        UIImage* img = [self.imageCache objectForKey:[event.id stringValue]];
+        if(!img){
+            if(event.imageURL){
+                img = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:event.imageURL]]]];
+            }
+            if(img==nil){
+                img = [UIImage imageNamed:@"image-placeholder.png"];
+            }
+            [self.imageCache setObject:img forKey:[event.id stringValue]];
+        }
+    }
 }
 
 #pragma mark - Fetched Results controller
@@ -482,7 +509,7 @@ CGRect initialTableViewRect;
     
     
     NSString *imageID = [tempEvent.id stringValue];
-    UIImage *image = [imageCache objectForKey:imageID];
+    UIImage *image = [self.imageCache objectForKey:imageID];
     if(image){
         cell.photoView.image = image;
     }else{
@@ -502,7 +529,7 @@ CGRect initialTableViewRect;
                 
                 
                 
-                [imageCache setObject:img forKey:imageID];
+                [self.imageCache setObject:img forKey:imageID];
                 cell.photoView.image =img;
                 
                 //reload the cell to display the image

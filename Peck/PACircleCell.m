@@ -358,10 +358,10 @@ UITextView *textViewHelper;
             [parent promptToAddMemberToCircleCell:self];
         }
         else{
-            NSLog(@"view the member");
             /*PACirclesTableViewController *parent = (PACirclesTableViewController *) self.parentViewController;
-            Peer *member = self.members[[indexPath row]];
             [parent showProfileOf:member];*/
+             Peer *member = self.members[[indexPath row]];
+             NSLog(@"view the member %@", member.name);
         }
     }
     else if (tableView == self.commentsTableView) {

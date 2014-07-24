@@ -2,7 +2,7 @@
 //  Subscription.m
 //  Peck
 //
-//  Created by John Karabinos on 7/23/14.
+//  Created by John Karabinos on 7/24/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -11,9 +11,10 @@
 
 @implementation Subscription
 
-@dynamic name;
 @dynamic category;
 @dynamic id;
+@dynamic name;
 @dynamic subscribed;
+@dynamic subscription_id;
 
 @end

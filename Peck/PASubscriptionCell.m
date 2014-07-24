@@ -49,6 +49,7 @@
         NSLog(@"remove subscription");
         self.subscription.subscribed = [NSNumber numberWithBool:NO];
         [parent.addedSubscriptions removeObjectForKey:subKey];
+        [parent.deletedSubscriptions addObject:self.subscription.subscription_id];
     }
     
 }

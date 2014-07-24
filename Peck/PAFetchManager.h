@@ -22,5 +22,5 @@
 -(void)logoutUser;
 -(void)loginUser;
 -(NSMutableArray*)fetchSubscriptionsForCategory:(NSString*)category;
--(void)setSubscribedTrue:(NSNumber*)subID withCategory:(NSString*)category;
+-(void)setSubscribedTrue:(NSNumber*)subID withCategory:(NSString*)category andSubscriptionID:(NSNumber*)subscriptionID;
 @end

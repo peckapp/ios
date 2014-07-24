@@ -135,7 +135,7 @@
     return mutableFetchResults;
 }
 
--(void)setSubscribedTrue:(NSNumber*)subID withCategory:(NSString *)category{
+-(void)setSubscribedTrue:(NSNumber*)subID withCategory:(NSString *)category andSubscriptionID:(NSNumber*)subscriptionID{
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     
@@ -155,6 +155,7 @@
     if([mutableFetchResults count]>0){
         Subscription* tempSubscription = mutableFetchResults[0];
         tempSubscription.subscribed = [NSNumber numberWithBool:YES];
+        tempSubscription.subscription_id = subscriptionID;
     }
 
 }

@@ -92,6 +92,7 @@
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="subscribed" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="subscription_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
     <elements>
         <element name="Circle" positionX="261" positionY="198" width="128" height="105"/>
@@ -104,6 +105,6 @@
         <element name="MenuItem" positionX="90" positionY="342" width="128" height="103"/>
         <element name="Message" positionX="261" positionY="261" width="128" height="118"/>
         <element name="Peer" positionX="261" positionY="261" width="128" height="30"/>
-        <element name="Subscription" positionX="90" positionY="342" width="128" height="103"/>
+        <element name="Subscription" positionX="90" positionY="342" width="128" height="120"/>
     </elements>
 </model>

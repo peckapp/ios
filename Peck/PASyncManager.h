@@ -36,7 +36,7 @@
 -(void)updateAvailableInstitutionsWithCallback:(void(^)(BOOL sucess))callbackBlock;
 
 // methods for updating events
--(void)updateEventInfo;
+-(void)updateEventInfoForViewController:(UIViewController*)controller;
 -(void)postEvent:(NSDictionary *) dictionary withImage:(NSData*)filePath;
 -(void)deleteEvent:(NSNumber*)eventID;
 
@@ -63,6 +63,7 @@
 //methods for subscriptions
 -(void)updateSubscriptions;
 -(void)postSubscriptions:(NSArray*)array;
+-(void)deleteSubscriptions:(NSMutableArray*)array;
 
 -(BOOL)objectExists:(NSNumber *)newID withType: (NSString *) type;
 @end
