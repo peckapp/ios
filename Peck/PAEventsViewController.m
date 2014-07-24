@@ -484,7 +484,7 @@ CGRect initialTableViewRect;
         imageView.image = cachedImage;
     }
     else {
-        imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
+        imageView.image = [UIImage imageNamed:@"event-placeholder.png"];
     }
 
     imageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -492,17 +492,17 @@ CGRect initialTableViewRect;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{/*
+{
     for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
     {
         UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         CGFloat cellHeight = cell.frame.size.height;
-        CGFloat cellPosition = (i * cellHeight) + cellHeight / 2;
-        CGFloat scrollPosition = scrollView.contentOffset.y + (self.view.frame.size.height / 2);
+        CGFloat cellPosition = i * cellHeight;
+        CGFloat scrollPosition = scrollView.contentOffset.y;
         CGRect frame = cell.backgroundView.frame;
-        frame.origin.y = (scrollPosition - cellPosition) / 3;
+        frame.origin.y = scrollPosition - cellPosition;
         cell.backgroundView.frame = frame;
-    }*/
+    }
 }
 
 #pragma mark - Search Bar Delegate

@@ -12,7 +12,7 @@
 
 - (void)awakeFromNib
 {
-
+    self.backgroundView = self.eventImageView;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

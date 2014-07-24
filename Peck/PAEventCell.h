@@ -13,4 +13,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *startTime;
 @property (weak, nonatomic) IBOutlet UILabel *endTime;
 
+@property (strong, nonatomic) UIImageView * eventImageView;
+
 @end
