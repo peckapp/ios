@@ -21,13 +21,14 @@
 #import "AFNetworking.h"
 #import "UIImageView+AFNetworking.h"
 #import "PADiningOpportunityCell.h"
+#import "UIImage+ImageEffects.h"
 
 #define statusBarHeight 20
 #define searchBarHeight 44
-#define cellHeight 88
+
 @interface PAEventsViewController ()
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+@property (strong, nonatomic) NSCache * imageCache;
 
 @end
 
@@ -40,7 +41,6 @@
 static NSString * cellIdentifier = PAPrimaryIdentifier;
 static NSString * nibName = @"PAEventCell";
 
-UITableView * eventsTableView;
 UISearchBar * searchBar;
 
 //CGFloat  cellHeight;
@@ -87,6 +87,8 @@ CGRect initialTableViewRect;
 {
     [super viewDidLoad];
     NSLog(@"View did load (events)");
+
+    self.title = @"Events";
     
     selectedDay=0;
     showingDetail = NO;
@@ -107,22 +109,51 @@ CGRect initialTableViewRect;
     if(!self.imageCache){
         self.imageCache = [[NSCache alloc] init];
     }
-       
-    self.title = @"Events";
     
-    if(!eventsTableView){
-        eventsTableView = [[UITableView alloc] init];
-        [self.view addSubview:eventsTableView];
+    if(!self.tableView){
+        self.tableView = [[UITableView alloc] init];
+        [self.view addSubview:self.tableView];
     }
 
-    eventsTableView.dataSource = self;
-    eventsTableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
 
-    //[[PASyncManager globalSyncManager] updateEventInfo];
+    UIView * backView = [[UIView alloc] init];
+    backView.backgroundColor = [UIColor blackColor];
+    [self.tableView setBackgroundView:backView];
+
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
-    
-    [eventsTableView reloadData];
+
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+    [self.tableView reloadData];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [[PASyncManager globalSyncManager] updateEventInfo];
+    [[PASyncManager globalSyncManager] updateDiningInfo];
+
+    NSLog(@"View will appear (events)");
+    showingDetail = NO;
+    [self registerForKeyboardNotifications];
+    searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
+    self.tableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, (self.view.frame.size.height) - searchBarHeight);
+    initialTableViewRect= self.tableView.frame;
+
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [self.view endEditing:YES];
+    [self deregisterFromKeyboardNotifications];
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    if(!showingDetail){
+        [self.tableView reloadData];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -243,18 +274,18 @@ CGRect initialTableViewRect;
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
-    [eventsTableView beginUpdates];
+    [self.tableView beginUpdates];
 }
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
     switch(type) {
         case NSFetchedResultsChangeInsert:
-            [eventsTableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeDelete:
-            [eventsTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
 }
@@ -263,12 +294,11 @@ CGRect initialTableViewRect;
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
     NSLog(@"did change object");
-    UITableView *tableView = eventsTableView;
     
     switch(type)
     {
         case NSFetchedResultsChangeInsert:
-            [tableView
+            [self.tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
@@ -276,22 +306,21 @@ CGRect initialTableViewRect;
         case NSFetchedResultsChangeDelete:
             //Event *tempEvent = (Event *)anObject;
             [[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
-            [tableView
+            [self.tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:[tableView cellForRowAtIndexPath:indexPath]
-                    atIndexPath:indexPath];
+            [self.tableView cellForRowAtIndexPath:indexPath];
             break;
             
         case NSFetchedResultsChangeMove:
-            [tableView
+            [self.tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             
-            [tableView
+            [self.tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
@@ -300,52 +329,10 @@ CGRect initialTableViewRect;
 
 - (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
 {
-    [eventsTableView endUpdates];
+    [self.tableView endUpdates];
 }
 
 #pragma mark - Table View
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    /*
-    int currentHeight = (int)[[eventsTableView.layer presentationLayer] bounds].origin.y;
-    if(currentHeight>lastCurrentHeight && currentHeight>0){
-        if((([_fetchedResultsController.fetchedObjects count] * 88 > eventsTableView.frame.size.height + searchBarThickness)&& !searching) || (([_searchFetchedResultsController.fetchedObjects count] * 44 > eventsTableView.frame.size.height) && searching)) {
-
-            // only scroll the scroll bar up if the number of events goes off screen
-            int tempCurrentHeight = currentHeight;
-            if(currentHeight > searchBarHeight){
-                tempCurrentHeight = searchBarHeight;
-            }
-
-            CGRect tempSearchRect = initialSearchBarRect;
-            tempSearchRect.origin.y = initialSearchBarRect.origin.y -tempCurrentHeight;
-            searchBar.frame=tempSearchRect;
-            CGRect tempTableViewRect = initialTableViewRect;
-            tempTableViewRect.origin.y = initialTableViewRect.origin.y - tempCurrentHeight;
-            tempTableViewRect.size.height = initialTableViewRect.size.height+tempCurrentHeight;
-            eventsTableView.frame=tempTableViewRect;
-        }
-        
-    }
-    else if(currentHeight<lastCurrentHeight){
-        if(currentHeight<=0){
-            if(!CGRectEqualToRect(searchBar.frame ,initialSearchBarRect)){
-            for(int i=0; i<=searchBarThickness;i++){
-                CGRect tempSearchRect = initialSearchBarRect;
-                tempSearchRect.origin.y = initialSearchBarRect.origin.y +i -searchBarThickness;
-                searchBar.frame=tempSearchRect;
-                CGRect tempTableViewRect = initialTableViewRect;
-                tempTableViewRect.origin.y = initialTableViewRect.origin.y +i-searchBarThickness;
-                tempTableViewRect.size.height = initialTableViewRect.size.height-i+searchBarThickness;
-                eventsTableView.frame=tempTableViewRect;
-            }
-            }
-        }
-    }
-    
-    lastCurrentHeight=currentHeight;
-    */
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -382,9 +369,10 @@ CGRect initialTableViewRect;
 
 -(void)configureDiningCell:(PADiningOpportunityCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     Event* tempDiningEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
+
     cell.nameLabel.text = tempDiningEvent.title;
-    cell.startTimeLabel.text = [self dateToString:tempDiningEvent.start_date];
-    cell.endTimeLabel.text = [self dateToString:tempDiningEvent.end_date];
+    //cell.startTimeLabel.text = [self dateToString:tempDiningEvent.start_date];
+    //cell.endTimeLabel.text = [self dateToString:tempDiningEvent.end_date];
     
 }
 
@@ -397,7 +385,7 @@ CGRect initialTableViewRect;
     if([tempEvent.type isEqualToString:@"dining"]){
         return 44;
     }
-    return cellHeight;
+    return 88;
 }
 
 
@@ -444,14 +432,14 @@ CGRect initialTableViewRect;
 {
     if ([[segue identifier] isEqualToString:@"showEventDetail"]) {
         showingDetail=YES;
-        NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         NSManagedObject *object;
         object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setDetailItem:object];
     }else if([[segue identifier] isEqualToString:@"showDiningDetail"]){
         
         showingDetail=YES;
-        NSIndexPath *indexPath = [eventsTableView indexPathForSelectedRow];
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         NSManagedObject *object;
         object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         //Event *diningEvent=(Event*)object;
@@ -516,12 +504,9 @@ CGRect initialTableViewRect;
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
-            UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]]];
-            
-            UIImage* placeholderImage = [UIImage imageNamed:@"image-placeholder.png"];
-            if(img==nil){
-                img = placeholderImage;
-            }
+
+            UIImage * loadedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]]];
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"image id: %@", imageID);
                 
@@ -539,6 +524,23 @@ CGRect initialTableViewRect;
                 //[eventsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
             });
         });
+    }
+
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    cell.backgroundView = imageView;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
+    {
+        UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        CGFloat cellHeight = cell.frame.size.height;
+        CGFloat cellPosition = (i * cellHeight) + cellHeight / 2;
+        CGFloat scrollPosition = scrollView.contentOffset.y + (self.view.frame.size.height / 2);
+        CGRect frame = cell.backgroundView.frame;
+        frame.origin.y = (scrollPosition - cellPosition) / 3;
+        cell.backgroundView.frame = frame;
     }
 }
 
@@ -565,7 +567,7 @@ CGRect initialTableViewRect;
             abort();
         }
     
-        [eventsTableView reloadData];
+        [self.tableView reloadData];
     }
 }
 
@@ -621,7 +623,7 @@ CGRect initialTableViewRect;
         abort();
     }
     
-    [eventsTableView reloadData];
+    [self.tableView reloadData];
 }
 
 #pragma mark - keyboard notifications
@@ -653,18 +655,18 @@ CGRect initialTableViewRect;
 
 
 - (void)keyboardWasShown:(NSNotification *)notification {
-    if(CGRectEqualToRect(eventsTableView.frame,initialTableViewRect)){
+    if(CGRectEqualToRect(self.tableView.frame, initialTableViewRect)){
         NSDictionary* info = [notification userInfo];
         CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-        eventsTableView.frame = CGRectMake(eventsTableView.frame.origin.x, eventsTableView.frame.origin.y, eventsTableView.frame.size.width, eventsTableView.frame.size.height-keyboardSize.height);
+        self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
     }
 }
 
 - (void)keyboardWillBeHidden:(NSNotification *)notification {
-    if(!CGRectEqualToRect(eventsTableView.frame,initialTableViewRect)){
+    if(!CGRectEqualToRect(self.tableView.frame, initialTableViewRect)){
         NSDictionary* info = [notification userInfo];
         CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-        eventsTableView.frame = CGRectMake(eventsTableView.frame.origin.x, eventsTableView.frame.origin.y, eventsTableView.frame.size.width, eventsTableView.frame.size.height+keyboardSize.height);
+        self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height+keyboardSize.height);
     }
     
 }
