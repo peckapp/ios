@@ -28,7 +28,7 @@
 
 @interface PAEventsViewController ()
 
-@property (strong, nonatomic) NSCache * imageCache;
+
 
 @end
 
@@ -55,33 +55,8 @@ CGRect initialTableViewRect;
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    
-
 }
 
--(void)viewDidDisappear:(BOOL)animated{
-    if(!showingDetail){
-        [eventsTableView reloadData];
-    }
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    [[PASyncManager globalSyncManager] updateEventInfoForViewController:self];
-    [[PASyncManager globalSyncManager] updateDiningInfo];
-    
-    NSLog(@"view will appear (events)");
-    showingDetail = NO;
-    [self registerForKeyboardNotifications];
-    searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
-    eventsTableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, (self.view.frame.size.height) - searchBarHeight);
-    initialTableViewRect= eventsTableView.frame;
-    [self cacheImages];
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [self.view endEditing:YES];
-    [self deregisterFromKeyboardNotifications];
-}
 
 - (void)viewDidLoad
 {
@@ -133,7 +108,7 @@ CGRect initialTableViewRect;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [[PASyncManager globalSyncManager] updateEventInfo];
+    [[PASyncManager globalSyncManager] updateEventInfoForViewController:self];
     [[PASyncManager globalSyncManager] updateDiningInfo];
 
     NSLog(@"View will appear (events)");
@@ -142,6 +117,7 @@ CGRect initialTableViewRect;
     searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
     self.tableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, (self.view.frame.size.height) - searchBarHeight);
     initialTableViewRect= self.tableView.frame;
+    [self cacheImages];
 
 }
 
@@ -183,6 +159,9 @@ CGRect initialTableViewRect;
             if(img==nil){
                 img = [UIImage imageNamed:@"image-placeholder.png"];
             }
+            
+            //change image here
+            
             [self.imageCache setObject:img forKey:[event.id stringValue]];
         }
     }
@@ -494,14 +473,24 @@ CGRect initialTableViewRect;
     cell.titleLabel.text = tempEvent.title;
     cell.startTime.text = [self dateToString:tempEvent.start_date];
     cell.endTime.text = [self dateToString:tempEvent.end_date];
+
+    cell.clipsToBounds = YES;
+
+    UIImageView * imageView = [[UIImageView alloc] initWithFrame:cell.frame];
+
+    NSString * imageID = [tempEvent.id stringValue];
+    UIImage * cachedImage = [self.imageCache objectForKey:imageID];
+
+    if (cachedImage) {
+        imageView.image = cachedImage;
+    }
     
+    /*else{
+     imageView.image = placeholder;
+     }
+     */
     
-    NSString *imageID = [tempEvent.id stringValue];
-    UIImage *image = [self.imageCache objectForKey:imageID];
-    if(image){
-        cell.photoView.image = image;
-    }else{
-        
+    else if (tempEvent.imageURL != nil){
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
 
@@ -509,19 +498,11 @@ CGRect initialTableViewRect;
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"image id: %@", imageID);
-                
-                // change image here
-                
-                
-                
-                [self.imageCache setObject:img forKey:imageID];
-                cell.photoView.image =img;
-                
-                //reload the cell to display the image
-                //this will be called at most one time for each cell
-                //because the image will be loaded into the cache
-                //after the first time
-                //[eventsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+
+                // Add effects to image
+                UIImage * blurredImage = [loadedImage applyDarkEffect];
+                imageView.image = blurredImage;
+                [self.imageCache setObject:blurredImage forKey:imageID];
             });
         });
     }
