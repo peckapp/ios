@@ -62,7 +62,7 @@
 
 //methods for subscriptions
 -(void)updateSubscriptions;
--(void)postSubscription:(NSMutableArray*)array;
+-(void)postSubscriptions:(NSArray*)array;
 
 -(BOOL)objectExists:(NSNumber *)newID withType: (NSString *) type;
 @end

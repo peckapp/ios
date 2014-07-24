@@ -1023,7 +1023,7 @@
 }
 
 
--(void)postSubscription:(NSMutableArray*)array{
+-(void)postSubscriptions:(NSArray*)array{
     
     [[PASessionManager sharedClient] POST:subscriptionsAPI
                                parameters:[self applyWrapper:@"subscriptions" toArray:array]
@@ -1148,7 +1148,7 @@
     return [baseDictionary copy];
 }
 
--(NSDictionary*)applyWrapper:(NSString*)wrapperString toArray:(NSMutableArray*)array{
+-(NSDictionary*)applyWrapper:(NSString*)wrapperString toArray:(NSArray*)array{
     NSMutableDictionary *baseDictionary = [[NSDictionary dictionaryWithObject:array forKey:wrapperString] mutableCopy];
     
     [baseDictionary setValuesForKeysWithDictionary:[self authenticationParameters]];

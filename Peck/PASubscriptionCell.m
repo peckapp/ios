@@ -31,6 +31,8 @@
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSNumber* institutionID = [defaults objectForKey:@"institution_id"];
     NSNumber* userID = [defaults objectForKey:@"user_id"];
+    PASubscriptionsTableViewController* parent = (PASubscriptionsTableViewController*)self.parentViewController;
+     NSString* subKey = [self.subscription.category stringByAppendingString:[self.subscription.id stringValue]];
     
     if(self.subscriptionSwitch.on){
         self.subscription.subscribed = [NSNumber numberWithBool:YES];
@@ -41,13 +43,12 @@
                                                 self.subscription.category, @"category",
                                                 nil];
 
-        PASubscriptionsTableViewController* parent = (PASubscriptionsTableViewController*)self.parentViewController;
-        [parent.addedSubscriptions addObject:subscriptionDictionary];
-        
-        
+       
+        [parent.addedSubscriptions setObject:subscriptionDictionary forKey:subKey];
     }else{
         NSLog(@"remove subscription");
         self.subscription.subscribed = [NSNumber numberWithBool:NO];
+        [parent.addedSubscriptions removeObjectForKey:subKey];
     }
     
 }
