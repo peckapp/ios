@@ -21,6 +21,7 @@
 #import "AFNetworking.h"
 #import "UIImageView+AFNetworking.h"
 #import "PADiningOpportunityCell.h"
+#import "UIImage+ImageEffects.h"
 
 #define statusBarHeight 20
 #define searchBarHeight 44
@@ -496,12 +497,13 @@ CGRect initialTableViewRect;
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"image id: %@", imageID);
                 
-                // change image here
-                
-                
-                
-                [imageCache setObject:img forKey:imageID];
-                cell.photoView.image =img;
+                // Add effects to image
+                UIImage * blurredImage = [img applyDarkEffect];
+
+                [imageCache setObject:blurredImage forKey:imageID];
+                UIImageView * imageView = [[UIImageView alloc] initWithFrame:cell.frame];
+                imageView.image = blurredImage;
+                cell.backgroundView = imageView;
                 
                 //reload the cell to display the image
                 //this will be called at most one time for each cell
