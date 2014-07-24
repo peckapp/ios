@@ -561,20 +561,16 @@ CGRect initialTableViewRect;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-    //dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-    //dispatch_async(queue, ^{
-        /*dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });*/
-    //});
-    
-    
-    
+    NSMutableArray* fetchedEvents = [[NSMutableArray alloc] init];
+    for(int i =0; i<[_fetchedResultsController.fetchedObjects count];i++){
+        Event* tempEvent = _fetchedResultsController.fetchedObjects[i];
+        [fetchedEvents addObject:tempEvent];
+    }
     dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
     dispatch_async(myQueue, ^{
         // Perform long running process
-        for(int i =0; i<[_fetchedResultsController.fetchedObjects count];i++){
-            Event* event = _fetchedResultsController.fetchedObjects[i];
+        for(int i =0; i<[fetchedEvents count];i++){
+            Event* event = fetchedEvents[i];
             if([event.type isEqualToString:@"simple"]){
                 [self cacheImageForEvent:event];
             }
