@@ -463,9 +463,6 @@ CGRect initialTableViewRect;
     UIImageView * imageView = [[UIImageView alloc] initWithFrame:cell.frame];
 
     NSString * imageID = [tempEvent.id stringValue];
-    
-    NSLog(@"event %@ has an imageID of %@",tempEvent.title, imageID);
-    
     UIImage * cachedImage = [self.imageCache objectForKey:imageID];
 
     if (cachedImage) {

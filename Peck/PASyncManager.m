@@ -728,14 +728,21 @@
 
 -(void)postEvent:(NSDictionary *)dictionary withImage:(NSData*)filePath
 {
-  // NSString* fileName = [@"event_photo" stringByAppendingString:[[dictionary ob]]]
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSDate* now = [NSDate date];
+    NSTimeInterval nowEpochSeconds = [now timeIntervalSince1970];
+    NSInteger seconds = (NSInteger)nowEpochSeconds;
     
-    
+    NSString* fileName = [@"event_photo_" stringByAppendingString:[[defaults objectForKey:@"user_id" ] stringValue]];
+    fileName = [fileName stringByAppendingString:@"_"];
+    fileName = [fileName stringByAppendingString:[@(seconds) stringValue]];
+    fileName = [fileName stringByAppendingString:@".jpeg"];
+    NSLog(@"file name %@", fileName);
     
     NSLog(@"file path: %@", filePath);
     [[PASessionManager sharedClient] POST:simple_eventsAPI
                                parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary]
-                                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:filePath name:@"image" fileName:@"event_photo.jpeg" mimeType:@"image/jpeg"];}
+                                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:filePath name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
