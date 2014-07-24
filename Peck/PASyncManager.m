@@ -728,18 +728,14 @@
 
 -(void)postEvent:(NSDictionary *)dictionary withImage:(NSData*)filePath
 {
-   /* NSURL* path = [NSURL URLWithString:filePath];
-    
-    UIImage* image = [UIImage imageNamed:@"profile-placeholder.png"];
-    NSData* imageData2 = UIImagePNGRepresentation(image);*/
+  // NSString* fileName = [@"event_photo" stringByAppendingString:[[dictionary ob]]]
     
     
     
     NSLog(@"file path: %@", filePath);
     [[PASessionManager sharedClient] POST:simple_eventsAPI
                                parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary]
-                                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:filePath name:@"image" fileName:@"event_photo.jpeg" mimeType:@"image/jpeg"];}      //constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-                                   //[formData appendPartWithFileURL:path name:@"image" fileName:@"event_photo.png" mimeType:@"image/png" error:nil];}
+                                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:filePath name:@"image" fileName:@"event_photo.jpeg" mimeType:@"image/jpeg"];}
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
@@ -795,16 +791,7 @@
                      [mutableEvents addObject:event];
                      //NSLog(@"EVENT: %@",event);
                     }
-             }if([controller isKindOfClass:[PAEventsViewController class]]){
-                 PAEventsViewController* sender = (PAEventsViewController*)controller;
-                 [sender cacheImages];
-                 /*UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:event.imageURL]]]];
-                  if(img==nil){
-                  img = [UIImage imageNamed:@"image-placeholder.png"];
-                  }
-                  [sender.imageCache setObject:img forKey:[event.id stringValue]];*/
              }
-
              
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
