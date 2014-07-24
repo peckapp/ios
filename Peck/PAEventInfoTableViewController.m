@@ -176,7 +176,12 @@ BOOL reloaded = NO;
         [self.endTimeLabel setText:[df stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
         self.descriptionTextView.text = [self.detailItem valueForKey:@"descrip"];
         UIImage* image = [UIImage imageNamed:@"image-placeholder.png"];
-        [self.eventPhoto setImageWithURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"imageURL"]]] placeholderImage:image];
+        if([self.detailItem valueForKey:@"imageURL"]){
+            [self.eventPhoto setImageWithURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"imageURL"]]] placeholderImage:image];
+        }else{
+            self.eventPhoto.image = image;
+        }
+        
     }
 }
 
