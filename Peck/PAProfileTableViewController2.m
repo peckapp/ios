@@ -60,6 +60,7 @@ BOOL loggedIn;
     NSString*blurb = [defaults objectForKey:@"blurb"];
     NSLog(@"blurb: %@",blurb);
     self.infoTextView.text = [defaults objectForKey:@"blurb"];
+    self.profilePicture.image = [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
     
     if([defaults objectForKey:@"authentication_token"]){
         loggedIn=YES;
@@ -254,14 +255,11 @@ BOOL loggedIn;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                          NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString* path = [documentsDirectory stringByAppendingPathComponent:
-                      @"profile_photo.png" ];
-    NSData* data = UIImagePNGRepresentation(self.profilePicture.image);
-    [data writeToFile:path atomically:YES];
-    NSLog(@"path: %@", path);
-
     
-    [[PASyncManager globalSyncManager] updateUserWithInfo:updatedInfo withImage:path];
+    NSData* data = UIImageJPEGRepresentation(self.profilePicture.image, .5);
+    
+    
+    [[PASyncManager globalSyncManager] updateUserWithInfo:updatedInfo withImage:data];
     
 }
 @end

@@ -343,7 +343,7 @@
                                                                  NSUserDomainMask, YES);
             NSString *documentsDirectory = [paths objectAtIndex:0];
             NSString* path = [documentsDirectory stringByAppendingPathComponent:
-                              @"event_photo.png" ];
+                              @"event_photo.jpeg" ];
             NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
             [data writeToFile:path atomically:YES];
             //NSLog(@"path: %@", path);

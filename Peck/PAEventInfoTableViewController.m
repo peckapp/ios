@@ -349,7 +349,7 @@ BOOL reloaded = NO;
         NSString* userName = [[[defaults objectForKey:@"first_name"] stringByAppendingString:@" "] stringByAppendingString:[defaults objectForKey:@"last_name"]];
         cell.nameLabel.text=userName;
         [cell.expandButton setHidden:YES];
-        
+        cell.profilePicture.image = [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
@@ -365,6 +365,8 @@ BOOL reloaded = NO;
         cell.tag = [indexPath row]-1;
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
+        
+        cell.profilePicture.image = [self imageForComment:tempComment];
         
         NSString * commentID = [tempComment.id stringValue];
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
@@ -404,6 +406,17 @@ BOOL reloaded = NO;
     
     return text;
 }
+
+-(UIImage*)imageForComment:(Comment*)comment{
+    NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
+    if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
+        return [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
+    }else{
+        return [UIImage imageNamed:@"profile-placeholder.png"];
+        //TODO: grab the profile picture of the commenter from the server
+    }
+}
+
 
 -(NSString*)dateToString:(NSDate *)date{
     NSCalendar *calendar = [NSCalendar currentCalendar];

@@ -220,6 +220,8 @@ UITextView *textViewHelper;
     cell.parentCell=self;
     cell.tag = indexPath.row-1;
     if([indexPath row]==0){
+        
+        
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
         [cell.postButton setHidden:NO];
@@ -236,6 +238,7 @@ UITextView *textViewHelper;
         cell.nameLabel.text=userName;
         //this will be blank when the user has not yet registered or is not logged in
         [cell.expandButton setHidden:YES];
+        cell.profilePicture.image = [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
@@ -251,6 +254,8 @@ UITextView *textViewHelper;
         
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
+        
+        cell.profilePicture.image = [self imageForComment:tempComment];
         
         NSString * commentID = [tempComment.id stringValue];
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
@@ -288,6 +293,17 @@ UITextView *textViewHelper;
     text = [text stringByAppendingString:[self dateToString:comment.created_at]];
     
     return text;
+}
+
+-(UIImage*)imageForComment:(Comment*)comment{
+     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
+     if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
+         return [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
+     }else{
+         return [UIImage imageNamed:@"profile-placeholder.png"];
+         //TODO: grab the profile picture of the commenter from the server
+     }
+
 }
 
 -(NSString*)dateToString:(NSDate *)date{

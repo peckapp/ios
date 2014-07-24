@@ -81,18 +81,29 @@
                                   }];
 }
 
--(void)updateUserWithInfo:(NSDictionary *)userInfo withImage:(NSString*)filePath
+-(void)updateUserWithInfo:(NSDictionary *)userInfo withImage:(NSData*)imageData
 {
     NSString* updateURL = [usersAPI stringByAppendingString:@"/"];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSNumber* userID = [defaults objectForKey:@"user_id"];
     updateURL = [updateURL stringByAppendingString:[userID stringValue]];
-    //updateURL = [updateURL stringByAppendingString:@"/update"];
     
-    NSURL* path = [NSURL URLWithString:filePath];
     
-    [[PASessionManager sharedClient] PATCH:updateURL
-                                parameters:[self applyWrapper:@"user" toDictionary:userInfo]
+    NSMutableDictionary* baseDictionary = [[self applyWrapper:@"user" toDictionary:userInfo] mutableCopy];
+    [baseDictionary setObject:@"patch" forKey:@"_method"];
+    
+    NSDate* now = [NSDate date];
+    NSTimeInterval nowEpochSeconds = [now timeIntervalSince1970];
+    NSInteger seconds = (NSInteger)nowEpochSeconds;
+    
+    NSString* fileName = [@"event_photo_" stringByAppendingString:[[defaults objectForKey:@"user_id" ] stringValue]];
+    fileName = [fileName stringByAppendingString:@"_"];
+    fileName = [fileName stringByAppendingString:[@(seconds) stringValue]];
+    fileName = [fileName stringByAppendingString:@".jpeg"];
+    NSLog(@"file name %@", fileName);
+    
+    [[PASessionManager sharedClient] POST:updateURL
+                                parameters: baseDictionary constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
                                     success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                         // extract core dictionary from json
                                         NSLog(@"Update user success: %@", JSON);
@@ -103,11 +114,25 @@
                                         NSString* blurb = [userDictionary objectForKey:@"blurb"];
                                         NSString* firstName = [userDictionary objectForKey:@"first_name"];
                                         NSString* lastName = [userDictionary objectForKey:@"last_name"];
+                                        NSString* imageURL = [userDictionary objectForKey:@"image"];
                                         
                                         [defaults setObject:email forKey:@"email"];
                                         [defaults setObject:blurb forKey:@"blurb"];
                                         [defaults setObject:firstName forKey:@"first_name"];
                                         [defaults setObject:lastName forKey:@"last_name"];
+                                        if(imageURL){
+                                            UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]]]];
+                                            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                                                 NSUserDomainMask, YES);
+                                            NSString *documentsDirectory = [paths objectAtIndex:0];
+                                            NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                                                              @"profile_picture.jpeg" ];
+                                            NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
+                                            [data writeToFile:path atomically:YES];
+                                            NSLog(@"path: %@", path);
+                                            [defaults setObject:path forKey:@"profile_picture"];
+                                        }
+                                        
                                       }
                                       failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                           NSLog(@"ERROR: %@",error);
