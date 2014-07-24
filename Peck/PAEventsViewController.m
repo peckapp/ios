@@ -137,31 +137,33 @@ CGRect initialTableViewRect;
 
 
 -(void)cacheImages{
-    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+
     
-    NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Event" inManagedObjectContext:_managedObjectContext]];
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [appdelegate managedObjectContext];
+    
+        NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] init];
+        [fetchRequest setEntity:[NSEntityDescription entityForName:@"Event" inManagedObjectContext:_managedObjectContext]];
    
-    NSError *error = nil;
-    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+        NSError *error = nil;
+        NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
     
-    for(int i =0; i<[mutableFetchResults count];i++){
-        Event* event = mutableFetchResults[i];
-        UIImage* loadedImage = [self.imageCache objectForKey:[event.id stringValue]];
-        if(!loadedImage){
+        for(int i =0; i<[mutableFetchResults count];i++){
+            Event* event = mutableFetchResults[i];
+            UIImage* loadedImage = [self.imageCache objectForKey:[event.id stringValue]];
             if(event.imageURL){
                 loadedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:event.imageURL]]]];
             }
-            if(loadedImage == nil){
-                loadedImage = [UIImage imageNamed:@"image-placeholder.png"];
+            if(loadedImage){
+                UIImage * blurredImage = [loadedImage applyDarkEffect];
+            
+                [self.imageCache setObject:blurredImage forKey:[event.id stringValue]];
             }
-            
-            UIImage * blurredImage = [loadedImage applyDarkEffect];
-            
-            [self.imageCache setObject:blurredImage forKey:[event.id stringValue]];
         }
-    }
+        [self.tableView reloadData];
+    });
 }
 
 #pragma mark - Fetched Results controller
@@ -490,7 +492,7 @@ CGRect initialTableViewRect;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
+{/*
     for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
     {
         UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
@@ -500,7 +502,7 @@ CGRect initialTableViewRect;
         CGRect frame = cell.backgroundView.frame;
         frame.origin.y = (scrollPosition - cellPosition) / 3;
         cell.backgroundView.frame = frame;
-    }
+    }*/
 }
 
 #pragma mark - Search Bar Delegate
