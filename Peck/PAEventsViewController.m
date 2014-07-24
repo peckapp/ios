@@ -43,9 +43,6 @@ static NSString * nibName = @"PAEventCell";
 
 UISearchBar * searchBar;
 
-//CGFloat  cellHeight;
-
-//NSCache * imageCache;
 BOOL showingDetail;
 NSString *searchBarText;
 NSDate *today;
@@ -151,18 +148,18 @@ CGRect initialTableViewRect;
     
     for(int i =0; i<[mutableFetchResults count];i++){
         Event* event = mutableFetchResults[i];
-        UIImage* img = [self.imageCache objectForKey:[event.id stringValue]];
-        if(!img){
+        UIImage* loadedImage = [self.imageCache objectForKey:[event.id stringValue]];
+        if(!loadedImage){
             if(event.imageURL){
-                img = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:event.imageURL]]]];
+                loadedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:event.imageURL]]]];
             }
-            if(img==nil){
-                img = [UIImage imageNamed:@"image-placeholder.png"];
+            if(loadedImage == nil){
+                loadedImage = [UIImage imageNamed:@"image-placeholder.png"];
             }
             
-            //change image here
+            UIImage * blurredImage = [loadedImage applyDarkEffect];
             
-            [self.imageCache setObject:img forKey:[event.id stringValue]];
+            [self.imageCache setObject:blurredImage forKey:[event.id stringValue]];
         }
     }
 }
@@ -484,27 +481,8 @@ CGRect initialTableViewRect;
     if (cachedImage) {
         imageView.image = cachedImage;
     }
-    
-    /*else{
-     imageView.image = placeholder;
-     }
-     */
-    
-    else if (tempEvent.imageURL != nil){
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-        dispatch_async(queue, ^{
-
-            UIImage * loadedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]]];
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"image id: %@", imageID);
-
-                // Add effects to image
-                UIImage * blurredImage = [loadedImage applyDarkEffect];
-                imageView.image = blurredImage;
-                [self.imageCache setObject:blurredImage forKey:imageID];
-            });
-        });
+    else {
+        imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
     }
 
     imageView.contentMode = UIViewContentModeScaleAspectFill;
