@@ -33,13 +33,14 @@
                     </label>
                 </subviews>
             </tableViewCellContentView>
-            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
                 <outlet property="endTime" destination="DIk-GA-gDH" id="Juq-cW-shq"/>
                 <outlet property="startTime" destination="aCl-Gy-4KN" id="Ilw-5C-5ss"/>
                 <outlet property="titleLabel" destination="bR6-zz-dc1" id="eTl-rO-EVH"/>
             </connections>
+            <point key="canvasLocation" x="87" y="162"/>
         </tableViewCell>
     </objects>
 </document>

@@ -441,43 +441,47 @@ CGRect initialTableViewRect;
     cell.endTime.text = [self dateToString:tempEvent.end_date];
 
     cell.clipsToBounds = YES;
-    
-    
-    NSString *imageID = [tempEvent.id stringValue];
-    UIImage *image = [imageCache objectForKey:imageID];
-    if (image) {
-        UIImageView * imageView = [[UIImageView alloc] initWithFrame:cell.frame];
-        imageView.image = image;
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        cell.backgroundView = imageView;
+
+    UIImageView * imageView = [[UIImageView alloc] initWithFrame:cell.frame];
+
+    NSString * imageID = [tempEvent.id stringValue];
+    UIImage * cachedImage = [imageCache objectForKey:imageID];
+
+    if (cachedImage) {
+        imageView.image = cachedImage;
     }
-    else {
+    else if (tempEvent.imageURL != nil){
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
-            UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]]];
 
-            if(img == nil) {
-                img = [UIImage imageNamed:@"image-placeholder.png"];
-            }
+            UIImage * loadedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]]]];
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"image id: %@", imageID);
-                
-                // Add effects to image
-                UIImage * blurredImage = [img applyDarkEffect];
 
-                [imageCache setObject:blurredImage forKey:imageID];
-                UIImageView * imageView = [[UIImageView alloc] initWithFrame:cell.frame];
+                // Add effects to image
+                UIImage * blurredImage = [loadedImage applyDarkEffect];
                 imageView.image = blurredImage;
-                imageView.contentMode = UIViewContentModeScaleAspectFill;
-                cell.backgroundView = imageView;
-                
-                //reload the cell to display the image
-                //this will be called at most one time for each cell
-                //because the image will be loaded into the cache
-                //after the first time
-                //[eventsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+                [imageCache setObject:blurredImage forKey:imageID];
             });
         });
+    }
+
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    cell.backgroundView = imageView;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
+    {
+        UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        CGFloat cellHeight = cell.frame.size.height;
+        CGFloat cellPosition = (i * cellHeight) + cellHeight / 2;
+        CGFloat scrollPosition = scrollView.contentOffset.y + (self.view.frame.size.height / 2);
+        CGRect frame = cell.backgroundView.frame;
+        frame.origin.y = (scrollPosition - cellPosition) / 4;
+        cell.backgroundView.frame = frame;
     }
 }
 
