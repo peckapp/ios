@@ -822,6 +822,7 @@
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
     event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     event.end_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    //if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
     event.imageURL = [dictionary objectForKey:@"image"];
 }
 

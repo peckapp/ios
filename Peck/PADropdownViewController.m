@@ -125,7 +125,9 @@
         // Filter item
         self.filter = [PAFilter filter];
         self.filter.delegate = self;
-        [self.view addSubview:self.filter];
+
+        // TODO: Show filter
+        // [self.view addSubview:self.filter];
         [self.filter setFrameBasedOnSuperview];
         [self.filter presentUpwardForMode:PAFilterHomeMode];
 
