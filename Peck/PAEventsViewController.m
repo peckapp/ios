@@ -59,17 +59,14 @@ CGRect initialTableViewRect;
 {
     [super viewDidLoad];
     NSLog(@"View did load (events)");
-
+    if(!self.imageCache){
+        self.imageCache = [[NSCache alloc] init];
+    }
     self.title = @"Events";
     
     selectedDay=0;
     showingDetail = NO;
-    NSError * error = nil;
-    if (![self.fetchedResultsController performFetch:&error])
-    {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }
+    [self reloadTheView];
     if(!searchBar){
         searchBar = [[UISearchBar alloc] init];
         searchBar.delegate = self;
@@ -78,9 +75,7 @@ CGRect initialTableViewRect;
     }
     
     
-    if(!self.imageCache){
-        self.imageCache = [[NSCache alloc] init];
-    }
+   
     
     if(!self.tableView){
         self.tableView = [[UITableView alloc] init];
@@ -114,7 +109,6 @@ CGRect initialTableViewRect;
     searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
     self.tableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, (self.view.frame.size.height) - searchBarHeight);
     initialTableViewRect= self.tableView.frame;
-    [self cacheImages];
 
 }
 
@@ -135,35 +129,23 @@ CGRect initialTableViewRect;
     // Dispose of any resources that can be recreated.
 }
 
-
--(void)cacheImages{
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-    dispatch_async(queue, ^{
-
-    
-        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-        _managedObjectContext = [appdelegate managedObjectContext];
-    
-        NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] init];
-        [fetchRequest setEntity:[NSEntityDescription entityForName:@"Event" inManagedObjectContext:_managedObjectContext]];
-   
-        NSError *error = nil;
-        NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
-    
-        for(int i =0; i<[mutableFetchResults count];i++){
-            Event* event = mutableFetchResults[i];
-            UIImage* loadedImage = [self.imageCache objectForKey:[event.id stringValue]];
-            if(event.imageURL){
-                loadedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:event.imageURL]]]];
-            }
+-(void)cacheImageForEvent:(Event*)event{
+    UIImage* loadedImage = [self.imageCache objectForKey:[event.id stringValue]];
+    if(!loadedImage){
+        //if there is not already an image in the cache
+        if(event.imageURL){
+            //if the event has a photo stored on the server
+            loadedImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:event.imageURL]]]];
             if(loadedImage){
-                UIImage * blurredImage = [loadedImage applyDarkEffect];
-            
-                [self.imageCache setObject:blurredImage forKey:[event.id stringValue]];
+                //one last check to make sure that the image is obtained correctly from the server
+                //change image here
+                
+                [self.imageCache setObject:loadedImage forKey:[event.id stringValue]];
             }
         }
-        [self.tableView reloadData];
-    });
+    
+        
+    }
 }
 
 #pragma mark - Fetched Results controller
@@ -227,8 +209,8 @@ CGRect initialTableViewRect;
                                                                  cacheName:nil];
         
     aFetchedResultsController.delegate = self;
-    self.fetchedResultsController = aFetchedResultsController;
     
+    self.fetchedResultsController = aFetchedResultsController;
     return _fetchedResultsController;
 }
 
@@ -275,10 +257,13 @@ CGRect initialTableViewRect;
     
     switch(type)
     {
-        case NSFetchedResultsChangeInsert:
+        case NSFetchedResultsChangeInsert:{
+            Event* event = (Event*) anObject;
+            [self cacheImageForEvent:event];
             [self.tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
+        }
             break;
             
         case NSFetchedResultsChangeDelete:
@@ -478,6 +463,9 @@ CGRect initialTableViewRect;
     UIImageView * imageView = [[UIImageView alloc] initWithFrame:cell.frame];
 
     NSString * imageID = [tempEvent.id stringValue];
+    
+    NSLog(@"event %@ has an imageID of %@",tempEvent.title, imageID);
+    
     UIImage * cachedImage = [self.imageCache objectForKey:imageID];
 
     if (cachedImage) {
@@ -521,14 +509,7 @@ CGRect initialTableViewRect;
         searchBarText = searchText;
         
         
-        NSError * error = nil;
-        if (![self.fetchedResultsController performFetch:&error])
-        {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-    
-        [self.tableView reloadData];
+        [self reloadTheView];
     }
 }
 
@@ -583,6 +564,31 @@ CGRect initialTableViewRect;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
+    //dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    //dispatch_async(queue, ^{
+        /*dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });*/
+    //});
+    
+    
+    
+    dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
+    dispatch_async(myQueue, ^{
+        // Perform long running process
+        for(int i =0; i<[_fetchedResultsController.fetchedObjects count];i++){
+            Event* event = _fetchedResultsController.fetchedObjects[i];
+            if([event.type isEqualToString:@"simple"]){
+                [self cacheImageForEvent:event];
+            }
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            
+        });
+    });
+    
     
     [self.tableView reloadData];
 }
