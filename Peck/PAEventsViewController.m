@@ -25,10 +25,10 @@
 
 #define statusBarHeight 20
 #define searchBarHeight 44
-#define cellHeight 88
+
 @interface PAEventsViewController ()
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+@property (strong, nonatomic) NSCache * imageCache;
 
 @end
 
@@ -61,6 +61,8 @@ CGRect initialTableViewRect;
 {
     [super viewDidLoad];
     NSLog(@"View did load (events)");
+
+    self.title = @"Events";
     
     selectedDay=0;
     showingDetail = NO;
@@ -81,8 +83,6 @@ CGRect initialTableViewRect;
     if(!imageCache){
         imageCache = [[NSCache alloc] init];
     }
-       
-    self.title = @"Events";
     
     if(!self.tableView){
         self.tableView = [[UITableView alloc] init];
@@ -92,24 +92,25 @@ CGRect initialTableViewRect;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
 
-    //[[PASyncManager globalSyncManager] updateEventInfo];
-    [[PASyncManager globalSyncManager] updateSubscriptions];
-    [[PASyncManager globalSyncManager] updatePeerInfo];
-    
-    [self.tableView reloadData];
-
     UIView * backView = [[UIView alloc] init];
     backView.backgroundColor = [UIColor blackColor];
     [self.tableView setBackgroundView:backView];
 
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+    [[PASyncManager globalSyncManager] updateSubscriptions];
+    [[PASyncManager globalSyncManager] updatePeerInfo];
+
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+    [self.tableView reloadData];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [[PASyncManager globalSyncManager] updateEventInfo];
     [[PASyncManager globalSyncManager] updateDiningInfo];
 
-    NSLog(@"view will appear (events)");
+    NSLog(@"View will appear (events)");
     showingDetail = NO;
     [self registerForKeyboardNotifications];
     searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
@@ -258,8 +259,7 @@ CGRect initialTableViewRect;
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:[self.tableView cellForRowAtIndexPath:indexPath]
-                    atIndexPath:indexPath];
+            [self.tableView cellForRowAtIndexPath:indexPath];
             break;
             
         case NSFetchedResultsChangeMove:
@@ -280,48 +280,6 @@ CGRect initialTableViewRect;
 }
 
 #pragma mark - Table View
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    /*
-    int currentHeight = (int)[[eventsTableView.layer presentationLayer] bounds].origin.y;
-    if(currentHeight>lastCurrentHeight && currentHeight>0){
-        if((([_fetchedResultsController.fetchedObjects count] * 88 > eventsTableView.frame.size.height + searchBarThickness)&& !searching) || (([_searchFetchedResultsController.fetchedObjects count] * 44 > eventsTableView.frame.size.height) && searching)) {
-
-            // only scroll the scroll bar up if the number of events goes off screen
-            int tempCurrentHeight = currentHeight;
-            if(currentHeight > searchBarHeight){
-                tempCurrentHeight = searchBarHeight;
-            }
-
-            CGRect tempSearchRect = initialSearchBarRect;
-            tempSearchRect.origin.y = initialSearchBarRect.origin.y -tempCurrentHeight;
-            searchBar.frame=tempSearchRect;
-            CGRect tempTableViewRect = initialTableViewRect;
-            tempTableViewRect.origin.y = initialTableViewRect.origin.y - tempCurrentHeight;
-            tempTableViewRect.size.height = initialTableViewRect.size.height+tempCurrentHeight;
-            eventsTableView.frame=tempTableViewRect;
-        }
-        
-    }
-    else if(currentHeight<lastCurrentHeight){
-        if(currentHeight<=0){
-            if(!CGRectEqualToRect(searchBar.frame ,initialSearchBarRect)){
-            for(int i=0; i<=searchBarThickness;i++){
-                CGRect tempSearchRect = initialSearchBarRect;
-                tempSearchRect.origin.y = initialSearchBarRect.origin.y +i -searchBarThickness;
-                searchBar.frame=tempSearchRect;
-                CGRect tempTableViewRect = initialTableViewRect;
-                tempTableViewRect.origin.y = initialTableViewRect.origin.y +i-searchBarThickness;
-                tempTableViewRect.size.height = initialTableViewRect.size.height-i+searchBarThickness;
-                eventsTableView.frame=tempTableViewRect;
-            }
-            }
-        }
-    }
-    
-    lastCurrentHeight=currentHeight;
-    */
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -358,9 +316,10 @@ CGRect initialTableViewRect;
 
 -(void)configureDiningCell:(PADiningOpportunityCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     Event* tempDiningEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
+
     cell.nameLabel.text = tempDiningEvent.title;
-    cell.startTimeLabel.text = [self dateToString:tempDiningEvent.start_date];
-    cell.endTimeLabel.text = [self dateToString:tempDiningEvent.end_date];
+    //cell.startTimeLabel.text = [self dateToString:tempDiningEvent.start_date];
+    //cell.endTimeLabel.text = [self dateToString:tempDiningEvent.end_date];
     
 }
 
@@ -371,7 +330,7 @@ CGRect initialTableViewRect;
     if([tempEvent.type isEqualToString:@"dining"]){
         return 44;
     }
-    return cellHeight;
+    return 88;
 }
 
 
@@ -633,7 +592,7 @@ CGRect initialTableViewRect;
 
 
 - (void)keyboardWasShown:(NSNotification *)notification {
-    if(CGRectEqualToRect(self.tableView.frame,initialTableViewRect)){
+    if(CGRectEqualToRect(self.tableView.frame, initialTableViewRect)){
         NSDictionary* info = [notification userInfo];
         CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
         self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
