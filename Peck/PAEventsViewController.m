@@ -361,51 +361,7 @@ CGRect initialTableViewRect;
     
 }
 
-- (void)configureCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-    Event *tempEvent;
-    tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
-    cell.titleLabel.text = tempEvent.title;
-    cell.startTime.text = [self dateToString:tempEvent.start_date];
-    cell.endTime.text = [self dateToString:tempEvent.end_date];
-
-    NSString *imageID = [tempEvent.id stringValue];
-    UIImage *image = [imageCache objectForKey:imageID];
-    if (image) {
-        // TODO: replace this URL with SharedClient URL and event image url
-
-        NSURL *imageURL = [NSURL URLWithString:@"http://thor.peckapp.com:3500/images/event.png"];
-        NSData *imageData = [NSData dataWithContentsOfURL:imageURL];
-        UIImage *image = [UIImage imageWithData:imageData];
-
-        [cell.photoView setImageWithURL:[NSURL URLWithString:@"http://thor.peckapp.com:3500/images/event.png"]placeholderImage:image];
-    }
-    else {
-
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-        dispatch_async(queue, ^{
-            NSData *data = [[PAImageManager imageManager] ReadImage:tempEvent.title];
-            //NSData *data = tempEvent.photo;
-            UIImage *image = [UIImage imageWithData:data];
-            if(!image){
-                // TODO: replace this to cache image from server
-                image = [UIImage imageNamed:@"image-placeholder.png"];
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"image id: %@", imageID);
-                [imageCache setObject:image forKey:imageID];
-                cell.photoView.image = image;
-
-                //reload the cell to display the image
-                //this will be called at most one time for each cell
-                //because the image will be loaded into the cache
-                //after the first time
-                [eventsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
-            });
-        });
-    }
-}
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
