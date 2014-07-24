@@ -25,6 +25,7 @@
 
 #define statusBarHeight 20
 #define searchBarHeight 44
+#define parallaxRange 176
 
 @interface PAEventsViewController ()
 
@@ -129,7 +130,7 @@ CGRect initialTableViewRect;
     // Dispose of any resources that can be recreated.
 }
 
--(void)cacheImageForEvent:(Event*)event{
+- (void)cacheImageForEvent:(Event*)event{
     UIImage* loadedImage = [self.imageCache objectForKey:[event.id stringValue]];
     if(!loadedImage){
         //if there is not already an image in the cache
@@ -137,10 +138,12 @@ CGRect initialTableViewRect;
             //if the event has a photo stored on the server
             loadedImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:event.imageURL]]]];
             if(loadedImage){
-                //one last check to make sure that the image is obtained correctly from the server
-                //change image here
+
+                UIImage * blurredImage = [loadedImage applyDarkEffect];
+                UIImageView * imageView = [[UIImageView alloc] initWithImage:blurredImage];
+                imageView.contentMode = UIViewContentModeScaleAspectFill;
                 
-                [self.imageCache setObject:loadedImage forKey:[event.id stringValue]];
+                [self.imageCache setObject:imageView forKey:[event.id stringValue]];
             }
         }
     
@@ -460,36 +463,48 @@ CGRect initialTableViewRect;
 
     cell.clipsToBounds = YES;
 
-    UIImageView * imageView = [[UIImageView alloc] initWithFrame:cell.frame];
-
     NSString * imageID = [tempEvent.id stringValue];
     
     NSLog(@"event %@ has an imageID of %@",tempEvent.title, imageID);
     
-    UIImage * cachedImage = [self.imageCache objectForKey:imageID];
+    UIImageView * cachedImageView = [self.imageCache objectForKey:imageID];
 
-    if (cachedImage) {
-        imageView.image = cachedImage;
+    if (cachedImageView) {
+        cell.backgroundView = cachedImageView;
     }
     else {
-        imageView.image = [UIImage imageNamed:@"event-placeholder.png"];
+        UIImageView * imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        cell.backgroundView = imageView;
     }
-
-    imageView.contentMode = UIViewContentModeScaleAspectFill;
-    cell.backgroundView = imageView;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
     {
-        UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        CGFloat cellHeight = cell.frame.size.height;
-        CGFloat cellPosition = i * cellHeight;
-        CGFloat scrollPosition = scrollView.contentOffset.y;
-        CGRect frame = cell.backgroundView.frame;
-        frame.origin.y = scrollPosition - cellPosition;
-        cell.backgroundView.frame = frame;
+        // Check if cell is a PAEventCell, which has a backgroundView.image property
+        UITableViewCell * c = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        if ([c isKindOfClass:[PAEventCell class]]) {
+            PAEventCell * cell = (PAEventCell *)c;
+
+            // Get Height of current image
+            // UIImage * image = cell.backgroundView.image;
+            // CGFloat imageHeight = image.size.height * (cell.frame.size.width / image.size.width);
+
+            CGFloat imageHeight = parallaxRange;
+            CGFloat cellHeight = cell.frame.size.height;
+            CGFloat cellY = i * cellHeight;
+            CGFloat scrollY = scrollView.contentOffset.y;
+            CGFloat topY= (imageHeight / 2) - (cellHeight / 2);
+            CGFloat bottomY = (cellHeight / 2) - (imageHeight / 2);
+
+            CGRect frame = cell.backgroundView.frame;
+            frame.origin.y = topY + ((cellY - scrollY) / (scrollView.frame.size.height - cellHeight)) * (bottomY - topY);
+
+
+            cell.backgroundView.frame = frame;
+        }
     }
 }
 
