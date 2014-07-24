@@ -14,4 +14,7 @@
 @property (strong, nonatomic) NSMutableArray* clubSubscriptions;
 @property (strong, nonatomic) NSMutableArray* athleticSubscriptions;
 
+@property (strong, nonatomic) NSMutableArray* addedSubscriptions;
+@property (strong, nonatomic) NSMutableArray* deletedSubscriptions;
+
 @end

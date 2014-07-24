@@ -9,6 +9,7 @@
 #import "PASubscriptionCell.h"
 #import "Subscription.h"
 #import "PASyncManager.h"
+#import "PASubscriptionsTableViewController.h"
 
 @implementation PASubscriptionCell
 
@@ -32,6 +33,7 @@
     NSNumber* userID = [defaults objectForKey:@"user_id"];
     
     if(self.subscriptionSwitch.on){
+        self.subscription.subscribed = [NSNumber numberWithBool:YES];
         NSDictionary* subscriptionDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                                 self.subscription.id, @"subscribed_to",
                                                 institutionID, @"institution_id",
@@ -39,10 +41,13 @@
                                                 self.subscription.category, @"category",
                                                 nil];
 
-        [[PASyncManager globalSyncManager] postSubscription:subscriptionDictionary];
+        PASubscriptionsTableViewController* parent = (PASubscriptionsTableViewController*)self.parentViewController;
+        [parent.addedSubscriptions addObject:subscriptionDictionary];
+        
         
     }else{
         NSLog(@"remove subscription");
+        self.subscription.subscribed = [NSNumber numberWithBool:NO];
     }
     
 }

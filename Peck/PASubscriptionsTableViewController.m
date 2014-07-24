@@ -10,6 +10,7 @@
 #import "PASubscriptionCell.h"
 #import "PAFetchManager.h"
 #import "Subscription.h"
+#import "PASyncManager.h"
 
 @interface PASubscriptionsTableViewController ()
 
@@ -36,6 +37,7 @@
     self.clubSubscriptions = [[PAFetchManager sharedFetchManager] fetchSubscriptionsForCategory:@"club"];
     self.athleticSubscriptions = [[PAFetchManager sharedFetchManager] fetchSubscriptionsForCategory:@"athletic"];
     
+    self.addedSubscriptions = [[NSMutableArray alloc] init];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -47,6 +49,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    NSLog(@"view will disappear");
+    [[PASyncManager globalSyncManager] postSubscription:self.addedSubscriptions];
 }
 
 #pragma mark - Table view data source
@@ -83,6 +90,7 @@
 
 
 -(void)configureCell:(PASubscriptionCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    cell.parentViewController = self;
     Subscription* tempSubscription;
     if(indexPath.section==0){
         tempSubscription = self.departmentSubscriptions[indexPath.row];
@@ -113,6 +121,8 @@
         return @"Athletics";
     }
 }
+
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -151,15 +161,16 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    NSLog(@"preparing for segue!!!!!");
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }
-*/
+
 
 @end

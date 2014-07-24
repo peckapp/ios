@@ -150,7 +150,7 @@
                                           [defaults setObject:blurb forKey:@"blurb"];
                                       }
                                       [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
-                                      
+                                      [self updateSubscriptions];
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       
                                       [controller dismissViewControllerAnimated:YES completion:nil];
@@ -1023,13 +1023,14 @@
 }
 
 
--(void)postSubscription:(NSDictionary*)dictionary{
+-(void)postSubscription:(NSMutableArray*)array{
     
     [[PASessionManager sharedClient] POST:subscriptionsAPI
-                               parameters:[self applyWrapper:@"subscription" toDictionary:dictionary]
+                               parameters:[self applyWrapper:@"subscriptions" toArray:array]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
+         [self updateSubscriptions];
          
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -1140,6 +1141,16 @@
     NSMutableDictionary *baseDictionary = [[NSDictionary dictionaryWithObject:dictionary forKey:wrapperString] mutableCopy];
     
     //[baseDictionary setObject:[self authenticationParameters] forKey:@"authentication"];
+    [baseDictionary setValuesForKeysWithDictionary:[self authenticationParameters]];
+    
+    NSLog(@"baseDictionary: %@",baseDictionary);
+    
+    return [baseDictionary copy];
+}
+
+-(NSDictionary*)applyWrapper:(NSString*)wrapperString toArray:(NSMutableArray*)array{
+    NSMutableDictionary *baseDictionary = [[NSDictionary dictionaryWithObject:array forKey:wrapperString] mutableCopy];
+    
     [baseDictionary setValuesForKeysWithDictionary:[self authenticationParameters]];
     
     NSLog(@"baseDictionary: %@",baseDictionary);

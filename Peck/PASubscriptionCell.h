@@ -14,4 +14,5 @@
 - (IBAction)switchSubscription:(id)sender;
 @property (weak, nonatomic) IBOutlet UISwitch *subscriptionSwitch;
 @property (weak, nonatomic) Subscription* subscription;
+@property (strong, nonatomic) UIViewController* parentViewController;
 @end
