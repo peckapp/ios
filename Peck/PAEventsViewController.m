@@ -152,10 +152,9 @@ CGRect initialTableViewRect;
             if(loadedImage){
 
                 UIImage * blurredImage = [loadedImage applyDarkEffect];
-                UIImageView * imageView = [[UIImageView alloc] initWithImage:blurredImage];
-                imageView.contentMode = UIViewContentModeScaleAspectFill;
-                
-                [self.imageCache setObject:imageView forKey:[eventID stringValue]];
+                //UIImageView * imageView = [[UIImageView alloc] initWithImage:blurredImage];
+                //imageView.contentMode = UIViewContentModeScaleAspectFill;
+                [self.imageCache setObject:blurredImage forKey:[eventID stringValue]];
             }
         }
     }
@@ -481,15 +480,13 @@ CGRect initialTableViewRect;
     
     NSLog(@"event %@ has an imageID of %@",tempEvent.title, imageID);
     
-    UIImageView * cachedImageView = [self.imageCache objectForKey:imageID];
+    UIImage * cachedImage = [self.imageCache objectForKey:imageID];
 
-    if (cachedImageView) {
-        cell.backgroundView = cachedImageView;
+    if (cachedImage) {
+        cell.imageView.image = cachedImage;
     }
     else {
-        //UIImageView * imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
-        //self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
-        cell.backgroundView = self.placeholderImage;
+        cell.imageView.image = self.placeholderImage.image;
     }
 }
 
@@ -608,8 +605,10 @@ CGRect initialTableViewRect;
         }
         
     }
-    dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
-    dispatch_async(myQueue, ^{
+    //dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
+    //dispatch_async(myQueue, ^{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
         // Perform long running process
         NSLog(@"starting async thread");
         for(int i =0; i<[eventIDs count];i++){
@@ -621,7 +620,7 @@ CGRect initialTableViewRect;
         dispatch_async(dispatch_get_main_queue(), ^{
             NSLog(@"reload the table view");
             [self.tableView reloadData];
-            [self.tableView scrollToNearestSelectedRowAtScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+            //[self.tableView scrollToNearestSelectedRowAtScrollPosition:UITableViewScrollPositionMiddle animated:YES];
         });
     });
     
