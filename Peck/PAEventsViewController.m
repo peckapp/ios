@@ -482,14 +482,15 @@ CGRect initialTableViewRect;
     
     UIImage * cachedImage = [self.imageCache objectForKey:imageID];
 
+    //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
     if (cachedImage) {
-        cell.imageView.image = cachedImage;
+        cell.eventImageView.image = cachedImage;
     }
     else {
-        cell.imageView.image = self.placeholderImage.image;
+        cell.eventImageView.image = self.placeholderImage.image;
     }
 
-    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
