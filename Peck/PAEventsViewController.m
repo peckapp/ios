@@ -138,6 +138,10 @@ CGRect initialTableViewRect;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    
+    
+    NSLog(@"Clearing imageCache due to memory warning");
+    [self.imageCache removeAllObjects];
 }
 
 - (void)cacheImageForEventURL:(NSString*)imageURL Type: (NSString*)type AndID: (NSNumber*)eventID {
@@ -147,6 +151,8 @@ CGRect initialTableViewRect;
         if(imageURL){
             //if the event has a photo stored on the server
             NSURL * url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+            
+            
             loadedImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
             if(loadedImage){
 
@@ -157,7 +163,6 @@ CGRect initialTableViewRect;
                 [self.imageCache setObject:imageView forKey:[eventID stringValue]];
             }
         }
-    
         
     }
 }
@@ -608,8 +613,8 @@ CGRect initialTableViewRect;
         }
         
     }
-    dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
-    dispatch_async(myQueue, ^{
+    //dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
+    dispatch_async(dispatch_get_main_queue(), ^{
         // Perform long running process
     
         for(int i =0; i<[eventIDs count];i++){

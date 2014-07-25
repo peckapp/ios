@@ -845,7 +845,10 @@
 -(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
 {
     event.title = [dictionary objectForKey:@"title"];
-    event.descrip = [dictionary objectForKey:@"event_description"];
+    NSString * descrip = [dictionary objectForKey:@"event_description"];
+    if (![descrip isKindOfClass:[NSNull class]]) {
+        event.descrip = descrip;
+    }
     //event.location = [dictionary objectForKey:@"institution_id"];
     event.id = [dictionary objectForKey:@"id"];
     event.type = @"simple";
