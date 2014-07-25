@@ -146,16 +146,16 @@ CGRect initialTableViewRect;
         //if there is not already an image in the cache
         if(imageURL){
             //if the event has a photo stored on the server
-            NSLog(@"the image url: %@", event.imageURL);
-            loadedImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:event.imageURL]]]];
+            NSLog(@"caching image for event %@", [eventID stringValue]);
+            NSURL * url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+            loadedImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
             if(loadedImage){
 
                 UIImage * blurredImage = [loadedImage applyDarkEffect];
                 UIImageView * imageView = [[UIImageView alloc] initWithImage:blurredImage];
                 imageView.contentMode = UIViewContentModeScaleAspectFill;
                 
-                NSLog(@"caching an image view for id: %@", [event.id stringValue]);
-                [self.imageCache setObject:imageView forKey:[event.id stringValue]];
+                [self.imageCache setObject:imageView forKey:[eventID stringValue]];
             }
         }
     }
@@ -485,17 +485,18 @@ CGRect initialTableViewRect;
 
     if (cachedImageView) {
         cell.backgroundView = cachedImageView;
+        [cell.backgroundView reloadInputViews];
     }
     else {
         //UIImageView * imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
-        self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
+        //self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
         cell.backgroundView = self.placeholderImage;
     }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
+   /* for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
     {
         // Check if cell is a PAEventCell, which has a backgroundView.image property
         UITableViewCell * c = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
@@ -519,7 +520,7 @@ CGRect initialTableViewRect;
 
             cell.backgroundView.frame = frame;
         }
-    }
+    }*/
 }
 
 #pragma mark - Search Bar Delegate
@@ -611,16 +612,16 @@ CGRect initialTableViewRect;
     dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
     dispatch_async(myQueue, ^{
         // Perform long running process
-    
+        NSLog(@"starting async thread");
         for(int i =0; i<[eventIDs count];i++){
             
             [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
             
         }
-
+        NSLog(@"post for loop");
         dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"reload the table view");
             [self.tableView reloadData];
-            
         });
     });
     
