@@ -563,12 +563,15 @@ CGRect initialTableViewRect;
     }
     NSMutableArray* fetchedEvents = [[NSMutableArray alloc] init];
     for(int i =0; i<[_fetchedResultsController.fetchedObjects count];i++){
+        //eventImage* eventImage =
+        
         Event* tempEvent = _fetchedResultsController.fetchedObjects[i];
         [fetchedEvents addObject:tempEvent];
     }
     dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
     dispatch_async(myQueue, ^{
         // Perform long running process
+    
         for(int i =0; i<[fetchedEvents count];i++){
             Event* event = fetchedEvents[i];
             if([event.type isEqualToString:@"simple"]){
