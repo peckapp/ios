@@ -485,7 +485,6 @@ CGRect initialTableViewRect;
 
     if (cachedImageView) {
         cell.backgroundView = cachedImageView;
-        [cell.backgroundView reloadInputViews];
     }
     else {
         //UIImageView * imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
@@ -622,6 +621,7 @@ CGRect initialTableViewRect;
         dispatch_async(dispatch_get_main_queue(), ^{
             NSLog(@"reload the table view");
             [self.tableView reloadData];
+            [self.tableView scrollToNearestSelectedRowAtScrollPosition:UITableViewScrollPositionMiddle animated:YES];
         });
     });
     
