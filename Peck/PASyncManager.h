@@ -20,6 +20,9 @@
 + (instancetype)globalSyncManager;
 
 // methods for anonymous user creation and subsqquent registration
+
+// sends the device token to the server and performs operations based on the result
+-(void)sendUserDeviceToken:(NSString*)deviceToken;
 // sends post request to server with institution_id and stores response user_id in NSUserDefaults
 -(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock;
 // sends post request to the server completing the user's other info after the registration process is triggered

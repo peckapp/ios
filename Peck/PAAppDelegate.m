@@ -45,6 +45,7 @@
 
         if(userID == nil){
             
+            [[PASyncManager globalSyncManager] sendUserDeviceToken:@"3"];
             [[PASyncManager globalSyncManager] ceateAnonymousUser:^(BOOL success) {
                 if (success) {
                     NSLog(@"Sucessfully set a new anonymous user");
