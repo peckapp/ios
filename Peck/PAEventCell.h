@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface PAEventCell : UITableViewCell
+
+// Overwrite UIView * background view as UIImageView
+@property (strong, nonatomic) UIImageView * backgroundView;
+
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *startTime;
 @property (weak, nonatomic) IBOutlet UILabel *endTime;

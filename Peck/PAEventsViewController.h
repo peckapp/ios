@@ -34,6 +34,4 @@ typedef struct {
 - (IBAction)yesterdayButton:(id)sender;
 - (IBAction)todayButton:(id)sender;
 - (IBAction)tomorrowButton:(id)sender;
-
--(void)cacheImages;
 @end
