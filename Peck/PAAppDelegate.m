@@ -57,6 +57,8 @@
         }
     }
 
+    self.window.tintColor = [UIColor colorWithRed:150/255.0 green:123/255.0 blue:255/255.0 alpha:1.0];
+
     // saves NSUserDefaults to "disk"
     [[NSUserDefaults standardUserDefaults] synchronize];
     
