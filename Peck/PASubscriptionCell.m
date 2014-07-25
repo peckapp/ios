@@ -36,20 +36,32 @@
     
     if(self.subscriptionSwitch.on){
         self.subscription.subscribed = [NSNumber numberWithBool:YES];
-        NSDictionary* subscriptionDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                self.subscription.id, @"subscribed_to",
-                                                institutionID, @"institution_id",
-                                                userID, @"user_id",
-                                                self.subscription.category, @"category",
-                                                nil];
+        
+        if(![parent.deletedSubscriptions objectForKey:subKey]){
+            //if the subscription is not on the list to be deleted
+            NSDictionary* subscriptionDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                    self.subscription.id, @"subscribed_to",
+                                                    institutionID, @"institution_id",
+                                                    userID, @"user_id",
+                                                    self.subscription.category, @"category",
+                                                    nil];
 
-       
-        [parent.addedSubscriptions setObject:subscriptionDictionary forKey:subKey];
+            [parent.addedSubscriptions setObject:subscriptionDictionary forKey:subKey];
+        }else{
+            [parent.deletedSubscriptions removeObjectForKey:subKey];
+        }
+        
+        
     }else{
         NSLog(@"remove subscription");
         self.subscription.subscribed = [NSNumber numberWithBool:NO];
-        [parent.addedSubscriptions removeObjectForKey:subKey];
-        [parent.deletedSubscriptions addObject:self.subscription.subscription_id];
+        if(![parent.addedSubscriptions objectForKey:subKey]){
+            //if the subscription is not on the list to be added
+            [parent.deletedSubscriptions setObject:self.subscription.subscription_id forKey:subKey];
+        }else{
+            [parent.addedSubscriptions removeObjectForKey:subKey];
+        }
+        
     }
     
 }

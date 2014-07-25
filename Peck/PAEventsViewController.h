@@ -29,6 +29,8 @@ typedef struct {
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (strong, nonatomic) UITableView * tableView;
+@property (strong, nonatomic) UIImageView* placeholderImage;
+
 
 @property (strong, nonatomic) NSCache* imageCache;
 - (IBAction)yesterdayButton:(id)sender;

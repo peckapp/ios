@@ -38,7 +38,7 @@
     self.athleticSubscriptions = [[PAFetchManager sharedFetchManager] fetchSubscriptionsForCategory:@"athletic"];
     
     self.addedSubscriptions = [[NSMutableDictionary alloc] init];
-    self.deletedSubscriptions = [[NSMutableArray alloc] init];
+    self.deletedSubscriptions = [[NSMutableDictionary alloc] init];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -55,7 +55,7 @@
 -(void)viewWillDisappear:(BOOL)animated{
     NSLog(@"view will disappear");
     [[PASyncManager globalSyncManager] postSubscriptions:[self.addedSubscriptions allValues]];
-    [[PASyncManager globalSyncManager] deleteSubscriptions:self.deletedSubscriptions];
+    [[PASyncManager globalSyncManager] deleteSubscriptions:[self.deletedSubscriptions allValues]];
 }
 
 #pragma mark - Table view data source

@@ -1071,7 +1071,7 @@
 
 }
 
--(void)deleteSubscriptions:(NSMutableArray*)array{
+-(void)deleteSubscriptions:(NSArray*)array{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* stringFromArray = @"[";
     for(int i =0; i<[array count];i++){
