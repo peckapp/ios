@@ -76,7 +76,6 @@
 		A463F385194B959800ED441F /* PACircleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A463F383194B959800ED441F /* PACircleCell.xib */; };
 		A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */; };
 		A463F38F19507FA300ED441F /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = A463F38E19507FA300ED441F /* Property List.plist */; };
-		A4677D3C197437EC007E3C3A /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D3B197437EC007E3C3A /* Peer.m */; };
 		A4677D3F19743A05007E3C3A /* Circle.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D3E19743A05007E3C3A /* Circle.m */; };
 		A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4119743A05007E3C3A /* DiningPlace.m */; };
 		A4677D4819743A05007E3C3A /* DiningPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4719743A05007E3C3A /* DiningPeriod.m */; };
@@ -99,6 +98,7 @@
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
 		A4925C0D194A1B32001AAC4A /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */; };
 		A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A99BAD19815AA4002DFD49 /* Subscription.m */; };
+		A4AB65801982E2F9004D3172 /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = A4AB657F1982E2F9004D3172 /* Peer.m */; };
 		A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */; };
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
 		A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */; };
@@ -287,8 +287,6 @@
 		A463F386194F3A4B00ED441F /* PAFriendProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFriendProfileViewController.h; sourceTree = "<group>"; };
 		A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFriendProfileViewController.m; sourceTree = "<group>"; };
 		A463F38E19507FA300ED441F /* Property List.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Property List.plist"; sourceTree = "<group>"; };
-		A4677D3A197437EC007E3C3A /* Peer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peer.h; sourceTree = "<group>"; };
-		A4677D3B197437EC007E3C3A /* Peer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peer.m; sourceTree = "<group>"; };
 		A4677D3D19743A05007E3C3A /* Circle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Circle.h; sourceTree = "<group>"; };
 		A4677D3E19743A05007E3C3A /* Circle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Circle.m; sourceTree = "<group>"; };
 		A4677D4019743A05007E3C3A /* DiningPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPlace.h; sourceTree = "<group>"; };
@@ -325,6 +323,8 @@
 		A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		A4A99BAC19815AA4002DFD49 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
 		A4A99BAD19815AA4002DFD49 /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Subscription.m; sourceTree = "<group>"; };
+		A4AB657E1982E2F9004D3172 /* Peer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peer.h; sourceTree = "<group>"; };
+		A4AB657F1982E2F9004D3172 /* Peer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peer.m; sourceTree = "<group>"; };
 		A4B772E31945FEFB00A31252 /* PAConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAConfigureViewController.h; sourceTree = "<group>"; };
 		A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAConfigureViewController.m; sourceTree = "<group>"; };
 		A4B772E619460C3200A31252 /* schools.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = schools.plist; sourceTree = "<group>"; };
@@ -649,8 +649,8 @@
 		A40CF56219547A730021C088 /* Peers */ = {
 			isa = PBXGroup;
 			children = (
-				A4677D3A197437EC007E3C3A /* Peer.h */,
-				A4677D3B197437EC007E3C3A /* Peer.m */,
+				A4AB657E1982E2F9004D3172 /* Peer.h */,
+				A4AB657F1982E2F9004D3172 /* Peer.m */,
 				A40CF56619547ACC0021C088 /* PAPeers.h */,
 				A40CF56719547ACC0021C088 /* PAPeers.m */,
 				A40CF572195483140021C088 /* PABST.h */,
@@ -1082,6 +1082,7 @@
 				A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */,
 				A43BF0FB1979B0B60009B7AD /* PAInvitationsTableViewController.m in Sources */,
 				A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */,
+				A4AB65801982E2F9004D3172 /* Peer.m in Sources */,
 				A459A83D195DF4B800D1FB0E /* Message.m in Sources */,
 				A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */,
 				DD59ADED197FF071006B4A61 /* PAProfileThumbnailView.m in Sources */,
@@ -1102,7 +1103,6 @@
 				A4773C8F195A076800AB9831 /* PACreateCircleViewController.m in Sources */,
 				A4677D52197562B1007E3C3A /* PADiningOpportunityCell.m in Sources */,
 				86292527193CBFF80057CA41 /* PAEventCell.m in Sources */,
-				A4677D3C197437EC007E3C3A /* Peer.m in Sources */,
 				A4E21F6F1965F0E0002A9800 /* Comment.m in Sources */,
 				A43BF0F6197978690009B7AD /* PAChangePasswordViewController.m in Sources */,
 				867B52D619509F5000BEB37B /* PASessionManager.m in Sources */,

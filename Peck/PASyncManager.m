@@ -301,7 +301,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"JSON: %@",JSON);
+             NSLog(@"JSON: %@",JSON);
              NSDictionary *usersDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
              for (NSDictionary *userAttributes in postsFromResponse) {
@@ -340,6 +340,9 @@
     fullName = [fullName stringByAppendingString:[dictionary objectForKey:@"last_name"]];
     peer.name = fullName;
     peer.id = [dictionary objectForKey:@"id"];
+    if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
+        peer.imageURL = [dictionary objectForKey:@"image"];
+    }
 }
 
 #pragma mark - Institution actions
@@ -563,15 +566,13 @@
     NSLog(@"circle name: %@", circle.circleName);
     circle.id = [dictionary objectForKey:@"id"];
     NSArray *members = (NSArray*)[dictionary objectForKey:@"circle_members"];
-    NSMutableArray *addedMembers = [[NSMutableArray alloc] init];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     for(int i =0; i<[members count]; i++){
-        addedMembers[i]=[self getPeer:members[i]];
-        [circle addCircle_membersObject:[self getPeer:members[i]]];
-        
+        if([members[i] integerValue] != [[defaults objectForKey:@"user_id"] integerValue]){
+            //Add the relationsip if the peer is not the user himself
+            [circle addCircle_membersObject:[self getPeer:members[i]]];
+        }
     }
-        //NSLog(@"circle members: %@", circle.circle_members);
-    //circle.members = addedMembers;
-    
 }
 
 - (Peer *)getPeer:(NSNumber*)peerID{
@@ -591,9 +592,12 @@
     NSError *error = nil;
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
     
-    Peer *peer = mutableFetchResults[0];
+    if([mutableFetchResults count]){
+        Peer *peer = mutableFetchResults[0];
+        return peer;
+    }
+    return nil;
     
-    return peer;
 }
 #pragma mark - Dining actions
 
