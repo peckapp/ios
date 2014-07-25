@@ -53,6 +53,25 @@
 
 #pragma mark - User actions
 
+-(void)sendUserDeviceToken:(NSString*)deviceToken{
+    NSString* userURL = [usersAPI stringByAppendingString:@"/user_for_device_token"];
+    NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                deviceToken, @"user_device_token",
+                                nil];
+    
+    [[PASessionManager sharedClient] POST:userURL
+                               parameters:dictionary
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      NSLog(@"Device Token JSON: %@", JSON);
+                                  }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                      
+                                  }];
+
+    
+}
+
 -(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock
 {
     NSLog(@"creating an anonymous new user");
@@ -499,7 +518,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"update circle info JSON: %@",JSON);
+             NSLog(@"update circle info JSON: %@",JSON);
              NSDictionary *circlesDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [circlesDictionary objectForKey:@"circles"];
              for (NSDictionary *circleAttributes in postsFromResponse) {
