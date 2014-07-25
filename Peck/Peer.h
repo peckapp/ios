@@ -2,7 +2,7 @@
 //  Peer.h
 //  Peck
 //
-//  Created by John Karabinos on 7/14/14.
+//  Created by John Karabinos on 7/25/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -15,6 +15,7 @@
 
 @property (nonatomic, retain) NSNumber * id;
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * imageURL;
 @property (nonatomic, retain) NSSet *circles;
 @end
 

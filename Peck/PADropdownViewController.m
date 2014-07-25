@@ -78,6 +78,7 @@
         [collector insertObject:viewController atIndex:idx];
     }];
     self.secondaryViewControllers = [collector copy];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated

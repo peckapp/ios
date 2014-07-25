@@ -16,6 +16,7 @@
 #import "UIImageView+AFNetworking.h"
 
 
+
 @interface PAEventInfoTableViewController ()
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
@@ -366,7 +367,8 @@ BOOL reloaded = NO;
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
         
-        cell.profilePicture.image = [self imageForComment:tempComment];
+        //cell.profilePicture.image = [self imageForComment:tempComment];
+        [self imageForComment:tempComment withCell:cell];
         
         NSString * commentID = [tempComment.id stringValue];
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
@@ -407,13 +409,20 @@ BOOL reloaded = NO;
     return text;
 }
 
--(UIImage*)imageForComment:(Comment*)comment{
+-(void)imageForComment:(Comment*)comment withCell:(PACommentCell*)cell{
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
     if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
-        return [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
+        cell.profilePicture.image =  [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
     }else{
-        return [UIImage imageNamed:@"profile-placeholder.png"];
-        //TODO: grab the profile picture of the commenter from the server
+        Peer* commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
+        if(commentFromPeer.imageURL){
+            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
+        [cell.profilePicture setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"profile-placeholder.png"]];
+
+        }
+        else{
+            cell.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+        }
     }
 }
 
