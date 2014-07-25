@@ -27,6 +27,12 @@
 #define searchBarHeight 44
 #define parallaxRange 176
 
+struct eventImage{
+    const char* imageURL;
+    const char* type ;
+    int eventID;
+};
+
 @interface PAEventsViewController ()
 
 
@@ -130,20 +136,21 @@ CGRect initialTableViewRect;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)cacheImageForEvent:(Event*)event{
-    UIImage* loadedImage = [self.imageCache objectForKey:[event.id stringValue]];
+- (void)cacheImageForEventURL:(NSString*)imageURL Type: (NSString*)type AndID: (NSNumber*)eventID {
+    UIImage* loadedImage = [self.imageCache objectForKey:[eventID stringValue]];
     if(!loadedImage){
         //if there is not already an image in the cache
-        if(event.imageURL){
+        if(imageURL){
             //if the event has a photo stored on the server
-            loadedImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:event.imageURL]]]];
+            NSURL * url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+            loadedImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
             if(loadedImage){
 
                 UIImage * blurredImage = [loadedImage applyDarkEffect];
                 UIImageView * imageView = [[UIImageView alloc] initWithImage:blurredImage];
                 imageView.contentMode = UIViewContentModeScaleAspectFill;
                 
-                [self.imageCache setObject:imageView forKey:[event.id stringValue]];
+                [self.imageCache setObject:imageView forKey:[eventID stringValue]];
             }
         }
     
@@ -262,10 +269,13 @@ CGRect initialTableViewRect;
     {
         case NSFetchedResultsChangeInsert:{
             Event* event = (Event*) anObject;
-            [self cacheImageForEvent:event];
-            [self.tableView
-             insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
-             withRowAnimation:UITableViewRowAnimationFade];
+            
+            if (event.imageURL != nil) {
+                
+                [self cacheImageForEventURL:event.imageURL Type:event.type AndID:event.id];
+                
+            }
+            [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
             break;
             
@@ -579,22 +589,29 @@ CGRect initialTableViewRect;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-    NSMutableArray* fetchedEvents = [[NSMutableArray alloc] init];
+    NSMutableArray* eventURLs = [[NSMutableArray alloc] init];
+    NSMutableArray* eventTypes = [[NSMutableArray alloc] init];
+    NSMutableArray* eventIDs = [[NSMutableArray alloc] init];
     for(int i =0; i<[_fetchedResultsController.fetchedObjects count];i++){
-        //eventImage* eventImage =
         
         Event* tempEvent = _fetchedResultsController.fetchedObjects[i];
-        [fetchedEvents addObject:tempEvent];
+        
+        // cannot asynchronously cache image it there isn't one
+        if (tempEvent.imageURL != nil) {
+            [eventURLs addObject:tempEvent.imageURL];
+            [eventTypes addObject:tempEvent.type];
+            [eventIDs addObject:tempEvent.id];
+        }
+        
     }
     dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
     dispatch_async(myQueue, ^{
         // Perform long running process
     
-        for(int i =0; i<[fetchedEvents count];i++){
-            Event* event = fetchedEvents[i];
-            if([event.type isEqualToString:@"simple"]){
-                [self cacheImageForEvent:event];
-            }
+        for(int i =0; i<[eventIDs count];i++){
+            
+            [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
+            
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -653,3 +670,22 @@ CGRect initialTableViewRect;
 }
 
 @end
+
+/*
+
+@interface EventInfo : NSObject {}
+
+@property (readwrite, strong, nonatomic) NSString *name;
+@property (readwrite, assign, nonatomic) NSUInteger time;
+
+@end
+
+@implementation EventInfo : NSObject 
+
+@synthesize name;
+@synthesize time;
+
+@end
+ 
+*/
+

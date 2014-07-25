@@ -13,13 +13,6 @@
 #import <CoreData/CoreData.h>
 #import "PACoreDataProtocol.h"
 
-typedef struct {
-    char* imageURL;
-    char* type ;
-    int eventID;
-} eventImage;
-
-
 
 @interface PAEventsViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDataSource,UITableViewDelegate, UISearchBarDelegate>
 
