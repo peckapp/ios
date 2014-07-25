@@ -163,12 +163,7 @@
 {
     // sends either email and password, or facebook token and link, to the server for authentication
     // expects an authentication token to be returned in response
-       
-    /*NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-     [self authenticationParameters],@"authentication",
-     [userInfo objectForKey:@"email" ], @"email",
-     [userInfo objectForKey:@"password"], @"password",
-     nil];*/
+    
     [[PASessionManager sharedClient] POST: @"api/access"
                                parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON){
@@ -185,12 +180,27 @@
                                       NSString* blurb = [userDictionary objectForKey:@"blurb"];
                                       NSNumber* userID = [userDictionary objectForKey:@"id"];
                                       NSString* apiKey = [userDictionary objectForKey:@"api_key"];
+                                      NSString* imageURL = [userDictionary objectForKey:@"image"];
                                       
                                       [defaults setObject:firstName forKey:@"first_name"];
                                       [defaults setObject:lastName forKey:@"last_name"];
                                       [defaults setObject:email forKey:@"email"];
                                       [defaults setObject:userID forKey:@"user_id"];
                                       [defaults setObject:apiKey forKey:@"api_key"];
+                                      
+                                      if(imageURL){
+                                          UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]]]];
+                                          NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                                               NSUserDomainMask, YES);
+                                          NSString *documentsDirectory = [paths objectAtIndex:0];
+                                          NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                                                            @"profile_picture.jpeg" ];
+                                          NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
+                                          [data writeToFile:path atomically:YES];
+                                          NSLog(@"path: %@", path);
+                                          [defaults setObject:path forKey:@"profile_picture"];
+                                      }
+                                      
                                       if(![blurb isKindOfClass:[NSNull class]]){
                                           [defaults setObject:blurb forKey:@"blurb"];
                                       }
@@ -512,7 +522,7 @@
         
         NSString* circlesURL = [usersAPI stringByAppendingString:@"/"];
         circlesURL = [circlesURL stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
-        circlesURL = [circlesURL stringByAppendingString:@"/circles"];
+        circlesURL = [circlesURL stringByAppendingString:@"/user_circles"];
         
         [[PASessionManager sharedClient] GET:circlesURL
                                   parameters:[self authenticationParameters]
