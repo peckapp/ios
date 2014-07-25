@@ -488,6 +488,8 @@ CGRect initialTableViewRect;
     else {
         cell.imageView.image = self.placeholderImage.image;
     }
+
+    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
