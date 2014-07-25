@@ -60,7 +60,7 @@ CGRect initialTableViewRect;
 {
     [super viewDidLoad];
     NSLog(@"View did load (events)");
-    self.placeholderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
+    self.placeholderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image-placeholder.png"]];
     self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
     
     if(!self.imageCache){
@@ -140,6 +140,7 @@ CGRect initialTableViewRect;
         //if there is not already an image in the cache
         if(event.imageURL){
             //if the event has a photo stored on the server
+            NSLog(@"the image url: %@", event.imageURL);
             loadedImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:event.imageURL]]]];
             if(loadedImage){
 
@@ -147,11 +148,10 @@ CGRect initialTableViewRect;
                 UIImageView * imageView = [[UIImageView alloc] initWithImage:blurredImage];
                 imageView.contentMode = UIViewContentModeScaleAspectFill;
                 
+                NSLog(@"caching an image view for id: %@", [event.id stringValue]);
                 [self.imageCache setObject:imageView forKey:[event.id stringValue]];
             }
         }
-    
-        
     }
 }
 
@@ -265,6 +265,7 @@ CGRect initialTableViewRect;
     switch(type)
     {
         case NSFetchedResultsChangeInsert:{
+            
             Event* event = (Event*) anObject;
             [self cacheImageForEvent:event];
             [self.tableView
@@ -478,7 +479,7 @@ CGRect initialTableViewRect;
     }
     else {
         //UIImageView * imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
-        //imageView.contentMode = UIViewContentModeScaleAspectFill;
+        self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
         cell.backgroundView = self.placeholderImage;
     }
 }
