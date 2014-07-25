@@ -53,6 +53,25 @@
 
 #pragma mark - User actions
 
+-(void)sendUserDeviceToken:(NSString*)deviceToken{
+    NSString* userURL = [usersAPI stringByAppendingString:@"/user_for_device_token"];
+    NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                deviceToken, @"user_device_token",
+                                nil];
+    
+    [[PASessionManager sharedClient] POST:userURL
+                               parameters:dictionary
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      NSLog(@"Device Token JSON: %@", JSON);
+                                  }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                      
+                                  }];
+
+    
+}
+
 -(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock
 {
     NSLog(@"creating an anonymous new user");
@@ -144,12 +163,7 @@
 {
     // sends either email and password, or facebook token and link, to the server for authentication
     // expects an authentication token to be returned in response
-       
-    /*NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-     [self authenticationParameters],@"authentication",
-     [userInfo objectForKey:@"email" ], @"email",
-     [userInfo objectForKey:@"password"], @"password",
-     nil];*/
+    
     [[PASessionManager sharedClient] POST: @"api/access"
                                parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON){
@@ -166,12 +180,27 @@
                                       NSString* blurb = [userDictionary objectForKey:@"blurb"];
                                       NSNumber* userID = [userDictionary objectForKey:@"id"];
                                       NSString* apiKey = [userDictionary objectForKey:@"api_key"];
+                                      NSString* imageURL = [userDictionary objectForKey:@"image"];
                                       
                                       [defaults setObject:firstName forKey:@"first_name"];
                                       [defaults setObject:lastName forKey:@"last_name"];
                                       [defaults setObject:email forKey:@"email"];
                                       [defaults setObject:userID forKey:@"user_id"];
                                       [defaults setObject:apiKey forKey:@"api_key"];
+                                      
+                                      if(imageURL){
+                                          UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]]]];
+                                          NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                                               NSUserDomainMask, YES);
+                                          NSString *documentsDirectory = [paths objectAtIndex:0];
+                                          NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                                                            @"profile_picture.jpeg" ];
+                                          NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
+                                          [data writeToFile:path atomically:YES];
+                                          NSLog(@"path: %@", path);
+                                          [defaults setObject:path forKey:@"profile_picture"];
+                                      }
+                                      
                                       if(![blurb isKindOfClass:[NSNull class]]){
                                           [defaults setObject:blurb forKey:@"blurb"];
                                       }
@@ -272,7 +301,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"JSON: %@",JSON);
+             NSLog(@"JSON: %@",JSON);
              NSDictionary *usersDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
              for (NSDictionary *userAttributes in postsFromResponse) {
@@ -311,6 +340,9 @@
     fullName = [fullName stringByAppendingString:[dictionary objectForKey:@"last_name"]];
     peer.name = fullName;
     peer.id = [dictionary objectForKey:@"id"];
+    if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
+        peer.imageURL = [dictionary objectForKey:@"image"];
+    }
 }
 
 #pragma mark - Institution actions
@@ -493,13 +525,13 @@
         
         NSString* circlesURL = [usersAPI stringByAppendingString:@"/"];
         circlesURL = [circlesURL stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
-        circlesURL = [circlesURL stringByAppendingString:@"/circles"];
+        circlesURL = [circlesURL stringByAppendingString:@"/user_circles"];
         
         [[PASessionManager sharedClient] GET:circlesURL
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"update circle info JSON: %@",JSON);
+             NSLog(@"update circle info JSON: %@",JSON);
              NSDictionary *circlesDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [circlesDictionary objectForKey:@"circles"];
              for (NSDictionary *circleAttributes in postsFromResponse) {
@@ -534,15 +566,13 @@
     NSLog(@"circle name: %@", circle.circleName);
     circle.id = [dictionary objectForKey:@"id"];
     NSArray *members = (NSArray*)[dictionary objectForKey:@"circle_members"];
-    NSMutableArray *addedMembers = [[NSMutableArray alloc] init];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     for(int i =0; i<[members count]; i++){
-        addedMembers[i]=[self getPeer:members[i]];
-        [circle addCircle_membersObject:[self getPeer:members[i]]];
-        
+        if([members[i] integerValue] != [[defaults objectForKey:@"user_id"] integerValue]){
+            //Add the relationsip if the peer is not the user himself
+            [circle addCircle_membersObject:[self getPeer:members[i]]];
+        }
     }
-        //NSLog(@"circle members: %@", circle.circle_members);
-    //circle.members = addedMembers;
-    
 }
 
 - (Peer *)getPeer:(NSNumber*)peerID{
@@ -562,9 +592,12 @@
     NSError *error = nil;
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
     
-    Peer *peer = mutableFetchResults[0];
+    if([mutableFetchResults count]){
+        Peer *peer = mutableFetchResults[0];
+        return peer;
+    }
+    return nil;
     
-    return peer;
 }
 #pragma mark - Dining actions
 

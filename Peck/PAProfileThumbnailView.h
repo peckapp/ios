@@ -10,7 +10,7 @@
 
 @interface PAProfileThumbnailView : UIView
 
-@property (nonatomic) UIImage * profileImage;
+@property (strong, nonatomic) UIImage * image;
 
 - (id)initWithFrame:(CGRect)frame subFrame:(CGRect)subFrame image:(UIImage *)image;
 

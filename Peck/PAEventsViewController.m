@@ -66,7 +66,7 @@ CGRect initialTableViewRect;
 {
     [super viewDidLoad];
     NSLog(@"View did load (events)");
-    self.placeholderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
+    self.placeholderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image-placeholder.png"]];
     self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
     
     if(!self.imageCache){
@@ -150,17 +150,17 @@ CGRect initialTableViewRect;
         //if there is not already an image in the cache
         if(imageURL){
             //if the event has a photo stored on the server
+            NSLog(@"caching image for event %@", [eventID stringValue]);
             NSURL * url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
             
             
             loadedImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
             if(loadedImage){
 
-                UIImage * blurredImage = [loadedImage applyDarkEffect];
-                UIImageView * imageView = [[UIImageView alloc] initWithImage:blurredImage];
-                imageView.contentMode = UIViewContentModeScaleAspectFill;
-                
-                [self.imageCache setObject:imageView forKey:[eventID stringValue]];
+                //UIImage * blurredImage = [loadedImage applyDarkEffect];
+                //UIImageView * imageView = [[UIImageView alloc] initWithImage:blurredImage];
+                //imageView.contentMode = UIViewContentModeScaleAspectFill;
+                [self.imageCache setObject:loadedImage forKey:[eventID stringValue]];
             }
         }
         
@@ -277,6 +277,7 @@ CGRect initialTableViewRect;
     switch(type)
     {
         case NSFetchedResultsChangeInsert:{
+            
             Event* event = (Event*) anObject;
             
             if (event.imageURL != nil) {
@@ -486,21 +487,22 @@ CGRect initialTableViewRect;
     
     NSLog(@"event %@ has an imageID of %@",tempEvent.title, imageID);
     
-    UIImageView * cachedImageView = [self.imageCache objectForKey:imageID];
+    UIImage * cachedImage = [self.imageCache objectForKey:imageID];
 
-    if (cachedImageView) {
-        cell.backgroundView = cachedImageView;
+    //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    if (cachedImage) {
+        cell.eventImageView.image = cachedImage;
     }
     else {
-        //UIImageView * imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
-        //imageView.contentMode = UIViewContentModeScaleAspectFill;
-        cell.backgroundView = self.placeholderImage;
+        cell.eventImageView.image = self.placeholderImage.image;
     }
+
+    //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
+   /* for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
     {
         // Check if cell is a PAEventCell, which has a backgroundView.image property
         UITableViewCell * c = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
@@ -524,7 +526,7 @@ CGRect initialTableViewRect;
 
             cell.backgroundView.frame = frame;
         }
-    }
+    }*/
 }
 
 #pragma mark - Search Bar Delegate
@@ -601,6 +603,7 @@ CGRect initialTableViewRect;
     NSMutableArray* eventURLs = [[NSMutableArray alloc] init];
     NSMutableArray* eventTypes = [[NSMutableArray alloc] init];
     NSMutableArray* eventIDs = [[NSMutableArray alloc] init];
+    NSMutableArray* eventRows = [[NSMutableArray alloc] init];
     for(int i =0; i<[_fetchedResultsController.fetchedObjects count];i++){
         
         Event* tempEvent = _fetchedResultsController.fetchedObjects[i];
@@ -610,6 +613,7 @@ CGRect initialTableViewRect;
             [eventURLs addObject:tempEvent.imageURL];
             [eventTypes addObject:tempEvent.type];
             [eventIDs addObject:tempEvent.id];
+            [eventRows addObject:[NSNumber numberWithInt:i]];
         }
         
     }
@@ -627,9 +631,7 @@ CGRect initialTableViewRect;
             [self.tableView reloadData];
             
         });
-    });
-    
-    
+    }
     [self.tableView reloadData];
 }
 

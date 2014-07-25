@@ -11,6 +11,7 @@
 @interface PAProfileThumbnailView ()
 
 @property (strong, nonatomic) UIButton * profileButton;
+
 - (void)onProfileTap:(id)sender;
 
 @end
@@ -25,7 +26,9 @@
         UIButton * button = [[UIButton alloc]initWithFrame:frame];
         UIImageView * imageView = [[UIImageView alloc] initWithFrame:subFrame];
 
-        imageView.image = image;
+        self.image = image;
+
+        imageView.image = self.image;
         imageView.layer.cornerRadius = subFrame.size.width / 2;
         imageView.clipsToBounds = YES;
 

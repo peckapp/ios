@@ -129,11 +129,13 @@ BOOL loggedIn;
         [defaults removeObjectForKey:@"last_name"];
         [defaults removeObjectForKey:@"blurb"];
         [defaults removeObjectForKey:@"email"];
+        [defaults removeObjectForKey:@"profile_picture"];
         
         self.emailTextField.text=@"";
         self.firstNameTextField.text=@"";
         self.infoTextView.text = @"";
         self.lastNameTextField.text = @"";
+        self.profilePicture.image = nil;
         [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
         loggedIn=NO;
     }
