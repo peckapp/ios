@@ -593,6 +593,7 @@ CGRect initialTableViewRect;
     NSMutableArray* eventURLs = [[NSMutableArray alloc] init];
     NSMutableArray* eventTypes = [[NSMutableArray alloc] init];
     NSMutableArray* eventIDs = [[NSMutableArray alloc] init];
+    NSMutableArray* eventRows = [[NSMutableArray alloc] init];
     for(int i =0; i<[_fetchedResultsController.fetchedObjects count];i++){
         
         Event* tempEvent = _fetchedResultsController.fetchedObjects[i];
@@ -602,29 +603,23 @@ CGRect initialTableViewRect;
             [eventURLs addObject:tempEvent.imageURL];
             [eventTypes addObject:tempEvent.type];
             [eventIDs addObject:tempEvent.id];
+            [eventRows addObject:[NSNumber numberWithInt:i]];
         }
         
     }
-    //dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
-    //dispatch_async(myQueue, ^{
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-    dispatch_async(queue, ^{
-        // Perform long running process
-        NSLog(@"starting async thread");
-        for(int i =0; i<[eventIDs count];i++){
-            
-            [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
-            
-        }
-        NSLog(@"post for loop");
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"reload the table view");
-            [self.tableView reloadData];
-            //[self.tableView scrollToNearestSelectedRowAtScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+   
+    for(int i =0; i<[eventIDs count];i++){
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+        dispatch_async(queue, ^{
+        [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSIndexPath* indexPath =[NSIndexPath indexPathForRow: [eventRows[i] integerValue] inSection:0];
+                PAEventCell* cell = (PAEventCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+                [self configureCell:cell atIndexPath:indexPath];
+                //to reload the cell after the image is cached
+            });
         });
-    });
-    
-    
+    }
     [self.tableView reloadData];
 }
 
