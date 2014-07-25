@@ -151,10 +151,10 @@ CGRect initialTableViewRect;
             loadedImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
             if(loadedImage){
 
-                UIImage * blurredImage = [loadedImage applyDarkEffect];
+                //UIImage * blurredImage = [loadedImage applyDarkEffect];
                 //UIImageView * imageView = [[UIImageView alloc] initWithImage:blurredImage];
                 //imageView.contentMode = UIViewContentModeScaleAspectFill;
-                [self.imageCache setObject:blurredImage forKey:[eventID stringValue]];
+                [self.imageCache setObject:loadedImage forKey:[eventID stringValue]];
             }
         }
     }

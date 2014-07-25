@@ -518,7 +518,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"update circle info JSON: %@",JSON);
+             NSLog(@"update circle info JSON: %@",JSON);
              NSDictionary *circlesDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [circlesDictionary objectForKey:@"circles"];
              for (NSDictionary *circleAttributes in postsFromResponse) {
