@@ -66,6 +66,9 @@ CGRect initialTableViewRect;
 {
     [super viewDidLoad];
     NSLog(@"View did load (events)");
+    self.placeholderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
+    self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
+    
     if(!self.imageCache){
         self.imageCache = [[NSCache alloc] init];
     }
@@ -104,6 +107,7 @@ CGRect initialTableViewRect;
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
     [self.tableView reloadData];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -483,9 +487,9 @@ CGRect initialTableViewRect;
         cell.backgroundView = cachedImageView;
     }
     else {
-        UIImageView * imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        cell.backgroundView = imageView;
+        //UIImageView * imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
+        //imageView.contentMode = UIViewContentModeScaleAspectFill;
+        cell.backgroundView = self.placeholderImage;
     }
 }
 

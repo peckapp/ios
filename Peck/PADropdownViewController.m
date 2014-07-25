@@ -79,7 +79,7 @@
     }];
     self.secondaryViewControllers = [collector copy];
 
-
+    [[UIApplication sharedApplication] keyWindow].tintColor = [UIColor orangeColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated
