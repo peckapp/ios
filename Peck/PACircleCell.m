@@ -17,6 +17,7 @@
 #import "Comment.h"
 #import "PASyncManager.h"
 #import "PAFetchManager.h"
+#import "PACircleProfilePreviewCell.h"
 
 @interface PACircleCell ()
 
@@ -27,8 +28,6 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-NSString * commentCellIdentifier = @"CircleCommentCell";
-NSString * commentCellNibName = @"PACommentCell";
 NSMutableDictionary *heightDictionary;
 UITextView *textViewHelper;
 
@@ -73,13 +72,6 @@ UITextView *textViewHelper;
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
-    if (selected) {
-        [self expand];
-    }
-    else {
-        [self contract];
-    }
 }
 
 -(void)selectProfile: (UIGestureRecognizer*) sender{
@@ -118,21 +110,6 @@ UITextView *textViewHelper;
     [self.profilesTableView reloadData];
 }
 
-- (void)addMember:(NSNumber *)member
-{
-
-}
-
-- (void)expand
-{
-    // TODO: handle expansion
-}
-
-- (void)contract
-{
-    // TODO: handle contraction
-}
-
 
 #pragma mark Table view data source
 
@@ -165,34 +142,24 @@ UITextView *textViewHelper;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == self.profilesTableView) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"circleSubcell"];
+        PACircleProfilePreviewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"profilePreviewCell"];
         if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"circleSubcell"];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [tableView registerNib:[UINib nibWithNibName:@"PACircleProfilePreviewCell" bundle:nil] forCellReuseIdentifier:@"profilePreviewCell"];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"profilePreviewCell"];
         }
 
-    
-
-        if (indexPath.row == [self.members count]) {
-            cell.backgroundColor = [UIColor blackColor];
-        }
-        else if (indexPath.row % 2 == 0) {
-            cell.backgroundColor = [UIColor grayColor];
-        }
-        else {
-            cell.backgroundColor = [UIColor lightGrayColor];
-        }
+        [self configureMemberCell:cell atIndexPath:indexPath];
 
         cell.transform = CGAffineTransformMakeRotation(M_PI_2);
         return cell;
     }
     else if (tableView == self.commentsTableView) {
-        PACommentCell *cell = [tableView dequeueReusableCellWithIdentifier:commentCellIdentifier];
+        PACommentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
         if (cell == nil) {
-            [tableView registerNib:[UINib nibWithNibName:commentCellNibName bundle:nil] forCellReuseIdentifier:commentCellIdentifier];
-            cell = [tableView dequeueReusableCellWithIdentifier:commentCellIdentifier];
+            [tableView registerNib:[UINib nibWithNibName:@"PACommentCell" bundle:nil] forCellReuseIdentifier:@"commentCell"];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
         }
-        [self configureCell:cell atIndexPath:indexPath];
+        [self configureCommentCell:cell atIndexPath:indexPath];
         return cell;
     }
     else if(tableView == self.suggestedMembersTableView){
@@ -208,13 +175,23 @@ UITextView *textViewHelper;
     }
 }
 
--(void)configureSuggestedMemberCell:(UITableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+- (void)configureMemberCell:(PACircleProfilePreviewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row < [self.members count]) {
+        cell.profileThumbnail.image = [UIImage imageNamed:@"plus@2x.png"];
+    }
+    else {
+        cell.profileThumbnail.image = [UIImage imageNamed:@"profile-placeholder.png"];
+    }
+    cell.profileThumbnail.userInteractionEnabled = NO;
+}
+
+- (void)configureSuggestedMemberCell:(UITableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath {
     Peer * suggestedMember = self.suggestedMembers[indexPath.row];
     NSLog(@"name: %@", suggestedMember.name);
     cell.textLabel.text = suggestedMember.name;
 }
 
--(void)configureCell:(PACommentCell *)cell atIndexPath:(NSIndexPath *)indexPath{
+- (void)configureCommentCell:(PACommentCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"configure cell");
     cell.parentCircleTableView = self.parentViewController;
     cell.parentCell=self;
@@ -487,7 +464,7 @@ UITextView *textViewHelper;
         case NSFetchedResultsChangeUpdate:
         {
             PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:indexPath];
-            [self configureCell:cell atIndexPath:indexPath];
+            [self configureCommentCell:cell atIndexPath:indexPath];
             break;
         }
         case NSFetchedResultsChangeMove:
