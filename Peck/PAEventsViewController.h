@@ -13,6 +13,14 @@
 #import <CoreData/CoreData.h>
 #import "PACoreDataProtocol.h"
 
+typedef struct {
+    char* imageURL;
+    char* type ;
+    int eventID;
+} eventImage;
+
+
+
 @interface PAEventsViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDataSource,UITableViewDelegate, UISearchBarDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -21,6 +29,8 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (strong, nonatomic) UITableView * tableView;
+@property (strong, nonatomic) UIImageView* placeholderImage;
+
 
 @property (strong, nonatomic) NSCache* imageCache;
 - (IBAction)yesterdayButton:(id)sender;

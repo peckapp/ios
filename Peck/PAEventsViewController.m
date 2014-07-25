@@ -60,6 +60,9 @@ CGRect initialTableViewRect;
 {
     [super viewDidLoad];
     NSLog(@"View did load (events)");
+    self.placeholderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
+    self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
+    
     if(!self.imageCache){
         self.imageCache = [[NSCache alloc] init];
     }
@@ -98,6 +101,7 @@ CGRect initialTableViewRect;
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
     [self.tableView reloadData];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -473,9 +477,9 @@ CGRect initialTableViewRect;
         cell.backgroundView = cachedImageView;
     }
     else {
-        UIImageView * imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        cell.backgroundView = imageView;
+        //UIImageView * imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
+        //imageView.contentMode = UIViewContentModeScaleAspectFill;
+        cell.backgroundView = self.placeholderImage;
     }
 }
 
@@ -581,12 +585,15 @@ CGRect initialTableViewRect;
     }
     NSMutableArray* fetchedEvents = [[NSMutableArray alloc] init];
     for(int i =0; i<[_fetchedResultsController.fetchedObjects count];i++){
+        //eventImage* eventImage =
+        
         Event* tempEvent = _fetchedResultsController.fetchedObjects[i];
         [fetchedEvents addObject:tempEvent];
     }
     dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
     dispatch_async(myQueue, ^{
         // Perform long running process
+    
         for(int i =0; i<[fetchedEvents count];i++){
             Event* event = fetchedEvents[i];
             if([event.type isEqualToString:@"simple"]){
