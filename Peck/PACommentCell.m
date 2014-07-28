@@ -67,7 +67,7 @@
 }
 
 - (IBAction)likeButton:(id)sender {
-    [[PASyncManager globalSyncManager] likeComment:self.commentID];
+    [[PASyncManager globalSyncManager] likeComment:self.comment.id];
 }
 
 - (IBAction)postButton:(id)sender {

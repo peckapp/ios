@@ -361,6 +361,8 @@ BOOL reloaded = NO;
         [cell.likeButton setHidden:NO];
         [cell.numberOfLikesLabel setHidden:NO];
         cell.commentID = tempComment.id;
+        cell.comment = tempComment;
+        
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
         [cell.expandButton setHidden:NO];
