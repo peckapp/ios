@@ -1168,7 +1168,7 @@
              NSNumber* subID = [subscriptionAttributes objectForKey:@"subscribed_to"];
              NSNumber* subscriptionID = [subscriptionAttributes objectForKey:@"id"];
              //the sub id is the id of the department, club, or athletic team that the user is subscribed to
-             //and the subscription id is the is of the acutal subscription (link between the user and subscription)
+             //and the subscription id is the id of the acutal subscription (link between the user and subscription)
              [[PAFetchManager sharedFetchManager] setSubscribedTrue:subID withCategory:category andSubscriptionID:subscriptionID];
         }
          
