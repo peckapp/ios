@@ -655,8 +655,8 @@
 -(void)updateDiningPlaces:(DiningPeriod*)diningPeriod forController:(PADiningPlacesTableViewController*)viewController{
    //dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
    //dispatch_async(queue, ^{
-        NSString * diningPlacesURL = [dining_placesAPI stringByAppendingString:@"?"];
-        diningPlacesURL = [diningPlacesURL stringByAppendingString:@"id="];
+        NSString * diningPlacesURL = [dining_placesAPI stringByAppendingString:@"/"];
+        //diningPlacesURL = [diningPlacesURL stringByAppendingString:@"id="];
         diningPlacesURL = [diningPlacesURL stringByAppendingString:[diningPeriod.place_id stringValue]];
     
         NSLog(@"in secondary thread to update dining");
@@ -667,18 +667,17 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"JSON: %@",JSON);
+             NSLog(@"JSON: %@",JSON);
              NSDictionary *diningDictionary = (NSDictionary*)JSON;
-             NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_places"];
-             for (NSDictionary *diningAttributes in postsFromResponse){
-                 NSNumber *newID = [diningAttributes objectForKey:@"id"];
-                 BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace" andCategory:nil];
-                 if(!diningPlaceAlreadyExists){
-                     NSLog(@"setting dining place");
-                     DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInDiningPlace:diningPlace withDictionary:diningAttributes];
-                     [viewController addDiningPlace:diningPlace withPeriod:diningPeriod];
-                 }
+             NSDictionary *diningAttributes = [diningDictionary objectForKey:@"dining_place"];
+             NSNumber *newID = [diningAttributes objectForKey:@"id"];
+             BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace" andCategory:nil];
+             if(!diningPlaceAlreadyExists){
+                    NSLog(@"setting dining place");
+                    DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
+                    [self setAttributesInDiningPlace:diningPlace withDictionary:diningAttributes];
+                    [viewController addDiningPlace:diningPlace withPeriod:diningPeriod];
+                
              }
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -707,6 +706,7 @@
                               parameters:[self authenticationParameters]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"dining period JSON %@", JSON);
          NSDictionary *periods = (NSDictionary*)JSON;
          NSArray * diningPeriodArray = [periods objectForKey:@"dining_periods"];
          NSMutableArray *diningPeriods = [[NSMutableArray alloc] init];
