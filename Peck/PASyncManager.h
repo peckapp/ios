@@ -68,5 +68,6 @@
 -(void)postSubscriptions:(NSArray*)array;
 -(void)deleteSubscriptions:(NSArray*)array;
 
--(BOOL)objectExists:(NSNumber *)newID withType: (NSString *) type;
+// -(BOOL)objectExists:(NSNumber *)newID withType: (NSString *) type;
+
 @end

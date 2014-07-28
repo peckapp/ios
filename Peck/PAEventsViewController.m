@@ -617,19 +617,17 @@ CGRect initialTableViewRect;
         }
         
     }
-    //dispatch_queue_t myQueue = dispatch_queue_create("My Queue",NULL);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        // Perform long running process
-    
-        for(int i =0; i<[eventIDs count];i++){
-            
-            [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
-            
-        }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            
+   
+    for(int i =0; i<[eventIDs count];i++){
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+        dispatch_async(queue, ^{
+        [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSIndexPath* indexPath =[NSIndexPath indexPathForRow: [eventRows[i] integerValue] inSection:0];
+                PAEventCell* cell = (PAEventCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+                [self configureCell:cell atIndexPath:indexPath];
+                //to reload the cell after the image is cached
+            });
         });
     }
     [self.tableView reloadData];
