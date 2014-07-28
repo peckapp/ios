@@ -70,7 +70,7 @@ CGRect initialTableViewRect;
 {
     [super viewDidLoad];
     NSLog(@"View did load (events)");
-    self.placeholderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image-placeholder.png"]];
+    self.placeholderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
     self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
     
     if(!self.imageCache){
@@ -339,7 +339,7 @@ CGRect initialTableViewRect;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
-    return rows = [sectionInfo numberOfObjects];
+    return [sectionInfo numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
