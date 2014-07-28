@@ -341,7 +341,7 @@ BOOL reloaded = NO;
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
         [cell.postButton setHidden:NO];
-        if([self.commentText isEqualToString:@""] || self.commentText==nil){
+        if(([self.commentText isEqualToString:@""] || self.commentText==nil) && ![cell.commentTextView isFirstResponder]){
             cell.commentTextView.textColor = [UIColor lightGrayColor];
             cell.commentTextView.text = @"add a comment";
         }
