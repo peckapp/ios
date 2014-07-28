@@ -135,6 +135,25 @@
     return mutableFetchResults;
 }
 
+-(void)setAllSubscriptionsFalseForCategory:(NSString *)category{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Subscription" inManagedObjectContext:_managedObjectContext]];
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"category like %@",category];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    
+    for(int i = 0; i<[mutableFetchResults count]; i++){
+        Subscription* subscription = mutableFetchResults[i];
+        subscription.subscribed = NO;
+    }
+}
+
 -(void)setSubscribedTrue:(NSNumber*)subID withCategory:(NSString *)category andSubscriptionID:(NSNumber*)subscriptionID{
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];

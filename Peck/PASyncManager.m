@@ -317,7 +317,6 @@
                      //NSLog(@"PEER: %@",peer);
                  }if(userAlreadyExists){
                      //if the peer is already in core data and is not the user
-                     NSLog(@"setting the attributes of a peer that is already in core data");
                      Peer* peer = [[PAFetchManager sharedFetchManager] getPeerWithID:newID];
                      if(peer){
                          [self setAttributesInPeer:peer withDictionary:userAttributes];
@@ -1164,6 +1163,7 @@
          //NSLog(@"Subscription JSON: %@",JSON);
          NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
          NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"subscriptions"];
+         [[PAFetchManager sharedFetchManager] setAllSubscriptionsFalseForCategory:category];
          for (NSDictionary *subscriptionAttributes in postsFromResponse) {
              NSNumber* subID = [subscriptionAttributes objectForKey:@"subscribed_to"];
              NSNumber* subscriptionID = [subscriptionAttributes objectForKey:@"id"];
