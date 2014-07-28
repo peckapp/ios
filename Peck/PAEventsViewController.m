@@ -98,7 +98,7 @@ CGRect initialTableViewRect;
     UIView * backView = [[UIView alloc] init];
     backView.backgroundColor = [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.tableView.separatorColor = [UIColor colorWithRed:84/255.0 green:80/255.0 blue:102/255.0 alpha:1];
+    self.tableView.separatorColor = [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1];
     self.tableView.separatorInset = UIEdgeInsetsZero;
     [self.tableView setBackgroundView:backView];
 
