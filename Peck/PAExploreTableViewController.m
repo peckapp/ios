@@ -79,6 +79,9 @@ NSCache *imageCache;
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;
+    cell.photoView.image = [UIImage imageNamed:@"image-placeholder.png"];
+    
+    /*
     NSNumber *imageID = tempExplore.id;
     UIImage *image = [imageCache objectForKey:imageID];
     if(image){
@@ -107,7 +110,7 @@ NSCache *imageCache;
                 [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
             });
         });
-    }
+    }*/
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
