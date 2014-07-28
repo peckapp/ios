@@ -360,6 +360,13 @@ BOOL reloaded = NO;
         cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
         [cell.likeButton setHidden:NO];
         [cell.numberOfLikesLabel setHidden:NO];
+
+        if([self userHasLikedComment:tempComment]){
+            [cell.likeButton setTitle:@"Unlike" forState:UIControlStateNormal];
+        }else{
+            [cell.likeButton setTitle:@"Like" forState:UIControlStateNormal];
+        }
+        
         cell.commentID = tempComment.id;
         cell.commentIntegerID = [tempComment.id integerValue];
         //cell.comment = tempComment;
@@ -394,6 +401,16 @@ BOOL reloaded = NO;
         
     }
     
+}
+
+-(BOOL)userHasLikedComment:(Comment*)comment{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger userID = [[defaults objectForKey:@"user_id"] integerValue];
+    for(int i =0; i<[comment.likes count];i++){
+        if(userID==[comment.likes[i] integerValue]){
+            return YES;
+        }
+    }return NO;
 }
 
 -(NSString*)nameLabelTextForComment:(Comment*)comment{

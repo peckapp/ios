@@ -375,6 +375,30 @@
                                     
                                    }];
 }
+-(void)unlikeComment:(NSInteger)commentID{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary* authentication = [[self authenticationParameters] objectForKey:@"authentication"];
+    NSDictionary* baseDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    authentication, @"authentication",
+                                    [defaults objectForKey:@"user_id"], @"unliker",
+                                    nil];
+    
+    NSString* likeURL = [@"api/comments/" stringByAppendingString:[@(commentID) stringValue]];
+    likeURL = [likeURL stringByAppendingString:@"/unlike"];
+    
+    NSLog(@"like url %@", likeURL);
+    [[PASessionManager sharedClient] PATCH:likeURL
+                                parameters:baseDictionary
+                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                       NSLog(@"like JSON %@", JSON);
+                                   }
+     
+                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                       NSLog(@"ERROR: %@",error);
+                                       
+                                   }];
+}
+
 
 #pragma mark - Institution actions
 

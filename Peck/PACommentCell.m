@@ -67,7 +67,12 @@
 }
 
 - (IBAction)likeButton:(id)sender {
-    [[PASyncManager globalSyncManager] likeComment:self.commentIntegerID];
+    if([self.likeButton.titleLabel.text isEqualToString:@"Like"]){
+        [[PASyncManager globalSyncManager] likeComment:self.commentIntegerID];
+    }else{
+        NSLog(@"UNLIKE!!");
+        [[PASyncManager globalSyncManager] unlikeComment:self.commentIntegerID];
+    }
 }
 
 - (IBAction)postButton:(id)sender {
