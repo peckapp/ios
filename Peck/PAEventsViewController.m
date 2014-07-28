@@ -113,7 +113,7 @@ CGRect initialTableViewRect;
     [self.tableView reloadData];
 
     UIImageView * dropShadow = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"drop-shadow-horizontal"] stretchableImageWithLeftCapWidth:1 topCapHeight:0]];
-    dropShadow.frame = CGRectMake(0,42, self.view.frame.size.width, 256);
+    dropShadow.frame = CGRectMake(0,44, self.view.frame.size.width, 64);
     [self.navigationController.navigationBar addSubview:dropShadow];
     
 }
