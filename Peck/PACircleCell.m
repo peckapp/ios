@@ -19,6 +19,7 @@
 #import "PAFetchManager.h"
 #import "PACircleProfilePreviewCell.h"
 #import "UIImageView+AFNetworking.h"
+#import "PAProfileThumbnailView.h"
 
 @interface PACircleCell ()
 
@@ -371,6 +372,7 @@ UITextView *textViewHelper;
              Peer *member = self.members[[indexPath row]];
              NSLog(@"view the member %@", member.name);
         }
+        [self.profilesTableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     else if (tableView == self.commentsTableView) {
         [self.commentsTableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -560,6 +562,7 @@ UITextView *textViewHelper;
     NSNumber* institutionID= [defaults objectForKey:@"institution_id"];
     
     NSMutableArray* circleMembers = [[NSMutableArray alloc] init];
+    
     for(int i=0;i<[self.members count];i++){
         Peer * tempPeer = self.members[i];
         [circleMembers addObject:tempPeer.id];
@@ -570,7 +573,7 @@ UITextView *textViewHelper;
                                 userID, @"user_id",
                                 institutionID, @"institution_id",
                                 self.titleTextField.text, @"circle_name",
-                                circleMembers, @"circle_members",
+                                circleMembers, @"circle_member_ids",
                                 nil];
     
     [self endEditing:YES];

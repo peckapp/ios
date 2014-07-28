@@ -54,8 +54,12 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     NSLog(@"view will disappear");
-    [[PASyncManager globalSyncManager] postSubscriptions:[self.addedSubscriptions allValues]];
-    [[PASyncManager globalSyncManager] deleteSubscriptions:[self.deletedSubscriptions allValues]];
+    if([[self.addedSubscriptions allValues] count]>0){
+        [[PASyncManager globalSyncManager] postSubscriptions:[self.addedSubscriptions allValues]];
+    }
+    if([[self.deletedSubscriptions allValues] count]>0){
+        [[PASyncManager globalSyncManager] deleteSubscriptions:[self.deletedSubscriptions allValues]];
+    }
 }
 
 #pragma mark - Table view data source
