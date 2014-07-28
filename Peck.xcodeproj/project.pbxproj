@@ -116,6 +116,7 @@
 		DD898137195B523F0079CDC9 /* button-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898134195B523F0079CDC9 /* button-selected@2x.png */; };
 		DD898139195B5AE20079CDC9 /* image-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898138195B5AE20079CDC9 /* image-placeholder.png */; };
 		DD89816D195CAF6F0079CDC9 /* PAEventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD89816C195CAF6F0079CDC9 /* PAEventCell.xib */; };
+		DDBCA9BE1986D6BC007D283E /* drop-shadow-horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */; };
 		DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAExploreCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */; };
 		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
@@ -351,6 +352,7 @@
 		DD898134195B523F0079CDC9 /* button-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-selected@2x.png"; sourceTree = "<group>"; };
 		DD898138195B5AE20079CDC9 /* image-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-placeholder.png"; sourceTree = "<group>"; };
 		DD89816C195CAF6F0079CDC9 /* PAEventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAEventCell.xib; sourceTree = "<group>"; };
+		DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "drop-shadow-horizontal.png"; sourceTree = "<group>"; };
 		DDCD45C0195DC8E60032333F /* profile-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile-placeholder.png"; sourceTree = "<group>"; };
 		DDDAEDD819465DCB004CE102 /* PAExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreCell.h; sourceTree = "<group>"; };
 		DDDAEDD919465DCB004CE102 /* PAExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreCell.m; sourceTree = "<group>"; };
@@ -421,6 +423,7 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */,
 				DDFFF5C21982CB3400DC5AC1 /* icons */,
 				DDFFF5C11982CB1100DC5AC1 /* app-icon */,
 				860EB42D1980660400F1E665 /* UIImage+ImageEffects.h */,
@@ -949,6 +952,7 @@
 				864D873D196470C100BCC01A /* facebook-login.png in Resources */,
 				8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */,
 				DDFFF5B219829D1100DC5AC1 /* feather-57@2x.png in Resources */,
+				DDBCA9BE1986D6BC007D283E /* drop-shadow-horizontal.png in Resources */,
 				DDFFF5AC19829BD100DC5AC1 /* feather-76@2x.png in Resources */,
 				A43BF0F8197992490009B7AD /* sidebar_background.jpg in Resources */,
 				A43BF1021979BC240009B7AD /* circles.jpeg in Resources */,

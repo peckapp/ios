@@ -28,6 +28,9 @@
 #define searchBarHeight 44
 #define parallaxRange 176
 
+#define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
+#define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
+
 struct eventImage{
     const char* imageURL;
     const char* type ;
@@ -82,7 +85,6 @@ CGRect initialTableViewRect;
         searchBar = [[UISearchBar alloc] init];
         searchBar.delegate = self;
         searchBar.showsCancelButton = NO;
-        [self.view addSubview:searchBar];
     }
     
     
@@ -97,9 +99,9 @@ CGRect initialTableViewRect;
     self.tableView.delegate = self;
 
     UIView * backView = [[UIView alloc] init];
-    backView.backgroundColor = [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1];
+    backView.backgroundColor = darkColor;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.tableView.separatorColor = [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1];
+    self.tableView.separatorColor = lightColor;
     self.tableView.separatorInset = UIEdgeInsetsZero;
     [self.tableView setBackgroundView:backView];
 
@@ -109,6 +111,10 @@ CGRect initialTableViewRect;
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
     [self.tableView reloadData];
+
+    UIImageView * dropShadow = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"drop-shadow-horizontal"] stretchableImageWithLeftCapWidth:1 topCapHeight:0]];
+    dropShadow.frame = CGRectMake(0,42, self.view.frame.size.width, 256);
+    [self.navigationController.navigationBar addSubview:dropShadow];
     
 }
 
@@ -120,9 +126,12 @@ CGRect initialTableViewRect;
     showingDetail = NO;
     [self registerForKeyboardNotifications];
     searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
-    self.tableView.frame = CGRectMake(0, searchBarHeight, self.view.frame.size.width, (self.view.frame.size.height) - searchBarHeight);
+    self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, (self.view.frame.size.height));
     initialTableViewRect= self.tableView.frame;
 
+    self.tableView.tableHeaderView = searchBar;
+
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -330,7 +339,7 @@ CGRect initialTableViewRect;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
-    return [sectionInfo numberOfObjects];
+    return rows = [sectionInfo numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
