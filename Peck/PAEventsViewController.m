@@ -131,7 +131,7 @@ CGRect initialTableViewRect;
 
     self.tableView.tableHeaderView = searchBar;
 
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    // [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
