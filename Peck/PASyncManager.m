@@ -803,7 +803,7 @@
     fileName = [fileName stringByAppendingString:@".jpeg"];
     NSLog(@"file name %@", fileName);
     
-    NSLog(@"file path: %@", filePath);
+    //NSLog(@"file path: %@", filePath);
     [[PASessionManager sharedClient] POST:simple_eventsAPI
                                parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary]
                                 constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:filePath name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
