@@ -59,6 +59,7 @@
 		86DD9C2B195C70AE0074096E /* PeckWebserviceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DD9C2A195C70AE0074096E /* PeckWebserviceTests.m */; };
 		A40CF56819547ACC0021C088 /* PAPeers.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56719547ACC0021C088 /* PAPeers.m */; };
 		A40CF574195483140021C088 /* PABST.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF573195483140021C088 /* PABST.m */; };
+		A412E1D11986D08A00384A11 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = A412E1D01986D08A00384A11 /* Comment.m */; };
 		A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */; };
 		A433EAA6195B53D800DAA201 /* PACircleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA5195B53D800DAA201 /* PACircleScrollView.m */; };
 		A43BF0EA197813200009B7AD /* PAProfileTableViewController2.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */; };
@@ -107,7 +108,6 @@
 		A4E21F601964A749002A9800 /* PAEventInfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */; };
 		A4E21F6519659892002A9800 /* PACommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F6319659892002A9800 /* PACommentCell.m */; };
 		A4E21F6619659892002A9800 /* PACommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4E21F6419659892002A9800 /* PACommentCell.xib */; };
-		A4E21F6F1965F0E0002A9800 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F6E1965F0E0002A9800 /* Comment.m */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 		DD5751B41980356100BF52A8 /* PAPeckInviteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD5751B31980356100BF52A8 /* PAPeckInviteCell.xib */; };
 		DD5751B819803BF800BF52A8 /* event-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD5751B719803BF800BF52A8 /* event-placeholder.png */; };
@@ -259,6 +259,8 @@
 		A40CF56719547ACC0021C088 /* PAPeers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPeers.m; sourceTree = "<group>"; };
 		A40CF572195483140021C088 /* PABST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PABST.h; sourceTree = "<group>"; };
 		A40CF573195483140021C088 /* PABST.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PABST.m; sourceTree = "<group>"; };
+		A412E1CF1986D08A00384A11 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
+		A412E1D01986D08A00384A11 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
 		A433EAA0195B3F5800DAA201 /* HTAutocompleteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTAutocompleteManager.h; sourceTree = "<group>"; };
 		A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTAutocompleteManager.m; sourceTree = "<group>"; };
 		A433EAA4195B53D800DAA201 /* PACircleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleScrollView.h; sourceTree = "<group>"; };
@@ -339,8 +341,6 @@
 		A4E21F6219659892002A9800 /* PACommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACommentCell.h; sourceTree = "<group>"; };
 		A4E21F6319659892002A9800 /* PACommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACommentCell.m; sourceTree = "<group>"; };
 		A4E21F6419659892002A9800 /* PACommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PACommentCell.xib; sourceTree = "<group>"; };
-		A4E21F6D1965F0E0002A9800 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
-		A4E21F6E1965F0E0002A9800 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD5751B31980356100BF52A8 /* PAPeckInviteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAPeckInviteCell.xib; sourceTree = "<group>"; };
@@ -724,8 +724,8 @@
 		A4E21F611965982C002A9800 /* Comment */ = {
 			isa = PBXGroup;
 			children = (
-				A4E21F6D1965F0E0002A9800 /* Comment.h */,
-				A4E21F6E1965F0E0002A9800 /* Comment.m */,
+				A412E1CF1986D08A00384A11 /* Comment.h */,
+				A412E1D01986D08A00384A11 /* Comment.m */,
 				A4E21F6219659892002A9800 /* PACommentCell.h */,
 				A4E21F6319659892002A9800 /* PACommentCell.m */,
 				A4E21F6419659892002A9800 /* PACommentCell.xib */,
@@ -1103,8 +1103,8 @@
 				A4773C8F195A076800AB9831 /* PACreateCircleViewController.m in Sources */,
 				A4677D52197562B1007E3C3A /* PADiningOpportunityCell.m in Sources */,
 				86292527193CBFF80057CA41 /* PAEventCell.m in Sources */,
-				A4E21F6F1965F0E0002A9800 /* Comment.m in Sources */,
 				A43BF0F6197978690009B7AD /* PAChangePasswordViewController.m in Sources */,
+				A412E1D11986D08A00384A11 /* Comment.m in Sources */,
 				867B52D619509F5000BEB37B /* PASessionManager.m in Sources */,
 				A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */,
 				86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */,

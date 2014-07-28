@@ -2,7 +2,7 @@
 //  Comment.m
 //  Peck
 //
-//  Created by John Karabinos on 7/3/14.
+//  Created by John Karabinos on 7/28/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -11,11 +11,12 @@
 
 @implementation Comment
 
-@dynamic created_at;
-@dynamic peer_id;
-@dynamic id;
 @dynamic category;
 @dynamic comment_from;
 @dynamic content;
+@dynamic created_at;
+@dynamic id;
+@dynamic peer_id;
+@dynamic likes;
 
 @end

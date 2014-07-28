@@ -355,6 +355,7 @@ BOOL reloaded = NO;
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+        cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
         cell.commentID = tempComment.id;
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];

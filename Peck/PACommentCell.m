@@ -66,6 +66,10 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)likeButton:(id)sender {
+    [[PASyncManager globalSyncManager] likeComment:self.commentID];
+}
+
 - (IBAction)postButton:(id)sender {
     NSLog(@"post (in cell)");
     if(self.parentTableView){
