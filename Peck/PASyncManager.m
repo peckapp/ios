@@ -119,7 +119,7 @@
     fileName = [fileName stringByAppendingString:@"_"];
     fileName = [fileName stringByAppendingString:[@(seconds) stringValue]];
     fileName = [fileName stringByAppendingString:@".jpeg"];
-    NSLog(@"file name %@", fileName);
+    //NSLog(@"file name %@", fileName);
     
     [[PASessionManager sharedClient] POST:updateURL
                                 parameters: baseDictionary constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
@@ -987,7 +987,7 @@
                               parameters:[self authenticationParameters]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"Subscription JSON: %@",JSON);
+         //NSLog(@"Subscription JSON: %@",JSON);
          NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
          NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"departments"];
          for (NSDictionary *departmentAttributes in postsFromResponse) {
@@ -1001,7 +1001,7 @@
                  NSError* error = nil;
                  [_managedObjectContext save:&error];
                  [self.persistentStoreCoordinator unlock];
-                 NSLog(@"SUBSCRIPTION: %@",subscription);
+                 //NSLog(@"SUBSCRIPTION: %@",subscription);
              }
          }
          [self updateSubscriptionsForCategory:@"department"];
@@ -1017,7 +1017,7 @@
                               parameters:[self authenticationParameters]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"Subscription JSON: %@",JSON);
+         //NSLog(@"Subscription JSON: %@",JSON);
          NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
          NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"clubs"];
          for (NSDictionary *clubAttributes in postsFromResponse) {
@@ -1031,7 +1031,7 @@
                  NSError* error = nil;
                  [_managedObjectContext save:&error];
                  [self.persistentStoreCoordinator unlock];
-                 NSLog(@"SUBSCRIPTION: %@",subscription);
+                // NSLog(@"SUBSCRIPTION: %@",subscription);
              }
          }
          [self updateSubscriptionsForCategory:@"club"];
@@ -1048,7 +1048,7 @@
                               parameters:[self authenticationParameters]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"Subscription JSON: %@",JSON);
+         //NSLog(@"Subscription JSON: %@",JSON);
          NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
          NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"athletic_teams"];
          for (NSDictionary *athleticAttributes in postsFromResponse) {
@@ -1062,7 +1062,7 @@
                  NSError* error = nil;
                  [_managedObjectContext save:&error];
                  [self.persistentStoreCoordinator unlock];
-                 NSLog(@"SUBSCRIPTION: %@",subscription);
+                 //NSLog(@"SUBSCRIPTION: %@",subscription);
              }
          }
          [self updateSubscriptionsForCategory:@"athletic"];
@@ -1094,7 +1094,7 @@
                                parameters:[self applyWrapper:@"subscriptions" toArray:array]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"success: %@", JSON);
+         //NSLog(@"success: %@", JSON);
          [self updateSubscriptions];
          
      }
@@ -1151,7 +1151,7 @@
                               parameters:[self authenticationParameters]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"Subscription JSON: %@",JSON);
+         //NSLog(@"Subscription JSON: %@",JSON);
          NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
          NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"subscriptions"];
          for (NSDictionary *subscriptionAttributes in postsFromResponse) {
