@@ -984,6 +984,11 @@
                          [_managedObjectContext save:&error];
                          [self.persistentStoreCoordinator unlock];
                          NSLog(@"COMMENT: %@",comment);
+                     }else{
+                         [self.persistentStoreCoordinator lock];
+                         Comment* comment = [[PAFetchManager sharedFetchManager] commentForID:newID];
+                         [self setAttributesInComment:comment withDictionary:commentAttributes];
+                         [self.persistentStoreCoordinator unlock];
                      }
                  }
              }

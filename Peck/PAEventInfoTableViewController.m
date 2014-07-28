@@ -336,6 +336,8 @@ BOOL reloaded = NO;
     cell.parentTableView=self;
     if([indexPath row]==0){
         //if it is the first cell. This is where the user will add a comment
+        [cell.likeButton setHidden:YES];
+        [cell.numberOfLikesLabel setHidden:YES];
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
         [cell.postButton setHidden:NO];
@@ -356,6 +358,8 @@ BOOL reloaded = NO;
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
         cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
+        [cell.likeButton setHidden:NO];
+        [cell.numberOfLikesLabel setHidden:NO];
         cell.commentID = tempComment.id;
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
@@ -369,7 +373,6 @@ BOOL reloaded = NO;
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
         
-        //cell.profilePicture.image = [self imageForComment:tempComment];
         [self imageForComment:tempComment withCell:cell];
         
         NSString * commentID = [tempComment.id stringValue];

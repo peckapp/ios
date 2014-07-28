@@ -77,6 +77,7 @@
             <connections>
                 <outlet property="commentTextView" destination="Apq-cS-vo8" id="3LA-7S-H2a"/>
                 <outlet property="expandButton" destination="L92-Wj-u3K" id="7va-e9-Vkd"/>
+                <outlet property="likeButton" destination="DWR-vI-Abg" id="dWq-Zc-Ayn"/>
                 <outlet property="nameLabel" destination="Iq5-9U-yu5" id="8dC-qA-vOF"/>
                 <outlet property="numberOfLikesLabel" destination="SQa-OC-gTk" id="fcQ-jF-2D7"/>
                 <outlet property="postButton" destination="gcg-Ko-G6d" id="ihB-g0-1kc"/>

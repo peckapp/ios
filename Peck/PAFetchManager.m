@@ -11,6 +11,7 @@
 #import "Peer.h"
 #import "PASyncManager.h"
 #import "Subscription.h"
+#import "Comment.h"
 
 @implementation PAFetchManager
 
@@ -176,6 +177,32 @@
         tempSubscription.subscribed = [NSNumber numberWithBool:YES];
         tempSubscription.subscription_id = subscriptionID;
     }
+
+}
+
+-(Comment*)commentForID:(NSNumber*)commentID{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Comment" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSString *attributeName = @"id";
+    NSNumber *attributeValue = commentID;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@",
+                              attributeName, attributeValue];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    
+    
+    if([mutableFetchResults count]>0){
+        Comment* comment = mutableFetchResults[0];
+        return comment;
+    }
+    return nil;
 
 }
 
