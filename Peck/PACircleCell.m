@@ -18,6 +18,7 @@
 #import "PASyncManager.h"
 #import "PAFetchManager.h"
 #import "PACircleProfilePreviewCell.h"
+#import "PAProfileThumbnailView.h"
 
 
 @interface PACircleCell ()
@@ -177,11 +178,11 @@ UITextView *textViewHelper;
 }
 
 - (void)configureMemberCell:(PACircleProfilePreviewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row < [self.members count]) {
-        cell.profileThumbnail.image = [UIImage imageNamed:@"plus@2x.png"];
+    if (indexPath.row == [self.members count]) {
+        cell.profileThumbnail.imageView.image = [UIImage imageNamed:@"plus"];
     }
     else {
-        cell.profileThumbnail.image = [UIImage imageNamed:@"profile-placeholder.png"];
+        cell.profileThumbnail.imageView.image = [UIImage imageNamed:@"profile-placeholder"];
     }
     cell.profileThumbnail.userInteractionEnabled = NO;
 }

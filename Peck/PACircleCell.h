@@ -40,7 +40,6 @@
 @property (weak, nonatomic) UITableViewController *parentViewController;
 @property BOOL addingMembers;
 
--(void)addMember:(NSNumber *)member;
 -(void)updateCircleMembers:(NSArray *)circleMembers;
 -(void)performFetch;
 -(void)expand:(PACommentCell*)cell;

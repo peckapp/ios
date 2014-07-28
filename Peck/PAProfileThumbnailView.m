@@ -24,16 +24,15 @@
     if (self) {
 
         UIButton * button = [[UIButton alloc]initWithFrame:frame];
-        UIImageView * imageView = [[UIImageView alloc] initWithFrame:subFrame];
 
-        self.image = image;
+        self.imageView = [[UIImageView alloc] initWithFrame:subFrame];
 
-        imageView.image = self.image;
-        imageView.layer.cornerRadius = subFrame.size.width / 2;
-        imageView.clipsToBounds = YES;
+        self.imageView.image = image;
+        self.imageView.layer.cornerRadius = subFrame.size.width / 2;
+        self.imageView.clipsToBounds = YES;
 
-        imageView.userInteractionEnabled=NO;
-        [button addSubview:imageView];
+        self.imageView.userInteractionEnabled=NO;
+        [button addSubview:self.imageView];
         [self addSubview:button];
     }
     return self;
