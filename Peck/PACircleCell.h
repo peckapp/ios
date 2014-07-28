@@ -40,6 +40,8 @@
 @property (weak, nonatomic) UITableViewController *parentViewController;
 @property BOOL addingMembers;
 
+@property (strong, nonatomic) UIImage* userPicture;
+
 -(void)addMember:(NSNumber *)member;
 -(void)updateCircleMembers:(NSArray *)circleMembers;
 -(void)performFetch;

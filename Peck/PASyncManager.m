@@ -315,6 +315,13 @@
                          [self setAttributesInPeer:peer withDictionary:userAttributes];
                      }
                      //NSLog(@"PEER: %@",peer);
+                 }if(userAlreadyExists){
+                     //if the peer is already in core data and is not the user
+                     NSLog(@"setting the attributes of a peer that is already in core data");
+                     Peer* peer = [[PAFetchManager sharedFetchManager] getPeerWithID:newID];
+                     if(peer){
+                         [self setAttributesInPeer:peer withDictionary:userAttributes];
+                     }
                  }
              }
          }
