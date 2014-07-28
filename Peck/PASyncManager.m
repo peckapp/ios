@@ -352,7 +352,7 @@
 }
 #pragma mark - Like actions
 
--(void)likeComment:(NSNumber*)commentID{
+-(void)likeComment:(NSInteger)commentID{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary* authentication = [[self authenticationParameters] objectForKey:@"authentication"];
     NSDictionary* baseDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -360,7 +360,7 @@
                                     [defaults objectForKey:@"user_id"], @"liker",
                                     nil];
     
-    NSString* likeURL = [@"api/comments/" stringByAppendingString:[commentID stringValue]];
+    NSString* likeURL = [@"api/comments/" stringByAppendingString:[@(commentID) stringValue]];
     likeURL = [likeURL stringByAppendingString:@"/add_like"];
     
     NSLog(@"like url %@", likeURL);
