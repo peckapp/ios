@@ -761,6 +761,7 @@
                               parameters:[self authenticationParameters]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"menu items JSON %@", JSON);
          NSDictionary *items = (NSDictionary*)JSON;
          NSArray * menuItemArray = [items objectForKey:@"menu_items"];
          for (NSDictionary *menuItemAttributes in menuItemArray){
