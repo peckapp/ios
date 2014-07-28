@@ -19,6 +19,7 @@
 #import "PAFetchManager.h"
 #import "PACircleProfilePreviewCell.h"
 #import "UIImageView+AFNetworking.h"
+#import "PAProfileThumbnailView.h"
 
 @interface PACircleCell ()
 
@@ -182,7 +183,9 @@ UITextView *textViewHelper;
         cell.profileThumbnail.imageView.image = [UIImage imageNamed:@"plus"];
     }
     else {
-        cell.profileThumbnail.imageView.image = [UIImage imageNamed:@"profile-placeholder"];
+        Peer* peer = self.members[indexPath.row];
+        [self imageForPeerID: peer.id withMemberCell:cell];
+        //cell.profileThumbnail.imageView.image = [UIImage imageNamed:@"profile-placeholder"];
     }
     cell.profileThumbnail.userInteractionEnabled = NO;
 }
@@ -234,7 +237,7 @@ UITextView *textViewHelper;
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
         
-        [self imageForComment:tempComment withCell:cell];
+        [self imageForPeerID:tempComment.peer_id withCell:cell];
         
         NSString * commentID = [tempComment.id stringValue];
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
@@ -274,12 +277,12 @@ UITextView *textViewHelper;
     return text;
 }
 
--(void)imageForComment:(Comment*)comment withCell:(PACommentCell*)cell{
+-(void)imageForPeerID:(NSNumber*)peerID withCell:(PACommentCell*)cell{
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
-    if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
+    if([[defaults objectForKey:@"user_id"] integerValue]==[peerID integerValue]){
         cell.profilePicture.image =  self.userPicture;
     }else{
-        Peer* commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
+        Peer* commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
         if(commentFromPeer.imageURL){
             NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
             UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
@@ -297,6 +300,28 @@ UITextView *textViewHelper;
     }
 }
 
+-(void)imageForPeerID:(NSNumber*)peerID withMemberCell:(PACircleProfilePreviewCell*)cell{
+    NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
+    if([[defaults objectForKey:@"user_id"] integerValue]==[peerID integerValue]){
+        cell.profileThumbnail.imageView.image =  self.userPicture;
+    }else{
+        Peer* commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
+        if(commentFromPeer.imageURL){
+            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
+            UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+            if(profPic){
+                cell.profileThumbnail.imageView.image = profPic;
+            }
+            else{
+                [cell.profileThumbnail.imageView setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"profile-placeholder.png"]];
+            }
+            
+        }
+        else{
+            cell.profileThumbnail.imageView.image = [UIImage imageNamed:@"profile-placeholder.png"];
+        }
+    }
+}
 
 -(NSString*)dateToString:(NSDate *)date{
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -371,6 +396,7 @@ UITextView *textViewHelper;
              Peer *member = self.members[[indexPath row]];
              NSLog(@"view the member %@", member.name);
         }
+        [self.profilesTableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     else if (tableView == self.commentsTableView) {
         [self.commentsTableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -560,6 +586,7 @@ UITextView *textViewHelper;
     NSNumber* institutionID= [defaults objectForKey:@"institution_id"];
     
     NSMutableArray* circleMembers = [[NSMutableArray alloc] init];
+    
     for(int i=0;i<[self.members count];i++){
         Peer * tempPeer = self.members[i];
         [circleMembers addObject:tempPeer.id];
@@ -570,7 +597,7 @@ UITextView *textViewHelper;
                                 userID, @"user_id",
                                 institutionID, @"institution_id",
                                 self.titleTextField.text, @"circle_name",
-                                circleMembers, @"circle_members",
+                                circleMembers, @"circle_member_ids",
                                 nil];
     
     [self endEditing:YES];

@@ -22,6 +22,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "PADiningOpportunityCell.h"
 #import "UIImage+ImageEffects.h"
+#import "UIImageView+AFNetworking.h"
 
 #define statusBarHeight 20
 #define searchBarHeight 44
@@ -489,6 +490,8 @@ CGRect initialTableViewRect;
     NSLog(@"event %@ has an imageID of %@",tempEvent.title, imageID);
     
     UIImage * cachedImage = [self.imageCache objectForKey:imageID];
+    //NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]];
+    //UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
 
     //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
     if (cachedImage) {
@@ -618,6 +621,21 @@ CGRect initialTableViewRect;
         }
         
     }
+    /*
+    for(int j=0; j<[eventIDs count];j++){
+        if( [eventTypes[j] isEqualToString:@"simple"]){
+            NSURL * url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:eventURLs[j]]];
+            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:url]];
+            if(!cachedImage){
+                NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[eventRows[j] integerValue] inSection:0];
+                PAEventCell* cell = (PAEventCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+                if(![cell isKindOfClass:[PADiningOpportunityCell class]]){
+                    [cell.eventImageView setImageWithURL:url placeholderImage:self.placeholderImage.image];
+                }
+            }
+        }
+    }
+    */
    
     for(int i =0; i<[eventIDs count];i++){
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);

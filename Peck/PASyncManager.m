@@ -317,7 +317,6 @@
                      //NSLog(@"PEER: %@",peer);
                  }if(userAlreadyExists){
                      //if the peer is already in core data and is not the user
-                     NSLog(@"setting the attributes of a peer that is already in core data");
                      Peer* peer = [[PAFetchManager sharedFetchManager] getPeerWithID:newID];
                      if(peer){
                          [self setAttributesInPeer:peer withDictionary:userAttributes];
@@ -656,8 +655,8 @@
 -(void)updateDiningPlaces:(DiningPeriod*)diningPeriod forController:(PADiningPlacesTableViewController*)viewController{
    //dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
    //dispatch_async(queue, ^{
-        NSString * diningPlacesURL = [dining_placesAPI stringByAppendingString:@"?"];
-        diningPlacesURL = [diningPlacesURL stringByAppendingString:@"id="];
+        NSString * diningPlacesURL = [dining_placesAPI stringByAppendingString:@"/"];
+        //diningPlacesURL = [diningPlacesURL stringByAppendingString:@"id="];
         diningPlacesURL = [diningPlacesURL stringByAppendingString:[diningPeriod.place_id stringValue]];
     
         NSLog(@"in secondary thread to update dining");
@@ -668,18 +667,17 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"JSON: %@",JSON);
+             NSLog(@"JSON: %@",JSON);
              NSDictionary *diningDictionary = (NSDictionary*)JSON;
-             NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_places"];
-             for (NSDictionary *diningAttributes in postsFromResponse){
-                 NSNumber *newID = [diningAttributes objectForKey:@"id"];
-                 BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace" andCategory:nil];
-                 if(!diningPlaceAlreadyExists){
-                     NSLog(@"setting dining place");
-                     DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInDiningPlace:diningPlace withDictionary:diningAttributes];
-                     [viewController addDiningPlace:diningPlace withPeriod:diningPeriod];
-                 }
+             NSDictionary *diningAttributes = [diningDictionary objectForKey:@"dining_place"];
+             NSNumber *newID = [diningAttributes objectForKey:@"id"];
+             BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace" andCategory:nil];
+             if(!diningPlaceAlreadyExists){
+                    NSLog(@"setting dining place");
+                    DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
+                    [self setAttributesInDiningPlace:diningPlace withDictionary:diningAttributes];
+                    [viewController addDiningPlace:diningPlace withPeriod:diningPeriod];
+                
              }
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -708,6 +706,7 @@
                               parameters:[self authenticationParameters]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"dining period JSON %@", JSON);
          NSDictionary *periods = (NSDictionary*)JSON;
          NSArray * diningPeriodArray = [periods objectForKey:@"dining_periods"];
          NSMutableArray *diningPeriods = [[NSMutableArray alloc] init];
@@ -804,7 +803,7 @@
     fileName = [fileName stringByAppendingString:@".jpeg"];
     NSLog(@"file name %@", fileName);
     
-    NSLog(@"file path: %@", filePath);
+    //NSLog(@"file path: %@", filePath);
     [[PASessionManager sharedClient] POST:simple_eventsAPI
                                parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary]
                                 constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:filePath name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
@@ -1164,11 +1163,12 @@
          //NSLog(@"Subscription JSON: %@",JSON);
          NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
          NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"subscriptions"];
+         [[PAFetchManager sharedFetchManager] setAllSubscriptionsFalseForCategory:category];
          for (NSDictionary *subscriptionAttributes in postsFromResponse) {
              NSNumber* subID = [subscriptionAttributes objectForKey:@"subscribed_to"];
              NSNumber* subscriptionID = [subscriptionAttributes objectForKey:@"id"];
              //the sub id is the id of the department, club, or athletic team that the user is subscribed to
-             //and the subscription id is the is of the acutal subscription (link between the user and subscription)
+             //and the subscription id is the id of the acutal subscription (link between the user and subscription)
              [[PAFetchManager sharedFetchManager] setSubscribedTrue:subID withCategory:category andSubscriptionID:subscriptionID];
         }
          
