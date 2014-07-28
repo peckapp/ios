@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Peer.h"
+#import "Comment.h"
 
 @interface PAFetchManager : NSObject
 
@@ -35,4 +36,7 @@
 
 -(void)setAllSubscriptionsFalseForCategory:(NSString*)category;
 //Sets all of the subscriptions for the given category in core data to have a subscribed of false. This will happen every time the subscriptions are updated.
+
+-(Comment*)commentForID:(NSNumber*)commentID;
+//returns the comment with the corresponding ID from core data
 @end

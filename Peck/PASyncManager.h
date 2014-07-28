@@ -34,6 +34,7 @@
 
 -(void)changePassword:(NSDictionary*)passwordInfo forViewController:(UIViewController*)controller;
 
+-(void)likeComment:(NSNumber*)commentID;
 
 // methods for syncing institutions for the configuration phase
 -(void)updateAvailableInstitutionsWithCallback:(void(^)(BOOL sucess))callbackBlock;

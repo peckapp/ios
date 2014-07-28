@@ -350,6 +350,31 @@
         peer.imageURL = [dictionary objectForKey:@"image"];
     }
 }
+#pragma mark - Like actions
+
+-(void)likeComment:(NSNumber*)commentID{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary* authentication = [[self authenticationParameters] objectForKey:@"authentication"];
+    NSDictionary* baseDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    authentication, @"authentication",
+                                    [defaults objectForKey:@"user_id"], @"liker",
+                                    nil];
+    
+    NSString* likeURL = [@"api/comments/" stringByAppendingString:[commentID stringValue]];
+    likeURL = [likeURL stringByAppendingString:@"/add_like"];
+    
+    NSLog(@"like url %@", likeURL);
+    [[PASessionManager sharedClient] PATCH:likeURL
+                              parameters:baseDictionary
+                                success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                    NSLog(@"like JSON %@", JSON);
+                                 }
+    
+                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                       NSLog(@"ERROR: %@",error);
+                                    
+                                   }];
+}
 
 #pragma mark - Institution actions
 
@@ -959,6 +984,11 @@
                          [_managedObjectContext save:&error];
                          [self.persistentStoreCoordinator unlock];
                          NSLog(@"COMMENT: %@",comment);
+                     }else{
+                         [self.persistentStoreCoordinator lock];
+                         Comment* comment = [[PAFetchManager sharedFetchManager] commentForID:newID];
+                         [self setAttributesInComment:comment withDictionary:commentAttributes];
+                         [self.persistentStoreCoordinator unlock];
                      }
                  }
              }
@@ -981,6 +1011,7 @@
     comment.peer_id = [dictionary objectForKey:@"user_id"];
     comment.category = [dictionary objectForKey:@"category"];
     comment.comment_from = [dictionary objectForKey:@"comment_from"];
+    comment.likes = [dictionary objectForKey:@"likes"];
 }
 
 

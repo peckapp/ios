@@ -23,6 +23,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *postButton;
 @property (weak, nonatomic) UITableViewCell *parentCell;
 @property (weak, nonatomic) NSNumber* commentID;
+@property (weak, nonatomic) IBOutlet UILabel *numberOfLikesLabel;
+- (IBAction)likeButton:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *likeButton;
 
 - (IBAction)postButton:(id)sender;
 
