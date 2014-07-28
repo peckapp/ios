@@ -351,7 +351,7 @@ BOOL reloaded = NO;
         NSString* userName = [[[defaults objectForKey:@"first_name"] stringByAppendingString:@" "] stringByAppendingString:[defaults objectForKey:@"last_name"]];
         cell.nameLabel.text=userName;
         [cell.expandButton setHidden:YES];
-        cell.profilePicture.image = [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
+        cell.profilePicture.image = self.userPicture;
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];

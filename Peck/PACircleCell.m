@@ -18,8 +18,7 @@
 #import "PASyncManager.h"
 #import "PAFetchManager.h"
 #import "PACircleProfilePreviewCell.h"
-#import "PAProfileThumbnailView.h"
-
+#import "UIImageView+AFNetworking.h"
 
 @interface PACircleCell ()
 
@@ -45,7 +44,8 @@ UITextView *textViewHelper;
     /*[scrollView setScrollEnabled:YES];
     [scrollView setContentSize:CGSizeMake(800, 0)];
      */
-
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    self.userPicture =[UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
     _loadedImages = NO;
 
     self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -217,7 +217,7 @@ UITextView *textViewHelper;
         cell.nameLabel.text=userName;
         //this will be blank when the user has not yet registered or is not logged in
         [cell.expandButton setHidden:YES];
-        cell.profilePicture.image = [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
+        cell.profilePicture.image = self.userPicture;
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
@@ -234,7 +234,7 @@ UITextView *textViewHelper;
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
         
-        cell.profilePicture.image = [self imageForComment:tempComment];
+        [self imageForComment:tempComment withCell:cell];
         
         NSString * commentID = [tempComment.id stringValue];
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
@@ -274,16 +274,29 @@ UITextView *textViewHelper;
     return text;
 }
 
--(UIImage*)imageForComment:(Comment*)comment{
-     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
-     if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
-         return [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
-     }else{
-         return [UIImage imageNamed:@"profile-placeholder.png"];
-         //TODO: grab the profile picture of the commenter from the server
-     }
-
+-(void)imageForComment:(Comment*)comment withCell:(PACommentCell*)cell{
+    NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
+    if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
+        cell.profilePicture.image =  self.userPicture;
+    }else{
+        Peer* commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
+        if(commentFromPeer.imageURL){
+            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
+            UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+            if(profPic){
+                cell.profilePicture.image = profPic;
+            }
+            else{
+                [cell.profilePicture setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"profile-placeholder.png"]];
+            }
+            
+        }
+        else{
+            cell.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+        }
+    }
 }
+
 
 -(NSString*)dateToString:(NSDate *)date{
     NSCalendar *calendar = [NSCalendar currentCalendar];
