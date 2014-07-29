@@ -15,7 +15,6 @@
 
 @protocol PACirclesControllerDelegate <UITableViewDelegate>
 
-- (void)profile:(int) member withCircle:(NSInteger)circle;
 - (void)promptToAddMemberToCircleCell:(UITableViewCell *)cell;
 
 @end

@@ -23,6 +23,7 @@
 #import "PADiningOpportunityCell.h"
 #import "UIImage+ImageEffects.h"
 #import "UIImageView+AFNetworking.h"
+#import "PAAssetManager.h"
 
 #define statusBarHeight 20
 #define searchBarHeight 44
@@ -39,8 +40,6 @@ struct eventImage{
 
 @interface PAEventsViewController ()
 
-
-
 @end
 
 @implementation PAEventsViewController
@@ -55,10 +54,13 @@ static NSString * nibName = @"PAEventCell";
 UISearchBar * searchBar;
 
 BOOL showingDetail;
+BOOL showingSearchBar;
 NSString *searchBarText;
 NSDate *today;
 NSInteger selectedDay;
 CGRect initialTableViewRect;
+
+PAAssetManager * assetManager;
 
 - (void)awakeFromNib
 {
@@ -69,8 +71,11 @@ CGRect initialTableViewRect;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    assetManager = [PAAssetManager sharedManager];
+
     NSLog(@"View did load (events)");
-    self.placeholderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
+    self.placeholderImage = [[UIImageView alloc] initWithImage:[assetManager eventPlaceholder]];
     self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
     
     if(!self.imageCache){
@@ -112,9 +117,10 @@ CGRect initialTableViewRect;
     [self.tableView endUpdates];
     [self.tableView reloadData];
 
-    UIImageView * dropShadow = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"drop-shadow-horizontal"] stretchableImageWithLeftCapWidth:1 topCapHeight:0]];
-    dropShadow.frame = CGRectMake(0,42, self.view.frame.size.width, 256);
-    [self.navigationController.navigationBar addSubview:dropShadow];
+    UIImageView * shadow = [[UIImageView alloc] initWithImage:[assetManager horizontalShadow]];
+    shadow.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
+    NSLog(@"Added shadow");
+    [self.view addSubview:shadow];
     
 }
 
@@ -123,15 +129,14 @@ CGRect initialTableViewRect;
     [[PASyncManager globalSyncManager] updateDiningInfo];
 
     NSLog(@"View will appear (events)");
+    showingSearchBar = NO;
     showingDetail = NO;
     [self registerForKeyboardNotifications];
-    searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
+    searchBar.frame = CGRectMake(0, -searchBarHeight, self.view.frame.size.width, searchBarHeight);
     self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, (self.view.frame.size.height));
     initialTableViewRect= self.tableView.frame;
 
     self.tableView.tableHeaderView = searchBar;
-
-    // [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -433,8 +438,8 @@ CGRect initialTableViewRect;
         NSManagedObject *object;
         object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setDetailItem:object];
-    }else if([[segue identifier] isEqualToString:@"showDiningDetail"]){
-        
+    }
+    else if ([[segue identifier] isEqualToString:@"showDiningDetail"]) {
         showingDetail=YES;
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         NSManagedObject *object;
@@ -517,7 +522,8 @@ CGRect initialTableViewRect;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-   /* for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
+    /*
+   for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
     {
         // Check if cell is a PAEventCell, which has a backgroundView.image property
         UITableViewCell * c = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
@@ -541,7 +547,8 @@ CGRect initialTableViewRect;
 
             cell.backgroundView.frame = frame;
         }
-    }*/
+    }
+     */
 }
 
 #pragma mark - Search Bar Delegate
