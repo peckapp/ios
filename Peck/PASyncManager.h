@@ -45,9 +45,12 @@
 // methods for syncing institutions for the configuration phase
 -(void)updateAvailableInstitutionsWithCallback:(void(^)(BOOL sucess))callbackBlock;
 
+//announcement actions
+-(void)postAnnouncement:(NSDictionary*)dictionary withImage:(NSData*)imageData;
+
 // methods for updating events
 -(void)updateEventInfo;
--(void)postEvent:(NSDictionary *) dictionary withImage:(NSData*)filePath;
+-(void)postEvent:(NSDictionary *) dictionary withImage:(NSData*)imageDate;
 -(void)deleteEvent:(NSNumber*)eventID;
 
 // methods for updating dining
