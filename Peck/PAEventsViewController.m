@@ -119,7 +119,7 @@ CGRect initialTableViewRect;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [[PASyncManager globalSyncManager] updateEventInfoForViewController:self];
+    [[PASyncManager globalSyncManager] updateEventInfo];
     [[PASyncManager globalSyncManager] updateDiningInfo];
 
     NSLog(@"View will appear (events)");

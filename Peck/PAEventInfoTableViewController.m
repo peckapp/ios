@@ -177,6 +177,14 @@ BOOL reloaded = NO;
         [self.startTimeLabel setText: stringFromDate];
         [self.endTimeLabel setText:[df stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
         self.descriptionTextView.text = [self.detailItem valueForKey:@"descrip"];
+       
+        self.numberOfAttendees.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
+        if([self attendingEvent]){
+            [self.attendButton setTitle:@"Unattend" forState:UIControlStateNormal];
+        }else{
+            [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
+        }
+        
         UIImage* image = [UIImage imageNamed:@"image-placeholder.png"];
         if([self.detailItem valueForKey:@"imageURL"]){
             [self.eventPhoto setImageWithURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"imageURL"]]] placeholderImage:image];
@@ -185,6 +193,18 @@ BOOL reloaded = NO;
         }
         
     }
+}
+
+-(BOOL)attendingEvent{
+    NSArray* attendees = [self.detailItem valueForKey:@"attendees"];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger userID = [[defaults objectForKey:@"user_id"] integerValue];
+    for(int i = 0; i<[attendees count];i++){
+        if(userID==[attendees[i] integerValue]){
+            return YES;
+        }
+    }
+    return NO;
 }
 
 #pragma mark - managing the fetched results controller
@@ -265,10 +285,10 @@ BOOL reloaded = NO;
     switch(type)
     {
         case NSFetchedResultsChangeInsert:{
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
+            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
             [tableView
              //the cell must be inserted below the post cell
-             insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:realIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             
             break;
@@ -281,8 +301,10 @@ BOOL reloaded = NO;
             
         case NSFetchedResultsChangeUpdate:
         {
-            PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:indexPath];
-            [self configureCell:cell atIndexPath:indexPath];
+            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section]];
+            
+            PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:realIndexPath];
+            [self configureCell:cell atIndexPath:realIndexPath];
             break;
         }
         case NSFetchedResultsChangeMove:
@@ -630,5 +652,37 @@ BOOL reloaded = NO;
     }
 }
 
+
+- (IBAction)attendButton:(id)sender {
+    if([self.attendButton.titleLabel.text isEqualToString:@"Attend"]){
+    
+        NSLog(@"attend the event");
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    
+        NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [defaults objectForKey:@"user_id"],@"user_id",
+                                  [defaults objectForKey:@"institution_id"],@"institution_id",
+                                  [self.detailItem valueForKey:@"id"],@"event_attended",
+                                  @"simple", @"category",
+                                  [defaults objectForKey:@"user_id"], @"added_by",
+                                  nil];
+    
+        [[PASyncManager globalSyncManager] attendEvent:attendee];
+    }else{
+        NSLog(@"unattend the event");
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        
+        NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [self.detailItem valueForKey:@"id"], @"event_attended",
+                                  [defaults objectForKey:@"institution_id"],@"institution_id",
+                                  [defaults objectForKey:@"user_id"],@"user_id",
+                                  @"simple", @"category",
+                                  nil];
+        
+        [[PASyncManager globalSyncManager] unattendEvent: attendee];
+        
+    }
+    
+}
 
 @end

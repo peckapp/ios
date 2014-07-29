@@ -39,4 +39,7 @@
 
 -(Comment*)commentForID:(NSNumber*)commentID;
 //returns the comment with the corresponding ID from core data
+
+-(id)getObject:(NSNumber *) newID withEntityType:(NSString*)entityType andType:(NSString*)type;
+//returns the object with the given id, entity type, and type
 @end

@@ -28,7 +28,6 @@
     [commentTextView setText:commentPlaceholder];
     [commentTextView setTextColor:[UIColor lightGrayColor]];
     commentTextView.delegate=self;
-    //self.comment_from = [[NSString alloc] init];
     
     _expanded=NO;
     // Initialization code

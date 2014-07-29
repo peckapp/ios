@@ -401,6 +401,39 @@
                                    }];
 }
 
+#pragma mark - attend actions
+
+-(void)attendEvent:(NSDictionary*) attendee{
+    
+    
+    [[PASessionManager sharedClient] POST:@"api/event_attendees"
+                                parameters: [self applyWrapper:@"event_attendee" toDictionary:attendee]
+                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                       NSLog(@"like JSON %@", JSON);
+                                       [self updateEventInfo];
+                                   }
+     
+                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                       NSLog(@"ERROR: %@",error);
+                                       
+                                   }];
+}
+
+-(void)unattendEvent:(NSDictionary*) attendee{
+    NSString* attendeeURL = [@"api/event_attendee/" stringByAppendingString:[[attendee objectForKey:@"user_id"] stringValue]];
+    [[PASessionManager sharedClient] DELETE:attendeeURL
+                               parameters: [self applyWrapper:@"event_attendee" toDictionary:attendee]
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      NSLog(@"like JSON %@", JSON);
+                                      [self updateEventInfo];
+                                  }
+     
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                      
+                                  }];
+
+}
 
 #pragma mark - Institution actions
 
@@ -862,7 +895,7 @@
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
-         [self updateEventInfoForViewController:nil];
+         [self updateEventInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -885,7 +918,7 @@
 
 }
 
--(void)updateEventInfoForViewController:(UIViewController*)controller
+-(void)updateEventInfo
 {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
@@ -899,7 +932,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"JSON: %@",JSON);
+             //NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
              //NSLog(@"Update Event response: %@", postsFromResponse);
@@ -913,7 +946,11 @@
                      [self setAttributesInEvent:event withDictionary:eventAttributes];
                      [mutableEvents addObject:event];
                      //NSLog(@"EVENT: %@",event);
-                    }
+                 }else{
+                     //the event is already in core data
+                     Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:@"simple"];
+                     [self setAttributesInEvent:event withDictionary:eventAttributes];
+                 }
              }
              
          }
@@ -949,6 +986,7 @@
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         event.imageURL = [dictionary objectForKey:@"image"];
     }
+    event.attendees = [dictionary objectForKey:@"attendees"];
 }
 
 #pragma mark - Comment actions
