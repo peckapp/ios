@@ -53,7 +53,7 @@ PAAssetManager * assetManager;
     self.profilesTableView.dataSource = self;
 
     self.profilesTableView.transform = CGAffineTransformMakeRotation(-M_PI_2);
-    self.profilesTableView.frame = CGRectMake(0, 44.0, self.frame.size.width, 44.0);
+    self.profilesTableView.frame = CGRectMake(0, 52.0, self.frame.size.width, 52.0);
 
     self.commentsTableView.delegate=self;
     self.commentsTableView.dataSource=self;
@@ -389,7 +389,7 @@ PAAssetManager * assetManager;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == self.profilesTableView) {
-        return 44;
+        return 52;
     }
     else if (tableView == self.commentsTableView) {
         if(indexPath.row>0){
