@@ -296,9 +296,9 @@ PAAssetManager * assetManager;
             
             Event* event = (Event*) anObject;
             
-            if (event.imageURL != nil) {
+            if (event.blurredImageURL != nil) {
                 
-                [self cacheImageForEventURL:event.imageURL Type:event.type AndID:event.id];
+                [self cacheImageForEventURL:event.blurredImageURL Type:event.type AndID:event.id];
                 
             }
             [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -631,8 +631,8 @@ PAAssetManager * assetManager;
         Event* tempEvent = _fetchedResultsController.fetchedObjects[i];
         
         // cannot asynchronously cache image it there isn't one
-        if (tempEvent.imageURL != nil) {
-            [eventURLs addObject:tempEvent.imageURL];
+        if (tempEvent.blurredImageURL != nil) {
+            [eventURLs addObject:tempEvent.blurredImageURL];
             [eventTypes addObject:tempEvent.type];
             [eventIDs addObject:tempEvent.id];
             [eventRows addObject:[NSNumber numberWithInt:i]];

@@ -1023,7 +1023,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"EVENT JSON: %@",JSON);
+             NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
              //NSLog(@"Update Event response: %@", postsFromResponse);
@@ -1076,6 +1076,9 @@
     event.end_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         event.imageURL = [dictionary objectForKey:@"image"];
+    }
+    if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
+        event.blurredImageURL = [dictionary objectForKey:@"blurred_image"];
     }
     event.attendees = [dictionary objectForKey:@"attendees"];
 }

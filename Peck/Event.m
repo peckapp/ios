@@ -23,5 +23,6 @@
 @dynamic type;
 @dynamic updated_at;
 @dynamic attendees;
+@dynamic blurredImageURL;
 
 @end
