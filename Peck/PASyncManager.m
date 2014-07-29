@@ -481,8 +481,8 @@
          NSDictionary* eventAttributes = [eventDictionary objectForKey:@"simple_event"];
          Event* event = [[PAFetchManager sharedFetchManager] getObject:eventID withEntityType:@"Event" andType:@"simple"];
          [self setAttributesInEvent:event withDictionary:eventAttributes];
-         PAEventInfoTableViewController* sender = (PAEventInfoTableViewController*)controller;
          if([controller isKindOfClass:[PAEventInfoTableViewController class]]){
+             PAEventInfoTableViewController* sender = (PAEventInfoTableViewController*)controller;
              [sender configureView];
          }
          

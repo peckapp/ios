@@ -486,6 +486,7 @@ CGRect initialTableViewRect;
 - (void)configureCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Event *tempEvent;
+    
     tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     cell.titleLabel.text = tempEvent.title;
@@ -511,6 +512,7 @@ CGRect initialTableViewRect;
     }
 
     //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -653,7 +655,9 @@ CGRect initialTableViewRect;
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSIndexPath* indexPath =[NSIndexPath indexPathForRow: [eventRows[i] integerValue] inSection:0];
                 PAEventCell* cell = (PAEventCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-                [self configureCell:cell atIndexPath:indexPath];
+                if([_fetchedResultsController.fetchedObjects count]>indexPath.row){
+                    [self configureCell:cell atIndexPath:indexPath];
+                }
                 //to reload the cell after the image is cached
             });
         });

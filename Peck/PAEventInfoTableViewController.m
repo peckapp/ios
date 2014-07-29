@@ -184,6 +184,7 @@ BOOL reloaded = NO;
         }else{
             [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
         }
+        NSLog(@"attendees: %@", [self.detailItem valueForKey:@"attendees"]);
         
         UIImage* image = [UIImage imageNamed:@"image-placeholder.png"];
         if([self.detailItem valueForKey:@"imageURL"]){
