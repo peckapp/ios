@@ -39,8 +39,6 @@ struct eventImage{
 
 @interface PAEventsViewController ()
 
-
-
 @end
 
 @implementation PAEventsViewController
@@ -55,6 +53,7 @@ static NSString * nibName = @"PAEventCell";
 UISearchBar * searchBar;
 
 BOOL showingDetail;
+BOOL showingSearchBar;
 NSString *searchBarText;
 NSDate *today;
 NSInteger selectedDay;
@@ -123,15 +122,14 @@ CGRect initialTableViewRect;
     [[PASyncManager globalSyncManager] updateDiningInfo];
 
     NSLog(@"View will appear (events)");
+    showingSearchBar = NO;
     showingDetail = NO;
     [self registerForKeyboardNotifications];
-    searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, searchBarHeight);
+    searchBar.frame = CGRectMake(0, -searchBarHeight, self.view.frame.size.width, searchBarHeight);
     self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, (self.view.frame.size.height));
     initialTableViewRect= self.tableView.frame;
 
     self.tableView.tableHeaderView = searchBar;
-
-    // [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -433,8 +431,8 @@ CGRect initialTableViewRect;
         NSManagedObject *object;
         object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setDetailItem:object];
-    }else if([[segue identifier] isEqualToString:@"showDiningDetail"]){
-        
+    }
+    else if ([[segue identifier] isEqualToString:@"showDiningDetail"]) {
         showingDetail=YES;
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         NSManagedObject *object;
@@ -515,6 +513,8 @@ CGRect initialTableViewRect;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+
+
    /* for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
     {
         // Check if cell is a PAEventCell, which has a backgroundView.image property
