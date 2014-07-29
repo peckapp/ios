@@ -1124,11 +1124,9 @@
 }
 
 -(void)setAttributesInComment:(Comment*)comment  withDictionary:(NSDictionary *)dictionary{
-    comment.content = [dictionary objectForKey:@"content"];
-    
-   /* NSDateFormatter * df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:serverDateFormat];
-    comment.created_at = [df dateFromString:[dictionary objectForKey:@"created_at"]];*/
+    if(![comment.content isEqualToString:[dictionary objectForKey:@"content"]]){
+        comment.content = [dictionary objectForKey:@"content"];
+    }
     comment.created_at = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"created_at"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     comment.id = [dictionary objectForKey:@"id"];
     comment.peer_id = [dictionary objectForKey:@"user_id"];

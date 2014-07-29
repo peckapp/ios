@@ -16,7 +16,7 @@
 #import "PACommentCell.h"
 
 #define cellHeight 100.0
-#define reloadTime 3
+#define reloadTime 10
 @interface PACirclesTableViewController ()
 
 @property (strong, nonatomic) NSIndexPath * selectedIndexPath;
