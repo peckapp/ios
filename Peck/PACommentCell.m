@@ -28,6 +28,7 @@
     [commentTextView setText:commentPlaceholder];
     [commentTextView setTextColor:[UIColor lightGrayColor]];
     commentTextView.delegate=self;
+    //self.comment_from = [[NSString alloc] init];
     
     _expanded=NO;
     // Initialization code
@@ -68,11 +69,12 @@
 
 - (IBAction)likeButton:(id)sender {
     if([self.likeButton.titleLabel.text isEqualToString:@"Like"]){
-        [[PASyncManager globalSyncManager] likeComment:self.commentIntegerID];
+        [[PASyncManager globalSyncManager] likeComment:self.commentIntegerID from:self.comment_from withCategory:@"simple"];
     }else{
         NSLog(@"UNLIKE!!");
-        [[PASyncManager globalSyncManager] unlikeComment:self.commentIntegerID];
+        [[PASyncManager globalSyncManager] unlikeComment:self.commentIntegerID from:self.comment_from withCategory:@"simple"];
     }
+    
 }
 
 - (IBAction)postButton:(id)sender {

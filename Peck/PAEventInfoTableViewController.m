@@ -45,7 +45,7 @@ BOOL reloaded = NO;
 
 #define defaultCellHeight 51
 #define cellY 22
-#define reloadTime 3
+#define reloadTime 10
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -370,7 +370,8 @@ BOOL reloaded = NO;
         cell.commentID = tempComment.id;
         cell.commentIntegerID = [tempComment.id integerValue];
         //cell.comment = tempComment;
-        
+        NSLog(@"self.detail: %@", [[self.detailItem valueForKey:@"id"] stringValue]);
+        cell.comment_from = [[self.detailItem valueForKey:@"id"] stringValue];
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
         [cell.expandButton setHidden:NO];

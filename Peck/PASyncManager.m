@@ -352,7 +352,7 @@
 }
 #pragma mark - Like actions
 
--(void)likeComment:(NSInteger)commentID{
+-(void)likeComment:(NSInteger)commentID from:(NSString*)comment_from withCategory:(NSString*)category{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary* authentication = [[self authenticationParameters] objectForKey:@"authentication"];
     NSDictionary* baseDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -368,6 +368,7 @@
                               parameters:baseDictionary
                                 success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                     NSLog(@"like JSON %@", JSON);
+                                    [self updateCommentsFrom:comment_from withCategory:category];
                                  }
     
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -375,7 +376,7 @@
                                     
                                    }];
 }
--(void)unlikeComment:(NSInteger)commentID{
+-(void)unlikeComment:(NSInteger)commentID from:(NSString*)comment_from withCategory:(NSString*)category{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary* authentication = [[self authenticationParameters] objectForKey:@"authentication"];
     NSDictionary* baseDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -391,6 +392,7 @@
                                 parameters:baseDictionary
                                    success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                        NSLog(@"like JSON %@", JSON);
+                                       [self updateCommentsFrom:comment_from withCategory:category];
                                    }
      
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
