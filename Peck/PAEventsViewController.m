@@ -23,6 +23,7 @@
 #import "PADiningOpportunityCell.h"
 #import "UIImage+ImageEffects.h"
 #import "UIImageView+AFNetworking.h"
+#import "PAAssetManager.h"
 
 #define statusBarHeight 20
 #define searchBarHeight 44
@@ -59,6 +60,8 @@ NSDate *today;
 NSInteger selectedDay;
 CGRect initialTableViewRect;
 
+PAAssetManager * assetManager;
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -68,6 +71,9 @@ CGRect initialTableViewRect;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    assetManager = [PAAssetManager sharedManager];
+
     NSLog(@"View did load (events)");
     self.placeholderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
     self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
@@ -111,9 +117,10 @@ CGRect initialTableViewRect;
     [self.tableView endUpdates];
     [self.tableView reloadData];
 
-    UIImageView * dropShadow = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"drop-shadow-horizontal"] stretchableImageWithLeftCapWidth:1 topCapHeight:0]];
-    dropShadow.frame = CGRectMake(0,44, self.view.frame.size.width, 64);
-    [self.navigationController.navigationBar addSubview:dropShadow];
+    UIImageView * shadow = [assetManager horizontalShadow];
+    shadow.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
+    NSLog(@"Added shadow");
+    [self.view addSubview:shadow];
     
 }
 
@@ -515,9 +522,8 @@ CGRect initialTableViewRect;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-
-
-   /* for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
+    /*
+   for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
     {
         // Check if cell is a PAEventCell, which has a backgroundView.image property
         UITableViewCell * c = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
@@ -541,7 +547,8 @@ CGRect initialTableViewRect;
 
             cell.backgroundView.frame = frame;
         }
-    }*/
+    }
+     */
 }
 
 #pragma mark - Search Bar Delegate
