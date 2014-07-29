@@ -17,4 +17,6 @@
 
 + (id)sharedManager;
 
+- (UIView *)createThumbnailWithFrame:(CGRect)frame image:(UIImage *)image;
+
 @end

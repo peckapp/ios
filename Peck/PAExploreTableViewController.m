@@ -13,6 +13,7 @@
 #import "PAExploreInfoViewController.h"
 #import "Explore.h"
 #import "PASyncManager.h"
+#import "PAAssetManager.h"
 
 #define cellHeight 340
 
@@ -29,6 +30,8 @@
 static NSString * cellIdentifier = PAExploreIdentifier;
 static NSString * nibName = @"PAExploreCell";
 
+PAAssetManager * assetManager;
+
 NSCache *imageCache;
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -43,6 +46,8 @@ NSCache *imageCache;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    assetManager = [PAAssetManager sharedManager];
 
     self.title = @"Explore";
     
@@ -79,7 +84,7 @@ NSCache *imageCache;
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;
-    cell.photoView.image = [];
+    cell.photoView.image = [assetManager imagePlaceholder];
     
     /*
     NSNumber *imageID = tempExplore.id;

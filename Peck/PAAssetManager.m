@@ -31,4 +31,20 @@
     return self;
 }
 
+- (UIView *)createThumbnailWithFrame:(CGRect)frame image:(UIImage *)image
+{
+    CGFloat size = 40;
+
+    UIButton * button = [[UIButton alloc]initWithFrame:frame];
+
+    UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(frame.size.width / 2 - size / 2, frame.size.height / 2 - size / 2, size, size)];
+    imageView.image = image;
+    imageView.layer.cornerRadius = size / 2;
+    imageView.clipsToBounds = YES;
+    imageView.userInteractionEnabled = NO;
+    [button addSubview:imageView];
+
+    return button;
+}
+
 @end

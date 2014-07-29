@@ -17,9 +17,7 @@
 #import "Comment.h"
 #import "PASyncManager.h"
 #import "PAFetchManager.h"
-#import "PACircleProfilePreviewCell.h"
 #import "UIImageView+AFNetworking.h"
-#import "PAProfileThumbnailView.h"
 #import "PAAssetManager.h"
 
 @interface PACircleCell ()
@@ -145,10 +143,9 @@ PAAssetManager * assetManager;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == self.profilesTableView) {
-        PACircleProfilePreviewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"profilePreviewCell"];
+        UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"profilePreviewCell"];
         if (cell == nil) {
-            [tableView registerNib:[UINib nibWithNibName:@"PACircleProfilePreviewCell" bundle:nil] forCellReuseIdentifier:@"profilePreviewCell"];
-            cell = [tableView dequeueReusableCellWithIdentifier:@"profilePreviewCell"];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profilePreviewCell"];
         }
 
         [self configureMemberCell:cell atIndexPath:indexPath];
@@ -178,16 +175,17 @@ PAAssetManager * assetManager;
     }
 }
 
-- (void)configureMemberCell:(PACircleProfilePreviewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+- (void)configureMemberCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == [self.members count]) {
-        cell.profileThumbnail.imageView.image = [UIImage imageNamed:@"plus"];
+        UIView * thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:[UIImage imageNamed:@"plus"]];
+        thumbnail.userInteractionEnabled = NO;
+        cell.backgroundView = thumbnail;
     }
     else {
         Peer* peer = self.members[indexPath.row];
         [self imageForPeerID: peer.id withMemberCell:cell];
         //cell.profileThumbnail.imageView.image = [UIImage imageNamed:@"profile-placeholder"];
     }
-    cell.profileThumbnail.userInteractionEnabled = NO;
 }
 
 - (void)configureSuggestedMemberCell:(UITableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath {
@@ -323,27 +321,34 @@ PAAssetManager * assetManager;
     }
 }
 
--(void)imageForPeerID:(NSNumber*)peerID withMemberCell:(PACircleProfilePreviewCell*)cell{
+-(void)imageForPeerID:(NSNumber*)peerID withMemberCell:(UITableViewCell *)cell{
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
+    UIView * thumbnail = nil;
+
     if([[defaults objectForKey:@"user_id"] integerValue]==[peerID integerValue]){
-        cell.profileThumbnail.imageView.image =  self.userPicture;
-    }else{
+        thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:self.userPicture];
+    }
+    else{
         Peer* commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
         if(commentFromPeer.imageURL){
             NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
             UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
             if(profPic){
-                cell.profileThumbnail.imageView.image = profPic;
+                thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:profPic];
             }
-            else{
-                [cell.profileThumbnail.imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+            else {
+                UIImageView * imageView = [[UIImageView alloc] init];
+                [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+                thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:imageView.image];
             }
             
         }
         else{
-            cell.profileThumbnail.imageView.image = [assetManager profilePlaceholder];
+            thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:[assetManager profilePlaceholder]];
         }
     }
+    thumbnail.userInteractionEnabled = NO;
+    cell.backgroundView = thumbnail;
 }
 
 -(NSString*)dateToString:(NSDate *)date{
