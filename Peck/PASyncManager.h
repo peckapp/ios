@@ -39,8 +39,8 @@
 -(void)unlikeComment:(NSInteger)commentID from:(NSString*)comment_from withCategory:(NSString*)category;
 
 //attend actions
--(void)attendEvent:(NSDictionary*) attendee;
--(void)unattendEvent:(NSDictionary*) attendee;
+-(void)attendEvent:(NSDictionary*) attendee forViewController:(UIViewController*)controller;
+-(void)unattendEvent:(NSDictionary*) attendee forViewController:(UIViewController*)controller;
 
 // methods for syncing institutions for the configuration phase
 -(void)updateAvailableInstitutionsWithCallback:(void(^)(BOOL sucess))callbackBlock;

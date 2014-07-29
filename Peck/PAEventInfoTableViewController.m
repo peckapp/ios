@@ -667,7 +667,7 @@ BOOL reloaded = NO;
                                   [defaults objectForKey:@"user_id"], @"added_by",
                                   nil];
     
-        [[PASyncManager globalSyncManager] attendEvent:attendee];
+        [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:self];
     }else{
         NSLog(@"unattend the event");
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -679,7 +679,7 @@ BOOL reloaded = NO;
                                   @"simple", @"category",
                                   nil];
         
-        [[PASyncManager globalSyncManager] unattendEvent: attendee];
+        [[PASyncManager globalSyncManager] unattendEvent: attendee forViewController:self];
         
     }
     
