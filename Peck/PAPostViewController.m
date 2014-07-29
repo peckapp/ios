@@ -216,7 +216,7 @@
     {
         UIImagePickerController *controller = [[UIImagePickerController alloc] init];
         controller.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        controller.modalPresentationStyle = UIModalPresentationCurrentContext;
+        controller.modalPresentationStyle = UIModalPresentationFormSheet;
         controller.delegate = self;
         [self presentViewController: controller animated: YES completion: nil];
     }
@@ -227,6 +227,8 @@
     [self dismissViewControllerAnimated: YES completion: nil];
     UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
     self.photoButton.imageView.image = image;
+
+    NSLog(@"Post view frame height: %f", self.view.frame.size.height);
     
     // stores the image locally so that we can use the file path to send it to the server
    
