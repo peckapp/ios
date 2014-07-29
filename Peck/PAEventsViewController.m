@@ -84,7 +84,7 @@ PAAssetManager * assetManager;
     }
     self.title = @"Events";
 
-    // TODO: optimize parallax
+    // TODO: optimize parallax? Currently takes a couple percent cpu extra and a two megabytes
     parallaxOn = YES;
 
     selectedDay=0;
