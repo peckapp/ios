@@ -42,13 +42,15 @@
     NSNumber * userID = [defaults objectForKey:@"user_id"];
     NSLog(@"USER ID: %@", userID);
     
+    NSLog(@"device token: %@", [defaults objectForKey:@"device_token"]);
+    
     if(institutionID == nil){
         NSLog(@"Open up the configure screen");
         initViewController = [self.mainStoryboard instantiateViewControllerWithIdentifier:@"configure"];
 
         if(userID == nil){
             
-            [[PASyncManager globalSyncManager] sendUserDeviceToken:@"3"];
+            
             [[PASyncManager globalSyncManager] ceateAnonymousUser:^(BOOL success) {
                 if (success) {
                     NSLog(@"Sucessfully set a new anonymous user");
@@ -76,9 +78,7 @@
     // Must remain after third-party SDK code
     [Crashlytics startWithAPIKey:@"147270e58be36f1b12187f08c0fa5ff034e701c8"];
     
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
     
-    NSLog(@"device token: %@", [defaults objectForKey:@"device_token"]);
     return YES;
 }
 
@@ -91,6 +91,7 @@
     NSLog(@"Device Token ---> %@", token);
     [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"device_token"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    [[PASyncManager globalSyncManager] sendUserDeviceToken:token];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error

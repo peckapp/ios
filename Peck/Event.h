@@ -24,5 +24,6 @@
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) id attendees;
+@property (nonatomic, retain) NSString * blurredImageURL;
 
 @end

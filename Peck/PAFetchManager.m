@@ -60,6 +60,9 @@
 
 -(void)logoutUser{
     [self removeAllCircles];
+    [self setAllSubscriptionsFalseForCategory:@"athletic"];
+    [self setAllSubscriptionsFalseForCategory:@"department"];
+    [self setAllSubscriptionsFalseForCategory:@"club"];
 }
 
 -(void)loginUser{

@@ -21,6 +21,7 @@
 # define dining_periodsAPI @"api/dining_periods"
 # define menu_itemsAPI @"api/menu_items"
 # define subscriptionsAPI @"api/subscriptions"
+# define announcementAPI @"api/announcements"
 
 // Parameter names
 #define user_id @"user_id"

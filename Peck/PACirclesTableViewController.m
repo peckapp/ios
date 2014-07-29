@@ -199,6 +199,8 @@ BOOL viewingCircles;
                                          newMember.id, @"user_id",
                                          instituion_id, @"institution_id",
                                          circle_id, @"circle_id",
+                                         [defaults objectForKey:@"device_token"],@"token",
+                                         @"Someone has invited you to a circle", @"message",
                                          nil];
         [[PASyncManager globalSyncManager] postCircleMember:newMember withDictionary:newCircleMember forCircle:selectedCircle withSender:selectedCell];
     }else{

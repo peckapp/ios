@@ -55,13 +55,13 @@
 #pragma mark - User actions
 
 -(void)sendUserDeviceToken:(NSString*)deviceToken{
-    NSString* userURL = [usersAPI stringByAppendingString:@"/user_for_device_token"];
+   
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                deviceToken, @"user_device_token",
+                                deviceToken, @"token",
                                 nil];
-    
-    [[PASessionManager sharedClient] POST:userURL
-                               parameters:dictionary
+    NSLog(@"device token dictionary: %@", dictionary);
+    [[PASessionManager sharedClient] POST:@"api/user_device_tokens"
+                               parameters:[self applyWrapper:@"user_device_token" toDictionary:dictionary]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                       NSLog(@"Device Token JSON: %@", JSON);
                                   }
@@ -69,6 +69,7 @@
                                       NSLog(@"ERROR: %@",error);
                                       
                                   }];
+
 
     
 }
@@ -206,7 +207,10 @@
                                           [defaults setObject:blurb forKey:@"blurb"];
                                       }
                                       [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
+                                      //update the subscriptions of the newly logged in user
                                       [self updateSubscriptions];
+                                      
+                                      //take care of some necessary login stuff
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       
                                       [controller dismissViewControllerAnimated:YES completion:nil];
@@ -230,6 +234,8 @@
     [[PASessionManager sharedClient] PATCH:registerURL
                                parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+                                      
                                       NSLog(@"user register success: %@", JSON);
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                       NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
@@ -932,9 +938,35 @@
     menuItem.dining_place_id =[dictionary objectForKey:@"dining_place_id"];
 }
 
+#pragma mark - Announcement actions
+
+-(void)postAnnouncement:(NSDictionary*)dictionary withImage:(NSData*)imageData{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSDate* now = [NSDate date];
+    NSTimeInterval nowEpochSeconds = [now timeIntervalSince1970];
+    NSInteger seconds = (NSInteger)nowEpochSeconds;
+    
+    NSString* fileName = [@"announcement_photo_" stringByAppendingString:[[defaults objectForKey:@"user_id" ] stringValue]];
+    fileName = [fileName stringByAppendingString:@"_"];
+    fileName = [fileName stringByAppendingString:[@(seconds) stringValue]];
+    fileName = [fileName stringByAppendingString:@".jpeg"];
+    NSLog(@"file name %@", fileName);
+
+    [[PASessionManager sharedClient] POST:announcementAPI
+                               parameters:[self applyWrapper:@"announcement" toDictionary:dictionary]
+                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"success: %@", JSON);
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+}
+
 #pragma mark - Events actions
 
--(void)postEvent:(NSDictionary *)dictionary withImage:(NSData*)filePath
+-(void)postEvent:(NSDictionary *)dictionary withImage:(NSData*)imageData
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSDate* now = [NSDate date];
@@ -950,7 +982,7 @@
     //NSLog(@"file path: %@", filePath);
     [[PASessionManager sharedClient] POST:simple_eventsAPI
                                parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary]
-                                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:filePath name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
+                                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
@@ -991,7 +1023,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"EVENT JSON: %@",JSON);
+             NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
              //NSLog(@"Update Event response: %@", postsFromResponse);
@@ -1044,6 +1076,9 @@
     event.end_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         event.imageURL = [dictionary objectForKey:@"image"];
+    }
+    if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
+        event.blurredImageURL = [dictionary objectForKey:@"blurred_image"];
     }
     event.attendees = [dictionary objectForKey:@"attendees"];
 }
