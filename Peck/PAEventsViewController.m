@@ -53,6 +53,7 @@ static NSString * nibName = @"PAEventCell";
 
 UISearchBar * searchBar;
 
+BOOL parallaxOn;
 BOOL showingDetail;
 BOOL showingSearchBar;
 NSString *searchBarText;
@@ -82,7 +83,10 @@ PAAssetManager * assetManager;
         self.imageCache = [[NSCache alloc] init];
     }
     self.title = @"Events";
-    
+
+    // TODO: optimize parallax
+    parallaxOn = YES;
+
     selectedDay=0;
     showingDetail = NO;
     [self reloadTheView];
@@ -523,33 +527,34 @@ PAAssetManager * assetManager;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    /*
+
    for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
     {
-        // Check if cell is a PAEventCell, which has a backgroundView.image property
-        UITableViewCell * c = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        if ([c isKindOfClass:[PAEventCell class]]) {
-            PAEventCell * cell = (PAEventCell *)c;
+        if (parallaxOn) {
+            // Check if cell is a PAEventCell, which has a backgroundView.image property
+            UITableViewCell * c = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+            if ([c isKindOfClass:[PAEventCell class]]) {
+                PAEventCell * cell = (PAEventCell *)c;
 
-            // Get Height of current image
-            // UIImage * image = cell.backgroundView.image;
-            // CGFloat imageHeight = image.size.height * (cell.frame.size.width / image.size.width);
+                // Get Height of current image
+                // UIImage * image = cell.backgroundView.image;
+                // CGFloat imageHeight = image.size.height * (cell.frame.size.width / image.size.width);
 
-            CGFloat imageHeight = parallaxRange;
-            CGFloat cellHeight = cell.frame.size.height;
-            CGFloat cellY = i * cellHeight;
-            CGFloat scrollY = scrollView.contentOffset.y;
-            CGFloat topY= (imageHeight / 2) - (cellHeight / 2);
-            CGFloat bottomY = (cellHeight / 2) - (imageHeight / 2);
+                CGFloat imageHeight = parallaxRange;
+                CGFloat cellHeight = cell.frame.size.height;
+                CGFloat cellY = i * cellHeight;
+                CGFloat scrollY = scrollView.contentOffset.y;
+                CGFloat topY= (imageHeight / 2) - (cellHeight / 2);
+                CGFloat bottomY = (cellHeight / 2) - (imageHeight / 2);
 
-            CGRect frame = cell.backgroundView.frame;
-            frame.origin.y = topY + ((cellY - scrollY) / (scrollView.frame.size.height - cellHeight)) * (bottomY - topY);
-
-
-            cell.backgroundView.frame = frame;
+                CGRect frame = cell.eventImageView.frame;
+                frame.origin.y = topY + ((cellY - scrollY) / (scrollView.frame.size.height - cellHeight)) * (bottomY - topY);
+                
+                
+                cell.eventImageView.frame = frame;
+            }
         }
     }
-     */
 }
 
 #pragma mark - Search Bar Delegate
