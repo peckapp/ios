@@ -203,11 +203,12 @@ UITextView *textViewHelper;
     cell.tag = indexPath.row-1;
     if([indexPath row]==0){
         
-        
+        [cell.likeButton setHidden:YES];
+        [cell.numberOfLikesLabel setHidden:YES];
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
         [cell.postButton setHidden:NO];
-        if([self.commentText isEqualToString:@""] || self.commentText==nil){
+        if(([self.commentText isEqualToString:@""] || self.commentText==nil) && ![cell.commentTextView isFirstResponder]){
             cell.commentTextView.textColor = [UIColor lightGrayColor];
             cell.commentTextView.text = @"add a comment";
         }
@@ -224,7 +225,19 @@ UITextView *textViewHelper;
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+        cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
+        [cell.likeButton setHidden:NO];
+        [cell.numberOfLikesLabel setHidden:NO];
+        
+        if([self userHasLikedComment:tempComment]){
+            [cell.likeButton setTitle:@"Unlike" forState:UIControlStateNormal];
+        }else{
+            [cell.likeButton setTitle:@"Like" forState:UIControlStateNormal];
+        }
+        
         cell.commentID = tempComment.id;
+        cell.commentIntegerID = [tempComment.id integerValue];
+        cell.comment_from = [self.circle.id stringValue];
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
         [cell.expandButton setHidden:NO];
@@ -253,6 +266,16 @@ UITextView *textViewHelper;
         }
         // this fixes the problem where the comment text would occasionally be cut off when first loaded
     }
+}
+
+-(BOOL)userHasLikedComment:(Comment*)comment{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger userID = [[defaults objectForKey:@"user_id"] integerValue];
+    for(int i =0; i<[comment.likes count];i++){
+        if(userID==[comment.likes[i] integerValue]){
+            return YES;
+        }
+    }return NO;
 }
 
 
@@ -489,10 +512,10 @@ UITextView *textViewHelper;
     switch(type)
     {
         case NSFetchedResultsChangeInsert:{
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
+            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
             [tableView
              //the cell must be inserted below the post cell
-             insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:realIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
         }
@@ -504,8 +527,9 @@ UITextView *textViewHelper;
             
         case NSFetchedResultsChangeUpdate:
         {
-            PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:indexPath];
-            [self configureCommentCell:cell atIndexPath:indexPath];
+            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
+            PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:realIndexPath];
+            [self configureCommentCell:cell atIndexPath:realIndexPath];
             break;
         }
         case NSFetchedResultsChangeMove:

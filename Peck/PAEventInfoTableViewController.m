@@ -393,7 +393,6 @@ BOOL reloaded = NO;
         cell.commentID = tempComment.id;
         cell.commentIntegerID = [tempComment.id integerValue];
         //cell.comment = tempComment;
-        NSLog(@"self.detail: %@", [[self.detailItem valueForKey:@"id"] stringValue]);
         cell.comment_from = [[self.detailItem valueForKey:@"id"] stringValue];
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];

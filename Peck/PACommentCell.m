@@ -67,13 +67,20 @@
 }
 
 - (IBAction)likeButton:(id)sender {
-    if([self.likeButton.titleLabel.text isEqualToString:@"Like"]){
-        [[PASyncManager globalSyncManager] likeComment:self.commentIntegerID from:self.comment_from withCategory:@"simple"];
-    }else{
-        NSLog(@"UNLIKE!!");
-        [[PASyncManager globalSyncManager] unlikeComment:self.commentIntegerID from:self.comment_from withCategory:@"simple"];
+    NSString*category = @"";
+    if(self.parentTableView){
+        category = @"simple";
     }
+    else if(self.parentCell){
+        category = @"circles";
+    }
+    if([self.likeButton.titleLabel.text isEqualToString:@"Like"]){
+        [[PASyncManager globalSyncManager] likeComment:self.commentIntegerID from:self.comment_from withCategory:category];
+    }else{
+        [[PASyncManager globalSyncManager] unlikeComment:self.commentIntegerID from:self.comment_from withCategory:category];
+        }
     
+        
 }
 
 - (IBAction)postButton:(id)sender {
