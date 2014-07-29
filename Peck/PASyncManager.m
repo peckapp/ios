@@ -420,12 +420,23 @@
 }
 
 -(void)unattendEvent:(NSDictionary*) attendee{
-    NSString* attendeeURL = [@"api/event_attendee/" stringByAppendingString:[[attendee objectForKey:@"user_id"] stringValue]];
-    [[PASessionManager sharedClient] DELETE:attendeeURL
-                               parameters: [self applyWrapper:@"event_attendee" toDictionary:attendee]
+    NSString* attendeeURL = @"api/event_attendees";
+    NSDictionary* authentication = [self authenticationParameters];
+    NSDictionary* attendeeDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        [attendee objectForKey:@"user_id"],@"user_id",
+                                        [attendee objectForKey:@"institution_id"],@"institution_id",
+                                        [attendee objectForKey:@"category"],@"category",
+                                        [attendee objectForKey:@"event_attended"], @"event_attended",
+                                        [authentication objectForKey:@"authentication"],@"authentication",
+                                        nil];
+    [[PASessionManager sharedClient] GET:attendeeURL
+                               parameters: attendeeDictionary
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                      NSLog(@"like JSON %@", JSON);
-                                      [self updateEventInfo];
+                                      NSLog(@"attendee JSON %@", JSON);
+                                      NSDictionary* attendees = (NSDictionary*)JSON;
+                                      NSArray* eventAttendees = [attendees objectForKey:@"event_attendees"];
+                                      NSDictionary* attendeeAttributes = eventAttendees[0];
+                                      [self deleteAttendee:[attendeeAttributes objectForKey:@"id"]];
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -435,6 +446,22 @@
 
 }
 
+
+-(void)deleteAttendee:(NSNumber*)attendeeID{
+    NSString* attendeeURL = [@"api/event_attendees/" stringByAppendingString:[attendeeID stringValue]];
+    [[PASessionManager sharedClient] DELETE:attendeeURL
+                              parameters: [self authenticationParameters]
+                                 success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                     NSLog(@"like JSON %@", JSON);
+                                     [self updateEventInfo];
+                                 }
+     
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                     
+                                 }];
+
+}
 #pragma mark - Institution actions
 
 - (void)updateAvailableInstitutionsWithCallback:(void (^)(BOOL))callbackBlock
