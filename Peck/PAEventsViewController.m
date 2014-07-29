@@ -504,6 +504,7 @@ PAAssetManager * assetManager;
     
     NSLog(@"event %@ has an imageID of %@",tempEvent.title, imageID);
     
+    
     UIImage * cachedImage = [self.imageCache objectForKey:imageID];
     //NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]];
     //UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
@@ -631,11 +632,14 @@ PAAssetManager * assetManager;
         Event* tempEvent = _fetchedResultsController.fetchedObjects[i];
         
         // cannot asynchronously cache image it there isn't one
-        if (tempEvent.blurredImageURL != nil) {
-            [eventURLs addObject:tempEvent.blurredImageURL];
-            [eventTypes addObject:tempEvent.type];
-            [eventIDs addObject:tempEvent.id];
-            [eventRows addObject:[NSNumber numberWithInt:i]];
+        if (tempEvent.blurredImageURL != nil && ![tempEvent.blurredImageURL isEqualToString:@"/images/missing.png"]) {
+            if(![self.imageCache objectForKey:[tempEvent.id stringValue]]){
+                //if the image is not already cached
+                [eventURLs addObject:tempEvent.blurredImageURL];
+                [eventTypes addObject:tempEvent.type];
+                [eventIDs addObject:tempEvent.id];
+                [eventRows addObject:[NSNumber numberWithInt:i]];
+            }
         }
         
     }
