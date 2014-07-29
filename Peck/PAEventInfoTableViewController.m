@@ -45,7 +45,7 @@ BOOL reloaded = NO;
 
 #define defaultCellHeight 51
 #define cellY 22
-#define reloadTime 3
+#define reloadTime 10
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -341,7 +341,7 @@ BOOL reloaded = NO;
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
         [cell.postButton setHidden:NO];
-        if([self.commentText isEqualToString:@""] || self.commentText==nil){
+        if(([self.commentText isEqualToString:@""] || self.commentText==nil) && ![cell.commentTextView isFirstResponder]){
             cell.commentTextView.textColor = [UIColor lightGrayColor];
             cell.commentTextView.text = @"add a comment";
         }
@@ -360,7 +360,18 @@ BOOL reloaded = NO;
         cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
         [cell.likeButton setHidden:NO];
         [cell.numberOfLikesLabel setHidden:NO];
+
+        if([self userHasLikedComment:tempComment]){
+            [cell.likeButton setTitle:@"Unlike" forState:UIControlStateNormal];
+        }else{
+            [cell.likeButton setTitle:@"Like" forState:UIControlStateNormal];
+        }
+        
         cell.commentID = tempComment.id;
+        cell.commentIntegerID = [tempComment.id integerValue];
+        //cell.comment = tempComment;
+        NSLog(@"self.detail: %@", [[self.detailItem valueForKey:@"id"] stringValue]);
+        cell.comment_from = [[self.detailItem valueForKey:@"id"] stringValue];
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
         [cell.expandButton setHidden:NO];
@@ -391,6 +402,16 @@ BOOL reloaded = NO;
         
     }
     
+}
+
+-(BOOL)userHasLikedComment:(Comment*)comment{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger userID = [[defaults objectForKey:@"user_id"] integerValue];
+    for(int i =0; i<[comment.likes count];i++){
+        if(userID==[comment.likes[i] integerValue]){
+            return YES;
+        }
+    }return NO;
 }
 
 -(NSString*)nameLabelTextForComment:(Comment*)comment{

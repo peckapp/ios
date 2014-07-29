@@ -352,7 +352,7 @@
 }
 #pragma mark - Like actions
 
--(void)likeComment:(NSNumber*)commentID{
+-(void)likeComment:(NSInteger)commentID from:(NSString*)comment_from withCategory:(NSString*)category{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary* authentication = [[self authenticationParameters] objectForKey:@"authentication"];
     NSDictionary* baseDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -360,7 +360,7 @@
                                     [defaults objectForKey:@"user_id"], @"liker",
                                     nil];
     
-    NSString* likeURL = [@"api/comments/" stringByAppendingString:[commentID stringValue]];
+    NSString* likeURL = [@"api/comments/" stringByAppendingString:[@(commentID) stringValue]];
     likeURL = [likeURL stringByAppendingString:@"/add_like"];
     
     NSLog(@"like url %@", likeURL);
@@ -368,6 +368,7 @@
                               parameters:baseDictionary
                                 success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                     NSLog(@"like JSON %@", JSON);
+                                    [self updateCommentsFrom:comment_from withCategory:category];
                                  }
     
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -375,6 +376,31 @@
                                     
                                    }];
 }
+-(void)unlikeComment:(NSInteger)commentID from:(NSString*)comment_from withCategory:(NSString*)category{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary* authentication = [[self authenticationParameters] objectForKey:@"authentication"];
+    NSDictionary* baseDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    authentication, @"authentication",
+                                    [defaults objectForKey:@"user_id"], @"unliker",
+                                    nil];
+    
+    NSString* likeURL = [@"api/comments/" stringByAppendingString:[@(commentID) stringValue]];
+    likeURL = [likeURL stringByAppendingString:@"/unlike"];
+    
+    NSLog(@"like url %@", likeURL);
+    [[PASessionManager sharedClient] PATCH:likeURL
+                                parameters:baseDictionary
+                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                       NSLog(@"like JSON %@", JSON);
+                                       [self updateCommentsFrom:comment_from withCategory:category];
+                                   }
+     
+                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                       NSLog(@"ERROR: %@",error);
+                                       
+                                   }];
+}
+
 
 #pragma mark - Institution actions
 
