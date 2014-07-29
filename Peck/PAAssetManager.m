@@ -22,8 +22,10 @@
 - (id)init {
     if (self = [super init]) {
 
-        self.horizontalShadow = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"drop-shadow-horizontal"] stretchableImageWithLeftCapWidth:1 topCapHeight:0]];
-        NSLog(@"Created shadow");
+        self.eventPlaceholder = [UIImage imageNamed:@"event-placeholder"];
+        self.imagePlaceholder = [UIImage imageNamed:@"image-placeholder"];
+        self.profilePlaceholder = [UIImage imageNamed:@"profile-placeholder"];
+        self.horizontalShadow = [[UIImage imageNamed:@"drop-shadow-horizontal"] stretchableImageWithLeftCapWidth:1 topCapHeight:0];
 
     }
     return self;

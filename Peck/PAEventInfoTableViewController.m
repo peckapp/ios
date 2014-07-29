@@ -14,6 +14,7 @@
 #import "Comment.h"
 #import "PAFetchManager.h"
 #import "UIImageView+AFNetworking.h"
+#import "PAAssetManager.h"
 
 
 
@@ -40,6 +41,7 @@ CGRect initialFrame;
 BOOL viewingEvent;
 UITextView *textViewHelper;
 
+PAAssetManager * assetManager;
 
 BOOL reloaded = NO;
 
@@ -58,6 +60,8 @@ BOOL reloaded = NO;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    assetManager = [PAAssetManager sharedManager];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -186,7 +190,7 @@ BOOL reloaded = NO;
         }
         NSLog(@"attendees: %@", [self.detailItem valueForKey:@"attendees"]);
         
-        UIImage* image = [UIImage imageNamed:@"image-placeholder.png"];
+        UIImage* image = [assetManager imagePlaceholder];
         if([self.detailItem valueForKey:@"imageURL"]){
             [self.eventPhoto setImageWithURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"imageURL"]]] placeholderImage:image];
         }else{
@@ -470,12 +474,12 @@ BOOL reloaded = NO;
                 cell.profilePicture.image = profPic;
             }
             else{
-                [cell.profilePicture setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"profile-placeholder.png"]];
+                [cell.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
             }
 
         }
         else{
-            cell.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+            cell.profilePicture.image = [assetManager profilePlaceholder];
         }
     }
 }

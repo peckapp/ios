@@ -7,12 +7,13 @@
 //
 
 #import "PACircleProfilePreviewCell.h"
+#import "PAAssetManager.h"
 
 @implementation PACircleProfilePreviewCell
 
 - (void)awakeFromNib
 {
-    self.profileThumbnail = [[PAProfileThumbnailView alloc] initWithFrame:self.frame subFrame:self.profileTemplateSubview.frame image:[UIImage imageNamed:@"profile-placeholder"]];
+    self.profileThumbnail = [[PAProfileThumbnailView alloc] initWithFrame:self.frame subFrame:self.profileTemplateSubview.frame image:[[PAAssetManager sharedManager] profilePlaceholder]];
     [self addSubview:self.profileThumbnail];
     self.profileTemplateSubview.hidden = true;
 }

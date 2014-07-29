@@ -79,7 +79,7 @@ NSCache *imageCache;
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;
-    cell.photoView.image = [UIImage imageNamed:@"image-placeholder.png"];
+    cell.photoView.image = [];
     
     /*
     NSNumber *imageID = tempExplore.id;

@@ -10,7 +10,10 @@
 
 @interface PAAssetManager : NSObject
 
-@property (strong, nonatomic) UIImageView * horizontalShadow;
+@property (strong, nonatomic) UIImage * eventPlaceholder;
+@property (strong, nonatomic) UIImage * imagePlaceholder;
+@property (strong, nonatomic) UIImage * profilePlaceholder;
+@property (strong, nonatomic) UIImage * horizontalShadow;
 
 + (id)sharedManager;
 

@@ -75,7 +75,7 @@ PAAssetManager * assetManager;
     assetManager = [PAAssetManager sharedManager];
 
     NSLog(@"View did load (events)");
-    self.placeholderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
+    self.placeholderImage = [[UIImageView alloc] initWithImage:[assetManager eventPlaceholder]];
     self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
     
     if(!self.imageCache){
@@ -117,7 +117,7 @@ PAAssetManager * assetManager;
     [self.tableView endUpdates];
     [self.tableView reloadData];
 
-    UIImageView * shadow = [assetManager horizontalShadow];
+    UIImageView * shadow = [[UIImageView alloc] initWithImage:[assetManager horizontalShadow]];
     shadow.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
     NSLog(@"Added shadow");
     [self.view addSubview:shadow];

@@ -20,6 +20,7 @@
 #import "PACircleProfilePreviewCell.h"
 #import "UIImageView+AFNetworking.h"
 #import "PAProfileThumbnailView.h"
+#import "PAAssetManager.h"
 
 @interface PACircleCell ()
 
@@ -33,6 +34,8 @@
 NSMutableDictionary *heightDictionary;
 UITextView *textViewHelper;
 
+PAAssetManager * assetManager;
+
 #define defaultCellHeight 51
 #define cellY 22
 //the compressed text view height is used to avoid seeing half of the last line of the text view.
@@ -40,11 +43,8 @@ UITextView *textViewHelper;
 
 - (void)awakeFromNib
 {
-    // Initialization code
+    assetManager = [PAAssetManager sharedManager];
 
-    /*[scrollView setScrollEnabled:YES];
-    [scrollView setContentSize:CGSizeMake(800, 0)];
-     */
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     self.userPicture =[UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
     _loadedImages = NO;
@@ -313,12 +313,12 @@ UITextView *textViewHelper;
                 cell.profilePicture.image = profPic;
             }
             else{
-                [cell.profilePicture setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"profile-placeholder.png"]];
+                [cell.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
             }
             
         }
         else{
-            cell.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+            cell.profilePicture.image = [assetManager profilePlaceholder];
         }
     }
 }
@@ -336,12 +336,12 @@ UITextView *textViewHelper;
                 cell.profileThumbnail.imageView.image = profPic;
             }
             else{
-                [cell.profileThumbnail.imageView setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"profile-placeholder.png"]];
+                [cell.profileThumbnail.imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
             }
             
         }
         else{
-            cell.profileThumbnail.imageView.image = [UIImage imageNamed:@"profile-placeholder.png"];
+            cell.profileThumbnail.imageView.image = [assetManager profilePlaceholder];
         }
     }
 }
