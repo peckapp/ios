@@ -60,6 +60,7 @@
 		A40CF56819547ACC0021C088 /* PAPeers.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56719547ACC0021C088 /* PAPeers.m */; };
 		A40CF574195483140021C088 /* PABST.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF573195483140021C088 /* PABST.m */; };
 		A412E1D41986E63800384A11 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = A412E1D31986E63800384A11 /* Comment.m */; };
+		A412E1D81987E2EB00384A11 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A412E1D71987E2EB00384A11 /* Event.m */; };
 		A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */; };
 		A433EAA6195B53D800DAA201 /* PACircleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA5195B53D800DAA201 /* PACircleScrollView.m */; };
 		A43BF0EA197813200009B7AD /* PAProfileTableViewController2.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */; };
@@ -104,7 +105,6 @@
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
 		A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */; };
 		A4C8C347197D8F3F008F9F85 /* PAFetchManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C8C346197D8F3F008F9F85 /* PAFetchManager.m */; };
-		A4C8C34D19802B42008F9F85 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C8C34C19802B42008F9F85 /* Event.m */; };
 		A4E21F601964A749002A9800 /* PAEventInfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */; };
 		A4E21F6519659892002A9800 /* PACommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F6319659892002A9800 /* PACommentCell.m */; };
 		A4E21F6619659892002A9800 /* PACommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4E21F6419659892002A9800 /* PACommentCell.xib */; };
@@ -262,6 +262,9 @@
 		A40CF573195483140021C088 /* PABST.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PABST.m; sourceTree = "<group>"; };
 		A412E1D21986E63800384A11 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
 		A412E1D31986E63800384A11 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
+		A412E1D51987E0CD00384A11 /* Peck 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Peck 2.xcdatamodel"; sourceTree = "<group>"; };
+		A412E1D61987E2EB00384A11 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		A412E1D71987E2EB00384A11 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A433EAA0195B3F5800DAA201 /* HTAutocompleteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTAutocompleteManager.h; sourceTree = "<group>"; };
 		A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTAutocompleteManager.m; sourceTree = "<group>"; };
 		A433EAA4195B53D800DAA201 /* PACircleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleScrollView.h; sourceTree = "<group>"; };
@@ -335,8 +338,6 @@
 		A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreInfoViewController.m; sourceTree = "<group>"; };
 		A4C8C345197D8F3F008F9F85 /* PAFetchManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFetchManager.h; sourceTree = "<group>"; };
 		A4C8C346197D8F3F008F9F85 /* PAFetchManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFetchManager.m; sourceTree = "<group>"; };
-		A4C8C34B19802B42008F9F85 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
-		A4C8C34C19802B42008F9F85 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A4E21F5E1964A749002A9800 /* PAEventInfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEventInfoTableViewController.h; sourceTree = "<group>"; };
 		A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEventInfoTableViewController.m; sourceTree = "<group>"; };
 		A4E21F6219659892002A9800 /* PACommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACommentCell.h; sourceTree = "<group>"; };
@@ -752,8 +753,8 @@
 		DDDAEDE419479665004CE102 /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				A4C8C34B19802B42008F9F85 /* Event.h */,
-				A4C8C34C19802B42008F9F85 /* Event.m */,
+				A412E1D61987E2EB00384A11 /* Event.h */,
+				A412E1D71987E2EB00384A11 /* Event.m */,
 				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
 				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
 				86292524193CBFF80057CA41 /* PAEventCell.h */,
@@ -1095,9 +1096,9 @@
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
 				860BE45E19632CC600E57A56 /* Institution.m in Sources */,
-				A4C8C34D19802B42008F9F85 /* Event.m in Sources */,
 				A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */,
 				A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */,
+				A412E1D81987E2EB00384A11 /* Event.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
 				A4C8C347197D8F3F008F9F85 /* PAFetchManager.m in Sources */,
 				A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */,
@@ -1416,9 +1417,10 @@
 		86D59819193768BF00F38654 /* Peck.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				A412E1D51987E0CD00384A11 /* Peck 2.xcdatamodel */,
 				86D5981A193768BF00F38654 /* Peck.xcdatamodel */,
 			);
-			currentVersion = 86D5981A193768BF00F38654 /* Peck.xcdatamodel */;
+			currentVersion = A412E1D51987E0CD00384A11 /* Peck 2.xcdatamodel */;
 			path = Peck.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

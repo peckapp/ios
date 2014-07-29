@@ -29,6 +29,7 @@
 #import "Subscription.h"
 #import "PAFetchManager.h"
 #import "PAEventsViewController.h"
+#import "PAEventInfoTableViewController.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -401,6 +402,97 @@
                                    }];
 }
 
+#pragma mark - attend actions
+
+-(void)attendEvent:(NSDictionary*) attendee forViewController:(UIViewController*)controller{
+    
+    
+    [[PASessionManager sharedClient] POST:@"api/event_attendees"
+                                parameters: [self applyWrapper:@"event_attendee" toDictionary:attendee]
+                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                       NSLog(@"like JSON %@", JSON);
+                                       
+                                       
+                                       //self set
+                                       
+                                        [self updateAndReloadEvent:[attendee objectForKey:@"event_attended"] forViewController:controller];
+                                       
+                                       //[self updateEventInfo];
+                                   }
+     
+                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                       NSLog(@"ERROR: %@",error);
+                                       
+                                   }];
+}
+
+-(void)unattendEvent:(NSDictionary*) attendee forViewController:(UIViewController*)controller{
+    NSString* attendeeURL = @"api/event_attendees";
+    NSDictionary* authentication = [self authenticationParameters];
+    NSDictionary* attendeeDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        [attendee objectForKey:@"user_id"],@"user_id",
+                                        [attendee objectForKey:@"institution_id"],@"institution_id",
+                                        [attendee objectForKey:@"category"],@"category",
+                                        [attendee objectForKey:@"event_attended"], @"event_attended",
+                                        [authentication objectForKey:@"authentication"],@"authentication",
+                                        nil];
+    
+    [[PASessionManager sharedClient] GET:attendeeURL
+                               parameters: attendeeDictionary
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      NSLog(@"attendee JSON %@", JSON);
+                                      NSDictionary* attendees = (NSDictionary*)JSON;
+                                      NSArray* eventAttendees = [attendees objectForKey:@"event_attendees"];
+                                      NSDictionary* attendeeAttributes = eventAttendees[0];
+                                      [self deleteAttendee:[attendeeAttributes objectForKey:@"id"] forEvent:[attendee objectForKey:@"event_attended"] forViewController:controller];
+                                  }
+     
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                      
+                                  }];
+
+}
+
+
+-(void)deleteAttendee:(NSNumber*)attendeeID forEvent:(NSNumber*)eventID forViewController:(UIViewController*)controller{
+    NSString* attendeeURL = [@"api/event_attendees/" stringByAppendingString:[attendeeID stringValue]];
+    [[PASessionManager sharedClient] DELETE:attendeeURL
+                              parameters: [self authenticationParameters]
+                                 success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                     NSLog(@"like JSON %@", JSON);
+                                     [self updateAndReloadEvent:eventID forViewController:controller];
+                                 }
+     
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                     
+                                 }];
+
+}
+-(void)updateAndReloadEvent:(NSNumber*)eventID forViewController:(UIViewController*)controller{
+    NSString* eventURL = [[simple_eventsAPI stringByAppendingString:@"/" ] stringByAppendingString:[eventID stringValue]];
+    [[PASessionManager sharedClient] GET:eventURL
+                              parameters:[self authenticationParameters]
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         //NSLog(@"EVENT JSON: %@",JSON);
+         NSDictionary* eventDictionary = (NSDictionary*)JSON;
+         NSDictionary* eventAttributes = [eventDictionary objectForKey:@"simple_event"];
+         Event* event = [[PAFetchManager sharedFetchManager] getObject:eventID withEntityType:@"Event" andType:@"simple"];
+         [self setAttributesInEvent:event withDictionary:eventAttributes];
+         if([controller isKindOfClass:[PAEventInfoTableViewController class]]){
+             PAEventInfoTableViewController* sender = (PAEventInfoTableViewController*)controller;
+             [sender configureView];
+         }
+         
+     }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                     
+                                 }];
+
+}
 
 #pragma mark - Institution actions
 
@@ -862,7 +954,7 @@
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
-         [self updateEventInfoForViewController:nil];
+         [self updateEventInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -885,7 +977,7 @@
 
 }
 
--(void)updateEventInfoForViewController:(UIViewController*)controller
+-(void)updateEventInfo
 {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
@@ -899,7 +991,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"JSON: %@",JSON);
+             //NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
              //NSLog(@"Update Event response: %@", postsFromResponse);
@@ -913,7 +1005,11 @@
                      [self setAttributesInEvent:event withDictionary:eventAttributes];
                      [mutableEvents addObject:event];
                      //NSLog(@"EVENT: %@",event);
-                    }
+                 }else{
+                     //the event is already in core data
+                     Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:@"simple"];
+                     [self setAttributesInEvent:event withDictionary:eventAttributes];
+                 }
              }
              
          }
@@ -949,6 +1045,7 @@
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         event.imageURL = [dictionary objectForKey:@"image"];
     }
+    event.attendees = [dictionary objectForKey:@"attendees"];
 }
 
 #pragma mark - Comment actions

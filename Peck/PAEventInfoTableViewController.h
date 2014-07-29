@@ -21,8 +21,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *startTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *endTimeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *eventPhoto;
+- (IBAction)attendButton:(id)sender;
 
 @property (strong, nonatomic) NSString* commentText;
+@property (weak, nonatomic) IBOutlet UILabel *numberOfAttendees;
+@property (weak, nonatomic) IBOutlet UIButton *attendButton;
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
@@ -33,4 +36,5 @@
 - (void)expandTableViewCell:(PACommentCell *)cell;
 -(void)compressTableViewCell:(PACommentCell *)cell;
 -(void)postComment:(PACommentCell *)cell;
+- (void)configureView;
 @end

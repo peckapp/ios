@@ -206,4 +206,64 @@
 
 }
 
+-(id)getObject:(NSNumber *) newID withEntityType:(NSString*)entityType andType:(NSString*)type
+{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest * request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *objects = [NSEntityDescription entityForName:entityType inManagedObjectContext:_managedObjectContext];
+    [request setEntity:objects];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id = %@", newID];
+    NSMutableArray*predicateArray = [[NSMutableArray alloc] init];
+    [predicateArray addObject:predicate];
+    //[request setPredicate:predicate];
+    
+    if(type!=nil){
+        NSPredicate* categoryPredicate = [NSPredicate predicateWithFormat:@"type like %@",type];
+        [predicateArray addObject:categoryPredicate];
+    }
+    
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    [request setPredicate:compoundPredicate];
+    
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
+    //fetch events in order to check if the events we want to add already exist in core data
+    
+    if([mutableFetchResults count]>0){
+        return mutableFetchResults[0];
+    }
+    else {
+        return nil;
+    }
+}
+
+-(Event*)getEventWithID:(NSNumber*)eventID andType:(NSString*)type{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSString *attributeName = @"id";
+    NSNumber *attributeValue = eventID;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@",
+                              attributeName, attributeValue];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    
+    
+    if([mutableFetchResults count]>0){
+       Event* comment = mutableFetchResults[0];
+        return comment;
+    }
+    return nil;
+
+}
+
 @end

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.21" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.13"/>
     </dependencies>
@@ -792,7 +792,7 @@
                             </button>
                         </barButtonItem>
                         <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="mZ0-eo-jaw">
-                            <rect key="frame" x="96" y="5.5" width="128" height="33"/>
+                            <rect key="frame" x="96" y="6" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Today"/>
                             <connections>
@@ -828,7 +828,7 @@
             <objects>
                 <tableViewController id="sCG-OO-lYg" customClass="PADiningPlacesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7nE-HW-BdO">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <connections>
                             <outlet property="dataSource" destination="sCG-OO-lYg" id="7Ed-wK-upt"/>
@@ -877,6 +877,23 @@
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Jxn-k1-dbT">
+                                    <rect key="frame" x="237" y="207" width="68" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title="Attend">
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="attendButton:" destination="rpt-SB-vsa" eventType="touchUpInside" id="4G5-D8-glA"/>
+                                    </connections>
+                                </button>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qCZ-hV-BIy">
+                                    <rect key="frame" x="259" y="240" width="41" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         </view>
@@ -897,9 +914,11 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="oUu-B6-1W8"/>
                     <connections>
+                        <outlet property="attendButton" destination="Jxn-k1-dbT" id="zvi-yu-RbH"/>
                         <outlet property="descriptionTextView" destination="cc6-zl-oCX" id="xiQ-IL-0nw"/>
                         <outlet property="endTimeLabel" destination="qf1-5w-VLx" id="F1x-qd-Xxt"/>
                         <outlet property="eventPhoto" destination="mur-Tb-M35" id="Mds-qs-jnN"/>
+                        <outlet property="numberOfAttendees" destination="qCZ-hV-BIy" id="ZnP-kx-Z2W"/>
                         <outlet property="startTimeLabel" destination="qQ0-0X-Re8" id="3GI-Az-Va3"/>
                     </connections>
                 </tableViewController>
@@ -1079,7 +1098,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="162.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <date key="date" timeIntervalSinceReferenceDate="425847387.11313301">
-                                                        <!--<__NSDate Class=2014-06-30 18:56:27 +0000 timeInterval=425847387.113133 ISO8601=2014-06-30T14:56:27.113-0400>-->
+                                                        <!--2014-06-30 18:56:27 +0000-->
                                                     </date>
                                                 </datePicker>
                                             </subviews>
@@ -1119,7 +1138,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="162.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <date key="date" timeIntervalSinceReferenceDate="425847387.11313301">
-                                                        <!--<__NSDate Class=2014-06-30 18:56:27 +0000 timeInterval=425847387.113133 ISO8601=2014-06-30T14:56:27.113-0400>-->
+                                                        <!--2014-06-30 18:56:27 +0000-->
                                                     </date>
                                                 </datePicker>
                                             </subviews>

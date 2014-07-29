@@ -34,14 +34,19 @@
 
 -(void)changePassword:(NSDictionary*)passwordInfo forViewController:(UIViewController*)controller;
 
+// like actions
 -(void)likeComment:(NSInteger)commentID from:(NSString*)comment_from withCategory:(NSString*)category;
 -(void)unlikeComment:(NSInteger)commentID from:(NSString*)comment_from withCategory:(NSString*)category;
+
+//attend actions
+-(void)attendEvent:(NSDictionary*) attendee forViewController:(UIViewController*)controller;
+-(void)unattendEvent:(NSDictionary*) attendee forViewController:(UIViewController*)controller;
 
 // methods for syncing institutions for the configuration phase
 -(void)updateAvailableInstitutionsWithCallback:(void(^)(BOOL sucess))callbackBlock;
 
 // methods for updating events
--(void)updateEventInfoForViewController:(UIViewController*)controller;
+-(void)updateEventInfo;
 -(void)postEvent:(NSDictionary *) dictionary withImage:(NSData*)filePath;
 -(void)deleteEvent:(NSNumber*)eventID;
 
