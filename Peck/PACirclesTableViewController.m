@@ -55,7 +55,8 @@ BOOL viewingCircles;
     return self;
 }
 -(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+    //[super viewWillAppear:animated];
+    //when this is uncommented, a strange error occurs where the circle cell will scroll up when the comment cell is selected
     
     [[PASyncManager globalSyncManager] updateCircleInfo];
     viewingCircles=YES;
