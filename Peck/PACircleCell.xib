@@ -66,7 +66,6 @@
                 <outlet property="createCircleButton" destination="wXC-83-NpW" id="BgR-ka-zIO"/>
                 <outlet property="leaveCircleButton" destination="9z0-Fk-KGq" id="q4T-jc-Eui"/>
                 <outlet property="profilesTableView" destination="XZl-as-txS" id="48Z-BR-35g"/>
-                <outlet property="suggestedMembersTableView" destination="0GW-OP-9h4" id="zqF-o8-tyF"/>
                 <outlet property="titleTextField" destination="XVF-lT-1oS" id="xJS-gi-ctP"/>
             </connections>
         </tableViewCell>
