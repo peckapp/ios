@@ -1303,8 +1303,8 @@
         }
     }
     stringFromArray = [stringFromArray stringByAppendingString:@"]"];
-    NSString* deleteURL = [subscriptionsAPI stringByAppendingString:@"/"];
-    deleteURL = [deleteURL stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
+    //NSString* deleteURL = [subscriptionsAPI stringByAppendingString:@"/"];
+    //deleteURL = [deleteURL stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
     /*deleteURL = [deleteURL stringByAppendingString:@"?"];
     deleteURL = [deleteURL stringByAppendingString:@"subscriptions="];
     deleteURL = [deleteURL stringByAppendingString:stringFromArray];*/
@@ -1312,9 +1312,9 @@
                                 stringFromArray, @"subscriptions",
                                 nil];
     
-    NSLog(@"deleteURL: %@", deleteURL);
+   // NSLog(@"deleteURL: %@", deleteURL);
     
-    [[PASessionManager sharedClient] DELETE:deleteURL
+    [[PASessionManager sharedClient] DELETE:subscriptionsAPI
                                  parameters:[self applyWrapper:@"subscription" toDictionary:dictionary]
                                     success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
