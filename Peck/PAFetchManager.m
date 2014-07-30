@@ -100,6 +100,27 @@
     [_managedObjectContext save:&saveError];
 }
 
+-(void)removeCircle:(NSNumber*)circleID{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext]];
+    [fetchRequest setIncludesPropertyValues:NO]; //only fetch the managedObjectID
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"id = %@", circleID];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError * error = nil;
+    NSArray * circles = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    //error handling goes here
+    for (NSManagedObject * circle in circles) {
+        [_managedObjectContext deleteObject:circle];
+    }
+    NSError *saveError = nil;
+    [_managedObjectContext save:&saveError];
+}
+
 -(void)removeAllEvents{
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];

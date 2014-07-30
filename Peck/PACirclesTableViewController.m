@@ -301,7 +301,11 @@ BOOL viewingCircles;
     cell.addingMembers=NO;
     self.selectedIndexPath = nil;
     [self dismissKeyboard:self];
-    [self configureCell:cell atIndexPath:indexPath];
+    if(indexPath){
+        [self configureCell:cell atIndexPath:indexPath];
+    }else{
+        [cell.leaveCircleButton setHidden:YES];
+    }
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }
@@ -354,10 +358,12 @@ BOOL viewingCircles;
         [cell.commentsTableView setHidden:YES];
         [cell.titleTextField setHidden:YES];
         [cell.createCircleButton setHidden:YES];
+        [cell.leaveCircleButton setHidden:YES];
         if(viewingCell){
             [cell.titleTextField setHidden:NO];
             [cell.profilesTableView setHidden:NO];
             [cell.createCircleButton setHidden:NO];
+        
         }
         
     }
@@ -378,7 +384,10 @@ BOOL viewingCircles;
         //NSLog(@"configure cell for circle %@", c);
         cell.circleTitle.text = c.circleName;
         cell.delegate = self;
-        
+        [cell.leaveCircleButton setHidden:YES];
+        if(viewingCell){
+            [cell.leaveCircleButton setHidden:NO];
+        }
         
         cell.circle=c;
         NSSet*members = c.circle_members;
