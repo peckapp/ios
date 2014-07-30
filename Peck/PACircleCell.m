@@ -416,6 +416,7 @@ PAAssetManager * assetManager;
     else {
 
     }
+    // self.frame = CGRectMake(0, -44, self.frame.size.width, self.frame.size.height);
 }
 #pragma mark - managing the fetched results controller
 
