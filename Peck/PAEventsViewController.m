@@ -675,7 +675,8 @@ PAAssetManager * assetManager;
                     if ([cell isKindOfClass:[PAEventCell class]]) {
                         [self configureCell:cell atIndexPath:indexPath];
                     } else {
-                        NSLog(@"ATTEMPTED TO CONFIGURE DINING CELL: was at indexpath:%@, only event cells allowed",indexPath);
+                        // need to fix the root cause of this error
+                        [NSException raise:@"ATTEMPTED TO CONFIGURE DINING CELL" format:@"was at indexpath:%@, only event cells allowed",indexPath];
                     }
                 }
                 //to reload the cell after the image is cached
