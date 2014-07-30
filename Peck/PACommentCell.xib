@@ -62,7 +62,7 @@
                 <outlet property="nameLabel" destination="Iq5-9U-yu5" id="8dC-qA-vOF"/>
                 <outlet property="numberOfLikesLabel" destination="SQa-OC-gTk" id="fcQ-jF-2D7"/>
                 <outlet property="postButton" destination="fdT-Fc-nuX" id="UGm-mr-sQl"/>
-                <outlet property="thumbnailTemplateView" destination="K4U-me-4FY" id="jOI-yg-7Gm"/>
+                <outlet property="thumbnailViewTemplate" destination="K4U-me-4FY" id="LEw-UN-GeJ"/>
             </connections>
             <point key="canvasLocation" x="-1418" y="138"/>
         </tableViewCell>

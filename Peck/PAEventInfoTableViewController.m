@@ -390,8 +390,8 @@ BOOL reloaded = NO;
         NSString* userName = [[[defaults objectForKey:@"first_name"] stringByAppendingString:@" "] stringByAppendingString:[defaults objectForKey:@"last_name"]];
         cell.nameLabel.text=userName;
 
-        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailTemplateView.frame image:self.userPicture];
-        cell.thumbnailTemplateView = thumbnail;
+        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailView.frame imageView:[[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]]];
+        cell.thumbnailView = thumbnail;
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
@@ -416,8 +416,9 @@ BOOL reloaded = NO;
         cell.tag = [indexPath row]-1;
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
-        
-        [self imageForComment:tempComment withCell:cell];
+
+        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageViewForComment:tempComment]];
+        [cell addSubview:thumbnail];
         
         NSString * commentID = [tempComment.id stringValue];
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
@@ -468,25 +469,30 @@ BOOL reloaded = NO;
     return text;
 }
 
--(void)imageForComment:(Comment*)comment withCell:(PACommentCell*)cell{
+- (UIImageView *)imageViewForComment:(Comment*)comment {
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
     if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
-        // cell.profilePicture.image =  self.userPicture;
+        return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
     }else{
-        Peer* commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
+        Peer * commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
         if(commentFromPeer.imageURL){
             NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
             UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+
             if(profPic){
-                //cell.profilePicture.image = profPic;
+                NSLog(@"AAA");
+                return [[UIImageView alloc] initWithImage:profPic];
+
+
             }
             else{
-                //[cell.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+                UIImageView * imageView = [[UIImageView alloc] init];
+                [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+                return imageView;
             }
-
         }
         else{
-            //cell.profilePicture.image = [assetManager profilePlaceholder];
+            return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
         }
     }
 }

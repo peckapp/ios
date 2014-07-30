@@ -26,16 +26,12 @@ PAAssetManager * assetManager;
     
     [self.commentTextView setEditable:NO];
     [self.commentTextView setScrollEnabled:NO];
-    //commentTextView.frame= CGRectMake(98, 34, 222, 85);
     [self.commentTextView setText:commentPlaceholder];
     [self.commentTextView setTextColor:[UIColor lightGrayColor]];
     self.commentTextView.delegate=self;
+    self.thumbnailViewTemplate.hidden = YES;
     
-    _expanded=NO;
-    // Initialization code
-
-    UIView * profileThumbnail = [assetManager createThumbnailWithFrame:CGRectMake(0, 0, 50, 50) image:[assetManager profilePlaceholder]];
-    [self addSubview:profileThumbnail];
+    self.expanded=NO;
 }
 
 
@@ -80,9 +76,7 @@ PAAssetManager * assetManager;
         [[PASyncManager globalSyncManager] likeComment:self.commentIntegerID from:self.comment_from withCategory:category];
     }else{
         [[PASyncManager globalSyncManager] unlikeComment:self.commentIntegerID from:self.comment_from withCategory:category];
-        }
-    
-        
+    }
 }
 
 - (IBAction)postButton:(id)sender {
