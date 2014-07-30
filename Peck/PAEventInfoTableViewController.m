@@ -95,13 +95,17 @@ BOOL reloaded = NO;
     viewingEvent=YES;
     [self registerForKeyboardNotifications];
     NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
-    initialFrame = self.tableView.frame;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         while(viewingEvent) {
             [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple"];
             [NSThread sleepForTimeInterval:reloadTime];
         }
     });
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    initialFrame = self.tableView.frame;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{

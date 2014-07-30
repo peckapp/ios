@@ -434,48 +434,20 @@
 
 -(void)unattendEvent:(NSDictionary*) attendee forViewController:(UIViewController*)controller{
     NSString* attendeeURL = @"api/event_attendees";
-    NSDictionary* authentication = [self authenticationParameters];
-    NSDictionary* attendeeDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        [attendee objectForKey:@"user_id"],@"user_id",
-                                        [attendee objectForKey:@"institution_id"],@"institution_id",
-                                        [attendee objectForKey:@"category"],@"category",
-                                        [attendee objectForKey:@"event_attended"], @"event_attended",
-                                        [authentication objectForKey:@"authentication"],@"authentication",
-                                        nil];
-    
-    [[PASessionManager sharedClient] GET:attendeeURL
-                               parameters: attendeeDictionary
-                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                      NSLog(@"attendee JSON %@", JSON);
-                                      NSDictionary* attendees = (NSDictionary*)JSON;
-                                      NSArray* eventAttendees = [attendees objectForKey:@"event_attendees"];
-                                      NSDictionary* attendeeAttributes = eventAttendees[0];
-                                      [self deleteAttendee:[attendeeAttributes objectForKey:@"id"] forEvent:[attendee objectForKey:@"event_attended"] forViewController:controller];
-                                  }
-     
-                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
-                                      
-                                  }];
-
-}
-
-
--(void)deleteAttendee:(NSNumber*)attendeeID forEvent:(NSNumber*)eventID forViewController:(UIViewController*)controller{
-    NSString* attendeeURL = [@"api/event_attendees/" stringByAppendingString:[attendeeID stringValue]];
     [[PASessionManager sharedClient] DELETE:attendeeURL
-                              parameters: [self authenticationParameters]
-                                 success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                     NSLog(@"like JSON %@", JSON);
-                                     [self updateAndReloadEvent:eventID forViewController:controller];
-                                 }
+                                 parameters: [self applyWrapper:@"event_attendee" toDictionary:attendee]
+                                    success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                        NSLog(@"like JSON %@", JSON);
+                                        [self updateAndReloadEvent:[attendee objectForKey:@"event_attended"] forViewController:controller];
+                                    }
      
-                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
-                                     
-                                 }];
+                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                        NSLog(@"ERROR: %@",error);
+                                        
+                                    }];
 
 }
+
 -(void)updateAndReloadEvent:(NSNumber*)eventID forViewController:(UIViewController*)controller{
     NSString* eventURL = [[simple_eventsAPI stringByAppendingString:@"/" ] stringByAppendingString:[eventID stringValue]];
     [[PASessionManager sharedClient] GET:eventURL
@@ -1328,14 +1300,17 @@
     stringFromArray = [stringFromArray stringByAppendingString:@"]"];
     NSString* deleteURL = [subscriptionsAPI stringByAppendingString:@"/"];
     deleteURL = [deleteURL stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
-    deleteURL = [deleteURL stringByAppendingString:@"?"];
+    /*deleteURL = [deleteURL stringByAppendingString:@"?"];
     deleteURL = [deleteURL stringByAppendingString:@"subscriptions="];
-    deleteURL = [deleteURL stringByAppendingString:stringFromArray];
+    deleteURL = [deleteURL stringByAppendingString:stringFromArray];*/
+    NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                stringFromArray, @"subscriptions",
+                                nil];
     
     NSLog(@"deleteURL: %@", deleteURL);
     
     [[PASessionManager sharedClient] DELETE:deleteURL
-                                 parameters:[self authenticationParameters]
+                                 parameters:[self applyWrapper:@"subscription" toDictionary:dictionary]
                                     success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"success: %@", JSON);
