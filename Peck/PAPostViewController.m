@@ -77,9 +77,9 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    //[super viewWillAppear:animated];
+    [super viewWillAppear:animated];
     
-    [self registerForKeyboardNotifications];
+    //[self registerForKeyboardNotifications];
     if([self.invitedCircles count]+[self.invitedPeople count]==0){
         self.peopleLabel.text=@"None";
     }else{
@@ -100,7 +100,7 @@
     [super viewWillDisappear:animated];
     
     [self.view endEditing:YES];
-    [self deregisterFromKeyboardNotifications];
+    //[self deregisterFromKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning
@@ -109,7 +109,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+/*
+//DO NOT DELETE (for now) 
+ 
 #pragma mark - managing the keyboard notifications
 
 - (void)registerForKeyboardNotifications {
@@ -149,7 +151,7 @@
 - (void)keyboardWillBeHidden:(NSNotification *)notification {
     self.tableView.frame = _initialTableViewFrame;
 }
-
+*/
 
 #pragma mark table view delegate
 

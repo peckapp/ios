@@ -126,6 +126,8 @@ BOOL reloaded = NO;
     // Dispose of any resources that can be recreated.
 }
 
+/*
+//DO NOT DELETE (for now)
 #pragma mark - managing the keyboard notifications
 
 - (void)registerForKeyboardNotifications {
@@ -166,7 +168,7 @@ BOOL reloaded = NO;
 - (void)keyboardWillBeHidden:(NSNotification *)notification {
         self.tableView.frame = initialFrame;
 }
-
+*/
 #pragma mark - managing the detail item
 
 - (void)setDetailItem:(id)newDetailItem
