@@ -368,7 +368,7 @@ PAAssetManager * assetManager;
         [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
-    [self configureCell:cell atIndexPath:indexPath];
+    [self configureEventCell:cell atIndexPath:indexPath];
     return cell;
     
 }
@@ -492,7 +492,7 @@ PAAssetManager * assetManager;
 }
 
 
-- (void)configureCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureEventCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Event *tempEvent;
     
@@ -673,7 +673,7 @@ PAAssetManager * assetManager;
                 PAEventCell* cell = (PAEventCell*)[self.tableView cellForRowAtIndexPath:indexPath];
                 if(_fetchedResultsController.fetchedObjects.count > indexPath.row){
                     if ([cell isKindOfClass:[PAEventCell class]]) {
-                        [self configureCell:cell atIndexPath:indexPath];
+                        [self configureEventCell:cell atIndexPath:indexPath];
                     } else {
                         // need to fix the root cause of this error
                         [NSException raise:@"ATTEMPTED TO CONFIGURE DINING CELL" format:@"was at indexpath:%@, only event cells allowed",indexPath];
