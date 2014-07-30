@@ -23,5 +23,6 @@
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSString * category;
 @property (nonatomic, retain) NSNumber * weight;
+@property (nonatomic, retain) NSString * imageURL;
 
 @end

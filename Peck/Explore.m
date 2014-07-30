@@ -22,5 +22,6 @@
 @dynamic updated_at;
 @dynamic category;
 @dynamic weight;
+@dynamic imageURL;
 
 @end
