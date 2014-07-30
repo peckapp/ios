@@ -89,7 +89,7 @@
     return YES;
 }
 
-
+#pragma mark - Notifications
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
@@ -106,6 +106,20 @@
     NSLog(@"we have a problem %@", error);
 }
 
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    NSLog(@"did receive remote notification: %@",userInfo);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"did receive remote notification: %@ with a fetch completion handler",userInfo);
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    NSLog(@"did receive local notification: %@",notification);
+}
+
+#pragma mark - Facebook API
+
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
@@ -120,6 +134,8 @@
     
     return wasHandled;
 }
+
+#pragma mark - Standard methods
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
