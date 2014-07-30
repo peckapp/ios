@@ -59,8 +59,11 @@
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 deviceToken, @"token",
                                 nil];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* deviceTokenURL = [@"api/users/" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
+    deviceTokenURL = [deviceTokenURL stringByAppendingString:@"/create_device_token"];
     NSLog(@"device token dictionary: %@", dictionary);
-    [[PASessionManager sharedClient] POST:@"api/user_device_tokens"
+    [[PASessionManager sharedClient] PATCH:deviceTokenURL
                                parameters:[self applyWrapper:@"user_device_token" toDictionary:dictionary]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                       NSLog(@"Device Token JSON: %@", JSON);
@@ -714,6 +717,11 @@
     circle.id = [dictionary objectForKey:@"id"];
     NSArray *members = (NSArray*)[dictionary objectForKey:@"circle_members"];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSSet* oldMembers = circle.circle_members;
+    if(oldMembers){
+        //In case a user leaves the circle. We need to remove all relationships and then add in the new ones
+        [circle removeCircle_members:oldMembers];
+    }
     for(int i =0; i<[members count]; i++){
         if([members[i] integerValue] != [[defaults objectForKey:@"user_id"] integerValue]){
             //Add the relationsip if the peer is not the user himself

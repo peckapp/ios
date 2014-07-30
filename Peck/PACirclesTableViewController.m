@@ -61,6 +61,8 @@ BOOL viewingCircles;
     viewingCircles=YES;
     [self registerForKeyboardNotifications];
     initialFrame=self.tableView.frame;
+
+    // TODO: This crashes sometimes
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         while (viewingCircles) {
             if (viewingCell && self.selectedIndexPath.row != [_fetchedResultsController.fetchedObjects count]) {
@@ -280,6 +282,7 @@ BOOL viewingCircles;
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+
         self.tableView.scrollEnabled = NO;
         viewingCell=YES;
         [self configureCell:cell atIndexPath:indexPath];
@@ -289,6 +292,7 @@ BOOL viewingCircles;
         }
         else{
             cell.addingMembers=NO;
+            [self dismissKeyboard:self];
             [self configureCell:cell atIndexPath:indexPath];
             [cell performFetch];
         }
