@@ -617,7 +617,7 @@ PAAssetManager * assetManager;
                                 [defaults objectForKey:@"user_id"],@"user_id",
                                 self.circle.id, @"circle_id",
                                 nil];
-    //[[PASyncManager globalSyncManager] leaveCircle:dictionary];
+    [[PASyncManager globalSyncManager] leaveCircle:dictionary];
 }
 
 - (IBAction)createCircleButton:(id)sender {
