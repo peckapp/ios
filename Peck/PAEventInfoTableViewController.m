@@ -95,7 +95,7 @@ BOOL reloaded = NO;
     [super viewWillAppear:animated];
     
     viewingEvent=YES;
-    [self registerForKeyboardNotifications];
+    //[self registerForKeyboardNotifications];
     NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -117,7 +117,7 @@ BOOL reloaded = NO;
     
     viewingEvent=NO;
     [self.view endEditing:YES];
-    [self deregisterFromKeyboardNotifications];
+    //[self deregisterFromKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning
@@ -126,6 +126,8 @@ BOOL reloaded = NO;
     // Dispose of any resources that can be recreated.
 }
 
+/*
+//DO NOT DELETE (for now)
 #pragma mark - managing the keyboard notifications
 
 - (void)registerForKeyboardNotifications {
@@ -166,7 +168,7 @@ BOOL reloaded = NO;
 - (void)keyboardWillBeHidden:(NSNotification *)notification {
         self.tableView.frame = initialFrame;
 }
-
+*/
 #pragma mark - managing the detail item
 
 - (void)setDetailItem:(id)newDetailItem
