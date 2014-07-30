@@ -286,6 +286,7 @@ BOOL viewingCircles;
         }
         else{
             cell.addingMembers=NO;
+            [self dismissKeyboard:self];
             [self configureCell:cell atIndexPath:indexPath];
             [cell performFetch];
         }
