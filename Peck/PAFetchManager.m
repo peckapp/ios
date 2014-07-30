@@ -113,7 +113,8 @@
     
     NSError * error = nil;
     NSArray * circles = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    //error handling goes here
+    
+    // Delete all circles fetched with the given id. This should only ever be one cirlce.
     for (NSManagedObject * circle in circles) {
         [_managedObjectContext deleteObject:circle];
     }
