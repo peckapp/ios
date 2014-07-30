@@ -13,6 +13,10 @@
 		860BE45E19632CC600E57A56 /* Institution.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE45D19632CC600E57A56 /* Institution.m */; };
 		860EB42F1980660400F1E665 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 860EB42E1980660400F1E665 /* UIImage+ImageEffects.m */; };
 		86173751195E07F000F2A794 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86D59816193768BF00F38654 /* Main.storyboard */; };
+		861E469F1988887C0088B47F /* NewRelicAgent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E469E1988887C0088B47F /* NewRelicAgent.framework */; };
+		861E46A1198888AE0088B47F /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A0198888AE0088B47F /* CoreTelephony.framework */; };
+		861E46A3198888B80088B47F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A2198888B80088B47F /* SystemConfiguration.framework */; };
+		861E46A5198888C20088B47F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A4198888C20088B47F /* libz.dylib */; };
 		86292512193CBE000057CA41 /* PAPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292511193CBE000057CA41 /* PAPostViewController.m */; };
 		86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292520193CBFD40057CA41 /* PAPeckCell.m */; };
 		86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86292521193CBFD40057CA41 /* PAPeckCell.xib */; };
@@ -111,7 +115,6 @@
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 		DD5751B41980356100BF52A8 /* PAPeckInviteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD5751B31980356100BF52A8 /* PAPeckInviteCell.xib */; };
 		DD5751B819803BF800BF52A8 /* event-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD5751B719803BF800BF52A8 /* event-placeholder.png */; };
-		DD59ADED197FF071006B4A61 /* PAProfileThumbnailView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD59ADEC197FF071006B4A61 /* PAProfileThumbnailView.m */; };
 		DD6902D2198820270095892F /* PAAssetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DD6902D1198820270095892F /* PAAssetManager.m */; };
 		DD898136195B523F0079CDC9 /* button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898133195B523F0079CDC9 /* button@2x.png */; };
 		DD898137195B523F0079CDC9 /* button-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898134195B523F0079CDC9 /* button-selected@2x.png */; };
@@ -137,8 +140,6 @@
 		DDFFF5B919829DE700DC5AC1 /* feather-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDFFF5B519829DE700DC5AC1 /* feather-72@2x.png */; };
 		DDFFF5BA19829DE700DC5AC1 /* feather-50.png in Resources */ = {isa = PBXBuildFile; fileRef = DDFFF5B619829DE700DC5AC1 /* feather-50.png */; };
 		DDFFF5BB19829DE700DC5AC1 /* feather-50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDFFF5B719829DE700DC5AC1 /* feather-50@2x.png */; };
-		DDFFF5BF1982A94B00DC5AC1 /* PACircleProfilePreviewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDFFF5BD1982A94B00DC5AC1 /* PACircleProfilePreviewCell.m */; };
-		DDFFF5C01982A94B00DC5AC1 /* PACircleProfilePreviewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDFFF5BE1982A94B00DC5AC1 /* PACircleProfilePreviewCell.xib */; };
 		DDFFF5C91982CB7900DC5AC1 /* post@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDFFF5C31982CB7900DC5AC1 /* post@2x.png */; };
 		DDFFF5CA1982CB7900DC5AC1 /* circles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDFFF5C41982CB7900DC5AC1 /* circles@2x.png */; };
 		DDFFF5CB1982CB7900DC5AC1 /* profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDFFF5C51982CB7900DC5AC1 /* profile@2x.png */; };
@@ -193,6 +194,10 @@
 		860BE45D19632CC600E57A56 /* Institution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Institution.m; sourceTree = "<group>"; };
 		860EB42D1980660400F1E665 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		860EB42E1980660400F1E665 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		861E469E1988887C0088B47F /* NewRelicAgent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NewRelicAgent.framework; sourceTree = "<group>"; };
+		861E46A0198888AE0088B47F /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		861E46A2198888B80088B47F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		861E46A4198888C20088B47F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		86292510193CBE000057CA41 /* PAPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPostViewController.h; sourceTree = "<group>"; };
 		86292511193CBE000057CA41 /* PAPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPostViewController.m; sourceTree = "<group>"; };
 		8629251F193CBFD40057CA41 /* PAPeckCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPeckCell.h; sourceTree = "<group>"; };
@@ -348,8 +353,6 @@
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD5751B31980356100BF52A8 /* PAPeckInviteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAPeckInviteCell.xib; sourceTree = "<group>"; };
 		DD5751B719803BF800BF52A8 /* event-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "event-placeholder.png"; sourceTree = "<group>"; };
-		DD59ADEB197FF071006B4A61 /* PAProfileThumbnailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAProfileThumbnailView.h; sourceTree = "<group>"; };
-		DD59ADEC197FF071006B4A61 /* PAProfileThumbnailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAProfileThumbnailView.m; sourceTree = "<group>"; };
 		DD6902D0198820270095892F /* PAAssetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAAssetManager.h; sourceTree = "<group>"; };
 		DD6902D1198820270095892F /* PAAssetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAAssetManager.m; sourceTree = "<group>"; };
 		DD898133195B523F0079CDC9 /* button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button@2x.png"; sourceTree = "<group>"; };
@@ -379,9 +382,6 @@
 		DDFFF5B519829DE700DC5AC1 /* feather-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feather-72@2x.png"; sourceTree = "<group>"; };
 		DDFFF5B619829DE700DC5AC1 /* feather-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feather-50.png"; sourceTree = "<group>"; };
 		DDFFF5B719829DE700DC5AC1 /* feather-50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feather-50@2x.png"; sourceTree = "<group>"; };
-		DDFFF5BC1982A94A00DC5AC1 /* PACircleProfilePreviewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleProfilePreviewCell.h; sourceTree = "<group>"; };
-		DDFFF5BD1982A94B00DC5AC1 /* PACircleProfilePreviewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACircleProfilePreviewCell.m; sourceTree = "<group>"; };
-		DDFFF5BE1982A94B00DC5AC1 /* PACircleProfilePreviewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PACircleProfilePreviewCell.xib; sourceTree = "<group>"; };
 		DDFFF5C31982CB7900DC5AC1 /* post@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "post@2x.png"; sourceTree = "<group>"; };
 		DDFFF5C41982CB7900DC5AC1 /* circles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circles@2x.png"; sourceTree = "<group>"; };
 		DDFFF5C51982CB7900DC5AC1 /* profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile@2x.png"; sourceTree = "<group>"; };
@@ -395,7 +395,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				861E46A5198888C20088B47F /* libz.dylib in Frameworks */,
+				861E46A3198888B80088B47F /* SystemConfiguration.framework in Frameworks */,
+				861E46A1198888AE0088B47F /* CoreTelephony.framework in Frameworks */,
 				86051D4D194BB64200961541 /* FacebookSDK.framework in Frameworks */,
+				861E469F1988887C0088B47F /* NewRelicAgent.framework in Frameworks */,
 				A4925C0D194A1B32001AAC4A /* libsqlite3.0.dylib in Frameworks */,
 				A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */,
 				A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */,
@@ -573,6 +577,10 @@
 		86D59801193768BF00F38654 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				861E46A4198888C20088B47F /* libz.dylib */,
+				861E46A2198888B80088B47F /* SystemConfiguration.framework */,
+				861E46A0198888AE0088B47F /* CoreTelephony.framework */,
+				861E469E1988887C0088B47F /* NewRelicAgent.framework */,
 				869B8788195B2226001DF0A2 /* Crashlytics.framework */,
 				A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */,
 				A4925C0A194A17AB001AAC4A /* Social.framework */,
@@ -801,9 +809,6 @@
 				A463F381194B959800ED441F /* PACircleCell.h */,
 				A463F382194B959800ED441F /* PACircleCell.m */,
 				A463F383194B959800ED441F /* PACircleCell.xib */,
-				DDFFF5BC1982A94A00DC5AC1 /* PACircleProfilePreviewCell.h */,
-				DDFFF5BD1982A94B00DC5AC1 /* PACircleProfilePreviewCell.m */,
-				DDFFF5BE1982A94B00DC5AC1 /* PACircleProfilePreviewCell.xib */,
 				A463F386194F3A4B00ED441F /* PAFriendProfileViewController.h */,
 				A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */,
 				A4773C8D195A076800AB9831 /* PACreateCircleViewController.h */,
@@ -817,8 +822,6 @@
 		DDDAEDE8194796C6004CE102 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				DD59ADEB197FF071006B4A61 /* PAProfileThumbnailView.h */,
-				DD59ADEC197FF071006B4A61 /* PAProfileThumbnailView.m */,
 				A43BF0E8197813200009B7AD /* PAProfileTableViewController2.h */,
 				A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */,
 				A43BF0F4197978690009B7AD /* PAChangePasswordViewController.h */,
@@ -977,7 +980,6 @@
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
 				DDFFF5A619829BD100DC5AC1 /* feather-60.png in Resources */,
 				DDFFF5B819829DE700DC5AC1 /* feather-72.png in Resources */,
-				DDFFF5C01982A94B00DC5AC1 /* PACircleProfilePreviewCell.xib in Resources */,
 				DDFFF5AF19829BD100DC5AC1 /* feather-40@2x.png in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
 				8671A2CE195B848D00700101 /* dropdown_pecks@2x.png in Resources */,
@@ -1088,7 +1090,6 @@
 				A4794C201962F103002BD272 /* Explore.m in Sources */,
 				A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */,
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,
-				DDFFF5BF1982A94B00DC5AC1 /* PACircleProfilePreviewCell.m in Sources */,
 				A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */,
 				A43BF0FB1979B0B60009B7AD /* PAInvitationsTableViewController.m in Sources */,
 				A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */,
@@ -1096,7 +1097,6 @@
 				A4AB65801982E2F9004D3172 /* Peer.m in Sources */,
 				A459A83D195DF4B800D1FB0E /* Message.m in Sources */,
 				A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */,
-				DD59ADED197FF071006B4A61 /* PAProfileThumbnailView.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,

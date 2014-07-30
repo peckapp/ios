@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface PAPeckCell : UITableViewCell
+
+@property (strong, nonatomic) UIView * profileThumbnail;
 @property (weak, nonatomic) IBOutlet UIView *profileTemplateView;
-@property (weak, nonatomic) IBOutlet UIView *profileTemplateSubview;
 
 @end

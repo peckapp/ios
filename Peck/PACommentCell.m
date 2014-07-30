@@ -11,16 +11,20 @@
 #import "PASyncManager.h"
 #import "PACirclesTableViewController.h"
 #import "PACircleCell.h"
-#import "PAProfileThumbnailView.h"
+#import "PAAssetManager.h"
 
 @implementation PACommentCell
 
 @synthesize nameLabel, postTimeLabel, profilePicture, commentTextView, expandButton;
 
+PAAssetManager * assetManager;
+
 #define commentPlaceholder @"add a comment"
 
 - (void)awakeFromNib
 {
+
+    assetManager = [PAAssetManager sharedManager];
     
     [commentTextView setEditable:NO];
     [commentTextView setScrollEnabled:NO];
@@ -32,7 +36,7 @@
     _expanded=NO;
     // Initialization code
 
-    PAProfileThumbnailView * profileThumbnail = [[PAProfileThumbnailView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+    UIView * profileThumbnail = [assetManager createThumbnailWithFrame:CGRectMake(0, 0, 50, 50) image:[assetManager profilePlaceholder]];
     [self addSubview:profileThumbnail];
 }
 

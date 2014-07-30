@@ -7,16 +7,15 @@
 //
 
 #import "PAPeckCell.h"
-#import "PAProfileThumbnailView.h"
+#import "PAAssetManager.h"
 
 @implementation PAPeckCell
 
 - (void)awakeFromNib
 {
-    PAProfileThumbnailView * profileThumbnail = [[PAProfileThumbnailView alloc] initWithFrame:self.profileTemplateView.frame subFrame:self.profileTemplateSubview.frame image:[UIImage imageNamed:@"profile-placeholder"]];
-    [self addSubview:profileThumbnail];
+    PAAssetManager * assetManager = [PAAssetManager sharedManager];
+    self.profileThumbnail = [assetManager createThumbnailWithFrame:self.profileTemplateView.frame image:[assetManager profilePlaceholder]];
     self.profileTemplateView.hidden = true;
-    self.profileTemplateSubview.hidden = true;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

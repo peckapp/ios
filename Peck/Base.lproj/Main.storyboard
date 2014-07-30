@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.7" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.13"/>
+        <deployment defaultVersion="1808" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6181.2"/>
     </dependencies>
     <scenes>
-        <!--Pecks View Controller - Pecks-->
+        <!--Pecks-->
         <scene sceneID="cfV-R5-Ne6">
             <objects>
                 <tableViewController id="vCF-rC-B71" customClass="PAPecksViewController" sceneMemberID="viewController">
@@ -36,9 +37,9 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I8C-IW-9eh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1024" y="115"/>
+            <point key="canvasLocation" x="-1688" y="347"/>
         </scene>
-        <!--Explore Table View Controller - Explore-->
+        <!--Explore-->
         <scene sceneID="09g-Dv-sHg">
             <objects>
                 <tableViewController title="Explore" id="dbL-Fg-Sgg" customClass="PAExploreTableViewController" sceneMemberID="viewController">
@@ -58,15 +59,14 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZzG-Tl-v6O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-720" y="938"/>
+            <point key="canvasLocation" x="-1076" y="1078"/>
         </scene>
-        <!--Navigation Controller - Explore-->
+        <!--Explore-->
         <scene sceneID="RJ5-1c-Ets">
             <objects>
                 <navigationController storyboardIdentifier="explore" title="Explore" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="YgY-YD-cce" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="FaF-Ex-tMg"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <size key="freeformSize" width="320" height="568"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="YHk-3p-VBI">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -76,9 +76,9 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vlZ-OQ-IMw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1252" y="938"/>
+            <point key="canvasLocation" x="-1608" y="1078"/>
         </scene>
-        <!--Navigation Controller - Pecks-->
+        <!--Pecks-->
         <scene sceneID="YWh-za-12c">
             <objects>
                 <navigationController storyboardIdentifier="pecks" title="Pecks" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7ZG-zh-pMr" sceneMemberID="viewController">
@@ -92,9 +92,9 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H3b-is-IFs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1560" y="115"/>
+            <point key="canvasLocation" x="-2224" y="347"/>
         </scene>
-        <!--Explore Info View Controller - Detail-->
+        <!--Detail-->
         <scene sceneID="Zfp-18-CXc">
             <objects>
                 <viewController storyboardIdentifier="feedInfo" useStoryboardIdentifierAsRestorationIdentifier="YES" id="gt2-YE-863" customClass="PAExploreInfoViewController" sceneMemberID="viewController">
@@ -125,16 +125,15 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EPX-0K-QGm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-172" y="938"/>
+            <point key="canvasLocation" x="-528" y="1078"/>
         </scene>
-        <!--Navigation Controller - Events-->
+        <!--Events-->
         <scene sceneID="cUi-kZ-frf">
             <objects>
                 <navigationController storyboardIdentifier="primary" id="rS3-R9-Ivy" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Events" id="t6u-Ov-roD"/>
                     <navigationItem key="navigationItem" id="SUg-ko-wCF"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <size key="freeformSize" width="320" height="568"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translucent="NO" id="yXu-0R-QUA">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -148,9 +147,9 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eq9-QA-ai8" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3139" y="2446"/>
+            <point key="canvasLocation" x="-3079" y="2318"/>
         </scene>
-        <!--Circles Table View Controller - Circles-->
+        <!--Circles-->
         <scene sceneID="I7Z-lZ-gzy">
             <objects>
                 <tableViewController storyboardIdentifier="circles" useStoryboardIdentifierAsRestorationIdentifier="YES" id="inP-uB-7M9" customClass="PACirclesTableViewController" sceneMemberID="viewController">
@@ -170,7 +169,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <size key="freeformSize" width="320" height="568"/>
                     <connections>
                         <outlet property="tableView" destination="j5U-Yp-073" id="oWF-hL-OqT"/>
                         <segue destination="rxR-7o-blZ" kind="modal" identifier="createACircle" id="lv2-Rn-WR6"/>
@@ -181,7 +179,7 @@
             </objects>
             <point key="canvasLocation" x="-720" y="2834"/>
         </scene>
-        <!--Create Circle View Controller - Create a Circle-->
+        <!--Create a Circle-->
         <scene sceneID="cAH-N6-cUI">
             <objects>
                 <viewController id="rxR-7o-blZ" customClass="PACreateCircleViewController" sceneMemberID="viewController">
@@ -257,7 +255,6 @@
                             </button>
                         </barButtonItem>
                     </navigationItem>
-                    <size key="freeformSize" width="320" height="568"/>
                     <connections>
                         <outlet property="membersAutocompleteTextField" destination="3Kh-mf-qIp" id="TST-rZ-m2F"/>
                         <outlet property="titleLabel" destination="LQD-X8-Bhg" id="3vA-PV-ZMg"/>
@@ -268,7 +265,7 @@
             </objects>
             <point key="canvasLocation" x="-172" y="2834"/>
         </scene>
-        <!--Invitations Table View Controller - Invitations-->
+        <!--Invitations-->
         <scene sceneID="74c-YO-RuB">
             <objects>
                 <tableViewController id="V6y-RR-AL1" customClass="PAInvitationsTableViewController" sceneMemberID="viewController">
@@ -321,7 +318,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1C1-0c-0yF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="503" y="2295"/>
+            <point key="canvasLocation" x="219" y="2127"/>
         </scene>
         <!--Friend Profile View Controller-->
         <scene sceneID="iQm-tz-Ztv">
@@ -375,7 +372,7 @@
             </objects>
             <point key="canvasLocation" x="-172" y="3755"/>
         </scene>
-        <!--Navigation Controller - More-->
+        <!--More-->
         <scene sceneID="gC2-m0-3wP">
             <objects>
                 <navigationController storyboardIdentifier="profile" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="bif-qW-HUa" sceneMemberID="viewController">
@@ -392,7 +389,7 @@
             </objects>
             <point key="canvasLocation" x="-2334" y="3827"/>
         </scene>
-        <!--Profile Table View Controller2 - Profile-->
+        <!--Profile-->
         <scene sceneID="P2i-1P-Ets">
             <objects>
                 <tableViewController id="Kpj-df-ekn" customClass="PAProfileTableViewController2" sceneMemberID="viewController">
@@ -637,7 +634,7 @@
             </objects>
             <point key="canvasLocation" x="-1809" y="3827"/>
         </scene>
-        <!--Subscriptions Table View Controller - Subscriptions-->
+        <!--Subscriptions-->
         <scene sceneID="G07-uO-x52">
             <objects>
                 <tableViewController id="AF5-E1-6m8" customClass="PASubscriptionsTableViewController" sceneMemberID="viewController">
@@ -656,7 +653,7 @@
             </objects>
             <point key="canvasLocation" x="-1326" y="3827"/>
         </scene>
-        <!--Change Password View Controller - Change Password-->
+        <!--Change Password-->
         <scene sceneID="mTT-FR-3aA">
             <objects>
                 <tableViewController id="8ga-7t-38c" customClass="PAChangePasswordViewController" sceneMemberID="viewController">
@@ -770,9 +767,9 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bYr-09-SbI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1326" y="4516"/>
+            <point key="canvasLocation" x="-1246" y="4552"/>
         </scene>
-        <!--Events View Controller - Master-->
+        <!--Master-->
         <scene sceneID="VgW-fR-Quf">
             <objects>
                 <tableViewController title="Master" id="pGg-6v-bdr" customClass="PAEventsViewController" sceneMemberID="viewController">
@@ -792,7 +789,7 @@
                             </button>
                         </barButtonItem>
                         <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="mZ0-eo-jaw">
-                            <rect key="frame" x="96" y="6" width="128" height="33"/>
+                            <rect key="frame" x="96" y="5.5" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Today"/>
                             <connections>
@@ -813,7 +810,6 @@
                             </button>
                         </barButtonItem>
                     </navigationItem>
-                    <size key="freeformSize" width="320" height="568"/>
                     <connections>
                         <segue destination="rpt-SB-vsa" kind="push" identifier="showEventDetail" id="bE3-cA-K6X"/>
                         <segue destination="sCG-OO-lYg" kind="push" identifier="showDiningDetail" id="ryJ-rI-fQC"/>
@@ -821,7 +817,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Cn-md-YlS" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2611" y="2446"/>
+            <point key="canvasLocation" x="-2551" y="2318"/>
         </scene>
         <!--Dining Places Table View Controller-->
         <scene sceneID="y0w-kJ-4Bb">
@@ -839,7 +835,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EqN-yo-LIY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2112" y="2446"/>
+            <point key="canvasLocation" x="-2052" y="2318"/>
         </scene>
         <!--Event Info Table View Controller-->
         <scene sceneID="iH3-Gt-QtS">
@@ -924,9 +920,9 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iVS-aJ-ShC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2112" y="3146"/>
+            <point key="canvasLocation" x="-2052" y="3018"/>
         </scene>
-        <!--Configure View Controller - Institution-->
+        <!--Institution-->
         <scene sceneID="LG1-G8-7Oc">
             <objects>
                 <viewController storyboardIdentifier="configure" useStoryboardIdentifierAsRestorationIdentifier="YES" id="wXS-p9-cDv" customClass="PAConfigureViewController" sceneMemberID="viewController">
@@ -980,7 +976,7 @@
             </objects>
             <point key="canvasLocation" x="-2728" y="1519"/>
         </scene>
-        <!--Navigation Controller - Add-->
+        <!--Add-->
         <scene sceneID="kh1-OH-BWn">
             <objects>
                 <navigationController storyboardIdentifier="post" title="Add" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="COS-N3-QSc" sceneMemberID="viewController">
@@ -994,9 +990,9 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZHC-4V-ePU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-688" y="1975"/>
+            <point key="canvasLocation" x="-972" y="1807"/>
         </scene>
-        <!--Post View Controller - Post-->
+        <!--Post-->
         <scene sceneID="yBA-au-b75">
             <objects>
                 <tableViewController id="I0y-hH-f6V" customClass="PAPostViewController" sceneMemberID="viewController">
@@ -1261,7 +1257,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fGt-fr-HsW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-140" y="1975"/>
+            <point key="canvasLocation" x="-424" y="1807"/>
         </scene>
     </scenes>
     <resources>
@@ -1272,6 +1268,9 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
+        <simulatedScreenMetrics key="destination" type="retina4">
+            <size key="portraitSize" width="320" height="568"/>
+            <size key="landscapeSize" width="568" height="320"/>
+        </simulatedScreenMetrics>
     </simulatedMetricsContainer>
 </document>
