@@ -604,6 +604,17 @@ PAAssetManager * assetManager;
     [self.commentsTableView endUpdates];
 
 }
+- (IBAction)leaveCircleButton:(id)sender {
+    PACirclesTableViewController* parent = (PACirclesTableViewController*) self.parentViewController;
+    [parent condenseCircleCell:self atIndexPath:nil];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [defaults objectForKey:@"user_id"],@"user_id",
+                                self.circle.id, @"circle_id",
+                                nil];
+    //[[PASyncManager globalSyncManager] leaveCircle:dictionary];
+}
+
 - (IBAction)createCircleButton:(id)sender {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSNumber* userID = [defaults objectForKey:@"user_id"];

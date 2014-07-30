@@ -630,6 +630,21 @@
     
 }
 
+-(void)leaveCircle: (NSDictionary*) dictionary{
+    [[PASessionManager sharedClient] DELETE:@"api/circle_members"
+                               parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"post circle member delete success: %@", JSON);
+         
+         [[PAFetchManager sharedFetchManager] removeCircle: [dictionary objectForKey:@"circle_id"]];
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+
+}
+
 -(void)postCircleMember:(Peer*)newMember withDictionary:(NSDictionary *) dictionary forCircle:(Circle*)circle withSender:(id)sender{
     [[PASessionManager sharedClient] POST:circle_membersAPI
                                parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]

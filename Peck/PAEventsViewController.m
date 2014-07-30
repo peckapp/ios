@@ -490,6 +490,7 @@ PAAssetManager * assetManager;
 
 - (void)configureCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+    if([cell isKindOfClass:[PAEventCell class]]){
     Event *tempEvent;
     
     tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -518,7 +519,7 @@ PAAssetManager * assetManager;
     }
 
     //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

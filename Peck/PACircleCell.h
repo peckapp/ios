@@ -13,6 +13,9 @@
 
 @interface PACircleCell : UITableViewCell <NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource>
 
+- (IBAction)leaveCircleButton:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *leaveCircleButton;
+
 - (IBAction)createCircleButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *createCircleButton;
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
