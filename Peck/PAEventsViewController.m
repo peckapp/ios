@@ -558,6 +558,10 @@ PAAssetManager * assetManager;
     }
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [searchBar resignFirstResponder];
+}
+
 #pragma mark - Search Bar Delegate
 
 
@@ -675,9 +679,6 @@ PAAssetManager * assetManager;
                 if(_fetchedResultsController.fetchedObjects.count > indexPath.row){
                     if ([cell isKindOfClass:[PAEventCell class]]) {
                         [self configureEventCell:cell atIndexPath:indexPath];
-                    } else {
-                        // need to fix the root cause of this error
-                        [NSException raise:@"ATTEMPTED TO CONFIGURE DINING CELL" format:@"was at indexpath:%@, only event cells allowed",indexPath];
                     }
                 }
                 //to reload the cell after the image is cached
