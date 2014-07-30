@@ -107,7 +107,7 @@ PAAssetManager * assetManager;
 -(void)updateCircleMembers:(NSMutableArray *)circleMembers{
     //we will use members to configure the cells of the members
     //it is an array of peers
-    self.members=circleMembers;
+    self.members = circleMembers;
     [self.profilesTableView reloadData];
 }
 
@@ -139,7 +139,6 @@ PAAssetManager * assetManager;
 
 #pragma mark Table view delegate
 
-// TODO: display profile images on table cells
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == self.profilesTableView) {
@@ -176,16 +175,17 @@ PAAssetManager * assetManager;
 }
 
 - (void)configureMemberCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    UIView * thumbnail = nil;
     if (indexPath.row == [self.members count]) {
-        UIView * thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:[UIImage imageNamed:@"plus"]];
-        thumbnail.userInteractionEnabled = NO;
-        cell.backgroundView = thumbnail;
+        thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:[UIImage imageNamed:@"plus"]];
     }
     else {
         Peer* peer = self.members[indexPath.row];
-        [self imageForPeerID: peer.id withMemberCell:cell];
-        //cell.profileThumbnail.imageView.image = [UIImage imageNamed:@"profile-placeholder"];
+        thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:[self imageForPeerID:peer.id]];
     }
+
+    thumbnail.userInteractionEnabled = NO;
+    cell.backgroundView = thumbnail;
 }
 
 - (void)configureSuggestedMemberCell:(UITableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath {
@@ -247,8 +247,13 @@ PAAssetManager * assetManager;
         
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
-        
-        [self imageForPeerID:tempComment.peer_id withCell:cell];
+
+        /*
+        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.profilePicture.frame image:[self imageForPeerID:tempComment.peer_id]];
+        thumbnail.userInteractionEnabled = NO;
+        cell.profileThumbnail = thumbnail;
+         */
+
         
         NSString * commentID = [tempComment.id stringValue];
         CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
@@ -298,57 +303,30 @@ PAAssetManager * assetManager;
     return text;
 }
 
--(void)imageForPeerID:(NSNumber*)peerID withCell:(PACommentCell*)cell{
+- (UIImage *)imageForPeerID:(NSNumber*)peerID
+{
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
     if([[defaults objectForKey:@"user_id"] integerValue]==[peerID integerValue]){
-        cell.profilePicture.image =  self.userPicture;
-    }else{
-        Peer* commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
-        if(commentFromPeer.imageURL){
-            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
-            UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-            if(profPic){
-                cell.profilePicture.image = profPic;
-            }
-            else{
-                [cell.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
-            }
-            
-        }
-        else{
-            cell.profilePicture.image = [assetManager profilePlaceholder];
-        }
+        return self.userPicture;
     }
-}
-
--(void)imageForPeerID:(NSNumber*)peerID withMemberCell:(UITableViewCell *)cell{
-    NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
-    UIView * thumbnail = nil;
-
-    if([[defaults objectForKey:@"user_id"] integerValue]==[peerID integerValue]){
-        thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:self.userPicture];
-    }
-    else{
-        Peer* commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
-        if(commentFromPeer.imageURL){
-            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
-            UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-            if(profPic){
-                thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:profPic];
+    else {
+        Peer * peer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
+        if (peer.imageURL) {
+            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
+            UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+            if(image){
+                return image;
             }
             else {
                 UIImageView * imageView = [[UIImageView alloc] init];
                 [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
-                thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:imageView.image];
+                return imageView.image;
             }
-            
         }
-        else{
-            thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:[assetManager profilePlaceholder]];
+        else {
+            return [assetManager profilePlaceholder];
         }
     }
-    thumbnail.userInteractionEnabled = NO;
-    cell.backgroundView = thumbnail;
 }
 
 -(NSString*)dateToString:(NSDate *)date{

@@ -31,7 +31,7 @@
     return self;
 }
 
-- (UIView *)createThumbnailWithFrame:(CGRect)frame image:(UIImage *)image
+- (UIButton *)createThumbnailWithFrame:(CGRect)frame image:(UIImage *)image
 {
     CGFloat size = 40;
 

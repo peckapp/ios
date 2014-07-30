@@ -54,7 +54,7 @@ BOOL viewingCircles;
     }
     return self;
 }
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated {
     [[PASyncManager globalSyncManager] updateCircleInfo];
     viewingCircles=YES;
     [self registerForKeyboardNotifications];
@@ -67,12 +67,15 @@ BOOL viewingCircles;
                 NSString* circleID =[selectedCircleCell.circle.id stringValue];
                 [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
                 [NSThread sleepForTimeInterval:reloadTime];
-                
             }
         }
     });
-
 }
+
+- (void)viewDidAppear:(BOOL)animated {
+        [self.tableView reloadData];
+}
+
 -(void)viewWillDisappear:(BOOL)animated{
     if(viewingCell){
         PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
@@ -393,6 +396,8 @@ BOOL viewingCircles;
         NSSet*members = c.circle_members;
         [cell updateCircleMembers:[members allObjects]];
     }
+
+    [cell.profilesTableView reloadData];
 }
 
 - (IBAction)addCircle:(id)sender
