@@ -27,7 +27,7 @@
 
 #define statusBarHeight 20
 #define searchBarHeight 44
-#define parallaxRange 176
+#define parallaxRange 128
 
 #define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
 #define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
@@ -368,7 +368,7 @@ PAAssetManager * assetManager;
         [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
-    [self configureCell:cell atIndexPath:indexPath];
+    [self configureEventCell:cell atIndexPath:indexPath];
     return cell;
     
 }
@@ -492,7 +492,7 @@ PAAssetManager * assetManager;
 }
 
 
-- (void)configureCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureEventCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     if([cell isKindOfClass:[PAEventCell class]]){
     Event *tempEvent;
@@ -544,9 +544,9 @@ PAAssetManager * assetManager;
                 CGFloat imageHeight = parallaxRange;
                 CGFloat cellHeight = cell.frame.size.height;
                 CGFloat cellY = i * cellHeight;
-                CGFloat scrollY = scrollView.contentOffset.y;
-                CGFloat topY= (imageHeight / 2) - (cellHeight / 2);
-                CGFloat bottomY = (cellHeight / 2) - (imageHeight / 2);
+                CGFloat scrollY = scrollView.contentOffset.y - searchBarHeight;
+                CGFloat topY = imageHeight / 2 - cellHeight / 2;
+                CGFloat bottomY = cellHeight / 2 - imageHeight / 2;
 
                 CGRect frame = cell.eventImageView.frame;
                 frame.origin.y = topY + ((cellY - scrollY) / (scrollView.frame.size.height - cellHeight)) * (bottomY - topY);
@@ -674,7 +674,7 @@ PAAssetManager * assetManager;
                 PAEventCell* cell = (PAEventCell*)[self.tableView cellForRowAtIndexPath:indexPath];
                 if(_fetchedResultsController.fetchedObjects.count > indexPath.row){
                     if ([cell isKindOfClass:[PAEventCell class]]) {
-                        [self configureCell:cell atIndexPath:indexPath];
+                        [self configureEventCell:cell atIndexPath:indexPath];
                     } else {
                         // need to fix the root cause of this error
                         [NSException raise:@"ATTEMPTED TO CONFIGURE DINING CELL" format:@"was at indexpath:%@, only event cells allowed",indexPath];
