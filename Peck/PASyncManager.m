@@ -591,6 +591,9 @@
     explore.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     explore.id = [dictionary objectForKey:@"id"];
     explore.category = category;
+    if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
+        explore.imageURL = [dictionary objectForKey:@"image"];
+    }
 }
 
 #pragma mark - Circles actions

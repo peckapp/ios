@@ -13,6 +13,7 @@
 #import "Explore.h"
 #import "PASyncManager.h"
 #import "PAAssetManager.h"
+#import "UIImageView+AFNetworking.h"
 
 #define cellHeight 340
 
@@ -83,7 +84,23 @@ NSCache *imageCache;
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;
+    
     cell.photoView.image = [assetManager imagePlaceholder];
+    
+    if(tempExplore.imageURL){
+    NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempExplore.imageURL]];
+    UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+    
+    if(image){
+        cell.photoView.image = image;
+    }
+    else {
+        [cell.photoView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+        
+    }
+    }
+    
+    
     
     /*
     NSNumber *imageID = tempExplore.id;

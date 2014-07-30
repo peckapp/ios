@@ -77,7 +77,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+    //[super viewWillAppear:animated];
     
     [self registerForKeyboardNotifications];
     if([self.invitedCircles count]+[self.invitedPeople count]==0){
