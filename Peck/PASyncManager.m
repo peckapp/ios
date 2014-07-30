@@ -685,6 +685,11 @@
                      [self setAttributesInCircle:circle withDictionary:circleAttributes];
                      //NSLog(@"CIRCLE: %@",circle);
                  }
+                 else{
+                     //the circle already exists but we still want to change the attributes (in case a user leaves or the name is changed)
+                     Circle* circle = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Circle" andType:nil];
+                     [self setAttributesInCircle:circle withDictionary:circleAttributes];
+                 }
              }
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {

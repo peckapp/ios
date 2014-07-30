@@ -443,15 +443,12 @@ BOOL viewingCircles;
     [cell.suggestedMembersTableView setHidden:NO];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:cell.tag inSection:0];
     self.selectedIndexPath = indexPath;
-    self.navigationItem.leftBarButtonItem = self.cancelCellButton;
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     self.tableView.scrollEnabled = NO;
     viewingCell=YES;
 
-    
-    
     selectedCell=cell.tag;
     selectedCircle=cell.circle;
     // Look at how terrible this is.
