@@ -68,8 +68,8 @@ BOOL viewingCircles;
                 PACircleCell *selectedCircleCell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
                 NSString* circleID =[selectedCircleCell.circle.id stringValue];
                 [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
-                [NSThread sleepForTimeInterval:reloadTime];
             }
+            [NSThread sleepForTimeInterval:reloadTime];
         }
     });
 }
