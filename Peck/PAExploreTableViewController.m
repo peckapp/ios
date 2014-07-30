@@ -7,7 +7,6 @@
 //
 
 #import "PAExploreTableViewController.h"
-#import "Message.h"
 #import "PAAppDelegate.h"
 #import "PAExploreCell.h"
 #import "PAExploreInfoViewController.h"

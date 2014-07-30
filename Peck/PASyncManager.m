@@ -545,16 +545,26 @@
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              //NSLog(@"explore JSON: %@",JSON);
-             NSDictionary *eventsDictionary = (NSDictionary*)JSON;
-             NSArray *postsFromResponse = [eventsDictionary objectForKey:@"explore"];
-             for (NSDictionary *eventAttributes in postsFromResponse) {
+             NSDictionary *exploreDictionary = (NSDictionary*)JSON;
+             NSArray *eventsFromResponse = [exploreDictionary objectForKey:@"explore_events"];
+             for (NSDictionary *eventAttributes in eventsFromResponse) {
                  NSNumber *newID = [eventAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Explore" andCategory:nil];
+                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Explore" andCategory:@"event"];
                  if(!eventAlreadyExists){
-                     NSLog(@"about to add the explore");
+                     NSLog(@"about to add the explore event");
                      Explore * explore = [NSEntityDescription insertNewObjectForEntityForName:@"Explore" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInExplore:explore withDictionary:eventAttributes];
+                     [self setAttributesInExplore:explore withDictionary:eventAttributes andCategory:@"event"];
                      //NSLog(@"EXPLORE: %@",explore);
+                 }
+             }
+             NSDictionary* announcementsFromResponse = [exploreDictionary objectForKey:@"explore_announcements"];
+             for(NSDictionary *announcementAttributes in announcementsFromResponse){
+                 NSNumber *newID = [announcementAttributes objectForKey:@"id"];
+                 BOOL announcementAlreadyExists = [self objectExists:newID withType:@"Explore" andCategory:@"announcement"];
+                 if(!announcementAlreadyExists){
+                     NSLog(@"about to add the explore announcement");
+                     Explore * explore = [NSEntityDescription insertNewObjectForEntityForName:@"Explore" inManagedObjectContext: _managedObjectContext];
+                     [self setAttributesInExplore:explore withDictionary:announcementAttributes andCategory:@"announcement"];
                  }
              }
          }
@@ -572,7 +582,7 @@
 
 }
 
--(void)setAttributesInExplore:(Explore *) explore withDictionary: (NSDictionary *)dictionary{
+-(void)setAttributesInExplore:(Explore *) explore withDictionary: (NSDictionary *)dictionary andCategory:(NSString*)category{
     explore.title = [dictionary objectForKey:@"title"];
     
     NSDateFormatter * df = [[NSDateFormatter alloc] init];
@@ -580,6 +590,7 @@
     explore.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     explore.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     explore.id = [dictionary objectForKey:@"id"];
+    explore.category = category;
 }
 
 #pragma mark - Circles actions
@@ -966,6 +977,7 @@
                                       NSLog(@"ERROR: %@",error);
                                   }];
 }
+
 
 #pragma mark - Events actions
 

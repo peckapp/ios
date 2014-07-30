@@ -9,7 +9,6 @@
 #import "PAPostViewController.h"
 #import "PAAppDelegate.h"
 #import "Event.h"
-#import "Message.h"
 #import "PADropdownViewController.h"
 #import "PAPeers.h"
 #import "PAImageManager.h"
