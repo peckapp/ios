@@ -42,7 +42,7 @@
 
 @property (strong, nonatomic) UIImage* userPicture;
 
--(void)addMember:(NSNumber *)member;
+//-(void)addMember:(NSNumber *)member;
 -(void)updateCircleMembers:(NSArray *)circleMembers;
 -(void)performFetch;
 -(void)expand:(PACommentCell*)cell;
