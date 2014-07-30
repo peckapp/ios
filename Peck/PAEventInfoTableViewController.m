@@ -92,7 +92,7 @@ BOOL reloaded = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+    //[super viewWillAppear:animated];
     
     viewingEvent=YES;
     [self registerForKeyboardNotifications];

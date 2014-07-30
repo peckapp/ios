@@ -361,6 +361,7 @@
                                       instID, @"institution_id",
                                       self.startTimeLabel.text, @"start_date",
                                       self.endTimeLabel.text, @"end_date",
+                                      [NSNumber numberWithBool:self.publicSwitch.on], @"public",
                                       nil];
             
             [[PASyncManager globalSyncManager] postEvent: setEvent withImage:data];
