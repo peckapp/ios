@@ -667,12 +667,16 @@ PAAssetManager * assetManager;
     for(int i =0; i<[eventIDs count];i++){
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
-        [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
+            [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSIndexPath* indexPath =[NSIndexPath indexPathForRow: [eventRows[i] integerValue] inSection:0];
                 PAEventCell* cell = (PAEventCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-                if([_fetchedResultsController.fetchedObjects count]>indexPath.row){
-                    [self configureCell:cell atIndexPath:indexPath];
+                if(_fetchedResultsController.fetchedObjects.count > indexPath.row){
+                    if ([cell isKindOfClass:[PAEventCell class]]) {
+                        [self configureCell:cell atIndexPath:indexPath];
+                    } else {
+                        NSLog(@"ATTEMPTED TO CONFIGURE DINING CELL: was at indexpath:%@, only event cells allowed",indexPath);
+                    }
                 }
                 //to reload the cell after the image is cached
             });
