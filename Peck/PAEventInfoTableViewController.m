@@ -45,9 +45,9 @@ PAAssetManager * assetManager;
 
 BOOL reloaded = NO;
 
-#define defaultCellHeight 51
-#define cellY 22
+#define defaultCellHeight 72
 #define reloadTime 10
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -375,8 +375,6 @@ BOOL reloaded = NO;
         //if it is the first cell. This is where the user will add a comment
         [cell.likeButton setHidden:YES];
         [cell.numberOfLikesLabel setHidden:YES];
-        [cell.commentTextView setEditable:YES];
-        [cell.commentTextView setScrollEnabled:YES];
         [cell.postButton setHidden:NO];
         if(([self.commentText isEqualToString:@""] || self.commentText==nil) && ![cell.commentTextView isFirstResponder]){
             cell.commentTextView.textColor = [UIColor lightGrayColor];
@@ -389,8 +387,9 @@ BOOL reloaded = NO;
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         NSString* userName = [[[defaults objectForKey:@"first_name"] stringByAppendingString:@" "] stringByAppendingString:[defaults objectForKey:@"last_name"]];
         cell.nameLabel.text=userName;
-        [cell.expandButton setHidden:YES];
-        cell.profilePicture.image = self.userPicture;
+
+        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailTemplateView.frame image:self.userPicture];
+        cell.thumbnailTemplateView = thumbnail;
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
@@ -410,10 +409,6 @@ BOOL reloaded = NO;
         cell.comment_from = [[self.detailItem valueForKey:@"id"] stringValue];
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
-        [cell.expandButton setHidden:NO];
-        if([self textViewIsSmallerThanFrame:tempComment.content]){
-            [cell.expandButton setHidden:YES];
-        }
         [cell.postButton setHidden:YES];
         cell.nameLabel.text = [self nameLabelTextForComment:tempComment];
         cell.tag = [indexPath row]-1;
@@ -427,13 +422,13 @@ BOOL reloaded = NO;
         if(height){
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, height);
             cell.expanded=YES;
-            [cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
+            //[cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
         }
         else{
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
             //using the default cell height used to show half a line, but now with autolayout constraints it displays correctly
             cell.expanded=NO;
-            [cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
+            //[cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
         }
         
     }
@@ -474,22 +469,22 @@ BOOL reloaded = NO;
 -(void)imageForComment:(Comment*)comment withCell:(PACommentCell*)cell{
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
     if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
-        cell.profilePicture.image =  self.userPicture;
+        // cell.profilePicture.image =  self.userPicture;
     }else{
         Peer* commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
         if(commentFromPeer.imageURL){
             NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
             UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
             if(profPic){
-                cell.profilePicture.image = profPic;
+                //cell.profilePicture.image = profPic;
             }
             else{
-                [cell.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+                //[cell.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
             }
 
         }
         else{
-            cell.profilePicture.image = [assetManager profilePlaceholder];
+            //cell.profilePicture.image = [assetManager profilePlaceholder];
         }
     }
 }
@@ -533,15 +528,15 @@ BOOL reloaded = NO;
 {
     if(indexPath.row>0){
         if([_fetchedResultsController.fetchedObjects count]>=[indexPath row]){
-            Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+            Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row] - 1];
             NSString * commentID = [comment.id stringValue];
             CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
             if(height){
-                return height+cellY;
+                return height;
             }
         }
     }
-    return defaultCellHeight+cellY;
+    return defaultCellHeight;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
@@ -554,6 +549,15 @@ BOOL reloaded = NO;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    PACommentCell * cell = (PACommentCell *)[self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+    if (cell.expanded) {
+        [self compressTableViewCell:cell];
+        cell.expanded = NO;
+    }
+    else {
+        [self expandTableViewCell:cell];
+        cell.expanded = YES;
+    }
 }
 
 /*
@@ -615,14 +619,13 @@ BOOL reloaded = NO;
     float newHeight = textViewHelper.frame.size.height;
     NSLog(@"new height: %f", newHeight);
     NSNumber *height = [NSNumber numberWithFloat: defaultCellHeight];
-    if(textViewHelper.frame.size.height>defaultCellHeight){
-        height = [NSNumber numberWithFloat:textViewHelper.frame.size.height+1];
-        //without the +1, the bottom line would not be displayed
+    if(textViewHelper.frame.size.height + textViewHelper.frame.origin.y > defaultCellHeight){
+        height = [NSNumber numberWithFloat:textViewHelper.frame.size.height + textViewHelper.frame.origin.y];
     }
     //Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
     
     NSString * commentID = [cell.commentID stringValue];
-    
+
     [heightDictionary setValue:height forKey:commentID];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];

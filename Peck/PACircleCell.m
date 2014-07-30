@@ -216,9 +216,7 @@ PAAssetManager * assetManager;
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         NSString* userName = [[[defaults objectForKey:@"first_name"] stringByAppendingString:@" "] stringByAppendingString:[defaults objectForKey:@"last_name"]];
         cell.nameLabel.text=userName;
-        //this will be blank when the user has not yet registered or is not logged in
-        [cell.expandButton setHidden:YES];
-        cell.profilePicture.image = self.userPicture;
+        // cell.profilePicture.image = self.userPicture;
     }
     else{
         Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
@@ -237,10 +235,6 @@ PAAssetManager * assetManager;
         cell.comment_from = [self.circle.id stringValue];
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
-        [cell.expandButton setHidden:NO];
-        if([self textViewIsSmallerThanFrame:tempComment.content]){
-            [cell.expandButton setHidden:YES];
-        }
         [cell.postButton setHidden:YES];
         cell.nameLabel.text=[self nameLabelTextForComment:tempComment];
         
@@ -259,12 +253,10 @@ PAAssetManager * assetManager;
         if(height){
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, height);
             cell.expanded=YES;
-            [cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
         }
         else{
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
             cell.expanded=NO;
-            [cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
         }
         // this fixes the problem where the comment text would occasionally be cut off when first loaded
     }

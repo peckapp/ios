@@ -13,13 +13,14 @@
 
 @interface PACommentCell : UITableViewCell <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *postTimeLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *profilePicture;
+//@property (weak, nonatomic) IBOutlet UILabel *postTimeLabel;
+//@property (weak, nonatomic) IBOutlet UIImageView *profilePicture;
+@property (weak, nonatomic) IBOutlet UIView *thumbnailTemplateView;
 @property (weak, nonatomic) IBOutlet UITextView *commentTextView;
 @property BOOL expanded;
 @property (weak, nonatomic) UITableViewController *parentTableView;
 @property (weak, nonatomic) UITableViewController *parentCircleTableView;
-@property (weak, nonatomic) IBOutlet UIButton *expandButton;
+// @property (weak, nonatomic) IBOutlet UIButton *expandButton;
 @property (weak, nonatomic) IBOutlet UIButton *postButton;
 @property (weak, nonatomic) UITableViewCell *parentCell;
 @property (weak, nonatomic) NSNumber* commentID;

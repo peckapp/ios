@@ -15,23 +15,21 @@
 
 @implementation PACommentCell
 
-@synthesize nameLabel, postTimeLabel, profilePicture, commentTextView, expandButton;
-
 PAAssetManager * assetManager;
 
-#define commentPlaceholder @"add a comment"
+#define commentPlaceholder @"Add a comment..."
 
 - (void)awakeFromNib
 {
 
     assetManager = [PAAssetManager sharedManager];
     
-    [commentTextView setEditable:NO];
-    [commentTextView setScrollEnabled:NO];
+    [self.commentTextView setEditable:NO];
+    [self.commentTextView setScrollEnabled:NO];
     //commentTextView.frame= CGRectMake(98, 34, 222, 85);
-    [commentTextView setText:commentPlaceholder];
-    [commentTextView setTextColor:[UIColor lightGrayColor]];
-    commentTextView.delegate=self;
+    [self.commentTextView setText:commentPlaceholder];
+    [self.commentTextView setTextColor:[UIColor lightGrayColor]];
+    self.commentTextView.delegate=self;
     
     _expanded=NO;
     // Initialization code
@@ -44,9 +42,9 @@ PAAssetManager * assetManager;
 
 - (BOOL) textViewShouldBeginEditing:(UITextView *)textView
 {
-    if (commentTextView.textColor == [UIColor lightGrayColor]) {
-        commentTextView.text = @"";
-        commentTextView.textColor = [UIColor blackColor];
+    if (self.commentTextView.textColor == [UIColor lightGrayColor]) {
+        self.commentTextView.text = @"";
+        self.commentTextView.textColor = [UIColor blackColor];
     }
     
     return YES;
@@ -100,6 +98,7 @@ PAAssetManager * assetManager;
 
 }
 
+/*
 - (IBAction)expandButton:(id)sender {
     NSLog(@"expand the cell");
     if(self.expanded==NO){
@@ -110,7 +109,7 @@ PAAssetManager * assetManager;
             PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentCircleTableView;
             [parent expandTableViewCell:self];
         }
-        [self.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
+        // [self.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
     }
     else{
         if(self.parentTableView){
@@ -120,10 +119,11 @@ PAAssetManager * assetManager;
             PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentCircleTableView;
             [parent compressTableViewCell:self];
         }
-        [self.expandButton setTitle:@"More" forState:UIControlStateNormal];
+        // [self.expandButton setTitle:@"More" forState:UIControlStateNormal];
     }
     self.expanded = !self.expanded;
 }
+ */
 
 
 @end
