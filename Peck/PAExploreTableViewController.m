@@ -7,13 +7,13 @@
 //
 
 #import "PAExploreTableViewController.h"
-#import "Message.h"
 #import "PAAppDelegate.h"
 #import "PAExploreCell.h"
 #import "PAExploreInfoViewController.h"
 #import "Explore.h"
 #import "PASyncManager.h"
 #import "PAAssetManager.h"
+#import "UIImageView+AFNetworking.h"
 
 #define cellHeight 340
 
@@ -84,38 +84,21 @@ NSCache *imageCache;
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;
+    
     cell.photoView.image = [assetManager imagePlaceholder];
     
-    /*
-    NSNumber *imageID = tempExplore.id;
-    UIImage *image = [imageCache objectForKey:imageID];
-    if(image){
-        //cell.imageView.image=image;
+    if(tempExplore.imageURL){
+        NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempExplore.imageURL]];
+        UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+    
+        if(image){
+            cell.photoView.image = image;
+        }
+        else {
+            [cell.photoView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+        }
     }
-    else{
-        
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-        dispatch_async(queue, ^{
-            //NSData *data = tempMessage.photo;
-            //UIImage *image = [UIImage imageWithData:data];
-            UIImage *
-            image;
-            if(!image){
-                image = [UIImage imageNamed:@"image-placeholder.png"];
-                
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"image id: %@", imageID);
-                [imageCache setObject:image forKey:imageID];
-                cell.photoView.image =image;
-                //reload the cell to display the image
-                //this will be called at most one time for each cell
-                //because the image will be loaded into the cache
-                //after the first time
-                [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
-            });
-        });
-    }*/
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

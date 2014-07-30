@@ -67,6 +67,7 @@ PAAssetManager * assetManager;
     self.members = [[NSMutableArray alloc] init];
     textViewHelper = [[UITextView alloc] init];
     [textViewHelper setHidden:YES];
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -112,6 +113,24 @@ PAAssetManager * assetManager;
 
 
 #pragma mark Table view data source
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    
+    if(tableView==self.suggestedMembersTableView){
+        return @"Add members";
+    }else if(tableView==self.commentsTableView){
+        return @"Comments";
+    }else{
+        return @"";
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if(tableView==self.profilesTableView){
+        return 0;
+    }
+    return 30;
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

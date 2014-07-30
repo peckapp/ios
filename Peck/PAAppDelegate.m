@@ -83,6 +83,8 @@
     // Must remain after third-party SDK code
     [Crashlytics startWithAPIKey:@"147270e58be36f1b12187f08c0fa5ff034e701c8"];
     
+    UIRemoteNotificationType enabledTypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+    NSLog(@"enable types %lu", enabledTypes );
     
     return YES;
 }

@@ -9,7 +9,6 @@
 #import "PAPostViewController.h"
 #import "PAAppDelegate.h"
 #import "Event.h"
-#import "Message.h"
 #import "PADropdownViewController.h"
 #import "PAPeers.h"
 #import "PAImageManager.h"
@@ -80,7 +79,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [self registerForKeyboardNotifications];
+    //[self registerForKeyboardNotifications];
     if([self.invitedCircles count]+[self.invitedPeople count]==0){
         self.peopleLabel.text=@"None";
     }else{
@@ -101,7 +100,7 @@
     [super viewWillDisappear:animated];
     
     [self.view endEditing:YES];
-    [self deregisterFromKeyboardNotifications];
+    //[self deregisterFromKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning
@@ -110,7 +109,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+/*
+//DO NOT DELETE (for now) 
+ 
 #pragma mark - managing the keyboard notifications
 
 - (void)registerForKeyboardNotifications {
@@ -150,7 +151,7 @@
 - (void)keyboardWillBeHidden:(NSNotification *)notification {
     self.tableView.frame = _initialTableViewFrame;
 }
-
+*/
 
 #pragma mark table view delegate
 
@@ -362,6 +363,7 @@
                                       instID, @"institution_id",
                                       self.startTimeLabel.text, @"start_date",
                                       self.endTimeLabel.text, @"end_date",
+                                      [NSNumber numberWithBool:self.publicSwitch.on], @"public",
                                       nil];
             
             [[PASyncManager globalSyncManager] postEvent: setEvent withImage:data];
