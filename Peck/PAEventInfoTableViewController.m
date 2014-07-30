@@ -92,10 +92,10 @@ BOOL reloaded = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    //[super viewWillAppear:animated];
+    [super viewWillAppear:animated];
     
     viewingEvent=YES;
-    [self registerForKeyboardNotifications];
+    //[self registerForKeyboardNotifications];
     NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -117,7 +117,7 @@ BOOL reloaded = NO;
     
     viewingEvent=NO;
     [self.view endEditing:YES];
-    [self deregisterFromKeyboardNotifications];
+    //[self deregisterFromKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning
