@@ -83,6 +83,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)

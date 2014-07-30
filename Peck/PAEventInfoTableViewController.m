@@ -92,6 +92,8 @@ BOOL reloaded = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
     viewingEvent=YES;
     [self registerForKeyboardNotifications];
     NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
@@ -105,10 +107,14 @@ BOOL reloaded = NO;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
     initialFrame = self.tableView.frame;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
     viewingEvent=NO;
     [self.view endEditing:YES];
     [self deregisterFromKeyboardNotifications];

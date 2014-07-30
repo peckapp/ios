@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "HTAutocompleteManager.h"
-#import "PACircleScrollView.h"
 #import "Peer.h"
 
 @class PACircleViewController;

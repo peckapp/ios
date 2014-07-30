@@ -11,12 +11,11 @@
 #import "Circle.h"
 #import "HTAutocompleteTextField.h"
 #import "HTAutocompleteManager.h"
-#import "PACircleScrollView.h"
 #import "PASyncManager.h"
 #import "HTAutocompleteManager.h"
 
 @interface PACreateCircleViewController ()
-@property (strong, nonatomic) PACircleScrollView *circleScrollView;
+
 @end
 
 @implementation PACreateCircleViewController
@@ -48,12 +47,7 @@
     [titleTextField addTarget:self
                   action:@selector(textFieldDidChange)
         forControlEvents:UIControlEventEditingChanged];
-    
-    if(!self.circleScrollView){
-        self.circleScrollView = [[PACircleScrollView alloc] initWithFrame:CGRectMake(100, 55, self.view.frame.size.width-100, 60)];
-        [self.view addSubview:self.circleScrollView];
-        self.circleScrollView.delegate = self;
-    }
+
     if(!_addedPeers){
         _addedPeers = [NSMutableArray array];
     }
@@ -112,7 +106,7 @@
         [_addedPeers addObject:tempPeer.id];
         NSLog(@"peers added so far: %@", _addedPeers);
         UIImage *image = [UIImage imageNamed:@"Silhouette.png"];
-        [self.circleScrollView addPeer:image WithName:tempText];
+        
         [membersAutocompleteTextField forceRefreshAutocompleteText];
     }
 }
@@ -154,10 +148,6 @@
 }
 
 -(void)removePeer:(int) peer{
-    if(_circleScrollView.numberOfMembers>=(peer+1)){
-        [_addedPeers removeObjectAtIndex:peer];
-        [self.circleScrollView removePeer:peer];
-    }
     
 }
 

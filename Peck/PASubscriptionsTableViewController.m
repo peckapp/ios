@@ -53,6 +53,8 @@
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
     NSLog(@"view will disappear");
     if([[self.addedSubscriptions allValues] count]>0){
         [[PASyncManager globalSyncManager] postSubscriptions:[self.addedSubscriptions allValues]];

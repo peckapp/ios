@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "PACirclesTableViewController.h"
-#import "PACircleScrollView.h"
 #import "Circle.h"
 
 @interface PACircleCell : UITableViewCell <NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource>

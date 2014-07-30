@@ -129,6 +129,8 @@ PAAssetManager * assetManager;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
     [[PASyncManager globalSyncManager] updateEventInfo];
     [[PASyncManager globalSyncManager] updateDiningInfo];
 
@@ -144,11 +146,15 @@ PAAssetManager * assetManager;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
     [self.view endEditing:YES];
     [self deregisterFromKeyboardNotifications];
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    
     if(!showingDetail){
         [self.tableView reloadData];
     }

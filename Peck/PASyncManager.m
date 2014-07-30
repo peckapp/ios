@@ -717,7 +717,10 @@
     for(int i =0; i<[members count]; i++){
         if([members[i] integerValue] != [[defaults objectForKey:@"user_id"] integerValue]){
             //Add the relationsip if the peer is not the user himself
-            [circle addCircle_membersObject:[self getPeer:members[i]]];
+            Peer *peer = [self getPeer:members[i]];
+            if (peer != nil) {
+                [circle addCircle_membersObject:peer];
+            }
         }
     }
 }
@@ -1294,7 +1297,7 @@
 }
 
 -(void)deleteSubscriptions:(NSArray*)array{
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    // NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* stringFromArray = @"[";
     for(int i =0; i<[array count];i++){
         stringFromArray = [stringFromArray stringByAppendingString:[array[i] stringValue]];

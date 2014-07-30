@@ -72,10 +72,14 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
     _initialTableViewFrame = self.tableView.frame;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
     [self registerForKeyboardNotifications];
     if([self.invitedCircles count]+[self.invitedPeople count]==0){
         self.peopleLabel.text=@"None";
@@ -94,6 +98,8 @@
     
 }
 -(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
     [self.view endEditing:YES];
     [self deregisterFromKeyboardNotifications];
 }

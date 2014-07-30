@@ -55,13 +55,15 @@ BOOL viewingCircles;
     return self;
 }
 -(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
     [[PASyncManager globalSyncManager] updateCircleInfo];
     viewingCircles=YES;
     [self registerForKeyboardNotifications];
     initialFrame=self.tableView.frame;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        while(viewingCircles){
-            if(viewingCell&&self.selectedIndexPath.row!=[_fetchedResultsController.fetchedObjects count]){
+        while (viewingCircles) {
+            if (viewingCell && self.selectedIndexPath.row != [_fetchedResultsController.fetchedObjects count]) {
                 //if you are viewing a cell that is not the final (create circle) cell
                 PACircleCell *selectedCircleCell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
                 NSString* circleID =[selectedCircleCell.circle.id stringValue];
@@ -73,10 +75,14 @@ BOOL viewingCircles;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-        [self.tableView reloadData];
+    [super viewDidAppear:animated];
+    
+    [self.tableView reloadData];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
     if(viewingCell){
         PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
         [cell endEditing:YES];

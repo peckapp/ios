@@ -11,7 +11,6 @@
 #import "PAFriendProfileViewController.h"
 #import "PAAppDelegate.h"
 #import "Circle.h"
-#import "PACircleScrollView.h"
 #import "Peer.h"
 #import "PACommentCell.h"
 #import "Comment.h"
