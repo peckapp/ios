@@ -21,7 +21,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="sEW-Wi-kY2">
-                        <rect key="frame" x="0.0" y="115" width="320" height="452.5"/>
+                        <rect key="frame" x="0.0" y="114" width="320" height="452.5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </tableView>
@@ -58,6 +58,11 @@
                             <action selector="leaveCircleButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="790-jI-Gbk"/>
                         </connections>
                     </button>
+                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="baP-po-hbb">
+                        <rect key="frame" x="0.0" y="114" width="320" height="453"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    </tableView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
@@ -66,6 +71,7 @@
                 <outlet property="createCircleButton" destination="wXC-83-NpW" id="BgR-ka-zIO"/>
                 <outlet property="leaveCircleButton" destination="9z0-Fk-KGq" id="q4T-jc-Eui"/>
                 <outlet property="profilesTableView" destination="XZl-as-txS" id="48Z-BR-35g"/>
+                <outlet property="suggestedMembersTableView" destination="baP-po-hbb" id="uke-vr-1ZZ"/>
                 <outlet property="titleTextField" destination="XVF-lT-1oS" id="xJS-gi-ctP"/>
             </connections>
         </tableViewCell>
