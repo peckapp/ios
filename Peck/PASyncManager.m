@@ -33,16 +33,21 @@
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
+@interface PASyncManager ()
+
+- (NSDictionary*) addUDIDToDictionary:(NSDictionary*)dictionary;
+- (NSString*)currentUDID;
+
+@end
 
 @implementation PASyncManager
+
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator  = _persistentStoreCoordinator;
-//NSDateFormatter * df;
 
 
-+ (instancetype)globalSyncManager
-{
++ (instancetype)globalSyncManager {
     static PASyncManager *_globalSyncManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -58,6 +63,7 @@
    
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 deviceToken, @"token",
+                                [self currentUDID],@"udid",
                                 nil];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* deviceTokenURL = [@"api/users/" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
@@ -84,9 +90,9 @@
     NSLog(@"creating an anonymous new user");
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
+    NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:[self currentUDID] forKey:@"udid"];
     [[PASessionManager sharedClient] POST:usersAPI
-                               parameters:nil
+                               parameters:deviceInfo
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                       // response JSON contains a user_id and api_key that must be stored
                                       NSLog(@"Anonymous user creation success: %@", JSON);
@@ -114,6 +120,7 @@
     NSNumber* userID = [defaults objectForKey:@"user_id"];
     updateURL = [updateURL stringByAppendingString:[userID stringValue]];
     
+    [self addUDIDToDictionary:userInfo];
     
     NSMutableDictionary* baseDictionary = [[self applyWrapper:@"user" toDictionary:userInfo] mutableCopy];
     [baseDictionary setObject:@"patch" forKey:@"_method"];
@@ -138,14 +145,14 @@
                                         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                                         NSString* email = [userDictionary objectForKey:@"email"];
                                         NSString* blurb = [userDictionary objectForKey:@"blurb"];
-                                        NSString* firstName = [userDictionary objectForKey:@"first_name"];
-                                        NSString* lastName = [userDictionary objectForKey:@"last_name"];
+                                        NSString* firstName = [userDictionary objectForKey:first_name_define];
+                                        NSString* lastName = [userDictionary objectForKey:last_name_define];
                                         NSString* imageURL = [userDictionary objectForKey:@"image"];
                                         
                                         [defaults setObject:email forKey:@"email"];
                                         [defaults setObject:blurb forKey:@"blurb"];
-                                        [defaults setObject:firstName forKey:@"first_name"];
-                                        [defaults setObject:lastName forKey:@"last_name"];
+                                        [defaults setObject:firstName forKey:first_name_define];
+                                        [defaults setObject:lastName forKey:last_name_define];
                                         if(imageURL){
                                             UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]]]];
                                             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
@@ -168,6 +175,9 @@
 
 - (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller
 {
+    // adds the unique user device token to the userInfo NSDictionary
+    [self addUDIDToDictionary:userInfo];
+    
     // sends either email and password, or facebook token and link, to the server for authentication
     // expects an authentication token to be returned in response
     
@@ -181,8 +191,8 @@
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                       NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
                                       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                                      NSString* firstName = [userDictionary objectForKey:@"first_name"];
-                                      NSString* lastName = [userDictionary objectForKey:@"last_name"];
+                                      NSString* firstName = [userDictionary objectForKey:first_name_define];
+                                      NSString* lastName = [userDictionary objectForKey:last_name_define];
                                       NSString* email = [userDictionary objectForKey:@"email"];
                                       NSString* blurb = [userDictionary objectForKey:@"blurb"];
                                       NSNumber* userID = [userDictionary objectForKey:@"id"];
@@ -190,13 +200,14 @@
                                       NSString* imageURL = [userDictionary objectForKey:@"image"];
 
                                       
-                                      [defaults setObject:firstName forKey:@"first_name"];
-                                      [defaults setObject:lastName forKey:@"last_name"];
+                                      [defaults setObject:firstName forKey:first_name_define];
+                                      [defaults setObject:lastName forKey:last_name_define];
                                       [defaults setObject:email forKey:@"email"];
                                       [defaults setObject:userID forKey:@"user_id"];
                                       [defaults setObject:apiKey forKey:@"api_key"];
                                       
                                       if(imageURL){
+                                          NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
                                           UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]]]];
                                           NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                                                                NSUserDomainMask, YES);
@@ -246,12 +257,12 @@
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                       NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
                                       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                                      NSString* firstName = [userDictionary objectForKey:@"first_name"];
-                                      NSString* lastName = [userDictionary objectForKey:@"last_name"];
+                                      NSString* firstName = [userDictionary objectForKey:first_name_define];
+                                      NSString* lastName = [userDictionary objectForKey:last_name_define];
                                       NSString* email = [userDictionary objectForKey:@"email"];
                                       NSString* blurb = [userDictionary objectForKey:@"blurb"];
-                                      [defaults setObject:firstName forKey:@"first_name"];
-                                      [defaults setObject:lastName forKey:@"last_name"];
+                                      [defaults setObject:firstName forKey:first_name_define];
+                                      [defaults setObject:lastName forKey:last_name_define];
                                       [defaults setObject:email forKey:@"email"];
                                       if(![blurb isKindOfClass:[NSNull class]]){
                                           [defaults setObject:blurb forKey:@"blurb"];
@@ -323,7 +334,7 @@
                  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                  if(!userAlreadyExists && !([defaults objectForKey:@"user_id"]==newID)){
                      //NSLog(@"about to add the peer");
-                     if(![[userAttributes objectForKey:@"first_name"] isKindOfClass:[NSNull class]]){
+                     if(![[userAttributes objectForKey:first_name_define] isKindOfClass:[NSNull class]]){
                          Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
                          [self setAttributesInPeer:peer withDictionary:userAttributes];
                      }
@@ -355,8 +366,8 @@
 -(void)setAttributesInPeer:(Peer *)peer withDictionary:(NSDictionary *)dictionary
 {
     //NSLog(@"set attributes of peer");
-    NSString* fullName = [[dictionary objectForKey:@"first_name"] stringByAppendingString:@" "];
-    fullName = [fullName stringByAppendingString:[dictionary objectForKey:@"last_name"]];
+    NSString* fullName = [[dictionary objectForKey:first_name_define] stringByAppendingString:@" "];
+    fullName = [fullName stringByAppendingString:[dictionary objectForKey:last_name_define]];
     peer.name = fullName;
     peer.id = [dictionary objectForKey:@"id"];
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
@@ -1487,7 +1498,7 @@
     return [baseDictionary copy];
 }
 
--(NSDictionary*)applyWrapper:(NSString*)wrapperString toArray:(NSArray*)array{
+- (NSDictionary*)applyWrapper:(NSString*)wrapperString toArray:(NSArray*)array {
     NSMutableDictionary *baseDictionary = [[NSDictionary dictionaryWithObject:array forKey:wrapperString] mutableCopy];
     
     [baseDictionary setValuesForKeysWithDictionary:[self authenticationParameters]];
@@ -1498,9 +1509,21 @@
 }
 
 
--(NSString*)currentInstitutionID
-{
+- (NSString*)currentInstitutionID {
     return [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
+}
+
+// adds the unique user device token to any NSDictionary at the top level
+- (NSDictionary*)addUDIDToDictionary:(NSDictionary *)dictionary {
+    // adds the unique user device token to the userInfo NSDictionary
+    NSMutableDictionary *mutDict = [dictionary mutableCopy];
+    [mutDict setObject:[self currentUDID] forKey:@"udid"];
+    return [mutDict copy];
+}
+
+- (NSString*)currentUDID {
+    NSLog(@"udid: %@",[UIDevice currentDevice].identifierForVendor.UUIDString);
+    return [UIDevice currentDevice].identifierForVendor.UUIDString;
 }
 
 @end
