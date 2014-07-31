@@ -66,6 +66,7 @@
 		A412E1D41986E63800384A11 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = A412E1D31986E63800384A11 /* Comment.m */; };
 		A412E1DB198835DF00384A11 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A412E1DA198835DF00384A11 /* Event.m */; };
 		A42D4FB719897C3C00536453 /* Explore.m in Sources */ = {isa = PBXBuildFile; fileRef = A42D4FB619897C3C00536453 /* Explore.m */; };
+		A42D4FB9198AAAB000536453 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A42D4FB8198AAAB000536453 /* Security.framework */; };
 		A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */; };
 		A43BF0EA197813200009B7AD /* PAProfileTableViewController2.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */; };
 		A43BF0EE197819480009B7AD /* PASubscriptionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */; };
@@ -271,6 +272,7 @@
 		A412E1DA198835DF00384A11 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A42D4FB519897C3C00536453 /* Explore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Explore.h; sourceTree = "<group>"; };
 		A42D4FB619897C3C00536453 /* Explore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Explore.m; sourceTree = "<group>"; };
+		A42D4FB8198AAAB000536453 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A433EAA0195B3F5800DAA201 /* HTAutocompleteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTAutocompleteManager.h; sourceTree = "<group>"; };
 		A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTAutocompleteManager.m; sourceTree = "<group>"; };
 		A43BF0E8197813200009B7AD /* PAProfileTableViewController2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAProfileTableViewController2.h; sourceTree = "<group>"; };
@@ -389,6 +391,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A42D4FB9198AAAB000536453 /* Security.framework in Frameworks */,
 				861E46A5198888C20088B47F /* libz.dylib in Frameworks */,
 				861E46A3198888B80088B47F /* SystemConfiguration.framework in Frameworks */,
 				861E46A1198888AE0088B47F /* CoreTelephony.framework in Frameworks */,
@@ -569,6 +572,7 @@
 		86D59801193768BF00F38654 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A42D4FB8198AAAB000536453 /* Security.framework */,
 				861E46A4198888C20088B47F /* libz.dylib */,
 				861E46A2198888B80088B47F /* SystemConfiguration.framework */,
 				861E46A0198888AE0088B47F /* CoreTelephony.framework */,

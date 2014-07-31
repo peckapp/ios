@@ -16,6 +16,9 @@
 #import "PAConfigureViewController.h"
 #import "PADropdownViewController.h"
 #import "PASyncManager.h"
+#import <Security/Security.h>
+
+
 
 @implementation PAAppDelegate
 
@@ -29,6 +32,9 @@
     // [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
     
     // Override point for customization after application launch.
+    
+    NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    [UICKeyChainStore setString:deviceId forKey:@"deviceId" service:@"Devices"];
     
     UIViewController *initViewController;
     _mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
