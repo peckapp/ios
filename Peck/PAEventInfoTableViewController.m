@@ -302,10 +302,9 @@ BOOL reloaded = NO;
     switch(type)
     {
         case NSFetchedResultsChangeInsert:{
-            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
             [tableView
              //the cell must be inserted below the post cell
-             insertRowsAtIndexPaths:[NSArray arrayWithObject:realIndexPath]
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             
             break;
@@ -318,10 +317,9 @@ BOOL reloaded = NO;
             
         case NSFetchedResultsChangeUpdate:
         {
-            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section]];
             
-            PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:realIndexPath];
-            [self configureCell:cell atIndexPath:realIndexPath];
+            PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:newIndexPath];
+            [self configureCell:cell atIndexPath:newIndexPath];
             break;
         }
         case NSFetchedResultsChangeMove:
@@ -352,7 +350,7 @@ BOOL reloaded = NO;
 {
 
     id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
-    return [sectionInfo numberOfObjects]+1;
+    return [sectionInfo numberOfObjects];
 
 }
 
@@ -373,75 +371,51 @@ BOOL reloaded = NO;
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath{
     NSLog(@"configure cell");
     cell.parentTableView=self;
-    if([indexPath row]==0){
-        //if it is the first cell. This is where the user will add a comment
-        [cell.likeButton setHidden:YES];
-        [cell.numberOfLikesLabel setHidden:YES];
-        [cell.postButton setHidden:NO];
-        if(([self.commentText isEqualToString:@""] || self.commentText==nil) && ![cell.commentTextView isFirstResponder]){
-            cell.commentTextView.textColor = [UIColor lightGrayColor];
-            cell.commentTextView.text = @"add a comment";
-        }
-        else{
-            cell.commentTextView.textColor = [UIColor blackColor];
-            cell.commentTextView.text = self.commentText;
-        }
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        NSString* userName = [[[defaults objectForKey:@"first_name"] stringByAppendingString:@" "] stringByAppendingString:[defaults objectForKey:@"last_name"]];
-        cell.nameLabel.text=userName;
 
-        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailView.frame imageView:[[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]]];
-        cell.thumbnailView = thumbnail;
+    Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]];
+    cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
+    [cell.likeButton setHidden:NO];
+    [cell.numberOfLikesLabel setHidden:NO];
+
+    if([self userHasLikedComment:tempComment]){
+        [cell.likeButton setTitle:@"Unlike" forState:UIControlStateNormal];
+    }else{
+        [cell.likeButton setTitle:@"Like" forState:UIControlStateNormal];
+    }
+
+    cell.commentID = tempComment.id;
+    cell.commentIntegerID = [tempComment.id integerValue];
+    //cell.comment = tempComment;
+    cell.comment_from = [[self.detailItem valueForKey:@"id"] stringValue];
+    cell.nameLabel.text = [self nameLabelTextForComment:tempComment];
+    cell.commentTextView.text = tempComment.content;
+
+    UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageViewForComment:tempComment]];
+    if (cell.thumbnailView) {
+        [cell.thumbnailView removeFromSuperview];
+    }
+    [cell addSubview:thumbnail];
+    cell.thumbnailView = thumbnail;
+    
+    NSString * commentID = [tempComment.id stringValue];
+    CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
+    if(height){
+        cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, height);
+        cell.expanded=YES;
+        //[cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
     }
     else{
-        Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
-        cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
-        [cell.likeButton setHidden:NO];
-        [cell.numberOfLikesLabel setHidden:NO];
-
-        if([self userHasLikedComment:tempComment]){
-            [cell.likeButton setTitle:@"Unlike" forState:UIControlStateNormal];
-        }else{
-            [cell.likeButton setTitle:@"Like" forState:UIControlStateNormal];
-        }
-        
-        cell.commentID = tempComment.id;
-        cell.commentIntegerID = [tempComment.id integerValue];
-        //cell.comment = tempComment;
-        cell.comment_from = [[self.detailItem valueForKey:@"id"] stringValue];
-        [cell.commentTextView setEditable:NO];
-        [cell.commentTextView setScrollEnabled:NO];
-        [cell.postButton setHidden:YES];
-        cell.nameLabel.text = [self nameLabelTextForComment:tempComment];
-        cell.tag = [indexPath row]-1;
-        cell.commentTextView.text = tempComment.content;
-        [cell.commentTextView setTextColor:[UIColor blackColor]];
-
-        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageViewForComment:tempComment]];
-        [cell addSubview:thumbnail];
-        
-        NSString * commentID = [tempComment.id stringValue];
-        CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
-        if(height){
-            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, height);
-            cell.expanded=YES;
-            //[cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
-        }
-        else{
-            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
-            //using the default cell height used to show half a line, but now with autolayout constraints it displays correctly
-            cell.expanded=NO;
-            //[cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
-        }
-        
+        cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
+        //using the default cell height used to show half a line, but now with autolayout constraints it displays correctly
+        cell.expanded=NO;
+        //[cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
     }
-    
 }
 
 -(BOOL)userHasLikedComment:(Comment*)comment{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSInteger userID = [[defaults objectForKey:@"user_id"] integerValue];
-    for(int i =0; i<[comment.likes count];i++){
+    for(int i = 0; i < [comment.likes count];i++){
         if(userID==[comment.likes[i] integerValue]){
             return YES;
         }
@@ -473,17 +447,14 @@ BOOL reloaded = NO;
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
     if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
         return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
-    }else{
+    } else {
         Peer * commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
         if(commentFromPeer.imageURL){
             NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
             UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
 
             if(profPic){
-                NSLog(@"AAA");
                 return [[UIImageView alloc] initWithImage:profPic];
-
-
             }
             else{
                 UIImageView * imageView = [[UIImageView alloc] init];
@@ -534,25 +505,25 @@ BOOL reloaded = NO;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.row>0){
-        if([_fetchedResultsController.fetchedObjects count]>=[indexPath row]){
-            Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row] - 1];
-            NSString * commentID = [comment.id stringValue];
-            CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
-            if(height){
-                return height;
-            }
+    if([indexPath row] < [_fetchedResultsController.fetchedObjects count]){
+        Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]];
+        NSString * commentID = [comment.id stringValue];
+        CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
+        if(height){
+            return height;
         }
     }
     return defaultCellHeight;
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    /*
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     PACommentCell *cell = (PACommentCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     [cell.commentTextView resignFirstResponder];
-    
+     */
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

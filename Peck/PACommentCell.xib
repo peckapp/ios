@@ -38,15 +38,6 @@
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fdT-Fc-nuX">
-                        <rect key="frame" x="193" y="4" width="32" height="25"/>
-                        <state key="normal" title="Post">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                        <connections>
-                            <action selector="postButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="QKm-gg-dZC"/>
-                        </connections>
-                    </button>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" scrollEnabled="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0FP-Jh-a8K">
                         <rect key="frame" x="52" y="27" width="260" height="300"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -61,7 +52,6 @@
                 <outlet property="likeButton" destination="DWR-vI-Abg" id="dWq-Zc-Ayn"/>
                 <outlet property="nameLabel" destination="Iq5-9U-yu5" id="8dC-qA-vOF"/>
                 <outlet property="numberOfLikesLabel" destination="SQa-OC-gTk" id="fcQ-jF-2D7"/>
-                <outlet property="postButton" destination="fdT-Fc-nuX" id="UGm-mr-sQl"/>
                 <outlet property="thumbnailViewTemplate" destination="K4U-me-4FY" id="LEw-UN-GeJ"/>
             </connections>
             <point key="canvasLocation" x="-1418" y="138"/>
