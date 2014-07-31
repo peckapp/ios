@@ -18,8 +18,6 @@
 #import "PASyncManager.h"
 #import <Security/Security.h>
 
-
-
 @implementation PAAppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;

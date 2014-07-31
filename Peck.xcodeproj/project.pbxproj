@@ -234,6 +234,7 @@
 		8689DDB219589E3600A6B61C /* filter_subscription@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_subscription@2x.png"; sourceTree = "<group>"; };
 		869A85AD1964855B00F254C1 /* dropdown_circles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_circles@2x.png"; sourceTree = "<group>"; };
 		869B8788195B2226001DF0A2 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		86B528E8198ABA76008E6060 /* Peck.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Peck.entitlements; sourceTree = "<group>"; };
 		86BFB4AE194B889100ADAB75 /* PADropdownBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownBar.h; sourceTree = "<group>"; };
 		86BFB4AF194B889100ADAB75 /* PADropdownBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADropdownBar.m; sourceTree = "<group>"; };
 		86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADropdownViewController.h; sourceTree = "<group>"; };
@@ -597,6 +598,7 @@
 		86D5980A193768BF00F38654 /* Peck */ = {
 			isa = PBXGroup;
 			children = (
+				86B528E8198ABA76008E6060 /* Peck.entitlements */,
 				A433EAA3195B43C700DAA201 /* AutocompleteManager */,
 				868572281943787300287A73 /* PACoreDataProtocol.h */,
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
@@ -919,6 +921,9 @@
 						DevelopmentTeam = P83C3BYK4B;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
 								enabled = 1;
 							};
 						};
@@ -1278,6 +1283,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = Peck/Peck.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1314,6 +1320,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = Peck/Peck.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
