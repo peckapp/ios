@@ -16,6 +16,9 @@
 #import "PAConfigureViewController.h"
 #import "PADropdownViewController.h"
 #import "PASyncManager.h"
+#import <Security/Security.h>
+
+
 
 @implementation PAAppDelegate
 
@@ -29,6 +32,9 @@
     // [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
     
     // Override point for customization after application launch.
+    
+    //NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    //[UICKeyChainStore setString:deviceId forKey:@"deviceId" service:@"Devices"];
     
     UIViewController *initViewController;
     _mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -47,6 +53,7 @@
         initViewController = [self.mainStoryboard instantiateViewControllerWithIdentifier:@"configure"];
         
         if(userID == nil){
+            /*
             [[PASyncManager globalSyncManager] ceateAnonymousUser:^(BOOL success) {
                 if (success) {
                     NSLog(@"Sucessfully set a new anonymous user");
@@ -55,7 +62,8 @@
                 } else {
                     NSLog(@"Anonymous user creation unsucessful");
                 }
-            }];
+            }];*/
+            [[PASyncManager globalSyncManager] sendUDIDForInitViewController:initViewController];
         }
     }
     // this is the device-specific identifier that we should be worrying about to keep track of things per-device
@@ -102,10 +110,9 @@
     [Crashlytics startWithAPIKey:@"147270e58be36f1b12187f08c0fa5ff034e701c8"];
     
     
-    NSLog(@"enable notification types: %u", [[UIApplication sharedApplication] enabledRemoteNotificationTypes]);
-    
     return YES;
 }
+
 
 #pragma mark - Notifications
 

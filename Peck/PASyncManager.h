@@ -23,6 +23,7 @@
 
 // sends the device token to the server and performs operations based on the result
 -(void)sendUserDeviceToken:(NSString*)deviceToken;
+-(void)sendUDIDForInitViewController:(UIViewController*)initViewController;
 // sends post request to server with institution_id and stores response user_id in NSUserDefaults
 -(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock;
 // sends post request to the server completing the user's other info after the registration process is triggered
