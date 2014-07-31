@@ -28,3 +28,5 @@
 #define inst_id @"institution_id"
 #define api_key @"api_key"
 #define auth_token @"authentication_token"
+#define first_name_define @"first_name"
+#define last_name_define @"last_name"
