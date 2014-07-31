@@ -18,6 +18,7 @@
 #import "PASyncManager.h"
 #import <Security/Security.h>
 
+
 @implementation PAAppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
@@ -33,6 +34,14 @@
     
     //NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
     //[UICKeyChainStore setString:deviceId forKey:@"deviceId" service:@"Devices"];
+    
+    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
+    NSString* udid = [store objectForKey:@"udid"];
+    if(!udid){
+        NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [store setObject:deviceId forKey:@"udid"];
+    }
+    NSLog(@"MY UDID: %@", [store objectForKey:@"udid"]);
     
     UIViewController *initViewController;
     _mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -105,7 +114,7 @@
     [NewRelicAgent startWithApplicationToken:@"AA14f069ef90609bd31c564006eebc0c133696af3b"];
     
     // Must remain after third-party SDK code
-    [Crashlytics startWithAPIKey:@"147270e58be36f1b12187f08c0fa5ff034e701c8"];
+    //[Crashlytics startWithAPIKey:@"147270e58be36f1b12187f08c0fa5ff034e701c8"];
     
     
     return YES;

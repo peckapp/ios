@@ -34,6 +34,7 @@
 
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
+#define shortTermUDID @"1"
 
 @interface PASyncManager ()
 
@@ -63,10 +64,11 @@
 #pragma mark - User actions
 
 -(void)sendUserDeviceToken:(NSString*)deviceToken{
-   
+    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 deviceToken, @"token",
-                                [self currentUDID],@"udid",
+                                shortTermUDID, @"udid",
+                                //[store objectForKey:@"udid"],@"udid",
                                 nil];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* deviceTokenURL = [@"api/users/" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
@@ -87,8 +89,10 @@
 }
 
 -(void)sendUDIDForInitViewController:(UIViewController*)initViewController{
+    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                [self currentUDID],@"udid",
+                                //[store objectForKey:@"udid"],@"udid",
+                                shortTermUDID,@"udid",
                                 nil];
     [[PASessionManager sharedClient] POST:@"api/users/user_for_udid"
                                parameters:dictionary
@@ -155,18 +159,7 @@
         if (buttonIndex == 0){
             //If the user presses no, we will create an anonymous user and load the institutions
             NSLog(@"create a new user");
-            [self ceateAnonymousUser:^(BOOL success) {
-                if (success) {
-                    NSLog(@"Sucessfully set a new anonymous user");
-                    PAConfigureViewController* configure = (PAConfigureViewController*) self.initialViewController;
-                    [configure updateInstitutions];
-                } else {
-                    NSLog(@"Anonymous user creation unsucessful");
-                }
-            }];
-            PAConfigureViewController* configure = (PAConfigureViewController*) self.initialViewController;
-            [configure updateInstitutions];
-            
+            [self createAnonymousUserHelper];
         }else{
             //If the user presses yes, we will load the previous data and segue to the homepage
             //Note that we have already added the necessary information into user defaults
@@ -183,7 +176,7 @@
     }else{
         if(buttonIndex==0){
             NSLog(@"create a new user");
-            //load the institutions
+            [self createAnonymousUserHelper];
         }else{
             NSLog(@"login the user");
             //segue to the login page
@@ -191,12 +184,27 @@
     }
 }
 
+-(void)createAnonymousUserHelper{
+    [self ceateAnonymousUser:^(BOOL success) {
+        if (success) {
+            NSLog(@"Sucessfully set a new anonymous user");
+            PAConfigureViewController* configure = (PAConfigureViewController*) self.initialViewController;
+            [configure updateInstitutions];
+        } else {
+            NSLog(@"Anonymous user creation unsucessful");
+        }
+    }];
+    PAConfigureViewController* configure = (PAConfigureViewController*) self.initialViewController;
+    [configure updateInstitutions];
+}
+
 -(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock
 {
     NSLog(@"creating an anonymous new user");
-    
+    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:[self currentUDID] forKey:@"udid"];
+    //NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:[store objectForKey:@"udid"] forKey:@"udid"];
+    NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:shortTermUDID forKey:@"udid"];
     NSLog(@"deviceInfo: %@", deviceInfo);
     [[PASessionManager sharedClient] POST:usersAPI
                                parameters:deviceInfo
@@ -1626,14 +1634,11 @@
 // adds the unique user device token to any NSDictionary at the top level
 - (NSDictionary*)addUDIDToDictionary:(NSDictionary *)dictionary {
     // adds the unique user device token to the userInfo NSDictionary
+    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSMutableDictionary *mutDict = [dictionary mutableCopy];
-    [mutDict setObject:[self currentUDID] forKey:@"udid"];
+    //[mutDict setObject:[store objectForKey:@"udid"] forKey:@"udid"];
+    [mutDict setObject:shortTermUDID forKey:@"udid"];
     return [mutDict copy];
-}
-
-- (NSString*)currentUDID {
-    NSLog(@"udid: %@",[UIDevice currentDevice].identifierForVendor.UUIDString);
-    return [UIDevice currentDevice].identifierForVendor.UUIDString;
 }
 
 @end
