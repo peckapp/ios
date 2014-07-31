@@ -33,8 +33,8 @@
     
     // Override point for customization after application launch.
     
-    NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-    [UICKeyChainStore setString:deviceId forKey:@"deviceId" service:@"Devices"];
+    //NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    //[UICKeyChainStore setString:deviceId forKey:@"deviceId" service:@"Devices"];
     
     UIViewController *initViewController;
     _mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
