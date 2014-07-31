@@ -22,6 +22,7 @@
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
 @property (nonatomic, retain) NSDateFormatter *formatter;
+@property (strong, nonatomic) UITextField * keyboardAccessory;
 
 @end
 
@@ -85,6 +86,11 @@ BOOL reloaded = NO;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
+
+    self.keyboardAccessory = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44.0)];
+    self.keyboardAccessory.backgroundColor = [UIColor lightGrayColor];
+    [self.view addSubview:self.keyboardAccessory];
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44.0, 0);
 
     [self.tableView reloadData];
     
@@ -514,6 +520,11 @@ BOOL reloaded = NO;
         }
     }
     return defaultCellHeight;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    self.keyboardAccessory.frame = CGRectMake(0, scrollView.contentOffset.y + self.view.frame.size.height - self.keyboardAccessory.frame.size.height, self.keyboardAccessory.frame.size.width, self.keyboardAccessory.frame.size.height);
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
