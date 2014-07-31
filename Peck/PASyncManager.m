@@ -112,8 +112,10 @@
                                           [configure updateInstitutions];
                                       }else{
                                           // if there was a user previously on this device (registered or not registered)
+                                          
                                           if(![[userAttributes objectForKey:@"first_name"] isKindOfClass:[NSNull class]]){
                                               //if the user was registered
+                                              [defaults setObject:[userAttributes objectForKey:@"api_key"] forKey:@"api_key"];
                                               NSString* message = [@"Would you like to use " stringByAppendingString:[userAttributes objectForKey:@"first_name"]];
                                               message = [message stringByAppendingString:@"'s information?"];
                                               UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:@"Logged In User Exists"
@@ -179,6 +181,11 @@
             [self createAnonymousUserHelper];
         }else{
             NSLog(@"login the user");
+            UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
+            UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
+            PAInitialViewController* root = loginRoot.viewControllers[0];
+            root.justOpenedApp=NO;
+            [self.initialViewController presentViewController:loginRoot animated:YES completion:nil];
             //segue to the login page
         }
     }
@@ -291,13 +298,14 @@
 - (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller
 {
     // adds the unique user device token to the userInfo NSDictionary
-    [self addUDIDToDictionary:userInfo];
+    NSDictionary* userInfoWithUDID = [self addUDIDToDictionary:userInfo];
     
     // sends either email and password, or facebook token and link, to the server for authentication
     // expects an authentication token to be returned in response
+    NSLog(@"Login dictionary: %@", userInfo);
     
     [[PASessionManager sharedClient] POST: @"api/access"
-                               parameters:[self applyWrapper:@"user" toDictionary:userInfo]
+                               parameters:[self applyWrapper:@"user" toDictionary:userInfoWithUDID]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON){
                                       NSLog(@"LOGIN JSON: %@",JSON);
                                       

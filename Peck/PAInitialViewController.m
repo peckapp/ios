@@ -83,6 +83,9 @@
 {
     [self dismissKeyboard];
     // dismiss the current login process to return to the main app
+    if(self.justOpenedApp){
+        [[PASyncManager globalSyncManager] createAnonymousUserHelper];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

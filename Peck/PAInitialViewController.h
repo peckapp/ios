@@ -11,5 +11,5 @@
 
 @interface PAInitialViewController : UITableViewController <FBLoginViewDelegate, UITableViewDelegate, UITextFieldDelegate>
 -(void)showAlert;
-
+@property BOOL justOpenedApp;
 @end

@@ -10,6 +10,7 @@
 #import "PAAppDelegate.h"
 #import "PASyncManager.h"
 #import "PAFetchManager.h"
+#import "PAInitialViewController.h"
 
 @interface PAProfileTableViewController2 ()
 
@@ -119,7 +120,9 @@ BOOL loggedIn;
 {
     if(!loggedIn){
         UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
-        UIViewController *loginRoot = [loginStoryboard instantiateInitialViewController];
+        UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
+        PAInitialViewController* root = loginRoot.viewControllers[0];
+        root.justOpenedApp=NO;
         [self presentViewController:loginRoot animated:YES completion:nil];
     }else{
         [[PAFetchManager sharedFetchManager] logoutUser];
