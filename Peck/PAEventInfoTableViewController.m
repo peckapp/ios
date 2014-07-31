@@ -87,10 +87,10 @@ BOOL reloaded = NO;
         abort();
     }
 
-    self.keyboardAccessory = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44.0)];
+    self.keyboardAccessory = [[UITextField alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.height, 44)];
     self.keyboardAccessory.backgroundColor = [UIColor lightGrayColor];
-    [self.view addSubview:self.keyboardAccessory];
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44.0, 0);
+    [self.tableView.tableHeaderView addSubview:self.keyboardAccessory];
+    self.keyboardAccessory.userInteractionEnabled = YES;
 
     [self.tableView reloadData];
     
@@ -110,6 +110,8 @@ BOOL reloaded = NO;
             [NSThread sleepForTimeInterval:reloadTime];
         }
     });
+
+    self.keyboardAccessory.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.height, 44);
 }
 
 -(void)viewDidAppear:(BOOL)animated{
