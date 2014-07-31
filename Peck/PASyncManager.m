@@ -91,6 +91,7 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:[self currentUDID] forKey:@"udid"];
+    
     [[PASessionManager sharedClient] POST:usersAPI
                                parameters:deviceInfo
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
@@ -190,7 +191,6 @@
                                       
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                       NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
-                                      NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                                       NSString* firstName = [userDictionary objectForKey:first_name_define];
                                       NSString* lastName = [userDictionary objectForKey:last_name_define];
                                       NSString* email = [userDictionary objectForKey:@"email"];
@@ -251,9 +251,11 @@
     [[PASessionManager sharedClient] PATCH:registerURL
                                parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      
+                                      [defaults setObject:@YES forKey:@"logged_in"];
                                       [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
                                       
-                                      NSLog(@"user register success: %@", JSON);
+                                      //NSLog(@"user register success: %@", JSON);
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                       NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
                                       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -282,12 +284,12 @@
     NSString* passwordURL = [usersAPI stringByAppendingString:@"/"];
     passwordURL = [passwordURL stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
     passwordURL = [passwordURL stringByAppendingString:@"/change_password"];
-    NSLog(@"passwordURL: %@", passwordURL);
+    //NSLog(@"passwordURL: %@", passwordURL);
     
     [[PASessionManager sharedClient] PATCH:passwordURL
                                 parameters:[self applyWrapper:@"user" toDictionary:passwordInfo]
                                    success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                       NSLog(@"password JSON: %@",JSON);
+                                       //NSLog(@"password JSON: %@",JSON);
                                        NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                        NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
                                        if([[userDictionary objectForKey:@"response"] isEqualToString:@"Old password was wrong"]){
@@ -325,7 +327,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"JSON: %@",JSON);
+             //NSLog(@"JSON: %@",JSON);
              NSDictionary *usersDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
              for (NSDictionary *userAttributes in postsFromResponse) {
@@ -387,11 +389,11 @@
     NSString* likeURL = [@"api/comments/" stringByAppendingString:[@(commentID) stringValue]];
     likeURL = [likeURL stringByAppendingString:@"/add_like"];
     
-    NSLog(@"like url %@", likeURL);
+    //NSLog(@"like url %@", likeURL);
     [[PASessionManager sharedClient] PATCH:likeURL
                               parameters:baseDictionary
                                 success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                    NSLog(@"like JSON %@", JSON);
+                                    //NSLog(@"like JSON %@", JSON);
                                     [self updateCommentsFrom:comment_from withCategory:category];
                                  }
     
@@ -411,11 +413,11 @@
     NSString* likeURL = [@"api/comments/" stringByAppendingString:[@(commentID) stringValue]];
     likeURL = [likeURL stringByAppendingString:@"/unlike"];
     
-    NSLog(@"like url %@", likeURL);
+    //NSLog(@"like url %@", likeURL);
     [[PASessionManager sharedClient] PATCH:likeURL
                                 parameters:baseDictionary
                                    success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                       NSLog(@"like JSON %@", JSON);
+                                       //NSLog(@"like JSON %@", JSON);
                                        [self updateCommentsFrom:comment_from withCategory:category];
                                    }
      
@@ -433,7 +435,7 @@
     [[PASessionManager sharedClient] POST:@"api/event_attendees"
                                 parameters: [self applyWrapper:@"event_attendee" toDictionary:attendee]
                                    success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                       NSLog(@"like JSON %@", JSON);
+                                       //NSLog(@"like JSON %@", JSON);
                                        
                                        
                                        //self set
@@ -454,7 +456,7 @@
     [[PASessionManager sharedClient] DELETE:attendeeURL
                                  parameters: [self applyWrapper:@"event_attendee" toDictionary:attendee]
                                     success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                        NSLog(@"like JSON %@", JSON);
+                                        //NSLog(@"like JSON %@", JSON);
                                         [self updateAndReloadEvent:[attendee objectForKey:@"event_attended"] forViewController:controller];
                                     }
      
@@ -619,7 +621,7 @@
                                parameters:[self applyWrapper:@"circle" toDictionary:dictionary]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"post circle success: %@", JSON);
+         //NSLog(@"post circle success: %@", JSON);
          /*NSDictionary *postsFromResponse = (NSDictionary*)JSON;
          NSDictionary *circleDictionary = [postsFromResponse objectForKey:@"circle"];
          //NSNumber *circleID = [circleDictionary objectForKey:@"id"];
@@ -638,7 +640,7 @@
                                parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"post circle member delete success: %@", JSON);
+         //NSLog(@"post circle member delete success: %@", JSON);
          
          [[PAFetchManager sharedFetchManager] removeCircle: [dictionary objectForKey:@"circle_id"]];
      }
@@ -721,14 +723,14 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"update circle info JSON: %@",JSON);
+             //NSLog(@"update circle info JSON: %@",JSON);
              NSDictionary *circlesDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [circlesDictionary objectForKey:@"circles"];
              for (NSDictionary *circleAttributes in postsFromResponse) {
                  NSNumber *newID = [circleAttributes objectForKey:@"id"];
                  BOOL circleAlreadyExists = [self objectExists:newID withType:@"Circle" andCategory:nil];
                  if(!circleAlreadyExists){
-                     NSLog(@"about to add the circle");
+                     //NSLog(@"about to add the circle");
                      Circle * circle = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext: _managedObjectContext];
                      [self setAttributesInCircle:circle withDictionary:circleAttributes];
                      //NSLog(@"CIRCLE: %@",circle);
@@ -756,9 +758,9 @@
 
 -(void)setAttributesInCircle:(Circle *)circle withDictionary:(NSDictionary *)dictionary
 {
-    NSLog(@"set attributes of circle");
+    //NSLog(@"set attributes of circle");
     circle.circleName = [dictionary objectForKey:@"circle_name"];
-    NSLog(@"circle name: %@", circle.circleName);
+    //NSLog(@"circle name: %@", circle.circleName);
     circle.id = [dictionary objectForKey:@"id"];
     NSArray *members = (NSArray*)[dictionary objectForKey:@"circle_members"];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -856,7 +858,7 @@
         //diningPlacesURL = [diningPlacesURL stringByAppendingString:@"id="];
         diningPlacesURL = [diningPlacesURL stringByAppendingString:[diningPeriod.place_id stringValue]];
     
-        NSLog(@"in secondary thread to update dining");
+        //NSLog(@"in secondary thread to update dining");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
         
@@ -911,7 +913,7 @@
              NSNumber *newID = [diningAttributes objectForKey:@"id"];
              BOOL diningPeriodAlreadyExists = [self objectExists:newID withType:@"DiningPeriod" andCategory:nil];
              if(!diningPeriodAlreadyExists){
-                 NSLog(@"setting dining period");
+                 //NSLog(@"setting dining period");
                  DiningPeriod * diningPeriod = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPeriod" inManagedObjectContext: _managedObjectContext];
                  [self setAttributesInDiningPeriod:diningPeriod withDictionary:diningAttributes withDiningEvent:diningOpportunity];
                  [diningPeriods addObject:diningPeriod];
@@ -958,7 +960,7 @@
                               parameters:[self authenticationParameters]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"menu items JSON %@", JSON);
+         //NSLog(@"menu items JSON %@", JSON);
          NSDictionary *items = (NSDictionary*)JSON;
          NSArray * menuItemArray = [items objectForKey:@"menu_items"];
          for (NSDictionary *menuItemAttributes in menuItemArray){
@@ -998,14 +1000,14 @@
     fileName = [fileName stringByAppendingString:@"_"];
     fileName = [fileName stringByAppendingString:[@(seconds) stringValue]];
     fileName = [fileName stringByAppendingString:@".jpeg"];
-    NSLog(@"file name %@", fileName);
+    //NSLog(@"file name %@", fileName);
 
     [[PASessionManager sharedClient] POST:announcementAPI
                                parameters:[self applyWrapper:@"announcement" toDictionary:dictionary]
                 constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"success: %@", JSON);
+         //NSLog(@"success: %@", JSON);
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -1026,7 +1028,7 @@
     fileName = [fileName stringByAppendingString:@"_"];
     fileName = [fileName stringByAppendingString:[@(seconds) stringValue]];
     fileName = [fileName stringByAppendingString:@".jpeg"];
-    NSLog(@"file name %@", fileName);
+    //NSLog(@"file name %@", fileName);
     
     //NSLog(@"file path: %@", filePath);
     [[PASessionManager sharedClient] POST:simple_eventsAPI
@@ -1034,7 +1036,7 @@
                                 constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"success: %@", JSON);
+         //NSLog(@"success: %@", JSON);
          [self updateEventInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -1050,7 +1052,7 @@
                                  parameters:[self authenticationParameters]
                                     success:^
     (NSURLSessionDataTask * __unused task, id JSON) {
-        NSLog(@"success: %@", JSON);
+        //NSLog(@"success: %@", JSON);
     }
                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                         NSLog(@"ERROR: %@",error);
@@ -1139,10 +1141,10 @@
                                parameters:[self applyWrapper:@"comment" toDictionary:dictionary]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"success: %@", JSON);
+         //NSLog(@"success: %@", JSON);
          NSDictionary *commentsDictionary = (NSDictionary*)JSON;
          NSDictionary *commentAtrributes= [commentsDictionary objectForKey:@"comment"];
-         NSLog(@"comment atrributes: %@", commentAtrributes);
+         //NSLog(@"comment atrributes: %@", commentAtrributes);
          NSNumber *comment_from = [commentAtrributes objectForKey:@"comment_from"];
          NSString *commentFromString = [comment_from stringValue];
          NSString *categoty = [commentAtrributes objectForKey:@"category"];
@@ -1190,7 +1192,7 @@
                          NSError* error = nil;
                          [_managedObjectContext save:&error];
                          [self.persistentStoreCoordinator unlock];
-                         NSLog(@"COMMENT: %@",comment);
+                         //NSLog(@"COMMENT: %@",comment);
                      }else{
                          [self.persistentStoreCoordinator lock];
                          Comment* comment = [[PAFetchManager sharedFetchManager] commentForID:newID];
@@ -1240,7 +1242,7 @@
              NSNumber *newID = [departmentAttributes objectForKey:@"id"];
              BOOL departmentAlreadyExists = [self objectExists:newID withType:@"Subscription" andCategory:@"department"];
              if(!departmentAlreadyExists){
-                 NSLog(@"adding an event to Core Data");
+                 //NSLog(@"adding an event to Core Data");
                  [self.persistentStoreCoordinator lock];
                  Subscription* subscription = [NSEntityDescription insertNewObjectForEntityForName:@"Subscription" inManagedObjectContext: _managedObjectContext];
                  [self setAttributesInSubscription:subscription withDictionary:departmentAttributes andCategory:@"department"];
@@ -1270,7 +1272,7 @@
              NSNumber *newID = [clubAttributes objectForKey:@"id"];
              BOOL clubAlreadyExists = [self objectExists:newID withType:@"Subscription" andCategory:@"club"];
              if(!clubAlreadyExists){
-                 NSLog(@"adding a subscription to Core Data");
+                 //NSLog(@"adding a subscription to Core Data");
                  [self.persistentStoreCoordinator lock];
                  Subscription* subscription = [NSEntityDescription insertNewObjectForEntityForName:@"Subscription" inManagedObjectContext: _managedObjectContext];
                  [self setAttributesInSubscription:subscription withDictionary:clubAttributes andCategory:@"club"];
@@ -1301,7 +1303,7 @@
              NSNumber *newID = [athleticAttributes objectForKey:@"id"];
              BOOL athleticAlreadyExists = [self objectExists:newID withType:@"Subscription" andCategory:@"athletic"];
              if(!athleticAlreadyExists){
-                 NSLog(@"adding a subscription to Core Data");
+                 //NSLog(@"adding a subscription to Core Data");
                  [self.persistentStoreCoordinator lock];
                  Subscription* subscription = [NSEntityDescription insertNewObjectForEntityForName:@"Subscription" inManagedObjectContext: _managedObjectContext];
                  [self setAttributesInSubscription:subscription withDictionary:athleticAttributes andCategory:@"athletic"];
@@ -1375,7 +1377,7 @@
                                  parameters:[self applyWrapper:@"subscription" toDictionary:dictionary]
                                     success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         NSLog(@"success: %@", JSON);
+         //NSLog(@"success: %@", JSON);
      }
                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                         NSLog(@"ERROR: %@",error);

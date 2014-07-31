@@ -133,6 +133,8 @@ BOOL loggedIn;
         [defaults removeObjectForKey:@"email"];
         [defaults removeObjectForKey:@"profile_picture"];
         
+        [defaults setObject:@NO forKey:@"logged_in"];
+        
         self.emailTextField.text=@"";
         self.firstNameTextField.text=@"";
         self.infoTextView.text = @"";
