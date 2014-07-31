@@ -42,15 +42,11 @@
     NSNumber * userID = [defaults objectForKey:@"user_id"];
     NSLog(@"USER ID: %@", userID);
     
-    NSLog(@"device token: %@", [defaults objectForKey:@"device_token"]);
-    
     if(institutionID == nil){
         NSLog(@"Open up the configure screen");
         initViewController = [self.mainStoryboard instantiateViewControllerWithIdentifier:@"configure"];
-
+        
         if(userID == nil){
-            
-            
             [[PASyncManager globalSyncManager] ceateAnonymousUser:^(BOOL success) {
                 if (success) {
                     NSLog(@"Sucessfully set a new anonymous user");
@@ -62,18 +58,42 @@
             }];
         }
     }
+    // this is the device-specific identifier that we should be worrying about to keep track of things per-device
+    NSLog(@"ID for vendor: %@",[UIDevice currentDevice].identifierForVendor);
+    
+    // Handles push notifications and user device tokens
+    NSString *token = [defaults objectForKey:@"device_token"];
+    NSLog(@"device token: %@", token);
+    // if the user has already registered for push notifications allowing us to send them push notifications
+    // this relies upon the token being in NSUserDefaults and the user having registered ALWAYS happening at the same time, which may not actually be true... requires further thought
+    if (token != nil) {
+        NSLog(@"registering device for push notifications on launch");
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+    }
+    // handles notifications that were queued while the app was closed
+    NSDictionary *remoteNotification = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (remoteNotification != nil) {
+        NSLog(@"launched with remote notification: %@",remoteNotification);
+        // handle push notifications received while application was in background
+    }
+    UILocalNotification *localNotification = [launchOptions valueForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (localNotification != nil) {
+        NSLog(@"launched with local notification: %@",localNotification);
+    }
 
     self.window.tintColor = [UIColor colorWithRed:150/255.0 green:123/255.0 blue:255/255.0 alpha:1.0];
 
     // saves NSUserDefaults to "disk"
     [[NSUserDefaults standardUserDefaults] synchronize];
     
+    // initializes the singleton
     [FBLoginView class];
     
     if (initViewController == nil) {
         initViewController = [self.mainStoryboard instantiateInitialViewController];
     }
     [self.window setRootViewController:initViewController];
+    
     
     // TODO: remove this line with the next release of the new relic monitoring software. it quiets the threading logs
     [NRLogger setLogLevels:NRLogLevelNone];
@@ -83,8 +103,8 @@
     // Must remain after third-party SDK code
     [Crashlytics startWithAPIKey:@"147270e58be36f1b12187f08c0fa5ff034e701c8"];
     
-    UIRemoteNotificationType enabledTypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
-    NSLog(@"enable types %lu", enabledTypes );
+    
+    NSLog(@"enable notification types: %u", [[UIApplication sharedApplication] enabledRemoteNotificationTypes]);
     
     return YES;
 }
@@ -107,11 +127,22 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    NSLog(@"did receive remote notification: %@",userInfo);
+    if (application.applicationState == UIApplicationStateActive) {
+        NSLog(@"while running did receive remote notification: %@",userInfo);
+    } else if (application.applicationState == UIApplicationStateInactive) {
+        NSLog(@"while in background did receive remote notification: %@",userInfo);
+    } else {
+        NSLog(@"while in unknown state did receive remote notification: %@",userInfo);
+    }
+    
+    
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    NSLog(@"did receive remote notification: %@ with a fetch completion handler",userInfo);
+    NSLog(@"did receive remote notification: %@ with fetch completion handler",userInfo);
+    
+    // handle all types of notifications here and call completion handler with the proper UIBackgroundFetchResult for each case
+    completionHandler(UIBackgroundFetchResultNoData);
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
