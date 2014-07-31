@@ -206,13 +206,17 @@ BOOL viewingCircles;
         NSNumber* invited_by = [defaults objectForKey:@"user_id"];
         NSNumber* instituion_id = [defaults objectForKey:@"institution_id"];
         NSNumber* circle_id = selectedCircle.id;
+        NSString* alert = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
+        alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
+        alert = [alert stringByAppendingString:@" has invited you to a circle"];
+        NSLog(@"message: %@", alert);
         NSDictionary *newCircleMember = [NSDictionary dictionaryWithObjectsAndKeys:
                                          invited_by, @"invited_by",
                                          newMember.id, @"user_id",
                                          instituion_id, @"institution_id",
                                          circle_id, @"circle_id",
-                                         @"0c4ad9e359d1dc3c392db7e93e0d018144f99642339eaf9ef2bf93f33e51e7cb",@"token",
-                                         @"Someone has invited you to a circle", @"message",
+                                         @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464",@"token",
+                                         alert, @"message",
                                          nil];
         [[PASyncManager globalSyncManager] postCircleMember:newMember withDictionary:newCircleMember forCircle:selectedCircle withSender:selectedCell];
     }else{

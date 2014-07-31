@@ -174,7 +174,7 @@
                                   success:^(NSURLSessionDataTask * __unused task, id JSON){
                                       NSLog(@"LOGIN JSON: %@",JSON);
                                       
-                                      
+                                      [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
                                       
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                       NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
@@ -186,6 +186,7 @@
                                       NSNumber* userID = [userDictionary objectForKey:@"id"];
                                       NSString* apiKey = [userDictionary objectForKey:@"api_key"];
                                       NSString* imageURL = [userDictionary objectForKey:@"image"];
+
                                       
                                       [defaults setObject:firstName forKey:@"first_name"];
                                       [defaults setObject:lastName forKey:@"last_name"];
@@ -649,6 +650,23 @@
     
 
 }
+
+-(void)acceptCircleInvite:(NSNumber*)circleMemberID{
+    
+    /*
+    [[PASessionManager sharedClient] PATCH:circle_membersAPI
+                               parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         [circle addCircle_membersObject:newMember];
+         PACircleCell *circleCell = (PACircleCell*)sender;
+         [circleCell.profilesTableView reloadData];
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];*/
+}
+
 /*-(void)updateModifiedCircle:(Circle*)circle withSender:(id)sender forPeer:(Peer*)newMember{
     NSString* circleMembersURL = [circle_membersAPI stringByAppendingString:@"?"];
     circleMembersURL = [circleMembersURL stringByAppendingString:@"circle_id="];
