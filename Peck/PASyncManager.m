@@ -1019,7 +1019,7 @@
                                 constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         //NSLog(@"success: %@", JSON);
+         NSLog(@"simple event creation success: %@", JSON);
          [self updateEventInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -1057,7 +1057,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"EVENT JSON: %@",JSON);
+             //NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
              //NSLog(@"Update Event response: %@", postsFromResponse);

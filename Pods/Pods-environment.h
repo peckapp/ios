@@ -54,3 +54,9 @@
 #define COCOAPODS_VERSION_MINOR_HTAutocompleteTextField 2
 #define COCOAPODS_VERSION_PATCH_HTAutocompleteTextField 6
 
+// UICKeyChainStore
+#define COCOAPODS_POD_AVAILABLE_UICKeyChainStore
+#define COCOAPODS_VERSION_MAJOR_UICKeyChainStore 1
+#define COCOAPODS_VERSION_MINOR_UICKeyChainStore 0
+#define COCOAPODS_VERSION_PATCH_UICKeyChainStore 5
+
