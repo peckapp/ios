@@ -22,7 +22,11 @@
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
 @property (nonatomic, retain) NSDateFormatter *formatter;
+
+@property (strong, nonatomic) UIView * keyboardAccessoryView;
 @property (strong, nonatomic) UITextField * keyboardAccessory;
+@property (strong, nonatomic) UIView * realKeyboardAccessoryView;
+@property (strong, nonatomic) UITextField * realKeyboardAccessory;
 
 @end
 
@@ -87,10 +91,22 @@ BOOL reloaded = NO;
         abort();
     }
 
-    self.keyboardAccessory = [[UITextField alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.height, 44)];
+    self.keyboardAccessoryView = [[UIView alloc] init];
+    self.keyboardAccessory = [[UITextField alloc] init];
+    self.keyboardAccessoryView.backgroundColor = [UIColor whiteColor];
     self.keyboardAccessory.backgroundColor = [UIColor lightGrayColor];
-    [self.tableView.tableHeaderView addSubview:self.keyboardAccessory];
-    self.keyboardAccessory.userInteractionEnabled = YES;
+    [self.keyboardAccessoryView addSubview:self.keyboardAccessory];
+    self.keyboardAccessory.delegate = self;
+    [self.view addSubview:self.keyboardAccessoryView];
+
+    self.realKeyboardAccessoryView = [[UIView alloc] init];
+    self.realKeyboardAccessory = [[UITextField alloc] init];
+    self.realKeyboardAccessoryView.backgroundColor = [UIColor whiteColor];
+    self.realKeyboardAccessory.backgroundColor = [UIColor lightGrayColor];
+    [self.realKeyboardAccessoryView addSubview:self.realKeyboardAccessory];
+    self.keyboardAccessory.inputAccessoryView = self.realKeyboardAccessoryView;
+
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, self.keyboardAccessory.frame.size.height, 0);
 
     [self.tableView reloadData];
     
@@ -111,7 +127,10 @@ BOOL reloaded = NO;
         }
     });
 
-    self.keyboardAccessory.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.height, 44);
+    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+    self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -498,6 +517,11 @@ BOOL reloaded = NO;
     return dateString;
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    //self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 216, 0);
+}
+
 
 -(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
     textViewHelper.frame = CGRectMake(0, 0, 222, 0);
@@ -526,7 +550,7 @@ BOOL reloaded = NO;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    self.keyboardAccessory.frame = CGRectMake(0, scrollView.contentOffset.y + self.view.frame.size.height - self.keyboardAccessory.frame.size.height, self.keyboardAccessory.frame.size.width, self.keyboardAccessory.frame.size.height);
+    self.keyboardAccessoryView.frame = CGRectMake(0, scrollView.contentOffset.y + self.view.frame.size.height - self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.width, self.keyboardAccessoryView.frame.size.height);
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
