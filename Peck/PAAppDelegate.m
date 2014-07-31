@@ -108,11 +108,21 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"did receive remote notification: %@",userInfo);
-    //NSNumber* circleMemberID = userInfo objectForKey:@"
+   
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     NSLog(@"did receive remote notification: %@ with a fetch completion handler",userInfo);
+    NSNumber* circleMemberID = [userInfo objectForKey:@"circle_member_id"];
+    NSLog(@"the member id: %@", circleMemberID);
+    NSString* alertTitle = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Circle Invite"
+                                                    message:alertTitle
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {

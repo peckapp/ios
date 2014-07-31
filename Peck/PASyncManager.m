@@ -77,6 +77,8 @@
     
 }
 
+
+
 -(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock
 {
     NSLog(@"creating an anonymous new user");
