@@ -61,12 +61,10 @@
     // this is the device-specific identifier that we should be worrying about to keep track of things per-device
     NSLog(@"ID for vendor: %@",[UIDevice currentDevice].identifierForVendor);
     
-    // Handles push notifications and user device tokens
-    NSString *token = [defaults objectForKey:@"device_token"];
-    NSLog(@"device token: %@", token);
     // if the user has already registered for push notifications allowing us to send them push notifications
     // this relies upon the token being in NSUserDefaults and the user having registered ALWAYS happening at the same time, which may not actually be true... requires further thought
-    if (token != nil) {
+    NSNumber *loggedIn = [defaults objectForKey:@"logged_in"];
+    if (loggedIn && [loggedIn isEqualToNumber:@YES]) {
         NSLog(@"registering device for push notifications on launch");
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
     }
