@@ -127,22 +127,22 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    NSLog(@"did receive remote notification: %@",userInfo);
-   
+    if (application.applicationState == UIApplicationStateActive) {
+        NSLog(@"while running did receive remote notification: %@",userInfo);
+    } else if (application.applicationState == UIApplicationStateInactive) {
+        NSLog(@"while in background did receive remote notification: %@",userInfo);
+    } else {
+        NSLog(@"while in unknown state did receive remote notification: %@",userInfo);
+    }
+    
+    
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    NSLog(@"did receive remote notification: %@ with a fetch completion handler",userInfo);
-    NSNumber* circleMemberID = [userInfo objectForKey:@"circle_member_id"];
-    NSLog(@"the member id: %@", circleMemberID);
-    NSString* alertTitle = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Circle Invite"
-                                                    message:alertTitle
-                                                   delegate:self
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    [alert show];
-
+    NSLog(@"did receive remote notification: %@ with fetch completion handler",userInfo);
+    
+    // handle all types of notifications here and call completion handler with the proper UIBackgroundFetchResult for each case
+    completionHandler(UIBackgroundFetchResultNoData);
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
