@@ -30,6 +30,7 @@
 #import "PAFetchManager.h"
 #import "PAEventsViewController.h"
 #import "PAEventInfoTableViewController.h"
+#import "PAConfigureViewController.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -37,6 +38,7 @@
 
 - (NSDictionary*) addUDIDToDictionary:(NSDictionary*)dictionary;
 - (NSString*)currentUDID;
+@property (weak, nonatomic) UIViewController* initialViewController;
 
 @end
 
@@ -83,7 +85,110 @@
     
 }
 
-
+-(void)sendUDIDForInitViewController:(UIViewController*)initViewController{
+    NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [self currentUDID],@"udid",
+                                nil];
+    [[PASessionManager sharedClient] POST:@"api/users/user_for_udid"
+                               parameters:dictionary
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      self.initialViewController = initViewController;
+                                      NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+                                      NSDictionary* userDictionary = (NSDictionary*)JSON;
+                                      NSDictionary* userAttributes = [userDictionary objectForKey:@"user"];
+                                      NSLog(@"USER ATTRIBUTES DICTIONARY: %@", userAttributes);
+                                      if([[userAttributes objectForKey:@"new_user"] boolValue]==YES){
+                                          // if there was not a user previously on this device
+                                          NSNumber *userID = [userAttributes objectForKey:@"id"];
+                                          [defaults setObject:userID forKey:user_id];
+                                          NSString *apiKey = [userAttributes objectForKey:api_key];
+                                          [defaults setObject:apiKey forKey:api_key];
+                                          PAConfigureViewController* configure = (PAConfigureViewController*) self.initialViewController;
+                                          [configure updateInstitutions];
+                                      }else{
+                                          // if there was a user previously on this device (registered or not registered)
+                                          if(![[userAttributes objectForKey:@"first_name"] isKindOfClass:[NSNull class]]){
+                                              //if the user was registered
+                                              NSString* message = [@"Would you like to use " stringByAppendingString:[userAttributes objectForKey:@"first_name"]];
+                                              message = [message stringByAppendingString:@"'s information?"];
+                                              UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:@"Logged In User Exists"
+                                                                                                  message:message
+                                                                                                 delegate:self
+                                                                                        cancelButtonTitle:@"No"
+                                                                                        otherButtonTitles:@"Yes",nil];
+                                              [loginAlert show];
+                                          }
+                                          else{
+                                              //if the user was not registered
+                                              //we will load the user id and api key into user defaults because they will be overwritten if the user chooses not to load the previous user's info
+                                              
+                                              NSNumber *userID = [userAttributes objectForKey:@"id"];
+                                              [defaults setObject:userID forKey:user_id];
+                                              NSString *apiKey = [userAttributes objectForKey:api_key];
+                                              NSLog(@"API KEY: %@", [userAttributes objectForKey:api_key]);
+                                              [defaults setObject:apiKey forKey:api_key];
+                                              if(![[userAttributes objectForKey:@"institution_id"] isKindOfClass:[NSNull class]]){
+                                                  [defaults setObject:[userAttributes objectForKey:@"institution_id"] forKey:@"institution_id"];
+                                              }
+                                              else{
+                                                  [defaults setObject:[NSNumber numberWithInt:1] forKey:@"institution_id"];
+                                              }
+                                              UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"User Exists"
+                                                                                         message:@"Would you like to use the previous user's information?"
+                                                                                        delegate:self
+                                                                               cancelButtonTitle:@"No"
+                                                                               otherButtonTitles:@"Yes",nil];
+                                              [alert show];
+                                          }
+                                          //[self ceateAnonymousUser:callbackBlock];
+                                      }
+                                  }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+}
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if([alertView.title isEqualToString:@"User Exists"]){
+        //if there was an anonymous user last logged in on this device
+        if (buttonIndex == 0){
+            //If the user presses no, we will create an anonymous user and load the institutions
+            NSLog(@"create a new user");
+            [self ceateAnonymousUser:^(BOOL success) {
+                if (success) {
+                    NSLog(@"Sucessfully set a new anonymous user");
+                    PAConfigureViewController* configure = (PAConfigureViewController*) self.initialViewController;
+                    [configure updateInstitutions];
+                } else {
+                    NSLog(@"Anonymous user creation unsucessful");
+                }
+            }];
+            PAConfigureViewController* configure = (PAConfigureViewController*) self.initialViewController;
+            [configure updateInstitutions];
+            
+        }else{
+            //If the user presses yes, we will load the previous data and segue to the homepage
+            //Note that we have already added the necessary information into user defaults
+            NSLog(@"use previous user info");
+            PAConfigureViewController* configure = (PAConfigureViewController*) self.initialViewController;
+            PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            // if this is root because of the initial download of the app
+            if ([appDelegate window].rootViewController == configure) {
+                UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+                NSLog(@"about to set the root");
+                [appDelegate.window setRootViewController:newRoot];
+            }
+        }
+    }else{
+        if(buttonIndex==0){
+            NSLog(@"create a new user");
+            //load the institutions
+        }else{
+            NSLog(@"login the user");
+            //segue to the login page
+        }
+    }
+}
 
 -(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock
 {
@@ -91,7 +196,7 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:[self currentUDID] forKey:@"udid"];
-    
+    NSLog(@"deviceInfo: %@", deviceInfo);
     [[PASessionManager sharedClient] POST:usersAPI
                                parameters:deviceInfo
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
@@ -198,6 +303,8 @@
                                       NSNumber* userID = [userDictionary objectForKey:@"id"];
                                       NSString* apiKey = [userDictionary objectForKey:@"api_key"];
                                       NSString* imageURL = [userDictionary objectForKey:@"image"];
+                                      
+                                      NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 
                                       
                                       [defaults setObject:firstName forKey:first_name_define];

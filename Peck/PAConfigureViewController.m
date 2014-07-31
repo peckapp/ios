@@ -140,11 +140,16 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
+    /*
+    *** This has been commented out for a reason. The school should not be set until the continue button is pressed because the previous methd of setting the institution could produce an error. If the user wished to select the first institution, but there was already an institution in user defaults then the institution would not be properly set.
+    ***
+     
     Institution * institution = (Institution*)[self.institutions objectAtIndex:row];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:institution.id forKey:@"institution_id"];
     NSLog(@"selected institution: %@ with id: %@",institution.name,institution.id);
+     */
 }
 
 
@@ -154,11 +159,11 @@
 
 - (IBAction)continueButton:(id)sender
 {
-    // sets the default if they never scroll the pickerview
+    // sets the institution when continue is pressed
+    Institution * institution = (Institution*)[self.institutions objectAtIndex:[self.schoolPicker selectedRowInComponent:0]];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:@"institution_id"] == nil) {
-        [defaults setObject:[NSNumber numberWithInt:1] forKey:@"institution_id"];
-    }
+    [defaults setObject:institution.id forKey:@"institution_id"];
+    NSLog(@"selected institution: %@ with id: %@",institution.name,institution.id);
     
     PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
