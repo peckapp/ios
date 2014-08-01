@@ -626,6 +626,7 @@ PAAssetManager * assetManager;
                                 institutionID, @"institution_id",
                                 self.titleTextField.text, @"circle_name",
                                 circleMembers, @"circle_member_ids",
+                                @"JOIN OR DIE!!!", @"message",
                                 nil];
     
     [self endEditing:YES];
