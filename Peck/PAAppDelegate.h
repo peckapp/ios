@@ -17,6 +17,8 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, weak) UIStoryboard * mainStoryboard;
 
+// icloud triggered selector for remote change to key-value store
+- (void)iCloudKeyStateChanged:(NSNotification*)notification;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
