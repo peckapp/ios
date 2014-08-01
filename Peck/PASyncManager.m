@@ -63,6 +63,20 @@
 
 #pragma mark - User actions
 
+-(void)logoutUser{
+    [[PASessionManager sharedClient] DELETE:@"api/access/logout"
+                               parameters:[self authenticationParameters]
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      
+                                  }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                      
+                                  }];
+    
+
+}
+
 -(void)sendUserDeviceToken:(NSString*)deviceToken{
     NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:

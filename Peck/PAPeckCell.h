@@ -23,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *acceptButton;
 @property (weak, nonatomic) IBOutlet UIButton *declineButton;
 
+@property BOOL interactedWith;
+
 - (IBAction)acceptInviteButton:(id)sender;
 - (IBAction)declineInviteButton:(id)sender;
 

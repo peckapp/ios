@@ -106,9 +106,11 @@ static NSString *nibName = @"PAPeckCell";
     }
     [cell.acceptButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [cell.declineButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    cell.interactedWith = NO;
     if([peck.interacted_with boolValue]==YES){
         [cell.acceptButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [cell.declineButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        cell.interactedWith = YES;
     }
     cell.dateLabel.text = [self dateToString:peck.created_at];
     cell.peckID = peck.id;

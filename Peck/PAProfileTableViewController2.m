@@ -127,6 +127,7 @@ BOOL loggedIn;
     }else{
         [[PAFetchManager sharedFetchManager] logoutUser];
         
+        [[PASyncManager globalSyncManager] logoutUser];
         
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         [defaults removeObjectForKey:@"authentication_token"];

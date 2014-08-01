@@ -27,11 +27,16 @@
 }
 
 - (IBAction)acceptInviteButton:(id)sender {
-    [[PASyncManager globalSyncManager] acceptCircleInvite:self.invitation_id withPeckID:self.peckID];
-    
+    if(!self.interactedWith){
+        //if the cell has not been interacted with
+        [[PASyncManager globalSyncManager] acceptCircleInvite:self.invitation_id withPeckID:self.peckID];
+    }
 }
 
 - (IBAction)declineInviteButton:(id)sender {
-    [[PASyncManager globalSyncManager] deleteCircleMember:self.invitation_id withPeckID:self.peckID];
+    if(!self.interactedWith){
+        //if the cell has not been interacted with
+        [[PASyncManager globalSyncManager] deleteCircleMember:self.invitation_id withPeckID:self.peckID];
+    }
 }
 @end

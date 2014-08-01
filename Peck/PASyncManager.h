@@ -21,6 +21,8 @@
 
 // methods for anonymous user creation and subsqquent registration
 
+-(void)logoutUser;
+
 -(void)createAnonymousUserHelper;
 //calls create anonymous user with a completetion block that has components more easily accessed from within the sync manager
 
