@@ -35,6 +35,6 @@
 
 - (void)expandTableViewCell:(PACommentCell *)cell;
 -(void)compressTableViewCell:(PACommentCell *)cell;
--(void)postComment:(PACommentCell *)cell;
+-(void)postComment:(NSString *)text;
 - (void)configureView;
 @end

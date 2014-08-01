@@ -27,6 +27,7 @@
 @property (strong, nonatomic) UITextField * keyboardAccessory;
 @property (strong, nonatomic) UIView * realKeyboardAccessoryView;
 @property (strong, nonatomic) UITextField * realKeyboardAccessory;
+@property (strong, nonatomic) UIButton * postButton;
 
 @end
 
@@ -98,19 +99,22 @@ BOOL reloaded = NO;
     [self.keyboardAccessoryView addSubview:self.keyboardAccessory];
     self.keyboardAccessory.delegate = self;
     [self.view addSubview:self.keyboardAccessoryView];
+    [self.view bringSubviewToFront:self.keyboardAccessoryView];
 
     self.realKeyboardAccessoryView = [[UIView alloc] init];
     self.realKeyboardAccessory = [[UITextField alloc] init];
     self.realKeyboardAccessoryView.backgroundColor = [UIColor whiteColor];
     self.realKeyboardAccessory.backgroundColor = [UIColor lightGrayColor];
+    self.realKeyboardAccessory.delegate = self;
+
+    self.postButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    [self.postButton addTarget:self action:@selector(didSelectPostButton:) forControlEvents:UIControlEventTouchUpInside];
+
     [self.realKeyboardAccessoryView addSubview:self.realKeyboardAccessory];
+    [self.realKeyboardAccessoryView addSubview:self.postButton];
     self.keyboardAccessory.inputAccessoryView = self.realKeyboardAccessoryView;
 
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, self.keyboardAccessory.frame.size.height, 0);
-
     [self.tableView reloadData];
-    
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -130,7 +134,10 @@ BOOL reloaded = NO;
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
     self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
-    self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
+    self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0, self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
+
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, self.keyboardAccessoryView.frame.size.height, 0);
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -517,24 +524,6 @@ BOOL reloaded = NO;
     return dateString;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    //self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 216, 0);
-}
-
-
--(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
-    textViewHelper.frame = CGRectMake(0, 0, 222, 0);
-    [textViewHelper setFont:[UIFont systemFontOfSize:14]];
-    [textViewHelper setHidden:YES];
-    textViewHelper.text = text;
-    [textViewHelper sizeToFit];
-    if(textViewHelper.frame.size.height>defaultCellHeight){
-        return NO;
-    }
-    return YES;
-}
-
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath row] < [_fetchedResultsController.fetchedObjects count]){
@@ -657,23 +646,23 @@ BOOL reloaded = NO;
     [self.tableView endUpdates];
 }
 
--(void)postComment:(PACommentCell *)cell{
-    if(cell.commentTextView.textColor==[UIColor blackColor] && ![cell.commentTextView.text isEqualToString:@""]){
-        [cell.commentTextView resignFirstResponder];
+-(void)postComment:(NSString *) text
+{
+    if(![text isEqualToString:@""]){
         self.commentText=nil;
         NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     
         NSLog(@"post comment");
-        NSString *commentText = cell.commentTextView.text;
-        cell.commentTextView.text=@"";
+        //NSString *commentText = cell.commentTextView.text;
+        //cell.commentTextView.text=@"";
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSNumber *userID = [defaults objectForKey:@"user_id"];
         NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
     
         NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                commentText, @"content",
+                                text, @"content",
                                 userID, @"user_id",
                                 @"simple", @"category",
                                 [self.detailItem valueForKey:@"id" ],@"comment_from",
@@ -716,6 +705,42 @@ BOOL reloaded = NO;
         
     }
     
+}
+
+#pragma Text Fields
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    NSLog(@"AAAA");
+    if (textField == self.keyboardAccessory) {
+        NSLog(@"BBBB");
+        [self.realKeyboardAccessory becomeFirstResponder];
+    }
+}
+
+
+-(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
+    textViewHelper.frame = CGRectMake(0, 0, 222, 0);
+    [textViewHelper setFont:[UIFont systemFontOfSize:14]];
+    [textViewHelper setHidden:YES];
+    textViewHelper.text = text;
+    [textViewHelper sizeToFit];
+    if(textViewHelper.frame.size.height>defaultCellHeight){
+        return NO;
+    }
+    return YES;
+}
+
+- (void)didSelectPostButton:(id)sender
+{
+    [self postComment:self.realKeyboardAccessory.text];
+    [self.realKeyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
 }
 
 @end
