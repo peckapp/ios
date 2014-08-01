@@ -19,5 +19,6 @@
 @property (nonatomic, retain) NSNumber * invited_by;
 @property (nonatomic, retain) NSDate * created_at;
 @property (nonatomic, retain) NSNumber * invitation_id;
+@property (nonatomic, retain) NSNumber * interacted_with;
 
 @end

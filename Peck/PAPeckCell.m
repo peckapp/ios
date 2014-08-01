@@ -8,6 +8,7 @@
 
 #import "PAPeckCell.h"
 #import "PAAssetManager.h"
+#import "PASyncManager.h"
 
 @implementation PAPeckCell
 
@@ -25,4 +26,12 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)acceptInviteButton:(id)sender {
+    [[PASyncManager globalSyncManager] acceptCircleInvite:self.invitation_id withPeckID:self.peckID];
+    
+}
+
+- (IBAction)declineInviteButton:(id)sender {
+    [[PASyncManager globalSyncManager] deleteCircleMember:self.invitation_id withPeckID:self.peckID];
+}
 @end

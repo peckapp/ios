@@ -761,7 +761,7 @@
 }
 
 -(void)leaveCircle: (NSDictionary*) dictionary{
-    [[PASessionManager sharedClient] DELETE:@"api/circle_members"
+    [[PASessionManager sharedClient] DELETE:@"api/circle_members/leave_circle"
                                parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
@@ -791,20 +791,52 @@
 
 }
 
--(void)acceptCircleInvite:(NSNumber*)circleMemberID{
+-(void)acceptCircleInvite:(NSInteger)circleMemberID withPeckID:(NSNumber*)peckID{
+    NSString* acceptInviteURL = [circle_membersAPI stringByAppendingString:@"/"];
+    acceptInviteURL = [acceptInviteURL stringByAppendingString:[@(circleMemberID) stringValue]];
+    acceptInviteURL = [acceptInviteURL stringByAppendingString:@"/accept"];
+
     
-    /*
-    [[PASessionManager sharedClient] PATCH:circle_membersAPI
-                               parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            peckID, @"peck_id",
+                            [[self authenticationParameters] objectForKey:@"authentication" ], @"authentication",
+                            nil];
+    NSLog(@"accpet invite dictionary: %@", params);
+    [[PASessionManager sharedClient] PATCH:acceptInviteURL
+                               parameters:params
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         [circle addCircle_membersObject:newMember];
-         PACircleCell *circleCell = (PACircleCell*)sender;
-         [circleCell.profilesTableView reloadData];
+         [self updateCircleInfo];
+         [self updatePecks];
+         //we must update the pecks in order to change the interacted with value to true so that the buttons are no longer selectable
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
-                                  }];*/
+                                  }];
+}
+
+-(void)deleteCircleMember:(NSInteger)circleMemberID withPeckID:(NSNumber*)peckID{
+    NSString* circleMemberURL = [@"api/circle_members/" stringByAppendingString:[@(circleMemberID) stringValue]];
+    
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            peckID, @"peck_id",
+                            [[self authenticationParameters] objectForKey:@"authentication" ], @"authentication",
+                            nil];
+
+    
+    [[PASessionManager sharedClient] DELETE:circleMemberURL
+                                parameters:params
+                                   success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"deleted member JSON: %@", JSON);
+         NSDictionary* json = (NSDictionary*)JSON;
+         NSDictionary* circleMember = [json objectForKey:@"circle_member"];
+         [[PAFetchManager sharedFetchManager] removeCircle:[circleMember objectForKey:@"circle_id"]];
+         [self updateCircleInfo];
+     }
+                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                       NSLog(@"ERROR: %@",error);
+                                   }];
 }
 
 /*-(void)updateModifiedCircle:(Circle*)circle withSender:(id)sender forPeer:(Peer*)newMember{
@@ -964,6 +996,9 @@
              if(!peckAlreadyExists){
                  Peck * peck = [NSEntityDescription insertNewObjectForEntityForName:@"Peck" inManagedObjectContext: _managedObjectContext];
                  [self setAttributesInPeck:peck withDictionary:peckAttributes];
+             }else{
+                 Peck* peck = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Peck" andType:nil];
+                 [self setAttributesInPeck:peck withDictionary:peckAttributes];
              }
          }
      }
@@ -977,11 +1012,13 @@
 -(void)setAttributesInPeck:(Peck*)peck withDictionary:(NSDictionary*)dictionary{
     peck.message = [dictionary objectForKey:@"message"];
     peck.id = [dictionary objectForKey:@"id"];
-    peck.created_at=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"created_at"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    peck.created_at=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"created_at"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     if(![[dictionary objectForKey:@"invitation"] isKindOfClass:[NSNull class]]){
+        NSLog(@"INVITATION ID: %@", [dictionary objectForKey:@"invitation"]);
         peck.invitation_id =[dictionary objectForKey:@"invitation"];
     }
-    
+    peck.notification_type = [dictionary objectForKey:@"notification_type"];
+    peck.interacted_with = [dictionary objectForKey:@"interacted"];
 }
 
 #pragma mark - Dining actions
