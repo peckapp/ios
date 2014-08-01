@@ -79,19 +79,6 @@ PAAssetManager * assetManager;
     }
 }
 
-- (IBAction)postButton:(id)sender {
-    NSLog(@"post (in cell)");
-    if(self.parentTableView){
-        PAEventInfoTableViewController *parent = (PAEventInfoTableViewController*)self.parentTableView;
-        [parent postComment:self];
-    }
-    else if(self.parentCircleTableView){
-        PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentCircleTableView;
-        [parent postComment:self];
-    }
-
-}
-
 /*
 - (IBAction)expandButton:(id)sender {
     NSLog(@"expand the cell");

@@ -14,7 +14,6 @@
 @interface PACommentCell : UITableViewCell <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UITextView *commentTextView;
-@property (weak, nonatomic) IBOutlet UIButton *postButton;
 @property (weak, nonatomic) IBOutlet UILabel *numberOfLikesLabel;
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (weak, nonatomic) IBOutlet UIView *thumbnailViewTemplate;
@@ -33,7 +32,4 @@
 @property (strong, nonatomic) NSString* comment_from;
 
 - (IBAction)likeButton:(id)sender;
-
-- (IBAction)postButton:(id)sender;
-
 @end

@@ -223,7 +223,6 @@ PAAssetManager * assetManager;
         [cell.numberOfLikesLabel setHidden:YES];
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
-        [cell.postButton setHidden:NO];
         if(([self.commentText isEqualToString:@""] || self.commentText==nil) && ![cell.commentTextView isFirstResponder]){
             cell.commentTextView.textColor = [UIColor lightGrayColor];
             cell.commentTextView.text = @"add a comment";
@@ -254,7 +253,6 @@ PAAssetManager * assetManager;
         cell.comment_from = [self.circle.id stringValue];
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
-        [cell.postButton setHidden:YES];
         cell.nameLabel.text=[self nameLabelTextForComment:tempComment];
         
         cell.commentTextView.text = tempComment.content;
