@@ -650,8 +650,10 @@ BOOL reloaded = NO;
 {
     if(![text isEqualToString:@""]){
         self.commentText=nil;
+        /*
         NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+         */
     
         NSLog(@"post comment");
         //NSString *commentText = cell.commentTextView.text;
