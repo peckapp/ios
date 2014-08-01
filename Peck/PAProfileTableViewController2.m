@@ -125,10 +125,12 @@ BOOL loggedIn;
         root.justOpenedApp=NO;
         [self presentViewController:loginRoot animated:YES completion:nil];
     }else{
-        [[PAFetchManager sharedFetchManager] logoutUser];
         
         [[PASyncManager globalSyncManager] logoutUser];
         
+        [[PAFetchManager sharedFetchManager] logoutUser];
+        
+    
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         [defaults removeObjectForKey:@"authentication_token"];
         [defaults removeObjectForKey:@"first_name"];

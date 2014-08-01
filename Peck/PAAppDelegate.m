@@ -143,7 +143,7 @@
     NSLog(@"Device Token ---> %@", token);
     [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"device_token"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [[PASyncManager globalSyncManager] sendUserDeviceToken:token];
+    
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error

@@ -77,31 +77,6 @@
 
 }
 
--(void)sendUserDeviceToken:(NSString*)deviceToken{
-    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
-    NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                deviceToken, @"token",
-                                shortTermUDID, @"udid",
-                                //[store objectForKey:@"udid"],@"udid",
-                                nil];
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* deviceTokenURL = [@"api/users/" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
-    deviceTokenURL = [deviceTokenURL stringByAppendingString:@"/create_device_token"];
-    NSLog(@"device token dictionary: %@", dictionary);
-    [[PASessionManager sharedClient] PATCH:deviceTokenURL
-                               parameters:[self applyWrapper:@"user_device_token" toDictionary:dictionary]
-                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                      NSLog(@"Device Token JSON: %@", JSON);
-                                  }
-                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
-                                      
-                                  }];
-
-
-    
-}
-
 -(void)sendUDIDForInitViewController:(UIViewController*)initViewController{
     NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
