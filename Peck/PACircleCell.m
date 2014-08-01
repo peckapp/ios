@@ -620,6 +620,7 @@ PAAssetManager * assetManager;
     }
     [circleMembers addObject:[defaults objectForKey:@"user_id"]];
     
+    
     NSDictionary * newCircle = [NSDictionary dictionaryWithObjectsAndKeys:
                                 userID, @"user_id",
                                 institutionID, @"institution_id",

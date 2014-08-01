@@ -73,6 +73,9 @@ PAAssetManager * assetManager;
 {
     [super viewDidLoad];
 
+    //we must store the profile picture every time the app loads because the local image storing is not persistent
+    [self storeProfilePicture];
+    
     assetManager = [PAAssetManager sharedManager];
 
     NSLog(@"View did load (events)");
@@ -126,6 +129,27 @@ PAAssetManager * assetManager;
     NSLog(@"Added shadow");
     [self.view addSubview:shadow];
     
+}
+
+-(void)storeProfilePicture{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    dispatch_async(queue, ^{
+
+        NSString* url = [[NSUserDefaults standardUserDefaults] objectForKey:@"profile_picture_url"];
+        if(url){
+        
+            UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString: url]]];
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+            NSString *documentsDirectory = [paths objectAtIndex:0];
+            NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                      @"profile_picture.jpeg" ];
+            NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
+            [data writeToFile:path atomically:YES];
+            NSLog(@"path: %@", path);
+            [[NSUserDefaults standardUserDefaults] setObject:path forKey:@"profile_picture"];
+        }
+    });
 }
 
 -(void)viewWillAppear:(BOOL)animated{

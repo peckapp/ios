@@ -222,11 +222,13 @@ static NSString *nibName = @"PAPeckCell";
     switch(type)
     {
         case NSFetchedResultsChangeInsert:
-            
+        {
             [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             
+            //this line is here because the table view would usually set the second cell to have the same properties as the cell that was just inserted
+            [self.tableView reloadData];
             break;
-        
+        }
         case NSFetchedResultsChangeDelete:
             [self.tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]

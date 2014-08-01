@@ -329,7 +329,8 @@
                                       
                                       if(imageURL){
                                           NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
-                                          UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]]]];
+                                          NSURL* url =[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+                                          UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
                                           NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                                                                NSUserDomainMask, YES);
                                           NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -339,6 +340,7 @@
                                           [data writeToFile:path atomically:YES];
                                           NSLog(@"path: %@", path);
                                           [defaults setObject:path forKey:@"profile_picture"];
+                                          [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
                                       }
                                       
                                       if(![blurb isKindOfClass:[NSNull class]]){
@@ -749,11 +751,6 @@
                                parameters:[self applyWrapper:@"circle" toDictionary:dictionary]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         //NSLog(@"post circle success: %@", JSON);
-         /*NSDictionary *postsFromResponse = (NSDictionary*)JSON;
-         NSDictionary *circleDictionary = [postsFromResponse objectForKey:@"circle"];
-         //NSNumber *circleID = [circleDictionary objectForKey:@"id"];
-         //[self addMembers:members ToCircle:circleID];*/
          [self updateCircleInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
