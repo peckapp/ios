@@ -114,9 +114,10 @@
                                           // if there was a user previously on this device (registered or not registered)
                                           
                                           if(![[userAttributes objectForKey:@"first_name"] isKindOfClass:[NSNull class]]){
+                                            
                                               //if the user was registered
                                               [defaults setObject:[userAttributes objectForKey:@"api_key"] forKey:@"api_key"];
-                                              [defaults setObject:[userAttributes objectForKey:@"user_id"] forKey:@"user_id"];
+                                              [defaults setObject:[userAttributes objectForKey:@"id"] forKey:@"user_id"];
                                               NSString* message = [@"Would you like to use " stringByAppendingString:[userAttributes objectForKey:@"first_name"]];
                                               message = [message stringByAppendingString:@"'s information?"];
                                               UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:@"Logged In User Exists"
@@ -833,6 +834,7 @@
          NSDictionary* circleMember = [json objectForKey:@"circle_member"];
          [[PAFetchManager sharedFetchManager] removeCircle:[circleMember objectForKey:@"circle_id"]];
          [self updateCircleInfo];
+         [self updatePecks];
      }
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                        NSLog(@"ERROR: %@",error);

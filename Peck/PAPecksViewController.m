@@ -219,16 +219,12 @@ static NSString *nibName = @"PAPeckCell";
     
     switch(type)
     {
-        case NSFetchedResultsChangeInsert:{
+        case NSFetchedResultsChangeInsert:
             
             [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             
-            //the following code is necessary to reload the information on the cell below the inserted one
-            NSIndexPath* cellBelow = [NSIndexPath indexPathForRow:newIndexPath.row inSection:newIndexPath.section];
-            PAPeckCell* cell = (PAPeckCell*)[self.tableView cellForRowAtIndexPath:cellBelow];
-            [self configureCell:cell atIndexPath:cellBelow];
             break;
-        }
+        
         case NSFetchedResultsChangeDelete:
             [self.tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
