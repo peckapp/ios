@@ -929,6 +929,39 @@
     return nil;
     
 }
+#pragma mark - Peck actions
+
+-(void)postPeck:(NSDictionary*)dictionary{
+    [[PASessionManager sharedClient] POST:@"api/pecks"
+                               parameters:[self applyWrapper:@"peck" toDictionary:dictionary]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"peck JSON: %@", JSON);
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+    
+
+}
+
+-(void)updatePecks{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* peckURL = [@"api/pecks?user_id=" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
+    [[PASessionManager sharedClient] GET:peckURL
+                               parameters:[self authenticationParameters]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"peck JSON: %@", JSON);
+         NSDictionary* json = (NSDictionary*)JSON;
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+    
+
+}
+
 #pragma mark - Dining actions
 
 -(void)updateDiningInfo{
@@ -1133,6 +1166,7 @@
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          //NSLog(@"success: %@", JSON);
+         [self updateExploreInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);

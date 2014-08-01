@@ -426,6 +426,7 @@
         }
         
     }else if(_controlSwitch.selectedSegmentIndex==1){
+        //The user is attempting to post an announcement
         if([self.titleField.text isEqualToString:@""]){
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
                                                             message:@"You must enter an announcement title"
@@ -452,7 +453,12 @@
                                           instID, @"institution_id",
                                           nil];
             [[PASyncManager globalSyncManager] postAnnouncement:announcement withImage:data];
+            
+            self.titleField.text=@"";
+            self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
+            self.descriptionField.text = @"";
         }
+        
     }
     
     
