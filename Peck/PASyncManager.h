@@ -45,7 +45,7 @@
 //attend actions
 -(void)attendEvent:(NSDictionary*) attendee forViewController:(UIViewController*)controller;
 -(void)unattendEvent:(NSDictionary*) attendee forViewController:(UIViewController*)controller;
-
+;
 // methods for syncing institutions for the configuration phase
 -(void)updateAvailableInstitutionsWithCallback:(void(^)(BOOL sucess))callbackBlock;
 
@@ -72,6 +72,7 @@
 
 //methods for updating pecks
 -(void)postPeck:(NSDictionary*)dictionary;
+-(void)updatePecks;
 
 //methods for comments
 -(void)postComment:(NSDictionary *)dictionary;

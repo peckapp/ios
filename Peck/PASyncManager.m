@@ -31,7 +31,7 @@
 #import "PAEventsViewController.h"
 #import "PAEventInfoTableViewController.h"
 #import "PAConfigureViewController.h"
-
+#import "Peck.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 #define shortTermUDID @"1"
@@ -946,6 +946,9 @@
 }
 
 -(void)updatePecks{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* peckURL = [@"api/pecks?user_id=" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
     [[PASessionManager sharedClient] GET:peckURL
@@ -954,12 +957,29 @@
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"peck JSON: %@", JSON);
          NSDictionary* json = (NSDictionary*)JSON;
+         NSArray* pecks = [json objectForKey:@"pecks"];
+         for(NSDictionary* peckAttributes in pecks){
+             NSNumber* newID = [peckAttributes objectForKey:@"id"];
+             BOOL peckAlreadyExists = [self objectExists:newID withType:@"Peck" andCategory:nil];
+             if(!peckAlreadyExists){
+                 Peck * peck = [NSEntityDescription insertNewObjectForEntityForName:@"Peck" inManagedObjectContext: _managedObjectContext];
+                 [self setAttributesInPeck:peck withDictionary:peckAttributes];
+             }
+         }
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
                                   }];
     
 
+}
+
+-(void)setAttributesInPeck:(Peck*)peck withDictionary:(NSDictionary*)dictionary{
+    peck.message = [dictionary objectForKey:@"message"];
+    peck.id = [dictionary objectForKey:@"id"];
+    peck.created_at=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"created_at"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    peck.invitation_id =[dictionary objectForKey:@"invitation"];
+    
 }
 
 #pragma mark - Dining actions

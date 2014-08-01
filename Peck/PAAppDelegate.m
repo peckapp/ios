@@ -141,6 +141,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     if (application.applicationState == UIApplicationStateActive) {
         NSLog(@"while running did receive remote notification: %@",userInfo);
+        
     } else if (application.applicationState == UIApplicationStateInactive) {
         NSLog(@"while in background did receive remote notification: %@",userInfo);
     } else {
@@ -154,6 +155,7 @@
     NSLog(@"did receive remote notification: %@ with fetch completion handler",userInfo);
     
     // handle all types of notifications here and call completion handler with the proper UIBackgroundFetchResult for each case
+    [[PASyncManager globalSyncManager] updatePecks];
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
