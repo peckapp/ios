@@ -43,6 +43,6 @@
 @property (strong, nonatomic) NSMutableDictionary* invitedPeopleDictionary;
 @property (strong, nonatomic) NSMutableDictionary* invitedCirclesDictionary;
 
-
+@property (strong, nonatomic) NSDateFormatter* formatter;
 
 @end

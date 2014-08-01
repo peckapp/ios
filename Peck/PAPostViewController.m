@@ -29,6 +29,7 @@
 
 @interface PAPostViewController () {
 
+    
 }
 
 @property BOOL startPickerIsOpen;
@@ -45,6 +46,7 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+@synthesize formatter;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -67,7 +69,12 @@
     
     self.locationTextField.delegate = self;
     
+    [self.startTimePicker addTarget:self action:@selector(dateChanged:)forControlEvents:UIControlEventValueChanged];
     
+    [self.endTimePicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
+    
+    formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -109,8 +116,45 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)dateChanged:(id)sender{
+    if(sender==self.startTimePicker){
+        
+        NSString *stringFromDate = [formatter stringFromDate:self.startTimePicker.date];
+        self.startTimeLabel.text = stringFromDate;
+        
+        if([self.startTimePicker.date compare:self.endTimePicker.date]==NSOrderedDescending || [self.endTimeLabel.text isEqualToString:@"None"]){
+            //if the start time is after the end time or the end time has not been set yet
+            
+            NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+            [dateComponents setHour:1];
+        
+            self.endTimePicker.date = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:self.startTimePicker.date options:0];
+        
+            stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
+            self.endTimeLabel.text = stringFromDate;
+        }
+    }else if(sender == self.endTimePicker){
+        NSString* stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
+        
+        if([self.endTimePicker.date compare:self.startTimePicker.date]==NSOrderedAscending){
+            //if the end time if before the start time
+            NSDictionary* attributes = @{
+                                     NSStrikethroughStyleAttributeName: [NSNumber numberWithInt:NSUnderlineStyleSingle]
+                                     };
+        
+            NSAttributedString* attrText = [[NSAttributedString alloc] initWithString:stringFromDate attributes:attributes];
+        
+            self.endTimeLabel.attributedText = attrText;
+        }else{
+            //if the end time is after the start time
+            self.endTimeLabel.text = stringFromDate;
+        }
+    }
+
+}
+
 /*
-//DO NOT DELETE (for now) 
+//DO NOT DELETE (for now)
  
 #pragma mark - managing the keyboard notifications
 
@@ -246,6 +290,11 @@
     [self dismissViewControllerAnimated: YES completion: nil];
 }
 
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+
+}
+
 # pragma mark state control
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -269,10 +318,11 @@
         self.startTimePickerCell.tag = cellStateAlwaysOff;
 
         // Update labels
+        /*
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
         NSString *stringFromDate = [formatter stringFromDate:self.startTimePicker.date];
-        self.startTimeLabel.text = stringFromDate;
+        self.startTimeLabel.text = stringFromDate;*/
     }
     else {
         self.startTimePickerCell.tag = 0;
@@ -282,10 +332,11 @@
         self.endTimePickerCell.tag = cellStateAlwaysOff;
 
         // Update labels
+        /*
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
         NSString *stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
-        self.endTimeLabel.text = stringFromDate;
+        self.endTimeLabel.text = stringFromDate;*/
     }
     else {
         self.endTimePickerCell.tag = 0;
@@ -342,20 +393,10 @@
             [alert show];
         
         } else {
-            //[[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];
-            //[event setId:_userEvents[0]];
             
             NSNumber *instID = [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
             
-            
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                                 NSUserDomainMask, YES);
-            NSString *documentsDirectory = [paths objectAtIndex:0];
-            NSString* path = [documentsDirectory stringByAppendingPathComponent:
-                              @"event_photo.jpeg" ];
             NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
-            [data writeToFile:path atomically:YES];
-            //NSLog(@"path: %@", path);
             
             NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                                       self.titleField.text,@"title",
@@ -373,16 +414,19 @@
             
             self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+            self.titleField.text=@"";
+            self.descriptionField.text=@"";
+            self.startTimeLabel.text =@"None";
+            self.endTimeLabel.text = @"None";
             [self.tableView reloadData];
             
-            
-            //[self performSegueWithIdentifier:@"showEvents" sender:self];
             
             // parent of self is a navigation controller, its parent is the dropdown controller
             [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];
         }
         
     }else if(_controlSwitch.selectedSegmentIndex==1){
+        //The user is attempting to post an announcement
         if([self.titleField.text isEqualToString:@""]){
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
                                                             message:@"You must enter an announcement title"
@@ -409,7 +453,12 @@
                                           instID, @"institution_id",
                                           nil];
             [[PASyncManager globalSyncManager] postAnnouncement:announcement withImage:data];
+            
+            self.titleField.text=@"";
+            self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
+            self.descriptionField.text = @"";
         }
+        
     }
     
     

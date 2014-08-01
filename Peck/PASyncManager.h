@@ -70,6 +70,9 @@
 -(void)postCircleMember:(Peer*)newMember withDictionary:(NSDictionary *) dictionary forCircle:(Circle*)circle withSender:(id)sender;
 -(void)updateCircleInfo;
 
+//methods for updating pecks
+-(void)postPeck:(NSDictionary*)dictionary;
+
 //methods for comments
 -(void)postComment:(NSDictionary *)dictionary;
 -(void)updateCommentsFrom: (NSString *)comment_from withCategory:(NSString *)category;

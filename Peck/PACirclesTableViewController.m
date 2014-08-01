@@ -217,8 +217,11 @@ BOOL viewingCircles;
                                          circle_id, @"circle_id",
                                          @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464",@"token",
                                          alert, @"message",
+                                         @"Invitation", @"notification_type",
+                                         [NSNumber numberWithBool:YES],@"send_push_notification",
                                          nil];
-        [[PASyncManager globalSyncManager] postCircleMember:newMember withDictionary:newCircleMember forCircle:selectedCircle withSender:selectedCell];
+        //[[PASyncManager globalSyncManager] postCircleMember:newMember withDictionary:newCircleMember forCircle:selectedCircle withSender:selectedCell];
+        [[PASyncManager globalSyncManager] postPeck:newCircleMember];
     }else{
         [self.addedPeers addObject:newMember];
         [selectedCell updateCircleMembers:self.addedPeers];
