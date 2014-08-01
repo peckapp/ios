@@ -140,7 +140,7 @@ PAAssetManager * assetManager;
     }
     else if (tableView == self.commentsTableView) {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
-        return [sectionInfo numberOfObjects]+1;
+        return [sectionInfo numberOfObjects];
     }
     else if(tableView== self.suggestedMembersTableView){
         return [self.suggestedMembers count];
@@ -195,11 +195,11 @@ PAAssetManager * assetManager;
 - (void)configureMemberCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     UIView * thumbnail = nil;
     if (indexPath.row == [self.members count]) {
-        thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:[UIImage imageNamed:@"plus"]];
+        thumbnail = [assetManager createThumbnailWithFrame:cell.frame imageView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"plus"]]];
     }
     else {
         Peer* peer = self.members[indexPath.row];
-        thumbnail = [assetManager createThumbnailWithFrame:cell.frame image:[self imageForPeerID:peer.id]];
+        thumbnail = [assetManager createThumbnailWithFrame:cell.frame imageView:[self imageForPeerID:peer.id]];
     }
 
     thumbnail.userInteractionEnabled = NO;
@@ -216,14 +216,14 @@ PAAssetManager * assetManager;
     NSLog(@"configure cell");
     cell.parentCircleTableView = self.parentViewController;
     cell.parentCell=self;
-    cell.tag = indexPath.row-1;
-    if([indexPath row]==0){
+    cell.tag = indexPath.row;
+    /*
+    if([indexPath row] == 0){
         
         [cell.likeButton setHidden:YES];
         [cell.numberOfLikesLabel setHidden:YES];
         [cell.commentTextView setEditable:YES];
         [cell.commentTextView setScrollEnabled:YES];
-        [cell.postButton setHidden:NO];
         if(([self.commentText isEqualToString:@""] || self.commentText==nil) && ![cell.commentTextView isFirstResponder]){
             cell.commentTextView.textColor = [UIColor lightGrayColor];
             cell.commentTextView.text = @"add a comment";
@@ -235,12 +235,10 @@ PAAssetManager * assetManager;
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         NSString* userName = [[[defaults objectForKey:@"first_name"] stringByAppendingString:@" "] stringByAppendingString:[defaults objectForKey:@"last_name"]];
         cell.nameLabel.text=userName;
-        //this will be blank when the user has not yet registered or is not logged in
-        [cell.expandButton setHidden:YES];
-        cell.profilePicture.image = self.userPicture;
+        // cell.profilePicture.image = self.userPicture;
     }
-    else{
-        Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+     */
+        Comment *tempComment = _fetchedResultsController.fetchedObjects[indexPath.row];
         cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
         [cell.likeButton setHidden:NO];
         [cell.numberOfLikesLabel setHidden:NO];
@@ -256,21 +254,17 @@ PAAssetManager * assetManager;
         cell.comment_from = [self.circle.id stringValue];
         [cell.commentTextView setEditable:NO];
         [cell.commentTextView setScrollEnabled:NO];
-        [cell.expandButton setHidden:NO];
-        if([self textViewIsSmallerThanFrame:tempComment.content]){
-            [cell.expandButton setHidden:YES];
-        }
-        [cell.postButton setHidden:YES];
         cell.nameLabel.text=[self nameLabelTextForComment:tempComment];
         
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
 
-        /*
-        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.profilePicture.frame image:[self imageForPeerID:tempComment.peer_id]];
-        thumbnail.userInteractionEnabled = NO;
-        cell.profileThumbnail = thumbnail;
-         */
+        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageForPeerID:tempComment.peer_id]];
+        if (cell.thumbnailView) {
+            [cell.thumbnailView removeFromSuperview];
+        }
+        [cell addSubview:thumbnail];
+        cell.thumbnailView = thumbnail;
 
         
         NSString * commentID = [tempComment.id stringValue];
@@ -278,15 +272,11 @@ PAAssetManager * assetManager;
         if(height){
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, height);
             cell.expanded=YES;
-            [cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
         }
         else{
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
             cell.expanded=NO;
-            [cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
         }
-        // this fixes the problem where the comment text would occasionally be cut off when first loaded
-    }
 }
 
 -(BOOL)userHasLikedComment:(Comment*)comment{
@@ -321,11 +311,11 @@ PAAssetManager * assetManager;
     return text;
 }
 
-- (UIImage *)imageForPeerID:(NSNumber*)peerID
+- (UIImageView *)imageForPeerID:(NSNumber*)peerID
 {
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
     if([[defaults objectForKey:@"user_id"] integerValue]==[peerID integerValue]){
-        return self.userPicture;
+        return [[UIImageView alloc] initWithImage:self.userPicture];
     }
     else {
         Peer * peer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
@@ -333,16 +323,16 @@ PAAssetManager * assetManager;
             NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
             UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
             if(image){
-                return image;
+                return [[UIImageView alloc] initWithImage:image];
             }
             else {
                 UIImageView * imageView = [[UIImageView alloc] init];
                 [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
-                return imageView.image;
+                return imageView;
             }
         }
         else {
-            return [assetManager profilePlaceholder];
+            return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
         }
     }
 }
@@ -514,7 +504,7 @@ PAAssetManager * assetManager;
     switch(type)
     {
         case NSFetchedResultsChangeInsert:{
-            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
+            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]) inSection:[newIndexPath section] ];
             [tableView
              //the cell must be inserted below the post cell
              insertRowsAtIndexPaths:[NSArray arrayWithObject:realIndexPath]
@@ -529,7 +519,7 @@ PAAssetManager * assetManager;
             
         case NSFetchedResultsChangeUpdate:
         {
-            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
+            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]) inSection:[newIndexPath section] ];
             PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:realIndexPath];
             [self configureCommentCell:cell atIndexPath:realIndexPath];
             break;

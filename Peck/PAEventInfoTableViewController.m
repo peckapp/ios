@@ -23,6 +23,12 @@
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
 @property (nonatomic, retain) NSDateFormatter *formatter;
 
+@property (strong, nonatomic) UIView * keyboardAccessoryView;
+@property (strong, nonatomic) UITextField * keyboardAccessory;
+@property (strong, nonatomic) UIView * realKeyboardAccessoryView;
+@property (strong, nonatomic) UITextField * realKeyboardAccessory;
+@property (strong, nonatomic) UIButton * postButton;
+
 @end
 
 @implementation PAEventInfoTableViewController
@@ -45,9 +51,9 @@ PAAssetManager * assetManager;
 
 BOOL reloaded = NO;
 
-#define defaultCellHeight 51
-#define cellY 22
+#define defaultCellHeight 72
 #define reloadTime 10
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -86,9 +92,29 @@ BOOL reloaded = NO;
         abort();
     }
 
+    self.keyboardAccessoryView = [[UIView alloc] init];
+    self.keyboardAccessory = [[UITextField alloc] init];
+    self.keyboardAccessoryView.backgroundColor = [UIColor whiteColor];
+    self.keyboardAccessory.backgroundColor = [UIColor lightGrayColor];
+    [self.keyboardAccessoryView addSubview:self.keyboardAccessory];
+    self.keyboardAccessory.delegate = self;
+    [self.view addSubview:self.keyboardAccessoryView];
+    [self.view bringSubviewToFront:self.keyboardAccessoryView];
+
+    self.realKeyboardAccessoryView = [[UIView alloc] init];
+    self.realKeyboardAccessory = [[UITextField alloc] init];
+    self.realKeyboardAccessoryView.backgroundColor = [UIColor whiteColor];
+    self.realKeyboardAccessory.backgroundColor = [UIColor lightGrayColor];
+    self.realKeyboardAccessory.delegate = self;
+
+    self.postButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    [self.postButton addTarget:self action:@selector(didSelectPostButton:) forControlEvents:UIControlEventTouchUpInside];
+
+    [self.realKeyboardAccessoryView addSubview:self.realKeyboardAccessory];
+    [self.realKeyboardAccessoryView addSubview:self.postButton];
+    self.keyboardAccessory.inputAccessoryView = self.realKeyboardAccessoryView;
+
     [self.tableView reloadData];
-    
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -104,6 +130,14 @@ BOOL reloaded = NO;
             [NSThread sleepForTimeInterval:reloadTime];
         }
     });
+
+    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+    self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
+    self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0, self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
+
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, self.keyboardAccessoryView.frame.size.height, 0);
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -302,10 +336,9 @@ BOOL reloaded = NO;
     switch(type)
     {
         case NSFetchedResultsChangeInsert:{
-            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
             [tableView
              //the cell must be inserted below the post cell
-             insertRowsAtIndexPaths:[NSArray arrayWithObject:realIndexPath]
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             
             break;
@@ -318,10 +351,9 @@ BOOL reloaded = NO;
             
         case NSFetchedResultsChangeUpdate:
         {
-            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section]];
             
-            PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:realIndexPath];
-            [self configureCell:cell atIndexPath:realIndexPath];
+            PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:newIndexPath];
+            [self configureCell:cell atIndexPath:newIndexPath];
             break;
         }
         case NSFetchedResultsChangeMove:
@@ -352,7 +384,7 @@ BOOL reloaded = NO;
 {
 
     id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
-    return [sectionInfo numberOfObjects]+1;
+    return [sectionInfo numberOfObjects];
 
 }
 
@@ -373,79 +405,51 @@ BOOL reloaded = NO;
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath{
     NSLog(@"configure cell");
     cell.parentTableView=self;
-    if([indexPath row]==0){
-        //if it is the first cell. This is where the user will add a comment
-        [cell.likeButton setHidden:YES];
-        [cell.numberOfLikesLabel setHidden:YES];
-        [cell.commentTextView setEditable:YES];
-        [cell.commentTextView setScrollEnabled:YES];
-        [cell.postButton setHidden:NO];
-        if(([self.commentText isEqualToString:@""] || self.commentText==nil) && ![cell.commentTextView isFirstResponder]){
-            cell.commentTextView.textColor = [UIColor lightGrayColor];
-            cell.commentTextView.text = @"add a comment";
-        }
-        else{
-            cell.commentTextView.textColor = [UIColor blackColor];
-            cell.commentTextView.text = self.commentText;
-        }
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        NSString* userName = [[[defaults objectForKey:@"first_name"] stringByAppendingString:@" "] stringByAppendingString:[defaults objectForKey:@"last_name"]];
-        cell.nameLabel.text=userName;
-        [cell.expandButton setHidden:YES];
-        cell.profilePicture.image = self.userPicture;
+
+    Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]];
+    cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
+    [cell.likeButton setHidden:NO];
+    [cell.numberOfLikesLabel setHidden:NO];
+
+    if([self userHasLikedComment:tempComment]){
+        [cell.likeButton setTitle:@"Unlike" forState:UIControlStateNormal];
+    }else{
+        [cell.likeButton setTitle:@"Like" forState:UIControlStateNormal];
+    }
+
+    cell.commentID = tempComment.id;
+    cell.commentIntegerID = [tempComment.id integerValue];
+    //cell.comment = tempComment;
+    cell.comment_from = [[self.detailItem valueForKey:@"id"] stringValue];
+    cell.nameLabel.text = [self nameLabelTextForComment:tempComment];
+    cell.commentTextView.text = tempComment.content;
+
+    UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageViewForComment:tempComment]];
+    if (cell.thumbnailView) {
+        [cell.thumbnailView removeFromSuperview];
+    }
+    [cell addSubview:thumbnail];
+    cell.thumbnailView = thumbnail;
+    
+    NSString * commentID = [tempComment.id stringValue];
+    CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
+    if(height){
+        cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, height);
+        cell.expanded=YES;
+        //[cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
     }
     else{
-        Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
-        cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
-        [cell.likeButton setHidden:NO];
-        [cell.numberOfLikesLabel setHidden:NO];
-
-        if([self userHasLikedComment:tempComment]){
-            [cell.likeButton setTitle:@"Unlike" forState:UIControlStateNormal];
-        }else{
-            [cell.likeButton setTitle:@"Like" forState:UIControlStateNormal];
-        }
-        
-        cell.commentID = tempComment.id;
-        cell.commentIntegerID = [tempComment.id integerValue];
-        //cell.comment = tempComment;
-        cell.comment_from = [[self.detailItem valueForKey:@"id"] stringValue];
-        [cell.commentTextView setEditable:NO];
-        [cell.commentTextView setScrollEnabled:NO];
-        [cell.expandButton setHidden:NO];
-        if([self textViewIsSmallerThanFrame:tempComment.content]){
-            [cell.expandButton setHidden:YES];
-        }
-        [cell.postButton setHidden:YES];
-        cell.nameLabel.text = [self nameLabelTextForComment:tempComment];
-        cell.tag = [indexPath row]-1;
-        cell.commentTextView.text = tempComment.content;
-        [cell.commentTextView setTextColor:[UIColor blackColor]];
-        
-        [self imageForComment:tempComment withCell:cell];
-        
-        NSString * commentID = [tempComment.id stringValue];
-        CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
-        if(height){
-            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, height);
-            cell.expanded=YES;
-            [cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
-        }
-        else{
-            cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
-            //using the default cell height used to show half a line, but now with autolayout constraints it displays correctly
-            cell.expanded=NO;
-            [cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
-        }
-        
+        cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
+        //using the default cell height used to show half a line, but now with autolayout constraints it displays correctly
+        cell.expanded=NO;
+        //[cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
     }
-    
 }
 
 -(BOOL)userHasLikedComment:(Comment*)comment{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSInteger userID = [[defaults objectForKey:@"user_id"] integerValue];
-    for(int i =0; i<[comment.likes count];i++){
+    for(int i = 0; i < [comment.likes count];i++){
         if(userID==[comment.likes[i] integerValue]){
             return YES;
         }
@@ -473,25 +477,27 @@ BOOL reloaded = NO;
     return text;
 }
 
--(void)imageForComment:(Comment*)comment withCell:(PACommentCell*)cell{
+- (UIImageView *)imageViewForComment:(Comment*)comment {
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
     if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
-        cell.profilePicture.image =  self.userPicture;
-    }else{
-        Peer* commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
+        return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
+    } else {
+        Peer * commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
         if(commentFromPeer.imageURL){
             NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
             UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+
             if(profPic){
-                cell.profilePicture.image = profPic;
+                return [[UIImageView alloc] initWithImage:profPic];
             }
             else{
-                [cell.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+                UIImageView * imageView = [[UIImageView alloc] init];
+                [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+                return imageView;
             }
-
         }
         else{
-            cell.profilePicture.image = [assetManager profilePlaceholder];
+            return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
         }
     }
 }
@@ -518,44 +524,45 @@ BOOL reloaded = NO;
     return dateString;
 }
 
-
--(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
-    textViewHelper.frame = CGRectMake(0, 0, 222, 0);
-    [textViewHelper setFont:[UIFont systemFontOfSize:14]];
-    [textViewHelper setHidden:YES];
-    textViewHelper.text = text;
-    [textViewHelper sizeToFit];
-    if(textViewHelper.frame.size.height>defaultCellHeight){
-        return NO;
-    }
-    return YES;
-}
-
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.row>0){
-        if([_fetchedResultsController.fetchedObjects count]>=[indexPath row]){
-            Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
-            NSString * commentID = [comment.id stringValue];
-            CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
-            if(height){
-                return height+cellY;
-            }
+    if([indexPath row] < [_fetchedResultsController.fetchedObjects count]){
+        Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]];
+        NSString * commentID = [comment.id stringValue];
+        CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
+        if(height){
+            return height;
         }
     }
-    return defaultCellHeight+cellY;
+    return defaultCellHeight;
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    self.keyboardAccessoryView.frame = CGRectMake(0, scrollView.contentOffset.y + self.view.frame.size.height - self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.width, self.keyboardAccessoryView.frame.size.height);
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    /*
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     PACommentCell *cell = (PACommentCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     [cell.commentTextView resignFirstResponder];
-    
+     */
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    PACommentCell * cell = (PACommentCell *)[self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+    if (cell.expanded) {
+        [self compressTableViewCell:cell];
+        cell.expanded = NO;
+    }
+    else {
+        [self expandTableViewCell:cell];
+        cell.expanded = YES;
+    }
 }
 
 /*
@@ -617,14 +624,13 @@ BOOL reloaded = NO;
     float newHeight = textViewHelper.frame.size.height;
     NSLog(@"new height: %f", newHeight);
     NSNumber *height = [NSNumber numberWithFloat: defaultCellHeight];
-    if(textViewHelper.frame.size.height>defaultCellHeight){
-        height = [NSNumber numberWithFloat:textViewHelper.frame.size.height+1];
-        //without the +1, the bottom line would not be displayed
+    if(textViewHelper.frame.size.height + textViewHelper.frame.origin.y > defaultCellHeight){
+        height = [NSNumber numberWithFloat:textViewHelper.frame.size.height + textViewHelper.frame.origin.y];
     }
     //Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
     
     NSString * commentID = [cell.commentID stringValue];
-    
+
     [heightDictionary setValue:height forKey:commentID];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
@@ -640,23 +646,23 @@ BOOL reloaded = NO;
     [self.tableView endUpdates];
 }
 
--(void)postComment:(PACommentCell *)cell{
-    if(cell.commentTextView.textColor==[UIColor blackColor] && ![cell.commentTextView.text isEqualToString:@""]){
-        [cell.commentTextView resignFirstResponder];
+-(void)postComment:(NSString *) text
+{
+    if(![text isEqualToString:@""]){
         self.commentText=nil;
         NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     
         NSLog(@"post comment");
-        NSString *commentText = cell.commentTextView.text;
-        cell.commentTextView.text=@"";
+        //NSString *commentText = cell.commentTextView.text;
+        //cell.commentTextView.text=@"";
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSNumber *userID = [defaults objectForKey:@"user_id"];
         NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
     
         NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                commentText, @"content",
+                                text, @"content",
                                 userID, @"user_id",
                                 @"simple", @"category",
                                 [self.detailItem valueForKey:@"id" ],@"comment_from",
@@ -699,6 +705,40 @@ BOOL reloaded = NO;
         
     }
     
+}
+
+#pragma Text Fields
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (textField == self.keyboardAccessory) {
+        [self.realKeyboardAccessory becomeFirstResponder];
+    }
+}
+
+
+-(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
+    textViewHelper.frame = CGRectMake(0, 0, 222, 0);
+    [textViewHelper setFont:[UIFont systemFontOfSize:14]];
+    [textViewHelper setHidden:YES];
+    textViewHelper.text = text;
+    [textViewHelper sizeToFit];
+    if(textViewHelper.frame.size.height>defaultCellHeight){
+        return NO;
+    }
+    return YES;
+}
+
+- (void)didSelectPostButton:(id)sender
+{
+    [self postComment:self.realKeyboardAccessory.text];
+    [self.realKeyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
 }
 
 @end

@@ -14,7 +14,7 @@
 - (void)awakeFromNib
 {
     PAAssetManager * assetManager = [PAAssetManager sharedManager];
-    self.profileThumbnail = [assetManager createThumbnailWithFrame:self.profileTemplateView.frame image:[assetManager profilePlaceholder]];
+    self.profileThumbnail = [assetManager createThumbnailWithFrame:self.profileTemplateView.frame imageView:[[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]]];
     self.profileTemplateView.hidden = true;
 }
 

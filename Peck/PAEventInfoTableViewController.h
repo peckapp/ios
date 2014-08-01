@@ -12,7 +12,7 @@
 #import "PACoreDataProtocol.h"
 @class PACommentCell;
 
-@interface PAEventInfoTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UIScrollViewDelegate>
+@interface PAEventInfoTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UIScrollViewDelegate,UITextFieldDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
@@ -35,6 +35,6 @@
 
 - (void)expandTableViewCell:(PACommentCell *)cell;
 -(void)compressTableViewCell:(PACommentCell *)cell;
--(void)postComment:(PACommentCell *)cell;
+-(void)postComment:(NSString *)text;
 - (void)configureView;
 @end
