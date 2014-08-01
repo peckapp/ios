@@ -35,11 +35,23 @@
     //NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
     //[UICKeyChainStore setString:deviceId forKey:@"deviceId" service:@"Devices"];
     
+    // register to observe notifications from the store
+    [[NSNotificationCenter defaultCenter]addObserver: self
+                                            selector: @selector (iCloudKeyStateChanged:)
+                                                name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                                              object: [NSUbiquitousKeyValueStore defaultStore]];
+    
+    // get changes that might have happened while this
+    // instance of your app wasn't running
+    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
+    
     NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
+    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     NSString* udid = [store objectForKey:@"udid"];
-    if(!udid){
+    if(udid == nil){
         NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
         [store setObject:deviceId forKey:@"udid"];
+        [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     }
     NSLog(@"MY UDID: %@", [store objectForKey:@"udid"]);
     
@@ -116,6 +128,7 @@
     // Must remain after third-party SDK code
     //[Crashlytics startWithAPIKey:@"147270e58be36f1b12187f08c0fa5ff034e701c8"];
     
+    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     
     return YES;
 }
@@ -161,6 +174,12 @@
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     NSLog(@"did receive local notification: %@",notification);
+}
+
+#pragma mark - iCloud
+
+- (void)iCloudKeyStateChanged:(NSNotification*)notification {
+    
 }
 
 #pragma mark - Facebook API
