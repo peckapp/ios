@@ -216,8 +216,8 @@ PAAssetManager * assetManager;
     NSLog(@"configure cell");
     cell.parentCircleTableView = self.parentViewController;
     cell.parentCell=self;
-    cell.tag = indexPath.row-1;
-    if([indexPath row]==0){
+    cell.tag = indexPath.row - 1;
+    if([indexPath row] == 0){
         
         [cell.likeButton setHidden:YES];
         [cell.numberOfLikesLabel setHidden:YES];
@@ -258,11 +258,12 @@ PAAssetManager * assetManager;
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
 
-        /*
-        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.profilePicture.frame image:[self imageForPeerID:tempComment.peer_id]];
-        thumbnail.userInteractionEnabled = NO;
-        cell.profileThumbnail = thumbnail;
-         */
+        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageForPeerID:tempComment.peer_id]];
+        if (cell.thumbnailView) {
+            [cell.thumbnailView removeFromSuperview];
+        }
+        [cell addSubview:thumbnail];
+        cell.thumbnailView = thumbnail;
 
         
         NSString * commentID = [tempComment.id stringValue];
@@ -328,7 +329,7 @@ PAAssetManager * assetManager;
             else {
                 UIImageView * imageView = [[UIImageView alloc] init];
                 [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
-                return [[UIImageView alloc] initWithImage:imageView.image];
+                return imageView;
             }
         }
         else {

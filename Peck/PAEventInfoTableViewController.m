@@ -716,9 +716,7 @@ BOOL reloaded = NO;
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    NSLog(@"AAAA");
     if (textField == self.keyboardAccessory) {
-        NSLog(@"BBBB");
         [self.realKeyboardAccessory becomeFirstResponder];
     }
 }
