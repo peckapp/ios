@@ -9,6 +9,9 @@
 
 
 #import "PAPecksViewController.h"
+#import "PAAppDelegate.h"
+#import "Peck.h"
+#import "PAPeckCell.h"
 
 @interface PAPecksViewController ()
 
@@ -18,6 +21,10 @@
 
 static NSString *cellIdentifier = PAPecksIdentifier;
 static NSString *nibName = @"PAPeckCell";
+
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -34,6 +41,13 @@ static NSString *nibName = @"PAPeckCell";
     self.items = @[@"Item 1", @"Item 2", @"Item 3"];
     self.title = @"Pecks";
     
+    NSError *error=nil;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -53,25 +67,35 @@ static NSString *nibName = @"PAPeckCell";
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return [[_fetchedResultsController sections] count];
+
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [self.items count];
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
+    return [sectionInfo numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    PAPeckCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         // Configure cell by loading a nib.
         [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     }
-    // Return the cell.
+    
+    [self configureCell:cell atIndexPath:indexPath];
+    
     return cell;
+}
+
+-(void)configureCell:(PAPeckCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    Peck* peck = [_fetchedResultsController objectAtIndexPath:indexPath];
+    cell.messageLabel.text = peck.message;
+    cell.titleLabel.text = @"Peck";
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -85,6 +109,105 @@ static NSString *nibName = @"PAPeckCell";
     // Return cell size.
     return cell.frame.size.height;
 }
+
+
+#pragma mark - managing the fetched results controller
+
+-(NSFetchedResultsController *)fetchedResultsController
+{
+    if(_fetchedResultsController!=nil){
+        return _fetchedResultsController;
+    }
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
+    
+    NSString * eventString = @"Peck";
+    NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    // Set the batch size to a suitable number.
+    [fetchRequest setFetchBatchSize:20];
+    
+    // Edit the sort key as appropriate.
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"created_at" ascending:YES];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    // Edit the section name key path and cache name if appropriate.
+    // nil for section name key path means "no sections".
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
+                                                             initWithFetchRequest:fetchRequest
+                                                             managedObjectContext:_managedObjectContext
+                                                             sectionNameKeyPath:nil //this needs to be nil
+                                                             cacheName:nil];
+    
+    aFetchedResultsController.delegate = self;
+    
+    self.fetchedResultsController = aFetchedResultsController;
+    return _fetchedResultsController;
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView beginUpdates];
+}
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{
+    NSLog(@"did change object");
+    
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:
+            
+            [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.tableView
+             deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            [self.tableView cellForRowAtIndexPath:indexPath];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            [self.tableView
+             deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            
+            [self.tableView
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
+{
+    [self.tableView endUpdates];
+}
+
 
 - (IBAction)cancelButton:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^(void){}];
