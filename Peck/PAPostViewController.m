@@ -67,7 +67,9 @@
     
     self.locationTextField.delegate = self;
     
+    [self.startTimePicker addTarget:self action:@selector(dateChanged:)forControlEvents:UIControlEventValueChanged];
     
+    [self.endTimePicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -109,8 +111,48 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)dateChanged:(id)sender{
+    if(sender==self.startTimePicker){
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+        
+        NSString *stringFromDate = [formatter stringFromDate:self.startTimePicker.date];
+        self.startTimeLabel.text = stringFromDate;
+        if([self.startTimePicker.date compare:self.endTimePicker.date]==NSOrderedDescending || [self.endTimeLabel.text isEqualToString:@"None"]){
+            //if the start time is after the end time or the end time has not been set yet
+            NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+            [dateComponents setHour:1];
+        
+            self.endTimePicker.date = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:self.startTimePicker.date options:0];
+        
+            stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
+            self.endTimeLabel.text = stringFromDate;
+        }
+    }else if(sender == self.endTimePicker){
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+        NSString* stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
+        //self.endTimeLabel.text = stringFromDate;
+        
+        if([self.endTimePicker.date compare:self.startTimePicker.date]==NSOrderedAscending){
+            //if the end time if before the start time
+            NSDictionary* attributes = @{
+                                     NSStrikethroughStyleAttributeName: [NSNumber numberWithInt:NSUnderlineStyleSingle]
+                                     };
+        
+            NSAttributedString* attrText = [[NSAttributedString alloc] initWithString:stringFromDate attributes:attributes];
+        
+            self.endTimeLabel.attributedText = attrText;
+        }else{
+            //if the end time is after the start time
+            self.endTimeLabel.text = stringFromDate;
+        }
+    }
+
+}
+
 /*
-//DO NOT DELETE (for now) 
+//DO NOT DELETE (for now)
  
 #pragma mark - managing the keyboard notifications
 
@@ -246,6 +288,11 @@
     [self dismissViewControllerAnimated: YES completion: nil];
 }
 
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+
+}
+
 # pragma mark state control
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -269,10 +316,11 @@
         self.startTimePickerCell.tag = cellStateAlwaysOff;
 
         // Update labels
+        /*
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
         NSString *stringFromDate = [formatter stringFromDate:self.startTimePicker.date];
-        self.startTimeLabel.text = stringFromDate;
+        self.startTimeLabel.text = stringFromDate;*/
     }
     else {
         self.startTimePickerCell.tag = 0;
@@ -282,10 +330,11 @@
         self.endTimePickerCell.tag = cellStateAlwaysOff;
 
         // Update labels
+        /*
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
         NSString *stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
-        self.endTimeLabel.text = stringFromDate;
+        self.endTimeLabel.text = stringFromDate;*/
     }
     else {
         self.endTimePickerCell.tag = 0;

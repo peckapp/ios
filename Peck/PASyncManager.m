@@ -39,7 +39,7 @@
 @interface PASyncManager ()
 
 - (NSDictionary*) addUDIDToDictionary:(NSDictionary*)dictionary;
-- (NSString*)currentUDID;
+
 @property (weak, nonatomic) UIViewController* initialViewController;
 
 @end
@@ -116,6 +116,7 @@
                                           if(![[userAttributes objectForKey:@"first_name"] isKindOfClass:[NSNull class]]){
                                               //if the user was registered
                                               [defaults setObject:[userAttributes objectForKey:@"api_key"] forKey:@"api_key"];
+                                              [defaults setObject:[userAttributes objectForKey:@"user_id"] forKey:@"user_id"];
                                               NSString* message = [@"Would you like to use " stringByAppendingString:[userAttributes objectForKey:@"first_name"]];
                                               message = [message stringByAppendingString:@"'s information?"];
                                               UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:@"Logged In User Exists"
@@ -184,7 +185,7 @@
             UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
             UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
             PAInitialViewController* root = loginRoot.viewControllers[0];
-            root.justOpenedApp=NO;
+            root.justOpenedApp=YES;
             [self.initialViewController presentViewController:loginRoot animated:YES completion:nil];
             //segue to the login page
         }
