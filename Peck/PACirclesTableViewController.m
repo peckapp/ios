@@ -735,8 +735,8 @@ BOOL viewingCircles;
    
     if(![text isEqualToString:@""]){
         PACircleCell *selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
-        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [selectedCell.commentsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+        // NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        // [selectedCell.commentsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
 
         NSLog(@"post the comment");
         //NSString *commentText = cell.commentTextView.text;
@@ -763,12 +763,12 @@ BOOL viewingCircles;
 
 - (void)expandTableViewCell:(PACommentCell *)cell {
     NSLog(@"still expanding!!");
-    PACircleCell *circleCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+    PACircleCell *circleCell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
     [circleCell expand:cell];
 }
 
 -(void)compressTableViewCell:(PACommentCell *)cell{
-    PACircleCell *circleCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+    PACircleCell *circleCell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
     [circleCell compress:cell];
 }
 
