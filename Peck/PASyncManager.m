@@ -978,7 +978,9 @@
     peck.message = [dictionary objectForKey:@"message"];
     peck.id = [dictionary objectForKey:@"id"];
     peck.created_at=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"created_at"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
-    peck.invitation_id =[dictionary objectForKey:@"invitation"];
+    if(![[dictionary objectForKey:@"invitation"] isKindOfClass:[NSNull class]]){
+        peck.invitation_id =[dictionary objectForKey:@"invitation"];
+    }
     
 }
 
