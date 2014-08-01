@@ -118,6 +118,12 @@
                                               //if the user was registered
                                               [defaults setObject:[userAttributes objectForKey:@"api_key"] forKey:@"api_key"];
                                               [defaults setObject:[userAttributes objectForKey:@"id"] forKey:@"user_id"];
+                                              if(![[userAttributes objectForKey:@"institution_id"] isKindOfClass:[NSNull class]]){
+                                                  [defaults setObject:[userAttributes objectForKey:@"institution_id"] forKey:@"institution_id"];
+                                              }else{
+                                                  [defaults setObject:[NSNumber numberWithInt:1] forKey:@"institution_id"];
+                                              }
+                                              
                                               NSString* message = [@"Would you like to use " stringByAppendingString:[userAttributes objectForKey:@"first_name"]];
                                               message = [message stringByAppendingString:@"'s information?"];
                                               UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:@"Logged In User Exists"
