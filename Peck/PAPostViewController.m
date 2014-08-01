@@ -393,20 +393,10 @@
             [alert show];
         
         } else {
-            //[[PAImageManager imageManager] WriteImage:imageData WithTitle:event.title];
-            //[event setId:_userEvents[0]];
             
             NSNumber *instID = [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
             
-            
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                                 NSUserDomainMask, YES);
-            NSString *documentsDirectory = [paths objectAtIndex:0];
-            NSString* path = [documentsDirectory stringByAppendingPathComponent:
-                              @"event_photo.jpeg" ];
             NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
-            [data writeToFile:path atomically:YES];
-            //NSLog(@"path: %@", path);
             
             NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                                       self.titleField.text,@"title",
@@ -424,10 +414,12 @@
             
             self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+            self.titleField.text=@"";
+            self.descriptionField.text=@"";
+            self.startTimeLabel.text =@"None";
+            self.endTimeLabel.text = @"None";
             [self.tableView reloadData];
             
-            
-            //[self performSegueWithIdentifier:@"showEvents" sender:self];
             
             // parent of self is a navigation controller, its parent is the dropdown controller
             [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];
