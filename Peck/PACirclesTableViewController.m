@@ -26,6 +26,12 @@
 @property (strong, nonatomic) UITapGestureRecognizer * tapRecognizer;
 @property (strong, nonatomic) NSMutableArray* addedPeers;
 
+@property (strong, nonatomic) UIView * keyboardAccessoryView;
+@property (strong, nonatomic) UITextField * keyboardAccessory;
+@property (strong, nonatomic) UIView * realKeyboardAccessoryView;
+@property (strong, nonatomic) UITextField * realKeyboardAccessory;
+@property (strong, nonatomic) UIButton * postButton;
+
 @end
 
 @implementation PACirclesTableViewController
@@ -53,47 +59,6 @@ BOOL viewingCircles;
         // Custom initialization
     }
     return self;
-}
--(void)viewWillAppear:(BOOL)animated {
-    //[super viewWillAppear:animated];
-    //when this is uncommented, a strange error occurs where the circle cell will scroll up when the comment cell is selected
-    
-    [[PASyncManager globalSyncManager] updateCircleInfo];
-    viewingCircles=YES;
-    [self registerForKeyboardNotifications];
-    initialFrame=self.tableView.frame;
-
-    // TODO: This crashes sometimes
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        while (viewingCircles) {
-            if (viewingCell && self.selectedIndexPath.row != [_fetchedResultsController.fetchedObjects count]) {
-                //if you are viewing a cell that is not the final (create circle) cell
-                PACircleCell *selectedCircleCell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
-                NSString* circleID =[selectedCircleCell.circle.id stringValue];
-                [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
-            }
-            [NSThread sleepForTimeInterval:reloadTime];
-        }
-    });
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    [self.tableView reloadData];
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    
-    if(viewingCell){
-        PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
-        [cell endEditing:YES];
-        [self dismissKeyboard:self];
-        [self dismissCircleTitleKeyboard];
-    }
-    viewingCircles=NO;
-    [self deregisterFromKeyboardNotifications];
 }
 
 
@@ -146,12 +111,92 @@ BOOL viewingCircles;
    /* self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
     self.tapRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:self.tapRecognizer];*/
+
+
+    self.keyboardAccessoryView = [[UIView alloc] init];
+    self.keyboardAccessory = [[UITextField alloc] init];
+    self.keyboardAccessoryView.backgroundColor = [UIColor whiteColor];
+    self.keyboardAccessory.backgroundColor = [UIColor lightGrayColor];
+    [self.keyboardAccessoryView addSubview:self.keyboardAccessory];
+    self.keyboardAccessory.delegate = self;
+    [self.view addSubview:self.keyboardAccessoryView];
+    self.keyboardAccessory.hidden = YES;
+
+    self.realKeyboardAccessoryView = [[UIView alloc] init];
+    self.realKeyboardAccessory = [[UITextField alloc] init];
+    self.realKeyboardAccessoryView.backgroundColor = [UIColor whiteColor];
+    self.realKeyboardAccessory.backgroundColor = [UIColor lightGrayColor];
+    self.realKeyboardAccessory.delegate = self;
+
+    self.postButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    [self.postButton addTarget:self action:@selector(didSelectPostButton:) forControlEvents:UIControlEventTouchUpInside];
+
+    [self.realKeyboardAccessoryView addSubview:self.realKeyboardAccessory];
+    [self.realKeyboardAccessoryView addSubview:self.postButton];
+    self.keyboardAccessory.inputAccessoryView = self.realKeyboardAccessoryView;
+
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    //[super viewWillAppear:animated];
+    //when this is uncommented, a strange error occurs where the circle cell will scroll up when the comment cell is selected
+
+    [[PASyncManager globalSyncManager] updateCircleInfo];
+    viewingCircles=YES;
+    [self registerForKeyboardNotifications];
+    initialFrame=self.tableView.frame;
+
+    // TODO: This crashes sometimes
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        while (viewingCircles) {
+            if (viewingCell && self.selectedIndexPath.row != [_fetchedResultsController.fetchedObjects count]) {
+                //if you are viewing a cell that is not the final (create circle) cell
+                PACircleCell *selectedCircleCell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+                NSString* circleID =[selectedCircleCell.circle.id stringValue];
+                [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
+            }
+            [NSThread sleepForTimeInterval:reloadTime];
+        }
+    });
+
+    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+    self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
+    self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0, self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
+
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
+    [self.tableView reloadData];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+
+    if(viewingCell){
+        PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+        [cell endEditing:YES];
+        [self dismissKeyboard:self];
+        [self dismissCircleTitleKeyboard];
+    }
+    viewingCircles=NO;
+    [self deregisterFromKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)didSelectPostButton:(id)sender
+{
+    [self postComment:self.realKeyboardAccessory.text];
+    [self.realKeyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
 }
 
 #pragma mark - text field delegate
@@ -286,22 +331,28 @@ BOOL viewingCircles;
 
         self.tableView.scrollEnabled = NO;
         viewingCell=YES;
+        self.keyboardAccessory.hidden = NO;
+        self.keyboardAccessoryView.frame = CGRectMake(0, cell.frame.origin.y + cell.frame.size.height - 44, self.view.frame.size.width, 44);
         [self configureCell:cell atIndexPath:indexPath];
-    }else if(viewingCell && cell.addingMembers){
-        if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
+    }
+    else {
+        if (cell.addingMembers) {
+            if (indexPath.row==[_fetchedResultsController.fetchedObjects count]) {
+                [self condenseCircleCell:cell atIndexPath:indexPath];
+            }
+            else {
+                cell.addingMembers = NO;
+                [self dismissKeyboard:self];
+                [self configureCell:cell atIndexPath:indexPath];
+                [cell performFetch];
+            }
+            
+        }
+        else {
             [self condenseCircleCell:cell atIndexPath:indexPath];
         }
-        else{
-            cell.addingMembers=NO;
-            [self dismissKeyboard:self];
-            [self configureCell:cell atIndexPath:indexPath];
-            [cell performFetch];
-        }
-        
-    }else if(viewingCell && !cell.addingMembers){
-        [self condenseCircleCell:cell atIndexPath:indexPath];
+
     }
-    
 }
 
 -(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
@@ -310,6 +361,9 @@ BOOL viewingCircles;
     [self.addedPeers removeAllObjects];
     self.inviteTextField.text=@"";
     viewingCell=NO;
+    self.keyboardAccessory.hidden = YES;
+    [self.realKeyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
     self.tableView.scrollEnabled = YES;
     [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
     cell.addingMembers=NO;
@@ -669,17 +723,17 @@ BOOL viewingCircles;
     [commentCell.commentTextView resignFirstResponder];
 }
 
--(void)postComment:(PACommentCell *)cell{
+-(void)postComment:(NSString *)text
+{
    
-    if(cell.commentTextView.textColor==[UIColor blackColor] && ![cell.commentTextView.text isEqualToString:@""]){
-        [cell.commentTextView resignFirstResponder];
+    if(![text isEqualToString:@""]){
         PACircleCell *selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
-        selectedCell.commentText=nil;
         NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [selectedCell.commentsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+
         NSLog(@"post the comment");
-        NSString *commentText = cell.commentTextView.text;
-        cell.commentTextView.text=@"";
+        //NSString *commentText = cell.commentTextView.text;
+        //cell.commentTextView.text=@"";
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSNumber *userID = [defaults objectForKey:@"user_id"];
@@ -687,7 +741,7 @@ BOOL viewingCircles;
    
     
         NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                commentText, @"content",
+                                text, @"content",
                                 userID, @"user_id",
                                 @"circles", @"category",
                                 selectedCell.circle.id, @"comment_from",
@@ -697,6 +751,8 @@ BOOL viewingCircles;
         [[PASyncManager globalSyncManager] postComment:dictionary];
     }
 }
+
+
 
 - (void)expandTableViewCell:(PACommentCell *)cell {
     NSLog(@"still expanding!!");

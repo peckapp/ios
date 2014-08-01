@@ -140,7 +140,7 @@ PAAssetManager * assetManager;
     }
     else if (tableView == self.commentsTableView) {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
-        return [sectionInfo numberOfObjects]+1;
+        return [sectionInfo numberOfObjects];
     }
     else if(tableView== self.suggestedMembersTableView){
         return [self.suggestedMembers count];
@@ -216,7 +216,8 @@ PAAssetManager * assetManager;
     NSLog(@"configure cell");
     cell.parentCircleTableView = self.parentViewController;
     cell.parentCell=self;
-    cell.tag = indexPath.row - 1;
+    cell.tag = indexPath.row;
+    /*
     if([indexPath row] == 0){
         
         [cell.likeButton setHidden:YES];
@@ -236,8 +237,8 @@ PAAssetManager * assetManager;
         cell.nameLabel.text=userName;
         // cell.profilePicture.image = self.userPicture;
     }
-    else{
-        Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+     */
+        Comment *tempComment = _fetchedResultsController.fetchedObjects[indexPath.row];
         cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
         [cell.likeButton setHidden:NO];
         [cell.numberOfLikesLabel setHidden:NO];
@@ -276,8 +277,6 @@ PAAssetManager * assetManager;
             cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
             cell.expanded=NO;
         }
-        // this fixes the problem where the comment text would occasionally be cut off when first loaded
-    }
 }
 
 -(BOOL)userHasLikedComment:(Comment*)comment{
@@ -505,7 +504,7 @@ PAAssetManager * assetManager;
     switch(type)
     {
         case NSFetchedResultsChangeInsert:{
-            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
+            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]) inSection:[newIndexPath section] ];
             [tableView
              //the cell must be inserted below the post cell
              insertRowsAtIndexPaths:[NSArray arrayWithObject:realIndexPath]
@@ -520,7 +519,7 @@ PAAssetManager * assetManager;
             
         case NSFetchedResultsChangeUpdate:
         {
-            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]+1) inSection:[newIndexPath section] ];
+            NSIndexPath *realIndexPath = [NSIndexPath indexPathForRow:([newIndexPath row]) inSection:[newIndexPath section] ];
             PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:realIndexPath];
             [self configureCommentCell:cell atIndexPath:realIndexPath];
             break;

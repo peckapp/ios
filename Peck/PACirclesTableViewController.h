@@ -29,7 +29,7 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 -(void)dismissCommentKeyboard;
--(void)postComment:(PACommentCell*)cell;
+-(void)postComment:(NSString *)cell;
 -(void)showProfileOf:(Peer*)member;
 -(void)expandTableViewCell:(PACommentCell *)cell;
 -(void)compressTableViewCell:(PACommentCell *)cell;
