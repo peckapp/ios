@@ -32,7 +32,7 @@
 // sends post request to the server completing the user's other info after the registration process is triggered
 -(void)updateUserWithInfo:(NSDictionary*)userInfo withImage:(NSData*)imageData;
 // authenticates the user and updates the authentication token returned from the server
-- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UIViewController*)controller;
+- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(BOOL)goToHomepage;
 // sends patch request to the server when the registration process is complete
 -(void)registerUserWithInfo:(NSDictionary*)userInfo;
 

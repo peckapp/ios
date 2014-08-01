@@ -303,7 +303,7 @@
     
 }
 
-- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller
+- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(BOOL)goToHomepage
 {
     // adds the unique user device token to the userInfo NSDictionary
     NSDictionary* userInfoWithUDID = [self addUDIDToDictionary:userInfo];
@@ -362,7 +362,14 @@
                                       //take care of some necessary login stuff
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       
-                                      [controller dismissViewControllerAnimated:YES completion:nil];
+                                      
+                                      if(goToHomepage){
+                                          PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                                        UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+                                        [appDelegate.window setRootViewController:newRoot];
+                                      }else{
+                                        [controller dismissViewControllerAnimated:YES completion:nil];
+                                      }
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {

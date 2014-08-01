@@ -96,7 +96,7 @@
                                    self.emailField.text,@"email",
                                    self.passwordField.text, @"password",
                                    nil];
-        [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self];
+        [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self direction:self.justOpenedApp];
     }
 }
 
