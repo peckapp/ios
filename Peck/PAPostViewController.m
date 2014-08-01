@@ -29,6 +29,7 @@
 
 @interface PAPostViewController () {
 
+    
 }
 
 @property BOOL startPickerIsOpen;
@@ -45,6 +46,7 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+@synthesize formatter;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -70,6 +72,9 @@
     [self.startTimePicker addTarget:self action:@selector(dateChanged:)forControlEvents:UIControlEventValueChanged];
     
     [self.endTimePicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
+    
+    formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -113,13 +118,13 @@
 
 -(void)dateChanged:(id)sender{
     if(sender==self.startTimePicker){
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
         
         NSString *stringFromDate = [formatter stringFromDate:self.startTimePicker.date];
         self.startTimeLabel.text = stringFromDate;
+        
         if([self.startTimePicker.date compare:self.endTimePicker.date]==NSOrderedDescending || [self.endTimeLabel.text isEqualToString:@"None"]){
             //if the start time is after the end time or the end time has not been set yet
+            
             NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
             [dateComponents setHour:1];
         
@@ -129,10 +134,7 @@
             self.endTimeLabel.text = stringFromDate;
         }
     }else if(sender == self.endTimePicker){
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
         NSString* stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
-        //self.endTimeLabel.text = stringFromDate;
         
         if([self.endTimePicker.date compare:self.startTimePicker.date]==NSOrderedAscending){
             //if the end time if before the start time
