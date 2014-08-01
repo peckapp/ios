@@ -542,8 +542,8 @@ PAAssetManager * assetManager;
 }
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     if(scrollView==self.commentsTableView){
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [self.commentsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+        // NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        // [self.commentsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
         PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentViewController;
         [parent dismissCommentKeyboard];
     }
