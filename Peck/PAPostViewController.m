@@ -434,6 +434,7 @@
                                       [NSNumber numberWithBool:YES],@"send_push_notification",
                                       @"event_invite",@"notification_type",
                                       [NSNumber numberWithBool:self.publicSwitch.on], @"public",
+                                      [defaults objectForKey:@"user_id"],@"invited_by",
                                       nil];
             
             [[PASyncManager globalSyncManager] postEvent: setEvent withImage:data];

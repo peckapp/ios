@@ -158,6 +158,10 @@ static NSString *nibName = @"PAPeckCell";
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    Peck* peck = [_fetchedResultsController objectAtIndexPath:indexPath];
+    if([peck.notification_type isEqualToString:@"event_invite"]){
+        NSLog(@"show the detail of the event");
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 #pragma mark - managing the fetched results controller
