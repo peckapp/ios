@@ -132,6 +132,12 @@
         
             stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
             self.endTimeLabel.text = stringFromDate;
+        }else{
+            //if the times are in the correct order, reset the end time label.
+            //This is here in case the end time label has a strike through the time, it will reset if you change the start time to before the previously illegal end time
+            stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
+            self.endTimeLabel.text = stringFromDate;
+            
         }
     }else if(sender == self.endTimePicker){
         NSString* stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
