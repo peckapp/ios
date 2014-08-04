@@ -17,6 +17,8 @@
 //@property (strong, nonatomic) NSMutableArray* invitedPeople;
 @property (strong, nonatomic) NSMutableDictionary* invitedPeople;
 @property (strong, nonatomic) NSMutableDictionary* invitedCircles;
+@property (weak, nonatomic) NSArray* invitedPeopleArray;
+@property (weak, nonatomic) NSArray* invitedCirclesArray;
 
 @property (weak, nonatomic) IBOutlet UITableView *invitedPeopleTableView;
 @property (strong, nonatomic) UIViewController* parentPostViewController;
