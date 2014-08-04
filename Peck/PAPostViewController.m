@@ -429,10 +429,9 @@
                                       instID, @"institution_id",
                                       self.startTimeLabel.text, @"start_date",
                                       self.endTimeLabel.text, @"end_date",
-                                      self.invitedPeople,@"event_member_ids",
+                                      finalInvites, @"event_member_ids",
                                       alert,@"message",
                                       [NSNumber numberWithBool:YES],@"send_push_notification",
-                                      @"event_invite",@"notification_type",
                                       [NSNumber numberWithBool:self.publicSwitch.on], @"public",
                                       [defaults objectForKey:@"user_id"],@"invited_by",
                                       nil];

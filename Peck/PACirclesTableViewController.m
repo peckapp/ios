@@ -775,7 +775,10 @@ BOOL viewingCircles;
 
 -(void)showProfileOf:(Peer *)member{
     selectedPeer=member;
-    [self performSegueWithIdentifier:@"selectProfile" sender:self];
+    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *profileController = [loginStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
+    [self presentViewController:profileController animated:YES completion:nil];
+    //[self performSegueWithIdentifier:@"selectProfile" sender:self];
 }
 
 

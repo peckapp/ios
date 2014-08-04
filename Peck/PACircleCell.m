@@ -405,10 +405,10 @@ PAAssetManager * assetManager;
             [parent promptToAddMemberToCircleCell:self];
         }
         else{
-            /*PACirclesTableViewController *parent = (PACirclesTableViewController *) self.parentViewController;
-            [parent showProfileOf:member];*/
-             Peer *member = self.members[[indexPath row]];
-             NSLog(@"view the member %@", member.name);
+            PACirclesTableViewController *parent = (PACirclesTableViewController *) self.parentViewController;
+            Peer *member = self.members[[indexPath row]];
+            NSLog(@"view the member %@", member.name);
+            [parent showProfileOf:member];
         }
         [self.profilesTableView deselectRowAtIndexPath:indexPath animated:YES];
     }
