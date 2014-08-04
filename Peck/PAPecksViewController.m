@@ -99,10 +99,13 @@ static NSString *nibName = @"PAPeckCell";
 
 -(void)configureCell:(PAPeckCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     Peck* peck = [_fetchedResultsController objectAtIndexPath:indexPath];
+    
     cell.messageTextView.text = peck.message;
     cell.titleLabel.text = @"Peck";
-    if([peck.notification_type isEqualToString:@"circle_invite"]){
+    if([peck.notification_type isEqualToString:@"circle_invite"] || [peck.notification_type isEqualToString:@"event_invite"]){
         cell.invitation_id = [peck.invitation_id integerValue];
+        cell.invitation_id = [peck.invitation_id integerValue];
+        cell.notification_type = peck.notification_type;
     }
     [cell.acceptButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [cell.declineButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];

@@ -185,9 +185,10 @@ PAAssetManager * assetManager;
     self.invitedPeopleArray = [self.invitedPeople allValues];
     self.invitedCirclesArray = [self.invitedCircles allValues];
     if(indexPath.row<[self.invitedCirclesArray count]){
-    
+        UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
+        cell.backgroundView = imageView;
     }else{
-        NSNumber* peerID = self.invitedPeopleArray[indexPath.row];
+        NSNumber* peerID = self.invitedPeopleArray[indexPath.row - [self.invitedCirclesArray count]];
         Peer* peer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
         UIView* thumbnail = [assetManager createThumbnailWithFrame:cell.frame imageView:[self imageForPeer:peer]];
 

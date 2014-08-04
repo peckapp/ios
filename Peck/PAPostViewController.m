@@ -15,6 +15,7 @@
 #import "PASessionManager.h"
 #import "PASyncManager.h"
 #import "PAInvitationsTableViewController.h"
+#import "PAFetchManager.h"
 
 /*
  State for each cell is defined by the cell's tag.
@@ -399,10 +400,28 @@
             [alert show];
         
         } else {
+            NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
             
-            NSNumber *instID = [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
+            NSNumber *instID = [defaults objectForKey:@"institution_id"];
             
             NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
+            
+            NSMutableArray* finalInvites = [self.invitedPeople mutableCopy];
+            for( NSNumber* circleID in self.invitedCircles){
+                Circle* circle = [[PAFetchManager sharedFetchManager] getObject:circleID withEntityType:@"Circle" andType:nil];
+                NSSet*members = circle.circle_members;
+                NSArray* circleMembers = [members allObjects];
+                for(Peer* peer in circleMembers){
+                    if(![finalInvites containsObject:peer.id]){
+                        [finalInvites addObject:peer.id];
+                    }
+                }
+            }
+            
+            NSLog(@"final invites: %@", finalInvites);
+            NSString* alert = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
+            alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
+            alert = [alert stringByAppendingString:@" has invited you to an event"];
             
             NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                                       self.titleField.text,@"title",
@@ -411,8 +430,9 @@
                                       self.startTimeLabel.text, @"start_date",
                                       self.endTimeLabel.text, @"end_date",
                                       self.invitedPeople,@"event_member_ids",
-                                      @"You have been invited to an event",@"message",
+                                      alert,@"message",
                                       [NSNumber numberWithBool:YES],@"send_push_notification",
+                                      @"event_invite",@"notification_type",
                                       [NSNumber numberWithBool:self.publicSwitch.on], @"public",
                                       nil];
             
