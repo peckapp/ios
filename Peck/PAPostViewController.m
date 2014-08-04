@@ -410,6 +410,9 @@
                                       instID, @"institution_id",
                                       self.startTimeLabel.text, @"start_date",
                                       self.endTimeLabel.text, @"end_date",
+                                      self.invitedPeople,@"event_member_ids",
+                                      @"You have been invited to an event",@"message",
+                                      [NSNumber numberWithBool:YES],@"send_push_notification",
                                       [NSNumber numberWithBool:self.publicSwitch.on], @"public",
                                       nil];
             
