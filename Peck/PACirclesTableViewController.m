@@ -163,7 +163,8 @@ BOOL viewingCircles;
     self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
     self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
-    self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0, self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
+    self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0,
+                                       self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
 
 }
 
@@ -209,7 +210,8 @@ BOOL viewingCircles;
     [selectedCell.suggestedMembersTableView reloadData];
 }
 
-/*- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+/*
+ - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     //TODO: this is where we will send a new member to a circle that is already created
     NSLog(@"add a new member");
     HTAutocompleteTextField *tempTextField = (HTAutocompleteTextField *)textField;
@@ -236,9 +238,8 @@ BOOL viewingCircles;
                                     nil];
         [[PASyncManager globalSyncManager] postCircleMember:tempPeer withDictionary:newMember forCircle:selectedCircle withSender:self ];
     }
-
-    
-}*/
+}
+*/
 
 -(void)addMember:(Peer*)newMember{
     self.inviteTextField.text=@"";
@@ -341,21 +342,17 @@ BOOL viewingCircles;
         self.keyboardAccessory.hidden = NO;
         self.keyboardAccessoryView.frame = CGRectMake(0, cell.frame.origin.y + cell.frame.size.height - 44, self.view.frame.size.width, 44);
         [self configureCell:cell atIndexPath:indexPath];
-    }
-    else {
+    } else {
         if (cell.addingMembers) {
-            if (indexPath.row==[_fetchedResultsController.fetchedObjects count]) {
+            if (indexPath.row == [_fetchedResultsController.fetchedObjects count]) {
                 [self condenseCircleCell:cell atIndexPath:indexPath];
-            }
-            else {
+            } else {
                 cell.addingMembers = NO;
                 [self dismissKeyboard:self];
                 [self configureCell:cell atIndexPath:indexPath];
                 [cell performFetch];
             }
-            
-        }
-        else {
+        } else {
             [self condenseCircleCell:cell atIndexPath:indexPath];
         }
 
