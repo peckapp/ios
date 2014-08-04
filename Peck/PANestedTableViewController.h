@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PANestedTableViewController : UITableViewController
+@interface PANestedTableViewController : UIViewController
+
+@property (strong, nonatomic) UITableView * tableView;
 
 - (UITableViewCell *)configureDetailViewControllerCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
