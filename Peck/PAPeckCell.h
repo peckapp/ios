@@ -17,11 +17,15 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 
+
+@property (strong,nonatomic) NSNumber* invited_by;
 @property (strong, nonatomic) NSNumber* peckID;
 @property (nonatomic) NSInteger invitation_id;
 
 @property (weak, nonatomic) IBOutlet UIButton *acceptButton;
 @property (weak, nonatomic) IBOutlet UIButton *declineButton;
+
+@property (weak, nonatomic) NSString* notification_type;
 
 @property BOOL interactedWith;
 

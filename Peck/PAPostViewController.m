@@ -15,6 +15,7 @@
 #import "PASessionManager.h"
 #import "PASyncManager.h"
 #import "PAInvitationsTableViewController.h"
+#import "PAFetchManager.h"
 
 /*
  State for each cell is defined by the cell's tag.
@@ -132,6 +133,12 @@
         
             stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
             self.endTimeLabel.text = stringFromDate;
+        }else{
+            //if the times are in the correct order, reset the end time label.
+            //This is here in case the end time label has a strike through the time, it will reset if you change the start time to before the previously illegal end time
+            stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
+            self.endTimeLabel.text = stringFromDate;
+            
         }
     }else if(sender == self.endTimePicker){
         NSString* stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
@@ -393,10 +400,28 @@
             [alert show];
         
         } else {
+            NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
             
-            NSNumber *instID = [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
+            NSNumber *instID = [defaults objectForKey:@"institution_id"];
             
             NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
+            
+            NSMutableArray* finalInvites = [self.invitedPeople mutableCopy];
+            for( NSNumber* circleID in self.invitedCircles){
+                Circle* circle = [[PAFetchManager sharedFetchManager] getObject:circleID withEntityType:@"Circle" andType:nil];
+                NSSet*members = circle.circle_members;
+                NSArray* circleMembers = [members allObjects];
+                for(Peer* peer in circleMembers){
+                    if(![finalInvites containsObject:peer.id]){
+                        [finalInvites addObject:peer.id];
+                    }
+                }
+            }
+            
+            NSLog(@"final invites: %@", finalInvites);
+            NSString* alert = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
+            alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
+            alert = [alert stringByAppendingString:@" has invited you to an event"];
             
             NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                                       self.titleField.text,@"title",
@@ -404,7 +429,11 @@
                                       instID, @"institution_id",
                                       self.startTimeLabel.text, @"start_date",
                                       self.endTimeLabel.text, @"end_date",
+                                      finalInvites, @"event_member_ids",
+                                      alert,@"message",
+                                      [NSNumber numberWithBool:YES],@"send_push_notification",
                                       [NSNumber numberWithBool:self.publicSwitch.on], @"public",
+                                      [defaults objectForKey:@"user_id"],@"invited_by",
                                       nil];
             
             [[PASyncManager globalSyncManager] postEvent: setEvent withImage:data];

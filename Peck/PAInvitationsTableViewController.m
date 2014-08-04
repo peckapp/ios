@@ -13,7 +13,9 @@
 #import "PAAppDelegate.h"
 #import "PASyncManager.h"
 #import "PAPostViewController.h"
-
+#import "PAAssetManager.h"
+#import "UIImageView+AFNetworking.h"
+#import "PAFetchManager.h"
 
 @interface PAInvitationsTableViewController ()
 
@@ -24,6 +26,8 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
+PAAssetManager * assetManager;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -37,6 +41,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    assetManager = [PAAssetManager sharedManager];
     
     [[PASyncManager globalSyncManager] updateCircleInfo];
     self.tableView.delegate = self;
@@ -148,7 +153,7 @@
     if(tableView==self.invitedPeopleTableView){
         return 44;
     }
-    return 71;
+    return 52;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -177,30 +182,63 @@
 }
 
 -(void)configurePreviewCell:(UITableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath{
-    if([self.invitedCircles count]>indexPath.row){
-        cell.backgroundColor = [UIColor blackColor];
-    }
-    
+    self.invitedPeopleArray = [self.invitedPeople allValues];
+    self.invitedCirclesArray = [self.invitedCircles allValues];
+    if(indexPath.row<[self.invitedCirclesArray count]){
+        UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"event-placeholder.png"]];
+        cell.backgroundView = imageView;
+    }else{
+        NSNumber* peerID = self.invitedPeopleArray[indexPath.row - [self.invitedCirclesArray count]];
+        Peer* peer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
+        UIView* thumbnail = [assetManager createThumbnailWithFrame:cell.frame imageView:[self imageForPeer:peer]];
 
-    else {
-        cell.backgroundColor = [UIColor lightGrayColor];
+        thumbnail.userInteractionEnabled = NO;
+        cell.backgroundView = thumbnail;
+
     }
-    
-    cell.transform = CGAffineTransformMakeRotation(M_PI_2);
+            cell.transform = CGAffineTransformMakeRotation(M_PI_2);
 }
 
 -(void)configureCell:(PAInvitationCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     if([self.suggestedInvites[indexPath.row] isKindOfClass:[Circle class]]){
         Circle* tempCircle = self.suggestedInvites[indexPath.row];
         cell.nameLabel.text = tempCircle.circleName;
-        cell.picture.image = [UIImage imageNamed:@"circles.jpeg"];
+        //cell.picture.image = [UIImage imageNamed:@"circles.jpeg"];
         
     }else if([self.suggestedInvites[indexPath.row] isKindOfClass:[Peer class]]){
         Peer* tempPeer = self.suggestedInvites[indexPath.row];
         cell.nameLabel.text = tempPeer.name;
-        cell.picture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+        //cell.picture.image = [UIImage imageNamed:@"event-placeholder.png"];
+        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageForPeer:tempPeer]];
+        if (cell.thumbnailView) {
+            [cell.thumbnailView removeFromSuperview];
+        }
+        [cell addSubview:thumbnail];
+        cell.thumbnailViewTemplate.backgroundColor = [UIColor whiteColor];
+        cell.thumbnailView = thumbnail;
     }
 }
+
+- (UIImageView *)imageForPeer:(Peer*)peer
+{
+    if (peer.imageURL) {
+        NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
+        UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+        if(image){
+            return [[UIImageView alloc] initWithImage:image];
+        }
+        else {
+            UIImageView * imageView = [[UIImageView alloc] init];
+            [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+            return imageView;
+        }
+    }
+    else {
+        return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
+    }
+    
+}
+
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if(tableView==self.tableView){

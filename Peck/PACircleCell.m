@@ -405,10 +405,10 @@ PAAssetManager * assetManager;
             [parent promptToAddMemberToCircleCell:self];
         }
         else{
-            /*PACirclesTableViewController *parent = (PACirclesTableViewController *) self.parentViewController;
-            [parent showProfileOf:member];*/
-             Peer *member = self.members[[indexPath row]];
-             NSLog(@"view the member %@", member.name);
+            PACirclesTableViewController *parent = (PACirclesTableViewController *) self.parentViewController;
+            Peer *member = self.members[[indexPath row]];
+            NSLog(@"view the member %@", member.name);
+            [parent showProfileOf:member];
         }
         [self.profilesTableView deselectRowAtIndexPath:indexPath animated:YES];
     }
@@ -618,15 +618,18 @@ PAAssetManager * assetManager;
         Peer * tempPeer = self.members[i];
         [circleMembers addObject:tempPeer.id];
     }
-    [circleMembers addObject:[defaults objectForKey:@"user_id"]];
+    //[circleMembers addObject:[defaults objectForKey:@"user_id"]];
     
+    NSString* alert = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
+    alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
+    alert = [alert stringByAppendingString:@" has invited you to a circle"];
     
     NSDictionary * newCircle = [NSDictionary dictionaryWithObjectsAndKeys:
                                 userID, @"user_id",
                                 institutionID, @"institution_id",
                                 self.titleTextField.text, @"circle_name",
                                 circleMembers, @"circle_member_ids",
-                                @"JOIN OR DIE!!!", @"message",
+                                alert, @"message",
                                 nil];
     
     [self endEditing:YES];

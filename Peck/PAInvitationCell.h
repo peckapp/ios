@@ -10,6 +10,7 @@
 
 @interface PAInvitationCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *picture;
+@property (weak, nonatomic) IBOutlet UIView *thumbnailViewTemplate;
 
+@property (strong, nonatomic) UIView * thumbnailView;
 @end
