@@ -198,7 +198,7 @@
     }else if([self.suggestedInvites[indexPath.row] isKindOfClass:[Peer class]]){
         Peer* tempPeer = self.suggestedInvites[indexPath.row];
         cell.nameLabel.text = tempPeer.name;
-        cell.picture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+        cell.picture.image = [UIImage imageNamed:@"profile_placeholder.png"];
     }
 }
 

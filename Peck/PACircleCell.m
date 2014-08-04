@@ -618,7 +618,7 @@ PAAssetManager * assetManager;
         Peer * tempPeer = self.members[i];
         [circleMembers addObject:tempPeer.id];
     }
-    [circleMembers addObject:[defaults objectForKey:@"user_id"]];
+    //[circleMembers addObject:[defaults objectForKey:@"user_id"]];
     
     
     NSDictionary * newCircle = [NSDictionary dictionaryWithObjectsAndKeys:
