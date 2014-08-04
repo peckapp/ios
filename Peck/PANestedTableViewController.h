@@ -10,4 +10,6 @@
 
 @interface PANestedTableViewController : UITableViewController
 
+- (UITableViewCell *)configureDetailViewControllerCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+
 @end

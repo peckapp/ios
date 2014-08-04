@@ -37,7 +37,7 @@
     [super viewWillAppear:animated];
     self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(11, 11, 22, 22)];
     [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
-    self.backButton.backgroundColor = [UIColor blackColor];
+    self.backButton.backgroundColor = [UIColor lightTextColor];
 }
 
 - (void)didReceiveMemoryWarning
