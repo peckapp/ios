@@ -63,29 +63,18 @@
 
 #pragma mark - User actions
 
--(void)sendUserDeviceToken:(NSString*)deviceToken{
-    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
-    NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                deviceToken, @"token",
-                                shortTermUDID, @"udid",
-                                //[store objectForKey:@"udid"],@"udid",
-                                nil];
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* deviceTokenURL = [@"api/users/" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
-    deviceTokenURL = [deviceTokenURL stringByAppendingString:@"/create_device_token"];
-    NSLog(@"device token dictionary: %@", dictionary);
-    [[PASessionManager sharedClient] PATCH:deviceTokenURL
-                               parameters:[self applyWrapper:@"user_device_token" toDictionary:dictionary]
+-(void)logoutUser{
+    [[PASessionManager sharedClient] DELETE:@"api/access/logout"
+                               parameters:[self authenticationParameters]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                      NSLog(@"Device Token JSON: %@", JSON);
+                                      
                                   }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
                                       
                                   }];
-
-
     
+
 }
 
 -(void)sendUDIDForInitViewController:(UIViewController*)initViewController{
@@ -114,9 +103,16 @@
                                           // if there was a user previously on this device (registered or not registered)
                                           
                                           if(![[userAttributes objectForKey:@"first_name"] isKindOfClass:[NSNull class]]){
+                                            
                                               //if the user was registered
                                               [defaults setObject:[userAttributes objectForKey:@"api_key"] forKey:@"api_key"];
-                                              [defaults setObject:[userAttributes objectForKey:@"user_id"] forKey:@"user_id"];
+                                              [defaults setObject:[userAttributes objectForKey:@"id"] forKey:@"user_id"];
+                                              if(![[userAttributes objectForKey:@"institution_id"] isKindOfClass:[NSNull class]]){
+                                                  [defaults setObject:[userAttributes objectForKey:@"institution_id"] forKey:@"institution_id"];
+                                              }else{
+                                                  [defaults setObject:[NSNumber numberWithInt:1] forKey:@"institution_id"];
+                                              }
+                                              
                                               NSString* message = [@"Would you like to use " stringByAppendingString:[userAttributes objectForKey:@"first_name"]];
                                               message = [message stringByAppendingString:@"'s information?"];
                                               UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:@"Logged In User Exists"
@@ -296,7 +292,7 @@
     
 }
 
-- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller
+- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(BOOL)goToHomepage
 {
     // adds the unique user device token to the userInfo NSDictionary
     NSDictionary* userInfoWithUDID = [self addUDIDToDictionary:userInfo];
@@ -333,7 +329,8 @@
                                       
                                       if(imageURL){
                                           NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
-                                          UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]]]];
+                                          NSURL* url =[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+                                          UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
                                           NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                                                                NSUserDomainMask, YES);
                                           NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -343,6 +340,7 @@
                                           [data writeToFile:path atomically:YES];
                                           NSLog(@"path: %@", path);
                                           [defaults setObject:path forKey:@"profile_picture"];
+                                          [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
                                       }
                                       
                                       if(![blurb isKindOfClass:[NSNull class]]){
@@ -355,7 +353,14 @@
                                       //take care of some necessary login stuff
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       
-                                      [controller dismissViewControllerAnimated:YES completion:nil];
+                                      
+                                      if(goToHomepage){
+                                          PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                                        UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+                                        [appDelegate.window setRootViewController:newRoot];
+                                      }else{
+                                        [controller dismissViewControllerAnimated:YES completion:nil];
+                                      }
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -746,11 +751,6 @@
                                parameters:[self applyWrapper:@"circle" toDictionary:dictionary]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         //NSLog(@"post circle success: %@", JSON);
-         /*NSDictionary *postsFromResponse = (NSDictionary*)JSON;
-         NSDictionary *circleDictionary = [postsFromResponse objectForKey:@"circle"];
-         //NSNumber *circleID = [circleDictionary objectForKey:@"id"];
-         //[self addMembers:members ToCircle:circleID];*/
          [self updateCircleInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -761,7 +761,7 @@
 }
 
 -(void)leaveCircle: (NSDictionary*) dictionary{
-    [[PASessionManager sharedClient] DELETE:@"api/circle_members"
+    [[PASessionManager sharedClient] DELETE:@"api/circle_members/leave_circle"
                                parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
@@ -791,20 +791,53 @@
 
 }
 
--(void)acceptCircleInvite:(NSNumber*)circleMemberID{
+-(void)acceptCircleInvite:(NSInteger)circleMemberID withPeckID:(NSNumber*)peckID{
+    NSString* acceptInviteURL = [circle_membersAPI stringByAppendingString:@"/"];
+    acceptInviteURL = [acceptInviteURL stringByAppendingString:[@(circleMemberID) stringValue]];
+    acceptInviteURL = [acceptInviteURL stringByAppendingString:@"/accept"];
+
     
-    /*
-    [[PASessionManager sharedClient] PATCH:circle_membersAPI
-                               parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            peckID, @"peck_id",
+                            [[self authenticationParameters] objectForKey:@"authentication" ], @"authentication",
+                            nil];
+    NSLog(@"accpet invite dictionary: %@", params);
+    [[PASessionManager sharedClient] PATCH:acceptInviteURL
+                               parameters:params
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         [circle addCircle_membersObject:newMember];
-         PACircleCell *circleCell = (PACircleCell*)sender;
-         [circleCell.profilesTableView reloadData];
+         [self updateCircleInfo];
+         [self updatePecks];
+         //we must update the pecks in order to change the interacted with value to true so that the buttons are no longer selectable
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
-                                  }];*/
+                                  }];
+}
+
+-(void)deleteCircleMember:(NSInteger)circleMemberID withPeckID:(NSNumber*)peckID{
+    NSString* circleMemberURL = [@"api/circle_members/" stringByAppendingString:[@(circleMemberID) stringValue]];
+    
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            peckID, @"peck_id",
+                            [[self authenticationParameters] objectForKey:@"authentication" ], @"authentication",
+                            nil];
+
+    
+    [[PASessionManager sharedClient] DELETE:circleMemberURL
+                                parameters:params
+                                   success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"deleted member JSON: %@", JSON);
+         NSDictionary* json = (NSDictionary*)JSON;
+         NSDictionary* circleMember = [json objectForKey:@"circle_member"];
+         [[PAFetchManager sharedFetchManager] removeCircle:[circleMember objectForKey:@"circle_id"]];
+         [self updateCircleInfo];
+         [self updatePecks];
+     }
+                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                       NSLog(@"ERROR: %@",error);
+                                   }];
 }
 
 /*-(void)updateModifiedCircle:(Circle*)circle withSender:(id)sender forPeer:(Peer*)newMember{
@@ -848,7 +881,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"update circle info JSON: %@",JSON);
+             NSLog(@"update circle info JSON: %@",JSON);
              NSDictionary *circlesDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [circlesDictionary objectForKey:@"circles"];
              for (NSDictionary *circleAttributes in postsFromResponse) {
@@ -964,6 +997,9 @@
              if(!peckAlreadyExists){
                  Peck * peck = [NSEntityDescription insertNewObjectForEntityForName:@"Peck" inManagedObjectContext: _managedObjectContext];
                  [self setAttributesInPeck:peck withDictionary:peckAttributes];
+             }else{
+                 Peck* peck = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Peck" andType:nil];
+                 [self setAttributesInPeck:peck withDictionary:peckAttributes];
              }
          }
      }
@@ -977,11 +1013,13 @@
 -(void)setAttributesInPeck:(Peck*)peck withDictionary:(NSDictionary*)dictionary{
     peck.message = [dictionary objectForKey:@"message"];
     peck.id = [dictionary objectForKey:@"id"];
-    peck.created_at=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"created_at"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    peck.created_at=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"created_at"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     if(![[dictionary objectForKey:@"invitation"] isKindOfClass:[NSNull class]]){
+        NSLog(@"INVITATION ID: %@", [dictionary objectForKey:@"invitation"]);
         peck.invitation_id =[dictionary objectForKey:@"invitation"];
     }
-    
+    peck.notification_type = [dictionary objectForKey:@"notification_type"];
+    peck.interacted_with = [dictionary objectForKey:@"interacted"];
 }
 
 #pragma mark - Dining actions

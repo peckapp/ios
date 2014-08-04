@@ -85,6 +85,7 @@
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="institution_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="interacted_with" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="invitation_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="invited_by" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
@@ -114,6 +115,6 @@
         <element name="MenuItem" positionX="90" positionY="342" width="128" height="103"/>
         <element name="Peer" positionX="261" positionY="261" width="128" height="105"/>
         <element name="Subscription" positionX="90" positionY="342" width="128" height="120"/>
-        <element name="Peck" positionX="90" positionY="342" width="128" height="148"/>
+        <element name="Peck" positionX="90" positionY="342" width="128" height="163"/>
     </elements>
 </model>

@@ -80,6 +80,7 @@ BOOL reloaded = NO;
     //}
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     self.userPicture =[UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
+    NSLog(@"view did load");
     textViewHelper = [[UITextView alloc] init];
     [textViewHelper setHidden:YES];
     [self.descriptionTextView setEditable:NO];
@@ -480,7 +481,7 @@ BOOL reloaded = NO;
 - (UIImageView *)imageViewForComment:(Comment*)comment {
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
     if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
-        return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
+        return [[UIImageView alloc] initWithImage:self.userPicture];
     } else {
         Peer * commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
         if(commentFromPeer.imageURL){

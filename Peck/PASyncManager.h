@@ -21,18 +21,19 @@
 
 // methods for anonymous user creation and subsqquent registration
 
+-(void)logoutUser;
+
 -(void)createAnonymousUserHelper;
 //calls create anonymous user with a completetion block that has components more easily accessed from within the sync manager
 
 // sends the device token to the server and performs operations based on the result
--(void)sendUserDeviceToken:(NSString*)deviceToken;
 -(void)sendUDIDForInitViewController:(UIViewController*)initViewController;
 // sends post request to server with institution_id and stores response user_id in NSUserDefaults
 -(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock;
 // sends post request to the server completing the user's other info after the registration process is triggered
 -(void)updateUserWithInfo:(NSDictionary*)userInfo withImage:(NSData*)imageData;
 // authenticates the user and updates the authentication token returned from the server
-- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UIViewController*)controller;
+- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(BOOL)goToHomepage;
 // sends patch request to the server when the registration process is complete
 -(void)registerUserWithInfo:(NSDictionary*)userInfo;
 
@@ -69,6 +70,8 @@
 -(void)leaveCircle: (NSDictionary*) dictionary;
 -(void)postCircleMember:(Peer*)newMember withDictionary:(NSDictionary *) dictionary forCircle:(Circle*)circle withSender:(id)sender;
 -(void)updateCircleInfo;
+-(void)acceptCircleInvite:(NSInteger)circleMemberID withPeckID:(NSNumber*)peckID;
+-(void)deleteCircleMember:(NSInteger)circleMemberID withPeckID:(NSNumber*)peckID;
 
 //methods for updating pecks
 -(void)postPeck:(NSDictionary*)dictionary;

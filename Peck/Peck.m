@@ -18,5 +18,6 @@
 @dynamic invited_by;
 @dynamic created_at;
 @dynamic invitation_id;
+@dynamic interacted_with;
 
 @end

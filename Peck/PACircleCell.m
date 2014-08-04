@@ -618,13 +618,18 @@ PAAssetManager * assetManager;
         Peer * tempPeer = self.members[i];
         [circleMembers addObject:tempPeer.id];
     }
-    [circleMembers addObject:[defaults objectForKey:@"user_id"]];
+    //[circleMembers addObject:[defaults objectForKey:@"user_id"]];
+    
+    NSString* alert = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
+    alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
+    alert = [alert stringByAppendingString:@" has invited you to a circle"];
     
     NSDictionary * newCircle = [NSDictionary dictionaryWithObjectsAndKeys:
                                 userID, @"user_id",
                                 institutionID, @"institution_id",
                                 self.titleTextField.text, @"circle_name",
                                 circleMembers, @"circle_member_ids",
+                                alert, @"message",
                                 nil];
     
     [self endEditing:YES];

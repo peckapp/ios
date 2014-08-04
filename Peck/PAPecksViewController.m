@@ -12,6 +12,7 @@
 #import "PAAppDelegate.h"
 #import "Peck.h"
 #import "PAPeckCell.h"
+#import "PASyncManager.h"
 
 @interface PAPecksViewController ()
 
@@ -55,6 +56,10 @@ static NSString *nibName = @"PAPeckCell";
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [[PASyncManager globalSyncManager] updatePecks];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -94,9 +99,50 @@ static NSString *nibName = @"PAPeckCell";
 
 -(void)configureCell:(PAPeckCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     Peck* peck = [_fetchedResultsController objectAtIndexPath:indexPath];
-    cell.messageLabel.text = peck.message;
+    
+    cell.messageTextView.text = peck.message;
     cell.titleLabel.text = @"Peck";
+    if([peck.notification_type isEqualToString:@"circle_invite"] || [peck.notification_type isEqualToString:@"event_invite"]){
+        cell.invitation_id = [peck.invitation_id integerValue];
+        cell.invitation_id = [peck.invitation_id integerValue];
+        cell.notification_type = peck.notification_type;
+    }
+    [cell.acceptButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [cell.declineButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    cell.interactedWith = NO;
+    if([peck.interacted_with boolValue]==YES){
+        [cell.acceptButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        [cell.declineButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        cell.interactedWith = YES;
+    }
+    cell.dateLabel.text = [self dateToString:peck.created_at];
+    cell.peckID = peck.id;
 }
+
+-(NSString*)dateToString:(NSDate *)date{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:date];
+    NSInteger hour = [components hour];
+    NSString * timeOfDay = @" AM";
+    if(hour>12){
+        hour-=12;
+        timeOfDay = @" PM";
+    }
+    
+    NSString *minute = [@([components minute]) stringValue];
+    if(minute.length==1){
+        minute = [@"0" stringByAppendingString:minute];
+    }
+    
+    
+    NSString * dateString = [[@(hour) stringValue] stringByAppendingString:@":"];
+    dateString = [dateString stringByAppendingString:minute];
+    dateString = [dateString stringByAppendingString:timeOfDay];
+    return dateString;
+    
+    
+}
+
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -109,8 +155,11 @@ static NSString *nibName = @"PAPeckCell";
     // Return cell size.
     return cell.frame.size.height;
 }
+#pragma mark - Table view delegate
 
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
 #pragma mark - managing the fetched results controller
 
 -(NSFetchedResultsController *)fetchedResultsController
@@ -131,7 +180,7 @@ static NSString *nibName = @"PAPeckCell";
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"created_at" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"created_at" ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -176,20 +225,24 @@ static NSString *nibName = @"PAPeckCell";
     switch(type)
     {
         case NSFetchedResultsChangeInsert:
-            
+        {
             [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
-            break;
             
+            //this line is here because the table view would usually set the second cell to have the same properties as the cell that was just inserted
+            [self.tableView reloadData];
+            break;
+        }
         case NSFetchedResultsChangeDelete:
             [self.tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
             
-        case NSFetchedResultsChangeUpdate:
-            [self.tableView cellForRowAtIndexPath:indexPath];
+        case NSFetchedResultsChangeUpdate:{
+            PAPeckCell* cell = (PAPeckCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+            [self configureCell:cell atIndexPath:indexPath];
             break;
+        }
             
         case NSFetchedResultsChangeMove:
             [self.tableView

@@ -176,7 +176,7 @@
     
     for(int i = 0; i<[mutableFetchResults count]; i++){
         Subscription* subscription = mutableFetchResults[i];
-        subscription.subscribed = NO;
+        subscription.subscribed = [NSNumber numberWithBool:NO];
     }
 }
 

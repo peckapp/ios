@@ -61,6 +61,8 @@ BOOL loggedIn;
     NSString*blurb = [defaults objectForKey:@"blurb"];
     NSLog(@"blurb: %@",blurb);
     self.infoTextView.text = [defaults objectForKey:@"blurb"];
+    NSLog(@"profile picture path %@", [defaults objectForKey:@"profile_picture"]);
+    UIImage* image =[UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
     self.profilePicture.image = [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
     
     if([defaults objectForKey:@"authentication_token"]){
@@ -125,9 +127,12 @@ BOOL loggedIn;
         root.justOpenedApp=NO;
         [self presentViewController:loginRoot animated:YES completion:nil];
     }else{
+        
+        [[PASyncManager globalSyncManager] logoutUser];
+        
         [[PAFetchManager sharedFetchManager] logoutUser];
         
-        
+    
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         [defaults removeObjectForKey:@"authentication_token"];
         [defaults removeObjectForKey:@"first_name"];

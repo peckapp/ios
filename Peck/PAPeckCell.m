@@ -8,6 +8,7 @@
 
 #import "PAPeckCell.h"
 #import "PAAssetManager.h"
+#import "PASyncManager.h"
 
 @implementation PAPeckCell
 
@@ -25,4 +26,35 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)acceptInviteButton:(id)sender {
+    if(!self.interactedWith){
+        //if the cell has not been interacted with
+        if([self.notification_type isEqualToString:@"circle_invite"]){
+            [[PASyncManager globalSyncManager] acceptCircleInvite:self.invitation_id withPeckID:self.peckID];
+        }else if([self.notification_type isEqualToString:@"event_invite"]){
+            NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+            
+            NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      [defaults objectForKey:@"user_id"],@"user_id",
+                                      [defaults objectForKey:@"institution_id"],@"institution_id",
+                                      self.invitation_id,@"event_attended",
+                                      @"simple", @"category",
+                                      self.invited_by, @"added_by",
+                                      nil];
+            
+            [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:nil];
+        }
+    }
+}
+
+- (IBAction)declineInviteButton:(id)sender {
+    if(!self.interactedWith){
+        //if the cell has not been interacted with
+        if([self.notification_type isEqualToString:@"circle_invite"]){
+            [[PASyncManager globalSyncManager] deleteCircleMember:self.invitation_id withPeckID:self.peckID];
+        }else if([self.notification_type isEqualToString:@"event_invite"]){
+            
+        }
+    }
+}
 @end
