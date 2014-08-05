@@ -10,8 +10,16 @@
 
 @interface PANestedTableViewController : UIViewController
 
-@property (strong, nonatomic) UITableView * tableView;
+@property (strong, nonatomic) UIButton * backButton;
 
 - (UITableViewCell *)configureDetailViewControllerCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+
+- (BOOL)indexPathIsSelected:(NSIndexPath *)indexPath;
+
+- (UIViewController *)viewControllerAtIndexPath:(NSIndexPath *)indexPath;
+- (void)setViewController:(UIViewController *)viewController atIndexPath:(NSIndexPath *)indexPath;
+
+- (void)tableView:(UITableView *)tableView compressRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)tableView:(UITableView *)tableView expandRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

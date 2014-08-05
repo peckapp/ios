@@ -810,7 +810,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="rpt-SB-vsa" kind="push" identifier="showEventDetail" id="bE3-cA-K6X"/>
                         <segue destination="sCG-OO-lYg" kind="push" identifier="showDiningDetail" id="ryJ-rI-fQC"/>
                     </connections>
                 </tableViewController>
@@ -839,9 +838,9 @@
         <!--Event Info Table View Controller-->
         <scene sceneID="iH3-Gt-QtS">
             <objects>
-                <tableViewController id="rpt-SB-vsa" customClass="PAEventInfoTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="event-info-view-controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="rpt-SB-vsa" customClass="PAEventInfoTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Oqv-ah-lB4">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>

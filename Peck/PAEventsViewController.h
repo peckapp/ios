@@ -12,20 +12,21 @@
 
 #import <CoreData/CoreData.h>
 #import "PACoreDataProtocol.h"
+#import "PANestedTableViewController.h"
 
 
-@interface PAEventsViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDataSource,UITableViewDelegate, UISearchBarDelegate>
+@interface PAEventsViewController : PANestedTableViewController <NSFetchedResultsControllerDelegate, PACoreDataProtocol, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-@property (strong, nonatomic) UITableView * tableView;
-@property (strong, nonatomic) UIImageView* placeholderImage;
+@property (strong, nonatomic) UIImageView *placeholderImage;
 
+@property (strong, nonatomic) UITableView *tableView;
 
-@property (strong, nonatomic) NSCache* imageCache;
+@property (strong, nonatomic) NSCache *imageCache;
 - (IBAction)yesterdayButton:(id)sender;
 - (IBAction)todayButton:(id)sender;
 - (IBAction)tomorrowButton:(id)sender;

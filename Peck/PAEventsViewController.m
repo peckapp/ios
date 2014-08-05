@@ -34,7 +34,7 @@
 
 struct eventImage{
     const char* imageURL;
-    const char* type ;
+    const char* type;
     int eventID;
 };
 
@@ -47,9 +47,6 @@ struct eventImage{
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
-static NSString * cellIdentifier = PAPrimaryIdentifier;
-static NSString * nibName = @"PAEventCell";
 
 UISearchBar * searchBar;
 
@@ -126,9 +123,7 @@ PAAssetManager * assetManager;
 
     UIImageView * shadow = [[UIImageView alloc] initWithImage:[assetManager horizontalShadow]];
     shadow.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
-    NSLog(@"Added shadow");
     [self.view addSubview:shadow];
-    
 }
 
 -(void)storeProfilePicture{
@@ -219,7 +214,7 @@ PAAssetManager * assetManager;
 
 #pragma mark - Fetched Results controller
 
--(NSFetchedResultsController *)fetchedResultsController
+- (NSFetchedResultsController *)fetchedResultsController
 {
     if(_fetchedResultsController!=nil){
         return _fetchedResultsController;
@@ -383,24 +378,71 @@ PAAssetManager * assetManager;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Event * currentEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
+    Event *currentEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
+
     if([currentEvent.type isEqualToString:@"dining"]){
         PADiningOpportunityCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningOppCell"];
         if(cell==nil){
             [tableView registerNib:[UINib nibWithNibName:@"PADiningOpportunityCell" bundle:nil] forCellReuseIdentifier:@"diningOppCell"];
             cell = [tableView dequeueReusableCellWithIdentifier:@"diningOppCell"];
         }
+        //[self configureDetailViewControllerCell:cell atIndexPath:indexPath];
         [self configureDiningCell:cell atIndexPath:indexPath];
         return cell;
     }
-    PAEventCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    else {
+        PAEventCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
+        if (cell == nil) {
+            [tableView registerNib:[UINib nibWithNibName:@"PAEventCell" bundle:nil] forCellReuseIdentifier:@"eventCell"];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
+        }
+
+        UIViewController * viewController = [self viewControllerAtIndexPath:indexPath];
+        if (viewController == nil) {
+            PAEventInfoTableViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"event-info-view-controller"];
+            NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+            [viewController setDetailItem:object];
+            [self setViewController:viewController atIndexPath:indexPath];
+        }
+
+        [self configureDetailViewControllerCell:cell atIndexPath:indexPath];
+        //[self configureEventCell:cell atIndexPath:indexPath];
+        return cell;
     }
-    [self configureEventCell:cell atIndexPath:indexPath];
-    return cell;
-    
+}
+
+- (void)configureEventCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    if([cell isKindOfClass:[PAEventCell class]]){
+        Event *tempEvent;
+
+        tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
+        cell.titleLabel.text = tempEvent.title;
+        cell.startTime.text = [self dateToString:tempEvent.start_date];
+        cell.endTime.text = [self dateToString:tempEvent.end_date];
+
+        cell.clipsToBounds = YES;
+
+        NSString * imageID = [tempEvent.id stringValue];
+
+        NSLog(@"event %@ has an imageID of %@",tempEvent.title, imageID);
+
+
+        UIImage * cachedImage = [self.imageCache objectForKey:imageID];
+        //NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]];
+        //UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+
+        //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        if (cachedImage) {
+            cell.eventImageView.image = cachedImage;
+        }
+        else {
+            cell.eventImageView.image = self.placeholderImage.image;
+        }
+        
+        //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    }
 }
 
 -(void)configureDiningCell:(PADiningOpportunityCell*)cell atIndexPath:(NSIndexPath*)indexPath{
@@ -418,14 +460,19 @@ PAAssetManager * assetManager;
 {
      //NSLog(@"cell height (height for row): %f",cellHeight);
     Event * tempEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
-    if([tempEvent.type isEqualToString:@"dining"]){
+
+    if ([self indexPathIsSelected:indexPath]) {
+        return self.view.frame.size.height;
+    }
+    else if([tempEvent.type isEqualToString:@"dining"]){
         return 44;
     }
     return 88;
 }
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    /*
     Event *selectedEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
     if([selectedEvent.type isEqualToString:@"simple"]){
         [self performSegueWithIdentifier:@"showEventDetail" sender:self];
@@ -434,6 +481,9 @@ PAAssetManager * assetManager;
         [self performSegueWithIdentifier:@"showDiningDetail" sender:self];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+     */
+
+    [self tableView:self.tableView expandRowAtIndexPath:indexPath];
 }
 
 
@@ -464,6 +514,7 @@ PAAssetManager * assetManager;
     return NO;
 }
 
+/*
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showEventDetail"]) {
@@ -483,6 +534,7 @@ PAAssetManager * assetManager;
         [[segue destinationViewController] setDetailItem:object];
     }
 }
+ */
 
 
 
@@ -519,41 +571,6 @@ PAAssetManager * assetManager;
     return dateString;
     
     
-}
-
-
-- (void)configureEventCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-    if([cell isKindOfClass:[PAEventCell class]]){
-    Event *tempEvent;
-    
-    tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    cell.titleLabel.text = tempEvent.title;
-    cell.startTime.text = [self dateToString:tempEvent.start_date];
-    cell.endTime.text = [self dateToString:tempEvent.end_date];
-
-    cell.clipsToBounds = YES;
-
-    NSString * imageID = [tempEvent.id stringValue];
-    
-    NSLog(@"event %@ has an imageID of %@",tempEvent.title, imageID);
-    
-    
-    UIImage * cachedImage = [self.imageCache objectForKey:imageID];
-    //NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]];
-    //UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-
-    //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    if (cachedImage) {
-        cell.eventImageView.image = cachedImage;
-    }
-    else {
-        cell.eventImageView.image = self.placeholderImage.image;
-    }
-
-    //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -764,22 +781,4 @@ PAAssetManager * assetManager;
 }
 
 @end
-
-/*
-
-@interface EventInfo : NSObject {}
-
-@property (readwrite, strong, nonatomic) NSString *name;
-@property (readwrite, assign, nonatomic) NSUInteger time;
-
-@end
-
-@implementation EventInfo : NSObject 
-
-@synthesize name;
-@synthesize time;
-
-@end
- 
-*/
 

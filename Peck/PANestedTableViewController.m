@@ -10,56 +10,19 @@
 
 @interface PANestedTableViewController ()
 
-@property (strong,nonatomic) NSMutableArray * detailViewControllers;
-@property (strong,nonatomic) NSIndexPath * selectedCellIndexPath;
-@property (strong,nonatomic) UIButton * backButton;
+@property (strong, nonatomic) NSMutableDictionary *detailViewControllers;
+@property (strong, nonatomic) NSIndexPath *selectedCellIndexPath;
 
 @end
 
 @implementation PANestedTableViewController
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(11, 11, 22, 22)];
-    [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
-    self.backButton.backgroundColor = [UIColor lightTextColor];
-}
-
-- (void)backButton:(id)sender
-{
-    NSIndexPath * indexPath = self.selectedCellIndexPath;
-    self.selectedCellIndexPath = nil;
-    self.tableView.scrollEnabled = YES;
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-    // [self.tableView reloadData];
-
-    [self.backButton removeFromSuperview];
-}
-
-#pragma mark - Table view data source
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [self.detailViewControllers count];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if(self.selectedCellIndexPath != nil && self.selectedCellIndexPath.row == indexPath.row) {
-        return self.view.frame.size.height;
-    }
-    return 44.0;
-}
 
 - (UITableViewCell *)configureDetailViewControllerCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     if (self.detailViewControllers.count > 0) {
-        UIViewController * newVC = self.detailViewControllers[indexPath.row];
+        UIViewController * newVC = [self viewControllerAtIndexPath:indexPath];
 
         [newVC willMoveToParentViewController:self];
         [newVC.view removeFromSuperview];
@@ -74,26 +37,44 @@
     return cell;
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)indexPathIsSelected:(NSIndexPath *)indexPath
 {
-    if(self.selectedCellIndexPath != nil && self.selectedCellIndexPath.row == indexPath.row) {
-        return nil;
-    }
-    return indexPath;
+    return self.selectedCellIndexPath != nil && self.selectedCellIndexPath.row == indexPath.row;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (UIViewController *)viewControllerAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"selected cell %ld", (long)indexPath.row);
+    NSString * key = [NSString stringWithFormat:@"%ld-%ld", (long)indexPath.section, (long)indexPath.row];
+    return [self.detailViewControllers objectForKey:key];
+}
 
-    UIViewController * newVC = self.detailViewControllers[indexPath.row];
+- (void)setViewController:(UIViewController *)viewController atIndexPath:(NSIndexPath *)indexPath
+{
+    NSString * key = [NSString stringWithFormat:@"%ld-%ld", (long)indexPath.section, (long)indexPath.row];
+    [self.detailViewControllers setObject:viewController forKey:key];
+}
+
+- (void)tableView:(UITableView *)tableView expandRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIViewController * newVC = [self viewControllerAtIndexPath:indexPath];
     [newVC.view addSubview:self.backButton];
 
     self.selectedCellIndexPath = indexPath;
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-    self.tableView.scrollEnabled = NO;
+    [tableView beginUpdates];
+    [tableView endUpdates];
+    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    tableView.scrollEnabled = NO;
+}
+
+- (void)tableView:(UITableView *)tableView compressRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    self.selectedCellIndexPath = nil;
+    tableView.scrollEnabled = YES;
+    [tableView beginUpdates];
+    [tableView endUpdates];
+    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+
+    [self.backButton removeFromSuperview];
 }
 
 @end
