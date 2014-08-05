@@ -149,6 +149,13 @@
     self.controlSwitch.selectedSegmentIndex = 1;
     self.selectorCell.tag = cellStateAlwaysOff;
     self.title = @"Edit Announcement";
+    self.titleField.text = self.editableAnnouncement.title;
+    self.descriptionTextView.text = self.editableAnnouncement.explore_description;
+    if(self.editableAnnouncement.imageURL){
+        NSURL* url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.editableAnnouncement.imageURL]];
+        [self.photoButton.imageView setImageWithURL:url placeholderImage:[UIImage imageNamed:@"image-placeholder.png"]];
+    }
+
     
 }
 
@@ -514,51 +521,10 @@
 }
 
 -(void)postEvent{
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    
-    NSNumber *instID = [defaults objectForKey:@"institution_id"];
     
     NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
     
-    NSMutableArray* finalInvites = [self.invitedPeople mutableCopy];
-    for( NSNumber* circleID in self.invitedCircles){
-        Circle* circle = [[PAFetchManager sharedFetchManager] getObject:circleID withEntityType:@"Circle" andType:nil];
-        NSSet*members = circle.circle_members;
-        NSArray* circleMembers = [members allObjects];
-        for(Peer* peer in circleMembers){
-            if(![finalInvites containsObject:peer.id]){
-                [finalInvites addObject:peer.id];
-            }
-        }
-    }
-    
-    NSLog(@"final invites: %@", finalInvites);
-    NSString* alert = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
-    alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
-    alert = [alert stringByAppendingString:@" has invited you to an event"];
-    
-    NSDateFormatter* timeZoneFormatter = [[NSDateFormatter alloc] init];
-    [timeZoneFormatter setDateFormat:@"MMM dd, yyyy h:mm a ZZZ"];
-    NSString*startDate = [timeZoneFormatter stringFromDate:self.startTimePicker.date];
-    NSString*endDate = [timeZoneFormatter stringFromDate:self.endTimePicker.date];
-    
-    NSLog(@"the start date: %@", startDate);
-    
-    NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
-                              self.titleField.text,@"title",
-                              self.descriptionTextView.text, @"event_description",
-                              instID, @"institution_id",
-                              startDate, @"start_date",
-                              endDate, @"end_date",
-                              [NSNumber numberWithBool:self.publicSwitch.on], @"public",
-                              [defaults objectForKey:@"user_id"],@"invited_by",
-                              [defaults objectForKey:@"user_id"], @"user_id",
-                              finalInvites, @"event_member_ids",
-                              alert,@"message",
-                              [NSNumber numberWithBool:YES],@"send_push_notification",
-                              nil];
-    
-    [[PASyncManager globalSyncManager] postEvent: setEvent withImage:data];
+    [[PASyncManager globalSyncManager] postEvent: [self configureEventDictioanry] withImage:data];
     
     
     
@@ -598,7 +564,73 @@
 }
 
 -(void)updateEvent{
+    NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
     
+    [[PASyncManager globalSyncManager] updateEvent:self.editableEvent.id withDictionary:[self configureEventDictioanry] withImage:data];
+    
+    
+    
+    
+    self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
+    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+    self.titleField.text=@"";
+    self.descriptionTextView.text=@"";
+    self.startTimeLabel.text =@"None";
+    self.endTimeLabel.text = @"None";
+    [self.tableView reloadData];
+    
+    
+    // parent of self is a navigation controller, its parent is the dropdown controller
+    [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];
+    
+}
+
+-(NSDictionary*)configureEventDictioanry{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSNumber *instID = [defaults objectForKey:@"institution_id"];
+    
+    
+    
+    NSMutableArray* finalInvites = [self.invitedPeople mutableCopy];
+    for( NSNumber* circleID in self.invitedCircles){
+        Circle* circle = [[PAFetchManager sharedFetchManager] getObject:circleID withEntityType:@"Circle" andType:nil];
+        NSSet*members = circle.circle_members;
+        NSArray* circleMembers = [members allObjects];
+        for(Peer* peer in circleMembers){
+            if(![finalInvites containsObject:peer.id]){
+                [finalInvites addObject:peer.id];
+            }
+        }
+    }
+    
+    NSLog(@"final invites: %@", finalInvites);
+    NSString* alert = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
+    alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
+    alert = [alert stringByAppendingString:@" has invited you to an event"];
+    
+    NSDateFormatter* timeZoneFormatter = [[NSDateFormatter alloc] init];
+    [timeZoneFormatter setDateFormat:@"MMM dd, yyyy h:mm a ZZZ"];
+    NSString*startDate = [timeZoneFormatter stringFromDate:self.startTimePicker.date];
+    NSString*endDate = [timeZoneFormatter stringFromDate:self.endTimePicker.date];
+    
+    NSLog(@"the start date: %@", startDate);
+    
+    NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
+                              self.titleField.text,@"title",
+                              self.descriptionTextView.text, @"event_description",
+                              instID, @"institution_id",
+                              startDate, @"start_date",
+                              endDate, @"end_date",
+                              [NSNumber numberWithBool:self.publicSwitch.on], @"public",
+                              [defaults objectForKey:@"user_id"],@"invited_by",
+                              [defaults objectForKey:@"user_id"], @"user_id",
+                              finalInvites, @"event_member_ids",
+                              alert,@"message",
+                              [NSNumber numberWithBool:YES],@"send_push_notification",
+                              nil];
+
+    return setEvent;
 }
 
 /*

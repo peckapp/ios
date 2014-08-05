@@ -1270,8 +1270,37 @@
 
 }
 
--(void)updateEvent:(NSDictionary*)dictioanary withImage:(NSData*)imageData{
+-(void)updateEvent:(NSNumber*)eventID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSDate* now = [NSDate date];
+    NSTimeInterval nowEpochSeconds = [now timeIntervalSince1970];
+    NSInteger seconds = (NSInteger)nowEpochSeconds;
     
+    NSString* fileName = [@"event_photo_" stringByAppendingString:[[defaults objectForKey:@"user_id" ] stringValue]];
+    fileName = [fileName stringByAppendingString:@"_"];
+    fileName = [fileName stringByAppendingString:[@(seconds) stringValue]];
+    fileName = [fileName stringByAppendingString:@".jpeg"];
+    
+    NSLog(@"patch event dictionary; %@", dictionary);
+    
+    NSMutableDictionary* baseDictioanary = [[self applyWrapper:@"simple_event" toDictionary:dictionary] mutableCopy];
+    [baseDictioanary setObject:@"patch" forKey:@"_method"];
+    
+    NSString* eventURL = [simple_eventsAPI stringByAppendingString:@"/"];
+    eventURL = [eventURL stringByAppendingString:[eventID stringValue]];
+    
+    [[PASessionManager sharedClient] POST:eventURL
+                               parameters:baseDictioanary
+                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"simple event creation success: %@", JSON);
+         [self updateEventInfo];
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+
 }
 
 -(void)deleteEvent:(NSNumber*)eventID
@@ -1303,7 +1332,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"EVENT JSON: %@",JSON);
+             //NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
              //NSLog(@"Update Event response: %@", postsFromResponse);

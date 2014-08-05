@@ -210,7 +210,7 @@ PAAssetManager * assetManager;
                 //UIImage * blurredImage = [loadedImage applyDarkEffect];
                 //UIImageView * imageView = [[UIImageView alloc] initWithImage:blurredImage];
                 //imageView.contentMode = UIViewContentModeScaleAspectFill;
-                [self.imageCache setObject:loadedImage forKey:[eventID stringValue]];
+                [self.imageCache setObject:loadedImage forKey:imageURL];
             }
         }
         
@@ -535,23 +535,25 @@ PAAssetManager * assetManager;
 
     cell.clipsToBounds = YES;
 
-    NSString * imageID = [tempEvent.id stringValue];
+    NSString * imageID = tempEvent.blurredImageURL;
     
     NSLog(@"event %@ has an imageID of %@",tempEvent.title, imageID);
     
-    
-    UIImage * cachedImage = [self.imageCache objectForKey:imageID];
-    //NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]];
-    //UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+    if(imageID){
+        UIImage * cachedImage = [self.imageCache objectForKey:imageID];
+        //NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]];
+        //UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
 
-    //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    if (cachedImage) {
-        cell.eventImageView.image = cachedImage;
-    }
-    else {
+        //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        if (cachedImage) {
+            cell.eventImageView.image = cachedImage;
+        }
+        else {
+            cell.eventImageView.image = self.placeholderImage.image;
+        }
+    }else{
         cell.eventImageView.image = self.placeholderImage.image;
     }
-
     //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
     }
 }
