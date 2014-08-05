@@ -95,6 +95,7 @@
     UITapGestureRecognizer* tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onPhotoSelect)];
     tgr.cancelsTouchesInView = NO;
     [self.photo addGestureRecognizer:tgr];
+    self.photo.userInteractionEnabled = YES;
 
     
     //[self registerForKeyboardNotifications];
