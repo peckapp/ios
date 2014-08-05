@@ -21,19 +21,17 @@
 {
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-    if (self.detailViewControllers.count > 0) {
-        UIViewController * newVC = [self viewControllerAtIndexPath:indexPath];
-
-        [newVC willMoveToParentViewController:self];
-        [newVC.view removeFromSuperview];
-        [newVC removeFromParentViewController];
-        [self addChildViewController:newVC];
-        [cell addSubview:newVC.view];
-        [newVC didMoveToParentViewController:self];
-
-        NSLog(@"added new view controller");
-    }
-
+    UIViewController * newVC = [self viewControllerAtIndexPath:indexPath];
+    
+    [newVC willMoveToParentViewController:self];
+    [newVC.view removeFromSuperview];
+    [newVC removeFromParentViewController];
+    [self addChildViewController:newVC];
+    [cell addSubview:newVC.view];
+    [newVC didMoveToParentViewController:self];
+    
+    NSLog(@"added new view controller");
+    
     return cell;
 }
 
@@ -44,13 +42,15 @@
 
 - (UIViewController *)viewControllerAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString * key = [NSString stringWithFormat:@"%ld-%ld", (long)indexPath.section, (long)indexPath.row];
+    NSString * key = [NSString stringWithFormat:@"%d-%d", (int)indexPath.section, (int)indexPath.row];
+    NSLog(@"returning view controller for key: %@", key);
     return [self.detailViewControllers objectForKey:key];
 }
 
 - (void)setViewController:(UIViewController *)viewController atIndexPath:(NSIndexPath *)indexPath
 {
-    NSString * key = [NSString stringWithFormat:@"%ld-%ld", (long)indexPath.section, (long)indexPath.row];
+    NSString * key = [NSString stringWithFormat:@"%d-%d", (int)indexPath.section, (int)indexPath.row];
+    NSLog(@"set view controller for key: %@", key);
     [self.detailViewControllers setObject:viewController forKey:key];
 }
 
