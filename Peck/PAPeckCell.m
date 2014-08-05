@@ -37,7 +37,7 @@
             NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
                                       [defaults objectForKey:@"user_id"],@"user_id",
                                       [defaults objectForKey:@"institution_id"],@"institution_id",
-                                      self.invitation_id,@"event_attended",
+                                      [NSNumber numberWithLong:self.invitation_id] ,@"event_attended",
                                       @"simple", @"category",
                                       self.invited_by, @"added_by",
                                       nil];

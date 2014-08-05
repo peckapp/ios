@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PACoreDataProtocol.h"
 
-@interface PAPostViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PACoreDataProtocol>
+@interface PAPostViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PACoreDataProtocol, UITextViewDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -21,7 +21,8 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *controlSwitch;
-@property (weak, nonatomic) IBOutlet UITextField *descriptionField;
+@property (weak, nonatomic) IBOutlet UITextView *descriptionTextView;
+
 @property (weak, nonatomic) IBOutlet UITextField *titleField;
 @property (weak, nonatomic) IBOutlet UITableViewCell *startTimeCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *endTimeCell;

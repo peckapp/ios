@@ -2,7 +2,7 @@
 //  Peer.h
 //  Peck
 //
-//  Created by John Karabinos on 7/25/14.
+//  Created by John Karabinos on 8/4/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -14,8 +14,9 @@
 @interface Peer : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * id;
-@property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * imageURL;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * blurb;
 @property (nonatomic, retain) NSSet *circles;
 @end
 

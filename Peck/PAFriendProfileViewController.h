@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Peer.h"
 #import "PACoreDataProtocol.h"
 @interface PAFriendProfileViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol>
 
@@ -17,6 +18,5 @@
 @property (weak, nonatomic) IBOutlet UITextView *blurbTextView;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (strong, nonatomic) id detailItem;
-- (void)setDetailItem:(id)newDetailItem;
+@property (strong, nonatomic) Peer* peer;
 @end

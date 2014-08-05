@@ -76,6 +76,11 @@
     
     formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+    
+    
+    self.titleField.delegate = self;
+    self.descriptionTextView.delegate = self;
+    self.locationTextField.delegate = self;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -88,6 +93,11 @@
     [super viewWillAppear:animated];
     
     //[self registerForKeyboardNotifications];
+    if([self.descriptionTextView.text isEqualToString:@""]){
+        self.descriptionTextView.textColor = [UIColor lightGrayColor];
+        self.descriptionTextView.text = @"Description";
+    }
+    
     if([self.invitedCircles count]+[self.invitedPeople count]==0){
         self.peopleLabel.text=@"None";
     }else{
@@ -385,7 +395,38 @@
     return YES;
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    if(textField==self.titleField){
+        [self.descriptionTextView becomeFirstResponder];
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition: UITableViewScrollPositionBottom animated:YES];
+        return NO;
+    }
+    else if(textField==self.locationTextField){
+        [self.locationTextField resignFirstResponder];
+    }
+    return YES;
+}
 
+# pragma mark - text view delegate
+
+- (BOOL) textViewShouldBeginEditing:(UITextView *)textView
+{
+    if (self.descriptionTextView.textColor == [UIColor lightGrayColor]) {
+        self.descriptionTextView.text = @"";
+        self.descriptionTextView.textColor = [UIColor blackColor];
+    }
+    
+    return YES;
+}
+
+-(void)textViewDidEndEditing:(UITextView *)textView{
+    if([self.descriptionTextView.text isEqualToString:@""]){
+        self.descriptionTextView.textColor = [UIColor lightGrayColor];
+        self.descriptionTextView.text = @"Description";
+        
+    }
+}
 
 - (IBAction)returnResultAndExit:(id)sender
 {
@@ -425,7 +466,7 @@
             
             NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                                       self.titleField.text,@"title",
-                                      self.descriptionField.text, @"event_description",
+                                      self.descriptionTextView.text, @"event_description",
                                       instID, @"institution_id",
                                       self.startTimeLabel.text, @"start_date",
                                       self.endTimeLabel.text, @"end_date",
@@ -444,7 +485,7 @@
             self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
             _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
             self.titleField.text=@"";
-            self.descriptionField.text=@"";
+            self.descriptionTextView.text=@"";
             self.startTimeLabel.text =@"None";
             self.endTimeLabel.text = @"None";
             [self.tableView reloadData];
@@ -478,14 +519,14 @@
             
             NSDictionary* announcement = [NSDictionary dictionaryWithObjectsAndKeys:
                                           self.titleField.text,@"title",
-                                          self.descriptionField.text, @"announcement_description",
+                                          self.descriptionTextView.text, @"announcement_description",
                                           instID, @"institution_id",
                                           nil];
             [[PASyncManager globalSyncManager] postAnnouncement:announcement withImage:data];
             
             self.titleField.text=@"";
             self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
-            self.descriptionField.text = @"";
+            self.descriptionTextView.text = @"";
         }
         
     }

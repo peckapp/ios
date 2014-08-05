@@ -502,6 +502,9 @@
     fullName = [fullName stringByAppendingString:[dictionary objectForKey:last_name_define]];
     peer.name = fullName;
     peer.id = [dictionary objectForKey:@"id"];
+    if(![[dictionary objectForKey:@"blurb"] isKindOfClass:[NSNull class]]){
+        peer.blurb = [dictionary objectForKey:@"blurb"];
+    }
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         peer.imageURL = [dictionary objectForKey:@"image"];
     }
