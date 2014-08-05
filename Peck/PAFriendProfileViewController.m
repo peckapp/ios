@@ -57,6 +57,8 @@ PAAssetManager * assetManager;
     blurbTextView.layer.borderWidth=.5f;
     blurbTextView.layer.borderColor = [[UIColor grayColor] CGColor];
     blurbTextView.layer.cornerRadius = 8;
+    
+    [self.scrollView setScrollEnabled:YES];
 
     [self configureView];
     // Do any additional setup after loading the view.
