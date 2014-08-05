@@ -14,6 +14,7 @@
 #import "PAFriendProfileViewController.h"
 #import "HTAutocompleteManager.h"
 #import "PACommentCell.h"
+#import "PAFriendProfileViewController.h"
 
 #define cellHeight 100.0
 #define reloadTime 10
@@ -773,8 +774,10 @@ BOOL viewingCircles;
 -(void)showProfileOf:(Peer *)member{
     selectedPeer=member;
     UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *profileController = [loginStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
-    [self presentViewController:profileController animated:YES completion:nil];
+    UINavigationController *navController = [loginStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
+    PAFriendProfileViewController*root = navController.viewControllers[0];
+    root.peer=member;
+    [self presentViewController:navController animated:YES completion:nil];
     //[self performSegueWithIdentifier:@"selectProfile" sender:self];
 }
 

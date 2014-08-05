@@ -106,6 +106,7 @@ static NSString *nibName = @"PAPeckCell";
         cell.invitation_id = [peck.invitation_id integerValue];
         cell.invitation_id = [peck.invitation_id integerValue];
         cell.notification_type = peck.notification_type;
+        cell.invited_by = peck.invited_by;
     }
     [cell.acceptButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [cell.declineButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
