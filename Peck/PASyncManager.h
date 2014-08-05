@@ -78,6 +78,7 @@
 //methods for updating pecks
 -(void)postPeck:(NSDictionary*)dictionary;
 -(void)updatePecks;
+-(void)setInteractedForPeck:(NSNumber*)peckID;
 
 //methods for comments
 -(void)postComment:(NSDictionary *)dictionary;

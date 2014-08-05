@@ -1110,13 +1110,10 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <button key="tableHeaderView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="am3-QK-qV6">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="219"/>
+                        <imageView key="tableHeaderView" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image-placeholder.png" id="C4C-V1-Z2O">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="Button" image="image-placeholder.png">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                        </button>
+                        </imageView>
                         <sections>
                             <tableViewSection id="xxA-Mb-XCJ">
                                 <cells>
@@ -1162,7 +1159,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4sN-Pf-ic2">
-                                                    <rect key="frame" x="20" y="0.0" width="300" height="87.5"/>
+                                                    <rect key="frame" x="20" y="-1" width="300" height="87.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -1339,7 +1336,7 @@
                         <outlet property="inviteCell" destination="6oR-6Z-kx8" id="vYU-FA-DcJ"/>
                         <outlet property="locationTextField" destination="2Qi-eI-hUF" id="pa9-vT-SQE"/>
                         <outlet property="peopleLabel" destination="nPQ-Hg-jfA" id="kfx-lG-rRO"/>
-                        <outlet property="photoButton" destination="am3-QK-qV6" id="S2p-Vh-QXj"/>
+                        <outlet property="photo" destination="C4C-V1-Z2O" id="N78-b3-0PJ"/>
                         <outlet property="publicSwitch" destination="Fu8-B9-PN1" id="n5I-aO-JtG"/>
                         <outlet property="selectorCell" destination="84q-Gp-EWm" id="7NE-H7-U2f"/>
                         <outlet property="startTimeCell" destination="Sj7-I4-hdV" id="IFv-3G-9ne"/>

@@ -575,6 +575,10 @@
                                        
                                         [self updateAndReloadEvent:[attendee objectForKey:@"event_attended"] forViewController:controller];
                                        
+                                       if([attendee objectForKey:@"peck"]){
+                                           //if the user is attending from a peck
+                                           [self updatePecks];
+                                       }
                                        //[self updateEventInfo];
                                    }
      
@@ -987,6 +991,23 @@
                                       NSLog(@"ERROR: %@",error);
                                   }];
     
+
+}
+
+-(void)setInteractedForPeck:(NSNumber*)peckID{
+    NSString* peckURL = [@"api/pecks/" stringByAppendingString:[peckID stringValue]];
+    NSDictionary* dictionary = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"interacted"];
+    
+    [[PASessionManager sharedClient] PATCH:peckURL
+                               parameters:[self applyWrapper:@"peck" toDictionary:dictionary]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"peck JSON: %@", JSON);
+         [self updatePecks];
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
 
 }
 

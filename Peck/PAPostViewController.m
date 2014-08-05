@@ -66,7 +66,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
-    [self.photoButton addTarget:self action:@selector(onPhotoSelect) forControlEvents:UIControlEventTouchUpInside];
+    //[self.photo addTarget:self action:@selector(onPhotoSelect) forControlEvents:UIControlEventTouchUpInside];
     [self.controlSwitch addTarget:self action:@selector(onControlSwitchChange) forControlEvents:UIControlEventValueChanged];
     
     self.locationTextField.delegate = self;
@@ -92,6 +92,10 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    UITapGestureRecognizer* tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onPhotoSelect)];
+    tgr.cancelsTouchesInView = NO;
+    [self.photo addGestureRecognizer:tgr];
+
     
     //[self registerForKeyboardNotifications];
     
@@ -135,7 +139,7 @@
     self.descriptionTextView.text = self.editableEvent.descrip;
     if(self.editableEvent.imageURL){
         NSURL* url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.editableEvent.imageURL]];
-        [self.photoButton.imageView setImageWithURL:url placeholderImage:[UIImage imageNamed:@"image-placeholder.png"]];
+        [self.photo setImageWithURL:url placeholderImage:[UIImage imageNamed:@"image-placeholder.png"]];
     }
     self.startTimePicker.date = self.editableEvent.start_date;
     self.endTimePicker.date = self.editableEvent.end_date;
@@ -155,7 +159,7 @@
     self.descriptionTextView.text = self.editableAnnouncement.explore_description;
     if(self.editableAnnouncement.imageURL){
         NSURL* url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.editableAnnouncement.imageURL]];
-        [self.photoButton.imageView setImageWithURL:url placeholderImage:[UIImage imageNamed:@"image-placeholder.png"]];
+        [self.photo setImageWithURL:url placeholderImage:[UIImage imageNamed:@"image-placeholder.png"]];
     }
 
     
@@ -261,6 +265,7 @@
 
 - (void)onPhotoSelect
 {
+    
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil
                                                              delegate: self
                                                     cancelButtonTitle: @"Cancel"
@@ -297,7 +302,7 @@
 {
     [self dismissViewControllerAnimated: YES completion: nil];
     UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
-    self.photoButton.imageView.image = image;
+    self.photo.image = image;
 
     NSLog(@"Post view frame height: %f", self.view.frame.size.height);
     
@@ -478,7 +483,7 @@
 }
 
 -(void)clearScreenAndDismissView{
-    self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
+    self.photo.image = [UIImage imageNamed:@"image-placeholder.png"];
     _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
     self.titleField.text=@"";
     self.descriptionTextView.text=@"";
@@ -493,7 +498,7 @@
 
 -(void)postEvent{
     
-    NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
+    NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
     
     [[PASyncManager globalSyncManager] postEvent: [self configureEventDictioanry] withImage:data];
     
@@ -502,7 +507,7 @@
 
 -(void)postAnnouncement{
     
-    NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
+    NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
     
     [[PASyncManager globalSyncManager] postAnnouncement:[self configureAnnouncementDictionary] withImage:data];
     
@@ -514,7 +519,7 @@
 }
 
 -(void)updateEvent{
-    NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
+    NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
     
     [[PASyncManager globalSyncManager] updateEvent:self.editableEvent.id withDictionary:[self configureEventDictioanry] withImage:data];
     
@@ -523,7 +528,7 @@
 }
 
 -(void)updateAnnouncement{
-    NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
+    NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
     
     [[PASyncManager globalSyncManager] updateAnnouncement:self.editableAnnouncement.id withDictionary:[self configureAnnouncementDictionary] withImage:data];
 
@@ -597,5 +602,6 @@
                                   nil];
     return announcement;
 }
+
 
 @end

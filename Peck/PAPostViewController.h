@@ -25,7 +25,8 @@
 @property (weak, nonatomic) Event* editableEvent;
 @property (weak, nonatomic) Explore* editableAnnouncement;
 
-@property (weak, nonatomic) IBOutlet UIButton *photoButton;
+@property (weak, nonatomic) IBOutlet UIImageView *photo;
+
 @property (weak, nonatomic) IBOutlet UISegmentedControl *controlSwitch;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionTextView;
 
