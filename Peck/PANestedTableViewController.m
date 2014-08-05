@@ -17,6 +17,12 @@
 
 @implementation PANestedTableViewController
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.detailViewControllers = [[NSMutableDictionary alloc] init];
+}
+
 - (UITableViewCell *)configureDetailViewControllerCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -56,8 +62,9 @@
 
 - (void)tableView:(UITableView *)tableView expandRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UIViewController * newVC = [self viewControllerAtIndexPath:indexPath];
-    [newVC.view addSubview:self.backButton];
+    UIViewController * child = [self viewControllerAtIndexPath:indexPath];
+    [child.view addSubview:self.backButton];
+    child.view.userInteractionEnabled = YES;
 
     self.selectedCellIndexPath = indexPath;
     [tableView beginUpdates];
@@ -66,14 +73,17 @@
     tableView.scrollEnabled = NO;
 }
 
-- (void)tableView:(UITableView *)tableView compressRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView compressRowAtSelectedIndexPathUserInteractionEnabled:(BOOL)interaction
 {
+    NSIndexPath * indexPath = self.selectedCellIndexPath;
     self.selectedCellIndexPath = nil;
     tableView.scrollEnabled = YES;
     [tableView beginUpdates];
     [tableView endUpdates];
     [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 
+    UIViewController * child = [self viewControllerAtIndexPath:indexPath];
+    child.view.userInteractionEnabled = interaction;
     [self.backButton removeFromSuperview];
 }
 

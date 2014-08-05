@@ -70,6 +70,10 @@ PAAssetManager * assetManager;
 {
     [super viewDidLoad];
 
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(11, 11, 22, 22)];
+    [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
+    self.backButton.backgroundColor = [UIColor lightTextColor];
+
     //we must store the profile picture every time the app loads because the local image storing is not persistent
     [self storeProfilePicture];
     
@@ -402,6 +406,7 @@ PAAssetManager * assetManager;
         UIViewController * viewController = [self viewControllerAtIndexPath:indexPath];
         if (viewController == nil) {
             PAEventInfoTableViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"event-info-view-controller"];
+            viewController.view.userInteractionEnabled = NO;
             NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
             [viewController setDetailItem:object];
             [self setViewController:viewController atIndexPath:indexPath];
@@ -457,7 +462,10 @@ PAAssetManager * assetManager;
     
 }
 
-
+- (void)backButton:(id)sender
+{
+    [self tableView:self.tableView compressRowAtSelectedIndexPathUserInteractionEnabled:NO];
+}
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {

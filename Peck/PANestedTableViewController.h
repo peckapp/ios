@@ -19,7 +19,7 @@
 - (UIViewController *)viewControllerAtIndexPath:(NSIndexPath *)indexPath;
 - (void)setViewController:(UIViewController *)viewController atIndexPath:(NSIndexPath *)indexPath;
 
-- (void)tableView:(UITableView *)tableView compressRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)tableView:(UITableView *)tableView compressRowAtSelectedIndexPathUserInteractionEnabled:(BOOL)interaction;
 - (void)tableView:(UITableView *)tableView expandRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
