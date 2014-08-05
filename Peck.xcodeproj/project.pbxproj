@@ -64,7 +64,6 @@
 		A40CF56819547ACC0021C088 /* PAPeers.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56719547ACC0021C088 /* PAPeers.m */; };
 		A40CF574195483140021C088 /* PABST.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF573195483140021C088 /* PABST.m */; };
 		A412E1D41986E63800384A11 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = A412E1D31986E63800384A11 /* Comment.m */; };
-		A412E1DB198835DF00384A11 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A412E1DA198835DF00384A11 /* Event.m */; };
 		A42D4FB719897C3C00536453 /* Explore.m in Sources */ = {isa = PBXBuildFile; fileRef = A42D4FB619897C3C00536453 /* Explore.m */; };
 		A42D4FB9198AAAB000536453 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A42D4FB8198AAAB000536453 /* Security.framework */; };
 		A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */; };
@@ -112,6 +111,8 @@
 		A4E21F601964A749002A9800 /* PAEventInfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */; };
 		A4E21F6519659892002A9800 /* PACommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F6319659892002A9800 /* PACommentCell.m */; };
 		A4E21F6619659892002A9800 /* PACommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4E21F6419659892002A9800 /* PACommentCell.xib */; };
+		A4E47D571991261000DDF941 /* PAUserEventsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E47D561991261000DDF941 /* PAUserEventsTableViewController.m */; };
+		A4E47D5A1991295000DDF941 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E47D591991295000DDF941 /* Event.m */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 		DD3701401990081F006B63E8 /* PANestedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD37013F1990081F006B63E8 /* PANestedTableViewController.m */; };
 		DD5751B41980356100BF52A8 /* PAPeckInviteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD5751B31980356100BF52A8 /* PAPeckInviteCell.xib */; };
@@ -271,8 +272,6 @@
 		A412E1D21986E63800384A11 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
 		A412E1D31986E63800384A11 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
 		A412E1D51987E0CD00384A11 /* Peck 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Peck 2.xcdatamodel"; sourceTree = "<group>"; };
-		A412E1D9198835DF00384A11 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
-		A412E1DA198835DF00384A11 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A42D4FB519897C3C00536453 /* Explore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Explore.h; sourceTree = "<group>"; };
 		A42D4FB619897C3C00536453 /* Explore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Explore.m; sourceTree = "<group>"; };
 		A42D4FB8198AAAB000536453 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -350,6 +349,10 @@
 		A4E21F6219659892002A9800 /* PACommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACommentCell.h; sourceTree = "<group>"; };
 		A4E21F6319659892002A9800 /* PACommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACommentCell.m; sourceTree = "<group>"; };
 		A4E21F6419659892002A9800 /* PACommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PACommentCell.xib; sourceTree = "<group>"; };
+		A4E47D551991261000DDF941 /* PAUserEventsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAUserEventsTableViewController.h; sourceTree = "<group>"; };
+		A4E47D561991261000DDF941 /* PAUserEventsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAUserEventsTableViewController.m; sourceTree = "<group>"; };
+		A4E47D581991295000DDF941 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		A4E47D591991295000DDF941 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD37013E1990081F006B63E8 /* PANestedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PANestedTableViewController.h; sourceTree = "<group>"; };
@@ -774,8 +777,8 @@
 		DDDAEDE419479665004CE102 /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				A412E1D9198835DF00384A11 /* Event.h */,
-				A412E1DA198835DF00384A11 /* Event.m */,
+				A4E47D581991295000DDF941 /* Event.h */,
+				A4E47D591991295000DDF941 /* Event.m */,
 				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
 				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
 				86292524193CBFF80057CA41 /* PAEventCell.h */,
@@ -832,6 +835,8 @@
 				A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */,
 				A43BF0F4197978690009B7AD /* PAChangePasswordViewController.h */,
 				A43BF0F5197978690009B7AD /* PAChangePasswordViewController.m */,
+				A4E47D551991261000DDF941 /* PAUserEventsTableViewController.h */,
+				A4E47D561991261000DDF941 /* PAUserEventsTableViewController.m */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -1107,7 +1112,6 @@
 				A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */,
 				A43BF0FB1979B0B60009B7AD /* PAInvitationsTableViewController.m in Sources */,
 				A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */,
-				A412E1DB198835DF00384A11 /* Event.m in Sources */,
 				A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
@@ -1120,6 +1124,7 @@
 				A4C8C347197D8F3F008F9F85 /* PAFetchManager.m in Sources */,
 				A42D4FB719897C3C00536453 /* Explore.m in Sources */,
 				DD6902D2198820270095892F /* PAAssetManager.m in Sources */,
+				A4E47D5A1991295000DDF941 /* Event.m in Sources */,
 				A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */,
 				A4773C8C1959DD0E00AB9831 /* PAImageManager.m in Sources */,
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
@@ -1135,6 +1140,7 @@
 				86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */,
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,
 				A4E21F6519659892002A9800 /* PACommentCell.m in Sources */,
+				A4E47D571991261000DDF941 /* PAUserEventsTableViewController.m in Sources */,
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,
 				A4677D4819743A05007E3C3A /* DiningPeriod.m in Sources */,
 				86D5981E193768BF00F38654 /* PAEventsViewController.m in Sources */,

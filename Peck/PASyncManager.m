@@ -1250,9 +1250,9 @@
     fileName = [fileName stringByAppendingString:@"_"];
     fileName = [fileName stringByAppendingString:[@(seconds) stringValue]];
     fileName = [fileName stringByAppendingString:@".jpeg"];
-    //NSLog(@"file name %@", fileName);
     
-    //NSLog(@"file path: %@", filePath);
+    NSLog(@"post event dictionary; %@", dictionary);
+    
     [[PASessionManager sharedClient] POST:simple_eventsAPI
                                parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary]
                                 constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
@@ -1296,7 +1296,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"EVENT JSON: %@",JSON);
+             NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
              //NSLog(@"Update Event response: %@", postsFromResponse);
@@ -1354,6 +1354,9 @@
         event.blurredImageURL = [dictionary objectForKey:@"blurred_image"];
     }
     event.attendees = [dictionary objectForKey:@"attendees"];
+    if(![[dictionary objectForKey:@"user_id"] isKindOfClass:[NSNull class]]){
+        event.created_by = [dictionary objectForKey:@"user_id"];
+    }
 }
 
 #pragma mark - Comment actions

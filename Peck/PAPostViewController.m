@@ -16,6 +16,7 @@
 #import "PASyncManager.h"
 #import "PAInvitationsTableViewController.h"
 #import "PAFetchManager.h"
+#import "UIImageView+AFNetworking.h"
 
 /*
  State for each cell is defined by the cell's tag.
@@ -93,6 +94,25 @@
     [super viewWillAppear:animated];
     
     //[self registerForKeyboardNotifications];
+    
+    if([self.controllerStatus isEqualToString:@"editing"]){
+        //if the user is editing an event rather than attempting to post one
+        self.selectorCell.tag = cellStateAlwaysOff;
+        self.title = @"Edit Event";
+        self.titleField.text = self.editableEvent.title;
+        self.descriptionTextView.text = self.editableEvent.descrip;
+        if(self.editableEvent.imageURL){
+            NSURL* url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.editableEvent.imageURL]];
+            [self.photoButton.imageView setImageWithURL:url placeholderImage:[UIImage imageNamed:@"image-placeholder.png"]];
+        }
+        self.startTimePicker.date = self.editableEvent.start_date;
+        self.endTimePicker.date = self.editableEvent.end_date;
+        self.topRightBarButton.title = @"Save";
+        
+        self.startTimeLabel.text = [formatter stringFromDate:self.editableEvent.start_date];
+        self.endTimeLabel.text = [formatter stringFromDate:self.editableEvent.end_date];
+    }
+    
     if([self.descriptionTextView.text isEqualToString:@""]){
         self.descriptionTextView.textColor = [UIColor lightGrayColor];
         self.descriptionTextView.text = @"Description";
@@ -369,10 +389,6 @@
     [self.tableView endUpdates];
 }
 
-- (IBAction)cancelResultAndExit:(id)sender
-{
-
-}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -470,11 +486,12 @@
                                       instID, @"institution_id",
                                       self.startTimeLabel.text, @"start_date",
                                       self.endTimeLabel.text, @"end_date",
+                                      [NSNumber numberWithBool:self.publicSwitch.on], @"public",
+                                      [defaults objectForKey:@"user_id"],@"invited_by",
+                                      [defaults objectForKey:@"user_id"], @"user_id",
                                       finalInvites, @"event_member_ids",
                                       alert,@"message",
                                       [NSNumber numberWithBool:YES],@"send_push_notification",
-                                      [NSNumber numberWithBool:self.publicSwitch.on], @"public",
-                                      [defaults objectForKey:@"user_id"],@"invited_by",
                                       nil];
             
             [[PASyncManager globalSyncManager] postEvent: setEvent withImage:data];
