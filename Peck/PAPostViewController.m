@@ -217,50 +217,6 @@
 
 }
 
-/*
-//DO NOT DELETE (for now)
- 
-#pragma mark - managing the keyboard notifications
-
-- (void)registerForKeyboardNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
-    
-}
-
-- (void)deregisterFromKeyboardNotifications {
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardDidHideNotification
-                                                  object:nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardWillHideNotification
-                                                  object:nil];
-    
-}
-
-- (void)keyboardWasShown:(NSNotification *)notification {
-    NSDictionary* info = [notification userInfo];
-    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    if(CGRectEqualToRect(_initialTableViewFrame, self.tableView.frame)){
-        self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
-    }
-    
-}
-
-- (void)keyboardWillBeHidden:(NSNotification *)notification {
-    self.tableView.frame = _initialTableViewFrame;
-}
-*/
-
 #pragma mark table view delegate
 
 
@@ -474,66 +430,65 @@
 - (IBAction)returnResultAndExit:(id)sender
 {
     if([self.topRightBarButton.title isEqualToString:@"Save"]){
+        //Editing
         if(_controlSwitch.selectedSegmentIndex==0){
+            //The user is attempting to edit an event
             if([self.titleField.text isEqualToString:@""]){
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                                                message:@"Your event must have a title"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-
+                [self showAllertWithMessage:@"Your event must have a title"];
             }else{
                 [self updateEvent];
             }
         }else{
-            //the user is attemping to update an announcement
+            //the user is attemping to edit an announcement
             if([self.titleField.text isEqualToString:@""]){
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                                                message:@"Your announcement must have a title"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
+                [self showAllertWithMessage:@"Your announcement must have a title"];
             }else{
                 [self updateAnnouncement];
             }
         }
     }
-    
     else{
+        //Posting
         if(_controlSwitch.selectedSegmentIndex==0){
+            //The user is attempting to post an event
             if([self.titleField.text isEqualToString:@""] || [self.startTimeLabel.text isEqualToString:@""]){
-                NSLog(@"alllert");
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                                                message:@"You must enter an event name and time"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-        
+                [self showAllertWithMessage:@"You must enter an event name and time"];
             }else{
                 [self postEvent];
             
             }
-        
         }else if(_controlSwitch.selectedSegmentIndex==1){
             //The user is attempting to post an announcement
             if([self.titleField.text isEqualToString:@""]){
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                                                message:@"You must enter an announcement title"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-
+                [self showAllertWithMessage:@"You must enter an announcement title"];
             }else{
                 [self postAnnouncement];
             }
-        
         }
     }
+}
+
+-(void)showAllertWithMessage:(NSString*)message{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                                    message:message
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
+-(void)clearScreenAndDismissView{
+    self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
+    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+    self.titleField.text=@"";
+    self.descriptionTextView.text=@"";
+    self.startTimeLabel.text =@"None";
+    self.endTimeLabel.text = @"None";
+    [self.tableView reloadData];
     
+    
+    // parent of self is a navigation controller, its parent is the dropdown controller
+    [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];
 }
 
 -(void)postEvent{
@@ -542,17 +497,7 @@
     
     [[PASyncManager globalSyncManager] postEvent: [self configureEventDictioanry] withImage:data];
     
-    self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
-    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-    self.titleField.text=@"";
-    self.descriptionTextView.text=@"";
-    self.startTimeLabel.text =@"None";
-    self.endTimeLabel.text = @"None";
-    [self.tableView reloadData];
-    
-    
-    // parent of self is a navigation controller, its parent is the dropdown controller
-    [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];
+    [self clearScreenAndDismissView];
 }
 
 -(void)postAnnouncement{
@@ -561,9 +506,11 @@
     
     [[PASyncManager globalSyncManager] postAnnouncement:[self configureAnnouncementDictionary] withImage:data];
     
+    [self clearScreenAndDismissView];
+    /*
     self.titleField.text=@"";
     self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
-    self.descriptionTextView.text = @"";
+    self.descriptionTextView.text = @"";*/
 }
 
 -(void)updateEvent{
@@ -571,17 +518,7 @@
     
     [[PASyncManager globalSyncManager] updateEvent:self.editableEvent.id withDictionary:[self configureEventDictioanry] withImage:data];
     
-    self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
-    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-    self.titleField.text=@"";
-    self.descriptionTextView.text=@"";
-    self.startTimeLabel.text =@"None";
-    self.endTimeLabel.text = @"None";
-    [self.tableView reloadData];
-    
-    
-    // parent of self is a navigation controller, its parent is the dropdown controller
-    [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];
+    [self clearScreenAndDismissView];
     
 }
 
@@ -590,11 +527,15 @@
     
     [[PASyncManager globalSyncManager] updateAnnouncement:self.editableAnnouncement.id withDictionary:[self configureAnnouncementDictionary] withImage:data];
 
+    [self clearScreenAndDismissView];
+    
+    /*
     self.titleField.text=@"";
     self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
     self.descriptionTextView.text = @"";
 
-    [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];
+    [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];*/
+    
 }
 
 -(NSDictionary*)configureEventDictioanry{
