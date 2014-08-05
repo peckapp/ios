@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *profilePicture;
 @property (weak, nonatomic) IBOutlet UITextView *blurbTextView;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (strong, nonatomic) Peer* peer;
 @end

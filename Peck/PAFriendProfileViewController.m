@@ -39,8 +39,11 @@ PAAssetManager * assetManager;
 {
     // Update the user interface for the detail item.
     self.nameLabel.text = self.peer.name;
-    self.profilePicture = [self imageForPeer:self.peer];
+    //self.profilePicture = [self imageForPeer:self.peer];
     self.blurbTextView.text = self.peer.blurb;
+    
+    NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.peer.imageURL]];
+    [self.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
        
         
     
