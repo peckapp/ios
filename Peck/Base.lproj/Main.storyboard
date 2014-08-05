@@ -514,6 +514,25 @@
                                             <segue destination="dsa-Na-DI5" kind="push" id="hWC-z7-P6s"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="8O3-VQ-t2u">
+                                        <rect key="frame" x="0.0" y="268" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8O3-VQ-t2u" id="xZK-ZT-4Ob">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Announcements" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9Rq-ds-VaO">
+                                                    <rect key="frame" x="20" y="11" width="156" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="dAi-DE-P7c" kind="push" id="uZg-xx-Pts"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="User Info" id="GJw-ic-4Xk">
@@ -698,6 +717,28 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tov-1Q-o03" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1326" y="3827"/>
+        </scene>
+        <!--My Announcements-->
+        <scene sceneID="T30-UV-TZ5">
+            <objects>
+                <tableViewController id="dAi-DE-P7c" customClass="PAUserAnnouncementsTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="FzX-gg-pHR">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="dAi-DE-P7c" id="YRP-9Q-SMj"/>
+                            <outlet property="delegate" destination="dAi-DE-P7c" id="d0N-vh-cdh"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="My Announcements" id="muv-Hl-rzE"/>
+                    <connections>
+                        <segue destination="I0y-hH-f6V" kind="push" identifier="editAnnouncement" id="qOD-fx-0or"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cDm-nm-mHy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2290" y="4604"/>
         </scene>
         <!--Change Password-->
         <scene sceneID="mTT-FR-3aA">
@@ -1121,7 +1162,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4sN-Pf-ic2">
-                                                    <rect key="frame" x="20" y="0.0" width="300" height="87"/>
+                                                    <rect key="frame" x="20" y="0.0" width="300" height="87.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -1311,7 +1352,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fGt-fr-HsW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-422" y="1807"/>
+            <point key="canvasLocation" x="-440" y="1807"/>
         </scene>
     </scenes>
     <resources>
@@ -1328,6 +1369,6 @@
         </simulatedScreenMetrics>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="hFV-W3-ZgN"/>
+        <segue reference="qOD-fx-0or"/>
     </inferredMetricsTieBreakers>
 </document>

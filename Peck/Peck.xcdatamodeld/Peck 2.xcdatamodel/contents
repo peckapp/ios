@@ -52,6 +52,7 @@
     <entity name="Explore" representedClassName="Explore" syncable="YES">
         <attribute name="category" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="created_by" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="end_date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="explore_description" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -112,7 +113,7 @@
         <element name="DiningPeriod" positionX="90" positionY="351" width="128" height="135"/>
         <element name="DiningPlace" positionX="-108" positionY="441" width="128" height="150"/>
         <element name="Event" positionX="124" positionY="467" width="128" height="255"/>
-        <element name="Explore" positionX="261" positionY="261" width="128" height="225"/>
+        <element name="Explore" positionX="261" positionY="261" width="128" height="240"/>
         <element name="Institution" positionX="-54" positionY="189" width="128" height="210"/>
         <element name="MenuItem" positionX="90" positionY="342" width="128" height="103"/>
         <element name="Peck" positionX="90" positionY="342" width="128" height="163"/>

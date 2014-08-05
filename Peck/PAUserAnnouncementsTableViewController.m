@@ -1,22 +1,22 @@
 //
-//  PAUserEventsTableViewController.m
+//  PAUserAnnouncementsTableViewController.m
 //  Peck
 //
 //  Created by John Karabinos on 8/5/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
-#import "PAUserEventsTableViewController.h"
+#import "PAUserAnnouncementsTableViewController.h"
 #import "PAAppDelegate.h"
-#import "Event.h"
+#import "Explore.h"
 #import "PAPostViewController.h"
 
-@interface PAUserEventsTableViewController ()
-@property (strong, nonatomic) Event* selectedEvent;
+@interface PAUserAnnouncementsTableViewController ()
+@property (strong, nonatomic) Explore* selectedAnnouncement;
 
 @end
 
-@implementation PAUserEventsTableViewController
+@implementation PAUserAnnouncementsTableViewController
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
@@ -31,7 +31,7 @@
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -67,54 +67,54 @@
     [self configureCell:cell atIndexPath:(NSIndexPath*)indexPath];
     
     return cell;
-
+    
 }
 
 -(void)configureCell:(UITableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath{
-    Event* event = [_fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = event.title;
+    Explore* explore = [_fetchedResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.text = explore.title;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 }
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    self.selectedEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
-    [self performSegueWithIdentifier:@"editEvent" sender:self];
+    self.selectedAnnouncement = [_fetchedResultsController objectAtIndexPath:indexPath];
+    [self performSegueWithIdentifier:@"editAnnouncement" sender:self];
 }
 
 /*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
 
 /*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
 
 /*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+ }
+ */
 
 /*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 
 #pragma mark - Navigation
@@ -123,10 +123,10 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if([[segue identifier] isEqualToString:@"editEvent"]){
+    if([[segue identifier] isEqualToString:@"editAnnouncement"]){
         PAPostViewController* controller = [segue destinationViewController];
-        controller.controllerStatus = @"editing event";
-        controller.editableEvent = self.selectedEvent;
+        controller.controllerStatus = @"editing announcement";
+        controller.editableAnnouncement = self.selectedAnnouncement;
         NSLog(@"edit the event");
     }
 }
@@ -144,14 +144,19 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
     
-    NSString * eventString = @"Event";
+    NSString * eventString = @"Explore";
     NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
     
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"created_by = %@", [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"]];
     
-    [fetchRequest setPredicate:predicate];
+    NSPredicate* categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", @"announcement"];
+    
+    NSArray* predicateArray = [NSArray arrayWithObjects:predicate, categoryPredicate, nil];
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    
+    [fetchRequest setPredicate:compoundPredicate];
     
     // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
@@ -203,7 +208,7 @@
     {
         case NSFetchedResultsChangeInsert:
             [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
+            
             break;
             
         case NSFetchedResultsChangeDelete:

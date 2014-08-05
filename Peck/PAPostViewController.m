@@ -95,22 +95,14 @@
     
     //[self registerForKeyboardNotifications];
     
-    if([self.controllerStatus isEqualToString:@"editing"]){
+    if([self.controllerStatus isEqualToString:@"editing event"]){
         //if the user is editing an event rather than attempting to post one
-        self.selectorCell.tag = cellStateAlwaysOff;
-        self.title = @"Edit Event";
-        self.titleField.text = self.editableEvent.title;
-        self.descriptionTextView.text = self.editableEvent.descrip;
-        if(self.editableEvent.imageURL){
-            NSURL* url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.editableEvent.imageURL]];
-            [self.photoButton.imageView setImageWithURL:url placeholderImage:[UIImage imageNamed:@"image-placeholder.png"]];
-        }
-        self.startTimePicker.date = self.editableEvent.start_date;
-        self.endTimePicker.date = self.editableEvent.end_date;
-        self.topRightBarButton.title = @"Save";
-        
-        self.startTimeLabel.text = [formatter stringFromDate:self.editableEvent.start_date];
-        self.endTimeLabel.text = [formatter stringFromDate:self.editableEvent.end_date];
+        [self configureEventEditingView];
+    }
+    
+    else if([self.controllerStatus isEqualToString:@"editing announcement"]){
+        //if the user is editing an announcement
+        [self configureAnnouncementEditingView];
     }
     
     if([self.descriptionTextView.text isEqualToString:@""]){
@@ -134,6 +126,32 @@
     }
     
 }
+
+-(void)configureEventEditingView{
+    self.selectorCell.tag = cellStateAlwaysOff;
+    self.title = @"Edit Event";
+    self.titleField.text = self.editableEvent.title;
+    self.descriptionTextView.text = self.editableEvent.descrip;
+    if(self.editableEvent.imageURL){
+        NSURL* url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.editableEvent.imageURL]];
+        [self.photoButton.imageView setImageWithURL:url placeholderImage:[UIImage imageNamed:@"image-placeholder.png"]];
+    }
+    self.startTimePicker.date = self.editableEvent.start_date;
+    self.endTimePicker.date = self.editableEvent.end_date;
+    self.topRightBarButton.title = @"Save";
+    
+    self.startTimeLabel.text = [formatter stringFromDate:self.editableEvent.start_date];
+    self.endTimeLabel.text = [formatter stringFromDate:self.editableEvent.end_date];
+
+}
+
+-(void)configureAnnouncementEditingView{
+    self.controlSwitch.selectedSegmentIndex = 1;
+    self.selectorCell.tag = cellStateAlwaysOff;
+    self.title = @"Edit Announcement";
+    
+}
+
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
@@ -446,108 +464,140 @@
 
 - (IBAction)returnResultAndExit:(id)sender
 {
-    if(_controlSwitch.selectedSegmentIndex==0){
-        if([self.titleField.text isEqualToString:@""] || [self.startTimeLabel.text isEqualToString:@""]){
-            NSLog(@"alllert");
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                                            message:@"You must enter an event name and time"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        
-        } else {
-            NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-            
-            NSNumber *instID = [defaults objectForKey:@"institution_id"];
-            
-            NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
-            
-            NSMutableArray* finalInvites = [self.invitedPeople mutableCopy];
-            for( NSNumber* circleID in self.invitedCircles){
-                Circle* circle = [[PAFetchManager sharedFetchManager] getObject:circleID withEntityType:@"Circle" andType:nil];
-                NSSet*members = circle.circle_members;
-                NSArray* circleMembers = [members allObjects];
-                for(Peer* peer in circleMembers){
-                    if(![finalInvites containsObject:peer.id]){
-                        [finalInvites addObject:peer.id];
-                    }
-                }
-            }
-            
-            NSLog(@"final invites: %@", finalInvites);
-            NSString* alert = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
-            alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
-            alert = [alert stringByAppendingString:@" has invited you to an event"];
-            
-            NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      self.titleField.text,@"title",
-                                      self.descriptionTextView.text, @"event_description",
-                                      instID, @"institution_id",
-                                      self.startTimeLabel.text, @"start_date",
-                                      self.endTimeLabel.text, @"end_date",
-                                      [NSNumber numberWithBool:self.publicSwitch.on], @"public",
-                                      [defaults objectForKey:@"user_id"],@"invited_by",
-                                      [defaults objectForKey:@"user_id"], @"user_id",
-                                      finalInvites, @"event_member_ids",
-                                      alert,@"message",
-                                      [NSNumber numberWithBool:YES],@"send_push_notification",
-                                      nil];
-            
-            [[PASyncManager globalSyncManager] postEvent: setEvent withImage:data];
-            
-            
-            
-            
-            self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
-            _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
-            self.titleField.text=@"";
-            self.descriptionTextView.text=@"";
-            self.startTimeLabel.text =@"None";
-            self.endTimeLabel.text = @"None";
-            [self.tableView reloadData];
-            
-            
-            // parent of self is a navigation controller, its parent is the dropdown controller
-            [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];
-        }
-        
-    }else if(_controlSwitch.selectedSegmentIndex==1){
-        //The user is attempting to post an announcement
+    if([self.topRightBarButton.title isEqualToString:@"Save"]){
         if([self.titleField.text isEqualToString:@""]){
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                                            message:@"You must enter an announcement title"
+                                                            message:@"Your event must have a title"
                                                            delegate:self
                                                   cancelButtonTitle:@"OK"
                                                   otherButtonTitles:nil];
             [alert show];
 
         }else{
-            NSNumber *instID = [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
-            
-            
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                                 NSUserDomainMask, YES);
-            NSString *documentsDirectory = [paths objectAtIndex:0];
-            NSString* path = [documentsDirectory stringByAppendingPathComponent:
-                              @"event_photo.jpeg" ];
-            NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
-            [data writeToFile:path atomically:YES];
-            
-            NSDictionary* announcement = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          self.titleField.text,@"title",
-                                          self.descriptionTextView.text, @"announcement_description",
-                                          instID, @"institution_id",
-                                          nil];
-            [[PASyncManager globalSyncManager] postAnnouncement:announcement withImage:data];
-            
-            self.titleField.text=@"";
-            self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
-            self.descriptionTextView.text = @"";
+            [self updateEvent];
         }
-        
     }
     
+    else{
+        if(_controlSwitch.selectedSegmentIndex==0){
+            if([self.titleField.text isEqualToString:@""] || [self.startTimeLabel.text isEqualToString:@""]){
+                NSLog(@"alllert");
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                                                message:@"You must enter an event name and time"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+        
+            }else{
+                [self postEvent];
+            
+            }
+        
+        }else if(_controlSwitch.selectedSegmentIndex==1){
+            //The user is attempting to post an announcement
+            if([self.titleField.text isEqualToString:@""]){
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                                                message:@"You must enter an announcement title"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+
+            }else{
+                [self postAnnouncement];
+            }
+        
+        }
+    }
+    
+}
+
+-(void)postEvent{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSNumber *instID = [defaults objectForKey:@"institution_id"];
+    
+    NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
+    
+    NSMutableArray* finalInvites = [self.invitedPeople mutableCopy];
+    for( NSNumber* circleID in self.invitedCircles){
+        Circle* circle = [[PAFetchManager sharedFetchManager] getObject:circleID withEntityType:@"Circle" andType:nil];
+        NSSet*members = circle.circle_members;
+        NSArray* circleMembers = [members allObjects];
+        for(Peer* peer in circleMembers){
+            if(![finalInvites containsObject:peer.id]){
+                [finalInvites addObject:peer.id];
+            }
+        }
+    }
+    
+    NSLog(@"final invites: %@", finalInvites);
+    NSString* alert = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
+    alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
+    alert = [alert stringByAppendingString:@" has invited you to an event"];
+    
+    NSDateFormatter* timeZoneFormatter = [[NSDateFormatter alloc] init];
+    [timeZoneFormatter setDateFormat:@"MMM dd, yyyy h:mm a ZZZ"];
+    NSString*startDate = [timeZoneFormatter stringFromDate:self.startTimePicker.date];
+    NSString*endDate = [timeZoneFormatter stringFromDate:self.endTimePicker.date];
+    
+    NSLog(@"the start date: %@", startDate);
+    
+    NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
+                              self.titleField.text,@"title",
+                              self.descriptionTextView.text, @"event_description",
+                              instID, @"institution_id",
+                              startDate, @"start_date",
+                              endDate, @"end_date",
+                              [NSNumber numberWithBool:self.publicSwitch.on], @"public",
+                              [defaults objectForKey:@"user_id"],@"invited_by",
+                              [defaults objectForKey:@"user_id"], @"user_id",
+                              finalInvites, @"event_member_ids",
+                              alert,@"message",
+                              [NSNumber numberWithBool:YES],@"send_push_notification",
+                              nil];
+    
+    [[PASyncManager globalSyncManager] postEvent: setEvent withImage:data];
+    
+    
+    
+    
+    self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
+    _userEvents = [NSMutableArray arrayWithArray:@[@"",@"",@"",@"",@"",@""]];
+    self.titleField.text=@"";
+    self.descriptionTextView.text=@"";
+    self.startTimeLabel.text =@"None";
+    self.endTimeLabel.text = @"None";
+    [self.tableView reloadData];
+    
+    
+    // parent of self is a navigation controller, its parent is the dropdown controller
+    [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];
+}
+
+-(void)postAnnouncement{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *instID = [defaults objectForKey:@"institution_id"];
+    
+    
+    NSData* data = UIImageJPEGRepresentation(self.photoButton.imageView.image, .5) ;
+    
+    
+    NSDictionary* announcement = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  self.titleField.text,@"title",
+                                  self.descriptionTextView.text, @"announcement_description",
+                                  instID, @"institution_id",
+                                  [defaults objectForKey:@"user_id"],@"user_id",
+                                  nil];
+    [[PASyncManager globalSyncManager] postAnnouncement:announcement withImage:data];
+    
+    self.titleField.text=@"";
+    self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
+    self.descriptionTextView.text = @"";
+}
+
+-(void)updateEvent{
     
 }
 

@@ -64,7 +64,6 @@
 		A40CF56819547ACC0021C088 /* PAPeers.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56719547ACC0021C088 /* PAPeers.m */; };
 		A40CF574195483140021C088 /* PABST.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF573195483140021C088 /* PABST.m */; };
 		A412E1D41986E63800384A11 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = A412E1D31986E63800384A11 /* Comment.m */; };
-		A42D4FB719897C3C00536453 /* Explore.m in Sources */ = {isa = PBXBuildFile; fileRef = A42D4FB619897C3C00536453 /* Explore.m */; };
 		A42D4FB9198AAAB000536453 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A42D4FB8198AAAB000536453 /* Security.framework */; };
 		A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */; };
 		A43BF0EA197813200009B7AD /* PAProfileTableViewController2.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */; };
@@ -99,6 +98,8 @@
 		A4773C8F195A076800AB9831 /* PACreateCircleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C8E195A076800AB9831 /* PACreateCircleViewController.m */; };
 		A4794C1D19620746002BD272 /* profile-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DDCD45C0195DC8E60032333F /* profile-placeholder.png */; };
 		A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4794C22196320AB002BD272 /* PAInvitationViewController.m */; };
+		A482259619914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A482259519914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m */; };
+		A482259919914E0B007D9A9F /* Explore.m in Sources */ = {isa = PBXBuildFile; fileRef = A482259819914E0B007D9A9F /* Explore.m */; };
 		A4925C07194A179A001AAC4A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C06194A179A001AAC4A /* Accounts.framework */; };
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
@@ -272,8 +273,6 @@
 		A412E1D21986E63800384A11 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
 		A412E1D31986E63800384A11 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
 		A412E1D51987E0CD00384A11 /* Peck 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Peck 2.xcdatamodel"; sourceTree = "<group>"; };
-		A42D4FB519897C3C00536453 /* Explore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Explore.h; sourceTree = "<group>"; };
-		A42D4FB619897C3C00536453 /* Explore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Explore.m; sourceTree = "<group>"; };
 		A42D4FB8198AAAB000536453 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A433EAA0195B3F5800DAA201 /* HTAutocompleteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTAutocompleteManager.h; sourceTree = "<group>"; };
 		A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTAutocompleteManager.m; sourceTree = "<group>"; };
@@ -331,6 +330,10 @@
 		A4773C8E195A076800AB9831 /* PACreateCircleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACreateCircleViewController.m; sourceTree = "<group>"; };
 		A4794C21196320AB002BD272 /* PAInvitationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAInvitationViewController.h; sourceTree = "<group>"; };
 		A4794C22196320AB002BD272 /* PAInvitationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAInvitationViewController.m; sourceTree = "<group>"; };
+		A482259419914C0D007D9A9F /* PAUserAnnouncementsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAUserAnnouncementsTableViewController.h; sourceTree = "<group>"; };
+		A482259519914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAUserAnnouncementsTableViewController.m; sourceTree = "<group>"; };
+		A482259719914E0B007D9A9F /* Explore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Explore.h; sourceTree = "<group>"; };
+		A482259819914E0B007D9A9F /* Explore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Explore.m; sourceTree = "<group>"; };
 		A4925C06194A179A001AAC4A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A4925C08194A17A1001AAC4A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A4925C0A194A17AB001AAC4A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -797,8 +800,8 @@
 		DDDAEDE51947967A004CE102 /* Explore */ = {
 			isa = PBXGroup;
 			children = (
-				A42D4FB519897C3C00536453 /* Explore.h */,
-				A42D4FB619897C3C00536453 /* Explore.m */,
+				A482259719914E0B007D9A9F /* Explore.h */,
+				A482259819914E0B007D9A9F /* Explore.m */,
 				863843E1193CB7FD004110F5 /* PAExploreTableViewController.h */,
 				863843E2193CB7FD004110F5 /* PAExploreTableViewController.m */,
 				DDDAEDD819465DCB004CE102 /* PAExploreCell.h */,
@@ -837,6 +840,8 @@
 				A43BF0F5197978690009B7AD /* PAChangePasswordViewController.m */,
 				A4E47D551991261000DDF941 /* PAUserEventsTableViewController.h */,
 				A4E47D561991261000DDF941 /* PAUserEventsTableViewController.m */,
+				A482259419914C0D007D9A9F /* PAUserAnnouncementsTableViewController.h */,
+				A482259519914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -1122,7 +1127,6 @@
 				A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
 				A4C8C347197D8F3F008F9F85 /* PAFetchManager.m in Sources */,
-				A42D4FB719897C3C00536453 /* Explore.m in Sources */,
 				DD6902D2198820270095892F /* PAAssetManager.m in Sources */,
 				A4E47D5A1991295000DDF941 /* Event.m in Sources */,
 				A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */,
@@ -1130,6 +1134,7 @@
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
 				A4773C8019589E8200AB9831 /* PAEvents.m in Sources */,
 				A4773C8F195A076800AB9831 /* PACreateCircleViewController.m in Sources */,
+				A482259619914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m in Sources */,
 				A4677D52197562B1007E3C3A /* PADiningOpportunityCell.m in Sources */,
 				86292527193CBFF80057CA41 /* PAEventCell.m in Sources */,
 				A43BF0F6197978690009B7AD /* PAChangePasswordViewController.m in Sources */,
@@ -1148,6 +1153,7 @@
 				A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */,
 				A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */,
 				A43BF0EA197813200009B7AD /* PAProfileTableViewController2.m in Sources */,
+				A482259919914E0B007D9A9F /* Explore.m in Sources */,
 				A4677D3F19743A05007E3C3A /* Circle.m in Sources */,
 				A463F384194B959800ED441F /* PACircleCell.m in Sources */,
 				A43ED454198C0967007A6BA9 /* Peck.m in Sources */,

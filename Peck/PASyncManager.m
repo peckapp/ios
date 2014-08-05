@@ -743,6 +743,9 @@
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         explore.imageURL = [dictionary objectForKey:@"image"];
     }
+    if(![[dictionary objectForKey:@"user_id"] isKindOfClass:[NSNull class]]){
+        explore.created_by = [dictionary objectForKey:@"user_id"];
+    }
 }
 
 #pragma mark - Circles actions
@@ -1267,6 +1270,10 @@
 
 }
 
+-(void)updateEvent:(NSDictionary*)dictioanary withImage:(NSData*)imageData{
+    
+}
+
 -(void)deleteEvent:(NSNumber*)eventID
 {
     NSString *appendedURL = [@"api/simple_events/" stringByAppendingString:[eventID stringValue]];
@@ -1345,8 +1352,8 @@
     event.id = [dictionary objectForKey:@"id"];
     event.type = @"simple";
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
-    event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
-    event.end_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    event.end_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         event.imageURL = [dictionary objectForKey:@"image"];
     }

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PACoreDataProtocol.h"
 #import "Event.h"
+#import "Explore.h"
 
 @interface PAPostViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PACoreDataProtocol, UITextViewDelegate>
 
@@ -22,6 +23,7 @@
 
 @property (weak, nonatomic) NSString* controllerStatus;
 @property (weak, nonatomic) Event* editableEvent;
+@property (weak, nonatomic) Explore* editableAnnouncement;
 
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *controlSwitch;
