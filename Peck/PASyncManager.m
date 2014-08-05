@@ -740,6 +740,12 @@
     explore.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     explore.id = [dictionary objectForKey:@"id"];
     explore.category = category;
+    
+    NSString* description = [category stringByAppendingString:@"_description"];
+    if(![[dictionary objectForKey:description] isKindOfClass:[NSNull class]]){
+        explore.explore_description = [dictionary objectForKey:description];
+    }
+    
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         explore.imageURL = [dictionary objectForKey:@"image"];
     }
@@ -1237,6 +1243,38 @@
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
                                   }];
+}
+
+-(void)updateAnnouncement:(NSNumber*)announcementID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSDate* now = [NSDate date];
+    NSTimeInterval nowEpochSeconds = [now timeIntervalSince1970];
+    NSInteger seconds = (NSInteger)nowEpochSeconds;
+    
+    NSString* fileName = [@"announcement_photo_" stringByAppendingString:[[defaults objectForKey:@"user_id" ] stringValue]];
+    fileName = [fileName stringByAppendingString:@"_"];
+    fileName = [fileName stringByAppendingString:[@(seconds) stringValue]];
+    fileName = [fileName stringByAppendingString:@".jpeg"];
+    
+    NSMutableDictionary* baseDictionary = [[self applyWrapper:@"announcement" toDictionary:dictionary] mutableCopy];
+    [baseDictionary setObject:@"patch" forKey:@"_method"];
+    
+    NSString* announcementURL = [announcementAPI stringByAppendingString:@"/"];
+    announcementURL = [announcementURL stringByAppendingString:[announcementID stringValue]];
+    
+    
+    [[PASessionManager sharedClient] POST:announcementURL
+                               parameters:baseDictionary
+                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         //NSLog(@"success: %@", JSON);
+         [self updateExploreInfo];
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+
 }
 
 
