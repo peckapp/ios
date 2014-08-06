@@ -10,9 +10,10 @@
 #import "PAAppDelegate.h"
 #import "Explore.h"
 #import "PAPostViewController.h"
+#import "Announcement.h"
 
 @interface PAUserAnnouncementsTableViewController ()
-@property (strong, nonatomic) Explore* selectedAnnouncement;
+@property (strong, nonatomic) Announcement* selectedAnnouncement;
 
 @end
 
@@ -59,9 +60,9 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"myEventCell"];
+    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"myAnnouncementCell"];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"myEventCell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"myAnnouncementCell"];
     }
     
     [self configureCell:cell atIndexPath:(NSIndexPath*)indexPath];
@@ -71,8 +72,8 @@
 }
 
 -(void)configureCell:(UITableViewCell*)cell atIndexPath:(NSIndexPath*)indexPath{
-    Explore* explore = [_fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = explore.title;
+    Announcement* announcement = [_fetchedResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.text = announcement.title;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 }
 
@@ -144,25 +145,16 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
     
-    NSString * eventString = @"Explore";
-    NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
+   
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Announcement" inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
-    
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"created_by = %@", [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"]];
-    
-    NSPredicate* categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", @"announcement"];
-    
-    NSArray* predicateArray = [NSArray arrayWithObjects:predicate, categoryPredicate, nil];
-    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
-    
-    [fetchRequest setPredicate:compoundPredicate];
-    
+
     // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"created_at" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];

@@ -100,6 +100,7 @@
 		A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4794C22196320AB002BD272 /* PAInvitationViewController.m */; };
 		A482259619914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A482259519914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m */; };
 		A482259919914E0B007D9A9F /* Explore.m in Sources */ = {isa = PBXBuildFile; fileRef = A482259819914E0B007D9A9F /* Explore.m */; };
+		A48225A2199268D6007D9A9F /* Announcement.m in Sources */ = {isa = PBXBuildFile; fileRef = A48225A1199268D6007D9A9F /* Announcement.m */; };
 		A4925C07194A179A001AAC4A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C06194A179A001AAC4A /* Accounts.framework */; };
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
@@ -334,6 +335,8 @@
 		A482259519914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAUserAnnouncementsTableViewController.m; sourceTree = "<group>"; };
 		A482259719914E0B007D9A9F /* Explore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Explore.h; sourceTree = "<group>"; };
 		A482259819914E0B007D9A9F /* Explore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Explore.m; sourceTree = "<group>"; };
+		A48225A0199268D6007D9A9F /* Announcement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Announcement.h; sourceTree = "<group>"; };
+		A48225A1199268D6007D9A9F /* Announcement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Announcement.m; sourceTree = "<group>"; };
 		A4925C06194A179A001AAC4A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A4925C08194A17A1001AAC4A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A4925C0A194A17AB001AAC4A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -834,6 +837,8 @@
 		DDDAEDE8194796C6004CE102 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				A48225A0199268D6007D9A9F /* Announcement.h */,
+				A48225A1199268D6007D9A9F /* Announcement.m */,
 				A43BF0E8197813200009B7AD /* PAProfileTableViewController2.h */,
 				A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */,
 				A43BF0F4197978690009B7AD /* PAChangePasswordViewController.h */,
@@ -1149,6 +1154,7 @@
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,
 				A4677D4819743A05007E3C3A /* DiningPeriod.m in Sources */,
 				86D5981E193768BF00F38654 /* PAEventsViewController.m in Sources */,
+				A48225A2199268D6007D9A9F /* Announcement.m in Sources */,
 				A40CF574195483140021C088 /* PABST.m in Sources */,
 				A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */,
 				A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */,

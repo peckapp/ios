@@ -53,6 +53,7 @@
 //announcement actions
 -(void)postAnnouncement:(NSDictionary*)dictionary withImage:(NSData*)imageData;
 -(void)updateAnnouncement:(NSNumber*)announcementID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData;
+-(void)updateUserAnnouncements;
 
 // methods for updating events
 -(void)updateEventInfo;

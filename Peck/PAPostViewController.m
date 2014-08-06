@@ -137,7 +137,11 @@
     self.selectorCell.tag = cellStateAlwaysOff;
     self.title = @"Edit Event";
     self.titleField.text = self.editableEvent.title;
+    
     self.descriptionTextView.text = self.editableEvent.descrip;
+    if(self.editableEvent.descrip){
+        self.descriptionTextView.textColor = [UIColor blackColor];
+    }
     if(self.editableEvent.imageURL){
         NSURL* url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.editableEvent.imageURL]];
         [self.photo setImageWithURL:url placeholderImage:[UIImage imageNamed:@"image-placeholder.png"]];
@@ -157,7 +161,10 @@
     self.selectorCell.tag = cellStateAlwaysOff;
     self.title = @"Edit Announcement";
     self.titleField.text = self.editableAnnouncement.title;
-    self.descriptionTextView.text = self.editableAnnouncement.explore_description;
+    self.descriptionTextView.text = self.editableAnnouncement.content;
+    if(self.editableAnnouncement.content){
+        self.descriptionTextView.textColor = [UIColor blackColor];
+    }
     if(self.editableAnnouncement.imageURL){
         NSURL* url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.editableAnnouncement.imageURL]];
         [self.photo setImageWithURL:url placeholderImage:[UIImage imageNamed:@"image-placeholder.png"]];
@@ -513,10 +520,6 @@
     [[PASyncManager globalSyncManager] postAnnouncement:[self configureAnnouncementDictionary] withImage:data];
     
     [self clearScreenAndDismissView];
-    /*
-    self.titleField.text=@"";
-    self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
-    self.descriptionTextView.text = @"";*/
 }
 
 -(void)updateEvent{
@@ -534,13 +537,6 @@
     [[PASyncManager globalSyncManager] updateAnnouncement:self.editableAnnouncement.id withDictionary:[self configureAnnouncementDictionary] withImage:data];
 
     [self clearScreenAndDismissView];
-    
-    /*
-    self.titleField.text=@"";
-    self.photoButton.imageView.image = [UIImage imageNamed:@"image-placeholder.png"];
-    self.descriptionTextView.text = @"";
-
-    [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];*/
     
 }
 
@@ -572,10 +568,14 @@
     NSString*endDate = [timeZoneFormatter stringFromDate:self.endTimePicker.date];
     
     NSLog(@"the start date: %@", startDate);
+    NSString*description = @"";
+    if(self.descriptionTextView.textColor != [UIColor lightGrayColor]){
+        description = self.descriptionTextView.text;
+    }
     
     NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                               self.titleField.text,@"title",
-                              self.descriptionTextView.text, @"event_description",
+                              description, @"event_description",
                               instID, @"institution_id",
                               startDate, @"start_date",
                               endDate, @"end_date",
@@ -594,10 +594,15 @@
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSNumber *instID = [defaults objectForKey:@"institution_id"];
     
+    NSString*description = @"";
+    if(self.descriptionTextView.textColor != [UIColor lightGrayColor]){
+        description = self.descriptionTextView.text;
+    }
+
     
     NSDictionary* announcement = [NSDictionary dictionaryWithObjectsAndKeys:
                                   self.titleField.text,@"title",
-                                  self.descriptionTextView.text, @"announcement_description",
+                                  description, @"announcement_description",
                                   instID, @"institution_id",
                                   [defaults objectForKey:@"user_id"],@"user_id",
                                   nil];

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PACoreDataProtocol.h"
 #import "Event.h"
-#import "Explore.h"
+#import "Announcement.h"
 
 @interface PAPostViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PACoreDataProtocol, UITextViewDelegate>
 
@@ -23,7 +23,7 @@
 
 @property (weak, nonatomic) NSString* controllerStatus;
 @property (weak, nonatomic) Event* editableEvent;
-@property (weak, nonatomic) Explore* editableAnnouncement;
+@property (weak, nonatomic) Announcement* editableAnnouncement;
 
 @property (weak, nonatomic) IBOutlet UIImageView *photo;
 

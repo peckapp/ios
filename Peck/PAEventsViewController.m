@@ -119,7 +119,8 @@ PAAssetManager * assetManager;
 
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
-
+    [[PASyncManager globalSyncManager] updateUserAnnouncements];
+    
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
     [self.tableView reloadData];
