@@ -631,12 +631,14 @@ BOOL viewingCircles;
     
     switch(type)
     {
-        case NSFetchedResultsChangeInsert:
+        case NSFetchedResultsChangeInsert:{
             [tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
+            [tableView reloadData];
             break;
             
+        }
         case NSFetchedResultsChangeDelete:
             [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
