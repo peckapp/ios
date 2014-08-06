@@ -37,6 +37,7 @@
 @property BOOL startPickerIsOpen;
 @property BOOL endPickerIsOpen;
 @property CGRect initialTableViewFrame;
+@property BOOL userHasChangedEndTime;
 
 @end
 
@@ -49,6 +50,7 @@
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 @synthesize formatter;
+@synthesize userHasChangedEndTime;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -82,6 +84,7 @@
     self.titleField.delegate = self;
     self.descriptionTextView.delegate = self;
     self.locationTextField.delegate = self;
+    userHasChangedEndTime = NO;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -192,7 +195,7 @@
         NSString *stringFromDate = [formatter stringFromDate:self.startTimePicker.date];
         self.startTimeLabel.text = stringFromDate;
         
-        if([self.startTimePicker.date compare:self.endTimePicker.date]==NSOrderedDescending || [self.endTimeLabel.text isEqualToString:@"None"]){
+        if([self.startTimePicker.date compare:self.endTimePicker.date]==NSOrderedDescending || !userHasChangedEndTime){
             //if the start time is after the end time or the end time has not been set yet
             
             NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
@@ -211,6 +214,7 @@
         }
     }else if(sender == self.endTimePicker){
         NSString* stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
+        userHasChangedEndTime=YES;
         
         if([self.endTimePicker.date compare:self.startTimePicker.date]==NSOrderedAscending){
             //if the end time if before the start time
