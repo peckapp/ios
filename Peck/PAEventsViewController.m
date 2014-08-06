@@ -48,7 +48,7 @@ struct eventImage{
 @property (assign, nonatomic) CGRect centerTableViewFrame;
 @property (assign, nonatomic) CGRect rightTableViewFrame;
 
-@property (assign, nonatomic) NSInteger selectedDayOffset;
+@property (assign, nonatomic) NSInteger selectedDay;
 
 @end
 
@@ -99,7 +99,7 @@ PAAssetManager * assetManager;
     // TODO: optimize parallax? Currently takes a couple percent cpu extra and a two megabytes
     parallaxOn = YES;
 
-    self.selectedDayOffset = 0;
+    self.selectedDay = 0;
     showingDetail = NO;
     [self reloadTheView];
     if(!searchBar){
@@ -247,20 +247,17 @@ PAAssetManager * assetManager;
 
 #pragma mark - Fetched Results controller
 
-- (NSFetchedResultsController *)centerFetchedResultsController
+- (NSFetchedResultsController *)constructFetchedResultsControllerForDay:(NSInteger)day
 {
-    if (_centerFetchedResultsController!=nil) {
-        return _centerFetchedResultsController;
-    }
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    
+
     NSString *eventString = @"Event";
     NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
-    
-    
+
+
     NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
     if(searchBarText){
         NSString *attributeName = @"title";
@@ -269,45 +266,55 @@ PAAssetManager * assetManager;
         // the [c] dismisses case sensitivity
         [predicateArray addObject:predicate];
     }
-    
-    
-    NSDate *selectedMorning = [self getDateForDay:self.selectedDayOffset];
+
+
+    NSDate *selectedMorning = [self getDateForDay:day];
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     [dateComponents setDay:1];
     NSDate *selectedNight =[[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:selectedMorning options:0];
-    
+
     NSPredicate *startDatePredicate = [NSPredicate predicateWithFormat:@"start_date > %@", selectedMorning];
     NSPredicate *endDatePredicate = [NSPredicate predicateWithFormat:@"start_date < %@", selectedNight];
     NSLog(@"the current date: %@", [NSDate date]);
-    
+
     [predicateArray addObject:startDatePredicate];
     [predicateArray addObject:endDatePredicate];
     NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
     [fetchRequest setPredicate:compoundPredicate];
 
-    
+
     // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
-    
+
     // Edit the sort key as appropriate.
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
-    
+
     [fetchRequest setSortDescriptors:sortDescriptors];
-    
+
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
-                                                                 initWithFetchRequest:fetchRequest
-                                                                 managedObjectContext:_managedObjectContext
-                                                                 sectionNameKeyPath:nil //this needs to be nil
-                                                                 cacheName:nil];
-        
+                                                             initWithFetchRequest:fetchRequest
+                                                             managedObjectContext:_managedObjectContext
+                                                             sectionNameKeyPath:nil //this needs to be nil
+                                                             cacheName:nil];
+
     aFetchedResultsController.delegate = self;
-    
-    self.centerFetchedResultsController = aFetchedResultsController;
-    return _centerFetchedResultsController;
+    return aFetchedResultsController;
 }
+
+/*
+- (NSFetchedResultsController *)centerFetchedResultsController
+{
+    if (_centerFetchedResultsController!=nil) {
+        return _centerFetchedResultsController;
+    }
+    else {
+        return [self constructFetchedResultsControllerForDay:self.selectedDay];
+    }
+}
+ */
 
 
 -(NSDate *)getDateForDay:(NSInteger) day
@@ -673,7 +680,7 @@ PAAssetManager * assetManager;
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
     searchBar.text = nil;
     searchBarText=nil;
-    self.centerFetchedResultsController = nil;
+    //self.centerFetchedResultsController = nil;
     [self reloadTheView];
     NSLog(@"User cancelled search");
     [searchBar resignFirstResponder]; // if you want the keyboard to go away
@@ -681,27 +688,30 @@ PAAssetManager * assetManager;
 
 - (IBAction)yesterdayButton:(id)sender {
     NSLog(@"Yesterday");
-    self.selectedDayOffset--;
-    self.centerFetchedResultsController = nil;
+    self.selectedDay--;
+    //self.centerFetchedResultsController = nil;
     [self reloadTheView];
 }
 
 - (IBAction)todayButton:(id)sender {
-    self.selectedDayOffset = 0;
-    self.centerFetchedResultsController = nil;
+    self.selectedDay = 0;
+    //self.centerFetchedResultsController = nil;
     NSLog(@"Today");
     [self reloadTheView];
 }
 
 - (IBAction)tomorrowButton:(id)sender {
-    self.selectedDayOffset++;
-    self.centerFetchedResultsController = nil;
+    self.selectedDay++;
+    //self.centerFetchedResultsController = nil;
     NSLog(@"Tomorrow");
     [self reloadTheView];
 }
 
 -(void)reloadTheView{
     NSError *error = nil;
+    if (self.centerFetchedResultsController == nil) {
+        self.centerFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay];
+    }
     if (![self.centerFetchedResultsController performFetch:&error])
     {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
