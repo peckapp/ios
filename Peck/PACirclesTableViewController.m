@@ -749,14 +749,17 @@ BOOL viewingCircles;
         NSNumber *userID = [defaults objectForKey:@"user_id"];
         NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
    
-    
+        NSString* allert = @"Someone commented in some circle";
+        
         NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                text, @"content",
-                                userID, @"user_id",
-                                @"circles", @"category",
-                                selectedCell.circle.id, @"comment_from",
-                                institutionID, @"institution_id",
-                                nil];
+                                    text, @"content",
+                                    userID, @"user_id",
+                                    @"circles", @"category",
+                                    selectedCell.circle.id, @"comment_from",
+                                    institutionID, @"institution_id",
+                                    [NSNumber numberWithBool:YES], @"send_push_notification",
+                                    allert, @"message",
+                                    nil];
     
         [[PASyncManager globalSyncManager] postComment:dictionary];
     }
