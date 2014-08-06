@@ -28,7 +28,4 @@
 @property (strong, nonatomic) UIImageView *placeholderImage;
 
 @property (strong, nonatomic) NSCache *imageCache;
-- (IBAction)yesterdayButton:(id)sender;
-- (IBAction)todayButton:(id)sender;
-- (IBAction)tomorrowButton:(id)sender;
 @end

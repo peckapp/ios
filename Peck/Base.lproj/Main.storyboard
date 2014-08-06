@@ -126,28 +126,6 @@
             </objects>
             <point key="canvasLocation" x="-528" y="1078"/>
         </scene>
-        <!--Navigation Controller - Events-->
-        <scene sceneID="cUi-kZ-frf">
-            <objects>
-                <navigationController storyboardIdentifier="primary" id="rS3-R9-Ivy" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Events" id="t6u-Ov-roD"/>
-                    <navigationItem key="navigationItem" id="SUg-ko-wCF"/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translucent="NO" id="yXu-0R-QUA">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="nCH-YX-wb1">
-                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="pGg-6v-bdr" kind="relationship" relationship="rootViewController" id="RxB-wf-QIq"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="eq9-QA-ai8" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-3079" y="2318"/>
-        </scene>
         <!--Circles Table View Controller - Circles-->
         <scene sceneID="I7Z-lZ-gzy">
             <objects>
@@ -771,7 +749,7 @@
         <!--Events View Controller - Master-->
         <scene sceneID="VgW-fR-Quf">
             <objects>
-                <tableViewController title="Master" id="pGg-6v-bdr" customClass="PAEventsViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="primary" title="Master" id="pGg-6v-bdr" customClass="PAEventsViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="tQt-TN-PWz">
                         <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" id="YHn-tq-yow">
@@ -782,19 +760,8 @@
                                 <state key="normal" title="Yesterday">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <action selector="yesterdayButton:" destination="pGg-6v-bdr" eventType="touchUpInside" id="3Jr-2q-lt6"/>
-                                </connections>
                             </button>
                         </barButtonItem>
-                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="mZ0-eo-jaw">
-                            <rect key="frame" x="96" y="6" width="128" height="33"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="Today"/>
-                            <connections>
-                                <action selector="todayButton:" destination="pGg-6v-bdr" eventType="touchUpInside" id="7jy-Oy-E3X"/>
-                            </connections>
-                        </button>
                         <barButtonItem key="rightBarButtonItem" id="6Uw-Vy-Zn0">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5Zv-qp-FrF">
                                 <rect key="frame" x="233" y="5" width="71" height="33"/>
@@ -803,9 +770,6 @@
                                 <state key="normal" title="Tomorrow">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <action selector="tomorrowButton:" destination="pGg-6v-bdr" eventType="touchUpInside" id="hAo-12-vaX"/>
-                                </connections>
                             </button>
                         </barButtonItem>
                     </navigationItem>
@@ -822,7 +786,7 @@
             <objects>
                 <tableViewController id="sCG-OO-lYg" customClass="PADiningPlacesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7nE-HW-BdO">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <connections>
                             <outlet property="dataSource" destination="sCG-OO-lYg" id="7Ed-wK-upt"/>

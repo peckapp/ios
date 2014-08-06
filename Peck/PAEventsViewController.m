@@ -96,7 +96,6 @@ PAAssetManager * assetManager;
     }
     self.title = @"Events";
 
-    // TODO: optimize parallax? Currently takes a couple percent cpu extra and a two megabytes
     parallaxOn = YES;
 
     self.selectedDay = 0;
@@ -150,9 +149,20 @@ PAAssetManager * assetManager;
     UIImageView *shadow = [[UIImageView alloc] initWithImage:[assetManager horizontalShadow]];
     shadow.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
     [self.view addSubview:shadow];
+
+    UISwipeGestureRecognizer *swipeLeftGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(transitionToRightTableView)];
+    swipeLeftGesture.numberOfTouchesRequired = 1;
+    swipeLeftGesture.direction = (UISwipeGestureRecognizerDirectionLeft);
+    [self.view addGestureRecognizer:swipeLeftGesture];
+
+    UISwipeGestureRecognizer *swipeRightGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(transitionToLeftTableView)];
+    swipeRightGesture.numberOfTouchesRequired = 1;
+    swipeRightGesture.direction = (UISwipeGestureRecognizerDirectionRight);
+    [self.view addGestureRecognizer:swipeRightGesture];
 }
 
--(void)storeProfilePicture{
+- (void)storeProfilePicture
+{
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
 
@@ -535,8 +545,7 @@ PAAssetManager * assetManager;
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+    return NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -686,6 +695,8 @@ PAAssetManager * assetManager;
     [searchBar resignFirstResponder]; // if you want the keyboard to go away
 }
 
+#pragma mark - View management
+
 - (IBAction)yesterdayButton:(id)sender {
     NSLog(@"Yesterday");
     self.selectedDay--;
@@ -707,11 +718,43 @@ PAAssetManager * assetManager;
     [self reloadTheView];
 }
 
--(void)reloadTheView{
-    NSError *error = nil;
+- (void)transitionToRightTableView
+{
+    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.rightTableView.frame = self.centerTableViewFrame;
+                         self.centerTableView.frame = self.leftTableViewFrame;
+                     }
+                     completion:^(BOOL finished){
+                         UITableView * temp = self.leftTableView;
+                         self.leftTableView = self.centerTableView;
+                         self.centerTableView = self.rightTableView;
+                         self.rightTableView = temp;
+                     }];
+}
+
+-(void)transitionToLeftTableView
+{
+    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.leftTableView.frame = self.centerTableViewFrame;
+                         self.centerTableView.frame = self.rightTableViewFrame;
+                     }
+                     completion:^(BOOL finished){
+                         UITableView * temp = self.rightTableView;
+                         self.rightTableView = self.centerTableView;
+                         self.centerTableView = self.leftTableView;
+                         self.leftTableView = temp;
+                     }];
+}
+
+- (void)reloadTheView
+{
     if (self.centerFetchedResultsController == nil) {
         self.centerFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay];
     }
+
+    NSError *error = nil;
     if (![self.centerFetchedResultsController performFetch:&error])
     {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -735,7 +778,6 @@ PAAssetManager * assetManager;
                 [eventRows addObject:[NSNumber numberWithInt:i]];
             }
         }
-        
     }
     /*
     for(int j=0; j<[eventIDs count];j++){
@@ -753,7 +795,7 @@ PAAssetManager * assetManager;
     }
     */
    
-    for(int i =0; i<[eventIDs count];i++){
+    for(int i = 0; i<[eventIDs count]; i++){
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
             [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
@@ -769,7 +811,7 @@ PAAssetManager * assetManager;
             });
         });
     }
-    [self.centerTableView reloadData];
+    // [self.centerTableView reloadData];
 }
 
 #pragma mark - keyboard notifications
