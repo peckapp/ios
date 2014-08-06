@@ -17,14 +17,15 @@
 
 @interface PAEventsViewController : PANestedTableViewController <NSFetchedResultsControllerDelegate, PACoreDataProtocol, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSFetchedResultsController *leftFetchedResultsController;
+@property (strong, nonatomic) NSFetchedResultsController *centerFetchedResultsController;
+@property (strong, nonatomic) NSFetchedResultsController *rightFetchedResultsController;
+
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (strong, nonatomic) UIImageView *placeholderImage;
-
-@property (strong, nonatomic) UITableView *tableView;
 
 @property (strong, nonatomic) NSCache *imageCache;
 - (IBAction)yesterdayButton:(id)sender;

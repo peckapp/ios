@@ -40,6 +40,14 @@ struct eventImage{
 
 @interface PAEventsViewController ()
 
+@property (strong, nonatomic) UITableView *leftTableView;
+@property (strong, nonatomic) UITableView *centerTableView;
+@property (strong, nonatomic) UITableView *rightTableView;
+
+@property (assign, nonatomic) CGRect leftTableViewFrame;
+@property (assign, nonatomic) CGRect centerTableViewFrame;
+@property (assign, nonatomic) CGRect rightTableViewFrame;
+
 @end
 
 @implementation PAEventsViewController
@@ -56,7 +64,6 @@ BOOL showingSearchBar;
 NSString *searchBarText;
 NSDate *today;
 NSInteger selectedDay;
-CGRect initialTableViewRect;
 
 PAAssetManager * assetManager;
 
@@ -99,33 +106,47 @@ PAAssetManager * assetManager;
         searchBar.delegate = self;
         searchBar.showsCancelButton = NO;
     }
-    
-    
-   
-    
-    if(!self.tableView){
-        self.tableView = [[UITableView alloc] init];
-        [self.view addSubview:self.tableView];
-    }
-
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
 
     UIView * backView = [[UIView alloc] init];
     backView.backgroundColor = darkColor;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.tableView.separatorColor = lightColor;
-    self.tableView.separatorInset = UIEdgeInsetsZero;
-    [self.tableView setBackgroundView:backView];
+    
+    if (!self.centerTableView) {
+        self.centerTableView = [[UITableView alloc] init];
+        [self.view addSubview:self.centerTableView];
+    }
+    self.leftTableView.dataSource = self;
+    self.leftTableView.delegate = self;
+    self.leftTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.leftTableView.separatorColor = lightColor;
+    self.leftTableView.separatorInset = UIEdgeInsetsZero;
+    [self.leftTableView setBackgroundView:backView];
+
+    if (!self.centerTableView) {
+        self.centerTableView = [[UITableView alloc] init];
+        [self.view addSubview:self.centerTableView];
+    }
+    self.centerTableView.dataSource = self;
+    self.centerTableView.delegate = self;
+    self.centerTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.centerTableView.separatorColor = lightColor;
+    self.centerTableView.separatorInset = UIEdgeInsetsZero;
+    [self.centerTableView setBackgroundView:backView];
+
+    if (!self.centerTableView) {
+        self.centerTableView = [[UITableView alloc] init];
+        [self.view addSubview:self.centerTableView];
+    }
+    self.rightTableView.dataSource = self;
+    self.rightTableView.delegate = self;
+    self.rightTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.rightTableView.separatorColor = lightColor;
+    self.rightTableView.separatorInset = UIEdgeInsetsZero;
+    [self.rightTableView setBackgroundView:backView];
 
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
 
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
-    [self.tableView reloadData];
-
-    UIImageView * shadow = [[UIImageView alloc] initWithImage:[assetManager horizontalShadow]];
+    UIImageView *shadow = [[UIImageView alloc] initWithImage:[assetManager horizontalShadow]];
     shadow.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
     [self.view addSubview:shadow];
 }
@@ -134,7 +155,7 @@ PAAssetManager * assetManager;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
 
-        NSString* url = [[NSUserDefaults standardUserDefaults] objectForKey:@"profile_picture_url"];
+        NSString *url = [[NSUserDefaults standardUserDefaults] objectForKey:@"profile_picture_url"];
         if(url){
         
             UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString: url]]];
@@ -160,12 +181,20 @@ PAAssetManager * assetManager;
     NSLog(@"View will appear (events)");
     showingSearchBar = NO;
     showingDetail = NO;
-    [self registerForKeyboardNotifications];
-    searchBar.frame = CGRectMake(0, -searchBarHeight, self.view.frame.size.width, searchBarHeight);
-    self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, (self.view.frame.size.height));
-    initialTableViewRect= self.tableView.frame;
 
-    self.tableView.tableHeaderView = searchBar;
+    [self registerForKeyboardNotifications];
+
+    searchBar.frame = CGRectMake(0, -searchBarHeight, self.view.frame.size.width, searchBarHeight);
+
+    self.leftTableViewFrame = CGRectMake(-self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
+    self.centerTableViewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    self.rightTableViewFrame = CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
+
+    self.leftTableView.frame = self.centerTableViewFrame;
+    self.centerTableView.frame = self.centerTableViewFrame;
+    self.rightTableView.frame = self.centerTableViewFrame;
+
+    // self.centerTableView.tableHeaderView = searchBar;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -179,7 +208,7 @@ PAAssetManager * assetManager;
     [super viewDidDisappear:animated];
     
     if(!showingDetail){
-        [self.tableView reloadData];
+        [self.centerTableView reloadData];
     }
 }
 
@@ -212,23 +241,21 @@ PAAssetManager * assetManager;
                 [self.imageCache setObject:loadedImage forKey:[eventID stringValue]];
             }
         }
-        
     }
 }
 
 #pragma mark - Fetched Results controller
 
-- (NSFetchedResultsController *)fetchedResultsController
+- (NSFetchedResultsController *)centerFetchedResultsController
 {
-    if(_fetchedResultsController!=nil){
-        return _fetchedResultsController;
+    if (_centerFetchedResultsController!=nil) {
+        return _centerFetchedResultsController;
     }
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    // Edit the entity name as appropriate.
     
-    NSString * eventString = @"Event";
+    NSString *eventString = @"Event";
     NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
@@ -237,8 +264,7 @@ PAAssetManager * assetManager;
     if(searchBarText){
         NSString *attributeName = @"title";
         NSString *attributeValue = searchBarText;
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@",
-                                  attributeName, attributeValue];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@", attributeName, attributeValue];
         // the [c] dismisses case sensitivity
         [predicateArray addObject:predicate];
     }
@@ -278,8 +304,8 @@ PAAssetManager * assetManager;
         
     aFetchedResultsController.delegate = self;
     
-    self.fetchedResultsController = aFetchedResultsController;
-    return _fetchedResultsController;
+    self.centerFetchedResultsController = aFetchedResultsController;
+    return _centerFetchedResultsController;
 }
 
 
@@ -302,7 +328,7 @@ PAAssetManager * assetManager;
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.tableView beginUpdates];
+    [self.centerTableView beginUpdates];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
@@ -310,11 +336,11 @@ PAAssetManager * assetManager;
 {
     switch(type) {
         case NSFetchedResultsChangeInsert:
-            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [self.centerTableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeDelete:
-            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [self.centerTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
 }
@@ -335,28 +361,28 @@ PAAssetManager * assetManager;
                 [self cacheImageForEventURL:event.blurredImageURL Type:event.type AndID:event.id];
                 
             }
-            [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.centerTableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
             break;
             
         case NSFetchedResultsChangeDelete:
             //Event *tempEvent = (Event *)anObject;
             [[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
-            [self.tableView
+            [self.centerTableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self.tableView cellForRowAtIndexPath:indexPath];
+            [self.centerTableView cellForRowAtIndexPath:indexPath];
             break;
             
         case NSFetchedResultsChangeMove:
-            [self.tableView
+            [self.centerTableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             
-            [self.tableView
+            [self.centerTableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
@@ -365,25 +391,25 @@ PAAssetManager * assetManager;
 
 - (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
 {
-    [self.tableView endUpdates];
+    [self.centerTableView endUpdates];
 }
 
 #pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [[_fetchedResultsController sections] count];
+    return [[self.centerFetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[self.centerFetchedResultsController sections] objectAtIndex:section];
     return [sectionInfo numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Event *currentEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
+    Event *currentEvent = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
 
     if([currentEvent.type isEqualToString:@"dining"]){
         PADiningOpportunityCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningOppCell"];
@@ -407,7 +433,7 @@ PAAssetManager * assetManager;
         if (viewController == nil) {
             PAEventInfoTableViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"event-info-view-controller"];
             viewController.view.userInteractionEnabled = NO;
-            NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+            NSManagedObject *object = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
             [viewController setDetailItem:object];
             [self setViewController:viewController atIndexPath:indexPath];
         }
@@ -424,7 +450,7 @@ PAAssetManager * assetManager;
     if([cell isKindOfClass:[PAEventCell class]]){
         Event *tempEvent;
 
-        tempEvent = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        tempEvent = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
 
         cell.titleLabel.text = tempEvent.title;
         cell.startTime.text = [self dateToString:tempEvent.start_date];
@@ -454,7 +480,7 @@ PAAssetManager * assetManager;
 }
 
 -(void)configureDiningCell:(PADiningOpportunityCell*)cell atIndexPath:(NSIndexPath*)indexPath{
-    Event* tempDiningEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
+    Event* tempDiningEvent = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
 
     cell.nameLabel.text = tempDiningEvent.title;
     //cell.startTimeLabel.text = [self dateToString:tempDiningEvent.start_date];
@@ -464,13 +490,13 @@ PAAssetManager * assetManager;
 
 - (void)backButton:(id)sender
 {
-    [self tableView:self.tableView compressRowAtSelectedIndexPathUserInteractionEnabled:NO];
+    [self tableView:self.centerTableView compressRowAtSelectedIndexPathUserInteractionEnabled:NO];
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
      //NSLog(@"cell height (height for row): %f",cellHeight);
-    Event * tempEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
+    Event * tempEvent = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
 
     if ([self indexPathIsSelected:indexPath]) {
         return self.view.frame.size.height;
@@ -494,7 +520,7 @@ PAAssetManager * assetManager;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
      */
 
-    [self tableView:self.tableView expandRowAtIndexPath:indexPath];
+    [self tableView:tableView expandRowAtIndexPath:indexPath];
 }
 
 
@@ -507,8 +533,8 @@ PAAssetManager * assetManager;
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-        [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
+        NSManagedObjectContext *context = [self.centerFetchedResultsController managedObjectContext];
+        [context deleteObject:[self.centerFetchedResultsController objectAtIndexPath:indexPath]];
         NSError *error = nil;
         if (![context save:&error]) {
              // Replace this implementation with code to handle the error appropriately.
@@ -575,11 +601,11 @@ PAAssetManager * assetManager;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 
-   for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:0]; ++i)
+   for (NSInteger i = 0; i < [self.centerTableView numberOfRowsInSection:0]; ++i)
     {
         if (parallaxOn) {
             // Check if cell is a PAEventCell, which has a backgroundView.image property
-            UITableViewCell * c = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+            UITableViewCell * c = [self.centerTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
             if ([c isKindOfClass:[PAEventCell class]]) {
                 PAEventCell * cell = (PAEventCell *)c;
 
@@ -616,11 +642,11 @@ PAAssetManager * assetManager;
     if([searchText isEqualToString:@""]){
         searchBar.text = nil;
         searchBarText=nil;
-        _fetchedResultsController=nil;
+        self.centerFetchedResultsController=nil;
         [self reloadTheView];
         NSLog(@"User cancelled search");
     }else{
-        _fetchedResultsController = nil;
+        self.centerFetchedResultsController = nil;
         searchBarText = searchText;
         
         
@@ -645,7 +671,7 @@ PAAssetManager * assetManager;
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
     searchBar.text = nil;
     searchBarText=nil;
-     _fetchedResultsController = nil;
+    self.centerFetchedResultsController = nil;
     [self reloadTheView];
     NSLog(@"User cancelled search");
     [searchBar resignFirstResponder]; // if you want the keyboard to go away
@@ -654,27 +680,27 @@ PAAssetManager * assetManager;
 - (IBAction)yesterdayButton:(id)sender {
     NSLog(@"Yesterday");
     selectedDay--;
-    _fetchedResultsController = nil;
+    self.centerFetchedResultsController = nil;
     [self reloadTheView];
 }
 
 - (IBAction)todayButton:(id)sender {
     selectedDay=0;
-    _fetchedResultsController = nil;
+    self.centerFetchedResultsController = nil;
     NSLog(@"Today");
     [self reloadTheView];
 }
 
 - (IBAction)tomorrowButton:(id)sender {
     selectedDay++;
-    _fetchedResultsController = nil;
+    self.centerFetchedResultsController = nil;
     NSLog(@"Tomorrow");
     [self reloadTheView];
 }
 
 -(void)reloadTheView{
     NSError *error=nil;
-    if (![self.fetchedResultsController performFetch:&error])
+    if (![self.centerFetchedResultsController performFetch:&error])
     {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
@@ -683,9 +709,9 @@ PAAssetManager * assetManager;
     NSMutableArray* eventTypes = [[NSMutableArray alloc] init];
     NSMutableArray* eventIDs = [[NSMutableArray alloc] init];
     NSMutableArray* eventRows = [[NSMutableArray alloc] init];
-    for(int i =0; i<[_fetchedResultsController.fetchedObjects count];i++){
+    for(int i =0; i<[self.centerFetchedResultsController.fetchedObjects count];i++){
         
-        Event* tempEvent = _fetchedResultsController.fetchedObjects[i];
+        Event* tempEvent = self.centerFetchedResultsController.fetchedObjects[i];
         
         // cannot asynchronously cache image it there isn't one
         if (tempEvent.blurredImageURL != nil && ![tempEvent.blurredImageURL isEqualToString:@"/images/missing.png"]) {
@@ -721,8 +747,8 @@ PAAssetManager * assetManager;
             [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSIndexPath* indexPath =[NSIndexPath indexPathForRow: [eventRows[i] integerValue] inSection:0];
-                PAEventCell* cell = (PAEventCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-                if(_fetchedResultsController.fetchedObjects.count > indexPath.row){
+                PAEventCell* cell = (PAEventCell*)[self.centerTableView cellForRowAtIndexPath:indexPath];
+                if(self.centerFetchedResultsController.fetchedObjects.count > indexPath.row){
                     if ([cell isKindOfClass:[PAEventCell class]]) {
                         [self configureEventCell:cell atIndexPath:indexPath];
                     }
@@ -731,7 +757,7 @@ PAAssetManager * assetManager;
             });
         });
     }
-    [self.tableView reloadData];
+    [self.centerTableView reloadData];
 }
 
 #pragma mark - keyboard notifications
@@ -763,18 +789,18 @@ PAAssetManager * assetManager;
 
 
 - (void)keyboardWasShown:(NSNotification *)notification {
-    if(CGRectEqualToRect(self.tableView.frame, initialTableViewRect)){
+    if (CGRectEqualToRect(self.centerTableView.frame, self.centerTableViewFrame)){
         NSDictionary* info = [notification userInfo];
         CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-        self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
+        self.centerTableView.frame = CGRectMake(self.centerTableView.frame.origin.x, self.centerTableView.frame.origin.y, self.centerTableView.frame.size.width, self.centerTableView.frame.size.height-keyboardSize.height);
     }
 }
 
 - (void)keyboardWillBeHidden:(NSNotification *)notification {
-    if(!CGRectEqualToRect(self.tableView.frame, initialTableViewRect)){
+    if(!CGRectEqualToRect(self.centerTableView.frame, self.centerTableViewFrame)){
         NSDictionary* info = [notification userInfo];
         CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-        self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height+keyboardSize.height);
+        self.centerTableView.frame = CGRectMake(self.centerTableView.frame.origin.x, self.centerTableView.frame.origin.y, self.centerTableView.frame.size.width, self.centerTableView.frame.size.height+keyboardSize.height);
     }
     
 }
