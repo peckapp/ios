@@ -100,7 +100,7 @@ PAAssetManager * assetManager;
 
     self.selectedDay = 0;
     showingDetail = NO;
-    [self reloadTheView];
+
     if(!searchBar){
         searchBar = [[UISearchBar alloc] init];
         searchBar.delegate = self;
@@ -110,8 +110,8 @@ PAAssetManager * assetManager;
     UIView * backView = [[UIView alloc] init];
     backView.backgroundColor = darkColor;
     
-    if (!self.centerTableView) {
-        self.centerTableView = [[UITableView alloc] init];
+    if (!self.leftTableView) {
+        self.leftTableView = [[UITableView alloc] init];
         [self.view addSubview:self.centerTableView];
     }
     self.leftTableView.dataSource = self;
@@ -132,8 +132,8 @@ PAAssetManager * assetManager;
     self.centerTableView.separatorInset = UIEdgeInsetsZero;
     [self.centerTableView setBackgroundView:backView];
 
-    if (!self.centerTableView) {
-        self.centerTableView = [[UITableView alloc] init];
+    if (!self.rightTableView) {
+        self.rightTableView = [[UITableView alloc] init];
         [self.view addSubview:self.centerTableView];
     }
     self.rightTableView.dataSource = self;
@@ -142,6 +142,10 @@ PAAssetManager * assetManager;
     self.rightTableView.separatorColor = lightColor;
     self.rightTableView.separatorInset = UIEdgeInsetsZero;
     [self.rightTableView setBackgroundView:backView];
+
+    self.leftFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay - 1];
+    self.centerFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay];
+    self.rightFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay + 1];
 
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
@@ -201,11 +205,16 @@ PAAssetManager * assetManager;
     self.centerTableViewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.rightTableViewFrame = CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
 
-    self.leftTableView.frame = self.centerTableViewFrame;
+    self.leftTableView.frame = self.leftTableViewFrame;
     self.centerTableView.frame = self.centerTableViewFrame;
-    self.rightTableView.frame = self.centerTableViewFrame;
+    self.rightTableView.frame = self.rightTableViewFrame;
 
     // self.centerTableView.tableHeaderView = searchBar;
+
+    [self tableView:self.leftTableView reloadDataFrom:self.leftFetchedResultsController];
+    [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+    [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
+
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -618,6 +627,7 @@ PAAssetManager * assetManager;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    /*
 
    for (NSInteger i = 0; i < [self.centerTableView numberOfRowsInSection:0]; ++i)
     {
@@ -646,6 +656,7 @@ PAAssetManager * assetManager;
             }
         }
     }
+     */
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
@@ -659,16 +670,13 @@ PAAssetManager * assetManager;
     NSLog(@"Text did change");
     if([searchText isEqualToString:@""]){
         searchBar.text = nil;
-        searchBarText=nil;
-        self.centerFetchedResultsController=nil;
-        [self reloadTheView];
+        searchBarText = nil;
+        [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
         NSLog(@"User cancelled search");
-    }else{
-        self.centerFetchedResultsController = nil;
+    }
+    else{
         searchBarText = searchText;
-        
-        
-        [self reloadTheView];
+        [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
     }
 }
 
@@ -690,13 +698,14 @@ PAAssetManager * assetManager;
     searchBar.text = nil;
     searchBarText=nil;
     //self.centerFetchedResultsController = nil;
-    [self reloadTheView];
+    [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
     NSLog(@"User cancelled search");
     [searchBar resignFirstResponder]; // if you want the keyboard to go away
 }
 
 #pragma mark - View management
 
+/*
 - (IBAction)yesterdayButton:(id)sender {
     NSLog(@"Yesterday");
     self.selectedDay--;
@@ -717,46 +726,68 @@ PAAssetManager * assetManager;
     NSLog(@"Tomorrow");
     [self reloadTheView];
 }
+*/
 
 - (void)transitionToRightTableView
 {
+    NSLog(@"begin transition to right");
     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.rightTableView.frame = self.centerTableViewFrame;
                          self.centerTableView.frame = self.leftTableViewFrame;
                      }
                      completion:^(BOOL finished){
-                         UITableView * temp = self.leftTableView;
+                         self.leftTableView.frame = self.rightTableViewFrame;
+
+                         UITableView * tempView = self.leftTableView;
                          self.leftTableView = self.centerTableView;
                          self.centerTableView = self.rightTableView;
-                         self.rightTableView = temp;
+                         self.rightTableView = tempView;
+
+                         NSFetchedResultsController * tempController = self.leftFetchedResultsController;
+                         self.leftFetchedResultsController = self.centerFetchedResultsController;
+                         self.centerFetchedResultsController = self.rightFetchedResultsController;
+                         self.rightFetchedResultsController = tempController;
+
+                         NSLog(@"end transition to right");
                      }];
 }
 
 -(void)transitionToLeftTableView
 {
+    NSLog(@"begin transition to left");
     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.leftTableView.frame = self.centerTableViewFrame;
                          self.centerTableView.frame = self.rightTableViewFrame;
                      }
                      completion:^(BOOL finished){
-                         UITableView * temp = self.rightTableView;
+                         self.rightTableView.frame = self.leftTableViewFrame;
+
+                         UITableView * tempView = self.rightTableView;
                          self.rightTableView = self.centerTableView;
                          self.centerTableView = self.leftTableView;
-                         self.leftTableView = temp;
+                         self.leftTableView = tempView;
+
+                         NSFetchedResultsController * tempController = self.rightFetchedResultsController;
+                         self.rightFetchedResultsController = self.centerFetchedResultsController;
+                         self.centerFetchedResultsController = self.leftFetchedResultsController;
+                         self.leftFetchedResultsController = tempController;
+
+                         [self tableView:self.leftTableView reloadDataFrom:self.leftFetchedResultsController];
+                         [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+                         [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
+
+                         NSLog(@"end transition to left");
                      }];
 }
 
-- (void)reloadTheView
+- (void)tableView:(UITableView *)tableView reloadDataFrom:(NSFetchedResultsController *)fetchedResultsController
 {
-    if (self.centerFetchedResultsController == nil) {
-        self.centerFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay];
-    }
-
     NSError *error = nil;
-    if (![self.centerFetchedResultsController performFetch:&error])
+    if (![fetchedResultsController performFetch:&error])
     {
+        NSLog(@"Fetched results controller could not perform fetch");
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
@@ -764,9 +795,9 @@ PAAssetManager * assetManager;
     NSMutableArray* eventTypes = [[NSMutableArray alloc] init];
     NSMutableArray* eventIDs = [[NSMutableArray alloc] init];
     NSMutableArray* eventRows = [[NSMutableArray alloc] init];
-    for(int i =0; i<[self.centerFetchedResultsController.fetchedObjects count];i++){
+    for(int i =0; i<[fetchedResultsController.fetchedObjects count];i++){
         
-        Event* tempEvent = self.centerFetchedResultsController.fetchedObjects[i];
+        Event* tempEvent = fetchedResultsController.fetchedObjects[i];
         
         // cannot asynchronously cache image it there isn't one
         if (tempEvent.blurredImageURL != nil && ![tempEvent.blurredImageURL isEqualToString:@"/images/missing.png"]) {
@@ -794,15 +825,15 @@ PAAssetManager * assetManager;
         }
     }
     */
-   
+
     for(int i = 0; i<[eventIDs count]; i++){
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
             [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSIndexPath* indexPath =[NSIndexPath indexPathForRow: [eventRows[i] integerValue] inSection:0];
-                PAEventCell* cell = (PAEventCell*)[self.centerTableView cellForRowAtIndexPath:indexPath];
-                if(self.centerFetchedResultsController.fetchedObjects.count > indexPath.row){
+                PAEventCell* cell = (PAEventCell*)[tableView cellForRowAtIndexPath:indexPath];
+                if(fetchedResultsController.fetchedObjects.count > indexPath.row){
                     if ([cell isKindOfClass:[PAEventCell class]]) {
                         [self configureEventCell:cell atIndexPath:indexPath];
                     }
