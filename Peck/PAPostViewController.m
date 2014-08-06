@@ -523,7 +523,10 @@
 }
 
 -(void)updateEvent{
-    NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
+    NSData* data = nil;
+    if(self.photo.image!=[UIImage imageNamed:@"image-placeholder.png"]){
+        data = UIImageJPEGRepresentation(self.photo.image, .5) ;
+    }
     
     [[PASyncManager globalSyncManager] updateEvent:self.editableEvent.id withDictionary:[self configureEventDictioanry] withImage:data];
     
@@ -532,7 +535,13 @@
 }
 
 -(void)updateAnnouncement{
-    NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
+    NSData* data = nil;
+    
+    if(self.photo.image!=[UIImage imageNamed:@"image-placeholder.png"]){
+        NSLog(@"setting an image");
+        data = UIImageJPEGRepresentation(self.photo.image, .5) ;
+    }
+
     
     [[PASyncManager globalSyncManager] updateAnnouncement:self.editableAnnouncement.id withDictionary:[self configureAnnouncementDictionary] withImage:data];
 
