@@ -48,6 +48,8 @@ struct eventImage{
 @property (assign, nonatomic) CGRect centerTableViewFrame;
 @property (assign, nonatomic) CGRect rightTableViewFrame;
 
+@property (assign, nonatomic) NSInteger selectedDayOffset;
+
 @end
 
 @implementation PAEventsViewController
@@ -63,7 +65,6 @@ BOOL showingDetail;
 BOOL showingSearchBar;
 NSString *searchBarText;
 NSDate *today;
-NSInteger selectedDay;
 
 PAAssetManager * assetManager;
 
@@ -98,7 +99,7 @@ PAAssetManager * assetManager;
     // TODO: optimize parallax? Currently takes a couple percent cpu extra and a two megabytes
     parallaxOn = YES;
 
-    selectedDay=0;
+    self.selectedDayOffset = 0;
     showingDetail = NO;
     [self reloadTheView];
     if(!searchBar){
@@ -270,7 +271,7 @@ PAAssetManager * assetManager;
     }
     
     
-    NSDate *selectedMorning = [self updateDate];
+    NSDate *selectedMorning = [self getDateForDay:self.selectedDayOffset];
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     [dateComponents setDay:1];
     NSDate *selectedNight =[[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:selectedMorning options:0];
@@ -309,7 +310,8 @@ PAAssetManager * assetManager;
 }
 
 
--(NSDate *)updateDate{
+-(NSDate *)getDateForDay:(NSInteger) day
+{
     NSDate *currentDate = [NSDate date];
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitSecond  fromDate:[NSDate date]];
     NSInteger hours = [components hour];
@@ -320,7 +322,7 @@ PAAssetManager * assetManager;
     [dateComponents setHour:-hours];
     [dateComponents setMinute:-minutes];
     [dateComponents setSecond:-seconds];
-    [dateComponents setDay:selectedDay];
+    [dateComponents setDay:day];
     
     NSDate *selectedDayMorning = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:currentDate options:0];
     return selectedDayMorning;
@@ -679,27 +681,27 @@ PAAssetManager * assetManager;
 
 - (IBAction)yesterdayButton:(id)sender {
     NSLog(@"Yesterday");
-    selectedDay--;
+    self.selectedDayOffset--;
     self.centerFetchedResultsController = nil;
     [self reloadTheView];
 }
 
 - (IBAction)todayButton:(id)sender {
-    selectedDay=0;
+    self.selectedDayOffset = 0;
     self.centerFetchedResultsController = nil;
     NSLog(@"Today");
     [self reloadTheView];
 }
 
 - (IBAction)tomorrowButton:(id)sender {
-    selectedDay++;
+    self.selectedDayOffset++;
     self.centerFetchedResultsController = nil;
     NSLog(@"Tomorrow");
     [self reloadTheView];
 }
 
 -(void)reloadTheView{
-    NSError *error=nil;
+    NSError *error = nil;
     if (![self.centerFetchedResultsController performFetch:&error])
     {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
