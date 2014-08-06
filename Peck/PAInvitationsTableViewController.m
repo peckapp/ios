@@ -258,7 +258,18 @@ PAAssetManager * assetManager;
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     else{
-        
+        //if the user is removing one of the invited circles or people
+        self.invitedCirclesArray = [self.invitedCircles allValues];
+        if(indexPath.row<[self.invitedCirclesArray count]){
+            NSNumber* circleID = self.invitedCirclesArray[indexPath.row];
+            [self.invitedCircles removeObjectForKey:[circleID stringValue]];
+            [self.invitedPeopleTableView reloadData];
+        }else{
+            self.invitedPeopleArray = [self.invitedPeople allValues];
+            NSNumber* peerID = self.invitedPeopleArray[indexPath.row - [self.invitedCirclesArray count]];
+            [self.invitedPeople removeObjectForKey:[peerID stringValue]];
+            [self.invitedPeopleTableView reloadData];
+        }
     }
     
     
