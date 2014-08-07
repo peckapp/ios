@@ -71,12 +71,14 @@ BOOL loggedIn;
     if([defaults objectForKey:@"authentication_token"]){
         loggedIn=YES;
         NSLog(@"logged in");
-        [self.loginButton setTitle:@"Logout" forState:UIControlStateNormal];
+        self.loginButton.title =@"Logout";
+        //[self.loginButton setTitle:@"Logout" forState:UIControlStateNormal];
     }
     else{
         loggedIn=NO;
         NSLog(@"logged out");
-        [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
+        self.loginButton.title = @"Login";
+        //[self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
     }
 }
 
@@ -152,7 +154,8 @@ BOOL loggedIn;
         self.infoTextView.text = @"";
         self.lastNameTextField.text = @"";
         self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
-        [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
+        self.loginButton.title = @"Login";
+        //[self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
         loggedIn=NO;
     }
 }

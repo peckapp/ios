@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.11" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
     <dependencies>
-        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6190.4"/>
     </dependencies>
     <scenes>
@@ -652,31 +651,15 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Profile" id="fwb-cG-2wa">
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="I7R-wm-NDG">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="QPD-qU-ssF">
-                                <rect key="frame" x="16" y="5" width="71" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Register">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="registerAccount:" destination="Kpj-df-ekn" eventType="touchUpInside" id="Pjy-NH-jlw"/>
-                                </connections>
-                            </button>
+                        <barButtonItem key="leftBarButtonItem" title="Register" id="aGC-xX-uXg">
+                            <connections>
+                                <action selector="registerAccount:" destination="Kpj-df-ekn" id="BwU-1e-3Bv"/>
+                            </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="kLe-TM-2Gr">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="yQV-ER-ZTZ">
-                                <rect key="frame" x="232" y="5" width="72" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Logout">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="login:" destination="Kpj-df-ekn" eventType="touchUpInside" id="LRh-rT-vcC"/>
-                                </connections>
-                            </button>
+                        <barButtonItem key="rightBarButtonItem" title="Logout" id="wxo-0w-9kt">
+                            <connections>
+                                <action selector="login:" destination="Kpj-df-ekn" id="F8a-u6-6DJ"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -684,7 +667,7 @@
                         <outlet property="firstNameTextField" destination="Uxt-6h-gHO" id="mAM-Og-d7k"/>
                         <outlet property="infoTextView" destination="oZr-2j-9VW" id="8Lz-qg-NsQ"/>
                         <outlet property="lastNameTextField" destination="f15-82-Ihd" id="Z90-Yg-qkb"/>
-                        <outlet property="loginButton" destination="yQV-ER-ZTZ" id="9yH-NJ-is3"/>
+                        <outlet property="loginButton" destination="wxo-0w-9kt" id="amM-8u-eft"/>
                         <outlet property="profilePicture" destination="zk9-Ii-utV" id="dJH-g2-ZSV"/>
                     </connections>
                 </tableViewController>
@@ -1152,7 +1135,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4sN-Pf-ic2">
-                                                    <rect key="frame" x="20" y="-1" width="300" height="88"/>
+                                                    <rect key="frame" x="20" y="-1" width="300" height="88.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
