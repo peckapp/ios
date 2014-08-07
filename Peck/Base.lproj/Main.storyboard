@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.11" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment defaultVersion="1808" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6190.4"/>
     </dependencies>
     <scenes>
-        <!--Pecks View Controller - Pecks-->
+        <!--Pecks-->
         <scene sceneID="cfV-R5-Ne6">
             <objects>
                 <tableViewController id="vCF-rC-B71" customClass="PAPecksViewController" sceneMemberID="viewController">
@@ -39,7 +39,7 @@
             </objects>
             <point key="canvasLocation" x="-1688" y="347"/>
         </scene>
-        <!--Explore Table View Controller - Explore-->
+        <!--Explore-->
         <scene sceneID="09g-Dv-sHg">
             <objects>
                 <tableViewController title="Explore" id="dbL-Fg-Sgg" customClass="PAExploreTableViewController" sceneMemberID="viewController">
@@ -61,7 +61,7 @@
             </objects>
             <point key="canvasLocation" x="-1076" y="1078"/>
         </scene>
-        <!--Navigation Controller - Explore-->
+        <!--Explore-->
         <scene sceneID="RJ5-1c-Ets">
             <objects>
                 <navigationController storyboardIdentifier="explore" title="Explore" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="YgY-YD-cce" sceneMemberID="viewController">
@@ -78,7 +78,7 @@
             </objects>
             <point key="canvasLocation" x="-1608" y="1078"/>
         </scene>
-        <!--Navigation Controller - Pecks-->
+        <!--Pecks-->
         <scene sceneID="YWh-za-12c">
             <objects>
                 <navigationController storyboardIdentifier="pecks" title="Pecks" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7ZG-zh-pMr" sceneMemberID="viewController">
@@ -94,7 +94,7 @@
             </objects>
             <point key="canvasLocation" x="-2224" y="347"/>
         </scene>
-        <!--Explore Info View Controller - Detail-->
+        <!--Detail-->
         <scene sceneID="Zfp-18-CXc">
             <objects>
                 <viewController storyboardIdentifier="feedInfo" useStoryboardIdentifierAsRestorationIdentifier="YES" id="gt2-YE-863" customClass="PAExploreInfoViewController" sceneMemberID="viewController">
@@ -127,7 +127,7 @@
             </objects>
             <point key="canvasLocation" x="-528" y="1078"/>
         </scene>
-        <!--Navigation Controller - Events-->
+        <!--Events-->
         <scene sceneID="cUi-kZ-frf">
             <objects>
                 <navigationController storyboardIdentifier="primary" id="rS3-R9-Ivy" sceneMemberID="viewController">
@@ -149,7 +149,7 @@
             </objects>
             <point key="canvasLocation" x="-3079" y="2318"/>
         </scene>
-        <!--Circles Table View Controller - Circles-->
+        <!--Circles-->
         <scene sceneID="I7Z-lZ-gzy">
             <objects>
                 <tableViewController storyboardIdentifier="circles" useStoryboardIdentifierAsRestorationIdentifier="YES" id="inP-uB-7M9" customClass="PACirclesTableViewController" sceneMemberID="viewController">
@@ -178,7 +178,7 @@
             </objects>
             <point key="canvasLocation" x="-720" y="2834"/>
         </scene>
-        <!--Create Circle View Controller - Create a Circle-->
+        <!--Create a Circle-->
         <scene sceneID="cAH-N6-cUI">
             <objects>
                 <viewController id="rxR-7o-blZ" customClass="PACreateCircleViewController" sceneMemberID="viewController">
@@ -264,7 +264,7 @@
             </objects>
             <point key="canvasLocation" x="-172" y="2834"/>
         </scene>
-        <!--Invitations Table View Controller - Invitations-->
+        <!--Invitations-->
         <scene sceneID="74c-YO-RuB">
             <objects>
                 <tableViewController id="V6y-RR-AL1" customClass="PAInvitationsTableViewController" sceneMemberID="viewController">
@@ -296,18 +296,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Invitations" id="Hrl-NV-8TP">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="U75-ie-PEw">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="oAe-Zg-lcw">
-                                <rect key="frame" x="233" y="5" width="71" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="Add">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="addInvites:" destination="V6y-RR-AL1" eventType="touchUpInside" id="93p-Kk-jJE"/>
-                                </connections>
-                            </button>
+                        <barButtonItem key="rightBarButtonItem" title="Add" id="VwI-aF-0eo">
+                            <connections>
+                                <action selector="addInvites:" destination="V6y-RR-AL1" id="coV-BR-Adh"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -345,7 +337,7 @@
             </objects>
             <point key="canvasLocation" x="-583" y="3773"/>
         </scene>
-        <!--Friend Profile View Controller - Profile-->
+        <!--Profile-->
         <scene sceneID="iQm-tz-Ztv">
             <objects>
                 <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="Jac-oM-WgV" customClass="PAFriendProfileViewController" sceneMemberID="viewController">
@@ -400,7 +392,7 @@
             </objects>
             <point key="canvasLocation" x="-172" y="3773"/>
         </scene>
-        <!--Navigation Controller - More-->
+        <!--More-->
         <scene sceneID="gC2-m0-3wP">
             <objects>
                 <navigationController storyboardIdentifier="profile" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="bif-qW-HUa" sceneMemberID="viewController">
@@ -417,7 +409,7 @@
             </objects>
             <point key="canvasLocation" x="-2334" y="3827"/>
         </scene>
-        <!--Profile Table View Controller2 - Profile-->
+        <!--Profile-->
         <scene sceneID="P2i-1P-Ets">
             <objects>
                 <tableViewController id="Kpj-df-ekn" customClass="PAProfileTableViewController2" sceneMemberID="viewController">
@@ -700,7 +692,7 @@
             </objects>
             <point key="canvasLocation" x="-1809" y="3827"/>
         </scene>
-        <!--Subscriptions Table View Controller - Subscriptions-->
+        <!--Subscriptions-->
         <scene sceneID="G07-uO-x52">
             <objects>
                 <tableViewController id="AF5-E1-6m8" customClass="PASubscriptionsTableViewController" sceneMemberID="viewController">
@@ -719,7 +711,7 @@
             </objects>
             <point key="canvasLocation" x="-1326" y="3827"/>
         </scene>
-        <!--User Announcements Table View Controller - My Announcements-->
+        <!--My Announcements-->
         <scene sceneID="T30-UV-TZ5">
             <objects>
                 <tableViewController id="dAi-DE-P7c" customClass="PAUserAnnouncementsTableViewController" sceneMemberID="viewController">
@@ -741,7 +733,7 @@
             </objects>
             <point key="canvasLocation" x="-2290" y="4604"/>
         </scene>
-        <!--Change Password View Controller - Change Password-->
+        <!--Change Password-->
         <scene sceneID="mTT-FR-3aA">
             <objects>
                 <tableViewController id="8ga-7t-38c" customClass="PAChangePasswordViewController" sceneMemberID="viewController">
@@ -857,7 +849,7 @@
             </objects>
             <point key="canvasLocation" x="-1809" y="4604"/>
         </scene>
-        <!--User Events Table View Controller - My Events-->
+        <!--My Events-->
         <scene sceneID="hz1-SP-2Fc">
             <objects>
                 <tableViewController id="dsa-Na-DI5" customClass="PAUserEventsTableViewController" sceneMemberID="viewController">
@@ -879,7 +871,7 @@
             </objects>
             <point key="canvasLocation" x="-1326" y="4604"/>
         </scene>
-        <!--Events View Controller - Master-->
+        <!--Master-->
         <scene sceneID="VgW-fR-Quf">
             <objects>
                 <tableViewController title="Master" id="pGg-6v-bdr" customClass="PAEventsViewController" sceneMemberID="viewController">
@@ -1033,7 +1025,7 @@
             </objects>
             <point key="canvasLocation" x="-2052" y="3018"/>
         </scene>
-        <!--Configure View Controller - Institution-->
+        <!--Institution-->
         <scene sceneID="LG1-G8-7Oc">
             <objects>
                 <viewController storyboardIdentifier="configure" useStoryboardIdentifierAsRestorationIdentifier="YES" id="wXS-p9-cDv" customClass="PAConfigureViewController" sceneMemberID="viewController">
@@ -1087,7 +1079,7 @@
             </objects>
             <point key="canvasLocation" x="-2728" y="1519"/>
         </scene>
-        <!--Navigation Controller - Add-->
+        <!--Add-->
         <scene sceneID="kh1-OH-BWn">
             <objects>
                 <navigationController storyboardIdentifier="post" title="Add" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="COS-N3-QSc" sceneMemberID="viewController">
@@ -1103,7 +1095,7 @@
             </objects>
             <point key="canvasLocation" x="-972" y="1807"/>
         </scene>
-        <!--Post View Controller - Post-->
+        <!--Post-->
         <scene sceneID="yBA-au-b75">
             <objects>
                 <tableViewController id="I0y-hH-f6V" customClass="PAPostViewController" sceneMemberID="viewController">
@@ -1160,7 +1152,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4sN-Pf-ic2">
-                                                    <rect key="frame" x="20" y="-1" width="300" height="87.5"/>
+                                                    <rect key="frame" x="20" y="-1" width="300" height="88"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -1361,7 +1353,10 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
+        <simulatedScreenMetrics key="destination" type="retina4">
+            <size key="portraitSize" width="320" height="568"/>
+            <size key="landscapeSize" width="568" height="320"/>
+        </simulatedScreenMetrics>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="qOD-fx-0or"/>
