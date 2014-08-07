@@ -31,19 +31,19 @@
     return self;
 }
 
-- (UIButton *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView
+- (UIImageView *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView
 {
     CGFloat size = 40;
 
-    UIButton * button = [[UIButton alloc]initWithFrame:frame];
+    //UIButton * button = [[UIButton alloc]initWithFrame:frame];
 
     imageView.frame = CGRectMake(frame.size.width / 2 - size / 2, frame.size.height / 2 - size / 2, size, size);
     imageView.layer.cornerRadius = size / 2;
     imageView.clipsToBounds = YES;
     imageView.userInteractionEnabled = NO;
-    [button addSubview:imageView];
+    //[button addSubview:imageView];
 
-    return button;
+    return imageView;
 }
 
 @end

@@ -2,7 +2,7 @@
 //  Event.h
 //  Peck
 //
-//  Created by John Karabinos on 7/29/14.
+//  Created by John Karabinos on 8/5/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -12,6 +12,8 @@
 
 @interface Event : NSManagedObject
 
+@property (nonatomic, retain) id attendees;
+@property (nonatomic, retain) NSString * blurredImageURL;
 @property (nonatomic, retain) NSDate * created_at;
 @property (nonatomic, retain) NSString * descrip;
 @property (nonatomic, retain) NSDate * end_date;
@@ -23,7 +25,6 @@
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSDate * updated_at;
-@property (nonatomic, retain) id attendees;
-@property (nonatomic, retain) NSString * blurredImageURL;
+@property (nonatomic, retain) NSNumber * created_by;
 
 @end

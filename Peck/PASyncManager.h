@@ -52,11 +52,14 @@
 
 //announcement actions
 -(void)postAnnouncement:(NSDictionary*)dictionary withImage:(NSData*)imageData;
+-(void)updateAnnouncement:(NSNumber*)announcementID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData;
+-(void)updateUserAnnouncements;
 
 // methods for updating events
 -(void)updateEventInfo;
 -(void)postEvent:(NSDictionary *) dictionary withImage:(NSData*)imageDate;
 -(void)deleteEvent:(NSNumber*)eventID;
+-(void)updateEvent:(NSNumber*)eventID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData;
 
 // methods for updating dining
 -(void)updateDiningInfo;
@@ -76,6 +79,7 @@
 //methods for updating pecks
 -(void)postPeck:(NSDictionary*)dictionary;
 -(void)updatePecks;
+-(void)setInteractedForPeck:(NSNumber*)peckID;
 
 //methods for comments
 -(void)postComment:(NSDictionary *)dictionary;

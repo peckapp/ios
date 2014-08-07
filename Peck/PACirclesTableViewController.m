@@ -14,6 +14,7 @@
 #import "PAFriendProfileViewController.h"
 #import "HTAutocompleteManager.h"
 #import "PACommentCell.h"
+#import "PAFriendProfileViewController.h"
 
 #define cellHeight 100.0
 #define reloadTime 10
@@ -341,6 +342,8 @@ BOOL viewingCircles;
         self.keyboardAccessory.hidden = NO;
         self.keyboardAccessoryView.frame = CGRectMake(0, cell.frame.origin.y + cell.frame.size.height - 44, self.view.frame.size.width, 44);
         [self configureCell:cell atIndexPath:indexPath];
+        NSString* circleID = [cell.circle.id stringValue];
+        [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
     }
     else {
         if (cell.addingMembers) {
@@ -352,6 +355,9 @@ BOOL viewingCircles;
                 [self dismissKeyboard:self];
                 [self configureCell:cell atIndexPath:indexPath];
                 [cell performFetch];
+                NSString* circleID = [cell.circle.id stringValue];
+                [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
+                
             }
             
         }
@@ -630,12 +636,14 @@ BOOL viewingCircles;
     
     switch(type)
     {
-        case NSFetchedResultsChangeInsert:
+        case NSFetchedResultsChangeInsert:{
             [tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
+            [tableView reloadData];
             break;
             
+        }
         case NSFetchedResultsChangeDelete:
             [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
@@ -746,14 +754,21 @@ BOOL viewingCircles;
         NSNumber *userID = [defaults objectForKey:@"user_id"];
         NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
    
-    
+        NSString* alert = [defaults objectForKey:@"first_name"];
+        alert = [alert stringByAppendingString:@" "];
+        alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
+        alert = [alert stringByAppendingString:@" commented in "];
+        alert = [alert stringByAppendingString:selectedCell.circle.circleName];
+        
         NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                text, @"content",
-                                userID, @"user_id",
-                                @"circles", @"category",
-                                selectedCell.circle.id, @"comment_from",
-                                institutionID, @"institution_id",
-                                nil];
+                                    text, @"content",
+                                    userID, @"user_id",
+                                    @"circles", @"category",
+                                    selectedCell.circle.id, @"comment_from",
+                                    institutionID, @"institution_id",
+                                    [NSNumber numberWithBool:YES], @"send_push_notification",
+                                    alert, @"message",
+                                    nil];
     
         [[PASyncManager globalSyncManager] postComment:dictionary];
     }
@@ -775,7 +790,12 @@ BOOL viewingCircles;
 
 -(void)showProfileOf:(Peer *)member{
     selectedPeer=member;
-    [self performSegueWithIdentifier:@"selectProfile" sender:self];
+    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UINavigationController *navController = [loginStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
+    PAFriendProfileViewController*root = navController.viewControllers[0];
+    root.peer=member;
+    [self presentViewController:navController animated:YES completion:nil];
+    //[self performSegueWithIdentifier:@"selectProfile" sender:self];
 }
 
 

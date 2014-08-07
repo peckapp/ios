@@ -17,6 +17,6 @@
 
 + (id)sharedManager;
 
-- (UIButton *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView;
+- (UIImageView *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView;
 
 @end

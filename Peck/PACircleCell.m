@@ -259,7 +259,7 @@ PAAssetManager * assetManager;
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
 
-        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageForPeerID:tempComment.peer_id]];
+        UIImageView * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageForPeerID:tempComment.peer_id]];
         if (cell.thumbnailView) {
             [cell.thumbnailView removeFromSuperview];
         }
@@ -379,8 +379,8 @@ PAAssetManager * assetManager;
     }
     else if (tableView == self.commentsTableView) {
         if(indexPath.row>0){
-            if([_fetchedResultsController.fetchedObjects count]>=[indexPath row]){
-                Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+            if([_fetchedResultsController.fetchedObjects count]>[indexPath row]){
+                Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]];
                 NSString * commentID = [comment.id stringValue];
                 CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
                 if(height){
@@ -405,15 +405,25 @@ PAAssetManager * assetManager;
             [parent promptToAddMemberToCircleCell:self];
         }
         else{
-            /*PACirclesTableViewController *parent = (PACirclesTableViewController *) self.parentViewController;
-            [parent showProfileOf:member];*/
-             Peer *member = self.members[[indexPath row]];
-             NSLog(@"view the member %@", member.name);
+            PACirclesTableViewController *parent = (PACirclesTableViewController *) self.parentViewController;
+            Peer *member = self.members[[indexPath row]];
+            NSLog(@"view the member %@", member.name);
+            [parent showProfileOf:member];
         }
         [self.profilesTableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     else if (tableView == self.commentsTableView) {
         [self.commentsTableView deselectRowAtIndexPath:indexPath animated:YES];
+        PACommentCell * cell = (PACommentCell *)[self tableView:self.commentsTableView cellForRowAtIndexPath:indexPath];
+        if (cell.expanded) {
+            [self compress:cell];
+            cell.expanded = NO;
+        }
+        else {
+            [self expand:cell];
+            cell.expanded = YES;
+        }
+
     }
     else if(tableView == self.suggestedMembersTableView){
         PACirclesTableViewController* parent = (PACirclesTableViewController*)self.parentViewController;

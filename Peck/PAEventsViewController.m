@@ -276,7 +276,7 @@ PAAssetManager * assetManager;
                 //UIImage * blurredImage = [loadedImage applyDarkEffect];
                 //UIImageView * imageView = [[UIImageView alloc] initWithImage:blurredImage];
                 //imageView.contentMode = UIViewContentModeScaleAspectFill;
-                [self.imageCache setObject:loadedImage forKey:[eventID stringValue]];
+                [self.imageCache setObject:loadedImage forKey:imageURL];
             }
         }
     }

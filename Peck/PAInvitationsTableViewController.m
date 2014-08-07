@@ -69,6 +69,8 @@ PAAssetManager * assetManager;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self.tableView reloadData];
+    [self.invitedPeopleTableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -190,7 +192,7 @@ PAAssetManager * assetManager;
     }else{
         NSNumber* peerID = self.invitedPeopleArray[indexPath.row - [self.invitedCirclesArray count]];
         Peer* peer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
-        UIView* thumbnail = [assetManager createThumbnailWithFrame:cell.frame imageView:[self imageForPeer:peer]];
+        UIImageView* thumbnail = [assetManager createThumbnailWithFrame:cell.frame imageView:[self imageForPeer:peer]];
 
         thumbnail.userInteractionEnabled = NO;
         cell.backgroundView = thumbnail;
@@ -203,13 +205,20 @@ PAAssetManager * assetManager;
     if([self.suggestedInvites[indexPath.row] isKindOfClass:[Circle class]]){
         Circle* tempCircle = self.suggestedInvites[indexPath.row];
         cell.nameLabel.text = tempCircle.circleName;
-        //cell.picture.image = [UIImage imageNamed:@"circles.jpeg"];
+        if (cell.thumbnailView) {
+            [cell.thumbnailView removeFromSuperview];
+        }
+        UIImageView * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image-placeholder.png"]]];
+        
+        [cell addSubview:thumbnail];
+        cell.thumbnailViewTemplate.backgroundColor = [UIColor whiteColor];
+        cell.thumbnailView = thumbnail;
         
     }else if([self.suggestedInvites[indexPath.row] isKindOfClass:[Peer class]]){
         Peer* tempPeer = self.suggestedInvites[indexPath.row];
         cell.nameLabel.text = tempPeer.name;
         //cell.picture.image = [UIImage imageNamed:@"event-placeholder.png"];
-        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageForPeer:tempPeer]];
+        UIImageView * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageForPeer:tempPeer]];
         if (cell.thumbnailView) {
             [cell.thumbnailView removeFromSuperview];
         }
@@ -256,7 +265,18 @@ PAAssetManager * assetManager;
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     else{
-        
+        //if the user is removing one of the invited circles or people
+        self.invitedCirclesArray = [self.invitedCircles allValues];
+        if(indexPath.row<[self.invitedCirclesArray count]){
+            NSNumber* circleID = self.invitedCirclesArray[indexPath.row];
+            [self.invitedCircles removeObjectForKey:[circleID stringValue]];
+            [self.invitedPeopleTableView reloadData];
+        }else{
+            self.invitedPeopleArray = [self.invitedPeople allValues];
+            NSNumber* peerID = self.invitedPeopleArray[indexPath.row - [self.invitedCirclesArray count]];
+            [self.invitedPeople removeObjectForKey:[peerID stringValue]];
+            [self.invitedPeopleTableView reloadData];
+        }
     }
     
     

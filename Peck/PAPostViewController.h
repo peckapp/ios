@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "PACoreDataProtocol.h"
+#import "Event.h"
+#import "Announcement.h"
 
-@interface PAPostViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PACoreDataProtocol>
+@interface PAPostViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PACoreDataProtocol, UITextViewDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -17,11 +19,17 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 - (IBAction)returnResultAndExit:(id)sender;
-- (IBAction)cancelResultAndExit:(id)sender;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *topRightBarButton;
 
-@property (weak, nonatomic) IBOutlet UIButton *photoButton;
+@property (weak, nonatomic) NSString* controllerStatus;
+@property (weak, nonatomic) Event* editableEvent;
+@property (weak, nonatomic) Announcement* editableAnnouncement;
+
+@property (weak, nonatomic) IBOutlet UIImageView *photo;
+
 @property (weak, nonatomic) IBOutlet UISegmentedControl *controlSwitch;
-@property (weak, nonatomic) IBOutlet UITextField *descriptionField;
+@property (weak, nonatomic) IBOutlet UITextView *descriptionTextView;
+
 @property (weak, nonatomic) IBOutlet UITextField *titleField;
 @property (weak, nonatomic) IBOutlet UITableViewCell *startTimeCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *endTimeCell;
@@ -35,6 +43,7 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *inviteCell;
 @property (weak, nonatomic) IBOutlet UISwitch *publicSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *locationTextField;
+@property (weak, nonatomic) IBOutlet UITableViewCell *selectorCell;
 
 @property (strong, nonatomic) NSMutableArray *userEvents;
 @property (strong, nonatomic) NSArray* invitedPeople;

@@ -2,7 +2,7 @@
 //  Peer.m
 //  Peck
 //
-//  Created by John Karabinos on 7/25/14.
+//  Created by John Karabinos on 8/4/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -13,8 +13,9 @@
 @implementation Peer
 
 @dynamic id;
-@dynamic name;
 @dynamic imageURL;
+@dynamic name;
+@dynamic blurb;
 @dynamic circles;
 
 @end

@@ -32,6 +32,7 @@
 #import "PAEventInfoTableViewController.h"
 #import "PAConfigureViewController.h"
 #import "Peck.h"
+#import "Announcement.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 #define shortTermUDID @"1"
@@ -350,6 +351,7 @@
                                       //update the subscriptions of the newly logged in user
                                       [self updateSubscriptions];
                                       
+                                      [self updateUserAnnouncements];
                                       //take care of some necessary login stuff
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       
@@ -502,6 +504,9 @@
     fullName = [fullName stringByAppendingString:[dictionary objectForKey:last_name_define]];
     peer.name = fullName;
     peer.id = [dictionary objectForKey:@"id"];
+    if(![[dictionary objectForKey:@"blurb"] isKindOfClass:[NSNull class]]){
+        peer.blurb = [dictionary objectForKey:@"blurb"];
+    }
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         peer.imageURL = [dictionary objectForKey:@"image"];
     }
@@ -572,6 +577,10 @@
                                        
                                         [self updateAndReloadEvent:[attendee objectForKey:@"event_attended"] forViewController:controller];
                                        
+                                       if([attendee objectForKey:@"peck"]){
+                                           //if the user is attending from a peck
+                                           [self updatePecks];
+                                       }
                                        //[self updateEventInfo];
                                    }
      
@@ -737,8 +746,17 @@
     explore.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     explore.id = [dictionary objectForKey:@"id"];
     explore.category = category;
+    
+    NSString* description = [category stringByAppendingString:@"_description"];
+    if(![[dictionary objectForKey:description] isKindOfClass:[NSNull class]]){
+        explore.explore_description = [dictionary objectForKey:description];
+    }
+    
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         explore.imageURL = [dictionary objectForKey:@"image"];
+    }
+    if(![[dictionary objectForKey:@"user_id"] isKindOfClass:[NSNull class]]){
+        explore.created_by = [dictionary objectForKey:@"user_id"];
     }
 }
 
@@ -978,6 +996,23 @@
 
 }
 
+-(void)setInteractedForPeck:(NSNumber*)peckID{
+    NSString* peckURL = [@"api/pecks/" stringByAppendingString:[peckID stringValue]];
+    NSDictionary* dictionary = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"interacted"];
+    
+    [[PASessionManager sharedClient] PATCH:peckURL
+                               parameters:[self applyWrapper:@"peck" toDictionary:dictionary]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"peck JSON: %@", JSON);
+         [self updatePecks];
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+
+}
+
 -(void)updatePecks{
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
@@ -1119,6 +1154,9 @@
     diningPeriodsURL = [diningPeriodsURL stringByAppendingString:@"&day_of_week="];
     diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[@([components weekday]-1) stringValue]];
     
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
     [[PASessionManager sharedClient] GET:diningPeriodsURL
                               parameters:[self authenticationParameters]
                                  success:^
@@ -1173,6 +1211,9 @@
     [df setDateFormat:@"yyyy-MM-dd"];
     NSString *today = [df stringFromDate:[NSDate date]];
     menuItemsURL = [menuItemsURL stringByAppendingString:today];
+    
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
     
     [[PASessionManager sharedClient] GET:menuItemsURL
                               parameters:[self authenticationParameters]
@@ -1233,6 +1274,85 @@
                                   }];
 }
 
+-(void)updateUserAnnouncements{
+    NSString* announcementsURL = [usersAPI stringByAppendingString:@"/"];
+    announcementsURL = [announcementsURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"] stringValue]];
+    announcementsURL = [announcementsURL stringByAppendingString:@"/user_announcements"];
+    
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    [[PASessionManager sharedClient] GET:announcementsURL
+                               parameters:[self authenticationParameters]
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"announcement JSON: %@", JSON);
+         NSDictionary* json = (NSDictionary*)JSON;
+         NSArray* announcements = [json objectForKey:@"announcements"];
+         for(NSDictionary* announcementAttributes in announcements){
+             NSNumber* newID = [announcementAttributes objectForKey:@"id"];
+             BOOL announcementAlreadyExists = [self objectExists:newID withType:@"Announcement" andCategory:nil];
+             if(!announcementAlreadyExists){
+                 //if the announcement is not already in core data
+                 NSLog(@"adding an announcement to core data");
+                 Announcement * announcement = [NSEntityDescription insertNewObjectForEntityForName:@"Announcement" inManagedObjectContext: _managedObjectContext];
+                 [self setAttributesInAnnouncement:announcement withDictionary:announcementAttributes];
+             }else{
+                 //if the announcement is in core data
+                 Announcement* announcement = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Announcement" andType:nil];
+                 [self setAttributesInAnnouncement:announcement withDictionary:announcementAttributes];
+             }
+         }
+         
+     }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                 }];
+
+}
+
+-(void)setAttributesInAnnouncement:(Announcement*)announcement withDictionary:(NSDictionary*)dictionary{
+    announcement.id = [dictionary objectForKey:@"id"];
+    announcement.title = [dictionary objectForKey:@"title"];
+    announcement.content = [dictionary objectForKey:@"announcement_description"];
+    announcement.created_at = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"created_at"] doubleValue]];
+    if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
+        announcement.imageURL = [dictionary objectForKey:@"image"];
+    }
+}
+
+-(void)updateAnnouncement:(NSNumber*)announcementID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSDate* now = [NSDate date];
+    NSTimeInterval nowEpochSeconds = [now timeIntervalSince1970];
+    NSInteger seconds = (NSInteger)nowEpochSeconds;
+    
+    NSString* fileName = [@"announcement_photo_" stringByAppendingString:[[defaults objectForKey:@"user_id" ] stringValue]];
+    fileName = [fileName stringByAppendingString:@"_"];
+    fileName = [fileName stringByAppendingString:[@(seconds) stringValue]];
+    fileName = [fileName stringByAppendingString:@".jpeg"];
+    
+    NSMutableDictionary* baseDictionary = [[self applyWrapper:@"announcement" toDictionary:dictionary] mutableCopy];
+    [baseDictionary setObject:@"patch" forKey:@"_method"];
+    
+    NSString* announcementURL = [announcementAPI stringByAppendingString:@"/"];
+    announcementURL = [announcementURL stringByAppendingString:[announcementID stringValue]];
+    
+    
+    [[PASessionManager sharedClient] POST:announcementURL
+                               parameters:baseDictionary
+                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         //NSLog(@"success: %@", JSON);
+         [self updateUserAnnouncements];
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+
+}
+
 
 #pragma mark - Events actions
 
@@ -1247,12 +1367,45 @@
     fileName = [fileName stringByAppendingString:@"_"];
     fileName = [fileName stringByAppendingString:[@(seconds) stringValue]];
     fileName = [fileName stringByAppendingString:@".jpeg"];
-    //NSLog(@"file name %@", fileName);
     
-    //NSLog(@"file path: %@", filePath);
+    NSLog(@"post event dictionary; %@", dictionary);
+    
     [[PASessionManager sharedClient] POST:simple_eventsAPI
                                parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary]
                                 constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"simple event creation success: %@", JSON);
+         [self updateEventInfo];
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+
+}
+
+-(void)updateEvent:(NSNumber*)eventID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSDate* now = [NSDate date];
+    NSTimeInterval nowEpochSeconds = [now timeIntervalSince1970];
+    NSInteger seconds = (NSInteger)nowEpochSeconds;
+    
+    NSString* fileName = [@"event_photo_" stringByAppendingString:[[defaults objectForKey:@"user_id" ] stringValue]];
+    fileName = [fileName stringByAppendingString:@"_"];
+    fileName = [fileName stringByAppendingString:[@(seconds) stringValue]];
+    fileName = [fileName stringByAppendingString:@".jpeg"];
+    
+    NSLog(@"patch event dictionary; %@", dictionary);
+    
+    NSMutableDictionary* baseDictioanary = [[self applyWrapper:@"simple_event" toDictionary:dictionary] mutableCopy];
+    [baseDictioanary setObject:@"patch" forKey:@"_method"];
+    
+    NSString* eventURL = [simple_eventsAPI stringByAppendingString:@"/"];
+    eventURL = [eventURL stringByAppendingString:[eventID stringValue]];
+    
+    [[PASessionManager sharedClient] POST:eventURL
+                               parameters:baseDictioanary
+                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"simple event creation success: %@", JSON);
@@ -1288,7 +1441,6 @@
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
         
-        
         [[PASessionManager sharedClient] GET:simple_eventsAPI
                                   parameters:[self authenticationParameters]
                                      success:^
@@ -1296,22 +1448,14 @@
              //NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
-             //NSLog(@"Update Event response: %@", postsFromResponse);
-             NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
              for (NSDictionary *eventAttributes in postsFromResponse) {
-                 NSNumber *newID = [eventAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event" andCategory:nil];
-                 if(!eventAlreadyExists){
-                     //NSLog(@"adding an event to Core Data");
-                     Event * event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInEvent:event withDictionary:eventAttributes];
-                     [mutableEvents addObject:event];
-                     //NSLog(@"EVENT: %@",event);
-                 }else{
-                     //the event is already in core data
-                     Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:@"simple"];
-                     [self setAttributesInEvent:event withDictionary:eventAttributes];
+                NSNumber *newID = [eventAttributes objectForKey:@"id"];
+                Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:[eventAttributes objectForKey:@"simple"]];
+                 if(!event){
+                     event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
                  }
+                 [self setAttributesInEvent:event withDictionary:eventAttributes];
+                 //We will set the attributes of the event even if it was already in core data in case the attributes of the event have changed (if it has been edited or people have chosen to attend it).
              }
              
          }
@@ -1321,15 +1465,11 @@
         /*
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            
-            
+        
         });
          */
     });
-
-    
 }
-
 
 -(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
 {
@@ -1342,8 +1482,9 @@
     event.id = [dictionary objectForKey:@"id"];
     event.type = @"simple";
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
-    event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
-    event.end_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    event.end_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         event.imageURL = [dictionary objectForKey:@"image"];
     }
@@ -1351,6 +1492,9 @@
         event.blurredImageURL = [dictionary objectForKey:@"blurred_image"];
     }
     event.attendees = [dictionary objectForKey:@"attendees"];
+    if(![[dictionary objectForKey:@"user_id"] isKindOfClass:[NSNull class]]){
+        event.created_by = [dictionary objectForKey:@"user_id"];
+    }
 }
 
 #pragma mark - Comment actions

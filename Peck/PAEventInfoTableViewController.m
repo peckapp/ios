@@ -427,7 +427,7 @@ BOOL reloaded = NO;
     cell.nameLabel.text = [self nameLabelTextForComment:tempComment];
     cell.commentTextView.text = tempComment.content;
 
-    UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageViewForComment:tempComment]];
+    UIImageView * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageViewForComment:tempComment]];
     if (cell.thumbnailView) {
         [cell.thumbnailView removeFromSuperview];
     }

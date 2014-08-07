@@ -8,6 +8,8 @@
 
 #import "PAFriendProfileViewController.h"
 #import "Peer.h"
+#import "UIImageView+AFNetworking.h"
+#import "PAAssetManager.h"
 
 @interface PAFriendProfileViewController ()
 
@@ -21,6 +23,8 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+PAAssetManager * assetManager;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -31,34 +35,36 @@
 }
 
 
-- (void)setDetailItem:(id)newDetailItem{
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
-        // Update the view.
-        [self configureView];
-    }
-}
-
 - (void)configureView
 {
     // Update the user interface for the detail item.
+    self.nameLabel.text = self.peer.name;
+    //self.profilePicture = [self imageForPeer:self.peer];
+    self.blurbTextView.text = self.peer.blurb;
     
-    if (self.detailItem) {
+    if(self.peer.imageURL){
+        NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.peer.imageURL]];
+        [self.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
         
-        self.nameLabel.text = [self.detailItem valueForKey:@"name"];
-        //self.blurbTextView.text = self.detailItem objectForKey:@"
-        
+    }else{
+        self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
     }
+    
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    assetManager = [PAAssetManager sharedManager];
     [blurbTextView setEditable:NO];
-    blurbTextView.layer.borderWidth=.5f;
+    /*blurbTextView.layer.borderWidth=.5f;
     blurbTextView.layer.borderColor = [[UIColor grayColor] CGColor];
-    blurbTextView.layer.cornerRadius = 8;
-
+    blurbTextView.layer.cornerRadius = 8;*/
+    
+    [self.scrollView setScrollEnabled:YES];
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height-123);
+    //subtracting 123 gives a height that is large enough to provide minimal scrolling
+    
     [self configureView];
     // Do any additional setup after loading the view.
 }
@@ -68,6 +74,39 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+/*- (UIImageView *)imageForPeer:(Peer*)peer
+{
+    if (peer.imageURL) {
+        NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
+        UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+        if(image){
+            return [[UIImageView alloc] initWithImage:image];
+        }
+        else {
+            UIImageView * imageView = [[UIImageView alloc] init];
+            [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+            return imageView;
+        }
+    }
+    else {
+        return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
+    }
+    
+}*/
+
+-(UIImageView*)imageForPeer:(Peer*)peer{
+    if (peer.imageURL) {
+        NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
+        UIImageView * imageView = [[UIImageView alloc] init];
+        [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+        return imageView;
+    }
+    else{
+         return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
+    }
+}
+
 
 /*
 #pragma mark - Navigation
