@@ -19,5 +19,6 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (strong, nonatomic) NSArray *items;
+@property (weak, nonatomic) IBOutlet UIView *suggestRegistrationView;
 
 @end

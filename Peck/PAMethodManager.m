@@ -28,8 +28,9 @@
     ACTIONS SO FAR:
         Posting an event
         Posting an announcement
-        Posting a comment
-        
+        Posting a comment to an event (they will not be able to post to a circle because they will not have any)
+        Attending an event
+        Creating a circle
     */
     
     message =[@"Please login or register to " stringByAppendingString:message];

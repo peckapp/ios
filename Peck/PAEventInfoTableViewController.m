@@ -686,19 +686,23 @@ BOOL reloaded = NO;
 
 - (IBAction)attendButton:(id)sender {
     if([self.attendButton.titleLabel.text isEqualToString:@"Attend"]){
-    
-        NSLog(@"attend the event");
+        
+       
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        if([defaults objectForKey:@"authentication_token"]){
+            NSLog(@"attend the event");
+            NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      [defaults objectForKey:@"user_id"],@"user_id",
+                                      [defaults objectForKey:@"institution_id"],@"institution_id",
+                                      [self.detailItem valueForKey:@"id"],@"event_attende",
+                                      @"simple", @"category",
+                                      [defaults objectForKey:@"user_id"], @"added_by",
+                                      nil];
     
-        NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [defaults objectForKey:@"user_id"],@"user_id",
-                                  [defaults objectForKey:@"institution_id"],@"institution_id",
-                                  [self.detailItem valueForKey:@"id"],@"event_attended",
-                                  @"simple", @"category",
-                                  [defaults objectForKey:@"user_id"], @"added_by",
-                                  nil];
-    
-        [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:self];
+            [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:self];
+        }else{
+            [[PAMethodManager sharedMethodManager] showRegisterAlert:@"attend an event" forViewController:self];
+        }
     }else{
         NSLog(@"unattend the event");
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];

@@ -59,12 +59,13 @@
 }
 
 -(void)logoutUser{
-    [self removeAllCircles];
     [self setAllSubscriptionsFalseForCategory:@"athletic"];
     [self setAllSubscriptionsFalseForCategory:@"department"];
     [self setAllSubscriptionsFalseForCategory:@"club"];
-    [self removeAllAnnouncements];
-    [self removeAllComments];
+    [self removeAllObjectsOfType:@"Circle"];
+    [self removeAllObjectsOfType:@"Announcement"];
+    [self removeAllObjectsOfType:@"Comment"];
+    [self removeAllObjectsOfType:@"Peck"];
 }
 
 -(void)loginUser{
@@ -84,62 +85,25 @@
     [[PASyncManager globalSyncManager] updatePeerInfo];
 }
 
--(void)removeAllComments{
+-(void)removeAllObjectsOfType:(NSString*)type{
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
     
-    NSFetchRequest * allComments = [[NSFetchRequest alloc] init];
-    [allComments setEntity:[NSEntityDescription entityForName:@"Comment" inManagedObjectContext:_managedObjectContext]];
-    [allComments setIncludesPropertyValues:NO]; //only fetch the managedObjectID
+    NSFetchRequest * allObjects = [[NSFetchRequest alloc] init];
+    [allObjects setEntity:[NSEntityDescription entityForName:type inManagedObjectContext:_managedObjectContext]];
+    [allObjects setIncludesPropertyValues:NO]; //only fetch the managedObjectID
     
     NSError * error = nil;
-    NSArray * comments = [_managedObjectContext executeFetchRequest:allComments error:&error];
+    NSArray * objects = [_managedObjectContext executeFetchRequest:allObjects error:&error];
     //error handling goes here
-    for (NSManagedObject * announcement in comments) {
-        [_managedObjectContext deleteObject:announcement];
-    }
-    NSError *saveError = nil;
-    [_managedObjectContext save:&saveError];
-    
-
-}
-
--(void)removeAllAnnouncements{
-    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
-    
-    NSFetchRequest * allAnnouncements = [[NSFetchRequest alloc] init];
-    [allAnnouncements setEntity:[NSEntityDescription entityForName:@"Announcement" inManagedObjectContext:_managedObjectContext]];
-    [allAnnouncements setIncludesPropertyValues:NO]; //only fetch the managedObjectID
-    
-    NSError * error = nil;
-    NSArray * announcements = [_managedObjectContext executeFetchRequest:allAnnouncements error:&error];
-    //error handling goes here
-    for (NSManagedObject * announcement in announcements) {
-        [_managedObjectContext deleteObject:announcement];
-    }
-    NSError *saveError = nil;
-    [_managedObjectContext save:&saveError];
-
-}
-
--(void)removeAllCircles{
-    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
-    
-    NSFetchRequest * allCircles = [[NSFetchRequest alloc] init];
-    [allCircles setEntity:[NSEntityDescription entityForName:@"Circle" inManagedObjectContext:_managedObjectContext]];
-    [allCircles setIncludesPropertyValues:NO]; //only fetch the managedObjectID
-    
-    NSError * error = nil;
-    NSArray * circles = [_managedObjectContext executeFetchRequest:allCircles error:&error];
-    //error handling goes here
-    for (NSManagedObject * circle in circles) {
-        [_managedObjectContext deleteObject:circle];
+    for (NSManagedObject * object in objects) {
+        [_managedObjectContext deleteObject:object];
     }
     NSError *saveError = nil;
     [_managedObjectContext save:&saveError];
 }
+
+
 
 -(void)removeCircle:(NSNumber*)circleID{
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];

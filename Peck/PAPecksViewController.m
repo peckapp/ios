@@ -57,8 +57,16 @@ static NSString *nibName = @"PAPeckCell";
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 -(void)viewWillAppear:(BOOL)animated{
+    
     [super viewWillAppear:animated];
-    [[PASyncManager globalSyncManager] updatePecks];
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"authentication_token"]){
+        self.tableView.tableHeaderView.frame =CGRectMake(0,0 , self.suggestRegistrationView.frame.size.width, 0);
+        //self.suggestRegistrationView.frame = CGRectMake(0,0 , self.suggestRegistrationView.frame.size.width, 0);
+        [[PASyncManager globalSyncManager] updatePecks];
+    }else{
+        //self.suggestRegistrationView.frame = CGRectMake(0,0 , self.suggestRegistrationView.frame.size.width, 600);
+        self.tableView.tableHeaderView.frame =CGRectMake(0,0 , self.suggestRegistrationView.frame.size.width, 600);
+    }
 }
 
 - (void)didReceiveMemoryWarning
