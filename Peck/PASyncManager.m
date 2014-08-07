@@ -351,6 +351,7 @@
                                       //update the subscriptions of the newly logged in user
                                       [self updateSubscriptions];
                                       
+                                      [self updateUserAnnouncements];
                                       //take care of some necessary login stuff
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       

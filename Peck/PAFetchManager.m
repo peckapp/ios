@@ -63,6 +63,7 @@
     [self setAllSubscriptionsFalseForCategory:@"athletic"];
     [self setAllSubscriptionsFalseForCategory:@"department"];
     [self setAllSubscriptionsFalseForCategory:@"club"];
+    [self removeAllAnnouncements];
 }
 
 -(void)loginUser{
@@ -80,6 +81,25 @@
     }
     
     [[PASyncManager globalSyncManager] updatePeerInfo];
+}
+
+-(void)removeAllAnnouncements{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest * allAnnouncements = [[NSFetchRequest alloc] init];
+    [allAnnouncements setEntity:[NSEntityDescription entityForName:@"Announcement" inManagedObjectContext:_managedObjectContext]];
+    [allAnnouncements setIncludesPropertyValues:NO]; //only fetch the managedObjectID
+    
+    NSError * error = nil;
+    NSArray * announcements = [_managedObjectContext executeFetchRequest:allAnnouncements error:&error];
+    //error handling goes here
+    for (NSManagedObject * announcement in announcements) {
+        [_managedObjectContext deleteObject:announcement];
+    }
+    NSError *saveError = nil;
+    [_managedObjectContext save:&saveError];
+
 }
 
 -(void)removeAllCircles{
