@@ -53,6 +53,7 @@
      */
     
     self.fbLogin.delegate = self;
+    self.fbLogin.readPermissions = @[@"public_profile", @"email", @"user_friends"];
     NSLog(@"fbLogin height: %f",self.fbLogin.frame.size.height);
 }
 
@@ -107,6 +108,8 @@
     // TODO: need to perform appropriate handling of the user here, including sending the necessary information back to the server
     
     if ([self verifyFacebookLoginWithUser:user]) {
+        NSLog(@"user info: %@ %@ %@ %@", [user objectForKey:@"first_name"], [user objectForKey:@"last_name"], [user objectForKey:@"email"], [[FBSession activeSession] accessTokenData]);
+        
         
         double delayInSeconds = 0.1;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);

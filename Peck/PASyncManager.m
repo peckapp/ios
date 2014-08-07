@@ -224,12 +224,15 @@
                                       [defaults setObject:userID forKey:user_id];
                                       NSString *apiKey = [userDictionary objectForKey:api_key];
                                       [defaults setObject:apiKey forKey:api_key];
-                                      
-                                      callbackBlock(YES);
+                                      if(callbackBlock){
+                                          callbackBlock(YES);
+                                      }
                                   }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
-                                      callbackBlock(NO);
+                                      if(callbackBlock){
+                                          callbackBlock(NO);
+                                      }
                                   }];
 }
 
@@ -321,6 +324,7 @@
                                       
                                       NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 
+                                      [defaults setObject:[defaults objectForKey:@"user_id"] forKey:@"old_user_id"];
                                       
                                       [defaults setObject:firstName forKey:first_name_define];
                                       [defaults setObject:lastName forKey:last_name_define];
@@ -380,8 +384,9 @@
     NSNumber* userID = [defaults objectForKey:@"user_id"];
     registerURL = [registerURL stringByAppendingString:[userID stringValue]];
     registerURL = [registerURL stringByAppendingString:@"/super_create"];
+    
     [[PASessionManager sharedClient] PATCH:registerURL
-                               parameters:[self applyWrapper:@"user" toDictionary:userInfo]
+                               parameters:[self applyWrapper:@"user" toDictionary:[self addUDIDToDictionary:userInfo]]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                       
                                       [defaults setObject:@YES forKey:@"logged_in"];
@@ -395,6 +400,9 @@
                                       NSString* lastName = [userDictionary objectForKey:last_name_define];
                                       NSString* email = [userDictionary objectForKey:@"email"];
                                       NSString* blurb = [userDictionary objectForKey:@"blurb"];
+                                      NSNumber* userID = [userDictionary objectForKey:@"id"];
+                                      
+                                      [defaults setObject:userID forKey:@"user_id"];
                                       [defaults setObject:firstName forKey:first_name_define];
                                       [defaults setObject:lastName forKey:last_name_define];
                                       [defaults setObject:email forKey:@"email"];

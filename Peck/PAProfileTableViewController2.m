@@ -145,7 +145,10 @@ BOOL loggedIn;
         [defaults removeObjectForKey:@"profile_picture"];
         [defaults removeObjectForKey:@"profile_picture_url"];
         
+        
         [defaults setObject:@NO forKey:@"logged_in"];
+        
+        [[PASyncManager globalSyncManager] ceateAnonymousUser:nil];
         
         self.emailTextField.text=@"";
         self.firstNameTextField.text=@"";
