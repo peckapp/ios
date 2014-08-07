@@ -1028,14 +1028,12 @@
          NSArray* pecks = [json objectForKey:@"pecks"];
          for(NSDictionary* peckAttributes in pecks){
              NSNumber* newID = [peckAttributes objectForKey:@"id"];
-             BOOL peckAlreadyExists = [self objectExists:newID withType:@"Peck" andCategory:nil];
-             if(!peckAlreadyExists){
-                 Peck * peck = [NSEntityDescription insertNewObjectForEntityForName:@"Peck" inManagedObjectContext: _managedObjectContext];
-                 [self setAttributesInPeck:peck withDictionary:peckAttributes];
-             }else{
-                 Peck* peck = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Peck" andType:nil];
-                 [self setAttributesInPeck:peck withDictionary:peckAttributes];
+             //BOOL peckAlreadyExists = [self objectExists:newID withType:@"Peck" andCategory:nil];
+             Peck* peck = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Peck" andType:nil];
+             if(!peck){
+                 peck = [NSEntityDescription insertNewObjectForEntityForName:@"Peck" inManagedObjectContext: _managedObjectContext];
              }
+             [self setAttributesInPeck:peck withDictionary:peckAttributes];
          }
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -1543,25 +1541,18 @@
                  //NSLog(@"JSON: %@",JSON);
                  NSDictionary *commentsDictionary = (NSDictionary*)JSON;
                  NSArray *postsFromResponse = [commentsDictionary objectForKey:@"comments"];
-                 //NSLog(@"Update Event response: %@", postsFromResponse);
                  for (NSDictionary *commentAttributes in postsFromResponse) {
                      NSNumber *newID = [commentAttributes objectForKey:@"id"];
-                     BOOL eventAlreadyExists = [self objectExists:newID withType:@"Comment" andCategory:nil];
-                     if(!eventAlreadyExists){
-                         //NSLog(@"adding an event to Core Data");
-                         [self.persistentStoreCoordinator lock];
-                         Comment * comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext: _managedObjectContext];
-                         [self setAttributesInComment:comment withDictionary:commentAttributes];
-                         NSError* error = nil;
-                         [_managedObjectContext save:&error];
-                         [self.persistentStoreCoordinator unlock];
-                         //NSLog(@"COMMENT: %@",comment);
-                     }else{
-                         [self.persistentStoreCoordinator lock];
-                         Comment* comment = [[PAFetchManager sharedFetchManager] commentForID:newID];
-                         [self setAttributesInComment:comment withDictionary:commentAttributes];
-                         [self.persistentStoreCoordinator unlock];
+                     //BOOL eventAlreadyExists = [self objectExists:newID withType:@"Comment" andCategory:nil];
+                     [self.persistentStoreCoordinator lock];
+                     Comment* comment = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Comment" andType:nil];
+                     if(!comment){
+                         comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext: _managedObjectContext];
                      }
+                     [self setAttributesInComment:comment withDictionary:commentAttributes];
+                     NSError* error = nil;
+                     [_managedObjectContext save:&error];
+                     [self.persistentStoreCoordinator unlock];
                  }
              }
                                          failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
