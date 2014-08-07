@@ -106,9 +106,6 @@ PAAssetManager * assetManager;
         searchBar.delegate = self;
         searchBar.showsCancelButton = NO;
     }
-
-    UIView * backView = [[UIView alloc] init];
-    backView.backgroundColor = darkColor;
     
     if (!self.leftTableView) {
         self.leftTableView = [[UITableView alloc] init];
@@ -119,7 +116,9 @@ PAAssetManager * assetManager;
     self.leftTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.leftTableView.separatorColor = lightColor;
     self.leftTableView.separatorInset = UIEdgeInsetsZero;
-    [self.leftTableView setBackgroundView:backView];
+    UIView * leftBackView = [[UIView alloc] init];
+    leftBackView.backgroundColor = darkColor;
+    [self.leftTableView setBackgroundView:leftBackView];
 
     if (!self.centerTableView) {
         self.centerTableView = [[UITableView alloc] init];
@@ -130,7 +129,10 @@ PAAssetManager * assetManager;
     self.centerTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.centerTableView.separatorColor = lightColor;
     self.centerTableView.separatorInset = UIEdgeInsetsZero;
-    [self.centerTableView setBackgroundView:backView];
+
+    UIView *centerBackView = [[UIView alloc] init];
+    centerBackView.backgroundColor = darkColor;
+    [self.centerTableView setBackgroundView:centerBackView];
 
     if (!self.rightTableView) {
         self.rightTableView = [[UITableView alloc] init];
@@ -141,7 +143,10 @@ PAAssetManager * assetManager;
     self.rightTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.rightTableView.separatorColor = lightColor;
     self.rightTableView.separatorInset = UIEdgeInsetsZero;
-    [self.rightTableView setBackgroundView:backView];
+
+    UIView *rightBackView = [[UIView alloc] init];
+    rightBackView.backgroundColor = darkColor;
+    [self.rightTableView setBackgroundView:rightBackView];
 
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
@@ -216,16 +221,17 @@ PAAssetManager * assetManager;
 
 - (void)viewWillLayoutSubviews
 {
-
+    [super viewWillLayoutSubviews];
 }
 
 - (void)viewDidLayoutSubviews
 {
-
+    [super viewDidLayoutSubviews];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     NSLog(@"view did appear");
 }
 
@@ -346,7 +352,7 @@ PAAssetManager * assetManager;
 - (NSFetchedResultsController *)centerFetchedResultsController
 {
     if (_centerFetchedResultsController == nil) {
-        _centerFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay - 1];
+        _centerFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay];
     }
     return _centerFetchedResultsController;
 
@@ -355,7 +361,7 @@ PAAssetManager * assetManager;
 - (NSFetchedResultsController *)rightFetchedResultsController
 {
     if (_rightFetchedResultsController == nil) {
-        _rightFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay - 1];
+        _rightFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay + 1];
     }
     return _rightFetchedResultsController;
 
