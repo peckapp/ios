@@ -42,10 +42,13 @@ PAAssetManager * assetManager;
     //self.profilePicture = [self imageForPeer:self.peer];
     self.blurbTextView.text = self.peer.blurb;
     
-    NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.peer.imageURL]];
-    [self.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
-       
+    if(self.peer.imageURL){
+        NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.peer.imageURL]];
+        [self.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
         
+    }else{
+        self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+    }
     
 }
 
@@ -57,7 +60,11 @@ PAAssetManager * assetManager;
     blurbTextView.layer.borderWidth=.5f;
     blurbTextView.layer.borderColor = [[UIColor grayColor] CGColor];
     blurbTextView.layer.cornerRadius = 8;
-
+    
+    [self.scrollView setScrollEnabled:YES];
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height-123);
+    //subtracting 123 gives a height that is large enough to provide minimal scrolling
+    
     [self configureView];
     // Do any additional setup after loading the view.
 }
@@ -68,7 +75,7 @@ PAAssetManager * assetManager;
     // Dispose of any resources that can be recreated.
 }
 
-- (UIImageView *)imageForPeer:(Peer*)peer
+/*- (UIImageView *)imageForPeer:(Peer*)peer
 {
     if (peer.imageURL) {
         NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
@@ -86,8 +93,19 @@ PAAssetManager * assetManager;
         return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
     }
     
-}
+}*/
 
+-(UIImageView*)imageForPeer:(Peer*)peer{
+    if (peer.imageURL) {
+        NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
+        UIImageView * imageView = [[UIImageView alloc] init];
+        [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+        return imageView;
+    }
+    else{
+         return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
+    }
+}
 
 
 /*

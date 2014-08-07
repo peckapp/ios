@@ -40,6 +40,7 @@
                                       [NSNumber numberWithLong:self.invitation_id] ,@"event_attended",
                                       @"simple", @"category",
                                       self.invited_by, @"added_by",
+                                      self.peckID, @"peck",
                                       nil];
             
             [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:nil];
@@ -53,7 +54,7 @@
         if([self.notification_type isEqualToString:@"circle_invite"]){
             [[PASyncManager globalSyncManager] deleteCircleMember:self.invitation_id withPeckID:self.peckID];
         }else if([self.notification_type isEqualToString:@"event_invite"]){
-            
+            [[PASyncManager globalSyncManager] setInteractedForPeck:self.peckID];
         }
     }
 }

@@ -259,7 +259,7 @@ PAAssetManager * assetManager;
         cell.commentTextView.text = tempComment.content;
         [cell.commentTextView setTextColor:[UIColor blackColor]];
 
-        UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageForPeerID:tempComment.peer_id]];
+        UIImageView * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageForPeerID:tempComment.peer_id]];
         if (cell.thumbnailView) {
             [cell.thumbnailView removeFromSuperview];
         }

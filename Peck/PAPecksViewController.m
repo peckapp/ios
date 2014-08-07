@@ -108,6 +108,12 @@ static NSString *nibName = @"PAPeckCell";
         cell.notification_type = peck.notification_type;
         cell.invited_by = peck.invited_by;
     }
+    [cell.acceptButton setHidden:NO];
+    [cell.declineButton setHidden:NO];
+    if([peck.notification_type isEqualToString:@"circle_comment"]){
+        [cell.acceptButton setHidden:YES];
+        [cell.declineButton setHidden:YES];
+    }
     [cell.acceptButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [cell.declineButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     cell.interactedWith = NO;

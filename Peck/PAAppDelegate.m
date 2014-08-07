@@ -48,6 +48,7 @@
     NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     NSString* udid = [store objectForKey:@"udid"];
+    NSLog(@"sync? %i",[[NSUbiquitousKeyValueStore defaultStore] synchronize]);
     if(udid == nil){
         NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
         [store setObject:deviceId forKey:@"udid"];

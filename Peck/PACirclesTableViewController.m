@@ -628,12 +628,14 @@ BOOL viewingCircles;
     
     switch(type)
     {
-        case NSFetchedResultsChangeInsert:
+        case NSFetchedResultsChangeInsert:{
             [tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
+            [tableView reloadData];
             break;
             
+        }
         case NSFetchedResultsChangeDelete:
             [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
@@ -744,14 +746,21 @@ BOOL viewingCircles;
         NSNumber *userID = [defaults objectForKey:@"user_id"];
         NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
    
-    
+        NSString* alert = [defaults objectForKey:@"first_name"];
+        alert = [alert stringByAppendingString:@" "];
+        alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
+        alert = [alert stringByAppendingString:@" commented in "];
+        alert = [alert stringByAppendingString:selectedCell.circle.circleName];
+        
         NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                text, @"content",
-                                userID, @"user_id",
-                                @"circles", @"category",
-                                selectedCell.circle.id, @"comment_from",
-                                institutionID, @"institution_id",
-                                nil];
+                                    text, @"content",
+                                    userID, @"user_id",
+                                    @"circles", @"category",
+                                    selectedCell.circle.id, @"comment_from",
+                                    institutionID, @"institution_id",
+                                    [NSNumber numberWithBool:YES], @"send_push_notification",
+                                    alert, @"message",
+                                    nil];
     
         [[PASyncManager globalSyncManager] postComment:dictionary];
     }
