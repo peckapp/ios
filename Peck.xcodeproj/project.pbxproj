@@ -95,7 +95,6 @@
 		A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C821958A27F00AB9831 /* PAEventBST.m */; };
 		A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C881959D2FE00AB9831 /* PASyncManager.m */; };
 		A4773C8C1959DD0E00AB9831 /* PAImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C8B1959DD0E00AB9831 /* PAImageManager.m */; };
-		A4773C8F195A076800AB9831 /* PACreateCircleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4773C8E195A076800AB9831 /* PACreateCircleViewController.m */; };
 		A4794C1D19620746002BD272 /* profile-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DDCD45C0195DC8E60032333F /* profile-placeholder.png */; };
 		A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4794C22196320AB002BD272 /* PAInvitationViewController.m */; };
 		A482259619914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A482259519914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m */; };
@@ -327,8 +326,6 @@
 		A4773C881959D2FE00AB9831 /* PASyncManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASyncManager.m; sourceTree = "<group>"; };
 		A4773C8A1959DD0E00AB9831 /* PAImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAImageManager.h; sourceTree = "<group>"; };
 		A4773C8B1959DD0E00AB9831 /* PAImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAImageManager.m; sourceTree = "<group>"; };
-		A4773C8D195A076800AB9831 /* PACreateCircleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACreateCircleViewController.h; sourceTree = "<group>"; };
-		A4773C8E195A076800AB9831 /* PACreateCircleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACreateCircleViewController.m; sourceTree = "<group>"; };
 		A4794C21196320AB002BD272 /* PAInvitationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAInvitationViewController.h; sourceTree = "<group>"; };
 		A4794C22196320AB002BD272 /* PAInvitationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAInvitationViewController.m; sourceTree = "<group>"; };
 		A482259419914C0D007D9A9F /* PAUserAnnouncementsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAUserAnnouncementsTableViewController.h; sourceTree = "<group>"; };
@@ -828,8 +825,6 @@
 				A463F383194B959800ED441F /* PACircleCell.xib */,
 				A463F386194F3A4B00ED441F /* PAFriendProfileViewController.h */,
 				A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */,
-				A4773C8D195A076800AB9831 /* PACreateCircleViewController.h */,
-				A4773C8E195A076800AB9831 /* PACreateCircleViewController.m */,
 			);
 			name = Circles;
 			sourceTree = "<group>";
@@ -1138,7 +1133,6 @@
 				A4773C8C1959DD0E00AB9831 /* PAImageManager.m in Sources */,
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
 				A4773C8019589E8200AB9831 /* PAEvents.m in Sources */,
-				A4773C8F195A076800AB9831 /* PACreateCircleViewController.m in Sources */,
 				A482259619914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m in Sources */,
 				A4677D52197562B1007E3C3A /* PADiningOpportunityCell.m in Sources */,
 				86292527193CBFF80057CA41 /* PAEventCell.m in Sources */,

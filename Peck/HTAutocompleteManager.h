@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "HTAutocompleteTextField.h"
-#import "PACreateCircleViewController.h"
 #import "Peer.h"
 
 typedef enum {

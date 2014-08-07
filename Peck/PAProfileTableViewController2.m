@@ -63,8 +63,11 @@ BOOL loggedIn;
     self.infoTextView.text = [defaults objectForKey:@"blurb"];
     NSLog(@"profile picture path %@", [defaults objectForKey:@"profile_picture"]);
     UIImage* image =[UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
-    self.profilePicture.image = [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
-    
+    if(image){
+        self.profilePicture.image = image;
+    }else{
+        self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+    }
     if([defaults objectForKey:@"authentication_token"]){
         loggedIn=YES;
         NSLog(@"logged in");
@@ -140,6 +143,7 @@ BOOL loggedIn;
         [defaults removeObjectForKey:@"blurb"];
         [defaults removeObjectForKey:@"email"];
         [defaults removeObjectForKey:@"profile_picture"];
+        [defaults removeObjectForKey:@"profile_picture_url"];
         
         [defaults setObject:@NO forKey:@"logged_in"];
         
@@ -147,7 +151,7 @@ BOOL loggedIn;
         self.firstNameTextField.text=@"";
         self.infoTextView.text = @"";
         self.lastNameTextField.text = @"";
-        self.profilePicture.image = nil;
+        self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
         [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
         loggedIn=NO;
     }
