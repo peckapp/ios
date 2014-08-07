@@ -17,6 +17,7 @@
 #import "PAInvitationsTableViewController.h"
 #import "PAFetchManager.h"
 #import "UIImageView+AFNetworking.h"
+#import "PAMethodManager.h"
 
 /*
  State for each cell is defined by the cell's tag.
@@ -450,6 +451,8 @@
 
 - (IBAction)returnResultAndExit:(id)sender
 {
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"authentication_token"]){
+    
     if([self.topRightBarButton.title isEqualToString:@"Save"]){
         //Editing
         if(_controlSwitch.selectedSegmentIndex==0){
@@ -486,6 +489,13 @@
                 [self postAnnouncement];
             }
         }
+    }
+    }else{
+        NSString*type = @"event";
+        if(_controlSwitch.selectedSegmentIndex==1){
+            type = @"annoucnement";
+        }
+        [[PAMethodManager sharedMethodManager] showRegisterAlert:[@"post an " stringByAppendingString:type] forViewController:self];
     }
 }
 

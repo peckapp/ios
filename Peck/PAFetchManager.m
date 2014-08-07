@@ -64,6 +64,7 @@
     [self setAllSubscriptionsFalseForCategory:@"department"];
     [self setAllSubscriptionsFalseForCategory:@"club"];
     [self removeAllAnnouncements];
+    [self removeAllComments];
 }
 
 -(void)loginUser{
@@ -81,6 +82,26 @@
     }
     
     [[PASyncManager globalSyncManager] updatePeerInfo];
+}
+
+-(void)removeAllComments{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest * allComments = [[NSFetchRequest alloc] init];
+    [allComments setEntity:[NSEntityDescription entityForName:@"Comment" inManagedObjectContext:_managedObjectContext]];
+    [allComments setIncludesPropertyValues:NO]; //only fetch the managedObjectID
+    
+    NSError * error = nil;
+    NSArray * comments = [_managedObjectContext executeFetchRequest:allComments error:&error];
+    //error handling goes here
+    for (NSManagedObject * announcement in comments) {
+        [_managedObjectContext deleteObject:announcement];
+    }
+    NSError *saveError = nil;
+    [_managedObjectContext save:&saveError];
+    
+
 }
 
 -(void)removeAllAnnouncements{

@@ -114,6 +114,7 @@
 		A4E21F6619659892002A9800 /* PACommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4E21F6419659892002A9800 /* PACommentCell.xib */; };
 		A4E47D571991261000DDF941 /* PAUserEventsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E47D561991261000DDF941 /* PAUserEventsTableViewController.m */; };
 		A4E47D5A1991295000DDF941 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E47D591991295000DDF941 /* Event.m */; };
+		A4F04BEE1994097500290CF2 /* PAMethodManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F04BED1994097500290CF2 /* PAMethodManager.m */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 		DD3701401990081F006B63E8 /* PANestedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD37013F1990081F006B63E8 /* PANestedTableViewController.m */; };
 		DD5751B41980356100BF52A8 /* PAPeckInviteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD5751B31980356100BF52A8 /* PAPeckInviteCell.xib */; };
@@ -356,6 +357,8 @@
 		A4E47D561991261000DDF941 /* PAUserEventsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAUserEventsTableViewController.m; sourceTree = "<group>"; };
 		A4E47D581991295000DDF941 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		A4E47D591991295000DDF941 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
+		A4F04BEC1994097500290CF2 /* PAMethodManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAMethodManager.h; sourceTree = "<group>"; };
+		A4F04BED1994097500290CF2 /* PAMethodManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAMethodManager.m; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD37013E1990081F006B63E8 /* PANestedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PANestedTableViewController.h; sourceTree = "<group>"; };
@@ -621,7 +624,7 @@
 				DD37013E1990081F006B63E8 /* PANestedTableViewController.h */,
 				DD37013F1990081F006B63E8 /* PANestedTableViewController.m */,
 				86613BE2197DD7D4004914B2 /* Dropdown */,
-				A4C8C344197D8F0E008F9F85 /* Fetch Manager */,
+				A4C8C344197D8F0E008F9F85 /* Managers */,
 				DDDAEDE419479665004CE102 /* Events */,
 				A46F08FE196DC0E700CFA5D0 /* Dining */,
 				DDDAEDE019475EE7004CE102 /* Pecks */,
@@ -741,13 +744,15 @@
 			name = Configure;
 			sourceTree = "<group>";
 		};
-		A4C8C344197D8F0E008F9F85 /* Fetch Manager */ = {
+		A4C8C344197D8F0E008F9F85 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
 				A4C8C345197D8F3F008F9F85 /* PAFetchManager.h */,
 				A4C8C346197D8F3F008F9F85 /* PAFetchManager.m */,
+				A4F04BEC1994097500290CF2 /* PAMethodManager.h */,
+				A4F04BED1994097500290CF2 /* PAMethodManager.m */,
 			);
-			name = "Fetch Manager";
+			name = Managers;
 			sourceTree = "<group>";
 		};
 		A4E21F611965982C002A9800 /* Comment */ = {
@@ -1126,6 +1131,7 @@
 				A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */,
 				A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
+				A4F04BEE1994097500290CF2 /* PAMethodManager.m in Sources */,
 				A4C8C347197D8F3F008F9F85 /* PAFetchManager.m in Sources */,
 				DD6902D2198820270095892F /* PAAssetManager.m in Sources */,
 				A4E47D5A1991295000DDF941 /* Event.m in Sources */,
