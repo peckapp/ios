@@ -77,6 +77,7 @@
 -(void)deleteCircleMember:(NSInteger)circleMemberID withPeckID:(NSNumber*)peckID;
 
 //methods for updating pecks
+-(void)deletePeck:(NSNumber*)peckID;
 -(void)postPeck:(NSDictionary*)dictionary;
 -(void)updatePecks;
 -(void)setInteractedForPeck:(NSNumber*)peckID;

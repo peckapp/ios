@@ -72,13 +72,11 @@ BOOL loggedIn;
         loggedIn=YES;
         NSLog(@"logged in");
         self.loginButton.title =@"Logout";
-        //[self.loginButton setTitle:@"Logout" forState:UIControlStateNormal];
     }
     else{
         loggedIn=NO;
         NSLog(@"logged out");
         self.loginButton.title = @"Login";
-        //[self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
     }
 }
 
@@ -155,7 +153,6 @@ BOOL loggedIn;
         self.lastNameTextField.text = @"";
         self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
         self.loginButton.title = @"Login";
-        //[self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
         loggedIn=NO;
     }
 }
@@ -255,9 +252,6 @@ BOOL loggedIn;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    /*if(indexPath.row==1 && indexPath.section==0){
-        [self switchSchool:self];
-    }*/
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

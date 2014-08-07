@@ -982,6 +982,21 @@
 }
 #pragma mark - Peck actions
 
+-(void)deletePeck:(NSNumber*)peckID{
+    NSString* peckURL = [@"api/pecks/" stringByAppendingString:[peckID stringValue]];
+    [[PASessionManager sharedClient] DELETE:peckURL
+                               parameters:[self authenticationParameters]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"peck JSON: %@", JSON);
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+    
+
+}
+
 -(void)postPeck:(NSDictionary*)dictionary{
     [[PASessionManager sharedClient] POST:@"api/pecks"
                                parameters:[self applyWrapper:@"peck" toDictionary:dictionary]
