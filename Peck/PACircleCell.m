@@ -379,8 +379,8 @@ PAAssetManager * assetManager;
     }
     else if (tableView == self.commentsTableView) {
         if(indexPath.row>0){
-            if([_fetchedResultsController.fetchedObjects count]>=[indexPath row]){
-                Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]-1];
+            if([_fetchedResultsController.fetchedObjects count]>[indexPath row]){
+                Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]];
                 NSString * commentID = [comment.id stringValue];
                 CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
                 if(height){
@@ -414,6 +414,16 @@ PAAssetManager * assetManager;
     }
     else if (tableView == self.commentsTableView) {
         [self.commentsTableView deselectRowAtIndexPath:indexPath animated:YES];
+        PACommentCell * cell = (PACommentCell *)[self tableView:self.commentsTableView cellForRowAtIndexPath:indexPath];
+        if (cell.expanded) {
+            [self compress:cell];
+            cell.expanded = NO;
+        }
+        else {
+            [self expand:cell];
+            cell.expanded = YES;
+        }
+
     }
     else if(tableView == self.suggestedMembersTableView){
         PACirclesTableViewController* parent = (PACirclesTableViewController*)self.parentViewController;

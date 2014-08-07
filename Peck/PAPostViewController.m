@@ -291,6 +291,7 @@
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
     {
         UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+        [controller setAllowsEditing:YES];
         controller.sourceType = UIImagePickerControllerSourceTypeCamera;
         controller.delegate = self;
         [self presentViewController: controller animated: YES completion: nil];
@@ -303,6 +304,7 @@
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary])
     {
         UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+        [controller setAllowsEditing:YES];
         controller.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         controller.modalPresentationStyle = UIModalPresentationFormSheet;
         controller.delegate = self;
@@ -313,7 +315,9 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     [self dismissViewControllerAnimated: YES completion: nil];
-    UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
+    //UIImage *image = [info valueForKey: UIImagePickerControllerOriginalImage];
+    //switching to the following line uses the edited image rather than the original
+    UIImage *image = [info valueForKey: UIImagePickerControllerEditedImage];
     self.photo.image = image;
 
     NSLog(@"Post view frame height: %f", self.view.frame.size.height);
