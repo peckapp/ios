@@ -100,7 +100,7 @@ PAAssetManager * assetManager;
 
     self.selectedDay = 0;
     showingDetail = NO;
-
+    // [self reloadTheView];
     if(!searchBar){
         searchBar = [[UISearchBar alloc] init];
         searchBar.delegate = self;
@@ -112,7 +112,7 @@ PAAssetManager * assetManager;
     
     if (!self.leftTableView) {
         self.leftTableView = [[UITableView alloc] init];
-        [self.view addSubview:self.centerTableView];
+        [self.view addSubview:self.leftTableView];
     }
     self.leftTableView.dataSource = self;
     self.leftTableView.delegate = self;
@@ -134,7 +134,7 @@ PAAssetManager * assetManager;
 
     if (!self.rightTableView) {
         self.rightTableView = [[UITableView alloc] init];
-        [self.view addSubview:self.centerTableView];
+        [self.view addSubview:self.rightTableView];
     }
     self.rightTableView.dataSource = self;
     self.rightTableView.delegate = self;
@@ -142,10 +142,6 @@ PAAssetManager * assetManager;
     self.rightTableView.separatorColor = lightColor;
     self.rightTableView.separatorInset = UIEdgeInsetsZero;
     [self.rightTableView setBackgroundView:backView];
-
-    self.leftFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay - 1];
-    self.centerFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay];
-    self.rightFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay + 1];
 
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
@@ -187,7 +183,8 @@ PAAssetManager * assetManager;
     });
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     
     [[PASyncManager globalSyncManager] updateEventInfo];
@@ -215,6 +212,21 @@ PAAssetManager * assetManager;
     [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
     [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
 
+}
+
+- (void)viewWillLayoutSubviews
+{
+
+}
+
+- (void)viewDidLayoutSubviews
+{
+
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSLog(@"view did appear");
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -323,17 +335,31 @@ PAAssetManager * assetManager;
     return aFetchedResultsController;
 }
 
-/*
+- (NSFetchedResultsController *)leftFetchedResultsController
+{
+    if (_leftFetchedResultsController == nil) {
+        _leftFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay - 1];
+    }
+    return _leftFetchedResultsController;
+}
+
 - (NSFetchedResultsController *)centerFetchedResultsController
 {
-    if (_centerFetchedResultsController!=nil) {
-        return _centerFetchedResultsController;
+    if (_centerFetchedResultsController == nil) {
+        _centerFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay - 1];
     }
-    else {
-        return [self constructFetchedResultsControllerForDay:self.selectedDay];
-    }
+    return _centerFetchedResultsController;
+
 }
- */
+
+- (NSFetchedResultsController *)rightFetchedResultsController
+{
+    if (_rightFetchedResultsController == nil) {
+        _rightFetchedResultsController = [self constructFetchedResultsControllerForDay:self.selectedDay - 1];
+    }
+    return _rightFetchedResultsController;
+
+}
 
 
 -(NSDate *)getDateForDay:(NSInteger) day
@@ -426,18 +452,59 @@ PAAssetManager * assetManager;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [[self.centerFetchedResultsController sections] count];
+    if (tableView == self.leftTableView) {
+        return [[self.leftFetchedResultsController sections] count];
+    }
+    else if (tableView == self.centerTableView) {
+        return [[self.centerFetchedResultsController sections] count];
+    }
+    else if (tableView == self.rightTableView) {
+        return [[self.rightFetchedResultsController sections] count];
+    }
+    else {
+        return 0;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[self.centerFetchedResultsController sections] objectAtIndex:section];
-    return [sectionInfo numberOfObjects];
+    if (tableView == self.leftTableView) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.leftFetchedResultsController sections] objectAtIndex:section];
+        return [sectionInfo numberOfObjects];
+    }
+    else if (tableView == self.centerTableView) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.centerFetchedResultsController sections] objectAtIndex:section];
+        return [sectionInfo numberOfObjects];
+    }
+    else if (tableView == self.rightTableView) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.rightFetchedResultsController sections] objectAtIndex:section];
+        return [sectionInfo numberOfObjects];
+    }
+    else {
+        return 0;
+    }
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Event *currentEvent = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
+    Event *currentEvent = nil;
+    NSFetchedResultsController *fetchedResultsController = nil;
+    if (tableView == self.leftTableView) {
+        currentEvent = [self.leftFetchedResultsController objectAtIndexPath:indexPath];
+        fetchedResultsController = self.leftFetchedResultsController;
+    }
+    else if (tableView == self.centerTableView) {
+        currentEvent = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
+        fetchedResultsController = self.centerFetchedResultsController;
+    }
+    else if (tableView == self.rightTableView) {
+        currentEvent = [self.rightFetchedResultsController objectAtIndexPath:indexPath];
+        fetchedResultsController = self.rightFetchedResultsController;
+    }
+    else {
+        return nil;
+    }
 
     if([currentEvent.type isEqualToString:@"dining"]){
         PADiningOpportunityCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningOppCell"];
@@ -461,7 +528,7 @@ PAAssetManager * assetManager;
         if (viewController == nil) {
             PAEventInfoTableViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"event-info-view-controller"];
             viewController.view.userInteractionEnabled = NO;
-            NSManagedObject *object = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
+            NSManagedObject *object = [fetchedResultsController objectAtIndexPath:indexPath];
             [viewController setDetailItem:object];
             [self setViewController:viewController atIndexPath:indexPath];
         }
@@ -507,12 +574,15 @@ PAAssetManager * assetManager;
     }
 }
 
--(void)configureDiningCell:(PADiningOpportunityCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+-(void)configureDiningCell:(PADiningOpportunityCell*)cell atIndexPath:(NSIndexPath*)indexPath
+{
+    /*
     Event* tempDiningEvent = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
 
     cell.nameLabel.text = tempDiningEvent.title;
     //cell.startTimeLabel.text = [self dateToString:tempDiningEvent.start_date];
     //cell.endTimeLabel.text = [self dateToString:tempDiningEvent.end_date];
+     */
     
 }
 
@@ -523,8 +593,21 @@ PAAssetManager * assetManager;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-     //NSLog(@"cell height (height for row): %f",cellHeight);
-    Event * tempEvent = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
+    NSFetchedResultsController * fetchedResultsController = nil;
+    if (tableView == self.leftTableView) {
+        fetchedResultsController = self.leftFetchedResultsController;
+    }
+    else if (tableView == self.centerTableView) {
+        fetchedResultsController = self.centerFetchedResultsController;
+    }
+    else if (tableView == self.rightTableView) {
+        fetchedResultsController = self.rightFetchedResultsController;
+    }
+    else {
+        return 0;
+    }
+
+    Event * tempEvent = [fetchedResultsController objectAtIndexPath:indexPath];
 
     if ([self indexPathIsSelected:indexPath]) {
         return self.view.frame.size.height;
