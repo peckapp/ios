@@ -1441,7 +1441,6 @@
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
         
-        
         [[PASessionManager sharedClient] GET:simple_eventsAPI
                                   parameters:[self authenticationParameters]
                                      success:^
@@ -1466,13 +1465,10 @@
         /*
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            
-            
+        
         });
          */
     });
-
-    
 }
 
 -(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary

@@ -342,6 +342,8 @@ BOOL viewingCircles;
         self.keyboardAccessory.hidden = NO;
         self.keyboardAccessoryView.frame = CGRectMake(0, cell.frame.origin.y + cell.frame.size.height - 44, self.view.frame.size.width, 44);
         [self configureCell:cell atIndexPath:indexPath];
+        NSString* circleID = [cell.circle.id stringValue];
+        [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
     }
     else {
         if (cell.addingMembers) {
@@ -353,6 +355,9 @@ BOOL viewingCircles;
                 [self dismissKeyboard:self];
                 [self configureCell:cell atIndexPath:indexPath];
                 [cell performFetch];
+                NSString* circleID = [cell.circle.id stringValue];
+                [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
+                
             }
             
         }
