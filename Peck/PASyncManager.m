@@ -1449,22 +1449,14 @@
              //NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
-             //NSLog(@"Update Event response: %@", postsFromResponse);
-             NSMutableArray *mutableEvents = [NSMutableArray arrayWithCapacity:[postsFromResponse count]];
              for (NSDictionary *eventAttributes in postsFromResponse) {
-                 NSNumber *newID = [eventAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event" andCategory:nil];
-                 if(!eventAlreadyExists){
-                     //NSLog(@"adding an event to Core Data");
-                     Event * event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInEvent:event withDictionary:eventAttributes];
-                     [mutableEvents addObject:event];
-                     //NSLog(@"EVENT: %@",event);
-                 }else{
-                     //the event is already in core data
-                     Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:@"simple"];
-                     [self setAttributesInEvent:event withDictionary:eventAttributes];
+                NSNumber *newID = [eventAttributes objectForKey:@"id"];
+                Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:[eventAttributes objectForKey:@"simple"]];
+                 if(!event){
+                     event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
                  }
+                 [self setAttributesInEvent:event withDictionary:eventAttributes];
+                 //We will set the attributes of the event even if it was already in core data in case the attributes of the event have changed (if it has been edited or people have chosen to attend it).
              }
              
          }
@@ -1482,7 +1474,6 @@
 
     
 }
-
 
 -(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
 {
