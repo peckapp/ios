@@ -96,3 +96,10 @@ push notifications will require the app to request an incremental update from th
 - create circle
 - added to circle
 - Pecks
+
+## API calls
+
+### install
+- send udid to server
+- update institutions
+
