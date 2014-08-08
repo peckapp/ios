@@ -42,8 +42,10 @@ static NSString *nibName = @"PAPeckCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.items = @[@"Item 1", @"Item 2", @"Item 3"];
-    self.title = @"Pecks";
+    
+    if(!self.noPecksLabel){
+        self.noPecksLabel = [[UILabel alloc] init];
+    }
     
     NSError *error=nil;
     if (![self.fetchedResultsController performFetch:&error])
@@ -62,16 +64,17 @@ static NSString *nibName = @"PAPeckCell";
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
+    
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"authentication_token"]){
       
-        if([_fetchedResultsController.fetchedObjects count]==0){
-            
-        }
-        
         [[PASyncManager globalSyncManager] updatePecks];
-        self.tableView.backgroundColor = [UIColor whiteColor];
-        self.tableView.separatorColor = [UIColor lightGrayColor];
         
+        if([_fetchedResultsController.fetchedObjects count]==0){
+            [self showNoPecks];
+        }
+        else{
+            [self showPecks];
+        }
     
         
     }else{
@@ -83,6 +86,24 @@ static NSString *nibName = @"PAPeckCell";
         [self.view addSubview:_promptView];
         
     }
+}
+-(void)showNoPecks{
+    self.tableView.backgroundColor = [[PAAssetManager sharedManager] unavailableColor];
+    self.tableView.separatorColor = [[PAAssetManager sharedManager] unavailableColor];
+    self.noPecksLabel.text = @"You have no Pecks";
+    self.noPecksLabel.textColor = [UIColor whiteColor];
+    self.noPecksLabel.frame = CGRectMake(0, 30, self.view.frame.size.width, 60);
+    self.noPecksLabel.textAlignment = NSTextAlignmentCenter;
+    self.noPecksLabel.font = [UIFont systemFontOfSize:28];
+    
+    [self.view addSubview:self.noPecksLabel];
+
+}
+
+-(void)showPecks{
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.separatorColor = [UIColor lightGrayColor];
+    [self.noPecksLabel removeFromSuperview];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -268,6 +289,9 @@ static NSString *nibName = @"PAPeckCell";
         {
             [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             
+            if([_fetchedResultsController.fetchedObjects count]>0){
+                [self showPecks];
+            }
             //this line is here because the table view would usually set the second cell to have the same properties as the cell that was just inserted
             [self.tableView reloadData];
             break;
@@ -277,6 +301,9 @@ static NSString *nibName = @"PAPeckCell";
             [self.tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
+            if([_fetchedResultsController.fetchedObjects count]==0){
+                [self showNoPecks];
+            }
             break;
         }
         case NSFetchedResultsChangeUpdate:{
