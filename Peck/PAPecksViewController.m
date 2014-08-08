@@ -13,9 +13,11 @@
 #import "Peck.h"
 #import "PAPeckCell.h"
 #import "PASyncManager.h"
+#import "PAPromptView.h"
 
 @interface PAPecksViewController ()
 
+@property (strong) PAPromptView* promptView;
 @end
 
 @implementation PAPecksViewController
@@ -60,13 +62,33 @@ static NSString *nibName = @"PAPeckCell";
     
     [super viewWillAppear:animated];
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"authentication_token"]){
-        self.tableView.tableHeaderView.frame =CGRectMake(0,0 , self.suggestRegistrationView.frame.size.width, 0);
-        //self.suggestRegistrationView.frame = CGRectMake(0,0 , self.suggestRegistrationView.frame.size.width, 0);
+      
         [[PASyncManager globalSyncManager] updatePecks];
+        self.tableView.backgroundColor = [UIColor whiteColor];
+        self.tableView.separatorColor = [UIColor lightGrayColor];
+        //[[self.view subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        
     }else{
-        //self.suggestRegistrationView.frame = CGRectMake(0,0 , self.suggestRegistrationView.frame.size.width, 600);
-        self.tableView.tableHeaderView.frame =CGRectMake(0,0 , self.suggestRegistrationView.frame.size.width, 600);
+        self.tableView.backgroundColor = [UIColor lightGrayColor];
+        self.tableView.separatorColor  = [UIColor lightGrayColor];
+        _promptView = [PAPromptView promptView:self];
+        [self.view addSubview:_promptView];
+        
+        /*
+        UIView* promptView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 50, 320, 60)];
+        UILabel* registerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
+    
+        registerLabel.text = @"Register or login to receive Pecks";
+        registerLabel.textColor = [UIColor whiteColor];
+        registerLabel.textAlignment = NSTextAlignmentCenter;
+        [promptView addSubview:registerLabel];
+        [self.view addSubview:promptView2];*/
     }
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [_promptView removeFromSuperview];
 }
 
 - (void)didReceiveMemoryWarning

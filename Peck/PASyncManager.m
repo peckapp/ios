@@ -388,12 +388,17 @@
     [[PASessionManager sharedClient] PATCH:registerURL
                                parameters:[self applyWrapper:@"user" toDictionary:[self addUDIDToDictionary:userInfo]]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      NSLog(@"JSON : %@", JSON);
                                       
-                                      [defaults setObject:@YES forKey:@"logged_in"];
-                                      [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+                                      
                                       
                                       //NSLog(@"user register success: %@", JSON);
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
+                                      NSArray* errors = [postsFromResponse objectForKey:@"errors"];
+                                      if(![errors count]>0){
+                                      
+                                      [defaults setObject:@YES forKey:@"logged_in"];
+                                      [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
                                       NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
                                       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                                       NSString* firstName = [userDictionary objectForKey:first_name_define];
@@ -405,11 +410,20 @@
                                       [defaults setObject:userID forKey:@"user_id"];
                                       [defaults setObject:firstName forKey:first_name_define];
                                       [defaults setObject:lastName forKey:last_name_define];
-                                      [defaults setObject:email forKey:@"email"];
-                                      if(![blurb isKindOfClass:[NSNull class]]){
-                                          [defaults setObject:blurb forKey:@"blurb"];
+                                          [defaults setObject:email forKey:@"email"];
+                                          if(![blurb isKindOfClass:[NSNull class]]){
+                                            [defaults setObject:blurb forKey:@"blurb"];
+                                          }
+                                          [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
+                                      }else{
+                                          UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Registration Error"
+                                                                                         message:@"Something went wrong while registering"
+                                                                                        delegate:self
+                                                                               cancelButtonTitle:@"OK"
+                                                                               otherButtonTitles:nil];
+                                          [alert show];
+                                          
                                       }
-                                      [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
