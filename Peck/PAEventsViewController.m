@@ -924,7 +924,7 @@ PAAssetManager * assetManager;
                 PAEventCell* cell = (PAEventCell*)[tableView cellForRowAtIndexPath:indexPath];
                 if(fetchedResultsController.fetchedObjects.count > indexPath.row){
                     if ([cell isKindOfClass:[PAEventCell class]]) {
-                        [self configureEventCell:cell atIndexPath:indexPath];
+                        // [self configureEventCell:cell atIndexPath:indexPath];
                     }
                 }
                 //to reload the cell after the image is cached
