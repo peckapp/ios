@@ -308,7 +308,7 @@ PAAssetManager * assetManager;
     NSDate *selectedMorning = [self getDateForDay:day];
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
     [dateComponents setDay:1];
-    NSDate *selectedNight =[[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:selectedMorning options:0];
+    NSDate *selectedNight = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:selectedMorning options:0];
 
     NSPredicate *startDatePredicate = [NSPredicate predicateWithFormat:@"start_date > %@", selectedMorning];
     NSPredicate *endDatePredicate = [NSPredicate predicateWithFormat:@"start_date < %@", selectedNight];
@@ -388,19 +388,42 @@ PAAssetManager * assetManager;
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.centerTableView beginUpdates];
+    if (controller == self.leftFetchedResultsController) {
+        [self.leftTableView beginUpdates];
+    }
+    else if (controller == self.centerFetchedResultsController) {
+        [self.centerTableView beginUpdates];
+    }
+    else if (controller == self.rightFetchedResultsController) {
+        [self.rightTableView beginUpdates];
+    }
+    else {
+    }
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
+    UITableView * tableView = nil;
+    if (controller == self.leftFetchedResultsController) {
+        tableView = self.leftTableView;
+    }
+    else if (controller == self.centerFetchedResultsController) {
+        tableView = self.centerTableView;
+    }
+    else if (controller == self.rightFetchedResultsController) {
+        tableView = self.rightTableView;
+    }
+    else {
+    }
+
     switch(type) {
         case NSFetchedResultsChangeInsert:
-            [self.centerTableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeDelete:
-            [self.centerTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
 
         case NSFetchedResultsChangeMove:
@@ -414,41 +437,49 @@ PAAssetManager * assetManager;
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
-    NSLog(@"did change object");
-    
-    switch(type)
+    UITableView * tableView = nil;
+    if (controller == self.leftFetchedResultsController) {
+        tableView = self.leftTableView;
+    }
+    else if (controller == self.centerFetchedResultsController) {
+        tableView = self.centerTableView;
+    }
+    else if (controller == self.rightFetchedResultsController) {
+        tableView = self.rightTableView;
+    }
+    else {
+    }
+
+    switch (type)
     {
         case NSFetchedResultsChangeInsert:{
-            
-            Event* event = (Event*) anObject;
+            Event *event = (Event*) anObject;
             
             if (event.blurredImageURL != nil) {
-                
                 [self cacheImageForEventURL:event.blurredImageURL Type:event.type AndID:event.id];
-                
             }
-            [self.centerTableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
             break;
             
         case NSFetchedResultsChangeDelete:
             //Event *tempEvent = (Event *)anObject;
             [[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
-            [self.centerTableView
+            [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self.centerTableView cellForRowAtIndexPath:indexPath];
+            [tableView cellForRowAtIndexPath:indexPath];
             break;
             
         case NSFetchedResultsChangeMove:
-            [self.centerTableView
+            [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             
-            [self.centerTableView
+            [tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
@@ -457,7 +488,17 @@ PAAssetManager * assetManager;
 
 - (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
 {
-    [self.centerTableView endUpdates];
+    if (controller == self.leftFetchedResultsController) {
+        [self.leftTableView endUpdates];
+    }
+    else if (controller == self.centerFetchedResultsController) {
+        [self.centerTableView endUpdates];
+    }
+    else if (controller == self.rightFetchedResultsController) {
+        [self.rightTableView endUpdates];
+    }
+    else {
+    }
 }
 
 #pragma mark - Table View
@@ -518,9 +559,9 @@ PAAssetManager * assetManager;
         return nil;
     }
 
-    if([currentEvent.type isEqualToString:@"dining"]){
+    if ([currentEvent.type isEqualToString:@"dining"]) {
         PADiningOpportunityCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningOppCell"];
-        if(cell==nil){
+        if(cell == nil){
             [tableView registerNib:[UINib nibWithNibName:@"PADiningOpportunityCell" bundle:nil] forCellReuseIdentifier:@"diningOppCell"];
             cell = [tableView dequeueReusableCellWithIdentifier:@"diningOppCell"];
         }
@@ -535,19 +576,14 @@ PAAssetManager * assetManager;
             cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
         }
 
-
-        UIViewController * viewController = [self viewControllerAtIndexPath:indexPath];
-        if (viewController == nil) {
-            PAEventInfoTableViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"event-info-view-controller"];
-            viewController.view.userInteractionEnabled = NO;
-            NSManagedObject *object = [fetchedResultsController objectAtIndexPath:indexPath];
-            [viewController setDetailItem:object];
-            [self setViewController:viewController atIndexPath:indexPath];
-        }
+        PAEventInfoTableViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"event-info-view-controller"];
+        viewController.view.userInteractionEnabled = NO;
+        NSManagedObject *object = [fetchedResultsController objectAtIndexPath:indexPath];
+        [viewController setDetailItem:object];
+        [self setViewController:viewController atIndexPath:indexPath];
 
         [self configureDetailViewControllerCell:cell atIndexPath:indexPath];
 
-        //[self configureEventCell:cell atIndexPath:indexPath];
         return cell;
     }
 }
@@ -643,6 +679,9 @@ PAAssetManager * assetManager;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
      */
 
+    if (tableView == self.centerTableView) {
+        NSLog(@"selected row at center table view");
+    }
     [self tableView:tableView expandRowAtIndexPath:indexPath];
 }
 
@@ -839,10 +878,13 @@ PAAssetManager * assetManager;
                          self.centerTableView = self.rightTableView;
                          self.rightTableView = tempView;
 
-                         NSFetchedResultsController * tempController = self.leftFetchedResultsController;
+                         self.selectedDay += 1;
+
                          self.leftFetchedResultsController = self.centerFetchedResultsController;
                          self.centerFetchedResultsController = self.rightFetchedResultsController;
-                         self.rightFetchedResultsController = tempController;
+                         self.rightFetchedResultsController = nil;
+
+                         [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
 
                          NSLog(@"end transition to right");
                      }];
@@ -859,19 +901,18 @@ PAAssetManager * assetManager;
                      completion:^(BOOL finished){
                          self.rightTableView.frame = self.leftTableViewFrame;
 
+                         self.selectedDay -= 1;
+
+                         self.rightFetchedResultsController = self.centerFetchedResultsController;
+                         self.centerFetchedResultsController = self.leftFetchedResultsController;
+                         self.leftFetchedResultsController = nil;
+
                          UITableView * tempView = self.rightTableView;
                          self.rightTableView = self.centerTableView;
                          self.centerTableView = self.leftTableView;
                          self.leftTableView = tempView;
 
-                         NSFetchedResultsController * tempController = self.rightFetchedResultsController;
-                         self.rightFetchedResultsController = self.centerFetchedResultsController;
-                         self.centerFetchedResultsController = self.leftFetchedResultsController;
-                         self.leftFetchedResultsController = tempController;
-
                          [self tableView:self.leftTableView reloadDataFrom:self.leftFetchedResultsController];
-                         [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
-                         [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
 
                          NSLog(@"end transition to left");
                      }];
@@ -886,11 +927,13 @@ PAAssetManager * assetManager;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
+
+    /*
     NSMutableArray* eventURLs = [[NSMutableArray alloc] init];
     NSMutableArray* eventTypes = [[NSMutableArray alloc] init];
     NSMutableArray* eventIDs = [[NSMutableArray alloc] init];
     NSMutableArray* eventRows = [[NSMutableArray alloc] init];
-    for(int i =0; i<[fetchedResultsController.fetchedObjects count];i++){
+    for(int i = 0; i < [fetchedResultsController.fetchedObjects count]; i++){
         
         Event* tempEvent = fetchedResultsController.fetchedObjects[i];
         
@@ -905,6 +948,7 @@ PAAssetManager * assetManager;
             }
         }
     }
+     */
     /*
     for(int j=0; j<[eventIDs count];j++){
         if( [eventTypes[j] isEqualToString:@"simple"]){
@@ -921,6 +965,7 @@ PAAssetManager * assetManager;
     }
     */
 
+    /*
     for(int i = 0; i<[eventIDs count]; i++){
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
@@ -937,7 +982,12 @@ PAAssetManager * assetManager;
             });
         });
     }
-    // [self.centerTableView reloadData];
+     */
+
+
+    [tableView reloadData];
+    [tableView beginUpdates];
+    [tableView endUpdates];
 }
 
 #pragma mark - keyboard notifications
@@ -982,7 +1032,6 @@ PAAssetManager * assetManager;
         CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
         self.centerTableView.frame = CGRectMake(self.centerTableView.frame.origin.x, self.centerTableView.frame.origin.y, self.centerTableView.frame.size.width, self.centerTableView.frame.size.height+keyboardSize.height);
     }
-    
 }
 
 @end
