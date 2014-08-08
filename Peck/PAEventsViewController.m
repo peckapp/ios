@@ -402,6 +402,12 @@ PAAssetManager * assetManager;
         case NSFetchedResultsChangeDelete:
             [self.centerTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
+
+        case NSFetchedResultsChangeMove:
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            break;
     }
 }
 
