@@ -828,7 +828,8 @@ BOOL viewingCircles;
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
     
     NSArray* currentMembers = [[NSArray alloc] init];
-    if(self.selectedIndexPath){
+    if([_fetchedResultsController.fetchedObjects count]>self.selectedIndexPath.row){
+        //if the user is adding members to an already created circle
         Circle* circle = [_fetchedResultsController objectAtIndexPath:self.selectedIndexPath];
         NSSet* circleMembers = circle.circle_members;
         currentMembers = [circleMembers allObjects];
