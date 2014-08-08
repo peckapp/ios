@@ -7,10 +7,10 @@
 //
 
 #import "PANestedTableViewController.h"
+#import "PANestedTableViewCell.h"
 
 @interface PANestedTableViewController ()
 
-@property (strong, nonatomic) NSMutableDictionary *detailViewControllers;
 @property (strong, nonatomic) NSIndexPath *selectedCellIndexPath;
 
 @end
@@ -20,14 +20,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.detailViewControllers = [[NSMutableDictionary alloc] init];
 }
 
-- (UITableViewCell *)configureDetailViewControllerCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)configureDetailViewControllerCell:(PANestedTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-    UIViewController * newVC = [self viewControllerAtIndexPath:indexPath];
+    UIViewController * newVC = cell.viewController;
     
     [newVC willMoveToParentViewController:self];
     [newVC.view removeFromSuperview];
@@ -46,6 +45,7 @@
     return self.selectedCellIndexPath != nil && self.selectedCellIndexPath.row == indexPath.row;
 }
 
+/*
 - (UIViewController *)viewControllerAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString * key = [NSString stringWithFormat:@"%d-%d", (int)indexPath.section, (int)indexPath.row];
@@ -59,13 +59,10 @@
     NSLog(@"set view controller for key: %@", key);
     [self.detailViewControllers setObject:viewController forKey:key];
 }
+ */
 
 - (void)tableView:(UITableView *)tableView expandRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UIViewController * child = [self viewControllerAtIndexPath:indexPath];
-    [child.view addSubview:self.backButton];
-    child.view.userInteractionEnabled = YES;
-
     self.selectedCellIndexPath = indexPath;
     [tableView beginUpdates];
     [tableView endUpdates];
@@ -81,10 +78,6 @@
     [tableView beginUpdates];
     [tableView endUpdates];
     [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-
-    UIViewController * child = [self viewControllerAtIndexPath:indexPath];
-    child.view.userInteractionEnabled = interaction;
-    [self.backButton removeFromSuperview];
 }
 
 @end

@@ -10,9 +10,11 @@
 
 #import <UIKit/UIKit.h>
 #import "PACoreDataProtocol.h"
+#import "PANestedTableViewCell.h"
+
 @class PACommentCell;
 
-@interface PAEventInfoTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UIScrollViewDelegate,UITextFieldDelegate>
+@interface PAEventInfoTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UIScrollViewDelegate,UITextFieldDelegate, PANestedTableViewCellSubviewControllerProtocol>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
@@ -35,7 +37,7 @@
 @property (strong, nonatomic) UIImage* userPicture;
 
 - (void)expandTableViewCell:(PACommentCell *)cell;
--(void)compressTableViewCell:(PACommentCell *)cell;
--(void)postComment:(NSString *)text;
+- (void)compressTableViewCell:(PACommentCell *)cell;
+- (void)postComment:(NSString *)text;
 - (void)configureView;
 @end

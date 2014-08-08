@@ -85,8 +85,12 @@
     }
 }
 
+- (void)setManagedObject:(NSManagedObject *)managedObject
+{
 
--(void)fetchDiningPeriods{
+}
+
+- (void)fetchDiningPeriods{
     
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];

@@ -206,10 +206,10 @@ BOOL reloaded = NO;
 */
 #pragma mark - managing the detail item
 
-- (void)setDetailItem:(id)newDetailItem
+- (void)setManagedObject:(NSManagedObject *)managedObject
 {
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
+    if (_detailItem != managedObject) {
+        _detailItem = managedObject;
         // Update the view.
         [self configureView];
     }

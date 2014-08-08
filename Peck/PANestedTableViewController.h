@@ -16,9 +16,6 @@
 
 - (BOOL)indexPathIsSelected:(NSIndexPath *)indexPath;
 
-- (UIViewController *)viewControllerAtIndexPath:(NSIndexPath *)indexPath;
-- (void)setViewController:(UIViewController *)viewController atIndexPath:(NSIndexPath *)indexPath;
-
 - (void)tableView:(UITableView *)tableView compressRowAtSelectedIndexPathUserInteractionEnabled:(BOOL)interaction;
 - (void)tableView:(UITableView *)tableView expandRowAtIndexPath:(NSIndexPath *)indexPath;
 

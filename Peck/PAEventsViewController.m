@@ -13,17 +13,15 @@
 #import "PAAppDelegate.h"
 #import "Event.h"
 #import "PASessionManager.h"
-#import "PAEventCell.h"
 #import "PADropdownViewController.h"
 #import "PAEvents.h"
 #import "PASyncManager.h"
 #import "PAImageManager.h"
 #import "AFNetworking.h"
 #import "UIImageView+AFNetworking.h"
-#import "PADiningOpportunityCell.h"
 #import "UIImage+ImageEffects.h"
-#import "UIImageView+AFNetworking.h"
 #import "PAAssetManager.h"
+#import "PANestedTableViewCell.h"
 
 #define statusBarHeight 20
 #define searchBarHeight 44
@@ -113,9 +111,7 @@ PAAssetManager * assetManager;
     }
     self.leftTableView.dataSource = self;
     self.leftTableView.delegate = self;
-    self.leftTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.leftTableView.separatorColor = lightColor;
-    self.leftTableView.separatorInset = UIEdgeInsetsZero;
+    self.leftTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     UIView * leftBackView = [[UIView alloc] init];
     leftBackView.backgroundColor = darkColor;
     [self.leftTableView setBackgroundView:leftBackView];
@@ -126,9 +122,7 @@ PAAssetManager * assetManager;
     }
     self.centerTableView.dataSource = self;
     self.centerTableView.delegate = self;
-    self.centerTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.centerTableView.separatorColor = lightColor;
-    self.centerTableView.separatorInset = UIEdgeInsetsZero;
+    self.centerTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     UIView *centerBackView = [[UIView alloc] init];
     centerBackView.backgroundColor = darkColor;
@@ -140,9 +134,7 @@ PAAssetManager * assetManager;
     }
     self.rightTableView.dataSource = self;
     self.rightTableView.delegate = self;
-    self.rightTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.rightTableView.separatorColor = lightColor;
-    self.rightTableView.separatorInset = UIEdgeInsetsZero;
+    self.rightTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     UIView *rightBackView = [[UIView alloc] init];
     rightBackView.backgroundColor = darkColor;
@@ -559,34 +551,34 @@ PAAssetManager * assetManager;
         return nil;
     }
 
-    if ([currentEvent.type isEqualToString:@"dining"]) {
-        PADiningOpportunityCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningOppCell"];
-        if(cell == nil){
-            [tableView registerNib:[UINib nibWithNibName:@"PADiningOpportunityCell" bundle:nil] forCellReuseIdentifier:@"diningOppCell"];
-            cell = [tableView dequeueReusableCellWithIdentifier:@"diningOppCell"];
-        }
-        //[self configureDetailViewControllerCell:cell atIndexPath:indexPath];
-        [self configureDiningCell:cell atIndexPath:indexPath];
-        return cell;
+
+    PANestedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
+    if (cell == nil) {
+        [tableView registerClass:[PANestedTableViewCell class] forCellReuseIdentifier:@"eventCell"];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
     }
-    else {
-        PAEventCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
-        if (cell == nil) {
-            [tableView registerNib:[UINib nibWithNibName:@"PAEventCell" bundle:nil] forCellReuseIdentifier:@"eventCell"];
-            cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
+
+    Event * eventObject = [fetchedResultsController objectAtIndexPath:indexPath];
+
+    if (cell.viewController == nil) {
+        if([eventObject.type isEqualToString:@"dining"]){
+            cell.viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"dining-places-view-controller"];
         }
-
-        PAEventInfoTableViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"event-info-view-controller"];
-        viewController.view.userInteractionEnabled = NO;
-        NSManagedObject *object = [fetchedResultsController objectAtIndexPath:indexPath];
-        [viewController setDetailItem:object];
-        [self setViewController:viewController atIndexPath:indexPath];
-
-        [self configureDetailViewControllerCell:cell atIndexPath:indexPath];
-
-        return cell;
+        else {
+            cell.viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"event-info-view-controller"];
+        }
     }
+
+    cell.clipsToBounds = YES;
+    cell.viewController.view.userInteractionEnabled = NO;
+    [cell.viewController setManagedObject:eventObject];
+
+    [self configureDetailViewControllerCell:cell atIndexPath:indexPath];
+
+    return cell;
 }
+
+/*
 
 - (void)configureEventCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
@@ -624,15 +616,16 @@ PAAssetManager * assetManager;
 
 -(void)configureDiningCell:(PADiningOpportunityCell*)cell atIndexPath:(NSIndexPath*)indexPath
 {
-    /*
+
     Event* tempDiningEvent = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
 
     cell.nameLabel.text = tempDiningEvent.title;
     //cell.startTimeLabel.text = [self dateToString:tempDiningEvent.start_date];
     //cell.endTimeLabel.text = [self dateToString:tempDiningEvent.end_date];
-     */
     
 }
+
+*/
 
 - (void)backButton:(id)sender
 {
@@ -679,9 +672,6 @@ PAAssetManager * assetManager;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
      */
 
-    if (tableView == self.centerTableView) {
-        NSLog(@"selected row at center table view");
-    }
     [self tableView:tableView expandRowAtIndexPath:indexPath];
 }
 
