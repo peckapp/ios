@@ -694,7 +694,7 @@ BOOL reloaded = NO;
             NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
                                       [defaults objectForKey:@"user_id"],@"user_id",
                                       [defaults objectForKey:@"institution_id"],@"institution_id",
-                                      [self.detailItem valueForKey:@"id"],@"event_attende",
+                                      [self.detailItem valueForKey:@"id"],@"event_attended",
                                       @"simple", @"category",
                                       [defaults objectForKey:@"user_id"], @"added_by",
                                       nil];

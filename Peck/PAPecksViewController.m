@@ -14,6 +14,7 @@
 #import "PAPeckCell.h"
 #import "PASyncManager.h"
 #import "PAPromptView.h"
+#import "PAAssetManager.h"
 
 @interface PAPecksViewController ()
 
@@ -63,26 +64,24 @@ static NSString *nibName = @"PAPeckCell";
     [super viewWillAppear:animated];
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"authentication_token"]){
       
+        if([_fetchedResultsController.fetchedObjects count]==0){
+            
+        }
+        
         [[PASyncManager globalSyncManager] updatePecks];
         self.tableView.backgroundColor = [UIColor whiteColor];
         self.tableView.separatorColor = [UIColor lightGrayColor];
-        //[[self.view subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        
+    
         
     }else{
-        self.tableView.backgroundColor = [UIColor lightGrayColor];
-        self.tableView.separatorColor  = [UIColor lightGrayColor];
+        self.tableView.backgroundColor = [[PAAssetManager sharedManager] unavailableColor];
+        self.tableView.separatorColor = [[PAAssetManager sharedManager] unavailableColor];
+        
         _promptView = [PAPromptView promptView:self];
+        
         [self.view addSubview:_promptView];
         
-        /*
-        UIView* promptView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 50, 320, 60)];
-        UILabel* registerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
-    
-        registerLabel.text = @"Register or login to receive Pecks";
-        registerLabel.textColor = [UIColor whiteColor];
-        registerLabel.textAlignment = NSTextAlignmentCenter;
-        [promptView addSubview:registerLabel];
-        [self.view addSubview:promptView2];*/
     }
 }
 

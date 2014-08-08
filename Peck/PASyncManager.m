@@ -397,19 +397,19 @@
                                       NSArray* errors = [postsFromResponse objectForKey:@"errors"];
                                       if(![errors count]>0){
                                       
-                                      [defaults setObject:@YES forKey:@"logged_in"];
-                                      [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
-                                      NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
-                                      NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                                      NSString* firstName = [userDictionary objectForKey:first_name_define];
-                                      NSString* lastName = [userDictionary objectForKey:last_name_define];
-                                      NSString* email = [userDictionary objectForKey:@"email"];
-                                      NSString* blurb = [userDictionary objectForKey:@"blurb"];
-                                      NSNumber* userID = [userDictionary objectForKey:@"id"];
+                                          [defaults setObject:@YES forKey:@"logged_in"];
+                                          [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+                                          NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
+                                          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                          NSString* firstName = [userDictionary objectForKey:first_name_define];
+                                          NSString* lastName = [userDictionary objectForKey:last_name_define];
+                                          NSString* email = [userDictionary objectForKey:@"email"];
+                                          NSString* blurb = [userDictionary objectForKey:@"blurb"];
+                                          NSNumber* userID = [userDictionary objectForKey:@"id"];
                                       
-                                      [defaults setObject:userID forKey:@"user_id"];
-                                      [defaults setObject:firstName forKey:first_name_define];
-                                      [defaults setObject:lastName forKey:last_name_define];
+                                          [defaults setObject:userID forKey:@"user_id"];
+                                          [defaults setObject:firstName forKey:first_name_define];
+                                          [defaults setObject:lastName forKey:last_name_define];
                                           [defaults setObject:email forKey:@"email"];
                                           if(![blurb isKindOfClass:[NSNull class]]){
                                             [defaults setObject:blurb forKey:@"blurb"];
@@ -431,6 +431,40 @@
                                   }];
 }
 
+
+-(void)loginWithFacebook:(NSDictionary*)dictionary forViewController:(UIViewController*)sender{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+
+    NSString* loginURL = [@"api/users/" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
+    loginURL = [loginURL stringByAppendingString:@"/facebook_login"];
+    
+    
+    [[PASessionManager sharedClient] PATCH:loginURL
+                                parameters:[self applyWrapper:@"user" toDictionary:[self addUDIDToDictionary:dictionary]]
+                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                       NSLog(@"JSON : %@", JSON);
+                                       NSDictionary* json = (NSDictionary*)JSON;
+                                       NSDictionary* userDictionary = [json objectForKey:@"user"];
+                                       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                       NSString* firstName = [userDictionary objectForKey:first_name_define];
+                                       NSString* lastName = [userDictionary objectForKey:last_name_define];
+                                       NSString* email = [userDictionary objectForKey:@"email"];
+                                       NSNumber* userID = [userDictionary objectForKey:@"id"];
+                                       NSString* apiKey = [userDictionary objectForKey:@"api_key"];
+                                       
+                                       [defaults setObject:apiKey forKey:@"api_key"];
+                                       [defaults setObject:userID forKey:@"user_id"];
+                                       [defaults setObject:firstName forKey:first_name_define];
+                                       [defaults setObject:lastName forKey:last_name_define];
+                                       [defaults setObject:email forKey:@"email"];
+                                       [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
+                                       [sender dismissViewControllerAnimated:YES completion:nil];
+                                       
+                                   }
+                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                       NSLog(@"ERROR: %@",error);
+                                   }];
+}
 
 -(void)changePassword:(NSDictionary*)passwordInfo forViewController:(UIViewController*)controller{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -617,7 +651,7 @@
     [[PASessionManager sharedClient] DELETE:attendeeURL
                                  parameters: [self applyWrapper:@"event_attendee" toDictionary:attendee]
                                     success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                        //NSLog(@"like JSON %@", JSON);
+                                        NSLog(@"attend JSON %@", JSON);
                                         [self updateAndReloadEvent:[attendee objectForKey:@"event_attended"] forViewController:controller];
                                     }
      

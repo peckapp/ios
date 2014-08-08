@@ -15,6 +15,7 @@
 @property (strong, nonatomic) UIImage * profilePlaceholder;
 @property (strong, nonatomic) UIImage * horizontalShadow;
 
+@property (strong, nonatomic) UIColor* unavailableColor;
 + (id)sharedManager;
 
 - (UIImageView *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView;

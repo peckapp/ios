@@ -8,6 +8,7 @@
 
 #import "PAPromptView.h"
 #import "PAInitialViewController.h"
+#import "PAAssetManager.h"
 
 @interface PAPromptView()
 
@@ -37,7 +38,8 @@
 {
     PAPromptView *promptView = [[[NSBundle mainBundle] loadNibNamed:@"View" owner:nil options:nil] lastObject];
     
-   promptView.viewController = sender;
+    promptView.viewController = sender;
+    promptView.backgroundColor = [[PAAssetManager sharedManager] unavailableColor];
     // make sure customView is not nil or the wrong class!
     if ([promptView isKindOfClass:[PAPromptView class]])
         return promptView;

@@ -26,6 +26,7 @@
         self.imagePlaceholder = [UIImage imageNamed:@"image-placeholder"];
         self.profilePlaceholder = [UIImage imageNamed:@"profile-placeholder"];
         self.horizontalShadow = [[UIImage imageNamed:@"drop-shadow-horizontal"]stretchableImageWithLeftCapWidth:1 topCapHeight:0];
+        self.unavailableColor = [UIColor colorWithHue:1 saturation:0 brightness:.85 alpha:1];
 
     }
     return self;
@@ -46,4 +47,8 @@
     return imageView;
 }
 
+
+-(UIColor*)getUnavailableColor{
+    return self.unavailableColor;
+}
 @end
