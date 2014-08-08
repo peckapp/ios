@@ -68,6 +68,9 @@
     [tableView endUpdates];
     [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     tableView.scrollEnabled = NO;
+
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [cell addSubview:self.backButton];
 }
 
 - (void)tableView:(UITableView *)tableView compressRowAtSelectedIndexPathUserInteractionEnabled:(BOOL)interaction
@@ -78,6 +81,8 @@
     [tableView beginUpdates];
     [tableView endUpdates];
     [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+
+    [self.backButton removeFromSuperview];
 }
 
 @end

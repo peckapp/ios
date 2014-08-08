@@ -533,24 +533,21 @@ PAAssetManager * assetManager;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Event *currentEvent = nil;
     NSFetchedResultsController *fetchedResultsController = nil;
     if (tableView == self.leftTableView) {
-        currentEvent = [self.leftFetchedResultsController objectAtIndexPath:indexPath];
         fetchedResultsController = self.leftFetchedResultsController;
     }
     else if (tableView == self.centerTableView) {
-        currentEvent = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
         fetchedResultsController = self.centerFetchedResultsController;
     }
     else if (tableView == self.rightTableView) {
-        currentEvent = [self.rightFetchedResultsController objectAtIndexPath:indexPath];
         fetchedResultsController = self.rightFetchedResultsController;
     }
     else {
         return nil;
     }
 
+    Event *eventObject = [fetchedResultsController objectAtIndexPath:indexPath];
 
     PANestedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
     if (cell == nil) {
@@ -558,13 +555,13 @@ PAAssetManager * assetManager;
         cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
     }
 
-    Event * eventObject = [fetchedResultsController objectAtIndexPath:indexPath];
-
-    if (cell.viewController == nil) {
-        if([eventObject.type isEqualToString:@"dining"]){
+    if ([eventObject.type isEqualToString:@"dining"]) {
+        if (cell.viewController == nil || [cell.viewController isKindOfClass:[PAEventInfoTableViewController class]]) {
             cell.viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"dining-places-view-controller"];
         }
-        else {
+    }
+    else {
+        if (cell.viewController == nil || [cell.viewController isKindOfClass:[PADiningPlacesTableViewController class]]) {
             cell.viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"event-info-view-controller"];
         }
     }
