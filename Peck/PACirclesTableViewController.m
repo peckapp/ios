@@ -15,6 +15,7 @@
 #import "HTAutocompleteManager.h"
 #import "PACommentCell.h"
 #import "PAFriendProfileViewController.h"
+#import "PAAssetManager.h"
 
 #define cellHeight 100.0
 #define reloadTime 10
@@ -433,18 +434,19 @@ BOOL viewingCircles;
     cell.tag=[indexPath row];
     cell.parentViewController=self;
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
-        cell.circleTitle.text=@"New";
+        cell.circleTitle.text=@"";
         [cell.profilesTableView setHidden:YES];
         [cell.suggestedMembersTableView setHidden:NO];
         [cell.commentsTableView setHidden:YES];
         [cell.titleTextField setHidden:YES];
         [cell.createCircleButton setHidden:YES];
         [cell.leaveCircleButton setHidden:YES];
+        [cell updateCircleMembers:nil];
         if(viewingCell){
             [cell.titleTextField setHidden:NO];
             [cell.profilesTableView setHidden:NO];
             [cell.createCircleButton setHidden:NO];
-        
+            
         }
         
     }
@@ -824,6 +826,28 @@ BOOL viewingCircles;
     
     NSError *error = nil;
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    
+    NSArray* currentMembers = [[NSArray alloc] init];
+    if(self.selectedIndexPath){
+        Circle* circle = [_fetchedResultsController objectAtIndexPath:self.selectedIndexPath];
+        NSSet* circleMembers = circle.circle_members;
+        currentMembers = [circleMembers allObjects];
+    }else{
+        //if the user is creating a new circle
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[_fetchedResultsController.fetchedObjects count] inSection:0];
+        PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+        currentMembers = cell.members;
+        
+    }
+    
+    for(int i = 0; i<[mutableFetchResults count];i++){
+        Peer* peer = mutableFetchResults[i];
+        for(Peer* member in currentMembers){
+            if(peer.id==member.id){
+                [mutableFetchResults removeObjectAtIndex:i];
+            }
+        }
+    }
     return mutableFetchResults;
 }
 

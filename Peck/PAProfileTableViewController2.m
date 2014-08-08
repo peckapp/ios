@@ -139,7 +139,7 @@ BOOL loggedIn;
             
             // Close the session and remove the access token from the cache
             // The session state handler (in the app delegate) will be called automatically
-            [FBSession.activeSession closeAndClearTokenInformation];
+        [FBSession.activeSession closeAndClearTokenInformation];
         //}
         
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];

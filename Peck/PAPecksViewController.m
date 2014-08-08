@@ -17,7 +17,7 @@
 #import "PAAssetManager.h"
 
 @interface PAPecksViewController ()
-
+@property BOOL editing;
 @property (strong) PAPromptView* promptView;
 @end
 
@@ -64,7 +64,14 @@ static NSString *nibName = @"PAPeckCell";
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
-    
+   /* _fetchedResultsController=nil;
+    NSError *error=nil;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }*/
+
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"authentication_token"]){
       
         [[PASyncManager globalSyncManager] updatePecks];
@@ -145,6 +152,13 @@ static NSString *nibName = @"PAPeckCell";
     [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.editing=YES;
+}
+-(void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.editing=NO;
 }
 
 -(void)configureCell:(PAPeckCell*)cell atIndexPath:(NSIndexPath*)indexPath{
@@ -297,7 +311,10 @@ static NSString *nibName = @"PAPeckCell";
             break;
         }
         case NSFetchedResultsChangeDelete:{
-            [[PASyncManager globalSyncManager] deletePeck: ((Peck*)anObject).id];
+            if(self.editing){
+                //only delete the peck from the server if the user is editing the table view rather than deleting the pecks from core data somewhere else (i.e. when he logs out)
+                [[PASyncManager globalSyncManager] deletePeck: ((Peck*)anObject).id];
+            }
             [self.tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
@@ -362,7 +379,11 @@ static NSString *nibName = @"PAPeckCell";
     // The table view should not be re-orderable.
     return NO;
 }
-
+/*
+-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    [[PASyncManager globalSyncManager] deletePeck: [_fetchedResultsController objectAtIndexPath:indexPath] ];
+}
+*/
 /*
  // Override to support conditional rearranging of the table view.
  - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
