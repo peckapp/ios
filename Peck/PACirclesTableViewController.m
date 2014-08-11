@@ -434,7 +434,7 @@ BOOL viewingCircles;
     cell.tag=[indexPath row];
     cell.parentViewController=self;
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
-        cell.circleTitle.text=@"";
+        cell.circleTitle.text=@"New";
         [cell.profilesTableView setHidden:YES];
         [cell.suggestedMembersTableView setHidden:NO];
         [cell.commentsTableView setHidden:YES];

@@ -1150,11 +1150,12 @@
              NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_opportunities"];
              for (NSDictionary *diningAttributes in postsFromResponse){
                  NSNumber *newID = [diningAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event" andCategory:nil];
-                 if(!eventAlreadyExists){
-                     Event * diningEvent = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInDiningEvent:diningEvent withDictionary:diningAttributes];
+                 //BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event" andCategory:@"dining"];
+                 Event* diningEvent = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:@"dining"];
+                 if(!diningEvent){
+                     diningEvent = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
                  }
+                 [self setAttributesInDiningEvent:diningEvent withDictionary:diningAttributes];
              }
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {

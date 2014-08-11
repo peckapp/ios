@@ -304,6 +304,7 @@ static NSString *nibName = @"PAPeckCell";
             [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             
             if([_fetchedResultsController.fetchedObjects count]>0){
+                
                 [self showPecks];
             }
             //this line is here because the table view would usually set the second cell to have the same properties as the cell that was just inserted
@@ -319,7 +320,8 @@ static NSString *nibName = @"PAPeckCell";
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             if([_fetchedResultsController.fetchedObjects count]==0){
-                [self showNoPecks];
+                 [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(showNoPecks) userInfo:nil repeats:NO];
+                //[self showNoPecks];
             }
             break;
         }
