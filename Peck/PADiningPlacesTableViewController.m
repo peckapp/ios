@@ -87,7 +87,8 @@
         _detailItem = managedObject;
 
         self.mealLabel.text = [self.detailItem valueForKey:@"title"];
-
+        [self fetchDiningPeriods];
+        [self.tableView reloadData];
     }
 }
 
