@@ -53,7 +53,7 @@
      */
     
     self.fbLogin.delegate = self;
-    self.fbLogin.readPermissions = @[@"public_profile", @"email", @"user_friends"];
+    self.fbLogin.readPermissions = @[@"public_profile", @"email", @"user_friends", @"publish_actions"];
     NSLog(@"fbLogin height: %f",self.fbLogin.frame.size.height);
 }
 

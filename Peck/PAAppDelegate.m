@@ -196,6 +196,7 @@
 
     
     // You can add your app-specific url handling code here if needed
+    NSLog(@"url = %@", url);
     
     return wasHandled;
 }
@@ -333,5 +334,9 @@
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
+
+
+
+
 
 @end

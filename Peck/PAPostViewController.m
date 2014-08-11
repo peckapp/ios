@@ -18,6 +18,7 @@
 #import "PAFetchManager.h"
 #import "UIImageView+AFNetworking.h"
 #import "PAMethodManager.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 /*
  State for each cell is defined by the cell's tag.
@@ -527,8 +528,71 @@
     NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
     
     [[PASyncManager globalSyncManager] postEvent: [self configureEventDictioanry] withImage:data];
-    
+    if(FBSessionStateOpen){
+        [self postInfoToFacebook];
+    }else{
+        NSLog(@"user not logged into facebook");
+    }
     [self clearScreenAndDismissView];
+}
+
+-(void)postInfoToFacebook{
+    if(self.photo.image!=[UIImage imageNamed:@"image-placeholder"]){
+        [FBRequestConnection startForUploadStagingResourceWithImage:self.photo.image completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+            if(!error) {
+                // Log the uri of the staged image
+                NSLog(@"Successfuly staged image with staged URI: %@", [result objectForKey:@"uri"]);
+            
+                // Further code to post the OG story goes here
+                
+                
+                // instantiate a Facebook Open Graph object
+                NSMutableDictionary<FBOpenGraphObject> *object = [FBGraphObject openGraphObjectForPost];
+                
+                // specify that this Open Graph object will be posted to Facebook
+                object.provisionedForPost = YES;
+                
+                // for og:title
+                object[@"title"] = self.titleField.text;
+                
+                // for og:type, this corresponds to the Namespace you've set for your app and the object type name
+                object[@"type"] = @"com_peckapp_peck:event";
+                
+                // for og:description
+                object[@"description"] = self.descriptionTextView.text;
+                
+                // for og:url, we cover how this is used in the "Deep Linking" section below
+                object[@"url"] = @"http://example.com/roasted_pumpkin_seeds";
+                //TODO: fix the url to work with deep linking
+                
+                // for og:image we assign the image that we just staged, using the uri we got as a response
+                // the image has to be packed in a dictionary like this:
+                object[@"image"] = @[@{@"url": [result objectForKey:@"uri"], @"user_generated" : @"false" }];
+
+            
+                [FBRequestConnection startForPostOpenGraphObject:object completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+                    if(!error) {
+                        // get the object ID for the Open Graph object that is now stored in the Object API
+                        NSString *objectId = [result objectForKey:@"id"];
+                        NSLog([NSString stringWithFormat:@"object id: %@", objectId]);
+                        
+                        // Further code to post the OG story goes here
+                        
+                    } else {
+                        // An error occurred
+                        NSLog(@"Error posting the Open Graph object to the Object API: %@", error);
+                    }
+                }];
+                
+                
+            } else {
+                // An error occurred
+                NSLog(@"Error staging an image: %@", error);
+            }
+        }];
+    }
+    
+    
 }
 
 -(void)postAnnouncement{
