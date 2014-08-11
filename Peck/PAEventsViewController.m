@@ -952,6 +952,11 @@ PAAssetManager * assetManager;
         abort();
     }
 
+    for(Event* event in fetchedResultsController.fetchedObjects){
+        if(event.imageURL){
+            [self cacheImageForURL:event.imageURL];
+        }
+    }
     /*
     NSMutableArray* eventURLs = [[NSMutableArray alloc] init];
     NSMutableArray* eventTypes = [[NSMutableArray alloc] init];
@@ -1012,6 +1017,11 @@ PAAssetManager * assetManager;
     [tableView reloadData];
     [tableView beginUpdates];
     [tableView endUpdates];
+}
+
+-(void)cacheImageForURL:(NSString*)urlString{
+    NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:urlString]];
+    [[[UIImageView alloc] init] setImageWithURL:imageURL];
 }
 
 #pragma mark - keyboard notifications
