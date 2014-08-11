@@ -117,28 +117,6 @@
             </objects>
             <point key="canvasLocation" x="-528" y="1078"/>
         </scene>
-        <!--Events-->
-        <scene sceneID="cUi-kZ-frf">
-            <objects>
-                <navigationController storyboardIdentifier="primary" id="rS3-R9-Ivy" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Events" id="t6u-Ov-roD"/>
-                    <navigationItem key="navigationItem" id="SUg-ko-wCF"/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translucent="NO" id="yXu-0R-QUA">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="nCH-YX-wb1">
-                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="pGg-6v-bdr" kind="relationship" relationship="rootViewController" id="RxB-wf-QIq"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="eq9-QA-ai8" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-3079" y="2318"/>
-        </scene>
         <!--Circles-->
         <scene sceneID="I7Z-lZ-gzy">
             <objects>
@@ -847,7 +825,7 @@
         <!--Master-->
         <scene sceneID="VgW-fR-Quf">
             <objects>
-                <tableViewController title="Master" id="pGg-6v-bdr" customClass="PAEventsViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="primary" title="Master" id="pGg-6v-bdr" customClass="PAEventsViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="tQt-TN-PWz">
                         <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" id="YHn-tq-yow">
@@ -899,7 +877,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="dining-places-view-controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="sCG-OO-lYg" customClass="PADiningPlacesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7nE-HW-BdO">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="mnJ-IV-rRF">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -927,14 +905,14 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EqN-yo-LIY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2052" y="2324"/>
+            <point key="canvasLocation" x="-2052" y="2318"/>
         </scene>
         <!--Event Info Table View Controller-->
         <scene sceneID="iH3-Gt-QtS">
             <objects>
                 <tableViewController storyboardIdentifier="event-info-view-controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="rpt-SB-vsa" customClass="PAEventInfoTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Oqv-ah-lB4">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
