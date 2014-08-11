@@ -65,11 +65,7 @@
 
 - (void)setDetailItem:(id)newDetailItem
 {
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
-        // Update the view.
-        //[self configureView];
-    }
+
 }
 
 - (void)configureView
@@ -85,8 +81,18 @@
     }
 }
 
+- (void)setManagedObject:(NSManagedObject *)managedObject
+{
+    if (_detailItem != managedObject) {
+        _detailItem = managedObject;
 
--(void)fetchDiningPeriods{
+        self.mealLabel.text = [self.detailItem valueForKey:@"title"];
+        [self fetchDiningPeriods];
+        [self.tableView reloadData];
+    }
+}
+
+- (void)fetchDiningPeriods{
     
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];

@@ -227,10 +227,10 @@ BOOL reloaded = NO;
 */
 #pragma mark - managing the detail item
 
-- (void)setDetailItem:(id)newDetailItem
+- (void)setManagedObject:(NSManagedObject *)managedObject
 {
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
+    if (_detailItem != managedObject) {
+        _detailItem = managedObject;
         // Update the view.
         [self configureView];
     }
@@ -243,11 +243,13 @@ BOOL reloaded = NO;
     if (self.detailItem) {
         
         self.title = [self.detailItem valueForKey:@"title"];
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"MMM dd, yyyy h:mm a"];
-        NSString *stringFromDate =[df stringFromDate:[self.detailItem valueForKey:@"start_date"]];
-        [self.startTimeLabel setText: stringFromDate];
-        [self.endTimeLabel setText:[df stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
+        self.nameLabel.text = [self.detailItem valueForKey:@"title"];
+
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+        [self.startTimeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
+        [self.endTimeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
+
         self.descriptionTextView.text = [self.detailItem valueForKey:@"descrip"];
        
         self.numberOfAttendees.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
@@ -345,6 +347,12 @@ BOOL reloaded = NO;
             
         case NSFetchedResultsChangeDelete:
             [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+
+        case NSFetchedResultsChangeMove:
+            break;
+
+        case NSFetchedResultsChangeUpdate:
             break;
     }
 }
