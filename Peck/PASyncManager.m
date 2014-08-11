@@ -522,7 +522,7 @@
                  NSNumber *newID = [userAttributes objectForKey:@"id"];
                  BOOL userAlreadyExists = [self objectExists:newID withType:@"Peer" andCategory:nil];
                  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                 if(!userAlreadyExists && !([defaults objectForKey:@"user_id"]==newID)){
+                 if(!userAlreadyExists && !([[defaults objectForKey:@"user_id"] integerValue]==[newID integerValue])){
                      //NSLog(@"about to add the peer");
                      if(![[userAttributes objectForKey:first_name_define] isKindOfClass:[NSNull class]]){
                          Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];

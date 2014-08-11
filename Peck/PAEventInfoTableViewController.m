@@ -156,7 +156,8 @@ BOOL reloaded = NO;
     [super viewWillDisappear:animated];
     
     viewingEvent=NO;
-    [self.view endEditing:YES];
+    [self.realKeyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
     //[self deregisterFromKeyboardNotifications];
 }
 
