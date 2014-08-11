@@ -224,7 +224,7 @@ PAAssetManager * assetManager;
         }
         [cell addSubview:thumbnail];
         cell.thumbnailViewTemplate.backgroundColor = [UIColor whiteColor];
-        cell.thumbnailView = thumbnail;
+        //cell.thumbnailView = thumbnail;
     }
 }
 

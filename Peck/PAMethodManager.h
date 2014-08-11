@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Peer.h"
 
 @interface PAMethodManager : NSObject <UIAlertViewDelegate>
 @property UIViewController* sender;
@@ -14,5 +15,5 @@
 + (instancetype)sharedMethodManager;
 
 -(void)showRegisterAlert:(NSString*)message forViewController:(UIViewController*)sender;
-
+-(UIImageView*)imageForPeer:(Peer*)peer;
 @end

@@ -15,6 +15,8 @@
 #import "PASyncManager.h"
 #import "PAPromptView.h"
 #import "PAAssetManager.h"
+#import "PAMethodManager.h"
+#import "PAFetchManager.h"
 
 @interface PAPecksViewController ()
 @property BOOL editing;
@@ -164,13 +166,15 @@ static NSString *nibName = @"PAPeckCell";
 -(void)configureCell:(PAPeckCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     Peck* peck = [_fetchedResultsController objectAtIndexPath:indexPath];
     
+    cell.parentViewController = self;
     cell.messageTextView.text = peck.message;
     cell.titleLabel.text = @"Peck";
+    cell.invited_by = peck.invited_by;
     if([peck.notification_type isEqualToString:@"circle_invite"] || [peck.notification_type isEqualToString:@"event_invite"]){
         cell.invitation_id = [peck.invitation_id integerValue];
         cell.invitation_id = [peck.invitation_id integerValue];
         cell.notification_type = peck.notification_type;
-        cell.invited_by = peck.invited_by;
+        
     }
     [cell.acceptButton setHidden:NO];
     [cell.declineButton setHidden:NO];
@@ -188,6 +192,17 @@ static NSString *nibName = @"PAPeckCell";
     }
     cell.dateLabel.text = [self dateToString:peck.created_at];
     cell.peckID = peck.id;
+    
+    Peer* sender = [[PAFetchManager sharedFetchManager] getObject:peck.invited_by withEntityType:@"Peer" andType:nil];
+    
+    UIImageView* thumbnail =[[PAAssetManager sharedManager] createThumbnailWithFrame:cell.profileTemplateView.frame imageView:[[PAMethodManager sharedMethodManager] imageForPeer:sender]];
+    
+    if (cell.profileThumbnail) {
+        [cell.profileThumbnail removeFromSuperview];
+    }
+    
+    [cell addSubview:thumbnail];
+   // cell.senderPicture =
 }
 
 -(NSString*)dateToString:(NSDate *)date{

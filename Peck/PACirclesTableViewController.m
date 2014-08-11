@@ -785,6 +785,7 @@ BOOL viewingCircles;
                                     institutionID, @"institution_id",
                                     [NSNumber numberWithBool:YES], @"send_push_notification",
                                     alert, @"message",
+                                    //[defaults objectForKey:@"user_id"], @"invited_by",
                                     nil];
     
         [[PASyncManager globalSyncManager] postComment:dictionary];

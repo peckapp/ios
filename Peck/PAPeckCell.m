@@ -9,6 +9,8 @@
 #import "PAPeckCell.h"
 #import "PAAssetManager.h"
 #import "PASyncManager.h"
+#import "PAFetchManager.h"
+#import "PAFriendProfileViewController.h"
 
 @implementation PAPeckCell
 
@@ -16,7 +18,14 @@
 {
     PAAssetManager * assetManager = [PAAssetManager sharedManager];
     self.profileThumbnail = [assetManager createThumbnailWithFrame:self.profileTemplateView.frame imageView:[[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]]];
-    self.profileTemplateView.hidden = true;
+    self.profileTemplateView.hidden = NO;
+    
+    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showProfile)];
+    tapRecognizer.cancelsTouchesInView = YES;
+    [self.profileTemplateView addGestureRecognizer:tapRecognizer];
+    self.profileTemplateView.userInteractionEnabled =YES;
+    self.profileTemplateView.backgroundColor = [UIColor whiteColor];
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -24,6 +33,16 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+-(void)showProfile{
+    NSLog(@"show the user's profile");
+    Peer*peer = [[PAFetchManager sharedFetchManager] getObject:self.invited_by withEntityType:@"Peer" andType:nil];
+    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UINavigationController *navController = [loginStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
+    PAFriendProfileViewController*root = navController.viewControllers[0];
+    root.peer=peer;
+    [self.parentViewController presentViewController:navController animated:YES completion:nil];
 }
 
 - (IBAction)acceptInviteButton:(id)sender {

@@ -124,7 +124,9 @@ BOOL reloaded = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+    //[super viewWillAppear:animated];
+    
+    NSLog(@"view will appear");
     
     viewingEvent=YES;
     //[self registerForKeyboardNotifications];
@@ -136,7 +138,7 @@ BOOL reloaded = NO;
             [NSThread sleepForTimeInterval:reloadTime];
         }
     });
-
+    
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
     self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
@@ -144,11 +146,16 @@ BOOL reloaded = NO;
     self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0, self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
 
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, self.keyboardAccessoryView.frame.size.height, 0);
+    
+    
+    [self.realKeyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
+
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    
     initialFrame = self.tableView.frame;
 }
 
@@ -158,6 +165,8 @@ BOOL reloaded = NO;
     viewingEvent=NO;
     [self.realKeyboardAccessory resignFirstResponder];
     [self.keyboardAccessory resignFirstResponder];
+    
+    
     //[self deregisterFromKeyboardNotifications];
 }
 

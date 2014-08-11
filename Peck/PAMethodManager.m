@@ -7,6 +7,9 @@
 //
 
 #import "PAMethodManager.h"
+#import "Peer.h"
+#import "UIImageView+AFNetworking.h"
+#import "PAAssetManager.h"
 
 @implementation PAMethodManager
 
@@ -53,6 +56,27 @@
         UIViewController *registerControllet = [loginStoryboard instantiateViewControllerWithIdentifier:@"register"];
         [self.sender presentViewController:registerControllet animated:YES completion:nil];
     }
+}
+
+
+
+-(UIImageView*)imageForPeer:(Peer*)peer{
+    if (peer.imageURL) {
+        NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
+        UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+        if(image){
+            return [[UIImageView alloc] initWithImage:image];
+        }
+        else {
+            UIImageView * imageView = [[UIImageView alloc] init];
+            [imageView setImageWithURL:imageURL placeholderImage:[[PAAssetManager sharedManager] profilePlaceholder]];
+            return imageView;
+        }
+    }
+    else {
+        return [[UIImageView alloc] initWithImage:[[PAAssetManager sharedManager] profilePlaceholder]];
+    }
+
 }
 
 @end

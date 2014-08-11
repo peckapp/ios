@@ -1124,6 +1124,7 @@
     }
     peck.notification_type = [dictionary objectForKey:@"notification_type"];
     peck.interacted_with = [dictionary objectForKey:@"interacted"];
+    peck.invited_by = [dictionary objectForKey:@"invited_by"];
 }
 
 #pragma mark - Dining actions
