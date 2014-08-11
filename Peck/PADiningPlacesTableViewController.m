@@ -65,11 +65,7 @@
 
 - (void)setDetailItem:(id)newDetailItem
 {
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
-        // Update the view.
-        //[self configureView];
-    }
+
 }
 
 - (void)configureView
@@ -87,7 +83,12 @@
 
 - (void)setManagedObject:(NSManagedObject *)managedObject
 {
+    if (_detailItem != managedObject) {
+        _detailItem = managedObject;
 
+        self.mealLabel.text = [self.detailItem valueForKey:@"title"];
+
+    }
 }
 
 - (void)fetchDiningPeriods{

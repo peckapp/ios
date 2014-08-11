@@ -751,11 +751,6 @@ PAAssetManager * assetManager;
     
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-
-}
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     /*
