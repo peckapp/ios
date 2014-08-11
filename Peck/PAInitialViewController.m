@@ -53,6 +53,7 @@
      */
     
     self.fbLogin.delegate = self;
+    self.fbLogin.readPermissions = @[@"public_profile", @"email", @"user_friends"];
     NSLog(@"fbLogin height: %f",self.fbLogin.frame.size.height);
 }
 
@@ -107,14 +108,31 @@
     // TODO: need to perform appropriate handling of the user here, including sending the necessary information back to the server
     
     if ([self verifyFacebookLoginWithUser:user]) {
+       
+        NSLog(@"user info: %@ %@ %@ %@", [user objectForKey:@"first_name"], [user objectForKey:@"last_name"], [user objectForKey:@"email"], [[FBSession activeSession] accessTokenData]);
         
+        FBAccessTokenData* accessTokenData = [[FBSession activeSession] accessTokenData];
+        NSString* token = [accessTokenData accessToken];
+        
+        NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [user objectForKey:@"first_name"],@"first_name",
+                                  [user objectForKey:@"last_name"],@"last_name",
+                                  [user objectForKey:@"email"],@"email",
+                                  token, @"facebook_token",
+                                  @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
+                                  nil];
+        
+        [[PASyncManager globalSyncManager] loginWithFacebook:userInfo forViewController:self];
+        
+        /*
         double delayInSeconds = 0.1;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             
             [self performSegueWithIdentifier:@"login" sender:self];
             
-        });
+        });*/
+        
     }
     
     
@@ -161,7 +179,12 @@
 
 - (BOOL)verifyFacebookLoginWithUser:(id<FBGraphUser>)user
 {
-    return YES;
+    if (FBSession.activeSession.state == FBSessionStateOpen) {
+
+        return YES;
+    }else{
+        return NO;
+    }
 }
 
 # pragma mark - utilities

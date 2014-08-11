@@ -224,12 +224,15 @@
                                       [defaults setObject:userID forKey:user_id];
                                       NSString *apiKey = [userDictionary objectForKey:api_key];
                                       [defaults setObject:apiKey forKey:api_key];
-                                      
-                                      callbackBlock(YES);
+                                      if(callbackBlock){
+                                          callbackBlock(YES);
+                                      }
                                   }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
-                                      callbackBlock(NO);
+                                      if(callbackBlock){
+                                          callbackBlock(NO);
+                                      }
                                   }];
 }
 
@@ -321,6 +324,7 @@
                                       
                                       NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 
+                                      [defaults setObject:[defaults objectForKey:@"user_id"] forKey:@"old_user_id"];
                                       
                                       [defaults setObject:firstName forKey:first_name_define];
                                       [defaults setObject:lastName forKey:last_name_define];
@@ -380,28 +384,46 @@
     NSNumber* userID = [defaults objectForKey:@"user_id"];
     registerURL = [registerURL stringByAppendingString:[userID stringValue]];
     registerURL = [registerURL stringByAppendingString:@"/super_create"];
+    
     [[PASessionManager sharedClient] PATCH:registerURL
-                               parameters:[self applyWrapper:@"user" toDictionary:userInfo]
+                               parameters:[self applyWrapper:@"user" toDictionary:[self addUDIDToDictionary:userInfo]]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      NSLog(@"JSON : %@", JSON);
                                       
-                                      [defaults setObject:@YES forKey:@"logged_in"];
-                                      [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+                                      
                                       
                                       //NSLog(@"user register success: %@", JSON);
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
-                                      NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
-                                      NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                                      NSString* firstName = [userDictionary objectForKey:first_name_define];
-                                      NSString* lastName = [userDictionary objectForKey:last_name_define];
-                                      NSString* email = [userDictionary objectForKey:@"email"];
-                                      NSString* blurb = [userDictionary objectForKey:@"blurb"];
-                                      [defaults setObject:firstName forKey:first_name_define];
-                                      [defaults setObject:lastName forKey:last_name_define];
-                                      [defaults setObject:email forKey:@"email"];
-                                      if(![blurb isKindOfClass:[NSNull class]]){
-                                          [defaults setObject:blurb forKey:@"blurb"];
+                                      NSArray* errors = [postsFromResponse objectForKey:@"errors"];
+                                      if(![errors count]>0){
+                                      
+                                          [defaults setObject:@YES forKey:@"logged_in"];
+                                          [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+                                          NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
+                                          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                          NSString* firstName = [userDictionary objectForKey:first_name_define];
+                                          NSString* lastName = [userDictionary objectForKey:last_name_define];
+                                          NSString* email = [userDictionary objectForKey:@"email"];
+                                          NSString* blurb = [userDictionary objectForKey:@"blurb"];
+                                          NSNumber* userID = [userDictionary objectForKey:@"id"];
+                                      
+                                          [defaults setObject:userID forKey:@"user_id"];
+                                          [defaults setObject:firstName forKey:first_name_define];
+                                          [defaults setObject:lastName forKey:last_name_define];
+                                          [defaults setObject:email forKey:@"email"];
+                                          if(![blurb isKindOfClass:[NSNull class]]){
+                                            [defaults setObject:blurb forKey:@"blurb"];
+                                          }
+                                          [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
+                                      }else{
+                                          UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Registration Error"
+                                                                                         message:@"Something went wrong while registering"
+                                                                                        delegate:self
+                                                                               cancelButtonTitle:@"OK"
+                                                                               otherButtonTitles:nil];
+                                          [alert show];
+                                          
                                       }
-                                      [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -409,6 +431,40 @@
                                   }];
 }
 
+
+-(void)loginWithFacebook:(NSDictionary*)dictionary forViewController:(UIViewController*)sender{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+
+    NSString* loginURL = [@"api/users/" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
+    loginURL = [loginURL stringByAppendingString:@"/facebook_login"];
+    
+    
+    [[PASessionManager sharedClient] PATCH:loginURL
+                                parameters:[self applyWrapper:@"user" toDictionary:[self addUDIDToDictionary:dictionary]]
+                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                       NSLog(@"JSON : %@", JSON);
+                                       NSDictionary* json = (NSDictionary*)JSON;
+                                       NSDictionary* userDictionary = [json objectForKey:@"user"];
+                                       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                       NSString* firstName = [userDictionary objectForKey:first_name_define];
+                                       NSString* lastName = [userDictionary objectForKey:last_name_define];
+                                       NSString* email = [userDictionary objectForKey:@"email"];
+                                       NSNumber* userID = [userDictionary objectForKey:@"id"];
+                                       NSString* apiKey = [userDictionary objectForKey:@"api_key"];
+                                       
+                                       [defaults setObject:apiKey forKey:@"api_key"];
+                                       [defaults setObject:userID forKey:@"user_id"];
+                                       [defaults setObject:firstName forKey:first_name_define];
+                                       [defaults setObject:lastName forKey:last_name_define];
+                                       [defaults setObject:email forKey:@"email"];
+                                       [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
+                                       [sender dismissViewControllerAnimated:YES completion:nil];
+                                       
+                                   }
+                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                       NSLog(@"ERROR: %@",error);
+                                   }];
+}
 
 -(void)changePassword:(NSDictionary*)passwordInfo forViewController:(UIViewController*)controller{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -595,7 +651,7 @@
     [[PASessionManager sharedClient] DELETE:attendeeURL
                                  parameters: [self applyWrapper:@"event_attendee" toDictionary:attendee]
                                     success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                        //NSLog(@"like JSON %@", JSON);
+                                        NSLog(@"attend JSON %@", JSON);
                                         [self updateAndReloadEvent:[attendee objectForKey:@"event_attended"] forViewController:controller];
                                     }
      
@@ -982,6 +1038,21 @@
 }
 #pragma mark - Peck actions
 
+-(void)deletePeck:(NSNumber*)peckID{
+    NSString* peckURL = [@"api/pecks/" stringByAppendingString:[peckID stringValue]];
+    [[PASessionManager sharedClient] DELETE:peckURL
+                               parameters:[self authenticationParameters]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"peck JSON: %@", JSON);
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+    
+
+}
+
 -(void)postPeck:(NSDictionary*)dictionary{
     [[PASessionManager sharedClient] POST:@"api/pecks"
                                parameters:[self applyWrapper:@"peck" toDictionary:dictionary]
@@ -1028,14 +1099,12 @@
          NSArray* pecks = [json objectForKey:@"pecks"];
          for(NSDictionary* peckAttributes in pecks){
              NSNumber* newID = [peckAttributes objectForKey:@"id"];
-             BOOL peckAlreadyExists = [self objectExists:newID withType:@"Peck" andCategory:nil];
-             if(!peckAlreadyExists){
-                 Peck * peck = [NSEntityDescription insertNewObjectForEntityForName:@"Peck" inManagedObjectContext: _managedObjectContext];
-                 [self setAttributesInPeck:peck withDictionary:peckAttributes];
-             }else{
-                 Peck* peck = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Peck" andType:nil];
-                 [self setAttributesInPeck:peck withDictionary:peckAttributes];
+             //BOOL peckAlreadyExists = [self objectExists:newID withType:@"Peck" andCategory:nil];
+             Peck* peck = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Peck" andType:nil];
+             if(!peck){
+                 peck = [NSEntityDescription insertNewObjectForEntityForName:@"Peck" inManagedObjectContext: _managedObjectContext];
              }
+             [self setAttributesInPeck:peck withDictionary:peckAttributes];
          }
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -1081,11 +1150,12 @@
              NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_opportunities"];
              for (NSDictionary *diningAttributes in postsFromResponse){
                  NSNumber *newID = [diningAttributes objectForKey:@"id"];
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event" andCategory:nil];
-                 if(!eventAlreadyExists){
-                     Event * diningEvent = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInDiningEvent:diningEvent withDictionary:diningAttributes];
+                 //BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event" andCategory:@"dining"];
+                 Event* diningEvent = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:@"dining"];
+                 if(!diningEvent){
+                     diningEvent = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
                  }
+                 [self setAttributesInDiningEvent:diningEvent withDictionary:diningAttributes];
              }
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -1543,25 +1613,18 @@
                  //NSLog(@"JSON: %@",JSON);
                  NSDictionary *commentsDictionary = (NSDictionary*)JSON;
                  NSArray *postsFromResponse = [commentsDictionary objectForKey:@"comments"];
-                 //NSLog(@"Update Event response: %@", postsFromResponse);
                  for (NSDictionary *commentAttributes in postsFromResponse) {
                      NSNumber *newID = [commentAttributes objectForKey:@"id"];
-                     BOOL eventAlreadyExists = [self objectExists:newID withType:@"Comment" andCategory:nil];
-                     if(!eventAlreadyExists){
-                         //NSLog(@"adding an event to Core Data");
-                         [self.persistentStoreCoordinator lock];
-                         Comment * comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext: _managedObjectContext];
-                         [self setAttributesInComment:comment withDictionary:commentAttributes];
-                         NSError* error = nil;
-                         [_managedObjectContext save:&error];
-                         [self.persistentStoreCoordinator unlock];
-                         //NSLog(@"COMMENT: %@",comment);
-                     }else{
-                         [self.persistentStoreCoordinator lock];
-                         Comment* comment = [[PAFetchManager sharedFetchManager] commentForID:newID];
-                         [self setAttributesInComment:comment withDictionary:commentAttributes];
-                         [self.persistentStoreCoordinator unlock];
+                     //BOOL eventAlreadyExists = [self objectExists:newID withType:@"Comment" andCategory:nil];
+                     [self.persistentStoreCoordinator lock];
+                     Comment* comment = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Comment" andType:nil];
+                     if(!comment){
+                         comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext: _managedObjectContext];
                      }
+                     [self setAttributesInComment:comment withDictionary:commentAttributes];
+                     NSError* error = nil;
+                     [_managedObjectContext save:&error];
+                     [self.persistentStoreCoordinator unlock];
                  }
              }
                                          failure:^(NSURLSessionDataTask *__unused task, NSError *error) {

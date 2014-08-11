@@ -18,6 +18,7 @@
 #import "PAFetchManager.h"
 #import "UIImageView+AFNetworking.h"
 #import "PAAssetManager.h"
+#import "PAMethodManager.h"
 
 @interface PACircleCell ()
 
@@ -618,39 +619,44 @@ PAAssetManager * assetManager;
 }
 
 - (IBAction)createCircleButton:(id)sender {
+    
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber* userID = [defaults objectForKey:@"user_id"];
-    NSNumber* institutionID= [defaults objectForKey:@"institution_id"];
+    if([defaults objectForKey:@"authentication_token"]){
     
-    NSMutableArray* circleMembers = [[NSMutableArray alloc] init];
+        NSNumber* userID = [defaults objectForKey:@"user_id"];
+        NSNumber* institutionID= [defaults objectForKey:@"institution_id"];
     
-    for(int i=0;i<[self.members count];i++){
-        Peer * tempPeer = self.members[i];
-        [circleMembers addObject:tempPeer.id];
+        NSMutableArray* circleMembers = [[NSMutableArray alloc] init];
+    
+        for(int i=0;i<[self.members count];i++){
+            Peer * tempPeer = self.members[i];
+            [circleMembers addObject:tempPeer.id];
+        }
+        //[circleMembers addObject:[defaults objectForKey:@"user_id"]];
+    
+        NSString* alert = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
+        alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
+        alert = [alert stringByAppendingString:@" has invited you to a circle"];
+    
+        NSDictionary * newCircle = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    userID, @"user_id",
+                                    institutionID, @"institution_id",
+                                    self.titleTextField.text, @"circle_name",
+                                    circleMembers, @"circle_member_ids",
+                                    alert, @"message",
+                                    nil];
+    
+        [self endEditing:YES];
+        PACirclesTableViewController* parent = (PACirclesTableViewController*)self.parentViewController;
+        [parent dismissCircleTitleKeyboard];
+        [parent dismissKeyboard:self];
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[parent.fetchedResultsController.fetchedObjects count] inSection:0];
+        [parent condenseCircleCell:self atIndexPath:indexPath];
+    
+        [[PASyncManager globalSyncManager] postCircle:newCircle];
+    }else{
+        [[PAMethodManager sharedMethodManager]showRegisterAlert:@"create a circle" forViewController:self.parentViewController];
     }
-    //[circleMembers addObject:[defaults objectForKey:@"user_id"]];
-    
-    NSString* alert = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
-    alert = [alert stringByAppendingString:[defaults objectForKey:@"last_name"]];
-    alert = [alert stringByAppendingString:@" has invited you to a circle"];
-    
-    NSDictionary * newCircle = [NSDictionary dictionaryWithObjectsAndKeys:
-                                userID, @"user_id",
-                                institutionID, @"institution_id",
-                                self.titleTextField.text, @"circle_name",
-                                circleMembers, @"circle_member_ids",
-                                alert, @"message",
-                                nil];
-    
-    [self endEditing:YES];
-    PACirclesTableViewController* parent = (PACirclesTableViewController*)self.parentViewController;
-    [parent dismissCircleTitleKeyboard];
-    [parent dismissKeyboard:self];
-    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[parent.fetchedResultsController.fetchedObjects count] inSection:0];
-    [parent condenseCircleCell:self atIndexPath:indexPath];
-    
-    [[PASyncManager globalSyncManager] postCircle:newCircle];
-    
     
 }
 @end

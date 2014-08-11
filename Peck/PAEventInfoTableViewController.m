@@ -15,7 +15,7 @@
 #import "PAFetchManager.h"
 #import "UIImageView+AFNetworking.h"
 #import "PAAssetManager.h"
-
+#import "PAMethodManager.h"
 
 
 @interface PAEventInfoTableViewController ()
@@ -657,50 +657,60 @@ BOOL reloaded = NO;
 
 -(void)postComment:(NSString *) text
 {
+   
     if(![text isEqualToString:@""]){
-        self.commentText=nil;
-        /*
-        NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
-         */
-    
-        NSLog(@"post comment");
-        //NSString *commentText = cell.commentTextView.text;
-        //cell.commentTextView.text=@"";
-        
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSNumber *userID = [defaults objectForKey:@"user_id"];
-        NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
+        if([defaults objectForKey:@"authentication_token"]){
+            self.commentText=nil;
+            /*
+             NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+             [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+             */
     
-        NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                text, @"content",
-                                userID, @"user_id",
-                                @"simple", @"category",
-                                [self.detailItem valueForKey:@"id" ],@"comment_from",
-                                institutionID, @"institution_id",
-                                nil];
-    
-        [[PASyncManager globalSyncManager] postComment:dictionary];
+            NSLog(@"post comment");
+            //NSString *commentText = cell.commentTextView.text;
+            //cell.commentTextView.text=@"";
         
+            NSNumber *userID = [defaults objectForKey:@"user_id"];
+            NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
+    
+            NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        text, @"content",
+                                        userID, @"user_id",
+                                        @"simple", @"category",
+                                        [self.detailItem valueForKey:@"id" ],@"comment_from",
+                                        institutionID, @"institution_id",
+                                        nil];
+    
+            [[PASyncManager globalSyncManager] postComment:dictionary];
+        
+        }else{
+            [[PAMethodManager sharedMethodManager] showRegisterAlert:@"post a comment" forViewController:self];
+        }
+
     }
 }
 
 
 - (IBAction)attendButton:(id)sender {
     if([self.attendButton.titleLabel.text isEqualToString:@"Attend"]){
-    
-        NSLog(@"attend the event");
+        
+       
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        if([defaults objectForKey:@"authentication_token"]){
+            NSLog(@"attend the event");
+            NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      [defaults objectForKey:@"user_id"],@"user_id",
+                                      [defaults objectForKey:@"institution_id"],@"institution_id",
+                                      [self.detailItem valueForKey:@"id"],@"event_attended",
+                                      @"simple", @"category",
+                                      [defaults objectForKey:@"user_id"], @"added_by",
+                                      nil];
     
-        NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [defaults objectForKey:@"user_id"],@"user_id",
-                                  [defaults objectForKey:@"institution_id"],@"institution_id",
-                                  [self.detailItem valueForKey:@"id"],@"event_attended",
-                                  @"simple", @"category",
-                                  [defaults objectForKey:@"user_id"], @"added_by",
-                                  nil];
-    
-        [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:self];
+            [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:self];
+        }else{
+            [[PAMethodManager sharedMethodManager] showRegisterAlert:@"attend an event" forViewController:self];
+        }
     }else{
         NSLog(@"unattend the event");
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
