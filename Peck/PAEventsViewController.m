@@ -533,6 +533,11 @@ PAAssetManager * assetManager;
 
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"");
+}
+
 - (PANestedTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSFetchedResultsController *fetchedResultsController = nil;
@@ -576,6 +581,7 @@ PAAssetManager * assetManager;
 
     return cell;
 }
+
 
 /*
 
@@ -659,7 +665,16 @@ PAAssetManager * assetManager;
     [self tableView:self.centerTableView compressRowAtSelectedIndexPathUserInteractionEnabled:NO];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([self indexPathIsSelected:indexPath]) {
+        return nil;
+    }
+    return indexPath;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     /*
     Event *selectedEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
     if([selectedEvent.type isEqualToString:@"simple"]){
@@ -668,12 +683,29 @@ PAAssetManager * assetManager;
     else if([selectedEvent.type isEqualToString:@"dining"]){
         [self performSegueWithIdentifier:@"showDiningDetail" sender:self];
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
      */
 
-    PANestedTableViewCell *cell = (PANestedTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+    /*
+     NSLog(@"selected cell %ld", (long)indexPath.row);
+
+     UIViewController * newVC = self.detailViewControllers[indexPath.row];
+     [newVC.view addSubview:self.backButton];
+
+     newVC.view.userInteractionEnabled = YES;
+
+     self.selectedCellIndexPath = indexPath;
+     [self.tableView beginUpdates];
+     [self.tableView endUpdates];
+     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+     self.tableView.scrollEnabled = NO;
+     */
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    PANestedTableViewCell *cell = (PANestedTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+    cell.viewController.view.userInteractionEnabled = YES;
     self.selectedViewController = cell.viewController;
-    self.selectedViewController.view.userInteractionEnabled = YES;
+
     [self tableView:tableView expandRowAtIndexPath:indexPath];
 }
 
