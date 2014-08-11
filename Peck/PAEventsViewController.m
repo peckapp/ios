@@ -48,6 +48,8 @@ struct eventImage{
 
 @property (assign, nonatomic) NSInteger selectedDay;
 
+@property (strong, nonatomic) UIViewController * selectedViewController;
+
 @end
 
 @implementation PAEventsViewController
@@ -76,7 +78,7 @@ PAAssetManager * assetManager;
 {
     [super viewDidLoad];
 
-    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(11, 11, 22, 22)];
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 44, 44)];
     [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
     self.backButton.backgroundColor = [UIColor lightTextColor];
 
@@ -531,7 +533,7 @@ PAAssetManager * assetManager;
 
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (PANestedTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSFetchedResultsController *fetchedResultsController = nil;
     if (tableView == self.leftTableView) {
@@ -624,11 +626,6 @@ PAAssetManager * assetManager;
 
 */
 
-- (void)backButton:(id)sender
-{
-    [self tableView:self.centerTableView compressRowAtSelectedIndexPathUserInteractionEnabled:NO];
-}
-
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSFetchedResultsController * fetchedResultsController = nil;
@@ -656,6 +653,11 @@ PAAssetManager * assetManager;
     return 88;
 }
 
+- (void)backButton:(id)sender
+{
+    self.selectedViewController.view.userInteractionEnabled = NO;
+    [self tableView:self.centerTableView compressRowAtSelectedIndexPathUserInteractionEnabled:NO];
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     /*
@@ -669,6 +671,9 @@ PAAssetManager * assetManager;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
      */
 
+    PANestedTableViewCell *cell = (PANestedTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+    self.selectedViewController = cell.viewController;
+    self.selectedViewController.view.userInteractionEnabled = YES;
     [self tableView:tableView expandRowAtIndexPath:indexPath];
 }
 
@@ -744,6 +749,11 @@ PAAssetManager * assetManager;
     return dateString;
     
     
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
