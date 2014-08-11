@@ -137,6 +137,11 @@ BOOL viewingCircles;
     [self.realKeyboardAccessoryView addSubview:self.postButton];
     self.keyboardAccessory.inputAccessoryView = self.realKeyboardAccessoryView;
 
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeFirstResponder)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -211,6 +216,11 @@ BOOL viewingCircles;
     [selectedCell.suggestedMembersTableView reloadData];
 }
 
+-(void)changeFirstResponder{
+    if(self.keyboardAccessory.isFirstResponder){
+        [self.realKeyboardAccessory becomeFirstResponder];
+    }
+}
 /*- (BOOL)textFieldShouldReturn:(UITextField *)textField {
     //TODO: this is where we will send a new member to a circle that is already created
     NSLog(@"add a new member");
@@ -547,7 +557,7 @@ BOOL viewingCircles;
     NSLog(@"???");
     [self.inviteTextField resignFirstResponder];
     [self.textCapture resignFirstResponder];
-}
+    }
 
 -(void)dismissCircleTitleKeyboard{
     PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
@@ -734,10 +744,13 @@ BOOL viewingCircles;
 }
 
 -(void)dismissCommentKeyboard{
-    PACircleCell *circleCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+    /*PACircleCell *circleCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     PACommentCell *commentCell = (PACommentCell*)[circleCell.commentsTableView cellForRowAtIndexPath:indexPath];
-    [commentCell.commentTextView resignFirstResponder];
+    [commentCell.commentTextView resignFirstResponder];*/
+    [self.realKeyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
+
 }
 
 -(void)postComment:(NSString *)text
@@ -751,6 +764,8 @@ BOOL viewingCircles;
         NSLog(@"post the comment");
         //NSString *commentText = cell.commentTextView.text;
         //cell.commentTextView.text=@"";
+        
+        
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSNumber *userID = [defaults objectForKey:@"user_id"];
@@ -773,6 +788,8 @@ BOOL viewingCircles;
                                     nil];
     
         [[PASyncManager globalSyncManager] postComment:dictionary];
+        
+        self.realKeyboardAccessory.text = @"";
     }
 }
 

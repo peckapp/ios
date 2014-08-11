@@ -115,6 +115,11 @@ BOOL reloaded = NO;
     [self.realKeyboardAccessoryView addSubview:self.postButton];
     self.keyboardAccessory.inputAccessoryView = self.realKeyboardAccessoryView;
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeFirstResponder)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
     [self.tableView reloadData];
 }
 
@@ -159,6 +164,12 @@ BOOL reloaded = NO;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)changeFirstResponder{
+    if(self.keyboardAccessory.isFirstResponder){
+        [self.realKeyboardAccessory becomeFirstResponder];
+    }
 }
 
 /*
@@ -551,6 +562,8 @@ BOOL reloaded = NO;
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     [cell.commentTextView resignFirstResponder];
      */
+    [self.realKeyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -675,6 +688,8 @@ BOOL reloaded = NO;
                                         nil];
     
             [[PASyncManager globalSyncManager] postComment:dictionary];
+            
+            self.realKeyboardAccessory.text = @"";
         
         }else{
             [[PAMethodManager sharedMethodManager] showRegisterAlert:@"post a comment" forViewController:self];
@@ -727,12 +742,12 @@ BOOL reloaded = NO;
     return YES;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
+/*- (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     if (textField == self.keyboardAccessory) {
         [self.realKeyboardAccessory becomeFirstResponder];
     }
-}
+}*/
 
 
 -(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
