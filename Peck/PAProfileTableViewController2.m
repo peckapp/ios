@@ -63,17 +63,20 @@ BOOL loggedIn;
     self.infoTextView.text = [defaults objectForKey:@"blurb"];
     NSLog(@"profile picture path %@", [defaults objectForKey:@"profile_picture"]);
     UIImage* image =[UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
-    self.profilePicture.image = [UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
-    
+    if(image){
+        self.profilePicture.image = image;
+    }else{
+        self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+    }
     if([defaults objectForKey:@"authentication_token"]){
         loggedIn=YES;
         NSLog(@"logged in");
-        [self.loginButton setTitle:@"Logout" forState:UIControlStateNormal];
+        self.loginButton.title =@"Logout";
     }
     else{
         loggedIn=NO;
         NSLog(@"logged out");
-        [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
+        self.loginButton.title = @"Login";
     }
 }
 
@@ -132,7 +135,13 @@ BOOL loggedIn;
         
         [[PAFetchManager sharedFetchManager] logoutUser];
         
-    
+        //if (FBSession.activeSession.state == FBSessionStateOpen|| FBSession.activeSession.state == FBSessionStateOpenTokenExtended) {
+            
+            // Close the session and remove the access token from the cache
+            // The session state handler (in the app delegate) will be called automatically
+        [FBSession.activeSession closeAndClearTokenInformation];
+        //}
+        
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         [defaults removeObjectForKey:@"authentication_token"];
         [defaults removeObjectForKey:@"first_name"];
@@ -140,15 +149,19 @@ BOOL loggedIn;
         [defaults removeObjectForKey:@"blurb"];
         [defaults removeObjectForKey:@"email"];
         [defaults removeObjectForKey:@"profile_picture"];
+        [defaults removeObjectForKey:@"profile_picture_url"];
+        
         
         [defaults setObject:@NO forKey:@"logged_in"];
+        
+        [[PASyncManager globalSyncManager] ceateAnonymousUser:nil];
         
         self.emailTextField.text=@"";
         self.firstNameTextField.text=@"";
         self.infoTextView.text = @"";
         self.lastNameTextField.text = @"";
-        self.profilePicture.image = nil;
-        [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
+        self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+        self.loginButton.title = @"Login";
         loggedIn=NO;
     }
 }
@@ -248,9 +261,6 @@ BOOL loggedIn;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    /*if(indexPath.row==1 && indexPath.section==0){
-        [self switchSchool:self];
-    }*/
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

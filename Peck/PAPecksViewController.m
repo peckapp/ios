@@ -13,9 +13,14 @@
 #import "Peck.h"
 #import "PAPeckCell.h"
 #import "PASyncManager.h"
+#import "PAPromptView.h"
+#import "PAAssetManager.h"
+#import "PAMethodManager.h"
+#import "PAFetchManager.h"
 
 @interface PAPecksViewController ()
-
+@property BOOL editing;
+@property (strong) PAPromptView* promptView;
 @end
 
 @implementation PAPecksViewController
@@ -39,8 +44,10 @@ static NSString *nibName = @"PAPeckCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.items = @[@"Item 1", @"Item 2", @"Item 3"];
-    self.title = @"Pecks";
+    
+    if(!self.noPecksLabel){
+        self.noPecksLabel = [[UILabel alloc] init];
+    }
     
     NSError *error=nil;
     if (![self.fetchedResultsController performFetch:&error])
@@ -57,8 +64,60 @@ static NSString *nibName = @"PAPeckCell";
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 -(void)viewWillAppear:(BOOL)animated{
+    
     [super viewWillAppear:animated];
-    [[PASyncManager globalSyncManager] updatePecks];
+   /* _fetchedResultsController=nil;
+    NSError *error=nil;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }*/
+
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"authentication_token"]){
+      
+        [[PASyncManager globalSyncManager] updatePecks];
+        
+        if([_fetchedResultsController.fetchedObjects count]==0){
+            [self showNoPecks];
+        }
+        else{
+            [self showPecks];
+        }
+    
+        
+    }else{
+        self.tableView.backgroundColor = [[PAAssetManager sharedManager] unavailableColor];
+        self.tableView.separatorColor = [[PAAssetManager sharedManager] unavailableColor];
+        
+        _promptView = [PAPromptView promptView:self];
+        
+        [self.view addSubview:_promptView];
+        
+    }
+}
+-(void)showNoPecks{
+    self.tableView.backgroundColor = [[PAAssetManager sharedManager] unavailableColor];
+    self.tableView.separatorColor = [[PAAssetManager sharedManager] unavailableColor];
+    self.noPecksLabel.text = @"You have no Pecks";
+    self.noPecksLabel.textColor = [UIColor whiteColor];
+    self.noPecksLabel.frame = CGRectMake(0, 30, self.view.frame.size.width, 60);
+    self.noPecksLabel.textAlignment = NSTextAlignmentCenter;
+    self.noPecksLabel.font = [UIFont systemFontOfSize:28];
+    
+    [self.view addSubview:self.noPecksLabel];
+
+}
+
+-(void)showPecks{
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.separatorColor = [UIColor lightGrayColor];
+    [self.noPecksLabel removeFromSuperview];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [_promptView removeFromSuperview];
 }
 
 - (void)didReceiveMemoryWarning
@@ -97,16 +156,25 @@ static NSString *nibName = @"PAPeckCell";
     return cell;
 }
 
+-(void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.editing=YES;
+}
+-(void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.editing=NO;
+}
+
 -(void)configureCell:(PAPeckCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     Peck* peck = [_fetchedResultsController objectAtIndexPath:indexPath];
     
+    cell.parentViewController = self;
     cell.messageTextView.text = peck.message;
     cell.titleLabel.text = @"Peck";
+    cell.invited_by = peck.invited_by;
     if([peck.notification_type isEqualToString:@"circle_invite"] || [peck.notification_type isEqualToString:@"event_invite"]){
         cell.invitation_id = [peck.invitation_id integerValue];
         cell.invitation_id = [peck.invitation_id integerValue];
         cell.notification_type = peck.notification_type;
-        cell.invited_by = peck.invited_by;
+        
     }
     [cell.acceptButton setHidden:NO];
     [cell.declineButton setHidden:NO];
@@ -124,6 +192,17 @@ static NSString *nibName = @"PAPeckCell";
     }
     cell.dateLabel.text = [self dateToString:peck.created_at];
     cell.peckID = peck.id;
+    
+    Peer* sender = [[PAFetchManager sharedFetchManager] getObject:peck.invited_by withEntityType:@"Peer" andType:nil];
+    
+    UIImageView* thumbnail =[[PAAssetManager sharedManager] createThumbnailWithFrame:cell.profileTemplateView.frame imageView:[[PAMethodManager sharedMethodManager] imageForPeer:sender]];
+    
+    if (cell.profileThumbnail) {
+        [cell.profileThumbnail removeFromSuperview];
+    }
+    
+    [cell addSubview:thumbnail];
+   // cell.senderPicture =
 }
 
 -(NSString*)dateToString:(NSDate *)date{
@@ -239,16 +318,28 @@ static NSString *nibName = @"PAPeckCell";
         {
             [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             
+            if([_fetchedResultsController.fetchedObjects count]>0){
+                
+                [self showPecks];
+            }
             //this line is here because the table view would usually set the second cell to have the same properties as the cell that was just inserted
             [self.tableView reloadData];
             break;
         }
-        case NSFetchedResultsChangeDelete:
+        case NSFetchedResultsChangeDelete:{
+            if(self.editing){
+                //only delete the peck from the server if the user is editing the table view rather than deleting the pecks from core data somewhere else (i.e. when he logs out)
+                [[PASyncManager globalSyncManager] deletePeck: ((Peck*)anObject).id];
+            }
             [self.tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
+            if([_fetchedResultsController.fetchedObjects count]==0){
+                 [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(showNoPecks) userInfo:nil repeats:NO];
+                //[self showNoPecks];
+            }
             break;
-            
+        }
         case NSFetchedResultsChangeUpdate:{
             PAPeckCell* cell = (PAPeckCell*)[self.tableView cellForRowAtIndexPath:indexPath];
             [self configureCell:cell atIndexPath:indexPath];
@@ -278,35 +369,38 @@ static NSString *nibName = @"PAPeckCell";
 }
 
 
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
 
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- } else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Return NO if you do not want the specified item to be editable.
+    return YES;
+}
 
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+        [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
+        NSError *error = nil;
+        if (![context save:&error]) {
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
+}
 
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // The table view should not be re-orderable.
+    return NO;
+}
+/*
+-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    [[PASyncManager globalSyncManager] deletePeck: [_fetchedResultsController objectAtIndexPath:indexPath] ];
+}
+*/
 /*
  // Override to support conditional rearranging of the table view.
  - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath

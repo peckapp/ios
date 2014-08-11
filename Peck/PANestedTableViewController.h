@@ -8,8 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PANestedTableViewController : UITableViewController
+@interface PANestedTableViewController : UIViewController
+
+@property (strong, nonatomic) UIButton * backButton;
 
 - (UITableViewCell *)configureDetailViewControllerCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+
+- (BOOL)indexPathIsSelected:(NSIndexPath *)indexPath;
+
+- (void)tableView:(UITableView *)tableView compressRowAtSelectedIndexPathUserInteractionEnabled:(BOOL)interaction;
+- (void)tableView:(UITableView *)tableView expandRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

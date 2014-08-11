@@ -15,7 +15,7 @@
 #import "PAFetchManager.h"
 #import "UIImageView+AFNetworking.h"
 #import "PAAssetManager.h"
-
+#import "PAMethodManager.h"
 
 
 @interface PAEventInfoTableViewController ()
@@ -115,11 +115,18 @@ BOOL reloaded = NO;
     [self.realKeyboardAccessoryView addSubview:self.postButton];
     self.keyboardAccessory.inputAccessoryView = self.realKeyboardAccessoryView;
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeFirstResponder)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
     [self.tableView reloadData];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+    //[super viewWillAppear:animated];
+    
+    NSLog(@"view will appear");
     
     viewingEvent=YES;
     //[self registerForKeyboardNotifications];
@@ -131,7 +138,7 @@ BOOL reloaded = NO;
             [NSThread sleepForTimeInterval:reloadTime];
         }
     });
-
+    
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
     self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
@@ -139,11 +146,16 @@ BOOL reloaded = NO;
     self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0, self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
 
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, self.keyboardAccessoryView.frame.size.height, 0);
+    
+    
+    [self.realKeyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
+
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    
     initialFrame = self.tableView.frame;
 }
 
@@ -151,7 +163,10 @@ BOOL reloaded = NO;
     [super viewWillDisappear:animated];
     
     viewingEvent=NO;
-    [self.view endEditing:YES];
+    [self.realKeyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
+    
+    
     //[self deregisterFromKeyboardNotifications];
 }
 
@@ -159,6 +174,12 @@ BOOL reloaded = NO;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)changeFirstResponder{
+    if(self.keyboardAccessory.isFirstResponder){
+        [self.realKeyboardAccessory becomeFirstResponder];
+    }
 }
 
 /*
@@ -206,10 +227,10 @@ BOOL reloaded = NO;
 */
 #pragma mark - managing the detail item
 
-- (void)setDetailItem:(id)newDetailItem
+- (void)setManagedObject:(NSManagedObject *)managedObject
 {
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
+    if (_detailItem != managedObject) {
+        _detailItem = managedObject;
         // Update the view.
         [self configureView];
     }
@@ -222,11 +243,13 @@ BOOL reloaded = NO;
     if (self.detailItem) {
         
         self.title = [self.detailItem valueForKey:@"title"];
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"MMM dd, yyyy h:mm a"];
-        NSString *stringFromDate =[df stringFromDate:[self.detailItem valueForKey:@"start_date"]];
-        [self.startTimeLabel setText: stringFromDate];
-        [self.endTimeLabel setText:[df stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
+        self.nameLabel.text = [self.detailItem valueForKey:@"title"];
+
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+        [self.startTimeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
+        [self.endTimeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
+
         self.descriptionTextView.text = [self.detailItem valueForKey:@"descrip"];
        
         self.numberOfAttendees.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
@@ -324,6 +347,12 @@ BOOL reloaded = NO;
             
         case NSFetchedResultsChangeDelete:
             [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+
+        case NSFetchedResultsChangeMove:
+            break;
+
+        case NSFetchedResultsChangeUpdate:
             break;
     }
 }
@@ -425,7 +454,7 @@ BOOL reloaded = NO;
     cell.nameLabel.text = [self nameLabelTextForComment:tempComment];
     cell.commentTextView.text = tempComment.content;
 
-    UIButton * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageViewForComment:tempComment]];
+    UIImageView * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageViewForComment:tempComment]];
     if (cell.thumbnailView) {
         [cell.thumbnailView removeFromSuperview];
     }
@@ -551,6 +580,8 @@ BOOL reloaded = NO;
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     [cell.commentTextView resignFirstResponder];
      */
+    [self.realKeyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -649,50 +680,62 @@ BOOL reloaded = NO;
 
 -(void)postComment:(NSString *) text
 {
+   
     if(![text isEqualToString:@""]){
-        self.commentText=nil;
-        /*
-        NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
-         */
-    
-        NSLog(@"post comment");
-        //NSString *commentText = cell.commentTextView.text;
-        //cell.commentTextView.text=@"";
-        
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSNumber *userID = [defaults objectForKey:@"user_id"];
-        NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
+        if([defaults objectForKey:@"authentication_token"]){
+            self.commentText=nil;
+            /*
+             NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+             [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+             */
     
-        NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                text, @"content",
-                                userID, @"user_id",
-                                @"simple", @"category",
-                                [self.detailItem valueForKey:@"id" ],@"comment_from",
-                                institutionID, @"institution_id",
-                                nil];
-    
-        [[PASyncManager globalSyncManager] postComment:dictionary];
+            NSLog(@"post comment");
+            //NSString *commentText = cell.commentTextView.text;
+            //cell.commentTextView.text=@"";
         
+            NSNumber *userID = [defaults objectForKey:@"user_id"];
+            NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
+    
+            NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        text, @"content",
+                                        userID, @"user_id",
+                                        @"simple", @"category",
+                                        [self.detailItem valueForKey:@"id" ],@"comment_from",
+                                        institutionID, @"institution_id",
+                                        nil];
+    
+            [[PASyncManager globalSyncManager] postComment:dictionary];
+            
+            self.realKeyboardAccessory.text = @"";
+        
+        }else{
+            [[PAMethodManager sharedMethodManager] showRegisterAlert:@"post a comment" forViewController:self];
+        }
+
     }
 }
 
 
 - (IBAction)attendButton:(id)sender {
     if([self.attendButton.titleLabel.text isEqualToString:@"Attend"]){
-    
-        NSLog(@"attend the event");
+        
+       
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        if([defaults objectForKey:@"authentication_token"]){
+            NSLog(@"attend the event");
+            NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      [defaults objectForKey:@"user_id"],@"user_id",
+                                      [defaults objectForKey:@"institution_id"],@"institution_id",
+                                      [self.detailItem valueForKey:@"id"],@"event_attended",
+                                      @"simple", @"category",
+                                      [defaults objectForKey:@"user_id"], @"added_by",
+                                      nil];
     
-        NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [defaults objectForKey:@"user_id"],@"user_id",
-                                  [defaults objectForKey:@"institution_id"],@"institution_id",
-                                  [self.detailItem valueForKey:@"id"],@"event_attended",
-                                  @"simple", @"category",
-                                  [defaults objectForKey:@"user_id"], @"added_by",
-                                  nil];
-    
-        [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:self];
+            [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:self];
+        }else{
+            [[PAMethodManager sharedMethodManager] showRegisterAlert:@"attend an event" forViewController:self];
+        }
     }else{
         NSLog(@"unattend the event");
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -717,12 +760,12 @@ BOOL reloaded = NO;
     return YES;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
+/*- (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     if (textField == self.keyboardAccessory) {
         [self.realKeyboardAccessory becomeFirstResponder];
     }
-}
+}*/
 
 
 -(BOOL)textViewIsSmallerThanFrame:(NSString*)text{

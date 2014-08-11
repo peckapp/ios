@@ -15,6 +15,7 @@
 #import "HTAutocompleteManager.h"
 #import "PACommentCell.h"
 #import "PAFriendProfileViewController.h"
+#import "PAAssetManager.h"
 
 #define cellHeight 100.0
 #define reloadTime 10
@@ -136,6 +137,11 @@ BOOL viewingCircles;
     [self.realKeyboardAccessoryView addSubview:self.postButton];
     self.keyboardAccessory.inputAccessoryView = self.realKeyboardAccessoryView;
 
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeFirstResponder)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -352,6 +358,9 @@ BOOL viewingCircles;
                 [self dismissKeyboard:self];
                 [self configureCell:cell atIndexPath:indexPath];
                 [cell performFetch];
+                NSString* circleID = [cell.circle.id stringValue];
+                [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
+                
             }
         } else {
             [self condenseCircleCell:cell atIndexPath:indexPath];
@@ -432,11 +441,12 @@ BOOL viewingCircles;
         [cell.titleTextField setHidden:YES];
         [cell.createCircleButton setHidden:YES];
         [cell.leaveCircleButton setHidden:YES];
+        [cell updateCircleMembers:nil];
         if(viewingCell){
             [cell.titleTextField setHidden:NO];
             [cell.profilesTableView setHidden:NO];
             [cell.createCircleButton setHidden:NO];
-        
+            
         }
         
     }
@@ -537,7 +547,7 @@ BOOL viewingCircles;
     NSLog(@"???");
     [self.inviteTextField resignFirstResponder];
     [self.textCapture resignFirstResponder];
-}
+    }
 
 -(void)dismissCircleTitleKeyboard{
     PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
@@ -724,10 +734,13 @@ BOOL viewingCircles;
 }
 
 -(void)dismissCommentKeyboard{
-    PACircleCell *circleCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+    /*PACircleCell *circleCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     PACommentCell *commentCell = (PACommentCell*)[circleCell.commentsTableView cellForRowAtIndexPath:indexPath];
-    [commentCell.commentTextView resignFirstResponder];
+    [commentCell.commentTextView resignFirstResponder];*/
+    [self.realKeyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
+
 }
 
 -(void)postComment:(NSString *)text
@@ -741,6 +754,8 @@ BOOL viewingCircles;
         NSLog(@"post the comment");
         //NSString *commentText = cell.commentTextView.text;
         //cell.commentTextView.text=@"";
+        
+        
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSNumber *userID = [defaults objectForKey:@"user_id"];
@@ -760,9 +775,12 @@ BOOL viewingCircles;
                                     institutionID, @"institution_id",
                                     [NSNumber numberWithBool:YES], @"send_push_notification",
                                     alert, @"message",
+                                    //[defaults objectForKey:@"user_id"], @"invited_by",
                                     nil];
     
         [[PASyncManager globalSyncManager] postComment:dictionary];
+        
+        self.realKeyboardAccessory.text = @"";
     }
 }
 
@@ -816,6 +834,29 @@ BOOL viewingCircles;
     
     NSError *error = nil;
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    
+    NSArray* currentMembers = [[NSArray alloc] init];
+    if([_fetchedResultsController.fetchedObjects count]>self.selectedIndexPath.row){
+        //if the user is adding members to an already created circle
+        Circle* circle = [_fetchedResultsController objectAtIndexPath:self.selectedIndexPath];
+        NSSet* circleMembers = circle.circle_members;
+        currentMembers = [circleMembers allObjects];
+    }else{
+        //if the user is creating a new circle
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[_fetchedResultsController.fetchedObjects count] inSection:0];
+        PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+        currentMembers = cell.members;
+        
+    }
+    
+    for(int i = 0; i<[mutableFetchResults count];i++){
+        Peer* peer = mutableFetchResults[i];
+        for(Peer* member in currentMembers){
+            if(peer.id==member.id){
+                [mutableFetchResults removeObjectAtIndex:i];
+            }
+        }
+    }
     return mutableFetchResults;
 }
 

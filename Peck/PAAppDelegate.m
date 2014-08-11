@@ -29,7 +29,13 @@
 {
     // uncomment during application launch to clear out all NSUserDefaults
     // [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
-    
+    // uncomment at launch to delete persistant store. proabaly a very messy way to do it
+    /*
+    for (NSPersistentStore *pstore in [[self persistentStoreCoordinator] persistentStores]) {
+        [[self persistentStoreCoordinator] removePersistentStore:pstore error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@",pstore.URL] error:nil];
+    }*/
+
     // Override point for customization after application launch.
     
     //NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
@@ -185,17 +191,34 @@
 
 #pragma mark - Facebook API
 
+// In order to process the response you get from interacting with the Facebook login process
+// and to handle any deep linking calls from Facebook
+// you need to override application:openURL:sourceApplication:annotation:
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
-
-
-    // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
-    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
-
     
-    // You can add your app-specific url handling code here if needed
+    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication fallbackHandler:^(FBAppCall *call) {
+        if([[call appLinkData] targetURL] != nil) {
+            // get the object ID string from the deep link URL
+            // we use the substringFromIndex so that we can delete the leading '/' from the targetURL
+            NSString *objectId = [[[call appLinkData] targetURL].path substringFromIndex:1];
+            
+            NSLog(@"the url of the object: %@", [[call appLinkData] targetURL]);
+            
+            // now handle the deep link
+            // write whatever code you need to show a view controller that displays the object, etc.
+            [[[UIAlertView alloc] initWithTitle:@"Directed from Facebook"
+                                        message:[NSString stringWithFormat:@"Deep link to %@", objectId]
+                                       delegate:self
+                              cancelButtonTitle:@"OK!"
+                              otherButtonTitles:nil] show];
+        } else {
+            //
+            NSLog(@"Unhandled deep link: %@", [[call appLinkData] targetURL]);
+        }
+    }];
     
     return wasHandled;
 }
@@ -333,5 +356,9 @@
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
+
+
+
+
 
 @end

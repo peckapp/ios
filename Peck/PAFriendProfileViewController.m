@@ -57,9 +57,9 @@ PAAssetManager * assetManager;
     [super viewDidLoad];
     assetManager = [PAAssetManager sharedManager];
     [blurbTextView setEditable:NO];
-    blurbTextView.layer.borderWidth=.5f;
+    /*blurbTextView.layer.borderWidth=.5f;
     blurbTextView.layer.borderColor = [[UIColor grayColor] CGColor];
-    blurbTextView.layer.cornerRadius = 8;
+    blurbTextView.layer.cornerRadius = 8;*/
     
     [self.scrollView setScrollEnabled:YES];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height-123);

@@ -37,6 +37,8 @@
 // sends patch request to the server when the registration process is complete
 -(void)registerUserWithInfo:(NSDictionary*)userInfo;
 
+-(void)loginWithFacebook:(NSDictionary*)dictionary forViewController:(UIViewController*)sender;
+
 -(void)changePassword:(NSDictionary*)passwordInfo forViewController:(UIViewController*)controller;
 
 // like actions
@@ -77,6 +79,7 @@
 -(void)deleteCircleMember:(NSInteger)circleMemberID withPeckID:(NSNumber*)peckID;
 
 //methods for updating pecks
+-(void)deletePeck:(NSNumber*)peckID;
 -(void)postPeck:(NSDictionary*)dictionary;
 -(void)updatePecks;
 -(void)setInteractedForPeck:(NSNumber*)peckID;
