@@ -262,13 +262,21 @@ BOOL reloaded = NO;
         
         UIImage* image = [assetManager imagePlaceholder];
         if([self.detailItem valueForKey:@"imageURL"]){
-            [self.eventPhoto setImageWithURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"imageURL"]]] placeholderImage:image];
+            //self.eventPhoto = [self imageForURL:[self.detailItem valueForKey:@"imageURL"]];
+             NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"imageURL"]]];
+             UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+            if(cachedImage){
+                self.eventPhoto.image = cachedImage;
+            }else{
+                [self.eventPhoto setImageWithURL:imageURL placeholderImage:image];
+            }
         }else{
             self.eventPhoto.image = image;
         }
-        
+
     }
 }
+
 
 -(BOOL)attendingEvent{
     NSArray* attendees = [self.detailItem valueForKey:@"attendees"];
