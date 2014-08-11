@@ -273,7 +273,7 @@ BOOL reloaded = NO;
         }else{
             self.eventPhoto.image = image;
         }
-        
+
     }
 }
 
