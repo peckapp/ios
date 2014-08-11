@@ -23,6 +23,8 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.Peck.ios</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fb291944037642057</string>
