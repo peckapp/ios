@@ -225,6 +225,36 @@ BOOL reloaded = NO;
         self.tableView.frame = initialFrame;
 }
 */
+
+- (void)compressAnimated:(BOOL)animated
+{
+    self.tableView.hidden = true;
+
+    void (^animationsBlock)(void) = ^{
+        self.eventPhoto.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
+    };
+
+    void (^completionBlock)(BOOL) = ^(BOOL finished){
+
+    };
+
+    if (animated) {
+        [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                     animations:animationsBlock
+                     completion:completionBlock];
+    }
+    else {
+        animationsBlock();
+        completionBlock(true);
+    }
+}
+
+- (void)expand:(BOOL)animated
+{
+
+}
+
+
 #pragma mark - managing the detail item
 
 - (void)setManagedObject:(NSManagedObject *)managedObject
@@ -233,6 +263,8 @@ BOOL reloaded = NO;
         _detailItem = managedObject;
         // Update the view.
         [self configureView];
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
     }
 }
 
