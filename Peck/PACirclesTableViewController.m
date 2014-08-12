@@ -906,7 +906,7 @@ BOOL viewingCircles;
     for(int i = 0; i<[mutableFetchResults count];i++){
         Peer* peer = mutableFetchResults[i];
         for(Peer* member in currentMembers){
-            if(peer.id==member.id){
+            if([peer.id integerValue]==[member.id integerValue]){
                 [mutableFetchResults removeObjectAtIndex:i];
             }
         }
