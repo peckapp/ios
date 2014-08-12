@@ -23,6 +23,9 @@
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
 @property (nonatomic, retain) NSDateFormatter *formatter;
 
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UIView *cellView;
+
 @property (strong, nonatomic) UIView * keyboardAccessoryView;
 @property (strong, nonatomic) UITextField * keyboardAccessory;
 @property (strong, nonatomic) UIView * realKeyboardAccessoryView;
@@ -54,14 +57,6 @@ BOOL reloaded = NO;
 #define defaultCellHeight 72
 #define reloadTime 10
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -78,13 +73,13 @@ BOOL reloaded = NO;
         self.formatter = [[NSDateFormatter alloc] init];
         [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
     //}
+
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     self.userPicture =[UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
-    NSLog(@"view did load");
+
     textViewHelper = [[UITextView alloc] init];
     [textViewHelper setHidden:YES];
-    [self.descriptionTextView setEditable:NO];
-    [self configureView];
+
     heightDictionary = [[NSMutableDictionary alloc] init];
     NSError * error = nil;
     if (![self.fetchedResultsController performFetch:&error])
@@ -93,6 +88,22 @@ BOOL reloaded = NO;
         abort();
     }
 
+    //[self configureView];
+
+
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+
+    self.cellView = [[UIView alloc] init];
+
+    self.eventPhoto = [[UIImageView alloc] init];
+    self.eventPhoto.contentMode = UIViewContentModeScaleAspectFill;
+    [self.cellView addSubview:self.eventPhoto];
+
+    self.view = self.cellView;
+
+    /*
     self.keyboardAccessoryView = [[UIView alloc] init];
     self.keyboardAccessory = [[UITextField alloc] init];
     self.keyboardAccessoryView.backgroundColor = [UIColor whiteColor];
@@ -121,6 +132,7 @@ BOOL reloaded = NO;
                                                object:nil];
     
     [self.tableView reloadData];
+     */
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -138,7 +150,11 @@ BOOL reloaded = NO;
             [NSThread sleepForTimeInterval:reloadTime];
         }
     });
-    
+
+    self.cellView.frame = CGRectMake(0, 0, 320, 88);
+    self.eventPhoto.frame = self.cellView.frame;
+
+    /*
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
     self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
@@ -150,7 +166,7 @@ BOOL reloaded = NO;
     
     [self.realKeyboardAccessory resignFirstResponder];
     [self.keyboardAccessory resignFirstResponder];
-
+     */
     
 }
 
@@ -263,8 +279,8 @@ BOOL reloaded = NO;
         _detailItem = managedObject;
         // Update the view.
         [self configureView];
-        [self.tableView beginUpdates];
-        [self.tableView endUpdates];
+        //[self.tableView beginUpdates];
+        //[self.tableView endUpdates];
     }
 }
 
@@ -273,7 +289,8 @@ BOOL reloaded = NO;
     // Update the user interface for the detail item.
     
     if (self.detailItem) {
-        
+
+        /*
         self.title = [self.detailItem valueForKey:@"title"];
         self.nameLabel.text = [self.detailItem valueForKey:@"title"];
 
@@ -291,7 +308,8 @@ BOOL reloaded = NO;
             [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
         }
         NSLog(@"attendees: %@", [self.detailItem valueForKey:@"attendees"]);
-        
+        */
+
         UIImage* image = [assetManager imagePlaceholder];
         if([self.detailItem valueForKey:@"imageURL"]){
             //self.eventPhoto = [self imageForURL:[self.detailItem valueForKey:@"imageURL"]];
@@ -305,7 +323,6 @@ BOOL reloaded = NO;
         }else{
             self.eventPhoto.image = image;
         }
-
     }
 }
 

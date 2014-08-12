@@ -24,13 +24,15 @@
 
 - (UITableViewCell *)configureDetailViewControllerCell:(PANestedTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
 
     UIViewController * newVC = cell.viewController;
+    [cell.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
     [newVC willMoveToParentViewController:self];
     [newVC.view removeFromSuperview];
     [newVC removeFromParentViewController];
+
     [self addChildViewController:newVC];
     [cell addSubview:newVC.view];
     [newVC didMoveToParentViewController:self];
