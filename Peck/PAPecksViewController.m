@@ -18,6 +18,7 @@
 #import "PAMethodManager.h"
 #import "PAFetchManager.h"
 #import "PADropdownBar.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @interface PAPecksViewController ()
 @property BOOL editing;
@@ -67,6 +68,31 @@ static NSString *nibName = @"PAPeckCell";
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
+    
+    
+    /*
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            @"Peck", @"name",
+                            @"[{\"url\": \"peckapp://\" },{\"url\":\"fb291944037642057://\"}]", @"ios",
+                            @"{\"should_fallback\": false}", @"web",
+                            nil
+                            ];
+    //make the API call
+    [FBRequestConnection startWithGraphPath:@"/app/app_link_hosts"
+                                 parameters:params
+                                 HTTPMethod:@"POST"
+                          completionHandler:^(
+                                              FBRequestConnection *connection,
+                                              id result,
+                                              NSError *error
+                                              ) {
+                              //handle the result
+                              NSLog(@"the result: %@", result);
+                              NSLog(@"error %@", error);
+                          }];
+    */
+
+    
    /* _fetchedResultsController=nil;
     NSError *error=nil;
     if (![self.fetchedResultsController performFetch:&error])

@@ -178,7 +178,7 @@ BOOL viewingCircles;
         }
     });
 
-    
+    //TODO: this frame changing seems to partially cover up one of the circle cells
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
     self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
