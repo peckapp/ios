@@ -66,9 +66,13 @@
     [self removeAllObjectsOfType:@"Announcement"];
     [self removeAllObjectsOfType:@"Comment"];
     [self removeAllObjectsOfType:@"Peck"];
+    [[PASyncManager globalSyncManager] updatePeerInfo];
 }
 
 -(void)loginUser{
+    
+    
+    
     // This method removes the peer from core data with id equal to the new logged in user's id.
     // It protects against logging in on a friends phone and being able to invite yourself to events and circles
     // The method then updates the peers (in order to load the now logged out user into core data)
@@ -82,7 +86,7 @@
         [_managedObjectContext deleteObject:oldUser];
     }
     
-    [[PASyncManager globalSyncManager] updatePeerInfo];
+    //[[PASyncManager globalSyncManager] updatePeerInfo];
 }
 
 -(void)removeAllObjectsOfType:(NSString*)type{

@@ -80,9 +80,10 @@
 
 }
 
--(void)postInfoToFacebook:(NSDictionary*)eventInfo{
-    NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[eventInfo objectForKey:@"image"]]];
-    UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+-(void)postInfoToFacebook:(NSDictionary*)eventInfo withImage:(NSData*)imageData{
+    //NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[eventInfo objectForKey:@"image"]]];
+    //UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+    UIImage* img = [UIImage imageWithData:imageData];
     if(img){
         [FBRequestConnection startForUploadStagingResourceWithImage:img completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
             if(!error) {
@@ -105,17 +106,19 @@
                 object[@"type"] = @"com_peckapp_peck:event";
                 
                 // for og:description
-                object[@"description"] =[eventInfo objectForKey:@"description"] ;
+                object[@"description"] =[eventInfo objectForKey:@"event_description"] ;
                 
                 // for og:url, we cover how this is used in the "Deep Linking" section below
-                object[@"url"] = @"http://example.com/roasted_pumpkin_seeds";
+                object[@"url"] = @"http://peckapp.com/";
+                
+                //object[@"url"] = @"http://example.com/roasted_pumpkin_seeds";
                 //TODO: fix the url to work with deep linking
                 
                 // for og:image we assign the image that we just staged, using the uri we got as a response
                 // the image has to be packed in a dictionary like this:
                 object[@"image"] = @[@{@"url": [result objectForKey:@"uri"], @"user_generated" : @"false" }];
                 
-                object[@"event_id"] = [[eventInfo objectForKey:@"id"] stringValue];
+                //object[@"event_id"] = [[eventInfo objectForKey:@"id"] stringValue];
                 
                 /*
                  [FBRequestConnection startForPostOpenGraphObject:object completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {

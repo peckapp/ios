@@ -142,6 +142,9 @@ BOOL viewingCircles;
                                              selector:@selector(changeFirstResponder)
                                                  name:UIKeyboardDidShowNotification
                                                object:nil];
+    
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    appdelegate.circleViewController = self;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -345,7 +348,9 @@ BOOL viewingCircles;
 {
     PACircleCell *cell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:indexPath];
     if(!viewingCell){
+        [self expandCircleCell:cell atIndexPath:indexPath];
         
+        /*
         cell.addingMembers=NO;
         if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
             [cell updateCircleMembers:nil];
@@ -361,7 +366,7 @@ BOOL viewingCircles;
         viewingCell=YES;
         self.keyboardAccessory.hidden = NO;
         self.keyboardAccessoryView.frame = CGRectMake(0, cell.frame.origin.y + cell.frame.size.height - 44, self.view.frame.size.width, 44);
-        [self configureCell:cell atIndexPath:indexPath];
+        [self configureCell:cell atIndexPath:indexPath];*/
     } else {
         if (cell.addingMembers) {
             if (indexPath.row == [_fetchedResultsController.fetchedObjects count]) {
@@ -380,6 +385,32 @@ BOOL viewingCircles;
         }
 
     }
+}
+
+-(void)expandCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    if(self.selectedIndexPath){
+        if(self.selectedIndexPath != indexPath){
+            PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+            [self condenseCircleCell:cell atIndexPath:self.selectedIndexPath];
+        }
+    }
+    
+    cell.addingMembers=NO;
+    if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
+        [cell updateCircleMembers:nil];
+        cell.titleTextField.text=@"";
+    }
+    [cell performFetch];
+    self.selectedIndexPath = indexPath;
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    
+    self.tableView.scrollEnabled = NO;
+    viewingCell=YES;
+    self.keyboardAccessory.hidden = NO;
+    self.keyboardAccessoryView.frame = CGRectMake(0, cell.frame.origin.y + cell.frame.size.height - 44, self.view.frame.size.width, 44);
+    [self configureCell:cell atIndexPath:indexPath];
 }
 
 -(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{

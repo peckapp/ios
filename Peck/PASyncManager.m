@@ -1508,7 +1508,7 @@
          NSDictionary* json = (NSDictionary*)JSON;
          
          if(FBSessionStateOpen){
-             [[PAMethodManager sharedMethodManager] postInfoToFacebook:[json objectForKey:@"simple_event"]];
+             [[PAMethodManager sharedMethodManager] postInfoToFacebook:[json objectForKey:@"simple_event"] withImage:imageData];
          }else{
              NSLog(@"user not logged into facebook");
          }
