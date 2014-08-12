@@ -459,7 +459,28 @@
                                        [defaults setObject:lastName forKey:last_name_define];
                                        [defaults setObject:email forKey:@"email"];
                                        [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
+                                       NSString* imageURL = [userDictionary objectForKey:@"image"];
+                                       
+                                       if(imageURL){
+                                           NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
+                                           NSURL* url =[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+                                           UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+                                           NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                                                NSUserDomainMask, YES);
+                                           NSString *documentsDirectory = [paths objectAtIndex:0];
+                                           NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                                                             @"profile_picture.jpeg" ];
+                                           NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
+                                           [data writeToFile:path atomically:YES];
+                                           NSLog(@"path: %@", path);
+                                           [defaults setObject:path forKey:@"profile_picture"];
+                                           [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
+                                       }
+
+                                       
                                        [sender dismissViewControllerAnimated:YES completion:nil];
+                                       
+                                      
                                        
                                    }
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
