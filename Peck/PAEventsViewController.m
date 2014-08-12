@@ -975,11 +975,15 @@ PAAssetManager * assetManager;
 
 
     for(Event* event in fetchedResultsController.fetchedObjects){
-        if(event.imageURL){
+        if (event.imageURL) {
             [self cacheImageForURL:event.imageURL];
         }
+        if (event.blurredImageURL) {
+            [self cacheImageForURL:event.blurredImageURL];
+        }
     }
-         /*
+
+    /*
     NSMutableArray* eventURLs = [[NSMutableArray alloc] init];
     NSMutableArray* eventTypes = [[NSMutableArray alloc] init];
     NSMutableArray* eventIDs = [[NSMutableArray alloc] init];
@@ -1000,6 +1004,7 @@ PAAssetManager * assetManager;
         }
     }
      */
+
     /*
     for(int j=0; j<[eventIDs count];j++){
         if( [eventTypes[j] isEqualToString:@"simple"]){
@@ -1023,6 +1028,7 @@ PAAssetManager * assetManager;
             [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSIndexPath* indexPath =[NSIndexPath indexPathForRow: [eventRows[i] integerValue] inSection:0];
+                /
                 PAEventCell* cell = (PAEventCell*)[tableView cellForRowAtIndexPath:indexPath];
                 if(fetchedResultsController.fetchedObjects.count > indexPath.row){
                     if ([cell isKindOfClass:[PAEventCell class]]) {
@@ -1034,7 +1040,6 @@ PAAssetManager * assetManager;
         });
     }
      */
-
 
     [tableView reloadData];
     [tableView beginUpdates];
