@@ -61,6 +61,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)expandAnimated:(BOOL)animated
+{
+
+}
+
+- (void)compressAnimated:(BOOL)animated
+{
+
+}
+
 #pragma mark - managing the detail item
 
 - (void)setDetailItem:(id)newDetailItem
