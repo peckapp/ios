@@ -278,17 +278,17 @@ BOOL reloaded = NO;
 }
 */
 
-- (void)compressAnimated:(BOOL)animated
+- (void)expandAnimated:(BOOL)animated
 {
-    if (self.expanded) {
+    if (!self.expanded) {
+        self.cleanImageView.hidden = NO;
 
         void (^animationsBlock)(void) = ^{
-            self.blurredImageView.alpha = 1;
+            self.blurredImageView.alpha = 0;
         };
 
         void (^completionBlock)(BOOL) = ^(BOOL finished){
-            self.cleanImageView.hidden = YES;
-            self.expanded = NO;
+            self.expanded = YES;
         };
 
         if (animated) {
@@ -303,17 +303,17 @@ BOOL reloaded = NO;
     }
 }
 
-- (void)expandAnimated:(BOOL)animated
+- (void)compressAnimated:(BOOL)animated
 {
-    if (!self.expanded) {
-        self.cleanImageView.hidden = NO;
+    if (self.expanded) {
 
         void (^animationsBlock)(void) = ^{
-            self.blurredImageView.alpha = 0;
+            self.blurredImageView.alpha = 1;
         };
 
         void (^completionBlock)(BOOL) = ^(BOOL finished){
-            self.expanded = YES;
+            self.cleanImageView.hidden = YES;
+            self.expanded = NO;
         };
 
         if (animated) {
