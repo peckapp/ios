@@ -28,10 +28,21 @@
 
     UIViewController * newVC = cell.viewController;
     
+    
+    NSLog(@"number of subviews: %lu", (unsigned long)[cell.subviews count]);
+    
+    UIView* view = [cell viewWithTag:3];
+    if(view){
+        [view removeFromSuperview];
+        
+    }
+    
+    
     [newVC willMoveToParentViewController:self];
     [newVC.view removeFromSuperview];
     [newVC removeFromParentViewController];
     [self addChildViewController:newVC];
+    newVC.view.tag=3;
     [cell addSubview:newVC.view];
     [newVC didMoveToParentViewController:self];
     
