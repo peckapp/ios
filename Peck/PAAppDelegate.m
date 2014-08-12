@@ -206,6 +206,7 @@
             // get the object ID string from the deep link URL
             // we use the substringFromIndex so that we can delete the leading '/' from the targetURL
             NSString *objectId = [[[call appLinkData] targetURL].path substringFromIndex:1];
+            NSDictionary* queryData = call.appLinkData.originalQueryParameters;
             
             NSLog(@"the url of the object: %@", [[call appLinkData] targetURL]);
             

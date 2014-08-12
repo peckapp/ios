@@ -335,7 +335,7 @@ static NSString *nibName = @"PAPeckCell";
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             if([_fetchedResultsController.fetchedObjects count]==0){
-                 [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(showNoPecks) userInfo:nil repeats:NO];
+                 [NSTimer scheduledTimerWithTimeInterval:.4 target:self selector:@selector(showNoPecks) userInfo:nil repeats:NO];
                 //[self showNoPecks];
             }
             break;

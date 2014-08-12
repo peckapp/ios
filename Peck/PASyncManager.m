@@ -33,6 +33,7 @@
 #import "PAConfigureViewController.h"
 #import "Peck.h"
 #import "Announcement.h"
+#import "PAMethodManager.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 #define shortTermUDID @"1"
@@ -944,6 +945,7 @@
         NSLog(@"in secondary thread");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
+        _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         
@@ -960,18 +962,18 @@
              NSArray *postsFromResponse = [circlesDictionary objectForKey:@"circles"];
              for (NSDictionary *circleAttributes in postsFromResponse) {
                  NSNumber *newID = [circleAttributes objectForKey:@"id"];
-                 BOOL circleAlreadyExists = [self objectExists:newID withType:@"Circle" andCategory:nil];
-                 if(!circleAlreadyExists){
-                     //NSLog(@"about to add the circle");
-                     Circle * circle = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInCircle:circle withDictionary:circleAttributes];
-                     //NSLog(@"CIRCLE: %@",circle);
+                 //BOOL circleAlreadyExists = [self objectExists:newID withType:@"Circle" andCategory:nil];
+                 [self.persistentStoreCoordinator lock];
+                 Circle* circle = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Circle" andType:nil];
+                 if(!circle){
+                     NSLog(@"about to add the circle");
+                     circle = [NSEntityDescription insertNewObjectForEntityForName:@"Circle" inManagedObjectContext: _managedObjectContext];
                  }
-                 else{
-                     //the circle already exists but we still want to change the attributes (in case a user leaves or the name is changed)
-                     Circle* circle = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Circle" andType:nil];
-                     [self setAttributesInCircle:circle withDictionary:circleAttributes];
-                 }
+                 [self setAttributesInCircle:circle withDictionary:circleAttributes];
+                 NSError* error = nil;
+                 [_managedObjectContext save:&error];
+                 [self.persistentStoreCoordinator unlock];
+                
              }
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -1448,6 +1450,14 @@
      (NSURLSessionDataTask * __unused task, id JSON) {
          NSLog(@"simple event creation success: %@", JSON);
          [self updateEventInfo];
+         NSDictionary* json = (NSDictionary*)JSON;
+         
+         if(FBSessionStateOpen){
+             [[PAMethodManager sharedMethodManager] postInfoToFacebook:[json objectForKey:@"simple_event"]];
+         }else{
+             NSLog(@"user not logged into facebook");
+         }
+
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
