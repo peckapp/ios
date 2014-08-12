@@ -554,7 +554,6 @@ PAAssetManager * assetManager;
     }
 
     Event *eventObject = [fetchedResultsController objectAtIndexPath:indexPath];
-    PANestedTableViewCell * cell;
 
     if ([eventObject.type isEqualToString:@"dining"]) {
         PANestedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningCell"];

@@ -179,7 +179,6 @@
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"height for row");
     if((self.selectedIndexPath != nil) && (indexPath.row == self.selectedIndexPath.row)) {
         return self.view.frame.size.height;
     }
