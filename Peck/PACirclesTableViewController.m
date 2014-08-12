@@ -178,19 +178,22 @@ BOOL viewingCircles;
         }
     });
 
+    
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
     self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
     self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
     self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0,
                                        self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
-
+    
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
     [self.tableView reloadData];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -284,13 +287,17 @@ BOOL viewingCircles;
                                          newMember.id, @"user_id",
                                          instituion_id, @"institution_id",
                                          circle_id, @"circle_id",
-                                         @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464",@"token",
+                                         //@"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464",@"token",
                                          alert, @"message",
-                                         @"circle_invite", @"notification_type",
+                                         //@"circle_invite", @"notification_type",
                                          [NSNumber numberWithBool:YES],@"send_push_notification",
                                          nil];
         //[[PASyncManager globalSyncManager] postCircleMember:newMember withDictionary:newCircleMember forCircle:selectedCircle withSender:selectedCell];
-        [[PASyncManager globalSyncManager] postPeck:newCircleMember];
+        
+        
+        //[[PASyncManager globalSyncManager] postPeck:newCircleMember];
+        [[PASyncManager globalSyncManager] postCircleMember:newCircleMember];
+        
     }else{
         [self.addedPeers addObject:newMember];
         [selectedCell updateCircleMembers:self.addedPeers];
@@ -411,6 +418,8 @@ BOOL viewingCircles;
     self.keyboardAccessory.hidden = NO;
     self.keyboardAccessoryView.frame = CGRectMake(0, cell.frame.origin.y + cell.frame.size.height - 44, self.view.frame.size.width, 44);
     [self configureCell:cell atIndexPath:indexPath];
+    NSString* circleID = [cell.circle.id stringValue];
+    [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
 }
 
 -(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{

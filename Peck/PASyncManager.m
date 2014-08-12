@@ -869,6 +869,7 @@
 
 }
 
+/*
 -(void)postCircleMember:(Peer*)newMember withDictionary:(NSDictionary *) dictionary forCircle:(Circle*)circle withSender:(id)sender{
     [[PASessionManager sharedClient] POST:circle_membersAPI
                                parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
@@ -882,6 +883,19 @@
                                       NSLog(@"ERROR: %@",error);
                                   }];
     
+
+}*/
+
+-(void)postCircleMember:(NSDictionary*)dictionary{
+    [[PASessionManager sharedClient] POST:circle_membersAPI
+                                   parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
+                                      success:^
+         (NSURLSessionDataTask * __unused task, id JSON) {
+             NSLog(@"circle member success json: %@", JSON);
+         }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
 
 }
 
