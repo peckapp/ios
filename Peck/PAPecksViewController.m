@@ -17,6 +17,7 @@
 #import "PAAssetManager.h"
 #import "PAMethodManager.h"
 #import "PAFetchManager.h"
+#import "PADropdownBar.h"
 
 @interface PAPecksViewController ()
 @property BOOL editing;
@@ -184,10 +185,14 @@ static NSString *nibName = @"PAPeckCell";
     }
     [cell.acceptButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [cell.declineButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    cell.acceptButton.userInteractionEnabled=YES;
+    cell.declineButton.userInteractionEnabled=YES;
     cell.interactedWith = NO;
     if([peck.interacted_with boolValue]==YES){
         [cell.acceptButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [cell.declineButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        cell.acceptButton.userInteractionEnabled=NO;
+        cell.declineButton.userInteractionEnabled=NO;
         cell.interactedWith = YES;
     }
     cell.dateLabel.text = [self dateToString:peck.created_at];
@@ -247,9 +252,28 @@ static NSString *nibName = @"PAPeckCell";
     Peck* peck = [_fetchedResultsController objectAtIndexPath:indexPath];
     if([peck.notification_type isEqualToString:@"event_invite"]){
         NSLog(@"show the detail of the event");
+    }else if([peck.notification_type isEqualToString:@"circle_comment"]){
+        NSLog(@"bring the user to the circle");
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        [appdelegate.dropDownBar selectItemAtIndex:3];
+        //navigate to the circles table view controller
+        //[NSThread sleepForTimeInterval:0.5];
+        
+        for(int i = 0; i<  [appdelegate.circleViewController.fetchedResultsController.fetchedObjects count]; i++){
+            Circle* circle =appdelegate.circleViewController.fetchedResultsController.fetchedObjects[i];
+            if(circle.id==peck.invitation_id){
+                NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+                PACircleCell* cell = (PACircleCell*)[ appdelegate.circleViewController.tableView cellForRowAtIndexPath:indexPath];
+                [appdelegate.circleViewController expandCircleCell:cell atIndexPath:indexPath];
+                //[appdelegate.circleViewController tableView:appdelegate.circleViewController.tableView didSelectRowAtIndexPath:indexPath];
+                break;
+            }
+        }
+
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
 #pragma mark - managing the fetched results controller
 
 -(NSFetchedResultsController *)fetchedResultsController

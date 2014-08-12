@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PADropdownBar.h"
+#import "PACirclesTableViewController.h"
 
 @interface PAAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -16,6 +18,9 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, weak) UIStoryboard * mainStoryboard;
+
+@property (strong, nonatomic) PADropdownBar* dropDownBar;
+@property (strong, nonatomic) PACirclesTableViewController* circleViewController;
 
 // icloud triggered selector for remote change to key-value store
 - (void)iCloudKeyStateChanged:(NSNotification*)notification;

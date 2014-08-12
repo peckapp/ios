@@ -7,6 +7,7 @@
 //
 
 #import "PADropdownBar.h"
+#import "PAAppDelegate.h"
 
 // Button dimensions. This should be calculated programatically from button image.
 #define barHeight 40.0
@@ -60,6 +61,10 @@
 
         self.buttons = [collector copy];
         self.currentIndex = -1;
+        
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        appdelegate.dropDownBar = self;
+        
     }
     return self;
 }
