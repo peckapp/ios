@@ -13,6 +13,8 @@
 @required
 
 - (void)setManagedObject:(NSManagedObject *)managedObject;
+- (void)expandAnimated:(BOOL)animated;
+- (void)compressAnimated:(BOOL)animated;
 
 @end
 

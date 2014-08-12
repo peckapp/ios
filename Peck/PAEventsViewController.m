@@ -726,7 +726,7 @@ PAAssetManager * assetManager;
     PANestedTableViewCell *cell = (PANestedTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     cell.viewController.view.userInteractionEnabled = YES;
     self.selectedViewController = cell.viewController;
-
+    [cell.viewController expandAnimated:YES];
     [self tableView:tableView expandRowAtIndexPath:indexPath];
 }
 

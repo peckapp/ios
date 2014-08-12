@@ -30,6 +30,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *numberOfAttendees;
 @property (weak, nonatomic) IBOutlet UIButton *attendButton;
 
+
+
+
+
+
+
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;

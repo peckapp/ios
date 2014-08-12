@@ -24,8 +24,7 @@
 
 - (UITableViewCell *)configureDetailViewControllerCell:(PANestedTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-
-
+    /*
     UIViewController * newVC = cell.viewController;
     [cell.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
@@ -49,7 +48,8 @@
     [newVC didMoveToParentViewController:self];
     
     NSLog(@"added new view controller");
-    
+    */
+
     return cell;
 }
 

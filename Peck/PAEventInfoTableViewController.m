@@ -23,8 +23,17 @@
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
 @property (nonatomic, retain) NSDateFormatter *formatter;
 
+@property (assign, nonatomic) BOOL expanded;
+
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIView *cellView;
+
+@property (strong, nonatomic) UIImageView *eventImageView;
+
+
+
+
+
 
 @property (strong, nonatomic) UIView * keyboardAccessoryView;
 @property (strong, nonatomic) UITextField * keyboardAccessory;
@@ -94,14 +103,15 @@ BOOL reloaded = NO;
     self.tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    [self.view addSubview:self.tableView];
+    self.tableView.hidden = YES;
 
     self.cellView = [[UIView alloc] init];
 
     self.eventPhoto = [[UIImageView alloc] init];
     self.eventPhoto.contentMode = UIViewContentModeScaleAspectFill;
     [self.cellView addSubview:self.eventPhoto];
-
-    self.view = self.cellView;
+    [self.view addSubview:self.cellView];
 
     /*
     self.keyboardAccessoryView = [[UIView alloc] init];
@@ -244,32 +254,53 @@ BOOL reloaded = NO;
 
 - (void)compressAnimated:(BOOL)animated
 {
-    self.tableView.hidden = true;
+    if (self.expanded) {
 
-    void (^animationsBlock)(void) = ^{
-        self.eventPhoto.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
-    };
+        void (^animationsBlock)(void) = ^{
+            self.eventPhoto.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
+        };
 
-    void (^completionBlock)(BOOL) = ^(BOOL finished){
+        void (^completionBlock)(BOOL) = ^(BOOL finished){
+            self.tableView.hidden = YES;
+        };
 
-    };
-
-    if (animated) {
-        [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-                     animations:animationsBlock
-                     completion:completionBlock];
-    }
-    else {
-        animationsBlock();
-        completionBlock(true);
+        if (animated) {
+            [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                             animations:animationsBlock
+                             completion:completionBlock];
+        }
+        else {
+            animationsBlock();
+            completionBlock(true);
+        }
     }
 }
 
-- (void)expand:(BOOL)animated
+- (void)expandAnimated:(BOOL)animated
 {
+    if (!self.expanded) {
 
+        self.tableView.hidden = NO;
+
+        void (^animationsBlock)(void) = ^{
+            self.eventPhoto.alpha = 0;
+        };
+
+        void (^completionBlock)(BOOL) = ^(BOOL finished){
+            self.eventPhoto.hidden = YES;
+        };
+
+        if (animated) {
+            [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                             animations:animationsBlock
+                             completion:completionBlock];
+        }
+        else {
+            animationsBlock();
+            completionBlock(true);
+        }
+    }
 }
-
 
 #pragma mark - managing the detail item
 
