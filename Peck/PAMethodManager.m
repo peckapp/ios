@@ -106,17 +106,19 @@
                 object[@"type"] = @"com_peckapp_peck:event";
                 
                 // for og:description
-                object[@"description"] =[eventInfo objectForKey:@"description"] ;
+                object[@"description"] =[eventInfo objectForKey:@"event_description"] ;
                 
                 // for og:url, we cover how this is used in the "Deep Linking" section below
-                object[@"url"] = @"http://PeckApp.com/ios";
+                object[@"url"] = @"http://peckapp.com/";
+                
+                //object[@"url"] = @"http://example.com/roasted_pumpkin_seeds";
                 //TODO: fix the url to work with deep linking
                 
                 // for og:image we assign the image that we just staged, using the uri we got as a response
                 // the image has to be packed in a dictionary like this:
                 object[@"image"] = @[@{@"url": [result objectForKey:@"uri"], @"user_generated" : @"false" }];
                 
-                object[@"event_id"] = [[eventInfo objectForKey:@"id"] stringValue];
+                //object[@"event_id"] = [[eventInfo objectForKey:@"id"] stringValue];
                 
                 /*
                  [FBRequestConnection startForPostOpenGraphObject:object completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {

@@ -24,9 +24,10 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>com.PeckApp.ios</string>
+			<string>com.peckapp.ios</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>peckapp</string>
 				<string>fb291944037642057</string>
 			</array>
 		</dict>
