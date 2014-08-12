@@ -147,7 +147,16 @@ BOOL viewingCircles;
 -(void)viewWillAppear:(BOOL)animated {
     //[super viewWillAppear:animated];
     //when this is uncommented, a strange error occurs where the circle cell will scroll up when the comment cell is selected
+    
+    /*_fetchedResultsController=nil;
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }*/
 
+    
     [[PASyncManager globalSyncManager] updateCircleInfo];
     viewingCircles=YES;
     [self registerForKeyboardNotifications];
@@ -615,6 +624,7 @@ BOOL viewingCircles;
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
     [self.tableView beginUpdates];
+    NSLog(@"controller will change object");
 }
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type

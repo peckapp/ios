@@ -50,6 +50,7 @@ struct eventImage{
 
 @property (strong, nonatomic) UIViewController * selectedViewController;
 
+@property (strong, nonatomic) UIImageView* helperImageView;
 @end
 
 @implementation PAEventsViewController
@@ -78,6 +79,8 @@ PAAssetManager * assetManager;
 {
     [super viewDidLoad];
 
+    self.helperImageView = [[UIImageView alloc] init];
+    
     self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 44, 44)];
     [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
     self.backButton.backgroundColor = [UIColor lightTextColor];
@@ -1021,7 +1024,12 @@ PAAssetManager * assetManager;
 
 -(void)cacheImageForURL:(NSString*)urlString{
     NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:urlString]];
-    [[[UIImageView alloc] init] setImageWithURL:imageURL];
+    //self.helperImageView.image=nil;
+    self.helperImageView.image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+    if(!self.helperImageView.image){
+        //we must use an image view to cache the image, even if we never display this image view
+        [self.helperImageView setImageWithURL:imageURL];
+    }
 }
 
 #pragma mark - keyboard notifications
