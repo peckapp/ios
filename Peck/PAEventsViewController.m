@@ -116,6 +116,7 @@ PAAssetManager * assetManager;
     }
     self.leftTableView.dataSource = self;
     self.leftTableView.delegate = self;
+    self.leftTableView.tag = -1;
     self.leftTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     UIView * leftBackView = [[UIView alloc] init];
     leftBackView.backgroundColor = darkColor;
@@ -127,8 +128,8 @@ PAAssetManager * assetManager;
     }
     self.centerTableView.dataSource = self;
     self.centerTableView.delegate = self;
+    self.centerTableView.tag = 0;
     self.centerTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-
     UIView *centerBackView = [[UIView alloc] init];
     centerBackView.backgroundColor = darkColor;
     [self.centerTableView setBackgroundView:centerBackView];
@@ -139,8 +140,8 @@ PAAssetManager * assetManager;
     }
     self.rightTableView.dataSource = self;
     self.rightTableView.delegate = self;
+    self.rightTableView.tag = 1;
     self.rightTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-
     UIView *rightBackView = [[UIView alloc] init];
     rightBackView.backgroundColor = darkColor;
     [self.rightTableView setBackgroundView:rightBackView];
@@ -243,7 +244,7 @@ PAAssetManager * assetManager;
     [super viewDidDisappear:animated];
     
     if(!showingDetail){
-        [self.centerTableView reloadData];
+        // [self.centerTableView reloadData];
     }
 }
 
@@ -502,13 +503,13 @@ PAAssetManager * assetManager;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (tableView == self.leftTableView) {
+    if (tableView.tag == -1) {
         return [[self.leftFetchedResultsController sections] count];
     }
-    else if (tableView == self.centerTableView) {
+    else if (tableView.tag == 0) {
         return [[self.centerFetchedResultsController sections] count];
     }
-    else if (tableView == self.rightTableView) {
+    else if (tableView.tag == 1) {
         return [[self.rightFetchedResultsController sections] count];
     }
     else {
@@ -518,15 +519,15 @@ PAAssetManager * assetManager;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView == self.leftTableView) {
+    if (tableView.tag == -1) {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[self.leftFetchedResultsController sections] objectAtIndex:section];
         return [sectionInfo numberOfObjects];
     }
-    else if (tableView == self.centerTableView) {
+    else if (tableView.tag == 0) {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[self.centerFetchedResultsController sections] objectAtIndex:section];
         return [sectionInfo numberOfObjects];
     }
-    else if (tableView == self.rightTableView) {
+    else if (tableView.tag == 1) {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[self.rightFetchedResultsController sections] objectAtIndex:section];
         return [sectionInfo numberOfObjects];
     }
@@ -536,21 +537,16 @@ PAAssetManager * assetManager;
 
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    NSLog(@"");
-}
-
 - (PANestedTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSFetchedResultsController *fetchedResultsController = nil;
-    if (tableView == self.leftTableView) {
+    if (tableView.tag == -1) {
         fetchedResultsController = self.leftFetchedResultsController;
     }
-    else if (tableView == self.centerTableView) {
+    else if (tableView.tag == 0) {
         fetchedResultsController = self.centerFetchedResultsController;
     }
-    else if (tableView == self.rightTableView) {
+    else if (tableView.tag == 1) {
         fetchedResultsController = self.rightFetchedResultsController;
     }
     else {
@@ -559,30 +555,52 @@ PAAssetManager * assetManager;
 
     Event *eventObject = [fetchedResultsController objectAtIndexPath:indexPath];
 
-    PANestedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
-    if (cell == nil) {
-        [tableView registerClass:[PANestedTableViewCell class] forCellReuseIdentifier:@"eventCell"];
-        cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
-    }
-
     if ([eventObject.type isEqualToString:@"dining"]) {
-        if (cell.viewController == nil || [cell.viewController isKindOfClass:[PAEventInfoTableViewController class]]) {
-            cell.viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"dining-places-view-controller"];
+        PANestedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningCell"];
+        if (cell == nil) {
+            [tableView registerClass:[PANestedTableViewCell class] forCellReuseIdentifier:@"diningCell"];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"diningCell"];
         }
+
+        if (cell.viewController == nil) {
+            cell.viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"dining-places-view-controller"];
+            [self addChildViewController:cell.viewController];
+            [cell addSubview:cell.viewController.view];
+            [cell.viewController didMoveToParentViewController:self];
+        }
+
+        cell.clipsToBounds = YES;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.viewController.view.userInteractionEnabled = NO;
+        [cell.viewController setManagedObject:eventObject];
+
+        // [self configureDetailViewControllerCell:cell atIndexPath:indexPath];
+        
+        return cell;
     }
     else {
-        if (cell.viewController == nil || [cell.viewController isKindOfClass:[PADiningPlacesTableViewController class]]) {
-            cell.viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"event-info-view-controller"];
+        PANestedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
+        if (cell == nil) {
+            [tableView registerClass:[PANestedTableViewCell class] forCellReuseIdentifier:@"eventCell"];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
         }
+
+        if (cell.viewController == nil) {
+            cell.viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"event-info-view-controller"];
+            [self addChildViewController:cell.viewController];
+            [cell addSubview:cell.viewController.view];
+            [cell.viewController didMoveToParentViewController:self];
+        }
+
+        cell.clipsToBounds = YES;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.viewController.view.userInteractionEnabled = NO;
+        [cell.viewController setManagedObject:eventObject];
+
+        // [self configureDetailViewControllerCell:cell atIndexPath:indexPath];
+        
+        return cell;
     }
-
-    cell.clipsToBounds = YES;
-    cell.viewController.view.userInteractionEnabled = NO;
-    [cell.viewController setManagedObject:eventObject];
-
-    [self configureDetailViewControllerCell:cell atIndexPath:indexPath];
-
-    return cell;
 }
 
 
@@ -708,7 +726,7 @@ PAAssetManager * assetManager;
     PANestedTableViewCell *cell = (PANestedTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     cell.viewController.view.userInteractionEnabled = YES;
     self.selectedViewController = cell.viewController;
-
+    [cell.viewController expandAnimated:YES];
     [self tableView:tableView expandRowAtIndexPath:indexPath];
 }
 
@@ -832,12 +850,12 @@ PAAssetManager * assetManager;
     if([searchText isEqualToString:@""]){
         searchBar.text = nil;
         searchBarText = nil;
-        [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+        //[self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
         NSLog(@"User cancelled search");
     }
     else{
         searchBarText = searchText;
-        [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+        //[self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
     }
 }
 
@@ -859,7 +877,7 @@ PAAssetManager * assetManager;
     searchBar.text = nil;
     searchBarText=nil;
     //self.centerFetchedResultsController = nil;
-    [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+    //[self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
     NSLog(@"User cancelled search");
     [searchBar resignFirstResponder]; // if you want the keyboard to go away
 }
@@ -955,12 +973,13 @@ PAAssetManager * assetManager;
         abort();
     }
 
+
     for(Event* event in fetchedResultsController.fetchedObjects){
         if(event.imageURL){
             [self cacheImageForURL:event.imageURL];
         }
     }
-    /*
+         /*
     NSMutableArray* eventURLs = [[NSMutableArray alloc] init];
     NSMutableArray* eventTypes = [[NSMutableArray alloc] init];
     NSMutableArray* eventIDs = [[NSMutableArray alloc] init];

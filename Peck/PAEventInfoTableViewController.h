@@ -14,7 +14,7 @@
 
 @class PACommentCell;
 
-@interface PAEventInfoTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UIScrollViewDelegate,UITextFieldDelegate, PANestedTableViewCellSubviewControllerProtocol>
+@interface PAEventInfoTableViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, PANestedTableViewCellSubviewControllerProtocol>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
@@ -23,12 +23,18 @@
 @property (weak, nonatomic) IBOutlet UITextView *descriptionTextView;
 @property (weak, nonatomic) IBOutlet UILabel *startTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *endTimeLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *eventPhoto;
+@property (strong, nonatomic) UIImageView *eventPhoto;
 - (IBAction)attendButton:(id)sender;
 
 @property (strong, nonatomic) NSString* commentText;
 @property (weak, nonatomic) IBOutlet UILabel *numberOfAttendees;
 @property (weak, nonatomic) IBOutlet UIButton *attendButton;
+
+
+
+
+
+
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

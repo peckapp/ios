@@ -13,11 +13,14 @@
 @required
 
 - (void)setManagedObject:(NSManagedObject *)managedObject;
+- (void)expandAnimated:(BOOL)animated;
+- (void)compressAnimated:(BOOL)animated;
 
 @end
 
 @interface PANestedTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) UIViewController<PANestedTableViewCellSubviewControllerProtocol> * viewController;
+
 
 @end

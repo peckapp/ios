@@ -24,9 +24,9 @@
 
 - (UITableViewCell *)configureDetailViewControllerCell:(PANestedTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+    /*
     UIViewController * newVC = cell.viewController;
+    [cell.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
     
     NSLog(@"number of subviews: %lu", (unsigned long)[cell.subviews count]);
@@ -41,13 +41,15 @@
     [newVC willMoveToParentViewController:self];
     [newVC.view removeFromSuperview];
     [newVC removeFromParentViewController];
+
     [self addChildViewController:newVC];
     newVC.view.tag=3;
     [cell addSubview:newVC.view];
     [newVC didMoveToParentViewController:self];
     
     NSLog(@"added new view controller");
-    
+    */
+
     return cell;
 }
 
