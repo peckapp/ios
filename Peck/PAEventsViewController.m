@@ -48,7 +48,7 @@ struct eventImage{
 
 @property (assign, nonatomic) NSInteger selectedDay;
 
-@property (strong, nonatomic) UIViewController * selectedViewController;
+@property (strong, nonatomic) NSIndexPath * selectedCellIndex;
 
 @property (strong, nonatomic) UIImageView* helperImageView;
 @end
@@ -116,7 +116,6 @@ PAAssetManager * assetManager;
     }
     self.leftTableView.dataSource = self;
     self.leftTableView.delegate = self;
-    self.leftTableView.tag = -1;
     self.leftTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     UIView * leftBackView = [[UIView alloc] init];
     leftBackView.backgroundColor = darkColor;
@@ -128,7 +127,6 @@ PAAssetManager * assetManager;
     }
     self.centerTableView.dataSource = self;
     self.centerTableView.delegate = self;
-    self.centerTableView.tag = 0;
     self.centerTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     UIView *centerBackView = [[UIView alloc] init];
     centerBackView.backgroundColor = darkColor;
@@ -140,7 +138,6 @@ PAAssetManager * assetManager;
     }
     self.rightTableView.dataSource = self;
     self.rightTableView.delegate = self;
-    self.rightTableView.tag = 1;
     self.rightTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     UIView *rightBackView = [[UIView alloc] init];
     rightBackView.backgroundColor = darkColor;
@@ -503,13 +500,13 @@ PAAssetManager * assetManager;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (tableView.tag == -1) {
+    if (tableView == self.leftTableView) {
         return [[self.leftFetchedResultsController sections] count];
     }
-    else if (tableView.tag == 0) {
+    else if (tableView == self.centerTableView) {
         return [[self.centerFetchedResultsController sections] count];
     }
-    else if (tableView.tag == 1) {
+    else if (tableView == self.rightTableView) {
         return [[self.rightFetchedResultsController sections] count];
     }
     else {
@@ -519,15 +516,15 @@ PAAssetManager * assetManager;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView.tag == -1) {
+    if (tableView == self.leftTableView) {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[self.leftFetchedResultsController sections] objectAtIndex:section];
         return [sectionInfo numberOfObjects];
     }
-    else if (tableView.tag == 0) {
+    else if (tableView == self.centerTableView) {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[self.centerFetchedResultsController sections] objectAtIndex:section];
         return [sectionInfo numberOfObjects];
     }
-    else if (tableView.tag == 1) {
+    else if (tableView == self.rightTableView) {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[self.rightFetchedResultsController sections] objectAtIndex:section];
         return [sectionInfo numberOfObjects];
     }
@@ -540,13 +537,13 @@ PAAssetManager * assetManager;
 - (PANestedTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSFetchedResultsController *fetchedResultsController = nil;
-    if (tableView.tag == -1) {
+    if (tableView == self.leftTableView) {
         fetchedResultsController = self.leftFetchedResultsController;
     }
-    else if (tableView.tag == 0) {
+    else if (tableView == self.centerTableView) {
         fetchedResultsController = self.centerFetchedResultsController;
     }
-    else if (tableView.tag == 1) {
+    else if (tableView == self.rightTableView) {
         fetchedResultsController = self.rightFetchedResultsController;
     }
     else {
@@ -682,8 +679,11 @@ PAAssetManager * assetManager;
 
 - (void)backButton:(id)sender
 {
-    self.selectedViewController.view.userInteractionEnabled = NO;
+    PANestedTableViewCell *cell = (PANestedTableViewCell *)[self.centerTableView cellForRowAtIndexPath:self.selectedCellIndex];
+    cell.viewController.view.userInteractionEnabled = NO;
+    [cell.viewController compressAnimated:YES];
     [self tableView:self.centerTableView compressRowAtSelectedIndexPathUserInteractionEnabled:NO];
+    self.selectedCellIndex = nil;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -723,9 +723,9 @@ PAAssetManager * assetManager;
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
+    self.selectedCellIndex = indexPath;
     PANestedTableViewCell *cell = (PANestedTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     cell.viewController.view.userInteractionEnabled = YES;
-    self.selectedViewController = cell.viewController;
     [cell.viewController expandAnimated:YES];
     [self tableView:tableView expandRowAtIndexPath:indexPath];
 }
