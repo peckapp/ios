@@ -226,8 +226,12 @@ BOOL viewingCircles;
     [selectedCell.suggestedMembersTableView reloadData];
 }
 
-/*
- - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+-(void)changeFirstResponder{
+    if(self.keyboardAccessory.isFirstResponder){
+        [self.realKeyboardAccessory becomeFirstResponder];
+    }
+}
+/*- (BOOL)textFieldShouldReturn:(UITextField *)textField {
     //TODO: this is where we will send a new member to a circle that is already created
     NSLog(@"add a new member");
     HTAutocompleteTextField *tempTextField = (HTAutocompleteTextField *)textField;
