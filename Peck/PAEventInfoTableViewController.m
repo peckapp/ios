@@ -26,12 +26,13 @@
 @property (assign, nonatomic) BOOL expanded;
 
 @property (strong, nonatomic) UITableView *tableView;
-@property (strong, nonatomic) UIView *cellView;
+@property (strong, nonatomic) UIView *headerView;
 
 @property (strong, nonatomic) UIImageView *cleanImageView;
 @property (strong, nonatomic) UIImageView *blurredImageView;
 
-
+@property (strong, nonatomic) UILabel *timeLabel;
+@property (strong, nonatomic) UILabel *titleLabel;
 
 
 
@@ -106,17 +107,30 @@ BOOL reloaded = NO;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
 
-    self.cellView = [[UIView alloc] init];
+    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 88)];
 
     self.cleanImageView = [[UIImageView alloc] init];
     self.cleanImageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.tableView.tableHeaderView = self.cleanImageView;
+    [self.headerView addSubview:self.cleanImageView];
 
     self.blurredImageView = [[UIImageView alloc] init];
     self.blurredImageView.contentMode = UIViewContentModeScaleAspectFill;
-    [self.cellView addSubview:self.blurredImageView];
+    [self.headerView addSubview:self.blurredImageView];
 
-    [self.view addSubview:self.cellView];
+    self.timeLabel = [[UILabel alloc] init];
+    self.timeLabel.textColor = [UIColor whiteColor];
+    self.timeLabel.font = [UIFont boldSystemFontOfSize:17.0];
+    self.timeLabel.textAlignment = NSTextAlignmentRight;
+    //self.timeLabel.backgroundColor = [UIColor lightGrayColor];
+    [self.headerView addSubview:self.timeLabel];
+
+    self.titleLabel = [[UILabel alloc] init];
+    self.titleLabel.textColor = [UIColor whiteColor];
+    self.titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
+    //self.titleLabel.backgroundColor = [UIColor lightGrayColor];
+    [self.headerView addSubview:self.titleLabel];
+
+    self.tableView.tableHeaderView = self.headerView;
 
     /*
     self.keyboardAccessoryView = [[UIView alloc] init];
@@ -166,9 +180,15 @@ BOOL reloaded = NO;
         }
     });
 
-    self.cellView.frame = CGRectMake(0, 0, 320, 88);
-    self.cleanImageView.frame = self.cellView.frame;
-    self.blurredImageView.frame = self.cellView.frame;
+    self.tableView.frame = self.view.frame;
+    self.cleanImageView.frame = self.headerView.frame;
+    self.blurredImageView.frame = self.headerView.frame;
+
+    CGRect left;
+    CGRect right;
+    CGRectDivide(self.headerView.frame, &left, &right, 100, CGRectMinXEdge);
+    self.timeLabel.frame = CGRectInset(left, 10, 30);
+    self.titleLabel.frame = CGRectInset(right, 10, 30);
 
     /*
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
@@ -262,15 +282,13 @@ BOOL reloaded = NO;
 {
     if (self.expanded) {
 
-        self.cellView.hidden = NO;
-
         void (^animationsBlock)(void) = ^{
-            self.cellView.alpha = 1;
+            self.blurredImageView.alpha = 1;
         };
 
         void (^completionBlock)(BOOL) = ^(BOOL finished){
+            self.cleanImageView.hidden = YES;
             self.expanded = NO;
-
         };
 
         if (animated) {
@@ -288,13 +306,13 @@ BOOL reloaded = NO;
 - (void)expandAnimated:(BOOL)animated
 {
     if (!self.expanded) {
+        self.cleanImageView.hidden = NO;
 
         void (^animationsBlock)(void) = ^{
-            self.cellView.alpha = 0;
+            self.blurredImageView.alpha = 0;
         };
 
         void (^completionBlock)(BOOL) = ^(BOOL finished){
-            self.cellView.hidden = YES;
             self.expanded = YES;
         };
 
@@ -348,6 +366,12 @@ BOOL reloaded = NO;
         }
         NSLog(@"attendees: %@", [self.detailItem valueForKey:@"attendees"]);
         */
+
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"h:mm a"];
+        [self.timeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
+
+        self.titleLabel.text = [self.detailItem valueForKey:@"title"];
 
         UIImage* image = [assetManager imagePlaceholder];
         if ([self.detailItem valueForKey:@"imageURL"]) {
