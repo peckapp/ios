@@ -28,7 +28,8 @@
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIView *cellView;
 
-@property (strong, nonatomic) UIImageView *eventImageView;
+@property (strong, nonatomic) UIImageView *cleanImageView;
+@property (strong, nonatomic) UIImageView *blurredImageView;
 
 
 
@@ -104,13 +105,17 @@ BOOL reloaded = NO;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
-    self.tableView.hidden = YES;
 
     self.cellView = [[UIView alloc] init];
 
-    self.eventPhoto = [[UIImageView alloc] init];
-    self.eventPhoto.contentMode = UIViewContentModeScaleAspectFill;
-    [self.cellView addSubview:self.eventPhoto];
+    self.cleanImageView = [[UIImageView alloc] init];
+    self.cleanImageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.tableView.tableHeaderView = self.cleanImageView;
+
+    self.blurredImageView = [[UIImageView alloc] init];
+    self.blurredImageView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.cellView addSubview:self.blurredImageView];
+
     [self.view addSubview:self.cellView];
 
     /*
@@ -162,7 +167,8 @@ BOOL reloaded = NO;
     });
 
     self.cellView.frame = CGRectMake(0, 0, 320, 88);
-    self.eventPhoto.frame = self.cellView.frame;
+    self.cleanImageView.frame = self.cellView.frame;
+    self.blurredImageView.frame = self.cellView.frame;
 
     /*
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
@@ -256,12 +262,15 @@ BOOL reloaded = NO;
 {
     if (self.expanded) {
 
+        self.cellView.hidden = NO;
+
         void (^animationsBlock)(void) = ^{
-            self.eventPhoto.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
+            self.cellView.alpha = 1;
         };
 
         void (^completionBlock)(BOOL) = ^(BOOL finished){
-            self.tableView.hidden = YES;
+            self.expanded = NO;
+
         };
 
         if (animated) {
@@ -280,14 +289,13 @@ BOOL reloaded = NO;
 {
     if (!self.expanded) {
 
-        self.tableView.hidden = NO;
-
         void (^animationsBlock)(void) = ^{
-            self.eventPhoto.alpha = 0;
+            self.cellView.alpha = 0;
         };
 
         void (^completionBlock)(BOOL) = ^(BOOL finished){
-            self.eventPhoto.hidden = YES;
+            self.cellView.hidden = YES;
+            self.expanded = YES;
         };
 
         if (animated) {
@@ -342,17 +350,32 @@ BOOL reloaded = NO;
         */
 
         UIImage* image = [assetManager imagePlaceholder];
-        if([self.detailItem valueForKey:@"imageURL"]){
-            //self.eventPhoto = [self imageForURL:[self.detailItem valueForKey:@"imageURL"]];
-             NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"imageURL"]]];
-             UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-            if(cachedImage){
-                self.eventPhoto.image = cachedImage;
-            }else{
-                [self.eventPhoto setImageWithURL:imageURL placeholderImage:image];
+        if ([self.detailItem valueForKey:@"imageURL"]) {
+            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"imageURL"]]];
+            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+            if (cachedImage) {
+                self.cleanImageView.image = cachedImage;
             }
-        }else{
-            self.eventPhoto.image = image;
+            else {
+                [self.cleanImageView setImageWithURL:imageURL placeholderImage:image];
+            }
+        }
+        else {
+            self.cleanImageView.image = image;
+        }
+
+        if ([self.detailItem valueForKey:@"imageURL"]) {
+            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"blurredImageURL"]]];
+            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+            if (cachedImage) {
+                self.blurredImageView.image = cachedImage;
+            }
+            else {
+                [self.blurredImageView setImageWithURL:imageURL placeholderImage:image];
+            }
+        }
+        else {
+            self.blurredImageView.image = image;
         }
     }
 }
@@ -455,7 +478,6 @@ BOOL reloaded = NO;
     {
         case NSFetchedResultsChangeInsert:{
             [tableView
-             //the cell must be inserted below the post cell
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             
@@ -500,12 +522,9 @@ BOOL reloaded = NO;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-
     id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
     return [sectionInfo numberOfObjects];
-
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -522,7 +541,7 @@ BOOL reloaded = NO;
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath{
     NSLog(@"configure cell");
-    cell.parentTableView=self;
+    cell.parentTableView = self;
 
     Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]];
     cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
