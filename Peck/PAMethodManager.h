@@ -16,5 +16,5 @@
 
 -(void)showRegisterAlert:(NSString*)message forViewController:(UIViewController*)sender;
 -(UIImageView*)imageForPeer:(Peer*)peer;
--(void)postInfoToFacebook:(NSDictionary*)eventInfo;
+-(void)postInfoToFacebook:(NSDictionary*)eventInfo withImage:(NSData*)imageDat; 
 @end

@@ -128,7 +128,7 @@ BOOL reloaded = NO;
     
     NSLog(@"view will appear");
     
-    viewingEvent=YES;
+    
     //[self registerForKeyboardNotifications];
     NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
     
