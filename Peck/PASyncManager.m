@@ -510,7 +510,7 @@
         NSLog(@"in secondary thread to update peer info");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
-        
+        _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
         [[PASessionManager sharedClient] GET:usersAPI
                                   parameters:[self authenticationParameters]
@@ -523,6 +523,7 @@
                  NSNumber *newID = [userAttributes objectForKey:@"id"];
                  BOOL userAlreadyExists = [self objectExists:newID withType:@"Peer" andCategory:nil];
                  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                 [self.persistentStoreCoordinator lock];
                  if(!userAlreadyExists && !([[defaults objectForKey:@"user_id"] integerValue]==[newID integerValue])){
                      //NSLog(@"about to add the peer");
                      if(![[userAttributes objectForKey:first_name_define] isKindOfClass:[NSNull class]]){
@@ -537,6 +538,9 @@
                          [self setAttributesInPeer:peer withDictionary:userAttributes];
                      }
                  }
+                 NSError* error = nil;
+                 [_managedObjectContext save:&error];
+                 [self.persistentStoreCoordinator unlock];
              }
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -695,6 +699,7 @@
     dispatch_async(queue, ^{
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
+        _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
         // no parameters needed here since the list of institutions is needed to get a user id
         [[PASessionManager sharedClient] GET:institutionsAPI
@@ -705,12 +710,16 @@
                                          NSArray *responseInstitutions = [institutionsDictionary objectForKey:@"institutions"];
                                          for (NSDictionary *institutionAttributes in responseInstitutions) {
                                              NSNumber * instID = [institutionAttributes objectForKey:@"id"];
+                                             [self.persistentStoreCoordinator lock];
                                              BOOL institutionAlreadyExists = [self objectExists:instID withType:@"Institution" andCategory:nil];
                                              if ( !institutionAlreadyExists ) {
                                                  //NSLog(@"Adding Institution: %@",[institutionAttributes objectForKey:@"name"]);
                                                  Institution * institution = [NSEntityDescription insertNewObjectForEntityForName:@"Institution" inManagedObjectContext:_managedObjectContext];
                                                  [self setAttributesInInstitution:institution withDictionary:institutionAttributes];
                                              }
+                                             NSError* error = nil;
+                                             [_managedObjectContext save:&error];
+                                             [self.persistentStoreCoordinator unlock];
                                          }
                                          callbackBlock(YES);
                                      }
@@ -751,6 +760,7 @@
         NSLog(@"in secondary thread");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
+        _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
         [[PASessionManager sharedClient] GET:exploreAPI
                                   parameters:[self authenticationParameters]
@@ -759,8 +769,10 @@
              //NSLog(@"explore JSON: %@",JSON);
              NSDictionary *exploreDictionary = (NSDictionary*)JSON;
              NSArray *eventsFromResponse = [exploreDictionary objectForKey:@"explore_events"];
+             [self.persistentStoreCoordinator lock];
              for (NSDictionary *eventAttributes in eventsFromResponse) {
                  NSNumber *newID = [eventAttributes objectForKey:@"id"];
+                 
                  BOOL eventAlreadyExists = [self objectExists:newID withType:@"Explore" andCategory:@"event"];
                  if(!eventAlreadyExists){
                      NSLog(@"about to add the explore event");
@@ -768,8 +780,12 @@
                      [self setAttributesInExplore:explore withDictionary:eventAttributes andCategory:@"event"];
                      //NSLog(@"EXPLORE: %@",explore);
                  }
+                 
+                 
              }
+             
              NSDictionary* announcementsFromResponse = [exploreDictionary objectForKey:@"explore_announcements"];
+            
              for(NSDictionary *announcementAttributes in announcementsFromResponse){
                  NSNumber *newID = [announcementAttributes objectForKey:@"id"];
                  BOOL announcementAlreadyExists = [self objectExists:newID withType:@"Explore" andCategory:@"announcement"];
@@ -779,6 +795,9 @@
                      [self setAttributesInExplore:explore withDictionary:announcementAttributes andCategory:@"announcement"];
                  }
              }
+             NSError* error = nil;
+             [_managedObjectContext save:&error];
+             [self.persistentStoreCoordinator unlock];
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                          NSLog(@"ERROR: %@",error);
@@ -1089,6 +1108,7 @@
 -(void)updatePecks{
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
+    _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* peckURL = [@"api/pecks?user_id=" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
@@ -1102,11 +1122,16 @@
          for(NSDictionary* peckAttributes in pecks){
              NSNumber* newID = [peckAttributes objectForKey:@"id"];
              //BOOL peckAlreadyExists = [self objectExists:newID withType:@"Peck" andCategory:nil];
+             [self.persistentStoreCoordinator lock];
              Peck* peck = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Peck" andType:nil];
              if(!peck){
+                 NSLog(@"adding a peck to core data");
                  peck = [NSEntityDescription insertNewObjectForEntityForName:@"Peck" inManagedObjectContext: _managedObjectContext];
              }
              [self setAttributesInPeck:peck withDictionary:peckAttributes];
+             NSError* error = nil;
+             [_managedObjectContext save:&error];
+             [self.persistentStoreCoordinator unlock];
          }
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -1138,6 +1163,7 @@
         NSLog(@"in secondary thread to update dining");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
+        _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
         NSCalendar *calendar = [NSCalendar currentCalendar];
         NSDateComponents *components = [calendar components:(NSWeekdayCalendarUnit) fromDate:[NSDate date]];
@@ -1151,15 +1177,22 @@
          (NSURLSessionDataTask * __unused task, id JSON) {
              NSDictionary *diningDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_opportunities"];
+             [self.persistentStoreCoordinator lock];
              for (NSDictionary *diningAttributes in postsFromResponse){
+                 
                  NSNumber *newID = [diningAttributes objectForKey:@"id"];
                  //BOOL eventAlreadyExists = [self objectExists:newID withType:@"Event" andCategory:@"dining"];
+                
                  Event* diningEvent = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:@"dining"];
                  if(!diningEvent){
                      diningEvent = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
                  }
                  [self setAttributesInDiningEvent:diningEvent withDictionary:diningAttributes];
+                
              }
+             NSError* error = nil;
+             [_managedObjectContext save:&error];
+             [self.persistentStoreCoordinator unlock];
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                          NSLog(@"ERROR: %@",error);
@@ -1187,7 +1220,8 @@
         //NSLog(@"in secondary thread to update dining");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
-        
+        _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
+    
         [[PASessionManager sharedClient] GET:diningPlacesURL
                                   parameters:[self authenticationParameters]
                                      success:^
@@ -1196,7 +1230,9 @@
              NSDictionary *diningDictionary = (NSDictionary*)JSON;
              NSDictionary *diningAttributes = [diningDictionary objectForKey:@"dining_place"];
              NSNumber *newID = [diningAttributes objectForKey:@"id"];
+             [self.persistentStoreCoordinator lock];
              BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace" andCategory:nil];
+             
              if(!diningPlaceAlreadyExists){
                     NSLog(@"setting dining place");
                     DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
@@ -1204,6 +1240,9 @@
                     [viewController addDiningPlace:diningPlace withPeriod:diningPeriod];
                 
              }
+             NSError* error = nil;
+             [_managedObjectContext save:&error];
+             [self.persistentStoreCoordinator unlock];
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                          NSLog(@"ERROR: %@",error);
@@ -1229,6 +1268,7 @@
     
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
+    _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
     
     [[PASessionManager sharedClient] GET:diningPeriodsURL
                               parameters:[self authenticationParameters]
@@ -1238,6 +1278,7 @@
          NSDictionary *periods = (NSDictionary*)JSON;
          NSArray * diningPeriodArray = [periods objectForKey:@"dining_periods"];
          NSMutableArray *diningPeriods = [[NSMutableArray alloc] init];
+         [self.persistentStoreCoordinator lock];
          for (NSDictionary *diningAttributes in diningPeriodArray){
              NSNumber *newID = [diningAttributes objectForKey:@"id"];
              BOOL diningPeriodAlreadyExists = [self objectExists:newID withType:@"DiningPeriod" andCategory:nil];
@@ -1248,6 +1289,9 @@
                  [diningPeriods addObject:diningPeriod];
              }
          }
+         NSError* error = nil;
+         [_managedObjectContext save:&error];
+         [self.persistentStoreCoordinator unlock];
          for(int i=0;i<[diningPeriods count];i++){
              [viewController fetchDiningPlace:diningPeriods[i]];
          }
@@ -1287,6 +1331,7 @@
     
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
+    _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
     
     [[PASessionManager sharedClient] GET:menuItemsURL
                               parameters:[self authenticationParameters]
@@ -1295,6 +1340,7 @@
          //NSLog(@"menu items JSON %@", JSON);
          NSDictionary *items = (NSDictionary*)JSON;
          NSArray * menuItemArray = [items objectForKey:@"menu_items"];
+         [self.persistentStoreCoordinator lock];
          for (NSDictionary *menuItemAttributes in menuItemArray){
              NSNumber *newID = [menuItemAttributes objectForKey:@"id"];
              BOOL menuItemAlreadyExists = [self objectExists:newID withType:@"MenuItem" andCategory:nil];
@@ -1304,6 +1350,9 @@
                  [self setAttributesInMenuItem:menuItem withDictionary:menuItemAttributes andPlace:diningPlace andOpportunity:diningOpportunity];
              }
          }
+         NSError* error = nil;
+         [_managedObjectContext save:&error];
+         [self.persistentStoreCoordinator unlock];
     }
      
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -1354,6 +1403,7 @@
     
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
+    _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
     
     [[PASessionManager sharedClient] GET:announcementsURL
                                parameters:[self authenticationParameters]
@@ -1362,8 +1412,10 @@
          NSLog(@"announcement JSON: %@", JSON);
          NSDictionary* json = (NSDictionary*)JSON;
          NSArray* announcements = [json objectForKey:@"announcements"];
+         [self.persistentStoreCoordinator lock];
          for(NSDictionary* announcementAttributes in announcements){
              NSNumber* newID = [announcementAttributes objectForKey:@"id"];
+             
              BOOL announcementAlreadyExists = [self objectExists:newID withType:@"Announcement" andCategory:nil];
              if(!announcementAlreadyExists){
                  //if the announcement is not already in core data
@@ -1376,6 +1428,9 @@
                  [self setAttributesInAnnouncement:announcement withDictionary:announcementAttributes];
              }
          }
+         NSError* error = nil;
+         [_managedObjectContext save:&error];
+         [self.persistentStoreCoordinator unlock];
          
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -1521,6 +1576,7 @@
         NSLog(@"in secondary thread to update events");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
+        _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
         [[PASessionManager sharedClient] GET:simple_eventsAPI
                                   parameters:[self authenticationParameters]
@@ -1529,6 +1585,7 @@
              //NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
+             [self.persistentStoreCoordinator lock];
              for (NSDictionary *eventAttributes in postsFromResponse) {
                 NSNumber *newID = [eventAttributes objectForKey:@"id"];
                 Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:[eventAttributes objectForKey:@"simple"]];
@@ -1538,6 +1595,9 @@
                  [self setAttributesInEvent:event withDictionary:eventAttributes];
                  //We will set the attributes of the event even if it was already in core data in case the attributes of the event have changed (if it has been edited or people have chosen to attend it).
              }
+             NSError* error = nil;
+             [_managedObjectContext save:&error];
+             [self.persistentStoreCoordinator unlock];
              
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
