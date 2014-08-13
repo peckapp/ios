@@ -85,7 +85,7 @@ NSCache *imageCache;
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;
     
-    cell.photoView.image = [assetManager imagePlaceholder];
+    
     
     if(tempExplore.imageURL){
         NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempExplore.imageURL]];
@@ -97,6 +97,8 @@ NSCache *imageCache;
         else {
             [cell.photoView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
         }
+    }else{
+        cell.photoView.image = [assetManager imagePlaceholder];
     }
     
 }

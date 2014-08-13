@@ -1185,6 +1185,9 @@
         NSLog(@"INVITATION ID: %@", [dictionary objectForKey:@"invitation"]);
         peck.invitation_id =[dictionary objectForKey:@"invitation"];
     }
+    if(![[dictionary objectForKey:@"refers_to"] isKindOfClass:[NSNull class]]){
+        peck.refers_to =[dictionary objectForKey:@"refers_to"];
+    }
     peck.notification_type = [dictionary objectForKey:@"notification_type"];
     peck.interacted_with = [dictionary objectForKey:@"interacted"];
     peck.invited_by = [dictionary objectForKey:@"invited_by"];

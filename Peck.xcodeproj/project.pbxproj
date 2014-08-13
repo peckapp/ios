@@ -75,7 +75,6 @@
 		A43BF0FF1979B4A50009B7AD /* PAInvitationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0FD1979B4A50009B7AD /* PAInvitationCell.m */; };
 		A43BF1001979B4A50009B7AD /* PAInvitationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A43BF0FE1979B4A50009B7AD /* PAInvitationCell.xib */; };
 		A43BF1021979BC240009B7AD /* circles.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = A43BF1011979BC240009B7AD /* circles.jpeg */; };
-		A43ED454198C0967007A6BA9 /* Peck.m in Sources */ = {isa = PBXBuildFile; fileRef = A43ED453198C0967007A6BA9 /* Peck.m */; };
 		A463F384194B959800ED441F /* PACircleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F382194B959800ED441F /* PACircleCell.m */; };
 		A463F385194B959800ED441F /* PACircleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A463F383194B959800ED441F /* PACircleCell.xib */; };
 		A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */; };
@@ -103,6 +102,7 @@
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
 		A4925C0D194A1B32001AAC4A /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */; };
+		A4988A50199B9FFC005C43BC /* Peck.m in Sources */ = {isa = PBXBuildFile; fileRef = A4988A4F199B9FFC005C43BC /* Peck.m */; };
 		A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A99BAD19815AA4002DFD49 /* Subscription.m */; };
 		A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */; };
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
@@ -292,8 +292,6 @@
 		A43BF0FD1979B4A50009B7AD /* PAInvitationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAInvitationCell.m; sourceTree = "<group>"; };
 		A43BF0FE1979B4A50009B7AD /* PAInvitationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAInvitationCell.xib; sourceTree = "<group>"; };
 		A43BF1011979BC240009B7AD /* circles.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = circles.jpeg; sourceTree = "<group>"; };
-		A43ED452198C0967007A6BA9 /* Peck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peck.h; sourceTree = "<group>"; };
-		A43ED453198C0967007A6BA9 /* Peck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peck.m; sourceTree = "<group>"; };
 		A463F381194B959800ED441F /* PACircleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACircleCell.h; sourceTree = "<group>"; };
 		A463F382194B959800ED441F /* PACircleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACircleCell.m; sourceTree = "<group>"; };
 		A463F383194B959800ED441F /* PACircleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PACircleCell.xib; sourceTree = "<group>"; };
@@ -338,6 +336,8 @@
 		A4925C08194A17A1001AAC4A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A4925C0A194A17AB001AAC4A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		A4988A4E199B9FFC005C43BC /* Peck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peck.h; sourceTree = "<group>"; };
+		A4988A4F199B9FFC005C43BC /* Peck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peck.m; sourceTree = "<group>"; };
 		A4A99BAC19815AA4002DFD49 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
 		A4A99BAD19815AA4002DFD49 /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Subscription.m; sourceTree = "<group>"; };
 		A4B772E31945FEFB00A31252 /* PAConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAConfigureViewController.h; sourceTree = "<group>"; };
@@ -775,9 +775,9 @@
 		DDDAEDE019475EE7004CE102 /* Pecks */ = {
 			isa = PBXGroup;
 			children = (
+				A4988A4E199B9FFC005C43BC /* Peck.h */,
+				A4988A4F199B9FFC005C43BC /* Peck.m */,
 				A4F04BF71995158F00290CF2 /* View.xib */,
-				A43ED452198C0967007A6BA9 /* Peck.h */,
-				A43ED453198C0967007A6BA9 /* Peck.m */,
 				DDDAEDDD19475EBA004CE102 /* PAPecksViewController.h */,
 				DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */,
 				8629251F193CBFD40057CA41 /* PAPeckCell.h */,
@@ -1150,6 +1150,7 @@
 				A4677D52197562B1007E3C3A /* PADiningOpportunityCell.m in Sources */,
 				A43BF0F6197978690009B7AD /* PAChangePasswordViewController.m in Sources */,
 				A412E1D41986E63800384A11 /* Comment.m in Sources */,
+				A4988A50199B9FFC005C43BC /* Peck.m in Sources */,
 				867B52D619509F5000BEB37B /* PASessionManager.m in Sources */,
 				A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */,
 				DD3701401990081F006B63E8 /* PANestedTableViewController.m in Sources */,
@@ -1168,7 +1169,6 @@
 				A482259919914E0B007D9A9F /* Explore.m in Sources */,
 				A4677D3F19743A05007E3C3A /* Circle.m in Sources */,
 				A463F384194B959800ED441F /* PACircleCell.m in Sources */,
-				A43ED454198C0967007A6BA9 /* Peck.m in Sources */,
 				863843DD193CB75F004110F5 /* PARegisterViewController.m in Sources */,
 				A4677D4E19746F45007E3C3A /* MenuItem.m in Sources */,
 				A46F0926196F2A7600CFA5D0 /* PADiningCell.m in Sources */,

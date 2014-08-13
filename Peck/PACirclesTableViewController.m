@@ -421,7 +421,9 @@ BOOL viewingCircles;
     [self configureCell:cell atIndexPath:indexPath];
     
     NSLog(@"configured the cell at index path: %li",(long)indexPath.row);
+    
     NSString* circleID = [cell.circle.id stringValue];
+    NSLog(@"get comments for circle: %@", circleID);
     [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
     
     [self addCommentTextFieldToCell:cell];

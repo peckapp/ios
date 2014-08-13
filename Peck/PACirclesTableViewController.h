@@ -38,6 +38,7 @@
 -(void)dismissCircleTitleKeyboard;
 -(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath;
 -(void)expandCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath;
+- (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
