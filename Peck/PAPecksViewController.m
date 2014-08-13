@@ -123,7 +123,7 @@ static NSString *nibName = @"PAPeckCell";
         
     }
 }
--(void)showNoPecks{
+- (void)showNoPecks {
     self.tableView.backgroundColor = [[PAAssetManager sharedManager] unavailableColor];
     self.tableView.separatorColor = [[PAAssetManager sharedManager] unavailableColor];
     self.noPecksLabel.text = @"You have no Pecks";

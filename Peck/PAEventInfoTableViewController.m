@@ -38,13 +38,15 @@
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UIView *imagesView;
-@property (strong, nonatomic) UIView *floatingTextView;
 
 @property (strong, nonatomic) UIImageView *cleanImageView;
 @property (strong, nonatomic) UIImageView *blurredImageView;
 
+@property (strong, nonatomic) UIImageView *dropShadow;
+
 @property (strong, nonatomic) UILabel *timeLabel;
 @property (strong, nonatomic) UILabel *titleLabel;
+@property (strong, nonatomic) UILabel *fullTitleLabel;
 @property (strong, nonatomic) UILabel *descriptionLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
 
@@ -119,8 +121,6 @@ BOOL reloaded = NO;
 
     self.headerView = [[UIView alloc] init];
     self.imagesView = [[UIView alloc] init];
-    self.floatingTextView = [[UIView alloc] init];
-    //self.floatingTextView.backgroundColor = [UIColor darkGrayColor];
 
     self.cleanImageView = [[UIImageView alloc] init];
     self.cleanImageView.contentMode = UIViewContentModeCenter;
@@ -135,13 +135,24 @@ BOOL reloaded = NO;
     self.timeLabel.font = [UIFont boldSystemFontOfSize:17.0];
     self.timeLabel.textAlignment = NSTextAlignmentRight;
     // self.timeLabel.backgroundColor = [UIColor lightGrayColor];
-    [self.floatingTextView addSubview:self.timeLabel];
+    [self.blurredImageView addSubview:self.timeLabel];
 
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
     //self.titleLabel.backgroundColor = [UIColor lightGrayColor];
-    [self.floatingTextView addSubview:self.titleLabel];
+    [self.blurredImageView addSubview:self.titleLabel];
+
+    self.dropShadow = [[UIImageView alloc] initWithImage:[assetManager horizontalShadow]];
+    self.dropShadow.frame = CGRectMake(0, -64, self.view.frame.size.width, 64);
+    self.dropShadow.transform = CGAffineTransformMakeRotation(M_PI);
+    [self.headerView addSubview:self.dropShadow];
+
+    self.fullTitleLabel = [[UILabel alloc] init];
+    self.fullTitleLabel.textColor = [UIColor whiteColor];
+    self.fullTitleLabel.font = [UIFont boldSystemFontOfSize:21.0];
+    //self.titleLabel.backgroundColor = [UIColor lightGrayColor];
+    [self.headerView addSubview:self.fullTitleLabel];
 
     self.dateLabel = [[UILabel alloc] init];
     //self.dateLabel.backgroundColor = [UIColor lightGrayColor];
@@ -157,7 +168,6 @@ BOOL reloaded = NO;
     self.headerView.backgroundColor = [UIColor whiteColor];
 
     [self.view addSubview:self.imagesView];
-    [self.view addSubview:self.floatingTextView];
     
     
 
@@ -228,16 +238,14 @@ BOOL reloaded = NO;
     self.cleanImageView.frame = self.imagesView.frame;
     self.blurredImageView.frame = self.imagesView.frame;
 
-
-    self.floatingTextView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
     CGRect left;
     CGRect right;
-    CGRectDivide(self.floatingTextView.frame, &left, &right, 90, CGRectMinXEdge);
+    CGRectDivide(self.blurredImageView.frame, &left, &right, 90, CGRectMinXEdge);
     self.timeLabel.frame = left;
     self.titleLabel.frame = right;
     self.titleLabel.frame = CGRectInset(self.titleLabel.frame, buffer, 0);
-    [self.floatingTextView sizeToFit];
 
+    self.fullTitleLabel.frame = CGRectMake(buffer, -buffer * 3, self.view.frame.size.width - buffer * 2, buffer * 3);
 
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
     self.dateLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, 0);
@@ -343,7 +351,7 @@ BOOL reloaded = NO;
 {
     if (!self.expanded) {
 
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         self.tableView.backgroundColor = [UIColor clearColor];
         self.tableView.dataSource = self;
         self.tableView.delegate = self;
@@ -355,7 +363,6 @@ BOOL reloaded = NO;
         self.cleanImageView.hidden = NO;
 
         void (^animationsBlock)(void) = ^{
-            self.floatingTextView.frame = CGRectOffset(self.floatingTextView.frame, 0, imageHeight - self.floatingTextView.frame.size.height);
             self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
             self.cleanImageView.frame = self.imagesView.frame;
             self.blurredImageView.frame = self.imagesView.frame;
@@ -400,7 +407,6 @@ BOOL reloaded = NO;
     if (self.expanded) {
 
         void (^animationsBlock)(void) = ^{
-            self.floatingTextView.frame = CGRectOffset(self.floatingTextView.frame, 0, -imageHeight + self.floatingTextView.frame.size.height);
             self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
             self.cleanImageView.frame = self.imagesView.frame;
             self.blurredImageView.frame = self.imagesView.frame;
@@ -471,6 +477,7 @@ BOOL reloaded = NO;
         [self.timeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
 
         self.titleLabel.text = [self.detailItem valueForKey:@"title"];
+        self.fullTitleLabel.text = [self.detailItem valueForKey:@"title"];
 
         [dateFormatter setDateFormat:@"MMM dd, yyyy h:mm a"];
         [self.dateLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
