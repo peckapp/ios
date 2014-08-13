@@ -97,9 +97,8 @@ NSCache *imageCache;
             
         }
         else {
-            [cell.photoView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
-            [cell.photoView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:imageURL] placeholderImage:[assetManager imagePlaceholder] success:^(NSURLRequest* request, NSHTTPURLResponse* response, UIImage* image){
-                //cell.photoView.image = image;
+            //[cell.photoView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+            [cell.photoView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:imageURL] placeholderImage:[assetManager greyBackground] success:^(NSURLRequest* request, NSHTTPURLResponse* response, UIImage* image){
                 
                 [UIView transitionWithView:cell.photoView
                                   duration:1.0f
