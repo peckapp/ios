@@ -141,6 +141,7 @@ BOOL loggedIn;
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         if(appdelegate.circleViewController.selectedIndexPath){
             //if there is a currently expanded cell, we must condense this cell before logging out
+            
             PACircleCell* cell = (PACircleCell*)[appdelegate.circleViewController.tableView cellForRowAtIndexPath:appdelegate.circleViewController.selectedIndexPath];
             
             [appdelegate.circleViewController condenseCircleCell:cell atIndexPath:appdelegate.circleViewController.selectedIndexPath];
