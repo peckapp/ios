@@ -1162,8 +1162,9 @@
              if(!peck){
                  NSLog(@"adding a peck to core data");
                  peck = [NSEntityDescription insertNewObjectForEntityForName:@"Peck" inManagedObjectContext: _managedObjectContext];
+                 [self setAttributesInPeck:peck withDictionary:peckAttributes];
              }
-             [self setAttributesInPeck:peck withDictionary:peckAttributes];
+             [self setAttributesInExistingPeck:peck withDictionary:peckAttributes];
              NSError* error = nil;
              [_managedObjectContext save:&error];
              [self.persistentStoreCoordinator unlock];
@@ -1187,6 +1188,12 @@
     peck.notification_type = [dictionary objectForKey:@"notification_type"];
     peck.interacted_with = [dictionary objectForKey:@"interacted"];
     peck.invited_by = [dictionary objectForKey:@"invited_by"];
+}
+
+-(void)setAttributesInExistingPeck:(Peck*)peck withDictionary:(NSDictionary*)dictionary{
+    if([peck.interacted_with boolValue]!=[[dictionary objectForKey:@"interacted"] boolValue] ){
+        peck.interacted_with = [dictionary objectForKey:@"interacted"];
+    }
 }
 
 #pragma mark - Dining actions
