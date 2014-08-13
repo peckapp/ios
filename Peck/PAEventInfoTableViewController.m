@@ -251,7 +251,6 @@ BOOL reloaded = NO;
     [super viewWillDisappear:animated];
     [self.keyboardAccessory resignFirstResponder];
     
-    
     //[self deregisterFromKeyboardNotifications];
 }
 
@@ -308,7 +307,17 @@ BOOL reloaded = NO;
 - (void)expandAnimated:(BOOL)animated
 {
     if (!self.expanded) {
+        //self.tableView = nil;
+        self.fetchedResultsController = nil;
+        
+        NSError * error = nil;
+        if (![self.fetchedResultsController performFetch:&error])
+        {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
 
+        
         self.view.backgroundColor = [UIColor whiteColor];
         self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         self.tableView.backgroundColor = [UIColor clearColor];
@@ -333,14 +342,6 @@ BOOL reloaded = NO;
         void (^completionBlock)(BOOL) = ^(BOOL finished){
             self.expanded = YES;
 
-            self.fetchedResultsController = nil;
-
-            NSError * error = nil;
-            if (![self.fetchedResultsController performFetch:&error])
-            {
-                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-                abort();
-            }
             
             NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -384,6 +385,7 @@ BOOL reloaded = NO;
             [self.keyboardAccessoryView removeFromSuperview];
             [self.tableView removeFromSuperview];
             self.tableView = nil;
+            _fetchedResultsController = nil;
 
             self.cleanImageView.hidden = YES;
             self.expanded = NO;
@@ -544,6 +546,7 @@ BOOL reloaded = NO;
                                                              cacheName:nil];
     
     aFetchedResultsController.delegate = self;
+    NSLog(@"number of fetched objects: %lu", (unsigned long)[aFetchedResultsController.fetchedObjects count]);
     self.fetchedResultsController = aFetchedResultsController;
     
     return _fetchedResultsController;
@@ -650,7 +653,8 @@ BOOL reloaded = NO;
     NSLog(@"configure cell");
     cell.parentTableView = self;
 
-    Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]];
+    //Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]];
+    Comment* tempComment = [_fetchedResultsController objectAtIndexPath:indexPath];
     cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
     [cell.likeButton setHidden:NO];
     [cell.numberOfLikesLabel setHidden:NO];

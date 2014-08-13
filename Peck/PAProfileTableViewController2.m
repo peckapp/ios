@@ -11,6 +11,7 @@
 #import "PASyncManager.h"
 #import "PAFetchManager.h"
 #import "PAInitialViewController.h"
+#import "PAFriendProfileViewController.h"
 
 @interface PAProfileTableViewController2 ()
 
@@ -141,6 +142,7 @@ BOOL loggedIn;
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         if(appdelegate.circleViewController.selectedIndexPath){
             //if there is a currently expanded cell, we must condense this cell before logging out
+            
             PACircleCell* cell = (PACircleCell*)[appdelegate.circleViewController.tableView cellForRowAtIndexPath:appdelegate.circleViewController.selectedIndexPath];
             
             [appdelegate.circleViewController condenseCircleCell:cell atIndexPath:appdelegate.circleViewController.selectedIndexPath];
@@ -280,7 +282,12 @@ BOOL loggedIn;
 #pragma mark - table view deleagate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    if(indexPath.section==0 && indexPath.row==5){
+        NSLog(@"view the user's profile");
+        UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UINavigationController *navController = [loginStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
+        [self presentViewController:navController animated:YES completion:nil];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

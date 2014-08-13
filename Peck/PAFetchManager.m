@@ -66,6 +66,7 @@
     [self removeAllObjectsOfType:@"Announcement"];
     [self removeAllObjectsOfType:@"Comment"];
     [self removeAllObjectsOfType:@"Peck"];
+    [self removeAllObjectsOfType:@"Event"];
     [[PASyncManager globalSyncManager] updatePeerInfo];
 }
 
