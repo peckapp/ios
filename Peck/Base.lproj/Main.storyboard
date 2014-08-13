@@ -32,9 +32,9 @@
         <!--Explore-->
         <scene sceneID="09g-Dv-sHg">
             <objects>
-                <tableViewController title="Explore" id="dbL-Fg-Sgg" customClass="PAExploreTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="explore" title="Explore" id="dbL-Fg-Sgg" customClass="PAExploreTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="R1T-hS-FbY">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
@@ -43,37 +43,17 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Explore" id="csn-Eh-RQM"/>
-                    <connections>
-                        <segue destination="gt2-YE-863" kind="push" identifier="showMessageDetail" id="zdc-7i-jBF"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZzG-Tl-v6O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1076" y="1078"/>
-        </scene>
-        <!--Explore-->
-        <scene sceneID="RJ5-1c-Ets">
-            <objects>
-                <navigationController storyboardIdentifier="explore" title="Explore" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="YgY-YD-cce" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="FaF-Ex-tMg"/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="YHk-3p-VBI">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="dbL-Fg-Sgg" kind="relationship" relationship="rootViewController" id="rcw-vZ-dVm"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vlZ-OQ-IMw" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1608" y="1078"/>
         </scene>
         <!--Detail-->
         <scene sceneID="Zfp-18-CXc">
             <objects>
                 <viewController storyboardIdentifier="feedInfo" useStoryboardIdentifierAsRestorationIdentifier="YES" id="gt2-YE-863" customClass="PAExploreInfoViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VHI-HX-z4R">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="PWy-cT-Ykw">
@@ -1027,7 +1007,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4sN-Pf-ic2">
-                                                    <rect key="frame" x="17" y="-2.5" width="302" height="90"/>
+                                                    <rect key="frame" x="17" y="-2.5" width="302" height="90.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
