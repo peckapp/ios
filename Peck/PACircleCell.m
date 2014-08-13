@@ -59,6 +59,9 @@ PAAssetManager * assetManager;
     self.commentsTableView.dataSource=self;
     
     
+    //NSLog(@"the superview height: %f", self.b);
+    //self.commentsTableView.frame = CGRectMake(0, 0, self.superview.frame.size.width, <#CGFloat height#>)
+    
     self.suggestedMembersTableView.delegate=self;
     self.suggestedMembersTableView.dataSource=self;
     

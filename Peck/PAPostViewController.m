@@ -409,6 +409,7 @@
 
 # pragma mark - text field delegate
 
+/*
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
     
     NSIndexPath* indexPath = [NSIndexPath indexPathForRow:7 inSection:0];
@@ -416,7 +417,8 @@
     
     return YES;
 }
-
+*/
+ 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     if(textField==self.titleField){
         [self.descriptionTextView becomeFirstResponder];
