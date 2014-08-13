@@ -268,23 +268,77 @@ static NSString *nibName = @"PAPeckCell";
         // Configure cell by loading a nib.
         [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
     }
     // Return cell size.
     return cell.frame.size.height;
 }
+
+- (NSInteger)daysBetweenDate:(NSDate*)fromDateTime andDate:(NSDate*)toDateTime
+{
+    NSDate *fromDate;
+    NSDate *toDate;
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    [calendar rangeOfUnit:NSDayCalendarUnit startDate:&fromDate
+                 interval:NULL forDate:fromDateTime];
+    [calendar rangeOfUnit:NSDayCalendarUnit startDate:&toDate
+                 interval:NULL forDate:toDateTime];
+    
+    NSDateComponents *difference = [calendar components:NSDayCalendarUnit
+                                               fromDate:fromDate toDate:toDate options:0];
+    
+    return [difference day];
+}
+
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     Peck* peck = [_fetchedResultsController objectAtIndexPath:indexPath];
     if([peck.notification_type isEqualToString:@"event_invite"]){
-        NSLog(@"show the detail of the event");
+        NSLog(@"show the detail of the event %@", peck.refers_to);
+        Event* event =[[PAFetchManager sharedFetchManager] getObject:peck.refers_to withEntityType:@"Event" andType:@"simple"];
+        if(event){
+            //If the event is already on the user's homepage, we want to bring them to that event
+            
+            /*
+            PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+            
+            NSInteger daysFromToday = [self daysBetweenDate:event.start_date andDate:[NSDate date]];
+            NSLog(@"number of days from today: %li", (long)daysFromToday);
+            
+            NSInteger daysFromSelectedDay = appdelegate.eventsViewController.selectedDay - daysFromToday;
+            
+            NSLog(@"difference in days: %li", (long)daysFromSelectedDay);
+            
+            [appdelegate.dropDownBar deselectAllItems];
+            
+            appdelegate.eventsViewController.animationTime = 0.001;
+            if(daysFromSelectedDay<0){
+                daysFromSelectedDay = -daysFromSelectedDay;
+                for(int i = 0; i<daysFromSelectedDay; i++){
+                    [appdelegate.eventsViewController transitionToRightTableView];
+                }
+            }else if(daysFromSelectedDay>0){
+                for(int i = 0; i<daysFromSelectedDay; i++){
+                    [appdelegate.eventsViewController transitionToLeftTableView];
+                }
+            }
+            appdelegate.eventsViewController.animationTime = 0.2;
+           */
+            
+
+            
+        }else{
+            //If the event is not on the user's homepage, then we want to display the event in the explore tab. First, we check to see if the event is in the user's core data (explore model). If it isn't, we must load the explore object manually from the webservice and handle the animations in the callback block.
+        }
+        
+        
     }else if([peck.notification_type isEqualToString:@"circle_comment"] || [peck.notification_type isEqualToString:@"circle_invite"]){
         NSLog(@"bring the user to the circle");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         [appdelegate.dropDownBar selectItemAtIndex:3];
-        //navigate to the circles table view controller
-        //[NSThread sleepForTimeInterval:0.5];
-        
         for(int i = 0; i<  [appdelegate.circleViewController.fetchedResultsController.fetchedObjects count]; i++){
            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
             Circle* circle =[appdelegate.circleViewController.fetchedResultsController objectAtIndexPath:indexPath];
@@ -298,8 +352,6 @@ static NSString *nibName = @"PAPeckCell";
                         [appdelegate.circleViewController condenseCircleCell:cell atIndexPath:appdelegate.circleViewController.selectedIndexPath];
                     }
                 }
-                
-                
                 [appdelegate.circleViewController.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
                 
                 PACircleCell* cell = (PACircleCell*)[ appdelegate.circleViewController.tableView cellForRowAtIndexPath:indexPath];

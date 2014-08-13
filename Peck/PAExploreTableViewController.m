@@ -100,7 +100,7 @@ NSCache *imageCache;
             [cell.photoView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:imageURL] placeholderImage:[assetManager greyBackground] success:^(NSURLRequest* request, NSHTTPURLResponse* response, UIImage* image){
                 
                 [UIView transitionWithView:cell.photoView
-                                  duration:1.0f
+                                  duration:.4f
                                    options:UIViewAnimationOptionTransitionCrossDissolve
                                 animations:^{
                                     cell.photoView.image = image;

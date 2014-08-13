@@ -27,6 +27,7 @@
 #define searchBarHeight 44
 #define parallaxRange 128
 
+
 #define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
 #define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
 
@@ -46,7 +47,7 @@ struct eventImage{
 @property (assign, nonatomic) CGRect centerTableViewFrame;
 @property (assign, nonatomic) CGRect rightTableViewFrame;
 
-@property (assign, nonatomic) NSInteger selectedDay;
+
 
 @property (strong, nonatomic) NSIndexPath * selectedCellIndex;
 
@@ -77,7 +78,11 @@ PAAssetManager * assetManager;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    appdelegate.eventsViewController = self;
+    
+    self.animationTime = 0.2;
+    
     self.helperImageView = [[UIImageView alloc] init];
     
     self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 44, 44)];
@@ -905,7 +910,7 @@ PAAssetManager * assetManager;
 {
     if (self.selectedCellIndex == nil) {
     NSLog(@"begin transition to right");
-    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+    [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.rightTableView.frame = self.centerTableViewFrame;
                          self.centerTableView.frame = self.leftTableViewFrame;
@@ -935,7 +940,7 @@ PAAssetManager * assetManager;
 {
     if (self.selectedCellIndex == nil) {
     NSLog(@"begin transition to left");
-    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+    [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.leftTableView.frame = self.centerTableViewFrame;
                          self.centerTableView.frame = self.rightTableViewFrame;

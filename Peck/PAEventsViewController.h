@@ -27,5 +27,12 @@
 
 @property (strong, nonatomic) UIImageView *placeholderImage;
 
+@property (assign, nonatomic) NSInteger selectedDay;
+
 @property (strong, nonatomic) NSCache *imageCache;
+@property (nonatomic) CGFloat animationTime;
+
+-(void)transitionToRightTableView;
+-(void)transitionToLeftTableView;
+
 @end
