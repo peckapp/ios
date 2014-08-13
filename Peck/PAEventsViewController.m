@@ -191,8 +191,6 @@ PAAssetManager * assetManager;
     NSLog(@"View will appear (events)");
     showingSearchBar = NO;
 
-    [self registerForKeyboardNotifications];
-
     searchBar.frame = CGRectMake(0, -searchBarHeight, self.view.frame.size.width, searchBarHeight);
 
     self.leftTableViewFrame = CGRectMake(-self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
@@ -233,7 +231,6 @@ PAAssetManager * assetManager;
     [self backButton:self];
     
     [self.view endEditing:YES];
-    [self deregisterFromKeyboardNotifications];
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
@@ -1059,6 +1056,7 @@ PAAssetManager * assetManager;
 
 #pragma mark - keyboard notifications
 
+/*
 - (void)registerForKeyboardNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
@@ -1100,6 +1098,7 @@ PAAssetManager * assetManager;
         self.centerTableView.frame = CGRectMake(self.centerTableView.frame.origin.x, self.centerTableView.frame.origin.y, self.centerTableView.frame.size.width, self.centerTableView.frame.size.height+keyboardSize.height);
     }
 }
+ */
 
 @end
 

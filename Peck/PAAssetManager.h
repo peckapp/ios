@@ -22,6 +22,7 @@
 
 + (id)sharedManager;
 
+- (UIView *)createShadowWithFrame:(CGRect)frame top:(BOOL)top;
 - (UIImageView *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView;
 - (UITextField *)createTextFieldWithFrame:(CGRect)frame;
 

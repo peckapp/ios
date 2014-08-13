@@ -55,6 +55,16 @@
     return img;
 }
 
+- (UIView *)createShadowWithFrame:(CGRect)frame top:(BOOL)top
+{
+    UIImageView *dropShadow = [[UIImageView alloc] initWithFrame:frame];
+    dropShadow.image = [self horizontalShadow];
+    if (top) {
+        dropShadow.transform = CGAffineTransformMakeRotation(M_PI);
+    }
+    return dropShadow;
+}
+
 - (UIImageView *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView
 {
     CGFloat size = 40;

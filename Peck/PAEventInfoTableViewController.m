@@ -39,8 +39,6 @@
 @property (strong, nonatomic) UIImageView *cleanImageView;
 @property (strong, nonatomic) UIImageView *blurredImageView;
 
-@property (strong, nonatomic) UIImageView *dropShadow;
-
 @property (strong, nonatomic) UILabel *timeLabel;
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UILabel *fullTitleLabel;
@@ -51,8 +49,6 @@
 
 @property (strong, nonatomic) UIView * keyboardAccessoryView;
 @property (strong, nonatomic) UITextField * keyboardAccessory;
-@property (strong, nonatomic) UIView * realKeyboardAccessoryView;
-@property (strong, nonatomic) UITextField * realKeyboardAccessory;
 @property (strong, nonatomic) UIButton * postButton;
 
 @end
@@ -77,8 +73,6 @@ BOOL reloaded = NO;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    
 
     assetManager = [PAAssetManager sharedManager];
     
@@ -139,10 +133,7 @@ BOOL reloaded = NO;
     //self.titleLabel.backgroundColor = [UIColor lightGrayColor];
     [self.blurredImageView addSubview:self.titleLabel];
 
-    self.dropShadow = [[UIImageView alloc] initWithImage:[assetManager horizontalShadow]];
-    self.dropShadow.frame = CGRectMake(0, -64, self.view.frame.size.width, 64);
-    self.dropShadow.transform = CGAffineTransformMakeRotation(M_PI);
-    [self.headerView addSubview:self.dropShadow];
+    [self.headerView addSubview:[assetManager createShadowWithFrame:CGRectMake(0, -64, self.view.frame.size.width, 64) top:YES]];
 
     self.fullTitleLabel = [[UILabel alloc] init];
     self.fullTitleLabel.textColor = [UIColor whiteColor];
@@ -165,40 +156,30 @@ BOOL reloaded = NO;
 
     [self.view addSubview:self.imagesView];
     
-    
 
-    //self.tableView.tableHeaderView = self.headerView;
 
-    /*
     self.keyboardAccessoryView = [[UIView alloc] init];
-    self.keyboardAccessory = [[UITextField alloc] init];
     self.keyboardAccessoryView.backgroundColor = [UIColor whiteColor];
-    self.keyboardAccessory.backgroundColor = [UIColor lightGrayColor];
-    [self.keyboardAccessoryView addSubview:self.keyboardAccessory];
-    self.keyboardAccessory.delegate = self;
-    [self.view addSubview:self.keyboardAccessoryView];
-    [self.view bringSubviewToFront:self.keyboardAccessoryView];
 
-    self.realKeyboardAccessoryView = [[UIView alloc] init];
-    self.realKeyboardAccessory = [[UITextField alloc] init];
-    self.realKeyboardAccessoryView.backgroundColor = [UIColor whiteColor];
-    self.realKeyboardAccessory.backgroundColor = [UIColor lightGrayColor];
-    self.realKeyboardAccessory.delegate = self;
+    self.keyboardAccessory = [assetManager createTextFieldWithFrame:CGRectZero];
+    self.keyboardAccessory.placeholder = @"Post a comment...";
+    self.keyboardAccessory.delegate = self;
+
+    [self.keyboardAccessoryView addSubview:self.keyboardAccessory];
 
     self.postButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
     [self.postButton addTarget:self action:@selector(didSelectPostButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.keyboardAccessoryView addSubview:self.postButton];
+    self.postButton.alpha = 0;
 
-    [self.realKeyboardAccessoryView addSubview:self.realKeyboardAccessory];
-    [self.realKeyboardAccessoryView addSubview:self.postButton];
-    self.keyboardAccessory.inputAccessoryView = self.realKeyboardAccessoryView;
-
+    /*
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(changeFirstResponder)
                                                  name:UIKeyboardDidShowNotification
                                                object:nil];
+     */
     
     [self.tableView reloadData];
-     */
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -253,21 +234,11 @@ BOOL reloaded = NO;
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, CGRectGetMaxY(self.descriptionLabel.frame) + buffer);
 
 
-
-
-    /*
      self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
-     self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
      self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
-     self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
-     self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0, self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
+     self.postButton.frame = CGRectMake(self.keyboardAccessoryView.frame.size.width - self.keyboardAccessoryView.frame.size.height, 0, self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.height);
 
-     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, self.keyboardAccessoryView.frame.size.height, 0);
-
-
-     [self.realKeyboardAccessory resignFirstResponder];
      [self.keyboardAccessory resignFirstResponder];
-     */
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -278,7 +249,6 @@ BOOL reloaded = NO;
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self.realKeyboardAccessory resignFirstResponder];
     [self.keyboardAccessory resignFirstResponder];
     
     
@@ -289,12 +259,6 @@ BOOL reloaded = NO;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
--(void)changeFirstResponder{
-    if(self.keyboardAccessory.isFirstResponder){
-        [self.realKeyboardAccessory becomeFirstResponder];
-    }
 }
 
 /*
@@ -353,7 +317,9 @@ BOOL reloaded = NO;
         self.tableView.tableHeaderView = self.headerView;
         [self.view addSubview:self.tableView];
         self.tableView.frame = self.view.frame;
-        self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, 0, 0);
+        self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, self.keyboardAccessoryView.frame.size.height, 0);
+
+        [self.view addSubview:self.keyboardAccessoryView];
 
         self.cleanImageView.hidden = NO;
 
@@ -383,6 +349,8 @@ BOOL reloaded = NO;
                     [NSThread sleepForTimeInterval:reloadTime];
                 }
             });
+
+            [self registerForKeyboardNotifications];
         };
 
         if (animated) {
@@ -401,8 +369,8 @@ BOOL reloaded = NO;
 {
     if (self.expanded) {
 
+        [self deregisterFromKeyboardNotifications];
         self.view.backgroundColor = [assetManager darkColor];
-
         [self.tableView setContentOffset:CGPointMake(0, -imageHeight) animated:YES];
 
         void (^animationsBlock)(void) = ^{
@@ -413,6 +381,7 @@ BOOL reloaded = NO;
         };
 
         void (^completionBlock)(BOOL) = ^(BOOL finished){
+            [self.keyboardAccessoryView removeFromSuperview];
             [self.tableView removeFromSuperview];
             self.tableView = nil;
 
@@ -825,7 +794,6 @@ BOOL reloaded = NO;
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     [cell.commentTextView resignFirstResponder];
      */
-    [self.realKeyboardAccessory resignFirstResponder];
     [self.keyboardAccessory resignFirstResponder];
 }
 
@@ -951,8 +919,7 @@ BOOL reloaded = NO;
                                         nil];
     
             [[PASyncManager globalSyncManager] postComment:dictionary];
-            
-            self.realKeyboardAccessory.text = @"";
+
         
         }else{
             [[PAMethodManager sharedMethodManager] showRegisterAlert:@"post a comment" forViewController:self];
@@ -998,22 +965,66 @@ BOOL reloaded = NO;
     
 }
 
-#pragma Text Fields
+#pragma mark - Text Fields
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    return YES;
+- (void)registerForKeyboardNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+
 }
 
-/*- (void)textFieldDidBeginEditing:(UITextField *)textField
+- (void)deregisterFromKeyboardNotifications {
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+
+}
+
+- (void)keyboardWillShow:(NSNotification*)notification
 {
-    if (textField == self.keyboardAccessory) {
-        [self.realKeyboardAccessory becomeFirstResponder];
-    }
-}*/
+    NSDictionary* info = [notification userInfo];
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
 
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
 
--(BOOL)textViewIsSmallerThanFrame:(NSString*)text{
+    self.keyboardAccessoryView.frame = CGRectOffset(self.keyboardAccessoryView.frame, 0, -keyboardSize.height);
+    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - self.postButton.frame.size.width - 7, 30);
+    self.postButton.alpha = 1;
+
+    [UIView commitAnimations];
+
+}
+
+- (void)keyboardWillBeHidden:(NSNotification*)notification
+{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+
+    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.postButton.alpha = 0;
+
+    [UIView commitAnimations];
+}
+
+- (BOOL)textViewIsSmallerThanFrame:(NSString*)text{
     textViewHelper.frame = CGRectMake(0, 0, 222, 0);
     [textViewHelper setFont:[UIFont systemFontOfSize:14]];
     [textViewHelper setHidden:YES];
@@ -1027,9 +1038,9 @@ BOOL reloaded = NO;
 
 - (void)didSelectPostButton:(id)sender
 {
-    [self postComment:self.realKeyboardAccessory.text];
-    [self.realKeyboardAccessory resignFirstResponder];
+    [self postComment:self.keyboardAccessory.text];
     [self.keyboardAccessory resignFirstResponder];
+    self.keyboardAccessory.text = @"";
 }
 
 @end
