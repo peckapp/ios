@@ -8,9 +8,6 @@
 
 #import "PAAssetManager.h"
 
-#define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
-#define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
-
 @implementation PAAssetManager
 
 + (id)sharedManager {
@@ -29,7 +26,9 @@
         self.imagePlaceholder = [UIImage imageNamed:@"image-placeholder"];
         self.profilePlaceholder = [UIImage imageNamed:@"profile-placeholder"];
         self.horizontalShadow = [[UIImage imageNamed:@"drop-shadow-horizontal"]stretchableImageWithLeftCapWidth:1 topCapHeight:0];
-        self.unavailableColor = [UIColor colorWithHue:1 saturation:0 brightness:.85 alpha:1];
+        self.unavailableColor = [UIColor colorWithHue:1 saturation:0 brightness:0.9 alpha:1];
+        self.darkColor = [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1];
+        self.lightColor = [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1];
         
         
         CGSize size = CGSizeMake(200, 200);
@@ -71,8 +70,16 @@
     return imageView;
 }
 
-
--(UIColor*)getUnavailableColor{
-    return self.unavailableColor;
+- (UITextField *)createTextFieldWithFrame:(CGRect)frame
+{
+    UITextField *textField = [[UITextField alloc] initWithFrame:frame];
+    textField.borderStyle = UITextBorderStyleRoundedRect;
+    textField.textColor = [UIColor blackColor];
+    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.backgroundColor = [UIColor clearColor];
+    textField.autocorrectionType = UITextAutocorrectionTypeYes;
+    textField.keyboardType = UIKeyboardTypeDefault;
+    textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    return textField;
 }
 @end

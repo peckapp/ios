@@ -16,9 +16,13 @@
 @property (strong, nonatomic) UIImage * horizontalShadow;
 @property (strong, nonatomic) UIImage * greyBackground;
 
-@property (strong, nonatomic) UIColor* unavailableColor;
+@property (strong, nonatomic) UIColor *unavailableColor;
+@property (strong, nonatomic) UIColor *darkColor;
+@property (strong, nonatomic) UIColor *lightColor;
+
 + (id)sharedManager;
 
 - (UIImageView *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView;
+- (UITextField *)createTextFieldWithFrame:(CGRect)frame;
 
 @end

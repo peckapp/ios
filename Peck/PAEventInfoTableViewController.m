@@ -17,9 +17,6 @@
 #import "PAAssetManager.h"
 #import "PAMethodManager.h"
 
-#define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
-#define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
-
 
 #define imageHeight 256
 #define compressedHeight 88
@@ -70,7 +67,6 @@ NSString * cellIdentifier = @"CommentCell";
 NSString * nibName = @"PACommentCell";
 NSMutableDictionary *heightDictionary;
 CGRect initialFrame;
-BOOL viewingEvent;
 UITextView *textViewHelper;
 
 PAAssetManager * assetManager;
@@ -117,7 +113,7 @@ BOOL reloaded = NO;
 
     //self.automaticallyAdjustsScrollViewInsets = NO;
 
-    self.view.backgroundColor = darkColor;
+    self.view.backgroundColor = [assetManager darkColor];
 
     self.headerView = [[UIView alloc] init];
     self.imagesView = [[UIView alloc] init];
@@ -282,8 +278,6 @@ BOOL reloaded = NO;
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
-    viewingEvent = NO;
     [self.realKeyboardAccessory resignFirstResponder];
     [self.keyboardAccessory resignFirstResponder];
     
@@ -404,6 +398,10 @@ BOOL reloaded = NO;
 - (void)compressAnimated:(BOOL)animated
 {
     if (self.expanded) {
+
+        self.view.backgroundColor = [assetManager darkColor];
+
+        [self.tableView setContentOffset:CGPointMake(0, -imageHeight) animated:YES];
 
         void (^animationsBlock)(void) = ^{
             self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
