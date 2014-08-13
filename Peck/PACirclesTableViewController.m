@@ -121,8 +121,8 @@ BOOL viewingCircles;
     self.keyboardAccessory.backgroundColor = [UIColor lightGrayColor];
     [self.keyboardAccessoryView addSubview:self.keyboardAccessory];
     self.keyboardAccessory.delegate = self;
-    [self.view addSubview:self.keyboardAccessoryView];
-    self.keyboardAccessory.hidden = YES;
+    //[self.view addSubview:self.keyboardAccessoryView];
+    //self.keyboardAccessory.hidden = YES;
 
     self.realKeyboardAccessoryView = [[UIView alloc] init];
     self.realKeyboardAccessory = [[UITextField alloc] init];
@@ -137,6 +137,12 @@ BOOL viewingCircles;
     [self.realKeyboardAccessoryView addSubview:self.postButton];
     self.keyboardAccessory.inputAccessoryView = self.realKeyboardAccessoryView;
 
+    
+    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+    self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
+    self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0, self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(changeFirstResponder)
@@ -178,19 +184,16 @@ BOOL viewingCircles;
         }
     });
 
-    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
-    self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
-    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
-    self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
-    self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0,
-                                       self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
-
+    
+    
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
     [self.tableView reloadData];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -198,9 +201,10 @@ BOOL viewingCircles;
 
     if(viewingCell){
         PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
-        [cell endEditing:YES];
+        [self condenseCircleCell:cell atIndexPath:self.selectedIndexPath];
+        /*[cell endEditing:YES];
         [self dismissKeyboard:self];
-        [self dismissCircleTitleKeyboard];
+        [self dismissCircleTitleKeyboard];*/
     }
     viewingCircles=NO;
     [self deregisterFromKeyboardNotifications];
@@ -284,13 +288,17 @@ BOOL viewingCircles;
                                          newMember.id, @"user_id",
                                          instituion_id, @"institution_id",
                                          circle_id, @"circle_id",
-                                         @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464",@"token",
+                                         //@"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464",@"token",
                                          alert, @"message",
-                                         @"circle_invite", @"notification_type",
+                                         //@"circle_invite", @"notification_type",
                                          [NSNumber numberWithBool:YES],@"send_push_notification",
                                          nil];
         //[[PASyncManager globalSyncManager] postCircleMember:newMember withDictionary:newCircleMember forCircle:selectedCircle withSender:selectedCell];
-        [[PASyncManager globalSyncManager] postPeck:newCircleMember];
+        
+        
+        //[[PASyncManager globalSyncManager] postPeck:newCircleMember];
+        [[PASyncManager globalSyncManager] postCircleMember:newCircleMember];
+        
     }else{
         [self.addedPeers addObject:newMember];
         [selectedCell updateCircleMembers:self.addedPeers];
@@ -378,7 +386,7 @@ BOOL viewingCircles;
                 [cell performFetch];
                 NSString* circleID = [cell.circle.id stringValue];
                 [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
-                
+                [self addCommentTextFieldToCell:cell];
             }
         } else {
             [self condenseCircleCell:cell atIndexPath:indexPath];
@@ -390,6 +398,7 @@ BOOL viewingCircles;
 -(void)expandCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     if(self.selectedIndexPath){
         if(self.selectedIndexPath != indexPath){
+            //if another cell is expanded and the user is being liked to this cell from a peck
             PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
             [self condenseCircleCell:cell atIndexPath:self.selectedIndexPath];
         }
@@ -408,9 +417,28 @@ BOOL viewingCircles;
     
     self.tableView.scrollEnabled = NO;
     viewingCell=YES;
+    
+    [self configureCell:cell atIndexPath:indexPath];
+    
+    NSLog(@"configured the cell at index path: %li",(long)indexPath.row);
+    NSString* circleID = [cell.circle.id stringValue];
+    [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
+    
+    [self addCommentTextFieldToCell:cell];
+    
+}
+
+-(void)addCommentTextFieldToCell:(PACircleCell*)cell{
     self.keyboardAccessory.hidden = NO;
     self.keyboardAccessoryView.frame = CGRectMake(0, cell.frame.origin.y + cell.frame.size.height - 44, self.view.frame.size.width, 44);
-    [self configureCell:cell atIndexPath:indexPath];
+    
+    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+    self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
+    self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0,
+                                       self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
+    [cell addSubview:self.keyboardAccessoryView];
 }
 
 -(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
@@ -434,6 +462,7 @@ BOOL viewingCircles;
     }
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
+    [self.keyboardAccessoryView removeFromSuperview];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -584,6 +613,7 @@ BOOL viewingCircles;
     [self.textCapture becomeFirstResponder];
     [self.inviteTextField becomeFirstResponder];
     
+    [self.keyboardAccessoryView removeFromSuperview];
 }
 
 - (void)dismissKeyboard:(id)sender
@@ -897,7 +927,7 @@ BOOL viewingCircles;
     for(int i = 0; i<[mutableFetchResults count];i++){
         Peer* peer = mutableFetchResults[i];
         for(Peer* member in currentMembers){
-            if(peer.id==member.id){
+            if([peer.id integerValue]==[member.id integerValue]){
                 [mutableFetchResults removeObjectAtIndex:i];
             }
         }

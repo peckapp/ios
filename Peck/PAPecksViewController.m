@@ -18,6 +18,7 @@
 #import "PAMethodManager.h"
 #import "PAFetchManager.h"
 #import "PADropdownBar.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @interface PAPecksViewController ()
 @property BOOL editing;
@@ -67,6 +68,31 @@ static NSString *nibName = @"PAPeckCell";
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
+    
+    
+    /*
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            @"Peck", @"name",
+                            @"[{\"url\": \"peckapp://\" },{\"url\":\"fb291944037642057://\"}]", @"ios",
+                            @"{\"should_fallback\": false}", @"web",
+                            nil
+                            ];
+    //make the API call
+    [FBRequestConnection startWithGraphPath:@"/app/app_link_hosts"
+                                 parameters:params
+                                 HTTPMethod:@"POST"
+                          completionHandler:^(
+                                              FBRequestConnection *connection,
+                                              id result,
+                                              NSError *error
+                                              ) {
+                              //handle the result
+                              NSLog(@"the result: %@", result);
+                              NSLog(@"error %@", error);
+                          }];
+    */
+
+    
    /* _fetchedResultsController=nil;
     NSError *error=nil;
     if (![self.fetchedResultsController performFetch:&error])
@@ -207,7 +233,7 @@ static NSString *nibName = @"PAPeckCell";
     }
     
     [cell addSubview:thumbnail];
-   // cell.senderPicture =
+    cell.profileThumbnail = thumbnail;
 }
 
 -(NSString*)dateToString:(NSDate *)date{
@@ -260,9 +286,10 @@ static NSString *nibName = @"PAPeckCell";
         //[NSThread sleepForTimeInterval:0.5];
         
         for(int i = 0; i<  [appdelegate.circleViewController.fetchedResultsController.fetchedObjects count]; i++){
-            Circle* circle =appdelegate.circleViewController.fetchedResultsController.fetchedObjects[i];
-            if(circle.id==peck.invitation_id){
-                NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+           NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+            Circle* circle =[appdelegate.circleViewController.fetchedResultsController objectAtIndexPath:indexPath];
+            if([circle.id integerValue]==[peck.invitation_id integerValue]){
+                
                 PACircleCell* cell = (PACircleCell*)[ appdelegate.circleViewController.tableView cellForRowAtIndexPath:indexPath];
                 [appdelegate.circleViewController expandCircleCell:cell atIndexPath:indexPath];
                 //[appdelegate.circleViewController tableView:appdelegate.circleViewController.tableView didSelectRowAtIndexPath:indexPath];

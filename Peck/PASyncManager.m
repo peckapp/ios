@@ -459,7 +459,28 @@
                                        [defaults setObject:lastName forKey:last_name_define];
                                        [defaults setObject:email forKey:@"email"];
                                        [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
+                                       NSString* imageURL = [userDictionary objectForKey:@"image"];
+                                       
+                                       if(imageURL){
+                                           NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
+                                           NSURL* url =[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+                                           UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+                                           NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                                                NSUserDomainMask, YES);
+                                           NSString *documentsDirectory = [paths objectAtIndex:0];
+                                           NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                                                             @"profile_picture.jpeg" ];
+                                           NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
+                                           [data writeToFile:path atomically:YES];
+                                           NSLog(@"path: %@", path);
+                                           [defaults setObject:path forKey:@"profile_picture"];
+                                           [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
+                                       }
+
+                                       
                                        [sender dismissViewControllerAnimated:YES completion:nil];
+                                       
+                                      
                                        
                                    }
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -869,6 +890,7 @@
 
 }
 
+/*
 -(void)postCircleMember:(Peer*)newMember withDictionary:(NSDictionary *) dictionary forCircle:(Circle*)circle withSender:(id)sender{
     [[PASessionManager sharedClient] POST:circle_membersAPI
                                parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
@@ -882,6 +904,19 @@
                                       NSLog(@"ERROR: %@",error);
                                   }];
     
+
+}*/
+
+-(void)postCircleMember:(NSDictionary*)dictionary{
+    [[PASessionManager sharedClient] POST:circle_membersAPI
+                                   parameters:[self applyWrapper:@"circle_member" toDictionary:dictionary]
+                                      success:^
+         (NSURLSessionDataTask * __unused task, id JSON) {
+             NSLog(@"circle member success json: %@", JSON);
+         }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
 
 }
 
@@ -1692,8 +1727,11 @@
                      if(!comment){
                          NSLog(@"adding comment to core data");
                          comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext: _managedObjectContext];
+                         [self setAttributesInComment:comment withDictionary:commentAttributes];
+                     }else{
+                         [self setAttributesInExistingComment:comment withDictionary:commentAttributes];
                      }
-                     [self setAttributesInComment:comment withDictionary:commentAttributes];
+                     
                      NSError* error = nil;
                      [_managedObjectContext save:&error];
                      [self.persistentStoreCoordinator unlock];
@@ -1719,6 +1757,14 @@
     comment.likes = [dictionary objectForKey:@"likes"];
 }
 
+-(void)setAttributesInExistingComment:(Comment*)comment withDictionary:(NSDictionary*)dictionary{
+    //This method will be called when a we want to set the attributes of a comment that is already in core data. It is helpful because not as many calls will be made to the "did change object" delegate method of the fetched results controller that controls this batch of comments, reducing negative impact on the UI.
+    
+    //Currently "likes" is the only attribute of comment that can be changed when the comment is in core data. More attributes will need to be added if we implement editing for comments.
+    if([comment.likes count]!= [[dictionary objectForKey:@"likes"] count]){
+        comment.likes = [dictionary objectForKey:@"likes"];
+    }
+}
 
 #pragma mark - suscription actions
 
