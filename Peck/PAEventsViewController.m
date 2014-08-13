@@ -83,7 +83,7 @@ PAAssetManager * assetManager;
     
     self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 44, 44)];
     [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
-    self.backButton.backgroundColor = [UIColor blueColor];
+    self.backButton.backgroundColor = [UIColor lightTextColor];
 
     //we must store the profile picture every time the app loads because the local image storing is not persistent
     [self storeProfilePicture];

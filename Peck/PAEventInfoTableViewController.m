@@ -17,8 +17,15 @@
 #import "PAAssetManager.h"
 #import "PAMethodManager.h"
 
-#define imageHeight 88
+#define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
+#define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
+
+
+#define imageHeight 256
+#define compressedHeight 88
 #define buffer 14
+#define defaultCellHeight 72
+#define reloadTime 10
 
 
 @interface PAEventInfoTableViewController ()
@@ -68,9 +75,6 @@ PAAssetManager * assetManager;
 
 BOOL reloaded = NO;
 
-#define defaultCellHeight 72
-#define reloadTime 10
-
 
 - (void)viewDidLoad
 {
@@ -111,47 +115,49 @@ BOOL reloaded = NO;
 
     //self.automaticallyAdjustsScrollViewInsets = NO;
 
-    self.view.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = darkColor;
 
     self.headerView = [[UIView alloc] init];
     self.imagesView = [[UIView alloc] init];
     self.floatingTextView = [[UIView alloc] init];
+    //self.floatingTextView.backgroundColor = [UIColor darkGrayColor];
 
     self.cleanImageView = [[UIImageView alloc] init];
-    self.cleanImageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.cleanImageView.contentMode = UIViewContentModeCenter;
     [self.imagesView addSubview:self.cleanImageView];
 
     self.blurredImageView = [[UIImageView alloc] init];
-    self.blurredImageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.blurredImageView.contentMode = UIViewContentModeCenter;
     [self.imagesView addSubview:self.blurredImageView];
 
     self.timeLabel = [[UILabel alloc] init];
     self.timeLabel.textColor = [UIColor whiteColor];
     self.timeLabel.font = [UIFont boldSystemFontOfSize:17.0];
     self.timeLabel.textAlignment = NSTextAlignmentRight;
-    self.timeLabel.backgroundColor = [UIColor lightGrayColor];
+    // self.timeLabel.backgroundColor = [UIColor lightGrayColor];
     [self.floatingTextView addSubview:self.timeLabel];
 
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
-    self.titleLabel.backgroundColor = [UIColor lightGrayColor];
+    //self.titleLabel.backgroundColor = [UIColor lightGrayColor];
     [self.floatingTextView addSubview:self.titleLabel];
 
     self.dateLabel = [[UILabel alloc] init];
-    self.dateLabel.backgroundColor = [UIColor lightGrayColor];
+    //self.dateLabel.backgroundColor = [UIColor lightGrayColor];
     [self.headerView addSubview:self.dateLabel];
 
     self.descriptionLabel = [[UILabel alloc] init];
     self.descriptionLabel.font = [UIFont systemFontOfSize:13.0];
     self.descriptionLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.descriptionLabel.numberOfLines = 0;
-    self.descriptionLabel.backgroundColor = [UIColor lightGrayColor];
+    // self.descriptionLabel.backgroundColor = [UIColor lightGrayColor];
     [self.headerView addSubview:self.descriptionLabel];
 
     self.headerView.backgroundColor = [UIColor whiteColor];
 
     [self.view addSubview:self.imagesView];
+    [self.view addSubview:self.floatingTextView];
     
     
 
@@ -215,28 +221,29 @@ BOOL reloaded = NO;
 {
     NSLog(@"event info frame width: %f", self.view.frame.size.width);
     NSLog(@"event info frame height: %f", self.view.frame.size.height);
-    self.tableView.frame = self.view.frame;
+
     //self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
 
-    self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
+    self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
     self.cleanImageView.frame = self.imagesView.frame;
     self.blurredImageView.frame = self.imagesView.frame;
 
 
-    self.floatingTextView.frame = self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
+    self.floatingTextView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
     CGRect left;
     CGRect right;
-    CGRectDivide(self.floatingTextView.frame, &left, &right, 100, CGRectMinXEdge);
+    CGRectDivide(self.floatingTextView.frame, &left, &right, 90, CGRectMinXEdge);
     self.timeLabel.frame = left;
-    [self.timeLabel sizeToFit];
     self.titleLabel.frame = right;
-    [self.titleLabel sizeToFit];
+    self.titleLabel.frame = CGRectInset(self.titleLabel.frame, buffer, 0);
+    [self.floatingTextView sizeToFit];
+
 
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
-    self.dateLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, buffer);
+    self.dateLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, 0);
     [self.dateLabel sizeToFit];
 
-    self.descriptionLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, CGRectGetMaxY(self.dateLabel.frame) + buffer);
+    self.descriptionLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, CGRectGetMaxY(self.dateLabel.frame));
     [self.descriptionLabel sizeToFit];
 
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, CGRectGetMaxY(self.descriptionLabel.frame) + buffer);
@@ -335,9 +342,23 @@ BOOL reloaded = NO;
 - (void)expandAnimated:(BOOL)animated
 {
     if (!self.expanded) {
+
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        self.tableView.backgroundColor = [UIColor clearColor];
+        self.tableView.dataSource = self;
+        self.tableView.delegate = self;
+        self.tableView.tableHeaderView = self.headerView;
+        [self.view addSubview:self.tableView];
+        self.tableView.frame = self.view.frame;
+        self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, 0, 0);
+
         self.cleanImageView.hidden = NO;
 
         void (^animationsBlock)(void) = ^{
+            self.floatingTextView.frame = CGRectOffset(self.floatingTextView.frame, 0, imageHeight - self.floatingTextView.frame.size.height);
+            self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
+            self.cleanImageView.frame = self.imagesView.frame;
+            self.blurredImageView.frame = self.imagesView.frame;
             self.blurredImageView.alpha = 0;
         };
 
@@ -352,18 +373,6 @@ BOOL reloaded = NO;
                 NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
                 abort();
             }
-            
-            self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-            self.tableView.backgroundColor = [UIColor clearColor];
-            self.tableView.dataSource = self;
-            self.tableView.delegate = self;
-            self.tableView.tableHeaderView = self.headerView;
-        
-            [self.view addSubview:self.tableView];
-            
-            self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, 0, 0);
-
-            [self updateFrames];
             
             NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -391,10 +400,17 @@ BOOL reloaded = NO;
     if (self.expanded) {
 
         void (^animationsBlock)(void) = ^{
+            self.floatingTextView.frame = CGRectOffset(self.floatingTextView.frame, 0, -imageHeight + self.floatingTextView.frame.size.height);
+            self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
+            self.cleanImageView.frame = self.imagesView.frame;
+            self.blurredImageView.frame = self.imagesView.frame;
             self.blurredImageView.alpha = 1;
         };
 
         void (^completionBlock)(BOOL) = ^(BOOL finished){
+            [self.tableView removeFromSuperview];
+            self.tableView = nil;
+
             self.cleanImageView.hidden = YES;
             self.expanded = NO;
         };
@@ -461,7 +477,7 @@ BOOL reloaded = NO;
 
         self.descriptionLabel.text = [self.detailItem valueForKey:@"descrip"];
 
-        UIImage* image = [assetManager imagePlaceholder];
+        UIImage* image = nil;
         if ([self.detailItem valueForKey:@"imageURL"]) {
             NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"imageURL"]]];
             UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];

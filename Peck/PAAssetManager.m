@@ -8,6 +8,9 @@
 
 #import "PAAssetManager.h"
 
+#define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
+#define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
+
 @implementation PAAssetManager
 
 + (id)sharedManager {
