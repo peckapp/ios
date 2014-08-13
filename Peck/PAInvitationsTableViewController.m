@@ -295,9 +295,8 @@ PAAssetManager * assetManager;
         }
         NSLog(@"invited people: %@", self.invitedPeople);
         NSLog(@"invited circles: %@", self.invitedCircles);
-        self.searchBar.text=@"";
-        [self searchBar:self.searchBar textDidChange:@""];
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        /*self.searchBar.text=@"";
+        [self searchBar:self.searchBar textDidChange:@""];*/
     }
     else{
         
@@ -306,16 +305,17 @@ PAAssetManager * assetManager;
         if(indexPath.row<[self.invitedCirclesArray count]){
             NSNumber* circleID = self.invitedCirclesArray[indexPath.row];
             [self.invitedCircles removeObjectForKey:[circleID stringValue]];
-            [self.tableView reloadData];
+            
         }else{
             self.invitedPeopleArray = [self.invitedPeople allValues];
             NSNumber* peerID = self.invitedPeopleArray[indexPath.row - [self.invitedCirclesArray count]];
             [self.invitedPeople removeObjectForKey:[peerID stringValue]];
-            [self.tableView reloadData];
         }
+        [self.tableView reloadData];
+        
     }
-    
-    
+    [self searchBar:self.searchBar textDidChange:self.searchBar.text];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Navigation
