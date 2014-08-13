@@ -62,7 +62,6 @@ struct eventImage{
 UISearchBar * searchBar;
 
 BOOL parallaxOn;
-BOOL showingDetail;
 BOOL showingSearchBar;
 NSString *searchBarText;
 NSDate *today;
@@ -102,8 +101,7 @@ PAAssetManager * assetManager;
     parallaxOn = YES;
 
     self.selectedDay = 0;
-    showingDetail = NO;
-    // [self reloadTheView];
+
     if(!searchBar){
         searchBar = [[UISearchBar alloc] init];
         searchBar.delegate = self;
@@ -192,7 +190,6 @@ PAAssetManager * assetManager;
 
     NSLog(@"View will appear (events)");
     showingSearchBar = NO;
-    showingDetail = NO;
 
     [self registerForKeyboardNotifications];
 
@@ -241,10 +238,6 @@ PAAssetManager * assetManager;
 
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
-    
-    if(!showingDetail){
-        // [self.centerTableView reloadData];
-    }
 }
 
 - (void)didReceiveMemoryWarning
