@@ -10,7 +10,7 @@
 #import "PAAppDelegate.h"
 
 // Button dimensions. This should be calculated programatically from button image.
-#define barHeight 40.0
+#define barHeight 48.0
 #define buffer 2.0
 #define statusBarHeight 20.0
 
