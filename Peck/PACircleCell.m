@@ -58,6 +58,7 @@ PAAssetManager * assetManager;
     self.commentsTableView.delegate=self;
     self.commentsTableView.dataSource=self;
     
+    
     self.suggestedMembersTableView.delegate=self;
     self.suggestedMembersTableView.dataSource=self;
     
