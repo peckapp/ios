@@ -201,9 +201,10 @@ BOOL viewingCircles;
 
     if(viewingCell){
         PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
-        [cell endEditing:YES];
+        [self condenseCircleCell:cell atIndexPath:self.selectedIndexPath];
+        /*[cell endEditing:YES];
         [self dismissKeyboard:self];
-        [self dismissCircleTitleKeyboard];
+        [self dismissCircleTitleKeyboard];*/
     }
     viewingCircles=NO;
     [self deregisterFromKeyboardNotifications];
@@ -397,6 +398,7 @@ BOOL viewingCircles;
 -(void)expandCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     if(self.selectedIndexPath){
         if(self.selectedIndexPath != indexPath){
+            //if another cell is expanded and the user is being liked to this cell from a peck
             PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
             [self condenseCircleCell:cell atIndexPath:self.selectedIndexPath];
         }
@@ -417,6 +419,8 @@ BOOL viewingCircles;
     viewingCell=YES;
     
     [self configureCell:cell atIndexPath:indexPath];
+    
+    NSLog(@"configured the cell at index path: %li",(long)indexPath.row);
     NSString* circleID = [cell.circle.id stringValue];
     [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
     
