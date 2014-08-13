@@ -15,7 +15,7 @@
 #import "PAAssetManager.h"
 #import "UIImageView+AFNetworking.h"
 
-#define cellHeight 340
+#define cellHeight 380
 
 @interface PAExploreTableViewController ()
 
@@ -81,6 +81,8 @@ NSCache *imageCache;
 
 - (void)configureCell:(PAExploreCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+    cell.backgroundView = [assetManager createShadowWithFrame:cell.frame];
+
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;

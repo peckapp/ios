@@ -25,7 +25,6 @@
         self.eventPlaceholder = [UIImage imageNamed:@"event-placeholder"];
         self.imagePlaceholder = [UIImage imageNamed:@"image-placeholder"];
         self.profilePlaceholder = [UIImage imageNamed:@"profile-placeholder"];
-        self.horizontalShadow = [[UIImage imageNamed:@"drop-shadow-horizontal"]stretchableImageWithLeftCapWidth:1 topCapHeight:0];
         self.unavailableColor = [UIColor colorWithHue:1 saturation:0 brightness:0.9 alpha:1];
         self.darkColor = [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1];
         self.lightColor = [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1];
@@ -55,10 +54,17 @@
     return img;
 }
 
+- (UIView *)createShadowWithFrame:(CGRect)frame
+{
+    UIImageView *shadow = [[UIImageView alloc] initWithFrame:frame];
+    shadow.image = [[UIImage imageNamed:@"drop-shadow"]stretchableImageWithLeftCapWidth:15 topCapHeight:15];
+    return shadow;
+}
+
 - (UIView *)createShadowWithFrame:(CGRect)frame top:(BOOL)top
 {
     UIImageView *dropShadow = [[UIImageView alloc] initWithFrame:frame];
-    dropShadow.image = [self horizontalShadow];
+    dropShadow.image = [[UIImage imageNamed:@"drop-shadow-horizontal"]stretchableImageWithLeftCapWidth:1 topCapHeight:0];
     if (top) {
         dropShadow.transform = CGAffineTransformMakeRotation(M_PI);
     }
