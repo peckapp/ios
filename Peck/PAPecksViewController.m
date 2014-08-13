@@ -278,7 +278,7 @@ static NSString *nibName = @"PAPeckCell";
     Peck* peck = [_fetchedResultsController objectAtIndexPath:indexPath];
     if([peck.notification_type isEqualToString:@"event_invite"]){
         NSLog(@"show the detail of the event");
-    }else if([peck.notification_type isEqualToString:@"circle_comment"]){
+    }else if([peck.notification_type isEqualToString:@"circle_comment"] || [peck.notification_type isEqualToString:@"circle_invite"]){
         NSLog(@"bring the user to the circle");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         [appdelegate.dropDownBar selectItemAtIndex:3];
@@ -288,7 +288,8 @@ static NSString *nibName = @"PAPeckCell";
         for(int i = 0; i<  [appdelegate.circleViewController.fetchedResultsController.fetchedObjects count]; i++){
            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
             Circle* circle =[appdelegate.circleViewController.fetchedResultsController objectAtIndexPath:indexPath];
-            if([circle.id integerValue]==[peck.invitation_id integerValue]){
+            if([circle.id integerValue]==[peck.refers_to integerValue]){
+                [appdelegate.circleViewController.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
                 
                 PACircleCell* cell = (PACircleCell*)[ appdelegate.circleViewController.tableView cellForRowAtIndexPath:indexPath];
                 [appdelegate.circleViewController expandCircleCell:cell atIndexPath:indexPath];

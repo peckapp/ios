@@ -14,6 +14,7 @@
 @property (strong, nonatomic) UIImage * imagePlaceholder;
 @property (strong, nonatomic) UIImage * profilePlaceholder;
 @property (strong, nonatomic) UIImage * horizontalShadow;
+@property (strong, nonatomic) UIImage * greyBackground;
 
 @property (strong, nonatomic) UIColor* unavailableColor;
 + (id)sharedManager;

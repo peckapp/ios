@@ -30,9 +30,30 @@
         self.profilePlaceholder = [UIImage imageNamed:@"profile-placeholder"];
         self.horizontalShadow = [[UIImage imageNamed:@"drop-shadow-horizontal"]stretchableImageWithLeftCapWidth:1 topCapHeight:0];
         self.unavailableColor = [UIColor colorWithHue:1 saturation:0 brightness:.85 alpha:1];
+        
+        
+        CGSize size = CGSizeMake(200, 200);
+        self.greyBackground = [self imageWithColor:[UIColor whiteColor] andSize:size];
 
     }
     return self;
+}
+
+- (UIImage *)imageWithColor:(UIColor *)color andSize:(CGSize)size;
+{
+    UIImage *img = nil;
+    
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context,
+                                   color.CGColor);
+    CGContextFillRect(context, rect);
+    img = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return img;
 }
 
 - (UIImageView *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView

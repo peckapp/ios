@@ -100,6 +100,7 @@
         <attribute name="invited_by" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="notification_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="refers_to" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="Peer" representedClassName="Peer" syncable="YES">
         <attribute name="blurb" optional="YES" attributeType="String" syncable="YES"/>
@@ -116,6 +117,7 @@
         <attribute name="subscription_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
     <elements>
+        <element name="Announcement" positionX="90" positionY="342" width="128" height="133"/>
         <element name="Circle" positionX="261" positionY="198" width="128" height="105"/>
         <element name="Comment" positionX="207" positionY="288" width="128" height="150"/>
         <element name="DiningPeriod" positionX="90" positionY="351" width="128" height="135"/>
@@ -124,9 +126,8 @@
         <element name="Explore" positionX="261" positionY="261" width="128" height="240"/>
         <element name="Institution" positionX="-54" positionY="189" width="128" height="210"/>
         <element name="MenuItem" positionX="90" positionY="342" width="128" height="103"/>
-        <element name="Peck" positionX="90" positionY="342" width="128" height="163"/>
+        <element name="Peck" positionX="90" positionY="342" width="128" height="178"/>
         <element name="Peer" positionX="261" positionY="261" width="128" height="120"/>
         <element name="Subscription" positionX="90" positionY="342" width="128" height="120"/>
-        <element name="Announcement" positionX="90" positionY="342" width="128" height="133"/>
     </elements>
 </model>
