@@ -1623,12 +1623,20 @@
         _managedObjectContext = [appdelegate managedObjectContext];
         _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
-        NSString* simpleEventsURL = [simple_eventsAPI stringByAppendingString:@"/"];
-        simpleEventsURL = [simpleEventsURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"] stringValue]];
+        NSString* simpleEventsURL = [simple_eventsAPI stringByAppendingString:@"?user_id="];
         
+        simpleEventsURL = [simpleEventsURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"] stringValue]];
+        NSLog(@"simple events url %@", simpleEventsURL);
+        
+        NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"], @"user_ip",
+                                [[self authenticationParameters] objectForKey:@"authentication"], @"authentication",
+                                nil];
+        
+        NSLog(@"params: %@", params);
         
         [[PASessionManager sharedClient] GET:simple_eventsAPI
-                                  parameters:[self authenticationParameters]
+                                  parameters:params
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              //NSLog(@"EVENT JSON: %@",JSON);

@@ -20,7 +20,6 @@
 @property (weak, nonatomic) NSArray* invitedPeopleArray;
 @property (weak, nonatomic) NSArray* invitedCirclesArray;
 
-@property (weak, nonatomic) IBOutlet UITableView *invitedPeopleTableView;
 @property (strong, nonatomic) UIViewController* parentPostViewController;
 - (IBAction)addInvites:(id)sender;
 @end

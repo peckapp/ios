@@ -287,7 +287,6 @@ BOOL reloaded = NO;
     [self.realKeyboardAccessory resignFirstResponder];
     [self.keyboardAccessory resignFirstResponder];
     
-    
     //[self deregisterFromKeyboardNotifications];
 }
 
@@ -350,7 +349,7 @@ BOOL reloaded = NO;
 - (void)expandAnimated:(BOOL)animated
 {
     if (!self.expanded) {
-
+        self.tableView=nil;
         self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         self.tableView.backgroundColor = [UIColor clearColor];
         self.tableView.dataSource = self;
@@ -416,6 +415,7 @@ BOOL reloaded = NO;
         void (^completionBlock)(BOOL) = ^(BOOL finished){
             [self.tableView removeFromSuperview];
             self.tableView = nil;
+            _fetchedResultsController = nil;
 
             self.cleanImageView.hidden = YES;
             self.expanded = NO;
@@ -682,7 +682,8 @@ BOOL reloaded = NO;
     NSLog(@"configure cell");
     cell.parentTableView = self;
 
-    Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]];
+    //Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]];
+    Comment* tempComment = [_fetchedResultsController objectAtIndexPath:indexPath];
     cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
     [cell.likeButton setHidden:NO];
     [cell.numberOfLikesLabel setHidden:NO];

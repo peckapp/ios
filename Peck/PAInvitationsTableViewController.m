@@ -56,13 +56,14 @@ PAAssetManager * assetManager;
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"Invite a circle or friend...";
     
+    /*
     self.invitedPeopleTableView.delegate = self;
     self.invitedPeopleTableView.dataSource = self;
     
     self.invitedPeopleTableView.transform = CGAffineTransformMakeRotation(-M_PI_2);
     
     self.invitedPeopleTableView.frame = CGRectMake(0, 44, self.view.frame.size.width, 44);
-    self.invitedPeopleTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.invitedPeopleTableView.separatorStyle = UITableViewCellSeparatorStyleNone;*/
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -70,7 +71,7 @@ PAAssetManager * assetManager;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self.tableView reloadData];
-    [self.invitedPeopleTableView reloadData];
+    //[self.invitedPeopleTableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -129,22 +130,33 @@ PAAssetManager * assetManager;
     
     
     [self.tableView reloadData];
-    [self.invitedPeopleTableView reloadData];
     
 }
 
 #pragma mark - Table view data source
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if(section==0){
+        return @"Add Members";
+    }
+    return @"Added Members";
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 30;
+}
+
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if(tableView==self.tableView){
+    if(section==0){
         return [self.suggestedInvites count];
     }else{
         return [self.invitedPeople count]+[self.invitedCircles count];
@@ -152,9 +164,6 @@ PAAssetManager * assetManager;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if(tableView==self.invitedPeopleTableView){
-        return 44;
-    }
     return 52;
 }
 
@@ -202,30 +211,56 @@ PAAssetManager * assetManager;
 }
 
 -(void)configureCell:(PAInvitationCell*)cell atIndexPath:(NSIndexPath*)indexPath{
-    if([self.suggestedInvites[indexPath.row] isKindOfClass:[Circle class]]){
-        Circle* tempCircle = self.suggestedInvites[indexPath.row];
-        cell.nameLabel.text = tempCircle.circleName;
-        if (cell.thumbnailView) {
-            [cell.thumbnailView removeFromSuperview];
-        }
-        UIImageView * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image-placeholder.png"]]];
+    if(indexPath.section==0){
+        //if we are in the add members section
+        if([self.suggestedInvites[indexPath.row] isKindOfClass:[Circle class]]){
+             Circle* tempCircle = self.suggestedInvites[indexPath.row];
+            [self configureCircleCell:cell withCircle:tempCircle];
         
-        [cell addSubview:thumbnail];
-        cell.thumbnailViewTemplate.backgroundColor = [UIColor whiteColor];
-        cell.thumbnailView = thumbnail;
-        
-    }else if([self.suggestedInvites[indexPath.row] isKindOfClass:[Peer class]]){
-        Peer* tempPeer = self.suggestedInvites[indexPath.row];
-        cell.nameLabel.text = tempPeer.name;
-        //cell.picture.image = [UIImage imageNamed:@"event-placeholder.png"];
-        UIImageView * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageForPeer:tempPeer]];
-        if (cell.thumbnailView) {
-            [cell.thumbnailView removeFromSuperview];
+        }else if([self.suggestedInvites[indexPath.row] isKindOfClass:[Peer class]]){
+            Peer* tempPeer = self.suggestedInvites[indexPath.row];
+            [self configurePeerCell:cell withPeer:tempPeer];
         }
-        [cell addSubview:thumbnail];
-        cell.thumbnailViewTemplate.backgroundColor = [UIColor whiteColor];
-        cell.thumbnailView = thumbnail;
+    }else{
+        //if we are in the added members section
+        self.invitedPeopleArray = [self.invitedPeople allValues];
+        self.invitedCirclesArray = [self.invitedCircles allValues];
+        if(indexPath.row<[self.invitedCirclesArray count]){
+            Circle* tempCircle = [[PAFetchManager sharedFetchManager] getObject:self.invitedCirclesArray[indexPath.row] withEntityType:@"Circle" andType:nil];
+            [self configureCircleCell:cell withCircle:tempCircle];
+        }else{
+            NSNumber* peerID = self.invitedPeopleArray[indexPath.row - [self.invitedCirclesArray count]];
+            Peer* peer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
+            [self configurePeerCell:cell withPeer:peer];
+        }
     }
+}
+
+-(void)configureCircleCell:(PAInvitationCell*)cell withCircle:(Circle*)circle{
+   
+    cell.nameLabel.text = circle.circleName;
+    if (cell.thumbnailView) {
+        [cell.thumbnailView removeFromSuperview];
+    }
+    UIImageView * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"image-placeholder.png"]]];
+    
+    [cell addSubview:thumbnail];
+    cell.thumbnailViewTemplate.backgroundColor = [UIColor whiteColor];
+    cell.thumbnailView = thumbnail;
+
+}
+
+-(void)configurePeerCell:(PAInvitationCell*)cell withPeer:(Peer*)tempPeer{
+    
+    cell.nameLabel.text = tempPeer.name;
+    //cell.picture.image = [UIImage imageNamed:@"event-placeholder.png"];
+    UIImageView * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageForPeer:tempPeer]];
+    if (cell.thumbnailView) {
+        [cell.thumbnailView removeFromSuperview];
+    }
+    [cell addSubview:thumbnail];
+    cell.thumbnailViewTemplate.backgroundColor = [UIColor whiteColor];
+    cell.thumbnailView = thumbnail;
 }
 
 - (UIImageView *)imageForPeer:(Peer*)peer
@@ -250,7 +285,7 @@ PAAssetManager * assetManager;
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if(tableView==self.tableView){
+    if(indexPath.section==0){
         if([self.suggestedInvites[indexPath.row] isKindOfClass:[Circle class]]){
             Circle* tempCircle = self.suggestedInvites[indexPath.row];
             [self.invitedCircles setObject:tempCircle.id forKey:[tempCircle.id stringValue]];
@@ -265,17 +300,18 @@ PAAssetManager * assetManager;
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     else{
+        
         //if the user is removing one of the invited circles or people
         self.invitedCirclesArray = [self.invitedCircles allValues];
         if(indexPath.row<[self.invitedCirclesArray count]){
             NSNumber* circleID = self.invitedCirclesArray[indexPath.row];
             [self.invitedCircles removeObjectForKey:[circleID stringValue]];
-            [self.invitedPeopleTableView reloadData];
+            [self.tableView reloadData];
         }else{
             self.invitedPeopleArray = [self.invitedPeople allValues];
             NSNumber* peerID = self.invitedPeopleArray[indexPath.row - [self.invitedCirclesArray count]];
             [self.invitedPeople removeObjectForKey:[peerID stringValue]];
-            [self.invitedPeopleTableView reloadData];
+            [self.tableView reloadData];
         }
     }
     
