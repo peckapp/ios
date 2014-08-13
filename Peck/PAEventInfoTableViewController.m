@@ -343,7 +343,18 @@ BOOL reloaded = NO;
 - (void)expandAnimated:(BOOL)animated
 {
     if (!self.expanded) {
-        self.tableView=nil;
+        //self.tableView = nil;
+        self.fetchedResultsController = nil;
+        
+        NSError * error = nil;
+        if (![self.fetchedResultsController performFetch:&error])
+        {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+
+        
+        self.view.backgroundColor = [UIColor whiteColor];
         self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         self.tableView.backgroundColor = [UIColor clearColor];
         self.tableView.dataSource = self;
@@ -365,14 +376,6 @@ BOOL reloaded = NO;
         void (^completionBlock)(BOOL) = ^(BOOL finished){
             self.expanded = YES;
 
-            self.fetchedResultsController = nil;
-
-            NSError * error = nil;
-            if (![self.fetchedResultsController performFetch:&error])
-            {
-                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-                abort();
-            }
             
             NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -574,6 +577,7 @@ BOOL reloaded = NO;
                                                              cacheName:nil];
     
     aFetchedResultsController.delegate = self;
+    NSLog(@"number of fetched objects: %lu", (unsigned long)[aFetchedResultsController.fetchedObjects count]);
     self.fetchedResultsController = aFetchedResultsController;
     
     return _fetchedResultsController;
