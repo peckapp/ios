@@ -906,6 +906,7 @@ PAAssetManager * assetManager;
 
 - (void)transitionToRightTableView
 {
+    if (self.selectedCellIndex == nil) {
     NSLog(@"begin transition to right");
     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
@@ -930,10 +931,12 @@ PAAssetManager * assetManager;
 
                          NSLog(@"end transition to right");
                      }];
+    }
 }
 
 -(void)transitionToLeftTableView
 {
+    if (self.selectedCellIndex == nil) {
     NSLog(@"begin transition to left");
     [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
@@ -958,6 +961,7 @@ PAAssetManager * assetManager;
 
                          NSLog(@"end transition to left");
                      }];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView reloadDataFrom:(NSFetchedResultsController *)fetchedResultsController
