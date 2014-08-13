@@ -1623,6 +1623,10 @@
         _managedObjectContext = [appdelegate managedObjectContext];
         _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
+        NSString* simpleEventsURL = [simple_eventsAPI stringByAppendingString:@"/"];
+        simpleEventsURL = [simpleEventsURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"] stringValue]];
+        
+        
         [[PASessionManager sharedClient] GET:simple_eventsAPI
                                   parameters:[self authenticationParameters]
                                      success:^

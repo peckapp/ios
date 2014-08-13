@@ -12,6 +12,8 @@
 #import "PACirclesTableViewController.h"
 #import "PACircleCell.h"
 #import "PAAssetManager.h"
+#import "PAFetchManager.h"
+#import "PAFriendProfileViewController.h"
 
 @implementation PACommentCell
 
@@ -29,11 +31,30 @@ PAAssetManager * assetManager;
     [self.commentTextView setText:commentPlaceholder];
     [self.commentTextView setTextColor:[UIColor lightGrayColor]];
     self.commentTextView.delegate=self;
-    self.thumbnailViewTemplate.hidden = YES;
+    self.thumbnailViewTemplate.hidden = NO;
+    self.thumbnailViewTemplate.backgroundColor = [UIColor whiteColor];
+    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showProfile)];
+    tapRecognizer.cancelsTouchesInView = YES;
+    [self.thumbnailViewTemplate addGestureRecognizer:tapRecognizer];
+    self.thumbnailViewTemplate.userInteractionEnabled =YES;
+
     
     self.expanded=NO;
 }
 
+-(void)showProfile{
+    NSLog(@"show the user's profile");
+    Peer*peer = [[PAFetchManager sharedFetchManager] getObject:self.commentor_id withEntityType:@"Peer" andType:nil];
+    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UINavigationController *navController = [loginStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
+    PAFriendProfileViewController*root = navController.viewControllers[0];
+    root.peer=peer;
+    if(self.parentCircleTableView){
+        [self.parentCircleTableView presentViewController:navController animated:YES completion:nil];
+    }else if(self.parentTableView){
+         [self.parentTableView presentViewController:navController animated:YES completion:nil];
+    }
+}
 
 
 - (BOOL) textViewShouldBeginEditing:(UITextView *)textView
