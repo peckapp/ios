@@ -58,6 +58,10 @@ PAAssetManager * assetManager;
     self.commentsTableView.delegate=self;
     self.commentsTableView.dataSource=self;
     
+    
+    //NSLog(@"the superview height: %f", self.b);
+    //self.commentsTableView.frame = CGRectMake(0, 0, self.superview.frame.size.width, <#CGFloat height#>)
+    
     self.suggestedMembersTableView.delegate=self;
     self.suggestedMembersTableView.dataSource=self;
     
@@ -243,6 +247,7 @@ PAAssetManager * assetManager;
         cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
         [cell.likeButton setHidden:NO];
         [cell.numberOfLikesLabel setHidden:NO];
+    cell.commentor_id = tempComment.peer_id;
         
         if([self userHasLikedComment:tempComment]){
             [cell.likeButton setTitle:@"Unlike" forState:UIControlStateNormal];

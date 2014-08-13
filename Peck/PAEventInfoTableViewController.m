@@ -17,6 +17,16 @@
 #import "PAAssetManager.h"
 #import "PAMethodManager.h"
 
+#define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
+#define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
+
+
+#define imageHeight 256
+#define compressedHeight 88
+#define buffer 14
+#define defaultCellHeight 72
+#define reloadTime 10
+
 
 @interface PAEventInfoTableViewController ()
 
@@ -27,13 +37,16 @@
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) UIView *imagesView;
+@property (strong, nonatomic) UIView *floatingTextView;
 
 @property (strong, nonatomic) UIImageView *cleanImageView;
 @property (strong, nonatomic) UIImageView *blurredImageView;
 
 @property (strong, nonatomic) UILabel *timeLabel;
 @property (strong, nonatomic) UILabel *titleLabel;
-
+@property (strong, nonatomic) UILabel *descriptionLabel;
+@property (strong, nonatomic) UILabel *dateLabel;
 
 
 
@@ -47,9 +60,6 @@
 
 @implementation PAEventInfoTableViewController
 
-@synthesize startTimeLabel = _startTimeLabel;
-@synthesize endTimeLabel = _endTimeLabel;
-@synthesize descriptionTextView = _blurbTextView;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -65,13 +75,12 @@ PAAssetManager * assetManager;
 
 BOOL reloaded = NO;
 
-#define defaultCellHeight 72
-#define reloadTime 10
-
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    
 
     assetManager = [PAAssetManager sharedManager];
     
@@ -92,45 +101,67 @@ BOOL reloaded = NO;
     [textViewHelper setHidden:YES];
 
     heightDictionary = [[NSMutableDictionary alloc] init];
+
+    /*
     NSError * error = nil;
     if (![self.fetchedResultsController performFetch:&error])
     {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-
+     */
+     
     //[self configureView];
 
+    //self.automaticallyAdjustsScrollViewInsets = NO;
 
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    [self.view addSubview:self.tableView];
+    self.view.backgroundColor = darkColor;
 
-    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 88)];
+    self.headerView = [[UIView alloc] init];
+    self.imagesView = [[UIView alloc] init];
+    self.floatingTextView = [[UIView alloc] init];
+    //self.floatingTextView.backgroundColor = [UIColor darkGrayColor];
 
     self.cleanImageView = [[UIImageView alloc] init];
-    self.cleanImageView.contentMode = UIViewContentModeScaleAspectFill;
-    [self.headerView addSubview:self.cleanImageView];
+    self.cleanImageView.contentMode = UIViewContentModeCenter;
+    [self.imagesView addSubview:self.cleanImageView];
 
     self.blurredImageView = [[UIImageView alloc] init];
-    self.blurredImageView.contentMode = UIViewContentModeScaleAspectFill;
-    [self.headerView addSubview:self.blurredImageView];
+    self.blurredImageView.contentMode = UIViewContentModeCenter;
+    [self.imagesView addSubview:self.blurredImageView];
 
     self.timeLabel = [[UILabel alloc] init];
     self.timeLabel.textColor = [UIColor whiteColor];
     self.timeLabel.font = [UIFont boldSystemFontOfSize:17.0];
     self.timeLabel.textAlignment = NSTextAlignmentRight;
-    //self.timeLabel.backgroundColor = [UIColor lightGrayColor];
-    [self.headerView addSubview:self.timeLabel];
+    // self.timeLabel.backgroundColor = [UIColor lightGrayColor];
+    [self.floatingTextView addSubview:self.timeLabel];
 
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
     //self.titleLabel.backgroundColor = [UIColor lightGrayColor];
-    [self.headerView addSubview:self.titleLabel];
+    [self.floatingTextView addSubview:self.titleLabel];
 
-    self.tableView.tableHeaderView = self.headerView;
+    self.dateLabel = [[UILabel alloc] init];
+    //self.dateLabel.backgroundColor = [UIColor lightGrayColor];
+    [self.headerView addSubview:self.dateLabel];
+
+    self.descriptionLabel = [[UILabel alloc] init];
+    self.descriptionLabel.font = [UIFont systemFontOfSize:13.0];
+    self.descriptionLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.descriptionLabel.numberOfLines = 0;
+    // self.descriptionLabel.backgroundColor = [UIColor lightGrayColor];
+    [self.headerView addSubview:self.descriptionLabel];
+
+    self.headerView.backgroundColor = [UIColor whiteColor];
+
+    [self.view addSubview:self.imagesView];
+    [self.view addSubview:self.floatingTextView];
+    
+    
+
+    //self.tableView.tableHeaderView = self.headerView;
 
     /*
     self.keyboardAccessoryView = [[UIView alloc] init];
@@ -167,54 +198,84 @@ BOOL reloaded = NO;
 -(void)viewWillAppear:(BOOL)animated{
     //[super viewWillAppear:animated];
     
-    NSLog(@"view will appear");
-    
+    NSLog(@"event info view will appear");
+
+    /*
     
     //[self registerForKeyboardNotifications];
     NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        while(viewingEvent) {
+        while(self.expanded) {
             [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple"];
             [NSThread sleepForTimeInterval:reloadTime];
         }
     });
+     */
 
-    self.tableView.frame = self.view.frame;
-    self.cleanImageView.frame = self.headerView.frame;
-    self.blurredImageView.frame = self.headerView.frame;
+    self.view.frame = self.parentViewController.view.bounds;
+    [self updateFrames];
+}
 
+- (void)updateFrames
+{
+    NSLog(@"event info frame width: %f", self.view.frame.size.width);
+    NSLog(@"event info frame height: %f", self.view.frame.size.height);
+
+    //self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
+
+    self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
+    self.cleanImageView.frame = self.imagesView.frame;
+    self.blurredImageView.frame = self.imagesView.frame;
+
+
+    self.floatingTextView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
     CGRect left;
     CGRect right;
-    CGRectDivide(self.headerView.frame, &left, &right, 100, CGRectMinXEdge);
-    self.timeLabel.frame = CGRectInset(left, 10, 30);
-    self.titleLabel.frame = CGRectInset(right, 10, 30);
+    CGRectDivide(self.floatingTextView.frame, &left, &right, 90, CGRectMinXEdge);
+    self.timeLabel.frame = left;
+    self.titleLabel.frame = right;
+    self.titleLabel.frame = CGRectInset(self.titleLabel.frame, buffer, 0);
+    [self.floatingTextView sizeToFit];
+
+
+    self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
+    self.dateLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, 0);
+    [self.dateLabel sizeToFit];
+
+    self.descriptionLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, CGRectGetMaxY(self.dateLabel.frame));
+    [self.descriptionLabel sizeToFit];
+
+    self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, CGRectGetMaxY(self.descriptionLabel.frame) + buffer);
+
+
+
 
     /*
-    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
-    self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
-    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
-    self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
-    self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0, self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
+     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+     self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+     self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
+     self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0, self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
 
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, self.keyboardAccessoryView.frame.size.height, 0);
-    
-    
-    [self.realKeyboardAccessory resignFirstResponder];
-    [self.keyboardAccessory resignFirstResponder];
+     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, self.keyboardAccessoryView.frame.size.height, 0);
+
+
+     [self.realKeyboardAccessory resignFirstResponder];
+     [self.keyboardAccessory resignFirstResponder];
      */
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    // NSLog(@"event info frame: %f", self.view.bounds.size.height);
     initialFrame = self.tableView.frame;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
-    viewingEvent=NO;
+    viewingEvent = NO;
     [self.realKeyboardAccessory resignFirstResponder];
     [self.keyboardAccessory resignFirstResponder];
     
@@ -281,14 +342,45 @@ BOOL reloaded = NO;
 - (void)expandAnimated:(BOOL)animated
 {
     if (!self.expanded) {
+
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        self.tableView.backgroundColor = [UIColor clearColor];
+        self.tableView.dataSource = self;
+        self.tableView.delegate = self;
+        self.tableView.tableHeaderView = self.headerView;
+        [self.view addSubview:self.tableView];
+        self.tableView.frame = self.view.frame;
+        self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, 0, 0);
+
         self.cleanImageView.hidden = NO;
 
         void (^animationsBlock)(void) = ^{
+            self.floatingTextView.frame = CGRectOffset(self.floatingTextView.frame, 0, imageHeight - self.floatingTextView.frame.size.height);
+            self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
+            self.cleanImageView.frame = self.imagesView.frame;
+            self.blurredImageView.frame = self.imagesView.frame;
             self.blurredImageView.alpha = 0;
         };
 
         void (^completionBlock)(BOOL) = ^(BOOL finished){
             self.expanded = YES;
+
+            self.fetchedResultsController = nil;
+
+            NSError * error = nil;
+            if (![self.fetchedResultsController performFetch:&error])
+            {
+                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                abort();
+            }
+            
+            NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                while(self.expanded) {
+                    [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple"];
+                    [NSThread sleepForTimeInterval:reloadTime];
+                }
+            });
         };
 
         if (animated) {
@@ -308,10 +400,17 @@ BOOL reloaded = NO;
     if (self.expanded) {
 
         void (^animationsBlock)(void) = ^{
+            self.floatingTextView.frame = CGRectOffset(self.floatingTextView.frame, 0, -imageHeight + self.floatingTextView.frame.size.height);
+            self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
+            self.cleanImageView.frame = self.imagesView.frame;
+            self.blurredImageView.frame = self.imagesView.frame;
             self.blurredImageView.alpha = 1;
         };
 
         void (^completionBlock)(BOOL) = ^(BOOL finished){
+            [self.tableView removeFromSuperview];
+            self.tableView = nil;
+
             self.cleanImageView.hidden = YES;
             self.expanded = NO;
         };
@@ -373,7 +472,12 @@ BOOL reloaded = NO;
 
         self.titleLabel.text = [self.detailItem valueForKey:@"title"];
 
-        UIImage* image = [assetManager imagePlaceholder];
+        [dateFormatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+        [self.dateLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
+
+        self.descriptionLabel.text = [self.detailItem valueForKey:@"descrip"];
+
+        UIImage* image = nil;
         if ([self.detailItem valueForKey:@"imageURL"]) {
             NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"imageURL"]]];
             UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
@@ -402,6 +506,8 @@ BOOL reloaded = NO;
             self.blurredImageView.image = image;
         }
     }
+
+    [self updateFrames];
 }
 
 
@@ -541,7 +647,9 @@ BOOL reloaded = NO;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [[_fetchedResultsController sections] count];
+    return 1;
+//    return [[_fetchedResultsController sections] count;
+
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -700,7 +808,7 @@ BOOL reloaded = NO;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    self.keyboardAccessoryView.frame = CGRectMake(0, scrollView.contentOffset.y + self.view.frame.size.height - self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.width, self.keyboardAccessoryView.frame.size.height);
+    //self.keyboardAccessoryView.frame = CGRectMake(0, scrollView.contentOffset.y + self.view.frame.size.height - self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.width, self.keyboardAccessoryView.frame.size.height);
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -779,7 +887,7 @@ BOOL reloaded = NO;
 
 - (void)expandTableViewCell:(PACommentCell *)cell {
     textViewHelper.frame = cell.commentTextView.frame;
-    textViewHelper.text=cell.commentTextView.text;
+    textViewHelper.text = cell.commentTextView.text;
     
     [textViewHelper setFont:[UIFont systemFontOfSize:14]];
     [textViewHelper sizeToFit];

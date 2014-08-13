@@ -28,6 +28,8 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (strong, nonatomic) NSIndexPath * selectedIndexPath;
+
 -(void)dismissCommentKeyboard;
 -(void)postComment:(NSString *)cell;
 -(void)showProfileOf:(Peer*)member;
@@ -38,6 +40,7 @@
 -(void)dismissCircleTitleKeyboard;
 -(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath;
 -(void)expandCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath;
+- (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

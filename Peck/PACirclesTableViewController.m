@@ -21,7 +21,6 @@
 #define reloadTime 10
 @interface PACirclesTableViewController ()
 
-@property (strong, nonatomic) NSIndexPath * selectedIndexPath;
 @property (strong, nonatomic) UIBarButtonItem * cancelCellButton;
 @property (strong, nonatomic) UITextField * inviteTextField;
 @property (strong, nonatomic) UITextField * textCapture;
@@ -121,8 +120,8 @@ BOOL viewingCircles;
     self.keyboardAccessory.backgroundColor = [UIColor lightGrayColor];
     [self.keyboardAccessoryView addSubview:self.keyboardAccessory];
     self.keyboardAccessory.delegate = self;
-    [self.view addSubview:self.keyboardAccessoryView];
-    self.keyboardAccessory.hidden = YES;
+    //[self.view addSubview:self.keyboardAccessoryView];
+    //self.keyboardAccessory.hidden = YES;
 
     self.realKeyboardAccessoryView = [[UIView alloc] init];
     self.realKeyboardAccessory = [[UITextField alloc] init];
@@ -137,6 +136,12 @@ BOOL viewingCircles;
     [self.realKeyboardAccessoryView addSubview:self.postButton];
     self.keyboardAccessory.inputAccessoryView = self.realKeyboardAccessoryView;
 
+    
+    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+    self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
+    self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0, self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(changeFirstResponder)
@@ -177,15 +182,6 @@ BOOL viewingCircles;
             [NSThread sleepForTimeInterval:reloadTime];
         }
     });
-
-    //TODO: this frame changing seems to partially cover up one of the circle cells
-    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
-    self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
-    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
-    self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
-    self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0,
-                                       self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
-    
     
 }
 
@@ -201,6 +197,7 @@ BOOL viewingCircles;
 
     if(viewingCell){
         PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+        //[self condenseCircleCell:cell atIndexPath:self.selectedIndexPath];
         [cell endEditing:YES];
         [self dismissKeyboard:self];
         [self dismissCircleTitleKeyboard];
@@ -385,7 +382,7 @@ BOOL viewingCircles;
                 [cell performFetch];
                 NSString* circleID = [cell.circle.id stringValue];
                 [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
-                
+                [self addCommentTextFieldToCell:cell];
             }
         } else {
             [self condenseCircleCell:cell atIndexPath:indexPath];
@@ -395,12 +392,14 @@ BOOL viewingCircles;
 }
 
 -(void)expandCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    /*
     if(self.selectedIndexPath){
         if(self.selectedIndexPath != indexPath){
+            //if another cell is expanded and the user is being linked to this cell from a peck
             PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
             [self condenseCircleCell:cell atIndexPath:self.selectedIndexPath];
         }
-    }
+    }*/
     
     cell.addingMembers=NO;
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
@@ -415,11 +414,30 @@ BOOL viewingCircles;
     
     self.tableView.scrollEnabled = NO;
     viewingCell=YES;
+    
+    [self configureCell:cell atIndexPath:indexPath];
+    
+    NSLog(@"configured the cell at index path: %li",(long)indexPath.row);
+    
+    NSString* circleID = [cell.circle.id stringValue];
+    NSLog(@"get comments for circle: %@", circleID);
+    [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
+    
+    [self addCommentTextFieldToCell:cell];
+    
+}
+
+-(void)addCommentTextFieldToCell:(PACircleCell*)cell{
     self.keyboardAccessory.hidden = NO;
     self.keyboardAccessoryView.frame = CGRectMake(0, cell.frame.origin.y + cell.frame.size.height - 44, self.view.frame.size.width, 44);
-    [self configureCell:cell atIndexPath:indexPath];
-    NSString* circleID = [cell.circle.id stringValue];
-    [[PASyncManager globalSyncManager] updateCommentsFrom:circleID withCategory:@"circles"];
+    
+    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+    self.realKeyboardAccessoryView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.realKeyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 7 - self.realKeyboardAccessoryView.frame.size.height, 30);
+    self.postButton.frame = CGRectMake(self.realKeyboardAccessoryView.frame.size.width - self.realKeyboardAccessoryView.frame.size.height, 0,
+                                       self.realKeyboardAccessoryView.frame.size.height, self.realKeyboardAccessoryView.frame.size.height);
+    [cell addSubview:self.keyboardAccessoryView];
 }
 
 -(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
@@ -443,6 +461,7 @@ BOOL viewingCircles;
     }
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
+    [self.keyboardAccessoryView removeFromSuperview];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -593,6 +612,7 @@ BOOL viewingCircles;
     [self.textCapture becomeFirstResponder];
     [self.inviteTextField becomeFirstResponder];
     
+    [self.keyboardAccessoryView removeFromSuperview];
 }
 
 - (void)dismissKeyboard:(id)sender
@@ -646,7 +666,7 @@ BOOL viewingCircles;
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"circleName" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"circleName" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -881,7 +901,7 @@ BOOL viewingCircles;
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];

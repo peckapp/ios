@@ -8,6 +8,9 @@
 
 #import "PAAssetManager.h"
 
+#define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
+#define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
+
 @implementation PAAssetManager
 
 + (id)sharedManager {
@@ -27,9 +30,30 @@
         self.profilePlaceholder = [UIImage imageNamed:@"profile-placeholder"];
         self.horizontalShadow = [[UIImage imageNamed:@"drop-shadow-horizontal"]stretchableImageWithLeftCapWidth:1 topCapHeight:0];
         self.unavailableColor = [UIColor colorWithHue:1 saturation:0 brightness:.85 alpha:1];
+        
+        
+        CGSize size = CGSizeMake(200, 200);
+        self.greyBackground = [self imageWithColor:[UIColor whiteColor] andSize:size];
 
     }
     return self;
+}
+
+- (UIImage *)imageWithColor:(UIColor *)color andSize:(CGSize)size;
+{
+    UIImage *img = nil;
+    
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context,
+                                   color.CGColor);
+    CGContextFillRect(context, rect);
+    img = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return img;
 }
 
 - (UIImageView *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView

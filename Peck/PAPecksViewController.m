@@ -233,7 +233,7 @@ static NSString *nibName = @"PAPeckCell";
     }
     
     [cell addSubview:thumbnail];
-   // cell.senderPicture =
+    cell.profileThumbnail = thumbnail;
 }
 
 -(NSString*)dateToString:(NSDate *)date{
@@ -278,7 +278,7 @@ static NSString *nibName = @"PAPeckCell";
     Peck* peck = [_fetchedResultsController objectAtIndexPath:indexPath];
     if([peck.notification_type isEqualToString:@"event_invite"]){
         NSLog(@"show the detail of the event");
-    }else if([peck.notification_type isEqualToString:@"circle_comment"]){
+    }else if([peck.notification_type isEqualToString:@"circle_comment"] || [peck.notification_type isEqualToString:@"circle_invite"]){
         NSLog(@"bring the user to the circle");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         [appdelegate.dropDownBar selectItemAtIndex:3];
@@ -286,9 +286,22 @@ static NSString *nibName = @"PAPeckCell";
         //[NSThread sleepForTimeInterval:0.5];
         
         for(int i = 0; i<  [appdelegate.circleViewController.fetchedResultsController.fetchedObjects count]; i++){
-            Circle* circle =appdelegate.circleViewController.fetchedResultsController.fetchedObjects[i];
-            if(circle.id==peck.invitation_id){
-                NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+           NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+            Circle* circle =[appdelegate.circleViewController.fetchedResultsController objectAtIndexPath:indexPath];
+            if([circle.id integerValue]==[peck.refers_to integerValue]){
+                
+                //If there is an expanded circle that is not the circle we are trying to show
+                if(appdelegate.circleViewController.selectedIndexPath){
+                    if(appdelegate.circleViewController.selectedIndexPath != indexPath){
+                        //if another cell is expanded and the user is being linked to this cell from a peck
+                        PACircleCell* cell = (PACircleCell*)[appdelegate.circleViewController.tableView cellForRowAtIndexPath:appdelegate.circleViewController.selectedIndexPath];
+                        [appdelegate.circleViewController condenseCircleCell:cell atIndexPath:appdelegate.circleViewController.selectedIndexPath];
+                    }
+                }
+                
+                
+                [appdelegate.circleViewController.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+                
                 PACircleCell* cell = (PACircleCell*)[ appdelegate.circleViewController.tableView cellForRowAtIndexPath:indexPath];
                 [appdelegate.circleViewController expandCircleCell:cell atIndexPath:indexPath];
                 //[appdelegate.circleViewController tableView:appdelegate.circleViewController.tableView didSelectRowAtIndexPath:indexPath];

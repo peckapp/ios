@@ -1162,8 +1162,9 @@
              if(!peck){
                  NSLog(@"adding a peck to core data");
                  peck = [NSEntityDescription insertNewObjectForEntityForName:@"Peck" inManagedObjectContext: _managedObjectContext];
+                 [self setAttributesInPeck:peck withDictionary:peckAttributes];
              }
-             [self setAttributesInPeck:peck withDictionary:peckAttributes];
+             [self setAttributesInExistingPeck:peck withDictionary:peckAttributes];
              NSError* error = nil;
              [_managedObjectContext save:&error];
              [self.persistentStoreCoordinator unlock];
@@ -1184,9 +1185,18 @@
         NSLog(@"INVITATION ID: %@", [dictionary objectForKey:@"invitation"]);
         peck.invitation_id =[dictionary objectForKey:@"invitation"];
     }
+    if(![[dictionary objectForKey:@"refers_to"] isKindOfClass:[NSNull class]]){
+        peck.refers_to =[dictionary objectForKey:@"refers_to"];
+    }
     peck.notification_type = [dictionary objectForKey:@"notification_type"];
     peck.interacted_with = [dictionary objectForKey:@"interacted"];
     peck.invited_by = [dictionary objectForKey:@"invited_by"];
+}
+
+-(void)setAttributesInExistingPeck:(Peck*)peck withDictionary:(NSDictionary*)dictionary{
+    if([peck.interacted_with boolValue]!=[[dictionary objectForKey:@"interacted"] boolValue] ){
+        peck.interacted_with = [dictionary objectForKey:@"interacted"];
+    }
 }
 
 #pragma mark - Dining actions
@@ -1613,6 +1623,10 @@
         _managedObjectContext = [appdelegate managedObjectContext];
         _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
+        NSString* simpleEventsURL = [simple_eventsAPI stringByAppendingString:@"/"];
+        simpleEventsURL = [simpleEventsURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"] stringValue]];
+        
+        
         [[PASessionManager sharedClient] GET:simple_eventsAPI
                                   parameters:[self authenticationParameters]
                                      success:^
@@ -1716,7 +1730,7 @@
                                       parameters:[self authenticationParameters]
                                          success:^
              (NSURLSessionDataTask * __unused task, id JSON) {
-                 //NSLog(@"JSON: %@",JSON);
+                 NSLog(@"JSON: %@",JSON);
                  NSDictionary *commentsDictionary = (NSDictionary*)JSON;
                  NSArray *postsFromResponse = [commentsDictionary objectForKey:@"comments"];
                  for (NSDictionary *commentAttributes in postsFromResponse) {
@@ -1725,9 +1739,13 @@
                      [self.persistentStoreCoordinator lock];
                      Comment* comment = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Comment" andType:nil];
                      if(!comment){
+                         NSLog(@"adding comment to core data");
                          comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext: _managedObjectContext];
+                         [self setAttributesInComment:comment withDictionary:commentAttributes];
+                     }else{
+                         [self setAttributesInExistingComment:comment withDictionary:commentAttributes];
                      }
-                     [self setAttributesInComment:comment withDictionary:commentAttributes];
+                     
                      NSError* error = nil;
                      [_managedObjectContext save:&error];
                      [self.persistentStoreCoordinator unlock];
@@ -1753,6 +1771,14 @@
     comment.likes = [dictionary objectForKey:@"likes"];
 }
 
+-(void)setAttributesInExistingComment:(Comment*)comment withDictionary:(NSDictionary*)dictionary{
+    //This method will be called when a we want to set the attributes of a comment that is already in core data. It is helpful because not as many calls will be made to the "did change object" delegate method of the fetched results controller that controls this batch of comments, reducing negative impact on the UI.
+    
+    //Currently "likes" is the only attribute of comment that can be changed when the comment is in core data. More attributes will need to be added if we implement editing for comments.
+    if([comment.likes count]!= [[dictionary objectForKey:@"likes"] count]){
+        comment.likes = [dictionary objectForKey:@"likes"];
+    }
+}
 
 #pragma mark - suscription actions
 

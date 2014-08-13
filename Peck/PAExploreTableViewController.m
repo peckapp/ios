@@ -85,7 +85,7 @@ NSCache *imageCache;
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;
     
-    cell.photoView.image = [assetManager imagePlaceholder];
+    
     
     if(tempExplore.imageURL){
         NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempExplore.imageURL]];
@@ -93,10 +93,25 @@ NSCache *imageCache;
     
         if(image){
             cell.photoView.image = image;
+            
+            
         }
         else {
-            [cell.photoView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+            //[cell.photoView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+            [cell.photoView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:imageURL] placeholderImage:[assetManager greyBackground] success:^(NSURLRequest* request, NSHTTPURLResponse* response, UIImage* image){
+                
+                [UIView transitionWithView:cell.photoView
+                                  duration:1.0f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{
+                                    cell.photoView.image = image;
+                                } completion:nil];
+            }failure:^(NSURLRequest* request, NSHTTPURLResponse* response, NSError* error){
+                NSLog(@"failed to get image");
+            }];
         }
+    }else{
+        cell.photoView.image = [assetManager imagePlaceholder];
     }
     
 }
