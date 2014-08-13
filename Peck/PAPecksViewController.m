@@ -292,7 +292,6 @@ static NSString *nibName = @"PAPeckCell";
                 [appdelegate.circleViewController.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
                 
                 PACircleCell* cell = (PACircleCell*)[ appdelegate.circleViewController.tableView cellForRowAtIndexPath:indexPath];
-                //[appdelegate.circleViewController configureCell:cell atIndexPath:indexPath];
                 [appdelegate.circleViewController expandCircleCell:cell atIndexPath:indexPath];
                 //[appdelegate.circleViewController tableView:appdelegate.circleViewController.tableView didSelectRowAtIndexPath:indexPath];
                 break;

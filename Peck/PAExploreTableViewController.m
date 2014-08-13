@@ -93,9 +93,23 @@ NSCache *imageCache;
     
         if(image){
             cell.photoView.image = image;
+            
+            
         }
         else {
             [cell.photoView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+            [cell.photoView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:imageURL] placeholderImage:[assetManager imagePlaceholder] success:^(NSURLRequest* request, NSHTTPURLResponse* response, UIImage* image){
+                //cell.photoView.image = image;
+                
+                [UIView transitionWithView:cell.photoView
+                                  duration:1.0f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{
+                                    cell.photoView.image = image;
+                                } completion:nil];
+            }failure:^(NSURLRequest* request, NSHTTPURLResponse* response, NSError* error){
+                NSLog(@"failed to get image");
+            }];
         }
     }else{
         cell.photoView.image = [assetManager imagePlaceholder];
