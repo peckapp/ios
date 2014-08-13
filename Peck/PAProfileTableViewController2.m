@@ -72,11 +72,15 @@ BOOL loggedIn;
         loggedIn=YES;
         NSLog(@"logged in");
         self.loginButton.title =@"Logout";
+        self.registerButton.title = @"";
+        self.registerButton.action = nil;
     }
     else{
         loggedIn=NO;
         NSLog(@"logged out");
         self.loginButton.title = @"Login";
+        self.registerButton.title = @"Register";
+        self.registerButton.action = @selector(registerAccount:);
     }
 }
 
@@ -175,6 +179,9 @@ BOOL loggedIn;
         self.lastNameTextField.text = @"";
         self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
         self.loginButton.title = @"Login";
+        self.registerButton.title = @"Register";
+        self.registerButton.action = @selector(registerAccount:);
+        
         loggedIn=NO;
     }
 }
