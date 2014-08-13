@@ -14,5 +14,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *photoView;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionLabel;
+- (IBAction)attendEvent:(id)sender;
 
 @end
