@@ -23,5 +23,6 @@
 }
 
 - (IBAction)attendEvent:(id)sender {
+    NSLog(@"attend the event");
 }
 @end
