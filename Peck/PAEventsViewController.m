@@ -149,9 +149,7 @@ PAAssetManager * assetManager;
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
 
-    UIImageView *shadow = [[UIImageView alloc] initWithImage:[assetManager horizontalShadow]];
-    shadow.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
-    [self.view addSubview:shadow];
+    [self.view addSubview:[assetManager createShadowWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64) top:NO]];
 
     UISwipeGestureRecognizer *swipeLeftGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(transitionToRightTableView)];
     swipeLeftGesture.numberOfTouchesRequired = 1;
