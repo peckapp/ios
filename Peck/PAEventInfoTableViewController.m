@@ -98,15 +98,15 @@ BOOL reloaded = NO;
 
     heightDictionary = [[NSMutableDictionary alloc] init];
 
-
+    /*
     NSError * error = nil;
     if (![self.fetchedResultsController performFetch:&error])
     {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-
-
+     */
+     
     //[self configureView];
 
     //self.automaticallyAdjustsScrollViewInsets = NO;
@@ -151,16 +151,9 @@ BOOL reloaded = NO;
 
     self.headerView.backgroundColor = [UIColor whiteColor];
 
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.tableHeaderView = self.headerView;
-
     [self.view addSubview:self.imagesView];
-    [self.view addSubview:self.tableView];
-
-    self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, 0, 0);
+    
+    
 
     //self.tableView.tableHeaderView = self.headerView;
 
@@ -248,7 +241,7 @@ BOOL reloaded = NO;
 
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, CGRectGetMaxY(self.descriptionLabel.frame) + buffer);
 
-    self.tableView.tableHeaderView = self.headerView;
+
 
 
     /*
@@ -359,7 +352,19 @@ BOOL reloaded = NO;
                 NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
                 abort();
             }
+            
+            self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+            self.tableView.backgroundColor = [UIColor clearColor];
+            self.tableView.dataSource = self;
+            self.tableView.delegate = self;
+            self.tableView.tableHeaderView = self.headerView;
+        
+            [self.view addSubview:self.tableView];
+            
+            self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, 0, 0);
 
+            [self updateFrames];
+            
             NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 while(self.expanded) {
