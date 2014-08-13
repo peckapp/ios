@@ -1681,7 +1681,7 @@
                                       parameters:[self authenticationParameters]
                                          success:^
              (NSURLSessionDataTask * __unused task, id JSON) {
-                 //NSLog(@"JSON: %@",JSON);
+                 NSLog(@"JSON: %@",JSON);
                  NSDictionary *commentsDictionary = (NSDictionary*)JSON;
                  NSArray *postsFromResponse = [commentsDictionary objectForKey:@"comments"];
                  for (NSDictionary *commentAttributes in postsFromResponse) {
@@ -1690,6 +1690,7 @@
                      [self.persistentStoreCoordinator lock];
                      Comment* comment = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Comment" andType:nil];
                      if(!comment){
+                         NSLog(@"adding comment to core data");
                          comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext: _managedObjectContext];
                      }
                      [self setAttributesInComment:comment withDictionary:commentAttributes];

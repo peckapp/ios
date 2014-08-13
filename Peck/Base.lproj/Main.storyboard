@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6205" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
     <dependencies>
+        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
     </dependencies>
     <scenes>
@@ -863,7 +864,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="rpt-SB-vsa" kind="push" identifier="showEventDetail" id="bE3-cA-K6X"/>
                         <segue destination="sCG-OO-lYg" kind="push" identifier="showDiningDetail" id="ryJ-rI-fQC"/>
                     </connections>
                 </tableViewController>
@@ -908,24 +908,18 @@
             <point key="canvasLocation" x="-2052" y="2318"/>
         </scene>
         <!--Event Info Table View Controller-->
-        <scene sceneID="iH3-Gt-QtS">
+        <scene sceneID="S91-Re-wlu">
             <objects>
-                <tableViewController storyboardIdentifier="event-info-view-controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="rpt-SB-vsa" customClass="PAEventInfoTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Oqv-ah-lB4">
-                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
+                <viewController storyboardIdentifier="event-info-view-controller" id="5C3-6I-DLQ" customClass="PAEventInfoTableViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="N6H-0b-ZIo">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        <connections>
-                            <outlet property="dataSource" destination="rpt-SB-vsa" id="QtA-X6-iOg"/>
-                            <outlet property="delegate" destination="rpt-SB-vsa" id="GZY-RG-nlf"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="oUu-B6-1W8"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iVS-aJ-ShC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Hqk-Kk-jTv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2052" y="3032"/>
+            <point key="canvasLocation" x="-2052" y="3002"/>
         </scene>
         <!--Institution-->
         <scene sceneID="LG1-G8-7Oc">
@@ -1054,7 +1048,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4sN-Pf-ic2">
-                                                    <rect key="frame" x="17.5" y="-2.5" width="301.5" height="90"/>
+                                                    <rect key="frame" x="17.5" y="-2.5" width="301.5" height="90.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -1261,6 +1255,6 @@
         </simulatedScreenMetrics>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="hFV-W3-ZgN"/>
+        <segue reference="qOD-fx-0or"/>
     </inferredMetricsTieBreakers>
 </document>
