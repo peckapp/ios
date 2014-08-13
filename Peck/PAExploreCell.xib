@@ -55,6 +55,7 @@
             </tableViewCellContentView>
             <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
+                <outlet property="attendButton" destination="py7-DU-HeP" id="fty-FX-HRC"/>
                 <outlet property="contextLabel" destination="KFy-lt-Xcz" id="BMV-UZ-2ra"/>
                 <outlet property="dateLabel" destination="6uA-pe-kG2" id="6SP-Ig-565"/>
                 <outlet property="descriptionLabel" destination="hCx-XY-dMm" id="T3R-4D-yty"/>
