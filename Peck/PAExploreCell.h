@@ -15,7 +15,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionLabel;
 
-//@property (weak, nonatomic) NSNumber* explore
+@property (weak, nonatomic) NSNumber* exploreID;
+@property (weak, nonatomic) NSString* category;
+@property (weak, nonatomic) IBOutlet UIButton *attendButton;
 
 - (IBAction)attendEvent:(id)sender;
 

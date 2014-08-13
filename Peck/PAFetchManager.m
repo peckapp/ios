@@ -275,6 +275,39 @@
     }
 }
 
+-(void)deleteObject:(NSNumber *) newID withEntityType:(NSString*)entityType andCategory:(NSString*)category
+{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest * request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *objects = [NSEntityDescription entityForName:entityType inManagedObjectContext:_managedObjectContext];
+    [request setEntity:objects];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id = %@", newID];
+    NSMutableArray*predicateArray = [[NSMutableArray alloc] init];
+    [predicateArray addObject:predicate];
+    //[request setPredicate:predicate];
+    
+    if(category!=nil){
+        NSPredicate* categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@",category];
+        [predicateArray addObject:categoryPredicate];
+    }
+    
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    [request setPredicate:compoundPredicate];
+    
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
+    //fetch events in order to check if the events we want to add already exist in core data
+    
+    if([mutableFetchResults count]>0){
+        [_managedObjectContext deleteObject:mutableFetchResults[0]];
+        NSError *saveError = nil;
+        [_managedObjectContext save:&saveError];
+    }
+}
+
 -(Event*)getEventWithID:(NSNumber*)eventID andType:(NSString*)type{
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];

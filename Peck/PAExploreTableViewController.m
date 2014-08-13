@@ -84,7 +84,8 @@ NSCache *imageCache;
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;
-    
+    cell.exploreID = tempExplore.id;
+    cell.category = tempExplore.category;
     
     
     if(tempExplore.imageURL){
@@ -93,8 +94,6 @@ NSCache *imageCache;
     
         if(image){
             cell.photoView.image = image;
-            
-            
         }
         else {
             //[cell.photoView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
@@ -114,6 +113,13 @@ NSCache *imageCache;
         cell.photoView.image = [assetManager imagePlaceholder];
     }
     
+    if([tempExplore.category isEqualToString:@"event"]){
+        cell.attendButton.hidden = NO;
+    }else{
+        cell.attendButton.hidden = YES;
+    }
+    
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -126,6 +132,7 @@ NSCache *imageCache;
     }
     
     [self configureCell:cell atIndexPath:indexPath];
+    
     return cell;
 }
 

@@ -664,7 +664,7 @@
                                            //if the user is attending from a peck
                                            [self updatePecks];
                                        }
-                                       //[self updateEventInfo];
+                                       [self updateEventInfo];
                                    }
      
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
