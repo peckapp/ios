@@ -137,7 +137,7 @@ PAAssetManager * assetManager;
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if(section==0){
-        return @"Add Members";
+        return @"Suggested Invites";
     }
     return @"Added Members";
 }

@@ -357,6 +357,7 @@
                                       [self updateSubscriptions];
                                       
                                       [self updateUserAnnouncements];
+                                      [self updateEventInfo];
                                       //take care of some necessary login stuff
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       
@@ -1629,7 +1630,7 @@
         NSLog(@"simple events url %@", simpleEventsURL);
         
         NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
-                                [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"], @"user_ip",
+                                [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"], @"user_id",
                                 [[self authenticationParameters] objectForKey:@"authentication"], @"authentication",
                                 nil];
         
