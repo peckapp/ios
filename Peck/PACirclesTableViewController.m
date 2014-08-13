@@ -21,7 +21,6 @@
 #define reloadTime 10
 @interface PACirclesTableViewController ()
 
-@property (strong, nonatomic) NSIndexPath * selectedIndexPath;
 @property (strong, nonatomic) UIBarButtonItem * cancelCellButton;
 @property (strong, nonatomic) UITextField * inviteTextField;
 @property (strong, nonatomic) UITextField * textCapture;
@@ -183,9 +182,6 @@ BOOL viewingCircles;
             [NSThread sleepForTimeInterval:reloadTime];
         }
     });
-
-    
-    
     
 }
 
@@ -201,10 +197,10 @@ BOOL viewingCircles;
 
     if(viewingCell){
         PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
-        [self condenseCircleCell:cell atIndexPath:self.selectedIndexPath];
-        /*[cell endEditing:YES];
+        //[self condenseCircleCell:cell atIndexPath:self.selectedIndexPath];
+        [cell endEditing:YES];
         [self dismissKeyboard:self];
-        [self dismissCircleTitleKeyboard];*/
+        [self dismissCircleTitleKeyboard];
     }
     viewingCircles=NO;
     [self deregisterFromKeyboardNotifications];
@@ -396,13 +392,14 @@ BOOL viewingCircles;
 }
 
 -(void)expandCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    /*
     if(self.selectedIndexPath){
         if(self.selectedIndexPath != indexPath){
-            //if another cell is expanded and the user is being liked to this cell from a peck
+            //if another cell is expanded and the user is being linked to this cell from a peck
             PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
             [self condenseCircleCell:cell atIndexPath:self.selectedIndexPath];
         }
-    }
+    }*/
     
     cell.addingMembers=NO;
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
@@ -669,7 +666,7 @@ BOOL viewingCircles;
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"circleName" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"circleName" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -904,7 +901,7 @@ BOOL viewingCircles;
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];

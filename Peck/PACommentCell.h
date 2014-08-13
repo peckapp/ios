@@ -31,5 +31,6 @@
 @property (nonatomic) NSInteger commentIntegerID;
 @property (strong, nonatomic) NSString* comment_from;
 
+@property (weak, nonatomic) NSNumber* commentor_id;
 - (IBAction)likeButton:(id)sender;
 @end

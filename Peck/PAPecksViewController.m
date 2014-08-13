@@ -289,6 +289,17 @@ static NSString *nibName = @"PAPeckCell";
            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
             Circle* circle =[appdelegate.circleViewController.fetchedResultsController objectAtIndexPath:indexPath];
             if([circle.id integerValue]==[peck.refers_to integerValue]){
+                
+                //If there is an expanded circle that is not the circle we are trying to show
+                if(appdelegate.circleViewController.selectedIndexPath){
+                    if(appdelegate.circleViewController.selectedIndexPath != indexPath){
+                        //if another cell is expanded and the user is being linked to this cell from a peck
+                        PACircleCell* cell = (PACircleCell*)[appdelegate.circleViewController.tableView cellForRowAtIndexPath:appdelegate.circleViewController.selectedIndexPath];
+                        [appdelegate.circleViewController condenseCircleCell:cell atIndexPath:appdelegate.circleViewController.selectedIndexPath];
+                    }
+                }
+                
+                
                 [appdelegate.circleViewController.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
                 
                 PACircleCell* cell = (PACircleCell*)[ appdelegate.circleViewController.tableView cellForRowAtIndexPath:indexPath];
