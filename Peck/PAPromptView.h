@@ -11,6 +11,6 @@
 @interface PAPromptView : UIView
 - (IBAction)registerButton:(id)sender;
 - (IBAction)loginButton:(id)sender;
-+ (id)promptView:(UIViewController*)sender;
++ (UIView *)promptViewWithFrame:(CGRect)frame viewController:(id)sender;
 
 @end

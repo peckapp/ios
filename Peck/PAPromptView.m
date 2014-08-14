@@ -34,24 +34,24 @@
 }
 */
 
-+ (id)promptView:(UIViewController*)sender;
++ (UIView *)promptViewWithFrame:(CGRect)frame viewController:(id)sender;
 {
-    PAPromptView *promptView = [[[NSBundle mainBundle] loadNibNamed:@"View" owner:nil options:nil] lastObject];
+    PAPromptView *prompt = [[[NSBundle mainBundle] loadNibNamed:@"PAPromptView" owner:nil options:nil] lastObject];
+    UIView *view = [[UIView alloc] initWithFrame:frame];
+    prompt.center = view.center;
+    [view addSubview:prompt];
     
-    promptView.viewController = sender;
-    promptView.backgroundColor = [[PAAssetManager sharedManager] unavailableColor];
-    // make sure customView is not nil or the wrong class!
-    if ([promptView isKindOfClass:[PAPromptView class]])
-        return promptView;
-    else
-        return nil;
+    prompt.viewController = sender;
+    view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+
+    return view;
 }
 
 - (IBAction)registerButton:(id)sender {
     NSLog(@"register");
     UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
-    UIViewController *registerControllet = [loginStoryboard instantiateViewControllerWithIdentifier:@"register"];
-    [self.viewController presentViewController:registerControllet animated:YES completion:nil];
+    UIViewController *registerController = [loginStoryboard instantiateViewControllerWithIdentifier:@"register"];
+    [self.viewController presentViewController:registerController animated:YES completion:nil];
 
 }
 

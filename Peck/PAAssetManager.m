@@ -25,7 +25,6 @@
         self.eventPlaceholder = [UIImage imageNamed:@"event-placeholder"];
         self.imagePlaceholder = [UIImage imageNamed:@"image-placeholder"];
         self.profilePlaceholder = [UIImage imageNamed:@"profile-placeholder"];
-        self.unavailableColor = [UIColor colorWithHue:1 saturation:0 brightness:0.9 alpha:1];
         self.darkColor = [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1];
         self.lightColor = [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1];
         
@@ -70,6 +69,7 @@
     }
     return dropShadow;
 }
+
 
 - (UIImageView *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView
 {
