@@ -1245,10 +1245,11 @@
          NSLog(@"peck JSON: %@", JSON);
          NSDictionary* json = (NSDictionary*)JSON;
          NSArray* pecks = [json objectForKey:@"pecks"];
+         [self.persistentStoreCoordinator lock];
          for(NSDictionary* peckAttributes in pecks){
              NSNumber* newID = [peckAttributes objectForKey:@"id"];
              //BOOL peckAlreadyExists = [self objectExists:newID withType:@"Peck" andCategory:nil];
-             [self.persistentStoreCoordinator lock];
+             
              Peck* peck = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Peck" andType:nil];
              if(!peck){
                  NSLog(@"adding a peck to core data");
@@ -1256,10 +1257,11 @@
                  [self setAttributesInPeck:peck withDictionary:peckAttributes];
              }
              [self setAttributesInExistingPeck:peck withDictionary:peckAttributes];
-             NSError* error = nil;
-             [_managedObjectContext save:&error];
-             [self.persistentStoreCoordinator unlock];
+             
          }
+         NSError* error = nil;
+         [_managedObjectContext save:&error];
+         [self.persistentStoreCoordinator unlock];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
