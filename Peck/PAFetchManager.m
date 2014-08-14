@@ -68,6 +68,8 @@
     [self removeAllObjectsOfType:@"Comment"];
     [self removeAllObjectsOfType:@"Peck"];
     [self removeAllObjectsOfType:@"Event"];
+    [self removeAllObjectsOfType:@"Explore"];
+    
     [[PASyncManager globalSyncManager] updatePeerInfo];
 }
 
@@ -88,6 +90,8 @@
         [_managedObjectContext deleteObject:oldUser];
     }
     
+    [self removeAllObjectsOfType:@"Explore"];
+    [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
     //[[PASyncManager globalSyncManager] updatePeerInfo];
 }
 

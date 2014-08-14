@@ -225,6 +225,7 @@
                                       [defaults setObject:userID forKey:user_id];
                                       NSString *apiKey = [userDictionary objectForKey:api_key];
                                       [defaults setObject:apiKey forKey:api_key];
+                                      [self updateExploreInfoForViewController:nil];
                                       if(callbackBlock){
                                           callbackBlock(YES);
                                       }
