@@ -11,10 +11,13 @@
 
 @interface PAMethodManager : NSObject <UIAlertViewDelegate>
 @property UIViewController* sender;
+@property (strong, nonatomic) void (^callbackBlock)(void);
 
 + (instancetype)sharedMethodManager;
 
 -(void)showRegisterAlert:(NSString*)message forViewController:(UIViewController*)sender;
+-(void)showInstitutionAlert:(void (^)(void))callbackBlock;
+
 -(UIImageView*)imageForPeer:(Peer*)peer;
 -(void)postInfoToFacebook:(NSDictionary*)eventInfo withImage:(NSData*)imageDat; 
 @end

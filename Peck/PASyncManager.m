@@ -332,6 +332,7 @@
                                       [defaults setObject:email forKey:@"email"];
                                       [defaults setObject:userID forKey:@"user_id"];
                                       [defaults setObject:apiKey forKey:@"api_key"];
+                                      [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
                                       
                                       if(imageURL){
                                           NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
@@ -413,6 +414,8 @@
                                           [defaults setObject:firstName forKey:first_name_define];
                                           [defaults setObject:lastName forKey:last_name_define];
                                           [defaults setObject:email forKey:@"email"];
+                                          [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
+                                          
                                           if(![blurb isKindOfClass:[NSNull class]]){
                                             [defaults setObject:blurb forKey:@"blurb"];
                                           }
@@ -460,6 +463,7 @@
                                        [defaults setObject:lastName forKey:last_name_define];
                                        [defaults setObject:email forKey:@"email"];
                                        [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
+                                       [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
                                     
                                        NSString* imageURL = [userDictionary objectForKey:@"image"];
                                        if([imageURL isEqualToString:@"/images/missing.png"]){
@@ -485,6 +489,11 @@
                                            
                                            NSURL* url =[NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];
                                            UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+                                           
+                                           //save the image to the sever as the user's new profile picture
+                                           [self updateUserWithInfo:[[NSDictionary alloc] init] withImage:
+                                            UIImageJPEGRepresentation(profilePicture, .5)];
+                                           
                                            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                                                                 NSUserDomainMask, YES);
                                            NSString *documentsDirectory = [paths objectAtIndex:0];

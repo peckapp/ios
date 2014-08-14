@@ -454,8 +454,31 @@
 
 - (IBAction)returnResultAndExit:(id)sender
 {
-    if([[NSUserDefaults standardUserDefaults] objectForKey:@"authentication_token"]){
+    NSUserDefaults* defualts = [NSUserDefaults standardUserDefaults];
     
+    if([defualts objectForKey:@"authentication_token"]){
+        NSLog(@"inst id %li home id %li", (long)[[defualts objectForKey:@"institution_id"] integerValue], (long)[[defualts objectForKey:@"home_institution"] integerValue]);
+        if([[defualts objectForKey:@"institution_id"] integerValue] == [[defualts objectForKey:@"home_institution"] integerValue]){
+            //if the user is viewing his home institution
+            [self continuePost];
+        }else{
+            //if the user is not viewing his home institution
+            [[PAMethodManager sharedMethodManager] showInstitutionAlert:^{
+                //this callback block will only be called if the user selects continue in the uialert view
+                [self continuePost];
+            }];
+        }
+    }else{
+        NSString*type = @"event";
+        if(_controlSwitch.selectedSegmentIndex==1){
+            type = @"annoucnement";
+        }
+        [[PAMethodManager sharedMethodManager] showRegisterAlert:[@"post an " stringByAppendingString:type] forViewController:self];
+    }
+    
+}
+
+-(void)continuePost{
     if([self.topRightBarButton.title isEqualToString:@"Save"]){
         //Editing
         if(_controlSwitch.selectedSegmentIndex==0){
@@ -482,7 +505,6 @@
                 [self showAllertWithMessage:@"You must enter an event name and time"];
             }else{
                 [self postEvent];
-            
             }
         }else if(_controlSwitch.selectedSegmentIndex==1){
             //The user is attempting to post an announcement
@@ -492,13 +514,6 @@
                 [self postAnnouncement];
             }
         }
-    }
-    }else{
-        NSString*type = @"event";
-        if(_controlSwitch.selectedSegmentIndex==1){
-            type = @"annoucnement";
-        }
-        [[PAMethodManager sharedMethodManager] showRegisterAlert:[@"post an " stringByAppendingString:type] forViewController:self];
     }
 }
 

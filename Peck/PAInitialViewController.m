@@ -120,6 +120,7 @@
                                   [user objectForKey:@"email"],@"email",
                                   token, @"facebook_token",
                                   @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
+                                  [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"],@"institution_id",
                                   nil];
         
         //We will store the picture locally that facebook has given us in case the user has not saved a new photo
