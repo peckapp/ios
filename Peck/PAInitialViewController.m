@@ -120,7 +120,24 @@
                                   [user objectForKey:@"email"],@"email",
                                   token, @"facebook_token",
                                   @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
+                                  [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"],@"institution_id",
                                   nil];
+        
+        //We will store the picture locally that facebook has given us in case the user has not saved a new photo
+        NSString *userImageURL = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [user objectID]];
+    
+        [[NSUserDefaults standardUserDefaults] setObject:userImageURL forKey:@"profile_picture_url"];
+        /*
+        UIImage* profilePicture. = user.id;
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                             NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                          @"profile_picture.jpeg" ];
+        NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
+        [data writeToFile:path atomically:YES];
+        NSLog(@"path: %@", path);
+        [defaults setObject:path forKey:@"profile_picture"];*/
         
         [[PASyncManager globalSyncManager] loginWithFacebook:userInfo forViewController:self];
         

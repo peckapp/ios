@@ -169,6 +169,7 @@ BOOL loggedIn;
         [defaults removeObjectForKey:@"email"];
         [defaults removeObjectForKey:@"profile_picture"];
         [defaults removeObjectForKey:@"profile_picture_url"];
+        [defaults removeObjectForKey:@"home_institution"];
         
         
         [defaults setObject:@NO forKey:@"logged_in"];

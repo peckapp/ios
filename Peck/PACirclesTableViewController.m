@@ -385,7 +385,7 @@ BOOL viewingCircles;
                 [self addCommentTextFieldToCell:cell];
             }
         } else {
-            [self condenseCircleCell:cell atIndexPath:indexPath];
+            //[self condenseCircleCell:cell atIndexPath:indexPath];
         }
 
     }
@@ -513,12 +513,13 @@ BOOL viewingCircles;
         [cell.titleTextField setHidden:YES];
         [cell.createCircleButton setHidden:YES];
         [cell.leaveCircleButton setHidden:YES];
+        [cell.backButton setHidden:YES];
         [cell updateCircleMembers:nil];
         if(viewingCell){
             [cell.titleTextField setHidden:NO];
             [cell.profilesTableView setHidden:NO];
             [cell.createCircleButton setHidden:NO];
-            
+            [cell.backButton setHidden:NO];
         }
         
     }
@@ -540,8 +541,10 @@ BOOL viewingCircles;
         cell.circleTitle.text = c.circleName;
         cell.delegate = self;
         [cell.leaveCircleButton setHidden:YES];
+        [cell.backButton setHidden:YES];
         if(viewingCell){
             [cell.leaveCircleButton setHidden:NO];
+            [cell.backButton setHidden:NO];
         }
         
         cell.circle=c;
@@ -613,6 +616,8 @@ BOOL viewingCircles;
     [self.inviteTextField becomeFirstResponder];
     
     [self.keyboardAccessoryView removeFromSuperview];
+    
+    [self configureCell:cell atIndexPath:indexPath];
 }
 
 - (void)dismissKeyboard:(id)sender
