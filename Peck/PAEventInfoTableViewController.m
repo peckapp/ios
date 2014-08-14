@@ -410,7 +410,7 @@ BOOL reloaded = NO;
 
 #pragma mark - managing the detail item
 
-- (void)setManagedObject:(NSManagedObject *)managedObject
+- (void)setManagedObject:(NSManagedObject *)managedObject parentObject:(NSManagedObject *)parentObject
 {
     if (_detailItem != managedObject) {
         _detailItem = managedObject;
