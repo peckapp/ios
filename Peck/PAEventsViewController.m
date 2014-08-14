@@ -444,9 +444,11 @@ PAAssetManager * assetManager;
     {
         case NSFetchedResultsChangeInsert:{
             Event *event = (Event*) anObject;
-            
-            if (event.blurredImageURL != nil) {
-                [self cacheImageForEventURL:event.blurredImageURL Type:event.type AndID:event.id];
+            if (event.imageURL) {
+                [self cacheImageForURL:event.imageURL];
+            }
+            if (event.blurredImageURL) {
+                [self cacheImageForURL:event.blurredImageURL];
             }
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
         }

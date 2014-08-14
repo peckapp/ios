@@ -478,6 +478,8 @@
                                            [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
                                        }
 
+                                       [self updateEventInfo];
+                                       [self updateUserAnnouncements];
                                        
                                        [sender dismissViewControllerAnimated:YES completion:nil];
                                        
