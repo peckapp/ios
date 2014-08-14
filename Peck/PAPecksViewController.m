@@ -21,8 +21,10 @@
 #import <FacebookSDK/FacebookSDK.h>
 
 @interface PAPecksViewController ()
+
 @property BOOL editing;
-@property (strong) PAPromptView* promptView;
+@property (strong) UIView *promptView;
+
 @end
 
 @implementation PAPecksViewController
@@ -114,23 +116,17 @@ static NSString *nibName = @"PAPeckCell";
     
         
     }else{
-        self.tableView.backgroundColor = [[PAAssetManager sharedManager] unavailableColor];
-        self.tableView.separatorColor = [[PAAssetManager sharedManager] unavailableColor];
-        
-        _promptView = [PAPromptView promptView:self];
-        
-        [self.view addSubview:_promptView];
-        
+        self.promptView = [PAPromptView promptViewWithFrame:self.view.bounds viewController:self];
+
+        self.view.userInteractionEnabled = NO;
+        [self.view addSubview:self.promptView];
     }
 }
 - (void)showNoPecks {
-    self.tableView.backgroundColor = [[PAAssetManager sharedManager] unavailableColor];
-    self.tableView.separatorColor = [[PAAssetManager sharedManager] unavailableColor];
     self.noPecksLabel.text = @"You have no Pecks";
-    self.noPecksLabel.textColor = [UIColor whiteColor];
     self.noPecksLabel.frame = CGRectMake(0, 30, self.view.frame.size.width, 60);
     self.noPecksLabel.textAlignment = NSTextAlignmentCenter;
-    self.noPecksLabel.font = [UIFont systemFontOfSize:28];
+    self.noPecksLabel.font = [UIFont boldSystemFontOfSize:17];
     
     [self.view addSubview:self.noPecksLabel];
 
@@ -145,6 +141,7 @@ static NSString *nibName = @"PAPeckCell";
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [_promptView removeFromSuperview];
+    self.view.userInteractionEnabled = YES;
 }
 
 - (void)didReceiveMemoryWarning
