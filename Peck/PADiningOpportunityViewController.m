@@ -50,10 +50,17 @@ PAAssetManager *assetManager;
 
 - (void) setManagedObject:(NSManagedObject *)managedObject
 {
-    if(managedObject){
-        self.
+    if (_detailItem != managedObject) {
+        _detailItem = managedObject;
+        
+        [self configureView];
     }
+}
 
+-(void)configureView{
+    if (self.detailItem) {
+        
+    }
 }
 
 - (UIView *)viewForBackButton
