@@ -25,8 +25,8 @@
         self.eventPlaceholder = [UIImage imageNamed:@"event-placeholder"];
         self.imagePlaceholder = [UIImage imageNamed:@"image-placeholder"];
         self.profilePlaceholder = [UIImage imageNamed:@"profile-placeholder"];
-        self.darkColor = [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1];
-        self.lightColor = [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1];
+        self.darkColor = [UIColor colorWithRed:38/255.0 green:27/255.0 blue:48/255.0 alpha:1];
+        self.lightColor = [UIColor colorWithRed:150/255.0 green:123/255.0 blue:255/255.0 alpha:1];
         
         
         CGSize size = CGSizeMake(200, 200);
