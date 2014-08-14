@@ -403,27 +403,29 @@
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                       NSArray* errors = [postsFromResponse objectForKey:@"errors"];
                                       if(![errors count]>0){
-                                      
+                                          
                                           [defaults setObject:@YES forKey:@"logged_in"];
                                           [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
                                           NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
-                                          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                                          NSString* firstName = [userDictionary objectForKey:first_name_define];
-                                          NSString* lastName = [userDictionary objectForKey:last_name_define];
-                                          NSString* email = [userDictionary objectForKey:@"email"];
-                                          NSString* blurb = [userDictionary objectForKey:@"blurb"];
-                                          NSNumber* userID = [userDictionary objectForKey:@"id"];
+                                          if([[userDictionary objectForKey:@"active"] boolValue]){
+                                              NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                              NSString* firstName = [userDictionary objectForKey:first_name_define];
+                                              NSString* lastName = [userDictionary objectForKey:last_name_define];
+                                              NSString* email = [userDictionary objectForKey:@"email"];
+                                              NSString* blurb = [userDictionary objectForKey:@"blurb"];
+                                              NSNumber* userID = [userDictionary objectForKey:@"id"];
                                       
-                                          [defaults setObject:userID forKey:@"user_id"];
-                                          [defaults setObject:firstName forKey:first_name_define];
-                                          [defaults setObject:lastName forKey:last_name_define];
-                                          [defaults setObject:email forKey:@"email"];
-                                          [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
+                                              [defaults setObject:userID forKey:@"user_id"];
+                                              [defaults setObject:firstName forKey:first_name_define];
+                                              [defaults setObject:lastName forKey:last_name_define];
+                                              [defaults setObject:email forKey:@"email"];
+                                              [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
                                           
-                                          if(![blurb isKindOfClass:[NSNull class]]){
-                                            [defaults setObject:blurb forKey:@"blurb"];
+                                              if(![blurb isKindOfClass:[NSNull class]]){
+                                                  [defaults setObject:blurb forKey:@"blurb"];
+                                              }
+                                              [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
                                           }
-                                          [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
                                       }else{
                                           UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Registration Error"
                                                                                          message:@"Something went wrong while registering"
@@ -477,74 +479,83 @@
                                        NSLog(@"JSON : %@", JSON);
                                        NSDictionary* json = (NSDictionary*)JSON;
                                        NSDictionary* userDictionary = [json objectForKey:@"user"];
-                                       NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                                       NSString* firstName = [userDictionary objectForKey:first_name_define];
-                                       NSString* lastName = [userDictionary objectForKey:last_name_define];
-                                       NSString* email = [userDictionary objectForKey:@"email"];
-                                       NSNumber* userID = [userDictionary objectForKey:@"id"];
-                                       NSString* apiKey = [userDictionary objectForKey:@"api_key"];
                                        
-                                       [defaults setObject:apiKey forKey:@"api_key"];
-                                       [defaults setObject:userID forKey:@"user_id"];
-                                       [defaults setObject:firstName forKey:first_name_define];
-                                       [defaults setObject:lastName forKey:last_name_define];
-                                       [defaults setObject:email forKey:@"email"];
-                                       [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
-                                       [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
+                                       if([[userDictionary objectForKey:@"active"] boolValue]){
+                                           NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                           NSString* firstName = [userDictionary objectForKey:first_name_define];
+                                           NSString* lastName = [userDictionary objectForKey:last_name_define];
+                                           NSString* email = [userDictionary objectForKey:@"email"];
+                                           NSNumber* userID = [userDictionary objectForKey:@"id"];
+                                           NSString* apiKey = [userDictionary objectForKey:@"api_key"];
+                                       
+                                           [defaults setObject:apiKey forKey:@"api_key"];
+                                           [defaults setObject:userID forKey:@"user_id"];
+                                           [defaults setObject:firstName forKey:first_name_define];
+                                           [defaults setObject:lastName forKey:last_name_define];
+                                           [defaults setObject:email forKey:@"email"];
+                                           [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
+                                           [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
                                     
-                                       NSString* imageURL = [userDictionary objectForKey:@"image"];
-                                       if([imageURL isEqualToString:@"/images/missing.png"]){
-                                           imageURL=nil;
-                                       }
+                                           NSString* imageURL = [userDictionary objectForKey:@"image"];
+                                           if([imageURL isEqualToString:@"/images/missing.png"]){
+                                               imageURL=nil;
+                                           }
                                        
-                                       if(imageURL){
-                                           NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
-                                           NSURL* url =[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
-                                           UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-                                           NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                           if(imageURL){
+                                               NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
+                                               NSURL* url =[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+                                               UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+                                               NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                                                                 NSUserDomainMask, YES);
-                                           NSString *documentsDirectory = [paths objectAtIndex:0];
-                                           NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                                               NSString *documentsDirectory = [paths objectAtIndex:0];
+                                               NSString* path = [documentsDirectory stringByAppendingPathComponent:
                                                              @"profile_picture.jpeg" ];
-                                           NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
-                                           [data writeToFile:path atomically:YES];
-                                           NSLog(@"path: %@", path);
-                                           [defaults setObject:path forKey:@"profile_picture"];
-                                           [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
-                                       }else{
-                                           //If the user has logged in with facebook but has not yet saved a new profile picture, we will use their facebook profile picture as their current image.
+                                               NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
+                                               [data writeToFile:path atomically:YES];
+                                               NSLog(@"path: %@", path);
+                                               [defaults setObject:path forKey:@"profile_picture"];
+                                               [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
+                                           }else{
+                                               //If the user has logged in with facebook but has not yet saved a new profile picture, we will use their facebook profile picture as their current image.
                                            
-                                           NSURL* url =[NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];
-                                           UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+                                               NSURL* url =[NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];
+                                               UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
                                            
-                                           //save the image to the sever as the user's new profile picture
-                                           NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               //save the image to the sever as the user's new profile picture
+                                               NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                                                        [defaults objectForKey:@"first_name"], @"first_name",
                                                                        nil];
                                            
-                                           [self updateUserWithInfo:dictionary withImage:
-                                            UIImageJPEGRepresentation(profilePicture, .5)];
+                                               [self updateUserWithInfo:dictionary withImage:
+                                                UIImageJPEGRepresentation(profilePicture, .5)];
                                            
-                                           NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                               NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                                                                 NSUserDomainMask, YES);
-                                           NSString *documentsDirectory = [paths objectAtIndex:0];
-                                           NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                                               NSString *documentsDirectory = [paths objectAtIndex:0];
+                                               NSString* path = [documentsDirectory stringByAppendingPathComponent:
                                                              @"profile_picture.jpeg" ];
-                                           NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
-                                           [data writeToFile:path atomically:YES];
-                                           NSLog(@"path: %@", path);
-                                           [defaults setObject:path forKey:@"profile_picture"];
-                                       }
+                                               NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
+                                               [data writeToFile:path atomically:YES];
+                                               NSLog(@"path: %@", path);
+                                               [defaults setObject:path forKey:@"profile_picture"];
+                                           }
 
-                                       //update the subscriptions of the newly logged in user
-                                       [self updateSubscriptions];
+                                           //update the subscriptions of the newly logged in user
+                                           [self updateSubscriptions];
                                        
-                                       [self updateUserAnnouncements];
-                                       [self updateEventInfo];
-                                       //take care of some necessary login stuff
-                                       [[PAFetchManager sharedFetchManager] loginUser];
+                                           [self updateUserAnnouncements];
+                                           [self updateEventInfo];
+                                           //take care of some necessary login stuff
+                                           [[PAFetchManager sharedFetchManager] loginUser];
+                                           [sender dismissViewControllerAnimated:YES completion:nil];
+                                       }
+                                       else{
+                                           //show confirmation email alert
+                                           UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Confirmation Email Sent!" message:@"An email has been sent to the email you have provided" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                                           [alert show];
+                                           [sender dismissViewControllerAnimated:YES completion:nil];
+                                       }
                                        
-                                       [sender dismissViewControllerAnimated:YES completion:nil];
                                        
                                       
                                        
