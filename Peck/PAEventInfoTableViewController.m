@@ -403,6 +403,11 @@ BOOL reloaded = NO;
     }
 }
 
+- (UIView *)viewForBackButton
+{
+    return self.tableView;
+}
+
 #pragma mark - managing the detail item
 
 - (void)setManagedObject:(NSManagedObject *)managedObject

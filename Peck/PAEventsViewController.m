@@ -737,6 +737,8 @@ PAAssetManager * assetManager;
     PANestedTableViewCell *cell = (PANestedTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     cell.viewController.view.userInteractionEnabled = YES;
     [cell.viewController expandAnimated:YES];
+    [[cell.viewController viewForBackButton] addSubview:self.backButton];
+
     [self tableView:tableView expandRowAtIndexPath:indexPath];
 }
 

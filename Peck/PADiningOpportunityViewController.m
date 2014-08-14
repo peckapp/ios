@@ -49,6 +49,11 @@ PAAssetManager *assetManager;
 
 }
 
+- (UIView *)viewForBackButton
+{
+    return self.view;
+}
+
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
