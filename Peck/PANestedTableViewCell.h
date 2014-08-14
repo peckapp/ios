@@ -15,6 +15,7 @@
 - (void)setManagedObject:(NSManagedObject *)managedObject;
 - (void)expandAnimated:(BOOL)animated;
 - (void)compressAnimated:(BOOL)animated;
+- (UIView *)viewForBackButton;
 
 @end
 

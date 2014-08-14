@@ -60,6 +60,30 @@
     return shadow;
 }
 
+- (UIView *)createPanelWithFrame:(CGRect)frame rounded:(BOOL)rounded shadow:(BOOL)shadow
+{
+    UIView *view = [[UIView alloc]initWithFrame:frame];
+    view.backgroundColor = [UIColor whiteColor];
+
+    if (rounded) {
+        view.layer.cornerRadius = 3;
+        view.clipsToBounds = YES;
+    }
+
+    if (shadow) {
+        UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:view.bounds];
+        view.layer.masksToBounds = NO;
+        view.layer.shadowColor = [UIColor blackColor].CGColor;
+        view.layer.shadowOffset = CGSizeMake(0.0f, 5.0f);
+        view.layer.shadowOpacity = 0.50f;
+        view.layer.shadowRadius = 25.0f;
+        view.layer.shadowPath = shadowPath.CGPath;
+    }
+
+    view.userInteractionEnabled = NO;
+    return view;
+}
+
 - (UIView *)createShadowWithFrame:(CGRect)frame top:(BOOL)top
 {
     UIImageView *dropShadow = [[UIImageView alloc] initWithFrame:frame];

@@ -87,6 +87,11 @@ PAAssetManager *assetManager;
 
 }
 
+- (UIView *)viewForBackButton
+{
+    return self.tableView;
+}
+
 #pragma mark - managing the detail item
 
 - (void)configureView
