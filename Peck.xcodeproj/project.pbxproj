@@ -124,6 +124,7 @@
 		DD898136195B523F0079CDC9 /* button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898133195B523F0079CDC9 /* button@2x.png */; };
 		DD898137195B523F0079CDC9 /* button-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898134195B523F0079CDC9 /* button-selected@2x.png */; };
 		DD898139195B5AE20079CDC9 /* image-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898138195B5AE20079CDC9 /* image-placeholder.png */; };
+		DD8C3394199D095B00B9966A /* PADiningOpportunityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD8C3393199D095B00B9966A /* PADiningOpportunityViewController.m */; };
 		DDBCA9BE1986D6BC007D283E /* drop-shadow-horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */; };
 		DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAExploreCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */; };
@@ -374,6 +375,8 @@
 		DD898133195B523F0079CDC9 /* button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button@2x.png"; sourceTree = "<group>"; };
 		DD898134195B523F0079CDC9 /* button-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-selected@2x.png"; sourceTree = "<group>"; };
 		DD898138195B5AE20079CDC9 /* image-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-placeholder.png"; sourceTree = "<group>"; };
+		DD8C3392199D095B00B9966A /* PADiningOpportunityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningOpportunityViewController.h; sourceTree = "<group>"; };
+		DD8C3393199D095B00B9966A /* PADiningOpportunityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningOpportunityViewController.m; sourceTree = "<group>"; };
 		DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "drop-shadow-horizontal.png"; sourceTree = "<group>"; };
 		DDCD45C0195DC8E60032333F /* profile-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile-placeholder.png"; sourceTree = "<group>"; };
 		DDDAEDD819465DCB004CE102 /* PAExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreCell.h; sourceTree = "<group>"; };
@@ -739,6 +742,8 @@
 				A46F0923196F2A7600CFA5D0 /* PADiningCell.h */,
 				A46F0924196F2A7600CFA5D0 /* PADiningCell.m */,
 				A46F0925196F2A7600CFA5D0 /* PADiningCell.xib */,
+				DD8C3392199D095B00B9966A /* PADiningOpportunityViewController.h */,
+				DD8C3393199D095B00B9966A /* PADiningOpportunityViewController.m */,
 				A4677D4F197562B1007E3C3A /* PADiningOpportunityCell.h */,
 				A4677D50197562B1007E3C3A /* PADiningOpportunityCell.m */,
 				A4677D51197562B1007E3C3A /* PADiningOpportunityCell.xib */,
@@ -1149,6 +1154,7 @@
 				A4F04BEE1994097500290CF2 /* PAMethodManager.m in Sources */,
 				A4C8C347197D8F3F008F9F85 /* PAFetchManager.m in Sources */,
 				DD6902D2198820270095892F /* PAAssetManager.m in Sources */,
+				DD8C3394199D095B00B9966A /* PADiningOpportunityViewController.m in Sources */,
 				A4E47D5A1991295000DDF941 /* Event.m in Sources */,
 				A4F04BF61995155900290CF2 /* PAPromptView.m in Sources */,
 				A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */,
