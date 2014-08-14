@@ -225,6 +225,8 @@
                                       [defaults setObject:userID forKey:user_id];
                                       NSString *apiKey = [userDictionary objectForKey:api_key];
                                       [defaults setObject:apiKey forKey:api_key];
+                                      [self updateExploreInfoForViewController:nil];
+                                      [self updateDiningInfo];
                                       if(callbackBlock){
                                           callbackBlock(YES);
                                       }
@@ -274,7 +276,7 @@
                                         NSString* imageURL = [userDictionary objectForKey:@"image"];
                                         
                                         [defaults setObject:email forKey:@"email"];
-                                        if([blurb isKindOfClass:[NSNull class]]){
+                                        if(![blurb isKindOfClass:[NSNull class]]){
                                             [defaults setObject:blurb forKey:@"blurb"];
                                         }
                                         [defaults setObject:firstName forKey:first_name_define];
@@ -438,7 +440,7 @@
                                   }];
 }
 
--(void)checkFacebookUser:(NSDictionary*)dictionary withCallback:(void (^)(BOOL))callbackBlock{
+-(void)checkFacebookUser:(NSDictionary*)dictionary withCallback:(void (^)(BOOL, NSString*))callbackBlock{
     NSLog(@"params: %@", dictionary);
     
     [[PASessionManager sharedClient] GET:@"api/users/check_link"
@@ -449,10 +451,10 @@
                                        BOOL registered = [[json objectForKey:@"facebook_registered"] boolValue];
                                        if(registered){
                                            //continue the login with facebook
-                                           callbackBlock(YES);
+                                           callbackBlock(YES,[json objectForKey:@"email"]);
                                        }else{
                                            //show the new view with the email field
-                                           callbackBlock(NO);
+                                           callbackBlock(NO, [json objectForKey:@"email"]);
                                        }
                                 }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -851,10 +853,12 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"explore JSON: %@",JSON);
+             NSLog(@"explore JSON: %@",JSON);
              NSDictionary *exploreDictionary = (NSDictionary*)JSON;
              NSArray *eventsFromResponse = [exploreDictionary objectForKey:@"explore_events"];
+             
              [self.persistentStoreCoordinator lock];
+             [[PAFetchManager sharedFetchManager] removeAllObjectsOfType:@"Explore"];
              for (NSDictionary *eventAttributes in eventsFromResponse) {
                  NSNumber *newID = [eventAttributes objectForKey:@"id"];
                  

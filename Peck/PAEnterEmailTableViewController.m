@@ -52,8 +52,14 @@
 
 - (IBAction)finishLogin:(id)sender {
     if([self emailMatchesInstitution:self.emailField.text]){
-        PAInitialViewController* parent = (PAInitialViewController*)self.parentViewController;
-        [parent loginWithFacebook:parent.user andBool:YES withEmail:self.emailField.text];
+        [self.parent loginWithFacebook:self.parent.user andBool:YES withEmail:self.emailField.text];
+        if (FBSession.activeSession.state == FBSessionStateOpen|| FBSession.activeSession.state == FBSessionStateOpenTokenExtended){
+            
+            // Close the session and remove the access token from the cache
+            // The session state handler (in the app delegate) will be called automatically
+            [FBSession.activeSession closeAndClearTokenInformation];
+        }
+
     }else{
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Invalid Email"
                                                         message:@"The email does not match the current institution"
