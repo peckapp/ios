@@ -44,7 +44,7 @@
 -(id)getObject:(NSNumber *) newID withEntityType:(NSString*)entityType andType:(NSString*)type;
 //returns the object with the given id, entity type, and type
 
--(id)deleteObject:(NSNumber *) newID withEntityType:(NSString*)entityType andCategory:(NSString*)category;
+-(void)deleteObject:(NSNumber *) newID withEntityType:(NSString*)entityType andCategory:(NSString*)category;
 
 -(void)removeCircle:(NSNumber*)circleID;
 //removes the circle for the given id
