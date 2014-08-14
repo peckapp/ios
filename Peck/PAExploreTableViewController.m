@@ -56,7 +56,10 @@ NSCache *imageCache;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
+
+    self.tableView.contentInset = UIEdgeInsetsMake(9, 0, 0, 0);
+    self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+
     [[PASyncManager globalSyncManager] updateExploreInfo];
 }
 
@@ -82,6 +85,7 @@ NSCache *imageCache;
 - (void)configureCell:(PAExploreCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     cell.backgroundView = [assetManager createShadowWithFrame:cell.frame];
+    cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
 
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;

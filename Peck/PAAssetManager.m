@@ -57,7 +57,7 @@
 - (UIView *)createShadowWithFrame:(CGRect)frame
 {
     UIImageView *shadow = [[UIImageView alloc] initWithFrame:frame];
-    shadow.image = [[UIImage imageNamed:@"drop-shadow"]stretchableImageWithLeftCapWidth:15 topCapHeight:15];
+    shadow.image = [[UIImage imageNamed:@"drop-shadow"]stretchableImageWithLeftCapWidth:21 topCapHeight:15];
     return shadow;
 }
 
