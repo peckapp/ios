@@ -43,10 +43,6 @@ struct eventImage{
 @property (assign, nonatomic) CGRect centerTableViewFrame;
 @property (assign, nonatomic) CGRect rightTableViewFrame;
 
-
-
-@property (strong, nonatomic) NSIndexPath * selectedCellIndex;
-
 @property (strong, nonatomic) UIImageView* helperImageView;
 @end
 
@@ -689,11 +685,10 @@ PAAssetManager * assetManager;
 
 - (void)backButton:(id)sender
 {
-    PANestedTableViewCell *cell = (PANestedTableViewCell *)[self.centerTableView cellForRowAtIndexPath:self.selectedCellIndex];
+    PANestedTableViewCell *cell = (PANestedTableViewCell *)[self.centerTableView cellForRowAtIndexPath:self.selectedCellIndexPath];
     cell.viewController.view.userInteractionEnabled = NO;
     [cell.viewController compressAnimated:YES];
-    [self tableView:self.centerTableView compressRowAtSelectedIndexPathUserInteractionEnabled:NO];
-    self.selectedCellIndex = nil;
+    [self tableView:self.centerTableView compressRowAtSelectedIndexPathAnimated:YES];
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -733,13 +728,13 @@ PAAssetManager * assetManager;
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    self.selectedCellIndex = indexPath;
+    self.selectedCellIndexPath = indexPath;
     PANestedTableViewCell *cell = (PANestedTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     cell.viewController.view.userInteractionEnabled = YES;
     [cell.viewController expandAnimated:YES];
     [[cell.viewController viewForBackButton] addSubview:self.backButton];
 
-    [self tableView:tableView expandRowAtIndexPath:indexPath];
+    [self tableView:tableView expandRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -921,7 +916,7 @@ PAAssetManager * assetManager;
 
 - (void)transitionToRightTableView
 {
-    if (self.selectedCellIndex == nil) {
+    if (self.selectedCellIndexPath == nil) {
     NSLog(@"begin transition to right");
     [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
@@ -951,7 +946,7 @@ PAAssetManager * assetManager;
 
 -(void)transitionToLeftTableView
 {
-    if (self.selectedCellIndex == nil) {
+    if (self.selectedCellIndexPath == nil) {
     NSLog(@"begin transition to left");
     [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
