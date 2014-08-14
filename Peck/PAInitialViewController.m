@@ -124,10 +124,10 @@
         }else{
             //The email does not match the institution that the user has chosen. In this case we must call the method in the sync manager that checks to see if a facebook link already exists for the user.
             NSDictionary* dictionary = [NSDictionary dictionaryWithObject:[user objectForKey:@"link"] forKey:@"facebook_link"];
-            [[PASyncManager globalSyncManager] checkFacebookUser:dictionary withCallback:^(BOOL registered){
+            [[PASyncManager globalSyncManager] checkFacebookUser:dictionary withCallback:^(BOOL registered, NSString* email){
                 if(registered){
                     NSLog(@"continue with normal facebook login");
-                    [self loginWithFacebook:user andBool:NO withEmail:[user objectForKey:@"email"]];
+                    [self loginWithFacebook:user andBool:NO withEmail:email];
                 }else{
                     NSLog(@"ask the user for his institution email");
                     self.user = user;

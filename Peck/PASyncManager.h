@@ -37,7 +37,7 @@
 // sends patch request to the server when the registration process is complete
 -(void)registerUserWithInfo:(NSDictionary*)userInfo;
 
--(void)checkFacebookUser:(NSDictionary*)dictionary withCallback:(void (^)(BOOL))callbackBlock;
+-(void)checkFacebookUser:(NSDictionary*)dictionary withCallback:(void (^)(BOOL, NSString*))callbackBlock;
 //checks with the server to check if a facebook link exists for the user that is attempting to login
 
 -(void)loginWithFacebook:(NSDictionary*)dictionary forViewController:(UIViewController*)sender;
