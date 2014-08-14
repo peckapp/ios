@@ -478,8 +478,13 @@
                                            [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
                                        }
 
-                                       [self updateEventInfo];
+                                       //update the subscriptions of the newly logged in user
+                                       [self updateSubscriptions];
+                                       
                                        [self updateUserAnnouncements];
+                                       [self updateEventInfo];
+                                       //take care of some necessary login stuff
+                                       [[PAFetchManager sharedFetchManager] loginUser];
                                        
                                        [sender dismissViewControllerAnimated:YES completion:nil];
                                        

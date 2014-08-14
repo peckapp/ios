@@ -62,6 +62,7 @@ struct eventImage{
 
 UISearchBar * searchBar;
 
+BOOL viewingEvents;
 BOOL parallaxOn;
 BOOL showingSearchBar;
 NSString *searchBarText;
@@ -210,6 +211,7 @@ PAAssetManager * assetManager;
     [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
     [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
 
+    viewingEvents = YES;
 }
 
 - (void)viewWillLayoutSubviews
@@ -234,6 +236,7 @@ PAAssetManager * assetManager;
     [self backButton:self];
     
     [self.view endEditing:YES];
+    viewingEvents=NO;
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
@@ -456,7 +459,9 @@ PAAssetManager * assetManager;
             
         case NSFetchedResultsChangeDelete:
             //Event *tempEvent = (Event *)anObject;
-            [[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
+            if(viewingEvents){
+                [[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
+            }
             [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
