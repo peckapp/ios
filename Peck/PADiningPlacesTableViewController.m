@@ -13,9 +13,7 @@
 #import "PASyncManager.h"
 #import "DiningPeriod.h"
 #import "PADiningCell.h"
-
-#define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
-#define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
+#import "PAAssetManager.h"
 
 @interface PADiningPlacesTableViewController ()
 @property NSMutableArray* diningPlaces;
@@ -53,8 +51,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
-    self.tableView.backgroundColor = [UIColor whiteColor];
-    self.tableView.tableHeaderView.backgroundColor = darkColor;
+    self.tableView.backgroundColor = [[PAAssetManager sharedManager] darkColor];
 }
 
 - (void)didReceiveMemoryWarning

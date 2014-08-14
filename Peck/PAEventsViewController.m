@@ -27,10 +27,6 @@
 #define searchBarHeight 44
 #define parallaxRange 128
 
-
-#define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
-#define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
-
 struct eventImage{
     const char* imageURL;
     const char* type;
@@ -79,9 +75,14 @@ PAAssetManager * assetManager;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     appdelegate.eventsViewController = self;
-    
+
+    assetManager = [PAAssetManager sharedManager];
+
+    self.view.backgroundColor = [assetManager darkColor];
+
     self.animationTime = 0.2;
     
     self.helperImageView = [[UIImageView alloc] init];
@@ -92,8 +93,7 @@ PAAssetManager * assetManager;
 
     //we must store the profile picture every time the app loads because the local image storing is not persistent
     [self storeProfilePicture];
-    
-    assetManager = [PAAssetManager sharedManager];
+
 
     NSLog(@"View did load (events)");
     self.placeholderImage = [[UIImageView alloc] initWithImage:[assetManager eventPlaceholder]];
@@ -120,9 +120,11 @@ PAAssetManager * assetManager;
     }
     self.leftTableView.dataSource = self;
     self.leftTableView.delegate = self;
-    self.leftTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.leftTableView.separatorInset = UIEdgeInsetsZero;
+    self.leftTableView.separatorColor = [assetManager lightColor];
+    self.leftTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     UIView * leftBackView = [[UIView alloc] init];
-    leftBackView.backgroundColor = darkColor;
+    leftBackView.backgroundColor = [assetManager darkColor];
     [self.leftTableView setBackgroundView:leftBackView];
 
     if (!self.centerTableView) {
@@ -131,9 +133,11 @@ PAAssetManager * assetManager;
     }
     self.centerTableView.dataSource = self;
     self.centerTableView.delegate = self;
-    self.centerTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.centerTableView.separatorInset = UIEdgeInsetsZero;
+    self.centerTableView.separatorColor = [assetManager lightColor];
+    self.centerTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     UIView *centerBackView = [[UIView alloc] init];
-    centerBackView.backgroundColor = darkColor;
+    centerBackView.backgroundColor = [assetManager darkColor];
     [self.centerTableView setBackgroundView:centerBackView];
 
     if (!self.rightTableView) {
@@ -142,9 +146,11 @@ PAAssetManager * assetManager;
     }
     self.rightTableView.dataSource = self;
     self.rightTableView.delegate = self;
-    self.rightTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.rightTableView.separatorInset = UIEdgeInsetsZero;
+    self.rightTableView.separatorColor = [assetManager lightColor];
+    self.rightTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     UIView *rightBackView = [[UIView alloc] init];
-    rightBackView.backgroundColor = darkColor;
+    rightBackView.backgroundColor = [assetManager darkColor];
     [self.rightTableView setBackgroundView:rightBackView];
 
     [[PASyncManager globalSyncManager] updateSubscriptions];
