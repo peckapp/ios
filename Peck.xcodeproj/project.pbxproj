@@ -65,6 +65,7 @@
 		A42D4FB9198AAAB000536453 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A42D4FB8198AAAB000536453 /* Security.framework */; };
 		A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */; };
 		A439EBC7199D196700FFEF33 /* Institution.m in Sources */ = {isa = PBXBuildFile; fileRef = A439EBC6199D196700FFEF33 /* Institution.m */; };
+		A439EBCA199D3CE400FFEF33 /* PAEnterEmailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A439EBC9199D3CE400FFEF33 /* PAEnterEmailTableViewController.m */; };
 		A43BF0EA197813200009B7AD /* PAProfileTableViewController2.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */; };
 		A43BF0EE197819480009B7AD /* PASubscriptionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */; };
 		A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0F01978198D0009B7AD /* PASubscriptionCell.m */; };
@@ -279,6 +280,8 @@
 		A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTAutocompleteManager.m; sourceTree = "<group>"; };
 		A439EBC5199D196700FFEF33 /* Institution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Institution.h; sourceTree = "<group>"; };
 		A439EBC6199D196700FFEF33 /* Institution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Institution.m; sourceTree = "<group>"; };
+		A439EBC8199D3CE400FFEF33 /* PAEnterEmailTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEnterEmailTableViewController.h; sourceTree = "<group>"; };
+		A439EBC9199D3CE400FFEF33 /* PAEnterEmailTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEnterEmailTableViewController.m; sourceTree = "<group>"; };
 		A43BF0E8197813200009B7AD /* PAProfileTableViewController2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAProfileTableViewController2.h; sourceTree = "<group>"; };
 		A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAProfileTableViewController2.m; sourceTree = "<group>"; };
 		A43BF0EC197819480009B7AD /* PASubscriptionsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASubscriptionsTableViewController.h; sourceTree = "<group>"; };
@@ -514,6 +517,8 @@
 				863843D9193CB75F004110F5 /* PARegisterViewController.m */,
 				863843DE193CB7A4004110F5 /* PeckLoadingViewController.h */,
 				863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */,
+				A439EBC8199D3CE400FFEF33 /* PAEnterEmailTableViewController.h */,
+				A439EBC9199D3CE400FFEF33 /* PAEnterEmailTableViewController.m */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -1139,6 +1144,7 @@
 				A4E21F601964A749002A9800 /* PAEventInfoTableViewController.m in Sources */,
 				A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */,
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,
+				A439EBCA199D3CE400FFEF33 /* PAEnterEmailTableViewController.m in Sources */,
 				DDF0DB47199532A40061089E /* PANestedTableViewCell.m in Sources */,
 				A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */,
 				A43BF0FB1979B0B60009B7AD /* PAInvitationsTableViewController.m in Sources */,

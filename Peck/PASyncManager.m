@@ -274,7 +274,9 @@
                                         NSString* imageURL = [userDictionary objectForKey:@"image"];
                                         
                                         [defaults setObject:email forKey:@"email"];
-                                        [defaults setObject:blurb forKey:@"blurb"];
+                                        if([blurb isKindOfClass:[NSNull class]]){
+                                            [defaults setObject:blurb forKey:@"blurb"];
+                                        }
                                         [defaults setObject:firstName forKey:first_name_define];
                                         [defaults setObject:lastName forKey:last_name_define];
                                         if(imageURL){
@@ -436,6 +438,29 @@
                                   }];
 }
 
+-(void)checkFacebookUser:(NSDictionary*)dictionary withCallback:(void (^)(BOOL))callbackBlock{
+    NSLog(@"params: %@", dictionary);
+    
+    [[PASessionManager sharedClient] GET:@"api/users/check_link"
+                                parameters:[self applyWrapper:@"user" toDictionary:dictionary]
+                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                       NSLog(@"check facebook JSON: %@", JSON);
+                                       NSDictionary* json = (NSDictionary*) JSON;
+                                       BOOL registered = [[json objectForKey:@"facebook_registered"] boolValue];
+                                       if(registered){
+                                           //continue the login with facebook
+                                           callbackBlock(YES);
+                                       }else{
+                                           //show the new view with the email field
+                                           callbackBlock(NO);
+                                       }
+                                }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                 }];
+    
+}
+
 
 -(void)loginWithFacebook:(NSDictionary*)dictionary forViewController:(UIViewController*)sender{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -491,7 +516,11 @@
                                            UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
                                            
                                            //save the image to the sever as the user's new profile picture
-                                           [self updateUserWithInfo:[[NSDictionary alloc] init] withImage:
+                                           NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                                       [defaults objectForKey:@"first_name"], @"first_name",
+                                                                       nil];
+                                           
+                                           [self updateUserWithInfo:dictionary withImage:
                                             UIImageJPEGRepresentation(profilePicture, .5)];
                                            
                                            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
