@@ -129,6 +129,7 @@
 		DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */; };
 		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
 		DDEF7DB6199C15BA007C28F7 /* drop-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = DDEF7DB5199C15BA007C28F7 /* drop-shadow.png */; };
+		DDEF7DB9199C4D34007C28F7 /* PAAthleticEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDEF7DB8199C4D34007C28F7 /* PAAthleticEventViewController.m */; };
 		DDF0DB47199532A40061089E /* PANestedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDF0DB46199532A40061089E /* PANestedTableViewCell.m */; };
 		DDFFF5A619829BD100DC5AC1 /* feather-60.png in Resources */ = {isa = PBXBuildFile; fileRef = DDFFF59C19829BD100DC5AC1 /* feather-60.png */; };
 		DDFFF5A719829BD100DC5AC1 /* feather-29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDFFF59D19829BD100DC5AC1 /* feather-29@2x.png */; };
@@ -381,6 +382,8 @@
 		DDDAEDDD19475EBA004CE102 /* PAPecksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPecksViewController.h; sourceTree = "<group>"; };
 		DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPecksViewController.m; sourceTree = "<group>"; };
 		DDEF7DB5199C15BA007C28F7 /* drop-shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "drop-shadow.png"; sourceTree = "<group>"; };
+		DDEF7DB7199C4D34007C28F7 /* PAAthleticEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAAthleticEventViewController.h; sourceTree = "<group>"; };
+		DDEF7DB8199C4D34007C28F7 /* PAAthleticEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAAthleticEventViewController.m; sourceTree = "<group>"; };
 		DDF0DB45199532A40061089E /* PANestedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PANestedTableViewCell.h; sourceTree = "<group>"; };
 		DDF0DB46199532A40061089E /* PANestedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PANestedTableViewCell.m; sourceTree = "<group>"; };
 		DDFFF59C19829BD100DC5AC1 /* feather-60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feather-60.png"; sourceTree = "<group>"; };
@@ -806,6 +809,8 @@
 				A4773C821958A27F00AB9831 /* PAEventBST.m */,
 				A4E21F5E1964A749002A9800 /* PAEventInfoTableViewController.h */,
 				A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */,
+				DDEF7DB7199C4D34007C28F7 /* PAAthleticEventViewController.h */,
+				DDEF7DB8199C4D34007C28F7 /* PAAthleticEventViewController.m */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -1153,6 +1158,7 @@
 				A482259619914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m in Sources */,
 				A4677D52197562B1007E3C3A /* PADiningOpportunityCell.m in Sources */,
 				A43BF0F6197978690009B7AD /* PAChangePasswordViewController.m in Sources */,
+				DDEF7DB9199C4D34007C28F7 /* PAAthleticEventViewController.m in Sources */,
 				A412E1D41986E63800384A11 /* Comment.m in Sources */,
 				A4988A50199B9FFC005C43BC /* Peck.m in Sources */,
 				867B52D619509F5000BEB37B /* PASessionManager.m in Sources */,
