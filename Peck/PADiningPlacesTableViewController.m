@@ -238,7 +238,8 @@ PAAssetManager *assetManager;
     cell.clipsToBounds = YES;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.viewController.view.userInteractionEnabled = NO;
-    // [cell.viewController setManagedObject:eventObject];
+    Event* event = self.diningPlaces[indexPath.row];
+    [cell.viewController setManagedObject:event];
 
     return cell;
 }
