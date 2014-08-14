@@ -43,6 +43,10 @@ PAAssetManager *assetManager;
 
     self.view.backgroundColor = [assetManager darkColor];
 
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(320 - 70, 0, 70, 70)];
+    [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.backButton addSubview:[assetManager createPanelWithFrame:CGRectInset(self.backButton.bounds, 20, 20) rounded:YES shadow:YES]];
+
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -203,39 +207,17 @@ PAAssetManager *assetManager;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return cellHeight;
+    if ([self indexPathIsSelected:indexPath]) {
+        return self.view.frame.size.height;
+    }
+    else {
+        return cellHeight;
+    }
 }
 
 
 
 #pragma mark - table view delegate
-
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    /*
-    if(self.selectedIndexPath==nil){
-        DiningPlace *tempDiningPlace = self.diningPlaces[indexPath.row];
-        PADiningCell *cell = (PADiningCell*)[tableView cellForRowAtIndexPath:indexPath];
-        cell.diningOpportunity=self.detailItem;
-        cell.diningPlace=tempDiningPlace;
-        [cell performFetch];
-        [[PASyncManager globalSyncManager] updateMenuItemsForOpportunity:self.detailItem andPlace:tempDiningPlace];
-        self.selectedIndexPath = indexPath;
-        [tableView beginUpdates];
-        [tableView endUpdates];
-        [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-        [tableView setScrollEnabled:NO];
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }else{
-        [tableView setScrollEnabled:YES];
-        self.selectedIndexPath=nil;
-        [tableView beginUpdates];
-        [tableView endUpdates];
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
-     */
-}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -259,6 +241,58 @@ PAAssetManager *assetManager;
     // [cell.viewController setManagedObject:eventObject];
 
     return cell;
+}
+
+- (void)backButton:(id)sender
+{
+    PANestedTableViewCell *cell = (PANestedTableViewCell *)[self.tableView cellForRowAtIndexPath:self.selectedCellIndexPath];
+    cell.viewController.view.userInteractionEnabled = NO;
+    [cell.viewController compressAnimated:YES];
+    [self tableView:self.tableView compressRowAtSelectedIndexPathAnimated:YES];
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([self indexPathIsSelected:indexPath]) {
+        return nil;
+    }
+    return indexPath;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    /*
+     if(self.selectedIndexPath==nil){
+     DiningPlace *tempDiningPlace = self.diningPlaces[indexPath.row];
+     PADiningCell *cell = (PADiningCell*)[tableView cellForRowAtIndexPath:indexPath];
+     cell.diningOpportunity=self.detailItem;
+     cell.diningPlace=tempDiningPlace;
+     [cell performFetch];
+     [[PASyncManager globalSyncManager] updateMenuItemsForOpportunity:self.detailItem andPlace:tempDiningPlace];
+     self.selectedIndexPath = indexPath;
+     [tableView beginUpdates];
+     [tableView endUpdates];
+     [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+     [tableView setScrollEnabled:NO];
+     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+     }else{
+     [tableView setScrollEnabled:YES];
+     self.selectedIndexPath=nil;
+     [tableView beginUpdates];
+     [tableView endUpdates];
+     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+     }
+     */
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    self.selectedCellIndexPath = indexPath;
+    PANestedTableViewCell *cell = (PANestedTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+    cell.viewController.view.userInteractionEnabled = YES;
+    [cell.viewController expandAnimated:YES];
+    [[cell.viewController viewForBackButton] addSubview:self.backButton];
+
+    [self tableView:tableView expandRowAtIndexPath:indexPath animated:YES];
 }
 
 -(NSString*)dateToString:(NSDate *)date{
