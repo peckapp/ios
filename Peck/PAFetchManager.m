@@ -92,6 +92,7 @@
     
     [self removeAllObjectsOfType:@"Explore"];
     [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
+    [[PASyncManager globalSyncManager] updateDiningInfo];
     //[[PASyncManager globalSyncManager] updatePeerInfo];
 }
 

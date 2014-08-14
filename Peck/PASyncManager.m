@@ -226,6 +226,7 @@
                                       NSString *apiKey = [userDictionary objectForKey:api_key];
                                       [defaults setObject:apiKey forKey:api_key];
                                       [self updateExploreInfoForViewController:nil];
+                                      [self updateDiningInfo];
                                       if(callbackBlock){
                                           callbackBlock(YES);
                                       }
