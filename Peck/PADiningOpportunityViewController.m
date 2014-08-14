@@ -8,10 +8,13 @@
 
 #import "PADiningOpportunityViewController.h"
 #import "PAAssetManager.h"
+#import "DiningPlace.h"
 
 @interface PADiningOpportunityViewController ()
 
 @property (strong, nonatomic) UITableView *tableView;
+
+@property (strong, nonatomic) UILabel *placeLabel;
 
 @end
 
@@ -29,6 +32,16 @@ PAAssetManager *assetManager;
     assetManager = [PAAssetManager sharedManager];
 
     self.view.backgroundColor = [assetManager darkColor];
+
+    self.placeLabel = [[UILabel alloc] init];
+    self.placeLabel.textColor = [UIColor whiteColor];
+    self.placeLabel.font = [UIFont boldSystemFontOfSize:17.0];
+    [self.view addSubview:self.placeLabel];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.placeLabel.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -59,7 +72,7 @@ PAAssetManager *assetManager;
 
 -(void)configureView{
     if (self.detailItem) {
-        
+        self.placeLabel.text = self.detailItem.name;
     }
 }
 
