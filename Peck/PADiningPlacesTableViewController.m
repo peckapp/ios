@@ -14,10 +14,16 @@
 #import "DiningPeriod.h"
 #import "PADiningCell.h"
 #import "PAAssetManager.h"
+#import "PANestedTableViewCell.h"
+
+#define cellHeight 88
 
 @interface PADiningPlacesTableViewController ()
-@property NSMutableArray* diningPlaces;
-@property NSIndexPath* selectedIndexPath;
+
+@property (strong, nonatomic) NSMutableArray *diningPlaces;
+
+@property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) UILabel *periodLabel;
 
 @end
 
@@ -27,31 +33,42 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-#define cellHeight 120
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+PAAssetManager *assetManager;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.selectedIndexPath=nil;
-    self.diningPlaces = [[NSMutableArray alloc] init];
-    //self.tableView.rowHeight=120;
-    [self configureView];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
-    self.tableView.backgroundColor = [[PAAssetManager sharedManager] darkColor];
+    assetManager = [PAAssetManager sharedManager];
+
+    self.view.backgroundColor = [assetManager darkColor];
+
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.backgroundColor = [assetManager darkColor];
+    self.tableView.separatorInset = UIEdgeInsetsZero;
+    self.tableView.separatorColor = [assetManager lightColor];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.view addSubview:self.tableView];
+
+    self.headerView = [[UIView alloc] init];
+    self.tableView.tableHeaderView = self.headerView;
+
+    self.periodLabel = [[UILabel alloc] init];
+    self.periodLabel.textColor = [UIColor whiteColor];
+    self.periodLabel.font = [UIFont boldSystemFontOfSize:17.0];
+    [self.headerView addSubview:self.periodLabel];
+
+    self.diningPlaces = [[NSMutableArray alloc] init];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.tableView.frame = self.view.frame;
+
+    self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+    self.periodLabel.frame = CGRectInset(self.headerView.frame, 15, 0);
 }
 
 - (void)didReceiveMemoryWarning
@@ -72,18 +89,13 @@
 
 #pragma mark - managing the detail item
 
-- (void)setDetailItem:(id)newDetailItem
-{
-
-}
-
 - (void)configureView
 {
     // Update the user interface for the detail item.
     
     if (self.detailItem) {
         
-        self.title = [self.detailItem valueForKey:@"title"];
+        self.periodLabel.text = [self.detailItem valueForKey:@"title"];
         
         [self fetchDiningPeriods];
         [self.tableView reloadData];
@@ -95,9 +107,7 @@
     if (_detailItem != managedObject) {
         _detailItem = managedObject;
 
-        self.mealLabel.text = [self.detailItem valueForKey:@"title"];
-        [self fetchDiningPeriods];
-        [self.tableView reloadData];
+        [self configureView];
     }
 }
 
@@ -188,9 +198,6 @@
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if((self.selectedIndexPath != nil) && (indexPath.row == self.selectedIndexPath.row)) {
-        return self.view.frame.size.height;
-    }
     return cellHeight;
 }
 
@@ -201,6 +208,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    /*
     if(self.selectedIndexPath==nil){
         DiningPlace *tempDiningPlace = self.diningPlaces[indexPath.row];
         PADiningCell *cell = (PADiningCell*)[tableView cellForRowAtIndexPath:indexPath];
@@ -221,31 +229,31 @@
         [tableView endUpdates];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
+     */
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PADiningCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningCell"];
+    PANestedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"dining-opportunity-cell-identifier"];
     if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:@"PADiningCell" bundle:nil] forCellReuseIdentifier:@"diningCell"];
-        cell = [tableView dequeueReusableCellWithIdentifier:@"diningCell"];
+        [tableView registerClass:[PANestedTableViewCell class] forCellReuseIdentifier:@"dining-opportunity-cell-identifier"];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"dining-opportunity-cell-identifier"];
     }
 
-    
-    [self configureCell:cell atIndexPath:indexPath];
-    
-    return cell;
-}
+    if (cell.viewController == nil) {
+        cell.viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"dining-opportunity-view-controller"];
+        [self addChildViewController:cell.viewController];
+        [cell addSubview:cell.viewController.view];
+        [cell.viewController didMoveToParentViewController:self];
+    }
 
--(void)configureCell:(PADiningCell*)cell atIndexPath:(NSIndexPath*)indexPath{
-    cell=(PADiningCell*)cell;
-    DiningPlace *tempDiningPlace = self.diningPlaces[indexPath.row];
-    
-    cell.startLabel.text = [self dateToString:tempDiningPlace.start_date];
-    cell.endLabel.text = [self dateToString:tempDiningPlace.end_date];
-    [cell.nameLabel setText:tempDiningPlace.name];
-    
+    cell.clipsToBounds = YES;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.viewController.view.userInteractionEnabled = NO;
+    // [cell.viewController setManagedObject:eventObject];
+
+    return cell;
 }
 
 -(NSString*)dateToString:(NSDate *)date{
@@ -272,53 +280,5 @@
     
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

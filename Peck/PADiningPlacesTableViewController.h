@@ -10,17 +10,18 @@
 #import "PACoreDataProtocol.h"
 #import "DiningPeriod.h"
 #import "DiningPlace.h"
+#import "PANestedTableViewController.h"
 #import "PANestedTableViewCell.h"
 
-@interface PADiningPlacesTableViewController : UITableViewController <PACoreDataProtocol, PANestedTableViewCellSubviewControllerProtocol>
-
-@property (weak, nonatomic) IBOutlet UILabel *mealLabel;
+@interface PADiningPlacesTableViewController : PANestedTableViewController <PACoreDataProtocol, PANestedTableViewCellSubviewControllerProtocol, UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) id detailItem;
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+@property (strong, nonatomic) UITableView *tableView;
 
 - (void)configureView;
 - (void)fetchDiningPlace:(DiningPeriod *)diningPeriod;
