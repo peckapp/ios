@@ -19,6 +19,10 @@ PAAssetManager *assetManager;
 
 @implementation PADiningOpportunityViewController
 
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -46,6 +50,9 @@ PAAssetManager *assetManager;
 
 - (void) setManagedObject:(NSManagedObject *)managedObject
 {
+    if(managedObject){
+        self.
+    }
 
 }
 
