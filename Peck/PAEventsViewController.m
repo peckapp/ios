@@ -83,9 +83,9 @@ PAAssetManager * assetManager;
     
     self.helperImageView = [[UIImageView alloc] init];
 
-    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(320 - 70, 0, 70, 70)];
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(320 - 64, 0, 64, 64)];
     [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.backButton addSubview:[assetManager createPanelWithFrame:CGRectInset(self.backButton.bounds, 20, 20) rounded:YES shadow:YES]];
+    [self.backButton addSubview:[assetManager createPanelWithFrame:CGRectInset(self.backButton.bounds, 15, 15) rounded:YES shadow:YES]];
 
     //we must store the profile picture every time the app loads because the local image storing is not persistent
     [self storeProfilePicture];
@@ -119,9 +119,7 @@ PAAssetManager * assetManager;
     self.leftTableView.separatorInset = UIEdgeInsetsZero;
     self.leftTableView.separatorColor = [assetManager lightColor];
     self.leftTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    UIView * leftBackView = [[UIView alloc] init];
-    leftBackView.backgroundColor = [assetManager darkColor];
-    [self.leftTableView setBackgroundView:leftBackView];
+    self.leftTableView.backgroundColor = [assetManager darkColor];
 
     if (!self.centerTableView) {
         self.centerTableView = [[UITableView alloc] init];
@@ -132,9 +130,7 @@ PAAssetManager * assetManager;
     self.centerTableView.separatorInset = UIEdgeInsetsZero;
     self.centerTableView.separatorColor = [assetManager lightColor];
     self.centerTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    UIView *centerBackView = [[UIView alloc] init];
-    centerBackView.backgroundColor = [assetManager darkColor];
-    [self.centerTableView setBackgroundView:centerBackView];
+    self.centerTableView.backgroundColor = [assetManager darkColor];
 
     if (!self.rightTableView) {
         self.rightTableView = [[UITableView alloc] init];
@@ -145,9 +141,7 @@ PAAssetManager * assetManager;
     self.rightTableView.separatorInset = UIEdgeInsetsZero;
     self.rightTableView.separatorColor = [assetManager lightColor];
     self.rightTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    UIView *rightBackView = [[UIView alloc] init];
-    rightBackView.backgroundColor = [assetManager darkColor];
-    [self.rightTableView setBackgroundView:rightBackView];
+    self.rightTableView.backgroundColor = [assetManager darkColor];
 
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
@@ -573,7 +567,7 @@ PAAssetManager * assetManager;
         cell.clipsToBounds = YES;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.viewController.view.userInteractionEnabled = NO;
-        [cell.viewController setManagedObject:eventObject];
+        [cell.viewController setManagedObject:eventObject parentObject:nil];
 
         // [self configureDetailViewControllerCell:cell atIndexPath:indexPath];
         
@@ -598,7 +592,7 @@ PAAssetManager * assetManager;
         cell.clipsToBounds = YES;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.viewController.view.userInteractionEnabled = NO;
-        [cell.viewController setManagedObject:eventObject];
+        [cell.viewController setManagedObject:eventObject parentObject:nil];
 
         // [self configureDetailViewControllerCell:cell atIndexPath:indexPath];
         
@@ -678,7 +672,7 @@ PAAssetManager * assetManager;
         return self.view.frame.size.height;
     }
     else if([tempEvent.type isEqualToString:@"dining"]){
-        return 44;
+        return 64;
     }
     return 88;
 }

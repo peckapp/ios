@@ -11,14 +11,19 @@
 #import "PANestedTableViewCell.h"
 #import "PACommentCell.h"
 #import "DiningPlace.h"
+#import "Event.h"
 
 @interface PADiningOpportunityViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, PANestedTableViewCellSubviewControllerProtocol>
+
+@property (strong, nonatomic) UITableView *tableView;
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @property (strong, nonatomic) DiningPlace *detailItem;
+@property (strong, nonatomic) Event* diningOpportunity;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
 
 @end

@@ -12,7 +12,7 @@
 
 @required
 
-- (void)setManagedObject:(NSManagedObject *)managedObject;
+- (void) setManagedObject:(NSManagedObject *)managedObject parentObject:(NSManagedObject *)parentObject;
 - (void)expandAnimated:(BOOL)animated;
 - (void)compressAnimated:(BOOL)animated;
 - (UIView *)viewForBackButton;

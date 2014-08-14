@@ -8,11 +8,13 @@
 
 #import "PADiningOpportunityViewController.h"
 #import "PAAssetManager.h"
+#import "PAAppDelegate.h"
 #import "DiningPlace.h"
+#import "MenuItem.h"
 
 @interface PADiningOpportunityViewController ()
 
-@property (strong, nonatomic) UITableView *tableView;
+@property (assign, nonatomic) BOOL expanded;
 
 @property (strong, nonatomic) UILabel *placeLabel;
 
@@ -41,7 +43,7 @@ PAAssetManager *assetManager;
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    self.placeLabel.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
+    self.placeLabel.frame = CGRectInset(CGRectMake(0, 0, self.view.frame.size.width, 88), 15, 15);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,21 +55,50 @@ PAAssetManager *assetManager;
 
 - (void)expandAnimated:(BOOL)animated
 {
+    if (!self.expanded) {
 
+        _fetchedResultsController=nil;
+        NSError *error=nil;
+        if (![self.fetchedResultsController performFetch:&error])
+        {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        self.tableView.dataSource = self;
+        self.tableView.delegate = self;
+        self.tableView.frame = self.view.frame;
+        [self.view addSubview:self.tableView];
+        [self.tableView reloadData];
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
+
+        self.expanded = YES;
+    }
 }
 
 - (void)compressAnimated:(BOOL)animated
 {
+    if (self.expanded) {
+        [self.tableView removeFromSuperview];
+        self.tableView = nil;
 
+        self.expanded = NO;
+    }
 }
 
-- (void) setManagedObject:(NSManagedObject *)managedObject
+- (void) setManagedObject:(NSManagedObject *)managedObject parentObject:(NSManagedObject *)parentObject
 {
     if (_detailItem != managedObject) {
-        _detailItem = managedObject;
-        
-        [self configureView];
+        _detailItem = (DiningPlace *)managedObject;
     }
+
+    if (_diningOpportunity != parentObject) {
+        _diningOpportunity = (Event *)parentObject;
+    }
+
+    [self configureView];
 }
 
 -(void)configureView{
@@ -86,7 +117,6 @@ PAAssetManager *assetManager;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
-    // return [[_fetchedResultsController sections] count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -104,7 +134,135 @@ PAAssetManager *assetManager;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return nil;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"menu-item-cell-identifier"];
+    if (cell == nil) {
+        [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"menu-item-cell-identifier"];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"menu-item-cell-identifier"];
+    }
+    [self configureCell:cell atIndexPath:indexPath];
+    return cell;
 }
+
+-(void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath{
+    MenuItem* tempMenuItem = [_fetchedResultsController objectAtIndexPath:indexPath];
+    //cell.textLabel.text = tempMenuItem.name;
+    cell.backgroundColor = [assetManager lightColor];
+}
+
+#pragma mark - Fetched Results Controller
+
+-(NSFetchedResultsController *)fetchedResultsController{
+    if(_fetchedResultsController){
+        return _fetchedResultsController;
+    }
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
+
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"MenuItem" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+
+
+    NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
+    NSPredicate *fromPlacePredicate = [NSPredicate predicateWithFormat:@"dining_place_id = %@", self.detailItem.id];
+    NSPredicate *fromOpportunityPredicate = [NSPredicate predicateWithFormat:@"dining_opportunity_id = %@", self.diningOpportunity.id];
+
+    [predicateArray addObject:fromPlacePredicate];
+    [predicateArray addObject:fromOpportunityPredicate];
+
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    [fetchRequest setPredicate:compoundPredicate];
+
+    // Set the batch size to a suitable number.
+    [fetchRequest setFetchBatchSize:20];
+
+    // Edit the sort key as appropriate.
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:NO];
+    NSArray *sortDescriptors = @[sortDescriptor];
+
+    [fetchRequest setSortDescriptors:sortDescriptors];
+
+    // Edit the section name key path and cache name if appropriate.
+    // nil for section name key path means "no sections".
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
+                                                             initWithFetchRequest:fetchRequest
+                                                             managedObjectContext:_managedObjectContext
+                                                             sectionNameKeyPath:nil //this needs to be nil
+                                                             cacheName:nil];
+
+    aFetchedResultsController.delegate = self;
+    self.fetchedResultsController = aFetchedResultsController;
+
+    return _fetchedResultsController;
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView beginUpdates];
+}
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+
+        case NSFetchedResultsChangeMove:
+            break;
+
+        case NSFetchedResultsChangeUpdate:
+            break;
+    }
+}
+
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{
+    NSLog(@"did change object");
+
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:{
+            [self.tableView
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+        }
+        case NSFetchedResultsChangeDelete:
+            [self.tableView
+             deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+
+        case NSFetchedResultsChangeUpdate:
+        {
+            UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            [self configureCell:cell atIndexPath:indexPath];
+            break;
+        }
+        case NSFetchedResultsChangeMove:
+            [self.tableView
+             deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+
+            [self.tableView
+             insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
+{
+    [self.tableView endUpdates];
+}
+
 
 @end

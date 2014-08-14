@@ -43,9 +43,9 @@ PAAssetManager *assetManager;
 
     self.view.backgroundColor = [assetManager darkColor];
 
-    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(320 - 70, 0, 70, 70)];
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(320 - 64, 0, 64, 64)];
     [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.backButton addSubview:[assetManager createPanelWithFrame:CGRectInset(self.backButton.bounds, 20, 20) rounded:YES shadow:YES]];
+    [self.backButton addSubview:[assetManager createPanelWithFrame:CGRectInset(self.backButton.bounds, 15, 15) rounded:YES shadow:YES]];
 
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero];
     self.tableView.dataSource = self;
@@ -57,7 +57,6 @@ PAAssetManager *assetManager;
     [self.view addSubview:self.tableView];
 
     self.headerView = [[UIView alloc] init];
-    self.tableView.tableHeaderView = self.headerView;
 
     self.periodLabel = [[UILabel alloc] init];
     self.periodLabel.textColor = [UIColor whiteColor];
@@ -72,8 +71,15 @@ PAAssetManager *assetManager;
 {
     self.tableView.frame = self.view.frame;
 
-    self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+    self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
+    self.tableView.tableHeaderView = self.headerView;
+    
     self.periodLabel.frame = CGRectInset(self.headerView.frame, 15, 0);
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self backButton:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -114,7 +120,7 @@ PAAssetManager *assetManager;
     }
 }
 
-- (void)setManagedObject:(NSManagedObject *)managedObject
+- (void)setManagedObject:(NSManagedObject *)managedObject parentObject:(NSManagedObject *)parentObject
 {
     if (_detailItem != managedObject) {
         _detailItem = managedObject;
@@ -242,7 +248,7 @@ PAAssetManager *assetManager;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.viewController.view.userInteractionEnabled = NO;
     DiningPlace* diningPlace = self.diningPlaces[indexPath.row];
-    [cell.viewController setManagedObject:diningPlace];
+    [cell.viewController setManagedObject:diningPlace parentObject:self.detailItem];
 
     return cell;
 }
@@ -265,28 +271,6 @@ PAAssetManager *assetManager;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
-     if(self.selectedIndexPath==nil){
-     DiningPlace *tempDiningPlace = self.diningPlaces[indexPath.row];
-     PADiningCell *cell = (PADiningCell*)[tableView cellForRowAtIndexPath:indexPath];
-     cell.diningOpportunity=self.detailItem;
-     cell.diningPlace=tempDiningPlace;
-     [cell performFetch];
-     [[PASyncManager globalSyncManager] updateMenuItemsForOpportunity:self.detailItem andPlace:tempDiningPlace];
-     self.selectedIndexPath = indexPath;
-     [tableView beginUpdates];
-     [tableView endUpdates];
-     [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-     [tableView setScrollEnabled:NO];
-     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-     }else{
-     [tableView setScrollEnabled:YES];
-     self.selectedIndexPath=nil;
-     [tableView beginUpdates];
-     [tableView endUpdates];
-     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-     }
-     */
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 

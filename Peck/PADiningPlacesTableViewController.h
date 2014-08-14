@@ -26,6 +26,5 @@
 - (void)configureView;
 - (void)fetchDiningPlace:(DiningPeriod *)diningPeriod;
 - (void)addDiningPlace:(DiningPlace *)diningPlace withPeriod:(DiningPeriod*)diningPeriod;
-- (void)setManagedObject:(NSManagedObject *)managedObject;
 
 @end
