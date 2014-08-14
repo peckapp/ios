@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PAInitialViewController.h"
 
 @interface PAEnterEmailTableViewController : UITableViewController
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 - (IBAction)finishLogin:(id)sender;
 - (IBAction)backButton:(id)sender;
+@property (weak, nonatomic) PAInitialViewController* parent;
 
 @end

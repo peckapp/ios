@@ -52,8 +52,7 @@
 
 - (IBAction)finishLogin:(id)sender {
     if([self emailMatchesInstitution:self.emailField.text]){
-        PAInitialViewController* parent = (PAInitialViewController*)self.parentViewController;
-        [parent loginWithFacebook:parent.user andBool:YES withEmail:self.emailField.text];
+        [self.parent loginWithFacebook:self.parent.user andBool:YES withEmail:self.emailField.text];
     }else{
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Invalid Email"
                                                         message:@"The email does not match the current institution"

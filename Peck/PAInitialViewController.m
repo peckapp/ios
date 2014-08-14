@@ -213,7 +213,8 @@
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if([[segue identifier] isEqualToString:@"enterValidEmail"]){
-        //PAEnterEmailTableViewController* destintation = [segue destinationViewController];
+        PAEnterEmailTableViewController* destintation = [segue destinationViewController];
+        destintation.parent = self;
     }
 }
 
