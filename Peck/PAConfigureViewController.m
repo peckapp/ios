@@ -23,6 +23,10 @@
 @implementation PAConfigureViewController
 @synthesize schoolPicker;
 
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator  = _persistentStoreCoordinator;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -72,8 +76,9 @@
 
 - (NSArray*)fetchInstitutions
 {
-    NSManagedObjectContext *moc = _managedObjectContext;
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Institution" inManagedObjectContext:moc];
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Institution" inManagedObjectContext:_managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];
     
@@ -82,7 +87,7 @@
     [request setSortDescriptors:@[sortDescriptor]];
     
     NSError *error;
-    NSArray *array = [moc executeFetchRequest:request error:&error];
+    NSArray *array = [_managedObjectContext executeFetchRequest:request error:&error];
     if (array == nil)
     {
         // Deal with error...

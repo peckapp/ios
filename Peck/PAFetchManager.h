@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Peer.h"
 #import "Comment.h"
+#import "Institution.h"
 
 @interface PAFetchManager : NSObject
 
@@ -47,4 +48,6 @@
 
 -(void)removeCircle:(NSNumber*)circleID;
 //removes the circle for the given id
+
+-(Institution*)fetchInstitutionForID:(NSNumber*)instID;
 @end

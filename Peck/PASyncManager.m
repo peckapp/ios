@@ -761,7 +761,7 @@
         [[PASessionManager sharedClient] GET:institutionsAPI
                                   parameters:[self authenticationParameters]
                                      success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                         //NSLog(@"update institutions JSON: %@",JSON);
+                                         NSLog(@"update institutions JSON: %@",JSON);
                                          NSDictionary *institutionsDictionary = (NSDictionary*)JSON;
                                          NSArray *responseInstitutions = [institutionsDictionary objectForKey:@"institutions"];
                                          for (NSDictionary *institutionAttributes in responseInstitutions) {
@@ -862,6 +862,10 @@
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                          NSLog(@"ERROR: %@",error);
+                                         if(viewController){
+                                             [viewController.refreshControl endRefreshing];
+                                         }
+
                                      }];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -884,7 +888,9 @@
     explore.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     explore.id = [dictionary objectForKey:@"id"];
     explore.category = category;
-    
+    if([dictionary objectForKey:@"score"]){
+        explore.weight = [dictionary objectForKey:@"score"];
+    }
     NSString* description = [category stringByAppendingString:@"_description"];
     if(![[dictionary objectForKey:description] isKindOfClass:[NSNull class]]){
         explore.explore_description = [dictionary objectForKey:description];

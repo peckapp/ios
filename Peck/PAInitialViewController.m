@@ -9,6 +9,8 @@
 #import "PAInitialViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "PASyncManager.h"
+#import "PAFetchManager.h"
+#import "Institution.h"
 
 @interface PAInitialViewController ()
 
@@ -114,6 +116,26 @@
         FBAccessTokenData* accessTokenData = [[FBSession activeSession] accessTokenData];
         NSString* token = [accessTokenData accessToken];
         
+        BOOL sendEmail = YES;
+        
+        Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
+        NSString* emailExtension = currentInstitution.email_regex;
+        NSString* userEmail = [user objectForKey:@"email"];
+        NSInteger preceedingLength = [userEmail length] - [emailExtension length];
+        if(preceedingLength>0){
+            NSString* userEmailExtension = [userEmail substringFromIndex:preceedingLength];
+            if([userEmailExtension isEqualToString:emailExtension]){
+                //the email matches the institution that the user has chosen
+                sendEmail = NO;
+                NSLog(@"matching email");
+            }
+        }
+        
+        if([[[user objectForKey:@"email"] substringFromIndex:([currentInstitution.name length]+4)] isEqualToString:currentInstitution.name]){
+            
+        }
+        
+        
         NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                   [user objectForKey:@"first_name"],@"first_name",
                                   [user objectForKey:@"last_name"],@"last_name",
@@ -121,6 +143,7 @@
                                   token, @"facebook_token",
                                   @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
                                   [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"],@"institution_id",
+                                  [NSNumber numberWithBool:sendEmail], @"send_email",
                                   nil];
         
         //We will store the picture locally that facebook has given us in case the user has not saved a new photo

@@ -72,10 +72,11 @@
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="weight" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
-    <entity name="Institution" syncable="YES">
+    <entity name="Institution" representedClassName="Institution" syncable="YES">
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="email_regex" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gps_latitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="gps_longitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -124,7 +125,7 @@
         <element name="DiningPlace" positionX="-108" positionY="441" width="128" height="150"/>
         <element name="Event" positionX="124" positionY="467" width="128" height="255"/>
         <element name="Explore" positionX="261" positionY="261" width="128" height="240"/>
-        <element name="Institution" positionX="-54" positionY="189" width="128" height="210"/>
+        <element name="Institution" positionX="-54" positionY="189" width="128" height="225"/>
         <element name="MenuItem" positionX="90" positionY="342" width="128" height="103"/>
         <element name="Peck" positionX="90" positionY="342" width="128" height="178"/>
         <element name="Peer" positionX="261" positionY="261" width="128" height="120"/>

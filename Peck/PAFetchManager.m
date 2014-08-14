@@ -12,6 +12,7 @@
 #import "PASyncManager.h"
 #import "Subscription.h"
 #import "Comment.h"
+#import "Institution.h"
 
 @implementation PAFetchManager
 
@@ -332,6 +333,25 @@
     }
     return nil;
 
+}
+
+-(Institution*)fetchInstitutionForID:(NSNumber*)instID{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Institution" inManagedObjectContext:_managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"id = %@", instID];
+    [request setPredicate:predicate];
+    
+    NSError *error;
+    NSArray *array = [_managedObjectContext executeFetchRequest:request error:&error];
+    if (array == nil)
+    {
+        // Deal with error...
+    }
+    return array[0];
 }
 
 @end

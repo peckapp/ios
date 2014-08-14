@@ -10,7 +10,6 @@
 		86051D49194BB27200961541 /* Silhouette.png in Resources */ = {isa = PBXBuildFile; fileRef = 86051D48194BB27200961541 /* Silhouette.png */; };
 		86051D4D194BB64200961541 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86051D4A194BB3EB00961541 /* FacebookSDK.framework */; };
 		860A8D27195201A700C5B4A6 /* thor_peckapp_com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 860A8D26195201A700C5B4A6 /* thor_peckapp_com.cer */; };
-		860BE45E19632CC600E57A56 /* Institution.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE45D19632CC600E57A56 /* Institution.m */; };
 		860EB42F1980660400F1E665 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 860EB42E1980660400F1E665 /* UIImage+ImageEffects.m */; };
 		86173751195E07F000F2A794 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86D59816193768BF00F38654 /* Main.storyboard */; };
 		861E469F1988887C0088B47F /* NewRelicAgent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E469E1988887C0088B47F /* NewRelicAgent.framework */; };
@@ -65,6 +64,7 @@
 		A412E1D41986E63800384A11 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = A412E1D31986E63800384A11 /* Comment.m */; };
 		A42D4FB9198AAAB000536453 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A42D4FB8198AAAB000536453 /* Security.framework */; };
 		A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */; };
+		A439EBC7199D196700FFEF33 /* Institution.m in Sources */ = {isa = PBXBuildFile; fileRef = A439EBC6199D196700FFEF33 /* Institution.m */; };
 		A43BF0EA197813200009B7AD /* PAProfileTableViewController2.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */; };
 		A43BF0EE197819480009B7AD /* PASubscriptionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */; };
 		A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0F01978198D0009B7AD /* PASubscriptionCell.m */; };
@@ -197,8 +197,6 @@
 		86051D48194BB27200961541 /* Silhouette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Silhouette.png; sourceTree = "<group>"; };
 		86051D4A194BB3EB00961541 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		860A8D26195201A700C5B4A6 /* thor_peckapp_com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = thor_peckapp_com.cer; sourceTree = "<group>"; };
-		860BE45C19632CC600E57A56 /* Institution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Institution.h; sourceTree = "<group>"; };
-		860BE45D19632CC600E57A56 /* Institution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Institution.m; sourceTree = "<group>"; };
 		860EB42D1980660400F1E665 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		860EB42E1980660400F1E665 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		861E469E1988887C0088B47F /* NewRelicAgent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NewRelicAgent.framework; sourceTree = "<group>"; };
@@ -278,6 +276,8 @@
 		A42D4FB8198AAAB000536453 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A433EAA0195B3F5800DAA201 /* HTAutocompleteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTAutocompleteManager.h; sourceTree = "<group>"; };
 		A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTAutocompleteManager.m; sourceTree = "<group>"; };
+		A439EBC5199D196700FFEF33 /* Institution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Institution.h; sourceTree = "<group>"; };
+		A439EBC6199D196700FFEF33 /* Institution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Institution.m; sourceTree = "<group>"; };
 		A43BF0E8197813200009B7AD /* PAProfileTableViewController2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAProfileTableViewController2.h; sourceTree = "<group>"; };
 		A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAProfileTableViewController2.m; sourceTree = "<group>"; };
 		A43BF0EC197819480009B7AD /* PASubscriptionsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASubscriptionsTableViewController.h; sourceTree = "<group>"; };
@@ -478,9 +478,9 @@
 		860BE45F19632CCE00E57A56 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A439EBC5199D196700FFEF33 /* Institution.h */,
+				A439EBC6199D196700FFEF33 /* Institution.m */,
 				A40CF56219547A730021C088 /* Peers */,
-				860BE45C19632CC600E57A56 /* Institution.h */,
-				860BE45D19632CC600E57A56 /* Institution.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1128,6 +1128,7 @@
 				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
 				863843E3193CB7FD004110F5 /* PAExploreTableViewController.m in Sources */,
 				A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */,
+				A439EBC7199D196700FFEF33 /* Institution.m in Sources */,
 				86D59811193768BF00F38654 /* main.m in Sources */,
 				DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */,
 				A4E21F601964A749002A9800 /* PAEventInfoTableViewController.m in Sources */,
@@ -1142,7 +1143,6 @@
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
-				860BE45E19632CC600E57A56 /* Institution.m in Sources */,
 				A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */,
 				A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
