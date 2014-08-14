@@ -35,13 +35,13 @@
             NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
                                       [defaults objectForKey:@"user_id"],@"user_id",
                                       [defaults objectForKey:@"institution_id"],@"institution_id",
-                                      self.exploreID,@"event_attended",
+                                      [NSNumber numberWithLong:self.exploreID],@"event_attended",
                                       @"simple", @"category",
                                       [defaults objectForKey:@"user_id"], @"added_by",
                                       nil];
             
             [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:nil];
-            [[PAFetchManager sharedFetchManager] deleteObject:self.exploreID withEntityType:@"Explore" andCategory:@"event"];
+            [[PAFetchManager sharedFetchManager] deleteObject:[NSNumber numberWithLong: self.exploreID] withEntityType:@"Explore" andCategory:@"event"];
            
             
         }else{

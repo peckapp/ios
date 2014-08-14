@@ -99,7 +99,7 @@ NSCache *imageCache;
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;
-    cell.exploreID = tempExplore.id;
+    cell.exploreID = [tempExplore.id integerValue];
     cell.category = tempExplore.category;
     
     NSLog(@"explore weight: %@", tempExplore.weight);
