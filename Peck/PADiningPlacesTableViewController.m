@@ -64,7 +64,8 @@ PAAssetManager *assetManager;
     self.periodLabel.font = [UIFont boldSystemFontOfSize:17.0];
     [self.headerView addSubview:self.periodLabel];
 
-    self.diningPlaces = [[NSMutableArray alloc] init];
+    //self.diningPlaces = [[NSMutableArray alloc] init];
+    self.diningPlaces = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -83,12 +84,15 @@ PAAssetManager *assetManager;
 
 - (void)expandAnimated:(BOOL)animated
 {
-
+    self.diningPlaces = [[NSMutableArray alloc] init];
+    [self fetchDiningPeriods];
+    [self.tableView reloadData];
 }
 
 - (void)compressAnimated:(BOOL)animated
 {
-
+    self.diningPlaces=nil;
+    [self.tableView reloadData];
 }
 
 - (UIView *)viewForBackButton
@@ -106,8 +110,7 @@ PAAssetManager *assetManager;
         
         self.periodLabel.text = [self.detailItem valueForKey:@"title"];
         
-        [self fetchDiningPeriods];
-        [self.tableView reloadData];
+        
     }
 }
 
