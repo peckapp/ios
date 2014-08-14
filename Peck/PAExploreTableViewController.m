@@ -91,6 +91,7 @@ NSCache *imageCache;
 - (void)configureCell:(PAExploreCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     cell.backgroundView = [assetManager createShadowWithFrame:cell.frame];
+    cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
 
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;
