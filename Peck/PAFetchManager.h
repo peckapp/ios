@@ -50,4 +50,6 @@
 //removes the circle for the given id
 
 -(Institution*)fetchInstitutionForID:(NSNumber*)instID;
+
+-(void)removeAllObjectsOfType:(NSString*)type;
 @end

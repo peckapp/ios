@@ -102,6 +102,7 @@ NSCache *imageCache;
     cell.exploreID = tempExplore.id;
     cell.category = tempExplore.category;
     
+    NSLog(@"explore weight: %@", tempExplore.weight);
     
     if(tempExplore.imageURL){
         NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempExplore.imageURL]];

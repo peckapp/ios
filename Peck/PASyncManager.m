@@ -854,7 +854,9 @@
              NSLog(@"explore JSON: %@",JSON);
              NSDictionary *exploreDictionary = (NSDictionary*)JSON;
              NSArray *eventsFromResponse = [exploreDictionary objectForKey:@"explore_events"];
+             
              [self.persistentStoreCoordinator lock];
+             [[PAFetchManager sharedFetchManager] removeAllObjectsOfType:@"Explore"];
              for (NSDictionary *eventAttributes in eventsFromResponse) {
                  NSNumber *newID = [eventAttributes objectForKey:@"id"];
                  
