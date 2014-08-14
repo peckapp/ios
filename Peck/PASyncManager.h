@@ -91,7 +91,7 @@
 
 -(void)updatePeerInfo;
 
--(void)updateExploreInfo;
+-(void)updateExploreInfoForViewController:(UITableViewController*)viewController;
 
 //methods for subscriptions
 -(void)updateSubscriptions;

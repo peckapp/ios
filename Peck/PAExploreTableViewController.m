@@ -51,13 +51,22 @@ NSCache *imageCache;
 
     self.title = @"Explore";
     
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refresh)
+             forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refreshControl;
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    [[PASyncManager globalSyncManager] updateExploreInfo];
+    [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
+}
+
+-(void)refresh{
+    NSLog(@"refresh the table view");
+    [[PASyncManager globalSyncManager] updateExploreInfoForViewController:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -145,7 +154,15 @@ NSCache *imageCache;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     //[self performSegueWithIdentifier:@"showMessageDetail" sender:self];
+    
+    /*
+    self.tableView.tableHeaderView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, 60);
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [spinner setCenter:CGPointMake(self.tableView.tableHeaderView.frame.size.width, 20)]; // I do this because I'm in landscape mode
+    [self.tableView.tableHeaderView addSubview:spinner];*/
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+     
 }
 
 /*

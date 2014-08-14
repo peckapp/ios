@@ -782,7 +782,7 @@
 
 #pragma mark - Explore tab actions
 
--(void)updateExploreInfo
+-(void)updateExploreInfoForViewController:(UITableViewController*)viewController
 {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
@@ -827,12 +827,18 @@
              NSError* error = nil;
              [_managedObjectContext save:&error];
              [self.persistentStoreCoordinator unlock];
+             
+             if(viewController){
+                 [viewController.refreshControl endRefreshing];
+             }
+
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                          NSLog(@"ERROR: %@",error);
                                      }];
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            
             //TODO: if there are any problems with the core data being added in the thread above,
             // then we should add a separate managed object context and merge the two in this thread.
             
@@ -1442,7 +1448,7 @@
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          //NSLog(@"success: %@", JSON);
-         [self updateExploreInfo];
+         [self updateExploreInfoForViewController:nil];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
