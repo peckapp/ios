@@ -60,7 +60,10 @@ NSCache *imageCache;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
+
+    self.tableView.contentInset = UIEdgeInsetsMake(9, 0, 0, 0);
+    self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+
     [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
 }
 
