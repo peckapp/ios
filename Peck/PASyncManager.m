@@ -274,7 +274,7 @@
                                         NSString* imageURL = [userDictionary objectForKey:@"image"];
                                         
                                         [defaults setObject:email forKey:@"email"];
-                                        if([blurb isKindOfClass:[NSNull class]]){
+                                        if(![blurb isKindOfClass:[NSNull class]]){
                                             [defaults setObject:blurb forKey:@"blurb"];
                                         }
                                         [defaults setObject:firstName forKey:first_name_define];
