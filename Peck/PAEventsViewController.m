@@ -86,10 +86,10 @@ PAAssetManager * assetManager;
     self.animationTime = 0.2;
     
     self.helperImageView = [[UIImageView alloc] init];
-    
-    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 44, 44)];
+
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(320 - 70, 0, 70, 70)];
     [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
-    self.backButton.backgroundColor = [UIColor lightTextColor];
+    [self.backButton addSubview:[assetManager createPanelWithFrame:CGRectInset(self.backButton.bounds, 20, 20) rounded:YES shadow:YES]];
 
     //we must store the profile picture every time the app loads because the local image storing is not persistent
     [self storeProfilePicture];

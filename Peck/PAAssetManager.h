@@ -22,6 +22,7 @@
 
 - (UIView *)createShadowWithFrame:(CGRect)frame;
 - (UIView *)createShadowWithFrame:(CGRect)frame top:(BOOL)top;
+- (UIView *)createPanelWithFrame:(CGRect)frame rounded:(BOOL)rounded shadow:(BOOL)shadow;
 - (UIImageView *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView;
 - (UITextField *)createTextFieldWithFrame:(CGRect)frame;
 
