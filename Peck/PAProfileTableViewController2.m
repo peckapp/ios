@@ -11,6 +11,7 @@
 #import "PASyncManager.h"
 #import "PAFetchManager.h"
 #import "PAInitialViewController.h"
+#import "PAFriendProfileViewController.h"
 
 @interface PAProfileTableViewController2 ()
 
@@ -72,11 +73,15 @@ BOOL loggedIn;
         loggedIn=YES;
         NSLog(@"logged in");
         self.loginButton.title =@"Logout";
+        self.registerButton.title = @"";
+        self.registerButton.action = nil;
     }
     else{
         loggedIn=NO;
         NSLog(@"logged out");
         self.loginButton.title = @"Login";
+        self.registerButton.title = @"Register";
+        self.registerButton.action = @selector(registerAccount:);
     }
 }
 
@@ -124,12 +129,25 @@ BOOL loggedIn;
 - (IBAction)login:(id)sender
 {
     if(!loggedIn){
+        
         UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
         UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
         PAInitialViewController* root = loginRoot.viewControllers[0];
         root.justOpenedApp=NO;
         [self presentViewController:loginRoot animated:YES completion:nil];
     }else{
+        //Logging out the user
+        
+        
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        if(appdelegate.circleViewController.selectedIndexPath){
+            //if there is a currently expanded cell, we must condense this cell before logging out
+            
+            PACircleCell* cell = (PACircleCell*)[appdelegate.circleViewController.tableView cellForRowAtIndexPath:appdelegate.circleViewController.selectedIndexPath];
+            
+            [appdelegate.circleViewController condenseCircleCell:cell atIndexPath:appdelegate.circleViewController.selectedIndexPath];
+        }
+
         
         [[PASyncManager globalSyncManager] logoutUser];
         
@@ -142,6 +160,7 @@ BOOL loggedIn;
         [FBSession.activeSession closeAndClearTokenInformation];
         }
         
+        
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         [defaults removeObjectForKey:@"authentication_token"];
         [defaults removeObjectForKey:@"first_name"];
@@ -150,6 +169,7 @@ BOOL loggedIn;
         [defaults removeObjectForKey:@"email"];
         [defaults removeObjectForKey:@"profile_picture"];
         [defaults removeObjectForKey:@"profile_picture_url"];
+        [defaults removeObjectForKey:@"home_institution"];
         
         
         [defaults setObject:@NO forKey:@"logged_in"];
@@ -162,6 +182,9 @@ BOOL loggedIn;
         self.lastNameTextField.text = @"";
         self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
         self.loginButton.title = @"Login";
+        self.registerButton.title = @"Register";
+        self.registerButton.action = @selector(registerAccount:);
+        
         loggedIn=NO;
     }
 }
@@ -260,7 +283,12 @@ BOOL loggedIn;
 #pragma mark - table view deleagate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    if(indexPath.section==0 && indexPath.row==5){
+        NSLog(@"view the user's profile");
+        UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UINavigationController *navController = [loginStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
+        [self presentViewController:navController animated:YES completion:nil];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

@@ -11,8 +11,6 @@
 
 @interface PANestedTableViewController ()
 
-@property (strong, nonatomic) NSIndexPath *selectedCellIndexPath;
-
 @end
 
 @implementation PANestedTableViewController
@@ -74,26 +72,23 @@
 }
  */
 
-- (void)tableView:(UITableView *)tableView expandRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView expandRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated
 {
     self.selectedCellIndexPath = indexPath;
     [tableView beginUpdates];
     [tableView endUpdates];
-    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:animated];
     tableView.scrollEnabled = NO;
-
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [cell addSubview:self.backButton];
 }
 
-- (void)tableView:(UITableView *)tableView compressRowAtSelectedIndexPathUserInteractionEnabled:(BOOL)interaction
+- (void)tableView:(UITableView *)tableView compressRowAtSelectedIndexPathAnimated:(BOOL)animated
 {
     NSIndexPath * indexPath = self.selectedCellIndexPath;
     self.selectedCellIndexPath = nil;
     tableView.scrollEnabled = YES;
     [tableView beginUpdates];
     [tableView endUpdates];
-    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:animated];
 
     [self.backButton removeFromSuperview];
 }

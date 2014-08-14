@@ -12,6 +12,7 @@
 #import "PASyncManager.h"
 #import "Subscription.h"
 #import "Comment.h"
+#import "Institution.h"
 
 @implementation PAFetchManager
 
@@ -66,6 +67,7 @@
     [self removeAllObjectsOfType:@"Announcement"];
     [self removeAllObjectsOfType:@"Comment"];
     [self removeAllObjectsOfType:@"Peck"];
+    [self removeAllObjectsOfType:@"Event"];
     [[PASyncManager globalSyncManager] updatePeerInfo];
 }
 
@@ -274,6 +276,39 @@
     }
 }
 
+-(void)deleteObject:(NSNumber *) newID withEntityType:(NSString*)entityType andCategory:(NSString*)category
+{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    
+    NSFetchRequest * request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *objects = [NSEntityDescription entityForName:entityType inManagedObjectContext:_managedObjectContext];
+    [request setEntity:objects];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id = %@", newID];
+    NSMutableArray*predicateArray = [[NSMutableArray alloc] init];
+    [predicateArray addObject:predicate];
+    //[request setPredicate:predicate];
+    
+    if(category!=nil){
+        NSPredicate* categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@",category];
+        [predicateArray addObject:categoryPredicate];
+    }
+    
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    [request setPredicate:compoundPredicate];
+    
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
+    //fetch events in order to check if the events we want to add already exist in core data
+    
+    if([mutableFetchResults count]>0){
+        [_managedObjectContext deleteObject:mutableFetchResults[0]];
+        NSError *saveError = nil;
+        [_managedObjectContext save:&saveError];
+    }
+}
+
 -(Event*)getEventWithID:(NSNumber*)eventID andType:(NSString*)type{
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
@@ -298,6 +333,25 @@
     }
     return nil;
 
+}
+
+-(Institution*)fetchInstitutionForID:(NSNumber*)instID{
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Institution" inManagedObjectContext:_managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"id = %@", instID];
+    [request setPredicate:predicate];
+    
+    NSError *error;
+    NSArray *array = [_managedObjectContext executeFetchRequest:request error:&error];
+    if (array == nil)
+    {
+        // Deal with error...
+    }
+    return array[0];
 }
 
 @end

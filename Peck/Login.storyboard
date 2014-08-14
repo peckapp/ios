@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.11" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Vgz-Kj-Ti8">
     <dependencies>
+        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6190.4"/>
     </dependencies>
     <scenes>
@@ -121,11 +122,71 @@
                         <outlet property="fbLogin" destination="t9J-oO-SfW" id="TB9-nN-Unm"/>
                         <outlet property="passwordField" destination="tUc-gS-lYW" id="Vrx-Kk-Qxq"/>
                         <segue destination="wlq-Oy-tGS" kind="push" identifier="login" id="4jd-cO-q31"/>
+                        <segue destination="d7F-TQ-fBG" kind="push" identifier="enterValidEmail" id="MsY-Co-q3i"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YoV-Ry-WA3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-323" y="125"/>
+        </scene>
+        <!--Enter College Email-->
+        <scene sceneID="eNA-um-Nm0">
+            <objects>
+                <tableViewController id="d7F-TQ-fBG" customClass="PAEnterEmailTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="u04-wW-hke">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection id="45p-fd-uFZ">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Qun-hg-lxQ">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Qun-hg-lxQ" id="QUW-nh-8qc">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Email:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nsq-h3-KEo">
+                                                    <rect key="frame" x="20" y="11" width="51" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="38w-YV-LBx">
+                                                    <rect key="frame" x="79" y="7" width="221" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="d7F-TQ-fBG" id="ol1-Ft-y64"/>
+                            <outlet property="delegate" destination="d7F-TQ-fBG" id="rFU-ga-L7t"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Enter College Email" id="ydl-hg-uvz">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="a0t-fm-G1S"/>
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="rG4-E6-fSf">
+                            <connections>
+                                <action selector="backButton:" destination="d7F-TQ-fBG" id="L3V-is-xQX"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="oBR-Il-H6d">
+                            <connections>
+                                <action selector="finishLogin:" destination="d7F-TQ-fBG" id="ejY-T7-mhx"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="emailField" destination="38w-YV-LBx" id="GiO-s2-6WS"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xGm-Qu-jRX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="152" y="-491"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="3Oe-Vd-DaR">

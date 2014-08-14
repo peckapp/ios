@@ -8,9 +8,6 @@
 
 #import "PAAssetManager.h"
 
-#define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
-#define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
-
 @implementation PAAssetManager
 
 + (id)sharedManager {
@@ -28,8 +25,8 @@
         self.eventPlaceholder = [UIImage imageNamed:@"event-placeholder"];
         self.imagePlaceholder = [UIImage imageNamed:@"image-placeholder"];
         self.profilePlaceholder = [UIImage imageNamed:@"profile-placeholder"];
-        self.horizontalShadow = [[UIImage imageNamed:@"drop-shadow-horizontal"]stretchableImageWithLeftCapWidth:1 topCapHeight:0];
-        self.unavailableColor = [UIColor colorWithHue:1 saturation:0 brightness:.85 alpha:1];
+        self.darkColor = [UIColor colorWithRed:38/255.0 green:27/255.0 blue:48/255.0 alpha:1];
+        self.lightColor = [UIColor colorWithRed:150/255.0 green:123/255.0 blue:255/255.0 alpha:1];
         
         
         CGSize size = CGSizeMake(200, 200);
@@ -56,6 +53,48 @@
     return img;
 }
 
+- (UIView *)createShadowWithFrame:(CGRect)frame
+{
+    UIImageView *shadow = [[UIImageView alloc] initWithFrame:frame];
+    shadow.image = [[UIImage imageNamed:@"drop-shadow"]stretchableImageWithLeftCapWidth:21 topCapHeight:15];
+    return shadow;
+}
+
+- (UIView *)createPanelWithFrame:(CGRect)frame rounded:(BOOL)rounded shadow:(BOOL)shadow
+{
+    UIView *view = [[UIView alloc]initWithFrame:frame];
+    view.backgroundColor = [UIColor whiteColor];
+
+    if (rounded) {
+        view.layer.cornerRadius = 3;
+        view.clipsToBounds = YES;
+    }
+
+    if (shadow) {
+        UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:view.bounds];
+        view.layer.masksToBounds = NO;
+        view.layer.shadowColor = [UIColor blackColor].CGColor;
+        view.layer.shadowOffset = CGSizeMake(0.0f, 5.0f);
+        view.layer.shadowOpacity = 0.50f;
+        view.layer.shadowRadius = 25.0f;
+        view.layer.shadowPath = shadowPath.CGPath;
+    }
+
+    view.userInteractionEnabled = NO;
+    return view;
+}
+
+- (UIView *)createShadowWithFrame:(CGRect)frame top:(BOOL)top
+{
+    UIImageView *dropShadow = [[UIImageView alloc] initWithFrame:frame];
+    dropShadow.image = [[UIImage imageNamed:@"drop-shadow-horizontal"]stretchableImageWithLeftCapWidth:1 topCapHeight:0];
+    if (top) {
+        dropShadow.transform = CGAffineTransformMakeRotation(M_PI);
+    }
+    return dropShadow;
+}
+
+
 - (UIImageView *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView
 {
     CGFloat size = 40;
@@ -71,8 +110,16 @@
     return imageView;
 }
 
-
--(UIColor*)getUnavailableColor{
-    return self.unavailableColor;
+- (UITextField *)createTextFieldWithFrame:(CGRect)frame
+{
+    UITextField *textField = [[UITextField alloc] initWithFrame:frame];
+    textField.borderStyle = UITextBorderStyleRoundedRect;
+    textField.textColor = [UIColor blackColor];
+    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.backgroundColor = [UIColor clearColor];
+    textField.autocorrectionType = UITextAutocorrectionTypeYes;
+    textField.keyboardType = UIKeyboardTypeDefault;
+    textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    return textField;
 }
 @end

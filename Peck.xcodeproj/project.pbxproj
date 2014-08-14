@@ -10,7 +10,6 @@
 		86051D49194BB27200961541 /* Silhouette.png in Resources */ = {isa = PBXBuildFile; fileRef = 86051D48194BB27200961541 /* Silhouette.png */; };
 		86051D4D194BB64200961541 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86051D4A194BB3EB00961541 /* FacebookSDK.framework */; };
 		860A8D27195201A700C5B4A6 /* thor_peckapp_com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 860A8D26195201A700C5B4A6 /* thor_peckapp_com.cer */; };
-		860BE45E19632CC600E57A56 /* Institution.m in Sources */ = {isa = PBXBuildFile; fileRef = 860BE45D19632CC600E57A56 /* Institution.m */; };
 		860EB42F1980660400F1E665 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 860EB42E1980660400F1E665 /* UIImage+ImageEffects.m */; };
 		86173751195E07F000F2A794 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86D59816193768BF00F38654 /* Main.storyboard */; };
 		861E469F1988887C0088B47F /* NewRelicAgent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E469E1988887C0088B47F /* NewRelicAgent.framework */; };
@@ -65,6 +64,8 @@
 		A412E1D41986E63800384A11 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = A412E1D31986E63800384A11 /* Comment.m */; };
 		A42D4FB9198AAAB000536453 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A42D4FB8198AAAB000536453 /* Security.framework */; };
 		A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */; };
+		A439EBC7199D196700FFEF33 /* Institution.m in Sources */ = {isa = PBXBuildFile; fileRef = A439EBC6199D196700FFEF33 /* Institution.m */; };
+		A439EBCA199D3CE400FFEF33 /* PAEnterEmailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A439EBC9199D3CE400FFEF33 /* PAEnterEmailTableViewController.m */; };
 		A43BF0EA197813200009B7AD /* PAProfileTableViewController2.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */; };
 		A43BF0EE197819480009B7AD /* PASubscriptionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */; };
 		A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0F01978198D0009B7AD /* PASubscriptionCell.m */; };
@@ -115,7 +116,7 @@
 		A4E47D5A1991295000DDF941 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E47D591991295000DDF941 /* Event.m */; };
 		A4F04BEE1994097500290CF2 /* PAMethodManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F04BED1994097500290CF2 /* PAMethodManager.m */; };
 		A4F04BF61995155900290CF2 /* PAPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F04BF51995155900290CF2 /* PAPromptView.m */; };
-		A4F04BF81995158F00290CF2 /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4F04BF71995158F00290CF2 /* View.xib */; };
+		A4F04BF81995158F00290CF2 /* PAPromptView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4F04BF71995158F00290CF2 /* PAPromptView.xib */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 		DD3701401990081F006B63E8 /* PANestedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD37013F1990081F006B63E8 /* PANestedTableViewController.m */; };
 		DD5751B41980356100BF52A8 /* PAPeckInviteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD5751B31980356100BF52A8 /* PAPeckInviteCell.xib */; };
@@ -124,10 +125,13 @@
 		DD898136195B523F0079CDC9 /* button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898133195B523F0079CDC9 /* button@2x.png */; };
 		DD898137195B523F0079CDC9 /* button-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898134195B523F0079CDC9 /* button-selected@2x.png */; };
 		DD898139195B5AE20079CDC9 /* image-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898138195B5AE20079CDC9 /* image-placeholder.png */; };
+		DD8C3394199D095B00B9966A /* PADiningOpportunityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD8C3393199D095B00B9966A /* PADiningOpportunityViewController.m */; };
 		DDBCA9BE1986D6BC007D283E /* drop-shadow-horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */; };
 		DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAExploreCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */; };
 		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
+		DDEF7DB6199C15BA007C28F7 /* drop-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = DDEF7DB5199C15BA007C28F7 /* drop-shadow.png */; };
+		DDEF7DB9199C4D34007C28F7 /* PAAthleticEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDEF7DB8199C4D34007C28F7 /* PAAthleticEventViewController.m */; };
 		DDF0DB47199532A40061089E /* PANestedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDF0DB46199532A40061089E /* PANestedTableViewCell.m */; };
 		DDFFF5A619829BD100DC5AC1 /* feather-60.png in Resources */ = {isa = PBXBuildFile; fileRef = DDFFF59C19829BD100DC5AC1 /* feather-60.png */; };
 		DDFFF5A719829BD100DC5AC1 /* feather-29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDFFF59D19829BD100DC5AC1 /* feather-29@2x.png */; };
@@ -195,8 +199,6 @@
 		86051D48194BB27200961541 /* Silhouette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Silhouette.png; sourceTree = "<group>"; };
 		86051D4A194BB3EB00961541 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		860A8D26195201A700C5B4A6 /* thor_peckapp_com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = thor_peckapp_com.cer; sourceTree = "<group>"; };
-		860BE45C19632CC600E57A56 /* Institution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Institution.h; sourceTree = "<group>"; };
-		860BE45D19632CC600E57A56 /* Institution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Institution.m; sourceTree = "<group>"; };
 		860EB42D1980660400F1E665 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		860EB42E1980660400F1E665 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		861E469E1988887C0088B47F /* NewRelicAgent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NewRelicAgent.framework; sourceTree = "<group>"; };
@@ -276,6 +278,10 @@
 		A42D4FB8198AAAB000536453 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A433EAA0195B3F5800DAA201 /* HTAutocompleteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTAutocompleteManager.h; sourceTree = "<group>"; };
 		A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTAutocompleteManager.m; sourceTree = "<group>"; };
+		A439EBC5199D196700FFEF33 /* Institution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Institution.h; sourceTree = "<group>"; };
+		A439EBC6199D196700FFEF33 /* Institution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Institution.m; sourceTree = "<group>"; };
+		A439EBC8199D3CE400FFEF33 /* PAEnterEmailTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEnterEmailTableViewController.h; sourceTree = "<group>"; };
+		A439EBC9199D3CE400FFEF33 /* PAEnterEmailTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEnterEmailTableViewController.m; sourceTree = "<group>"; };
 		A43BF0E8197813200009B7AD /* PAProfileTableViewController2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAProfileTableViewController2.h; sourceTree = "<group>"; };
 		A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAProfileTableViewController2.m; sourceTree = "<group>"; };
 		A43BF0EC197819480009B7AD /* PASubscriptionsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASubscriptionsTableViewController.h; sourceTree = "<group>"; };
@@ -360,7 +366,7 @@
 		A4F04BED1994097500290CF2 /* PAMethodManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAMethodManager.m; sourceTree = "<group>"; };
 		A4F04BF41995155900290CF2 /* PAPromptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPromptView.h; sourceTree = "<group>"; };
 		A4F04BF51995155900290CF2 /* PAPromptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPromptView.m; sourceTree = "<group>"; };
-		A4F04BF71995158F00290CF2 /* View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = View.xib; sourceTree = "<group>"; };
+		A4F04BF71995158F00290CF2 /* PAPromptView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAPromptView.xib; sourceTree = "<group>"; };
 		B0C43626CDC7426CB7DDD5C9 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		B42EB121A7584B6DAFCD7624 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD37013E1990081F006B63E8 /* PANestedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PANestedTableViewController.h; sourceTree = "<group>"; };
@@ -372,6 +378,8 @@
 		DD898133195B523F0079CDC9 /* button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button@2x.png"; sourceTree = "<group>"; };
 		DD898134195B523F0079CDC9 /* button-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-selected@2x.png"; sourceTree = "<group>"; };
 		DD898138195B5AE20079CDC9 /* image-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-placeholder.png"; sourceTree = "<group>"; };
+		DD8C3392199D095B00B9966A /* PADiningOpportunityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningOpportunityViewController.h; sourceTree = "<group>"; };
+		DD8C3393199D095B00B9966A /* PADiningOpportunityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningOpportunityViewController.m; sourceTree = "<group>"; };
 		DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "drop-shadow-horizontal.png"; sourceTree = "<group>"; };
 		DDCD45C0195DC8E60032333F /* profile-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile-placeholder.png"; sourceTree = "<group>"; };
 		DDDAEDD819465DCB004CE102 /* PAExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreCell.h; sourceTree = "<group>"; };
@@ -379,6 +387,9 @@
 		DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAExploreCell.xib; sourceTree = "<group>"; };
 		DDDAEDDD19475EBA004CE102 /* PAPecksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPecksViewController.h; sourceTree = "<group>"; };
 		DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPecksViewController.m; sourceTree = "<group>"; };
+		DDEF7DB5199C15BA007C28F7 /* drop-shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "drop-shadow.png"; sourceTree = "<group>"; };
+		DDEF7DB7199C4D34007C28F7 /* PAAthleticEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAAthleticEventViewController.h; sourceTree = "<group>"; };
+		DDEF7DB8199C4D34007C28F7 /* PAAthleticEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAAthleticEventViewController.m; sourceTree = "<group>"; };
 		DDF0DB45199532A40061089E /* PANestedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PANestedTableViewCell.h; sourceTree = "<group>"; };
 		DDF0DB46199532A40061089E /* PANestedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PANestedTableViewCell.m; sourceTree = "<group>"; };
 		DDFFF59C19829BD100DC5AC1 /* feather-60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feather-60.png"; sourceTree = "<group>"; };
@@ -447,6 +458,7 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				DDEF7DB5199C15BA007C28F7 /* drop-shadow.png */,
 				DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */,
 				DDFFF5C21982CB3400DC5AC1 /* icons */,
 				DDFFF5C11982CB1100DC5AC1 /* app-icon */,
@@ -472,9 +484,9 @@
 		860BE45F19632CCE00E57A56 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A439EBC5199D196700FFEF33 /* Institution.h */,
+				A439EBC6199D196700FFEF33 /* Institution.m */,
 				A40CF56219547A730021C088 /* Peers */,
-				860BE45C19632CC600E57A56 /* Institution.h */,
-				860BE45D19632CC600E57A56 /* Institution.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -505,6 +517,8 @@
 				863843D9193CB75F004110F5 /* PARegisterViewController.m */,
 				863843DE193CB7A4004110F5 /* PeckLoadingViewController.h */,
 				863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */,
+				A439EBC8199D3CE400FFEF33 /* PAEnterEmailTableViewController.h */,
+				A439EBC9199D3CE400FFEF33 /* PAEnterEmailTableViewController.m */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -733,6 +747,8 @@
 				A46F0923196F2A7600CFA5D0 /* PADiningCell.h */,
 				A46F0924196F2A7600CFA5D0 /* PADiningCell.m */,
 				A46F0925196F2A7600CFA5D0 /* PADiningCell.xib */,
+				DD8C3392199D095B00B9966A /* PADiningOpportunityViewController.h */,
+				DD8C3393199D095B00B9966A /* PADiningOpportunityViewController.m */,
 				A4677D4F197562B1007E3C3A /* PADiningOpportunityCell.h */,
 				A4677D50197562B1007E3C3A /* PADiningOpportunityCell.m */,
 				A4677D51197562B1007E3C3A /* PADiningOpportunityCell.xib */,
@@ -777,7 +793,6 @@
 			children = (
 				A4988A4E199B9FFC005C43BC /* Peck.h */,
 				A4988A4F199B9FFC005C43BC /* Peck.m */,
-				A4F04BF71995158F00290CF2 /* View.xib */,
 				DDDAEDDD19475EBA004CE102 /* PAPecksViewController.h */,
 				DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */,
 				8629251F193CBFD40057CA41 /* PAPeckCell.h */,
@@ -786,6 +801,7 @@
 				DD5751B31980356100BF52A8 /* PAPeckInviteCell.xib */,
 				A4F04BF41995155900290CF2 /* PAPromptView.h */,
 				A4F04BF51995155900290CF2 /* PAPromptView.m */,
+				A4F04BF71995158F00290CF2 /* PAPromptView.xib */,
 			);
 			name = Pecks;
 			sourceTree = "<group>";
@@ -803,6 +819,8 @@
 				A4773C821958A27F00AB9831 /* PAEventBST.m */,
 				A4E21F5E1964A749002A9800 /* PAEventInfoTableViewController.h */,
 				A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */,
+				DDEF7DB7199C4D34007C28F7 /* PAAthleticEventViewController.h */,
+				DDEF7DB8199C4D34007C28F7 /* PAAthleticEventViewController.m */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -1002,7 +1020,7 @@
 				DDFFF5A819829BD100DC5AC1 /* feather-40.png in Resources */,
 				8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */,
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
-				A4F04BF81995158F00290CF2 /* View.xib in Resources */,
+				A4F04BF81995158F00290CF2 /* PAPromptView.xib in Resources */,
 				A4677D53197562B1007E3C3A /* PADiningOpportunityCell.xib in Resources */,
 				DDFFF5BA19829DE700DC5AC1 /* feather-50.png in Resources */,
 				DD5751B819803BF800BF52A8 /* event-placeholder.png in Resources */,
@@ -1017,6 +1035,7 @@
 				DDFFF5AF19829BD100DC5AC1 /* feather-40@2x.png in Resources */,
 				86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */,
 				8671A2CE195B848D00700101 /* dropdown_pecks@2x.png in Resources */,
+				DDEF7DB6199C15BA007C28F7 /* drop-shadow.png in Resources */,
 				A4E21F6619659892002A9800 /* PACommentCell.xib in Resources */,
 				DD898139195B5AE20079CDC9 /* image-placeholder.png in Resources */,
 				DDFFF5CE1982CB7900DC5AC1 /* explore@2x.png in Resources */,
@@ -1119,11 +1138,13 @@
 				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
 				863843E3193CB7FD004110F5 /* PAExploreTableViewController.m in Sources */,
 				A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */,
+				A439EBC7199D196700FFEF33 /* Institution.m in Sources */,
 				86D59811193768BF00F38654 /* main.m in Sources */,
 				DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */,
 				A4E21F601964A749002A9800 /* PAEventInfoTableViewController.m in Sources */,
 				A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */,
 				863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */,
+				A439EBCA199D3CE400FFEF33 /* PAEnterEmailTableViewController.m in Sources */,
 				DDF0DB47199532A40061089E /* PANestedTableViewCell.m in Sources */,
 				A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */,
 				A43BF0FB1979B0B60009B7AD /* PAInvitationsTableViewController.m in Sources */,
@@ -1133,13 +1154,13 @@
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
-				860BE45E19632CC600E57A56 /* Institution.m in Sources */,
 				A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */,
 				A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
 				A4F04BEE1994097500290CF2 /* PAMethodManager.m in Sources */,
 				A4C8C347197D8F3F008F9F85 /* PAFetchManager.m in Sources */,
 				DD6902D2198820270095892F /* PAAssetManager.m in Sources */,
+				DD8C3394199D095B00B9966A /* PADiningOpportunityViewController.m in Sources */,
 				A4E47D5A1991295000DDF941 /* Event.m in Sources */,
 				A4F04BF61995155900290CF2 /* PAPromptView.m in Sources */,
 				A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */,
@@ -1149,6 +1170,7 @@
 				A482259619914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m in Sources */,
 				A4677D52197562B1007E3C3A /* PADiningOpportunityCell.m in Sources */,
 				A43BF0F6197978690009B7AD /* PAChangePasswordViewController.m in Sources */,
+				DDEF7DB9199C4D34007C28F7 /* PAAthleticEventViewController.m in Sources */,
 				A412E1D41986E63800384A11 /* Comment.m in Sources */,
 				A4988A50199B9FFC005C43BC /* Peck.m in Sources */,
 				867B52D619509F5000BEB37B /* PASessionManager.m in Sources */,

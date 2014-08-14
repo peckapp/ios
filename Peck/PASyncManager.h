@@ -37,6 +37,9 @@
 // sends patch request to the server when the registration process is complete
 -(void)registerUserWithInfo:(NSDictionary*)userInfo;
 
+-(void)checkFacebookUser:(NSDictionary*)dictionary withCallback:(void (^)(BOOL, NSString*))callbackBlock;
+//checks with the server to check if a facebook link exists for the user that is attempting to login
+
 -(void)loginWithFacebook:(NSDictionary*)dictionary forViewController:(UIViewController*)sender;
 
 -(void)changePassword:(NSDictionary*)passwordInfo forViewController:(UIViewController*)controller;
@@ -91,7 +94,7 @@
 
 -(void)updatePeerInfo;
 
--(void)updateExploreInfo;
+-(void)updateExploreInfoForViewController:(UITableViewController*)viewController;
 
 //methods for subscriptions
 -(void)updateSubscriptions;

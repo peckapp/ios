@@ -12,6 +12,13 @@
 #import "PAAssetManager.h"
 #import <FacebookSDK/FacebookSDK.h>
 
+@interface PAMethodManager()
+
+@property UIAlertView* registerAlert;
+@property UIAlertView* institutionAlert;
+
+@end
+
 @implementation PAMethodManager
 
 
@@ -22,6 +29,17 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedMethodManager = [[PAMethodManager alloc] init];
+        _sharedMethodManager.registerAlert = [[UIAlertView alloc] initWithTitle:@"Unregistered Account"
+                                                                        message:nil
+                                                                       delegate:self
+                                                              cancelButtonTitle:@"OK"
+                                                              otherButtonTitles:@"Register", nil];
+        
+        _sharedMethodManager.institutionAlert = [[UIAlertView alloc] initWithTitle:@"Foreign Institution"
+                                                                           message:@"Your current institution will be switched to your home institution to complete this action"
+                                                                          delegate:self
+                                                                 cancelButtonTitle:@"Cancel"
+                                                                 otherButtonTitles:@"Continue", nil];
     });
     
     return _sharedMethodManager;
@@ -36,26 +54,35 @@
         Attending an event
         Creating a circle
     */
-    
     message =[@"Please login or register to " stringByAppendingString:message];
+    self.registerAlert.message = message;
     self.sender = sender;
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unregistered Account"
-                                                    message:message
-                                                   delegate:self
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:@"Register", nil];
-    
-    [alert show];
+    [self.registerAlert show];
     
 }
 
+-(void)showInstitutionAlert:(void (^)(void))callbackBlock{
+    self.callbackBlock = callbackBlock;
+    self.institutionAlert.delegate=self;
+    [self.institutionAlert show];
+}
+
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    NSLog(@"button index: %li", (long)buttonIndex);
-    if(buttonIndex==1){
-        //The user has selected register
-        UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
-        UIViewController *registerControllet = [loginStoryboard instantiateViewControllerWithIdentifier:@"register"];
-        [self.sender presentViewController:registerControllet animated:YES completion:nil];
+    if(alertView==self.registerAlert){
+        if(buttonIndex==1){
+            //The user has selected register
+            UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
+            UIViewController *registerControllet = [loginStoryboard instantiateViewControllerWithIdentifier:@"register"];
+            [self.sender presentViewController:registerControllet animated:YES completion:nil];
+        }
+    }else if(alertView==self.institutionAlert){
+        if(buttonIndex==1){
+            //The user has pressed continue. We must switch to the user's home institution and then call the call back block to continue the action
+            NSLog(@"switch the institution");
+            self.callbackBlock();
+        }else{
+            NSLog(@"don't perform the action");
+        }
     }
 }
 
@@ -109,7 +136,7 @@
                 object[@"description"] =[eventInfo objectForKey:@"event_description"] ;
                 
                 // for og:url, we cover how this is used in the "Deep Linking" section below
-                object[@"url"] = @"https://www.peckapp.com";
+                object[@"url"] = @"http://loki.peckapp.com:3500/deep_links/native_peck";
                 
                 //object[@"url"] = @"http://example.com/roasted_pumpkin_seeds";
                 //TODO: fix the url to work with deep linking

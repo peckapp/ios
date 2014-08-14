@@ -37,19 +37,31 @@ PAAssetManager * assetManager;
 
 - (void)configureView
 {
-    // Update the user interface for the detail item.
-    self.nameLabel.text = self.peer.name;
-    //self.profilePicture = [self imageForPeer:self.peer];
-    self.blurbTextView.text = self.peer.blurb;
     
-    if(self.peer.imageURL){
-        NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.peer.imageURL]];
-        [self.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
-        
+    if(self.peer){
+    
+        self.nameLabel.text = self.peer.name;
+        self.blurbTextView.text = self.peer.blurb;
+    
+        if(self.peer.imageURL){
+            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.peer.imageURL]];
+            [self.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+        }else{
+            self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+        }
     }else{
-        self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+        //the user is attempting to view their own profile
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        self.nameLabel.text = [[[defaults objectForKey:@"first_name"] stringByAppendingString:@" "] stringByAppendingString:[defaults objectForKey:@"last_name"]];
+        self.blurbTextView.text = [defaults objectForKey:@"blurb"];
+        UIImage* image =[UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
+        if(image){
+            self.profilePicture.image = image;
+        }else{
+            self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+        }
+
     }
-    
 }
 
 - (void)viewDidLoad

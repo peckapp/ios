@@ -27,9 +27,6 @@
 #define searchBarHeight 44
 #define parallaxRange 128
 
-#define darkColor [UIColor colorWithRed:29/255.0 green:28/255.0 blue:36/255.0 alpha:1]
-#define lightColor [UIColor colorWithRed:59/255.0 green:56/255.0 blue:71/255.0 alpha:1]
-
 struct eventImage{
     const char* imageURL;
     const char* type;
@@ -46,10 +43,6 @@ struct eventImage{
 @property (assign, nonatomic) CGRect centerTableViewFrame;
 @property (assign, nonatomic) CGRect rightTableViewFrame;
 
-@property (assign, nonatomic) NSInteger selectedDay;
-
-@property (strong, nonatomic) NSIndexPath * selectedCellIndex;
-
 @property (strong, nonatomic) UIImageView* helperImageView;
 @end
 
@@ -61,8 +54,8 @@ struct eventImage{
 
 UISearchBar * searchBar;
 
+BOOL viewingEvents;
 BOOL parallaxOn;
-BOOL showingDetail;
 BOOL showingSearchBar;
 NSString *searchBarText;
 NSDate *today;
@@ -79,16 +72,24 @@ PAAssetManager * assetManager;
 {
     [super viewDidLoad];
 
-    self.helperImageView = [[UIImageView alloc] init];
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    appdelegate.eventsViewController = self;
+
+    assetManager = [PAAssetManager sharedManager];
+
+    self.view.backgroundColor = [assetManager darkColor];
+
+    self.animationTime = 0.2;
     
-    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 44, 44)];
+    self.helperImageView = [[UIImageView alloc] init];
+
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(320 - 70, 0, 70, 70)];
     [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
-    self.backButton.backgroundColor = [UIColor lightTextColor];
+    [self.backButton addSubview:[assetManager createPanelWithFrame:CGRectInset(self.backButton.bounds, 20, 20) rounded:YES shadow:YES]];
 
     //we must store the profile picture every time the app loads because the local image storing is not persistent
     [self storeProfilePicture];
-    
-    assetManager = [PAAssetManager sharedManager];
+
 
     NSLog(@"View did load (events)");
     self.placeholderImage = [[UIImageView alloc] initWithImage:[assetManager eventPlaceholder]];
@@ -102,8 +103,7 @@ PAAssetManager * assetManager;
     parallaxOn = YES;
 
     self.selectedDay = 0;
-    showingDetail = NO;
-    // [self reloadTheView];
+
     if(!searchBar){
         searchBar = [[UISearchBar alloc] init];
         searchBar.delegate = self;
@@ -116,9 +116,11 @@ PAAssetManager * assetManager;
     }
     self.leftTableView.dataSource = self;
     self.leftTableView.delegate = self;
-    self.leftTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.leftTableView.separatorInset = UIEdgeInsetsZero;
+    self.leftTableView.separatorColor = [assetManager lightColor];
+    self.leftTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     UIView * leftBackView = [[UIView alloc] init];
-    leftBackView.backgroundColor = darkColor;
+    leftBackView.backgroundColor = [assetManager darkColor];
     [self.leftTableView setBackgroundView:leftBackView];
 
     if (!self.centerTableView) {
@@ -127,9 +129,11 @@ PAAssetManager * assetManager;
     }
     self.centerTableView.dataSource = self;
     self.centerTableView.delegate = self;
-    self.centerTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.centerTableView.separatorInset = UIEdgeInsetsZero;
+    self.centerTableView.separatorColor = [assetManager lightColor];
+    self.centerTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     UIView *centerBackView = [[UIView alloc] init];
-    centerBackView.backgroundColor = darkColor;
+    centerBackView.backgroundColor = [assetManager darkColor];
     [self.centerTableView setBackgroundView:centerBackView];
 
     if (!self.rightTableView) {
@@ -138,17 +142,17 @@ PAAssetManager * assetManager;
     }
     self.rightTableView.dataSource = self;
     self.rightTableView.delegate = self;
-    self.rightTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.rightTableView.separatorInset = UIEdgeInsetsZero;
+    self.rightTableView.separatorColor = [assetManager lightColor];
+    self.rightTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     UIView *rightBackView = [[UIView alloc] init];
-    rightBackView.backgroundColor = darkColor;
+    rightBackView.backgroundColor = [assetManager darkColor];
     [self.rightTableView setBackgroundView:rightBackView];
 
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
 
-    UIImageView *shadow = [[UIImageView alloc] initWithImage:[assetManager horizontalShadow]];
-    shadow.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
-    [self.view addSubview:shadow];
+    [self.view addSubview:[assetManager createShadowWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64) top:NO]];
 
     UISwipeGestureRecognizer *swipeLeftGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(transitionToRightTableView)];
     swipeLeftGesture.numberOfTouchesRequired = 1;
@@ -192,9 +196,6 @@ PAAssetManager * assetManager;
 
     NSLog(@"View will appear (events)");
     showingSearchBar = NO;
-    showingDetail = NO;
-
-    [self registerForKeyboardNotifications];
 
     searchBar.frame = CGRectMake(0, -searchBarHeight, self.view.frame.size.width, searchBarHeight);
 
@@ -212,6 +213,7 @@ PAAssetManager * assetManager;
     [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
     [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
 
+    viewingEvents = YES;
 }
 
 - (void)viewWillLayoutSubviews
@@ -236,15 +238,11 @@ PAAssetManager * assetManager;
     [self backButton:self];
     
     [self.view endEditing:YES];
-    [self deregisterFromKeyboardNotifications];
+    viewingEvents=NO;
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
-    
-    if(!showingDetail){
-        // [self.centerTableView reloadData];
-    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -451,9 +449,11 @@ PAAssetManager * assetManager;
     {
         case NSFetchedResultsChangeInsert:{
             Event *event = (Event*) anObject;
-            
-            if (event.blurredImageURL != nil) {
-                [self cacheImageForEventURL:event.blurredImageURL Type:event.type AndID:event.id];
+            if (event.imageURL) {
+                [self cacheImageForURL:event.imageURL];
+            }
+            if (event.blurredImageURL) {
+                [self cacheImageForURL:event.blurredImageURL];
             }
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
@@ -461,7 +461,9 @@ PAAssetManager * assetManager;
             
         case NSFetchedResultsChangeDelete:
             //Event *tempEvent = (Event *)anObject;
-            [[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
+            if(viewingEvents){
+                [[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
+            }
             [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
@@ -683,11 +685,10 @@ PAAssetManager * assetManager;
 
 - (void)backButton:(id)sender
 {
-    PANestedTableViewCell *cell = (PANestedTableViewCell *)[self.centerTableView cellForRowAtIndexPath:self.selectedCellIndex];
+    PANestedTableViewCell *cell = (PANestedTableViewCell *)[self.centerTableView cellForRowAtIndexPath:self.selectedCellIndexPath];
     cell.viewController.view.userInteractionEnabled = NO;
     [cell.viewController compressAnimated:YES];
-    [self tableView:self.centerTableView compressRowAtSelectedIndexPathUserInteractionEnabled:NO];
-    self.selectedCellIndex = nil;
+    [self tableView:self.centerTableView compressRowAtSelectedIndexPathAnimated:YES];
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -727,11 +728,13 @@ PAAssetManager * assetManager;
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    self.selectedCellIndex = indexPath;
+    self.selectedCellIndexPath = indexPath;
     PANestedTableViewCell *cell = (PANestedTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     cell.viewController.view.userInteractionEnabled = YES;
     [cell.viewController expandAnimated:YES];
-    [self tableView:tableView expandRowAtIndexPath:indexPath];
+    [[cell.viewController viewForBackButton] addSubview:self.backButton];
+
+    [self tableView:tableView expandRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -913,8 +916,9 @@ PAAssetManager * assetManager;
 
 - (void)transitionToRightTableView
 {
+    if (self.selectedCellIndexPath == nil) {
     NSLog(@"begin transition to right");
-    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+    [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.rightTableView.frame = self.centerTableViewFrame;
                          self.centerTableView.frame = self.leftTableViewFrame;
@@ -937,12 +941,14 @@ PAAssetManager * assetManager;
 
                          NSLog(@"end transition to right");
                      }];
+    }
 }
 
 -(void)transitionToLeftTableView
 {
+    if (self.selectedCellIndexPath == nil) {
     NSLog(@"begin transition to left");
-    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+    [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.leftTableView.frame = self.centerTableViewFrame;
                          self.centerTableView.frame = self.rightTableViewFrame;
@@ -965,6 +971,7 @@ PAAssetManager * assetManager;
 
                          NSLog(@"end transition to left");
                      }];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView reloadDataFrom:(NSFetchedResultsController *)fetchedResultsController
@@ -1062,6 +1069,7 @@ PAAssetManager * assetManager;
 
 #pragma mark - keyboard notifications
 
+/*
 - (void)registerForKeyboardNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
@@ -1103,6 +1111,7 @@ PAAssetManager * assetManager;
         self.centerTableView.frame = CGRectMake(self.centerTableView.frame.origin.x, self.centerTableView.frame.origin.y, self.centerTableView.frame.size.width, self.centerTableView.frame.size.height+keyboardSize.height);
     }
 }
+ */
 
 @end
 

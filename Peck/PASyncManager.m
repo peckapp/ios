@@ -274,7 +274,9 @@
                                         NSString* imageURL = [userDictionary objectForKey:@"image"];
                                         
                                         [defaults setObject:email forKey:@"email"];
-                                        [defaults setObject:blurb forKey:@"blurb"];
+                                        if([blurb isKindOfClass:[NSNull class]]){
+                                            [defaults setObject:blurb forKey:@"blurb"];
+                                        }
                                         [defaults setObject:firstName forKey:first_name_define];
                                         [defaults setObject:lastName forKey:last_name_define];
                                         if(imageURL){
@@ -332,6 +334,7 @@
                                       [defaults setObject:email forKey:@"email"];
                                       [defaults setObject:userID forKey:@"user_id"];
                                       [defaults setObject:apiKey forKey:@"api_key"];
+                                      [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
                                       
                                       if(imageURL){
                                           NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
@@ -357,6 +360,7 @@
                                       [self updateSubscriptions];
                                       
                                       [self updateUserAnnouncements];
+                                      [self updateEventInfo];
                                       //take care of some necessary login stuff
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       
@@ -412,6 +416,8 @@
                                           [defaults setObject:firstName forKey:first_name_define];
                                           [defaults setObject:lastName forKey:last_name_define];
                                           [defaults setObject:email forKey:@"email"];
+                                          [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
+                                          
                                           if(![blurb isKindOfClass:[NSNull class]]){
                                             [defaults setObject:blurb forKey:@"blurb"];
                                           }
@@ -430,6 +436,29 @@
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
                                   }];
+}
+
+-(void)checkFacebookUser:(NSDictionary*)dictionary withCallback:(void (^)(BOOL, NSString*))callbackBlock{
+    NSLog(@"params: %@", dictionary);
+    
+    [[PASessionManager sharedClient] GET:@"api/users/check_link"
+                                parameters:[self applyWrapper:@"user" toDictionary:dictionary]
+                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                       NSLog(@"check facebook JSON: %@", JSON);
+                                       NSDictionary* json = (NSDictionary*) JSON;
+                                       BOOL registered = [[json objectForKey:@"facebook_registered"] boolValue];
+                                       if(registered){
+                                           //continue the login with facebook
+                                           callbackBlock(YES,[json objectForKey:@"email"]);
+                                       }else{
+                                           //show the new view with the email field
+                                           callbackBlock(NO, [json objectForKey:@"email"]);
+                                       }
+                                }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                 }];
+    
 }
 
 
@@ -459,7 +488,12 @@
                                        [defaults setObject:lastName forKey:last_name_define];
                                        [defaults setObject:email forKey:@"email"];
                                        [defaults setObject:[userDictionary objectForKey:@"authentication_token"] forKey:auth_token];
+                                       [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
+                                    
                                        NSString* imageURL = [userDictionary objectForKey:@"image"];
+                                       if([imageURL isEqualToString:@"/images/missing.png"]){
+                                           imageURL=nil;
+                                       }
                                        
                                        if(imageURL){
                                            NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
@@ -475,8 +509,38 @@
                                            NSLog(@"path: %@", path);
                                            [defaults setObject:path forKey:@"profile_picture"];
                                            [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
+                                       }else{
+                                           //If the user has logged in with facebook but has not yet saved a new profile picture, we will use their facebook profile picture as their current image.
+                                           
+                                           NSURL* url =[NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];
+                                           UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+                                           
+                                           //save the image to the sever as the user's new profile picture
+                                           NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                                       [defaults objectForKey:@"first_name"], @"first_name",
+                                                                       nil];
+                                           
+                                           [self updateUserWithInfo:dictionary withImage:
+                                            UIImageJPEGRepresentation(profilePicture, .5)];
+                                           
+                                           NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                                                NSUserDomainMask, YES);
+                                           NSString *documentsDirectory = [paths objectAtIndex:0];
+                                           NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                                                             @"profile_picture.jpeg" ];
+                                           NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
+                                           [data writeToFile:path atomically:YES];
+                                           NSLog(@"path: %@", path);
+                                           [defaults setObject:path forKey:@"profile_picture"];
                                        }
 
+                                       //update the subscriptions of the newly logged in user
+                                       [self updateSubscriptions];
+                                       
+                                       [self updateUserAnnouncements];
+                                       [self updateEventInfo];
+                                       //take care of some necessary login stuff
+                                       [[PAFetchManager sharedFetchManager] loginUser];
                                        
                                        [sender dismissViewControllerAnimated:YES completion:nil];
                                        
@@ -663,7 +727,7 @@
                                            //if the user is attending from a peck
                                            [self updatePecks];
                                        }
-                                       //[self updateEventInfo];
+                                       [self updateEventInfo];
                                    }
      
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -726,7 +790,7 @@
         [[PASessionManager sharedClient] GET:institutionsAPI
                                   parameters:[self authenticationParameters]
                                      success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                         //NSLog(@"update institutions JSON: %@",JSON);
+                                         NSLog(@"update institutions JSON: %@",JSON);
                                          NSDictionary *institutionsDictionary = (NSDictionary*)JSON;
                                          NSArray *responseInstitutions = [institutionsDictionary objectForKey:@"institutions"];
                                          for (NSDictionary *institutionAttributes in responseInstitutions) {
@@ -774,7 +838,7 @@
 
 #pragma mark - Explore tab actions
 
--(void)updateExploreInfo
+-(void)updateExploreInfoForViewController:(UITableViewController*)viewController
 {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
@@ -787,7 +851,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"explore JSON: %@",JSON);
+             NSLog(@"explore JSON: %@",JSON);
              NSDictionary *exploreDictionary = (NSDictionary*)JSON;
              NSArray *eventsFromResponse = [exploreDictionary objectForKey:@"explore_events"];
              [self.persistentStoreCoordinator lock];
@@ -819,12 +883,22 @@
              NSError* error = nil;
              [_managedObjectContext save:&error];
              [self.persistentStoreCoordinator unlock];
+             
+             if(viewController){
+                 [viewController.refreshControl endRefreshing];
+             }
+
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                          NSLog(@"ERROR: %@",error);
+                                         if(viewController){
+                                             [viewController.refreshControl endRefreshing];
+                                         }
+
                                      }];
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            
             //TODO: if there are any problems with the core data being added in the thread above,
             // then we should add a separate managed object context and merge the two in this thread.
             
@@ -843,7 +917,9 @@
     explore.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     explore.id = [dictionary objectForKey:@"id"];
     explore.category = category;
-    
+    if([dictionary objectForKey:@"score"]){
+        explore.weight = [dictionary objectForKey:@"score"];
+    }
     NSString* description = [category stringByAppendingString:@"_description"];
     if(![[dictionary objectForKey:description] isKindOfClass:[NSNull class]]){
         explore.explore_description = [dictionary objectForKey:description];
@@ -1434,7 +1510,7 @@
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          //NSLog(@"success: %@", JSON);
-         [self updateExploreInfo];
+         [self updateExploreInfoForViewController:nil];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -1623,12 +1699,20 @@
         _managedObjectContext = [appdelegate managedObjectContext];
         _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
-        NSString* simpleEventsURL = [simple_eventsAPI stringByAppendingString:@"/"];
-        simpleEventsURL = [simpleEventsURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"] stringValue]];
+        NSString* simpleEventsURL = [simple_eventsAPI stringByAppendingString:@"?user_id="];
         
+        simpleEventsURL = [simpleEventsURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"] stringValue]];
+        NSLog(@"simple events url %@", simpleEventsURL);
+        
+        NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"], @"user_id",
+                                [[self authenticationParameters] objectForKey:@"authentication"], @"authentication",
+                                nil];
+        
+        NSLog(@"params: %@", params);
         
         [[PASessionManager sharedClient] GET:simple_eventsAPI
-                                  parameters:[self authenticationParameters]
+                                  parameters:params
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              //NSLog(@"EVENT JSON: %@",JSON);

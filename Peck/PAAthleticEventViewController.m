@@ -1,13 +1,13 @@
 //
-//  PAEventInfoTableViewController.m
+//  PAAthleticEventViewController.m
 //  Peck
 //
-//  Created by John Karabinos on 7/2/14.
+//  Created by Jonas Luebbers on 8/13/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
 
-#import "PAEventInfoTableViewController.h"
+#import "PAAthleticEventViewController.h"
 #import "PACommentCell.h"
 #import "PAAppDelegate.h"
 #import "PASyncManager.h"
@@ -25,7 +25,7 @@
 #define reloadTime 10
 
 
-@interface PAEventInfoTableViewController ()
+@interface PAAthleticEventViewController ()
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
 @property (nonatomic, retain) NSDateFormatter *formatter;
@@ -53,14 +53,12 @@
 
 @end
 
-@implementation PAEventInfoTableViewController
+@implementation PAAthleticEventViewController
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-NSString * cellIdentifier = @"CommentCell";
-NSString * nibName = @"PACommentCell";
 NSMutableDictionary *heightDictionary;
 CGRect initialFrame;
 UITextView *textViewHelper;
@@ -75,15 +73,15 @@ BOOL reloaded = NO;
     [super viewDidLoad];
 
     assetManager = [PAAssetManager sharedManager];
-    
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
-    
+
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     //if(!self.formatter){
-        self.formatter = [[NSDateFormatter alloc] init];
-        [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+    self.formatter = [[NSDateFormatter alloc] init];
+    [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
     //}
 
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -95,14 +93,14 @@ BOOL reloaded = NO;
     heightDictionary = [[NSMutableDictionary alloc] init];
 
     /*
-    NSError * error = nil;
-    if (![self.fetchedResultsController performFetch:&error])
-    {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }
+     NSError * error = nil;
+     if (![self.fetchedResultsController performFetch:&error])
+     {
+     NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+     abort();
+     }
      */
-     
+
     //[self configureView];
 
     //self.automaticallyAdjustsScrollViewInsets = NO;
@@ -155,7 +153,7 @@ BOOL reloaded = NO;
     self.headerView.backgroundColor = [UIColor whiteColor];
 
     [self.view addSubview:self.imagesView];
-    
+
 
 
     self.keyboardAccessoryView = [[UIView alloc] init];
@@ -173,31 +171,31 @@ BOOL reloaded = NO;
     self.postButton.alpha = 0;
 
     /*
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(changeFirstResponder)
-                                                 name:UIKeyboardDidShowNotification
-                                               object:nil];
+     [[NSNotificationCenter defaultCenter] addObserver:self
+     selector:@selector(changeFirstResponder)
+     name:UIKeyboardDidShowNotification
+     object:nil];
      */
-    
+
     [self.tableView reloadData];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     //[super viewWillAppear:animated];
-    
+
     NSLog(@"event info view will appear");
 
     /*
-    
-    //[self registerForKeyboardNotifications];
-    NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        while(self.expanded) {
-            [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple"];
-            [NSThread sleepForTimeInterval:reloadTime];
-        }
-    });
+     //[self registerForKeyboardNotifications];
+     NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
+
+     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+     while(self.expanded) {
+     [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple"];
+     [NSThread sleepForTimeInterval:reloadTime];
+     }
+     });
      */
 
     self.view.frame = self.parentViewController.view.bounds;
@@ -234,11 +232,11 @@ BOOL reloaded = NO;
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, CGRectGetMaxY(self.descriptionLabel.frame) + buffer);
 
 
-     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
-     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
-     self.postButton.frame = CGRectMake(self.keyboardAccessoryView.frame.size.width - self.keyboardAccessoryView.frame.size.height, 0, self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.height);
+    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.postButton.frame = CGRectMake(self.keyboardAccessoryView.frame.size.width - self.keyboardAccessoryView.frame.size.height, 0, self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.height);
 
-     [self.keyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -250,7 +248,7 @@ BOOL reloaded = NO;
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.keyboardAccessory resignFirstResponder];
-    
+
     //[self deregisterFromKeyboardNotifications];
 }
 
@@ -261,55 +259,55 @@ BOOL reloaded = NO;
 }
 
 /*
-//DO NOT DELETE (for now)
-#pragma mark - managing the keyboard notifications
+ //DO NOT DELETE (for now)
+ #pragma mark - managing the keyboard notifications
 
-- (void)registerForKeyboardNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
-    
-}
+ - (void)registerForKeyboardNotifications {
+ [[NSNotificationCenter defaultCenter] addObserver:self
+ selector:@selector(keyboardWasShown:)
+ name:UIKeyboardDidShowNotification
+ object:nil];
 
-- (void)deregisterFromKeyboardNotifications {
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardDidHideNotification
-                                                  object:nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardWillHideNotification
-                                                  object:nil];
-    
-}
+ [[NSNotificationCenter defaultCenter] addObserver:self
+ selector:@selector(keyboardWillBeHidden:)
+ name:UIKeyboardWillHideNotification
+ object:nil];
 
-- (void)keyboardWasShown:(NSNotification *)notification {
-    if(CGRectEqualToRect(self.tableView.frame, initialFrame)){
-        NSDictionary* info = [notification userInfo];
-        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-        self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }
-}
+ }
 
-- (void)keyboardWillBeHidden:(NSNotification *)notification {
-        self.tableView.frame = initialFrame;
-}
-*/
+ - (void)deregisterFromKeyboardNotifications {
+
+ [[NSNotificationCenter defaultCenter] removeObserver:self
+ name:UIKeyboardDidHideNotification
+ object:nil];
+
+ [[NSNotificationCenter defaultCenter] removeObserver:self
+ name:UIKeyboardWillHideNotification
+ object:nil];
+
+ }
+
+ - (void)keyboardWasShown:(NSNotification *)notification {
+ if(CGRectEqualToRect(self.tableView.frame, initialFrame)){
+ NSDictionary* info = [notification userInfo];
+ CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+ self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
+ NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+ [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+ }
+ }
+
+ - (void)keyboardWillBeHidden:(NSNotification *)notification {
+ self.tableView.frame = initialFrame;
+ }
+ */
 
 - (void)expandAnimated:(BOOL)animated
 {
     if (!self.expanded) {
         //self.tableView = nil;
         self.fetchedResultsController = nil;
-        
+
         NSError * error = nil;
         if (![self.fetchedResultsController performFetch:&error])
         {
@@ -317,7 +315,7 @@ BOOL reloaded = NO;
             abort();
         }
 
-        
+
         self.view.backgroundColor = [UIColor whiteColor];
         self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         self.tableView.backgroundColor = [UIColor clearColor];
@@ -342,7 +340,7 @@ BOOL reloaded = NO;
         void (^completionBlock)(BOOL) = ^(BOOL finished){
             self.expanded = YES;
 
-            
+
             NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 while(self.expanded) {
@@ -403,11 +401,6 @@ BOOL reloaded = NO;
     }
 }
 
-- (UIView *)viewForBackButton
-{
-    return self.tableView;
-}
-
 #pragma mark - managing the detail item
 
 - (void)setManagedObject:(NSManagedObject *)managedObject
@@ -424,28 +417,28 @@ BOOL reloaded = NO;
 - (void)configureView
 {
     // Update the user interface for the detail item.
-    
+
     if (self.detailItem) {
 
         /*
-        self.title = [self.detailItem valueForKey:@"title"];
-        self.nameLabel.text = [self.detailItem valueForKey:@"title"];
+         self.title = [self.detailItem valueForKey:@"title"];
+         self.nameLabel.text = [self.detailItem valueForKey:@"title"];
 
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"MMM dd, yyyy h:mm a"];
-        [self.startTimeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
-        [self.endTimeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
+         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+         [dateFormatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+         [self.startTimeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
+         [self.endTimeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
 
-        self.descriptionTextView.text = [self.detailItem valueForKey:@"descrip"];
-       
-        self.numberOfAttendees.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
-        if([self attendingEvent]){
-            [self.attendButton setTitle:@"Unattend" forState:UIControlStateNormal];
-        }else{
-            [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
-        }
-        NSLog(@"attendees: %@", [self.detailItem valueForKey:@"attendees"]);
-        */
+         self.descriptionTextView.text = [self.detailItem valueForKey:@"descrip"];
+
+         self.numberOfAttendees.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
+         if([self attendingEvent]){
+         [self.attendButton setTitle:@"Unattend" forState:UIControlStateNormal];
+         }else{
+         [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
+         }
+         NSLog(@"attendees: %@", [self.detailItem valueForKey:@"attendees"]);
+         */
 
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"h:mm a"];
@@ -514,34 +507,34 @@ BOOL reloaded = NO;
     }
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
-    
+
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
-    
+
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Comment" inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
-    
-    
+
+
     NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
-    
+
     NSPredicate *commentFromPredicate = [NSPredicate predicateWithFormat:@"comment_from = %@", [self.detailItem valueForKey:@"id"]];
     NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", @"simple"];
-    
+
     [predicateArray addObject:commentFromPredicate];
     [predicateArray addObject:categoryPredicate];
-    
+
     NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
     [fetchRequest setPredicate:compoundPredicate];
-    
+
     // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
-    
+
     // Edit the sort key as appropriate.
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"created_at" ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor];
-    
+
     [fetchRequest setSortDescriptors:sortDescriptors];
-    
+
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
@@ -549,11 +542,11 @@ BOOL reloaded = NO;
                                                              managedObjectContext:_managedObjectContext
                                                              sectionNameKeyPath:nil //this needs to be nil
                                                              cacheName:nil];
-    
+
     aFetchedResultsController.delegate = self;
     NSLog(@"number of fetched objects: %lu", (unsigned long)[aFetchedResultsController.fetchedObjects count]);
     self.fetchedResultsController = aFetchedResultsController;
-    
+
     return _fetchedResultsController;
 }
 
@@ -568,7 +561,7 @@ BOOL reloaded = NO;
         case NSFetchedResultsChangeInsert:
             [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
-            
+
         case NSFetchedResultsChangeDelete:
             [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
@@ -586,14 +579,14 @@ BOOL reloaded = NO;
 {
     NSLog(@"did change object");
     UITableView *tableView = self.tableView;
-    
+
     switch(type)
     {
         case NSFetchedResultsChangeInsert:{
             [tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
-            
+
             break;
         }
         case NSFetchedResultsChangeDelete:
@@ -601,10 +594,10 @@ BOOL reloaded = NO;
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
-            
+
         case NSFetchedResultsChangeUpdate:
         {
-            
+
             PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:newIndexPath];
             [self configureCell:cell atIndexPath:newIndexPath];
             break;
@@ -613,7 +606,7 @@ BOOL reloaded = NO;
             [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
-            
+
             [tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
@@ -631,7 +624,7 @@ BOOL reloaded = NO;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
-//    return [[_fetchedResultsController sections] count;
+    //    return [[_fetchedResultsController sections] count;
 
 }
 
@@ -643,14 +636,14 @@ BOOL reloaded = NO;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PACommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    PACommentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell-identifier"];
     if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        [tableView registerNib:[UINib nibWithNibName:@"PACommentCell" bundle:nil] forCellReuseIdentifier:@"cell-identifier"];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"cell-identifier"];
     }
-    
+
     [self configureCell:cell atIndexPath:indexPath];
-    
+
     return cell;
 }
 
@@ -683,7 +676,7 @@ BOOL reloaded = NO;
     }
     [cell addSubview:thumbnail];
     cell.thumbnailView = thumbnail;
-    
+
     NSString * commentID = [tempComment.id stringValue];
     CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
     if(height){
@@ -717,7 +710,7 @@ BOOL reloaded = NO;
             text=tempPeer.name;
         }
     }
-    
+
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"comment id: %@ my id: %@",comment.peer_id, [defaults objectForKey:@"user_id"]);
     if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
@@ -726,7 +719,7 @@ BOOL reloaded = NO;
     }
     text = [text stringByAppendingString:@" "];
     text = [text stringByAppendingString:[self dateToString:comment.created_at]];
-    
+
     return text;
 }
 
@@ -765,12 +758,12 @@ BOOL reloaded = NO;
         hour-=12;
         timeOfDay = @" PM";
     }
-    
+
     NSString *minute = [@([components minute]) stringValue];
     if(minute.length==1){
         minute = [@"0" stringByAppendingString:minute];
     }
-    
+
     NSString * dateString = [[@(hour) stringValue] stringByAppendingString:@":"];
     dateString = [dateString stringByAppendingString:minute];
     dateString = [dateString stringByAppendingString:timeOfDay];
@@ -798,10 +791,10 @@ BOOL reloaded = NO;
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     /*
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    PACommentCell *cell = (PACommentCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
-    [cell.commentTextView resignFirstResponder];
+     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+     PACommentCell *cell = (PACommentCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+     [cell.commentTextView resignFirstResponder];
      */
     [self.keyboardAccessory resignFirstResponder];
 }
@@ -820,61 +813,61 @@ BOOL reloaded = NO;
 }
 
 /*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
 
 /*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
 
 /*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+ {
+ }
+ */
 
 /*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 /*
-#pragma mark - Navigation
+ #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+ {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 - (void)expandTableViewCell:(PACommentCell *)cell {
     textViewHelper.frame = cell.commentTextView.frame;
     textViewHelper.text = cell.commentTextView.text;
-    
+
     [textViewHelper setFont:[UIFont systemFontOfSize:14]];
     [textViewHelper sizeToFit];
-    
+
     float newHeight = textViewHelper.frame.size.height;
     NSLog(@"new height: %f", newHeight);
     NSNumber *height = [NSNumber numberWithFloat: defaultCellHeight];
@@ -882,7 +875,7 @@ BOOL reloaded = NO;
         height = [NSNumber numberWithFloat:textViewHelper.frame.size.height + textViewHelper.frame.origin.y];
     }
     //Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
-    
+
     NSString * commentID = [cell.commentID stringValue];
 
     [heightDictionary setValue:height forKey:commentID];
@@ -891,7 +884,7 @@ BOOL reloaded = NO;
 }
 
 -(void)compressTableViewCell:(PACommentCell *)cell{
-    
+
     //cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
     //Comment *comment = _fetchedResultsController.fetchedObjects[cell.tag];
     NSString *commentID = [cell.commentID stringValue];
@@ -902,7 +895,7 @@ BOOL reloaded = NO;
 
 -(void)postComment:(NSString *) text
 {
-   
+
     if(![text isEqualToString:@""]){
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         if([defaults objectForKey:@"authentication_token"]){
@@ -911,14 +904,14 @@ BOOL reloaded = NO;
              NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
              [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
              */
-    
+
             NSLog(@"post comment");
             //NSString *commentText = cell.commentTextView.text;
             //cell.commentTextView.text=@"";
-        
+
             NSNumber *userID = [defaults objectForKey:@"user_id"];
             NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
-    
+
             NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                         text, @"content",
                                         userID, @"user_id",
@@ -926,10 +919,10 @@ BOOL reloaded = NO;
                                         [self.detailItem valueForKey:@"id" ],@"comment_from",
                                         institutionID, @"institution_id",
                                         nil];
-    
+
             [[PASyncManager globalSyncManager] postComment:dictionary];
 
-        
+
         }else{
             [[PAMethodManager sharedMethodManager] showRegisterAlert:@"post a comment" forViewController:self];
         }
@@ -940,8 +933,8 @@ BOOL reloaded = NO;
 
 - (IBAction)attendButton:(id)sender {
     if([self.attendButton.titleLabel.text isEqualToString:@"Attend"]){
-        
-       
+
+
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         if([defaults objectForKey:@"authentication_token"]){
             NSLog(@"attend the event");
@@ -952,7 +945,7 @@ BOOL reloaded = NO;
                                       @"simple", @"category",
                                       [defaults objectForKey:@"user_id"], @"added_by",
                                       nil];
-    
+
             [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:self];
         }else{
             [[PAMethodManager sharedMethodManager] showRegisterAlert:@"attend an event" forViewController:self];
@@ -960,18 +953,18 @@ BOOL reloaded = NO;
     }else{
         NSLog(@"unattend the event");
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        
+
         NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
                                   [self.detailItem valueForKey:@"id"], @"event_attended",
                                   [defaults objectForKey:@"institution_id"],@"institution_id",
                                   [defaults objectForKey:@"user_id"],@"user_id",
                                   @"simple", @"category",
                                   nil];
-        
+
         [[PASyncManager globalSyncManager] unattendEvent: attendee forViewController:self];
-        
+
     }
-    
+
 }
 
 #pragma mark - Text Fields

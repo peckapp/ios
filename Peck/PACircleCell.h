@@ -14,6 +14,8 @@
 
 - (IBAction)leaveCircleButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *leaveCircleButton;
+- (IBAction)backButton:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 - (IBAction)createCircleButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *createCircleButton;

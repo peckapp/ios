@@ -13,12 +13,17 @@
 @property (strong, nonatomic) UIImage * eventPlaceholder;
 @property (strong, nonatomic) UIImage * imagePlaceholder;
 @property (strong, nonatomic) UIImage * profilePlaceholder;
-@property (strong, nonatomic) UIImage * horizontalShadow;
 @property (strong, nonatomic) UIImage * greyBackground;
 
-@property (strong, nonatomic) UIColor* unavailableColor;
+@property (strong, nonatomic) UIColor *darkColor;
+@property (strong, nonatomic) UIColor *lightColor;
+
 + (id)sharedManager;
 
+- (UIView *)createShadowWithFrame:(CGRect)frame;
+- (UIView *)createShadowWithFrame:(CGRect)frame top:(BOOL)top;
+- (UIView *)createPanelWithFrame:(CGRect)frame rounded:(BOOL)rounded shadow:(BOOL)shadow;
 - (UIImageView *)createThumbnailWithFrame:(CGRect)frame imageView:(UIImageView *)imageView;
+- (UITextField *)createTextFieldWithFrame:(CGRect)frame;
 
 @end

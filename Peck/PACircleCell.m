@@ -623,6 +623,14 @@ PAAssetManager * assetManager;
     [[PASyncManager globalSyncManager] leaveCircle:dictionary];
 }
 
+- (IBAction)backButton:(id)sender {
+    PACirclesTableViewController* parent = (PACirclesTableViewController*) self.parentViewController;
+    if(parent.selectedIndexPath){
+        //There should always be a selected index path if we are pressing the back button
+        [parent condenseCircleCell:self atIndexPath:parent.selectedIndexPath];
+    }
+}
+
 - (IBAction)createCircleButton:(id)sender {
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];

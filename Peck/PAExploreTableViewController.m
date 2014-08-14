@@ -15,7 +15,7 @@
 #import "PAAssetManager.h"
 #import "UIImageView+AFNetworking.h"
 
-#define cellHeight 340
+#define cellHeight 380
 
 @interface PAExploreTableViewController ()
 
@@ -51,13 +51,25 @@ NSCache *imageCache;
 
     self.title = @"Explore";
     
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refresh)
+             forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refreshControl;
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    [[PASyncManager globalSyncManager] updateExploreInfo];
+
+    self.tableView.contentInset = UIEdgeInsetsMake(9, 0, 0, 0);
+    self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+
+    [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
+}
+
+-(void)refresh{
+    NSLog(@"refresh the table view");
+    [[PASyncManager globalSyncManager] updateExploreInfoForViewController:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -81,10 +93,14 @@ NSCache *imageCache;
 
 - (void)configureCell:(PAExploreCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+    cell.backgroundView = [assetManager createShadowWithFrame:cell.frame];
+    cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
+
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;
-    
+    cell.exploreID = tempExplore.id;
+    cell.category = tempExplore.category;
     
     
     if(tempExplore.imageURL){
@@ -93,15 +109,13 @@ NSCache *imageCache;
     
         if(image){
             cell.photoView.image = image;
-            
-            
         }
         else {
             //[cell.photoView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
             [cell.photoView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:imageURL] placeholderImage:[assetManager greyBackground] success:^(NSURLRequest* request, NSHTTPURLResponse* response, UIImage* image){
                 
                 [UIView transitionWithView:cell.photoView
-                                  duration:1.0f
+                                  duration:.4f
                                    options:UIViewAnimationOptionTransitionCrossDissolve
                                 animations:^{
                                     cell.photoView.image = image;
@@ -113,6 +127,13 @@ NSCache *imageCache;
     }else{
         cell.photoView.image = [assetManager imagePlaceholder];
     }
+    
+    if([tempExplore.category isEqualToString:@"event"]){
+        cell.attendButton.hidden = NO;
+    }else{
+        cell.attendButton.hidden = YES;
+    }
+    
     
 }
 
@@ -126,6 +147,7 @@ NSCache *imageCache;
     }
     
     [self configureCell:cell atIndexPath:indexPath];
+    
     return cell;
 }
 
@@ -136,7 +158,15 @@ NSCache *imageCache;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     //[self performSegueWithIdentifier:@"showMessageDetail" sender:self];
+    
+    /*
+    self.tableView.tableHeaderView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, 60);
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [spinner setCenter:CGPointMake(self.tableView.tableHeaderView.frame.size.width, 20)]; // I do this because I'm in landscape mode
+    [self.tableView.tableHeaderView addSubview:spinner];*/
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+     
 }
 
 /*
@@ -220,7 +250,7 @@ NSCache *imageCache;
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"created_at" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"weight" ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
