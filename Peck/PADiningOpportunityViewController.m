@@ -11,6 +11,7 @@
 #import "PAAppDelegate.h"
 #import "DiningPlace.h"
 #import "MenuItem.h"
+#import "PASyncManager.h"
 
 @interface PADiningOpportunityViewController ()
 
@@ -73,8 +74,9 @@ PAAssetManager *assetManager;
         [self.tableView reloadData];
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
-
+        
         self.expanded = YES;
+        [[PASyncManager globalSyncManager] updateMenuItemsForOpportunity:self.diningOpportunity andPlace:self.detailItem];
     }
 }
 
@@ -166,6 +168,10 @@ PAAssetManager *assetManager;
 
 
     NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
+    
+    NSLog(@"dining place id: %@", self.detailItem.id);
+    NSLog(@"dining opp id: %@", self.diningOpportunity.id);
+    
     NSPredicate *fromPlacePredicate = [NSPredicate predicateWithFormat:@"dining_place_id = %@", self.detailItem.id];
     NSPredicate *fromOpportunityPredicate = [NSPredicate predicateWithFormat:@"dining_opportunity_id = %@", self.diningOpportunity.id];
 

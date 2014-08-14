@@ -1312,6 +1312,7 @@
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              NSDictionary *diningDictionary = (NSDictionary*)JSON;
+             NSLog(@"dining opp %@", JSON);
              NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_opportunities"];
              [self.persistentStoreCoordinator lock];
              for (NSDictionary *diningAttributes in postsFromResponse){
@@ -1473,7 +1474,7 @@
                               parameters:[self authenticationParameters]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         //NSLog(@"menu items JSON %@", JSON);
+         NSLog(@"menu items JSON %@", JSON);
          NSDictionary *items = (NSDictionary*)JSON;
          NSArray * menuItemArray = [items objectForKey:@"menu_items"];
          [self.persistentStoreCoordinator lock];
@@ -1502,7 +1503,9 @@
     menuItem.name = [dictionary objectForKey:@"name"];
     menuItem.id = [dictionary objectForKey:@"id"];
     menuItem.dining_opportunity_id =opportunity.id;
-    menuItem.dining_place_id =[dictionary objectForKey:@"dining_place_id"];
+    if(![[dictionary objectForKey:@"dining_place_id"] isKindOfClass:[NSNull class]]){
+        menuItem.dining_place_id =[dictionary objectForKey:@"dining_place_id"];
+    }
 }
 
 #pragma mark - Announcement actions
