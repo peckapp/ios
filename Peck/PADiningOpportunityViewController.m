@@ -8,6 +8,7 @@
 
 #import "PADiningOpportunityViewController.h"
 #import "PAAssetManager.h"
+#import "DiningPlace.h"
 
 @interface PADiningOpportunityViewController ()
 
@@ -71,7 +72,7 @@ PAAssetManager *assetManager;
 
 -(void)configureView{
     if (self.detailItem) {
-        
+        self.placeLabel.text = self.detailItem.name;
     }
 }
 
