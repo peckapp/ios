@@ -11,6 +11,7 @@
 #import "PASyncManager.h"
 #import "PAFetchManager.h"
 #import "Institution.h"
+#import "PAEnterEmailTableViewController.h"
 
 @interface PAInitialViewController ()
 
@@ -113,56 +114,28 @@
        
         NSLog(@"user info: %@ %@ %@ %@", [user objectForKey:@"first_name"], [user objectForKey:@"last_name"], [user objectForKey:@"email"], [[FBSession activeSession] accessTokenData]);
         
-        FBAccessTokenData* accessTokenData = [[FBSession activeSession] accessTokenData];
-        NSString* token = [accessTokenData accessToken];
+        
         
         BOOL sendEmail = YES;
-        
-        Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
-        NSString* emailExtension = currentInstitution.email_regex;
-        NSString* userEmail = [user objectForKey:@"email"];
-        NSInteger preceedingLength = [userEmail length] - [emailExtension length];
-        if(preceedingLength>0){
-            NSString* userEmailExtension = [userEmail substringFromIndex:preceedingLength];
-            if([userEmailExtension isEqualToString:emailExtension]){
-                //the email matches the institution that the user has chosen
-                sendEmail = NO;
-                NSLog(@"matching email");
-            }
+        if([self emailMatchesInstitution:[user objectForKey:@"email"]]){
+            //The email matches the institution that the user has chosen. In this case, we will simply perform a normal login through facebook
+            sendEmail = NO;
+            [self loginWithFacebook:user andBool:NO withEmail:[user objectForKey:@"email"]];
+        }else{
+            //The email does not match the institution that the user has chosen. In this case we must call the method in the sync manager that checks to see if a facebook link already exists for the user.
+            NSDictionary* dictionary = [NSDictionary dictionaryWithObject:[user objectForKey:@"link"] forKey:@"facebook_link"];
+            [[PASyncManager globalSyncManager] checkFacebookUser:dictionary withCallback:^(BOOL registered){
+                if(registered){
+                    NSLog(@"continue with normal facebook login");
+                    [self loginWithFacebook:user andBool:NO withEmail:[user objectForKey:@"email"]];
+                }else{
+                    NSLog(@"ask the user for his institution email");
+                    self.user = user;
+                    [self performSegueWithIdentifier:@"enterValidEmail" sender:self];
+                }
+            }];
+
         }
-        
-        if([[[user objectForKey:@"email"] substringFromIndex:([currentInstitution.name length]+4)] isEqualToString:currentInstitution.name]){
-            
-        }
-        
-        
-        NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [user objectForKey:@"first_name"],@"first_name",
-                                  [user objectForKey:@"last_name"],@"last_name",
-                                  [user objectForKey:@"email"],@"email",
-                                  token, @"facebook_token",
-                                  @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
-                                  [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"],@"institution_id",
-                                  [NSNumber numberWithBool:sendEmail], @"send_email",
-                                  nil];
-        
-        //We will store the picture locally that facebook has given us in case the user has not saved a new photo
-        NSString *userImageURL = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [user objectID]];
-    
-        [[NSUserDefaults standardUserDefaults] setObject:userImageURL forKey:@"profile_picture_url"];
-        /*
-        UIImage* profilePicture. = user.id;
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                             NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        NSString* path = [documentsDirectory stringByAppendingPathComponent:
-                          @"profile_picture.jpeg" ];
-        NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
-        [data writeToFile:path atomically:YES];
-        NSLog(@"path: %@", path);
-        [defaults setObject:path forKey:@"profile_picture"];*/
-        
-        [[PASyncManager globalSyncManager] loginWithFacebook:userInfo forViewController:self];
         
         /*
         double delayInSeconds = 0.1;
@@ -174,10 +147,47 @@
         });*/
         
     }
+}
+
+-(void)loginWithFacebook:(id<FBGraphUser>)user andBool:(BOOL)sendEmail withEmail:(NSString*)email{
     
+    FBAccessTokenData* accessTokenData = [[FBSession activeSession] accessTokenData];
+    NSString* token = [accessTokenData accessToken];
     
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              [user objectForKey:@"first_name"],@"first_name",
+                              [user objectForKey:@"last_name"],@"last_name",
+                              email,@"email",
+                              token, @"facebook_token",
+                              @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
+                              [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"],@"institution_id",
+                              [NSNumber numberWithBool:sendEmail], @"send_email",
+                              [user objectForKey:@"link"], @"facebook_link",
+                              nil];
     
+    //We will store the picture locally that facebook has given us in case the user has not saved a new photo
+    NSString *userImageURL = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [user objectID]];
     
+    [[NSUserDefaults standardUserDefaults] setObject:userImageURL forKey:@"profile_picture_url"];
+    
+    [[PASyncManager globalSyncManager] loginWithFacebook:userInfo forViewController:self];
+}
+
+-(BOOL)emailMatchesInstitution:(NSString*)userEmail{
+    Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
+    NSString* emailExtension = currentInstitution.email_regex;
+    //NSString* userEmail = [user objectForKey:@"email"];
+    NSInteger preceedingLength = [userEmail length] - [emailExtension length];
+    if(preceedingLength>0){
+        NSString* userEmailExtension = [userEmail substringFromIndex:preceedingLength];
+        if([userEmailExtension isEqualToString:emailExtension]){
+            return YES;
+        }else{
+            return NO;
+        }
+    }else{
+        return NO;
+    }
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
@@ -202,7 +212,9 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    
+    if([[segue identifier] isEqualToString:@"enterValidEmail"]){
+        //PAEnterEmailTableViewController* destintation = [segue destinationViewController];
+    }
 }
 
 # pragma mark - Network Calls
