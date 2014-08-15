@@ -54,17 +54,21 @@ PAAssetManager * assetManager;
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         self.nameLabel.text = [[[defaults objectForKey:@"first_name"] stringByAppendingString:@" "] stringByAppendingString:[defaults objectForKey:@"last_name"]];
         self.blurbTextView.text = [defaults objectForKey:@"blurb"];
-        UIImage* image =[UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
-        if(image){
-            self.profilePicture.image = image;
+        
+        NSURL* url = [NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];
+        if(url){
+            [self.profilePicture setImageWithURL:url placeholderImage:[assetManager profilePlaceholder]];
         }else{
             self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
         }
-
-        self.profilePicture.layer.cornerRadius = 256;
-        self.profilePicture.clipsToBounds = YES;
-
+        
     }
+    
+    //For some reason these methods were making the image not show up
+    
+    //self.profilePicture.layer.cornerRadius = 256;
+    //self.profilePicture.clipsToBounds = YES;
+
 }
 
 - (void)viewDidLoad

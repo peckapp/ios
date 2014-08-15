@@ -195,7 +195,7 @@
     //We will store the picture locally that facebook has given us in case the user has not saved a new photo
     NSString *userImageURL = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [user objectID]];
     
-    [[NSUserDefaults standardUserDefaults] setObject:userImageURL forKey:@"profile_picture_url"];
+    [[NSUserDefaults standardUserDefaults] setObject:userImageURL forKey:@"facebook_profile_picture_url"];
     
     [[PASyncManager globalSyncManager] loginWithFacebook:userInfo forViewController:self withCallback:callbackBlock];
 }

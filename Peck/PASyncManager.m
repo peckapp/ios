@@ -300,16 +300,8 @@
                                         [defaults setObject:firstName forKey:first_name_define];
                                         [defaults setObject:lastName forKey:last_name_define];
                                         if(imageURL){
-                                            UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]]]];
-                                            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                                                                 NSUserDomainMask, YES);
-                                            NSString *documentsDirectory = [paths objectAtIndex:0];
-                                            NSString* path = [documentsDirectory stringByAppendingPathComponent:
-                                                              @"profile_picture.jpeg" ];
-                                            NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
-                                            [data writeToFile:path atomically:YES];
-                                            NSLog(@"path: %@", path);
-                                            [defaults setObject:path forKey:@"profile_picture"];
+                                            NSURL* url =[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+                                            [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
                                         }
                                         
                                       }
@@ -359,16 +351,6 @@
                                       if(imageURL){
                                           NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
                                           NSURL* url =[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
-                                          UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-                                          NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                                                               NSUserDomainMask, YES);
-                                          NSString *documentsDirectory = [paths objectAtIndex:0];
-                                          NSString* path = [documentsDirectory stringByAppendingPathComponent:
-                                                            @"profile_picture.jpeg" ];
-                                          NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
-                                          [data writeToFile:path atomically:YES];
-                                          NSLog(@"path: %@", path);
-                                          [defaults setObject:path forKey:@"profile_picture"];
                                           [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
                                       }
                                       
@@ -508,7 +490,12 @@
                                            NSString* email = [userDictionary objectForKey:@"email"];
                                            NSNumber* userID = [userDictionary objectForKey:@"id"];
                                            NSString* apiKey = [userDictionary objectForKey:@"api_key"];
-                                       
+                                           NSString* blurb = [userDictionary objectForKey:@"blurb"];
+                                           
+                                           
+                                           if(![blurb isKindOfClass:[NSNull class]]){
+                                               [defaults setObject:blurb forKey:@"blurb"];
+                                           }
                                            [defaults setObject:apiKey forKey:@"api_key"];
                                            [defaults setObject:userID forKey:@"user_id"];
                                            [defaults setObject:firstName forKey:first_name_define];
@@ -525,21 +512,11 @@
                                            if(imageURL){
                                                NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
                                                NSURL* url =[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
-                                               UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-                                               NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                                                                NSUserDomainMask, YES);
-                                               NSString *documentsDirectory = [paths objectAtIndex:0];
-                                               NSString* path = [documentsDirectory stringByAppendingPathComponent:
-                                                             @"profile_picture.jpeg" ];
-                                               NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
-                                               [data writeToFile:path atomically:YES];
-                                               NSLog(@"path: %@", path);
-                                               [defaults setObject:path forKey:@"profile_picture"];
                                                [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
                                            }else{
                                                //If the user has logged in with facebook but has not yet saved a new profile picture, we will use their facebook profile picture as their current image.
                                            
-                                               NSURL* url =[NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];
+                                               NSURL* url =[NSURL URLWithString:[defaults objectForKey:@"facebook_profile_picture_url"]];
                                                UIImage* profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
                                            
                                                //save the image to the sever as the user's new profile picture
@@ -549,16 +526,6 @@
                                            
                                                [self updateUserWithInfo:dictionary withImage:
                                                 UIImageJPEGRepresentation(profilePicture, .5)];
-                                           
-                                               NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                                                                NSUserDomainMask, YES);
-                                               NSString *documentsDirectory = [paths objectAtIndex:0];
-                                               NSString* path = [documentsDirectory stringByAppendingPathComponent:
-                                                             @"profile_picture.jpeg" ];
-                                               NSData* data = UIImageJPEGRepresentation(profilePicture, .5);
-                                               [data writeToFile:path atomically:YES];
-                                               NSLog(@"path: %@", path);
-                                               [defaults setObject:path forKey:@"profile_picture"];
                                            }
 
                                            //update the subscriptions of the newly logged in user
