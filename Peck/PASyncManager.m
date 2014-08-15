@@ -241,6 +241,20 @@
 
 -(void)resetPassword:(NSDictionary*)dictionary{
     
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            [dictionary objectForKey:@"email"], @"email",
+                            [[self authenticationParameters] objectForKey:@"authentication"], @"authentication",
+                            nil];
+    NSLog(@"reset dict: %@", params);
+    
+    [[PASessionManager sharedClient] GET:@"api/users/reset_password"
+                               parameters:params
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                  }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"ERROR: %@",error);
+                                }];
+
 }
 
 -(void)updateUserWithInfo:(NSDictionary *)userInfo withImage:(NSData*)imageData
@@ -482,8 +496,9 @@
                                        NSLog(@"JSON : %@", JSON);
                                        NSDictionary* json = (NSDictionary*)JSON;
                                        NSDictionary* userDictionary = [json objectForKey:@"user"];
-                                       callbackBlock(YES);
-                                       
+                                       if(callbackBlock){
+                                           callbackBlock(YES);
+                                       }
                                        if([[userDictionary objectForKey:@"active"] boolValue]){
                                            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                                            NSString* firstName = [userDictionary objectForKey:first_name_define];
@@ -567,7 +582,9 @@
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                        NSLog(@"ERROR: %@",error);
                                        if([[[error userInfo] objectForKey:AFNetworkingOperationFailingURLResponseErrorKey] statusCode]==422){
-                                           callbackBlock(NO);
+                                           if(callbackBlock){
+                                               callbackBlock(NO);
+                                           }
                                        }
                                        
                                    }];

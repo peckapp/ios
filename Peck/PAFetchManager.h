@@ -20,6 +20,12 @@
 
 +(instancetype)sharedFetchManager;
 
+-(void)manuallyChangeInstituion;
+//switches the institution to the user's home institution and then calls switch institution
+
+-(void)switchInstitution;
+//Takes care of necessary insitution switching things. Removes all subscriptions and events from core data and then loads them from the webservice with the new institution id
+
 -(Peer*)getPeerWithID:(NSNumber*)peerID;
 //returns the peer from core data with the given id
 

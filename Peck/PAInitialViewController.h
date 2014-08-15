@@ -13,5 +13,6 @@
 -(void)showAlert;
 @property BOOL justOpenedApp;
 @property (strong ,nonatomic) id<FBGraphUser> user;
+- (IBAction)resetPassword:(id)sender;
 -(void)loginWithFacebook:(id<FBGraphUser>)user andBool:(BOOL)sendEmail withEmail:(NSString*)email withCallback:(void(^)(BOOL))callbackBlock;
 @end

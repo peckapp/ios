@@ -105,6 +105,7 @@
     </entity>
     <entity name="Peer" representedClassName="Peer" syncable="YES">
         <attribute name="blurb" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="home_institution" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="imageURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -128,7 +129,7 @@
         <element name="Institution" positionX="-54" positionY="189" width="128" height="225"/>
         <element name="MenuItem" positionX="90" positionY="342" width="128" height="103"/>
         <element name="Peck" positionX="90" positionY="342" width="128" height="178"/>
-        <element name="Peer" positionX="261" positionY="261" width="128" height="120"/>
+        <element name="Peer" positionX="261" positionY="261" width="128" height="135"/>
         <element name="Subscription" positionX="90" positionY="342" width="128" height="120"/>
     </elements>
 </model>

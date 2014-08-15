@@ -11,6 +11,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "PAAssetManager.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "PAFetchManager.h"
 
 @interface PAMethodManager()
 
@@ -79,6 +80,7 @@
         if(buttonIndex==1){
             //The user has pressed continue. We must switch to the user's home institution and then call the call back block to continue the action
             NSLog(@"switch the institution");
+            [[PAFetchManager sharedFetchManager] manuallyChangeInstituion];
             self.callbackBlock();
         }else{
             NSLog(@"don't perform the action");
