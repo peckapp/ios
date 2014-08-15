@@ -372,7 +372,7 @@
         <!--Profile-->
         <scene sceneID="P2i-1P-Ets">
             <objects>
-                <tableViewController id="Kpj-df-ekn" customClass="PAProfileTableViewController2" sceneMemberID="viewController">
+                <tableViewController id="Kpj-df-ekn" customClass="PAProfileTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="PW2-DG-hdV">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -446,7 +446,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="8ga-7t-38c" kind="push" id="1F5-gH-OFU"/>
+                                            <segue destination="8ga-7t-38c" kind="push" identifier="changePassword" id="1F5-gH-OFU"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="U6m-yU-oyI">

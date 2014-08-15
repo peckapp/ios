@@ -66,10 +66,16 @@
     [[PASyncManager globalSyncManager] updateAvailableInstitutionsWithCallback:^(BOOL success) {
         if (success) {
             NSLog(@"executing callback for institution configurator");
+            BOOL selectCurrent = YES;
+            if([self.institutions count]>0){
+                selectCurrent=NO;
+            }
             self.institutions = [self fetchInstitutions];
             [self.schoolPicker reloadAllComponents];
             
-            [self selectCurrentDefaultIfExists];
+            if(selectCurrent){
+                [self selectCurrentDefaultIfExists];
+            }
         }
     }];
 

@@ -633,6 +633,7 @@
                               finalInvites, @"event_member_ids",
                               alert,@"message",
                               [NSNumber numberWithBool:YES],@"send_push_notification",
+                              self.locationTextField.text,@"location",
                               nil];
 
     return setEvent;

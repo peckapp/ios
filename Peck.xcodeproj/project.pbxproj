@@ -66,7 +66,7 @@
 		A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A433EAA1195B3F5800DAA201 /* HTAutocompleteManager.m */; };
 		A439EBC7199D196700FFEF33 /* Institution.m in Sources */ = {isa = PBXBuildFile; fileRef = A439EBC6199D196700FFEF33 /* Institution.m */; };
 		A439EBCA199D3CE400FFEF33 /* PAEnterEmailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A439EBC9199D3CE400FFEF33 /* PAEnterEmailTableViewController.m */; };
-		A43BF0EA197813200009B7AD /* PAProfileTableViewController2.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */; };
+		A43BF0EA197813200009B7AD /* PAProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0E9197813200009B7AD /* PAProfileTableViewController.m */; };
 		A43BF0EE197819480009B7AD /* PASubscriptionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */; };
 		A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A43BF0F01978198D0009B7AD /* PASubscriptionCell.m */; };
 		A43BF0F31978198D0009B7AD /* PASubscriptionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A43BF0F11978198D0009B7AD /* PASubscriptionCell.xib */; };
@@ -282,8 +282,8 @@
 		A439EBC6199D196700FFEF33 /* Institution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Institution.m; sourceTree = "<group>"; };
 		A439EBC8199D3CE400FFEF33 /* PAEnterEmailTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAEnterEmailTableViewController.h; sourceTree = "<group>"; };
 		A439EBC9199D3CE400FFEF33 /* PAEnterEmailTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAEnterEmailTableViewController.m; sourceTree = "<group>"; };
-		A43BF0E8197813200009B7AD /* PAProfileTableViewController2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAProfileTableViewController2.h; sourceTree = "<group>"; };
-		A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAProfileTableViewController2.m; sourceTree = "<group>"; };
+		A43BF0E8197813200009B7AD /* PAProfileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAProfileTableViewController.h; sourceTree = "<group>"; };
+		A43BF0E9197813200009B7AD /* PAProfileTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAProfileTableViewController.m; sourceTree = "<group>"; };
 		A43BF0EC197819480009B7AD /* PASubscriptionsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASubscriptionsTableViewController.h; sourceTree = "<group>"; };
 		A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASubscriptionsTableViewController.m; sourceTree = "<group>"; };
 		A43BF0EF1978198D0009B7AD /* PASubscriptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASubscriptionCell.h; sourceTree = "<group>"; };
@@ -862,8 +862,8 @@
 			children = (
 				A48225A0199268D6007D9A9F /* Announcement.h */,
 				A48225A1199268D6007D9A9F /* Announcement.m */,
-				A43BF0E8197813200009B7AD /* PAProfileTableViewController2.h */,
-				A43BF0E9197813200009B7AD /* PAProfileTableViewController2.m */,
+				A43BF0E8197813200009B7AD /* PAProfileTableViewController.h */,
+				A43BF0E9197813200009B7AD /* PAProfileTableViewController.m */,
 				A43BF0F4197978690009B7AD /* PAChangePasswordViewController.h */,
 				A43BF0F5197978690009B7AD /* PAChangePasswordViewController.m */,
 				A4E47D551991261000DDF941 /* PAUserEventsTableViewController.h */,
@@ -1187,7 +1187,7 @@
 				A40CF574195483140021C088 /* PABST.m in Sources */,
 				A4773C891959D2FE00AB9831 /* PASyncManager.m in Sources */,
 				A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */,
-				A43BF0EA197813200009B7AD /* PAProfileTableViewController2.m in Sources */,
+				A43BF0EA197813200009B7AD /* PAProfileTableViewController.m in Sources */,
 				A482259919914E0B007D9A9F /* Explore.m in Sources */,
 				A4677D3F19743A05007E3C3A /* Circle.m in Sources */,
 				A463F384194B959800ED441F /* PACircleCell.m in Sources */,

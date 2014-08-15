@@ -10,6 +10,7 @@
 #import "PADropdownBar.h"
 #import "PACirclesTableViewController.h"
 #import "PAEventsViewController.h"
+#import "PAProfileTableViewController.h"
 
 @interface PAAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -23,11 +24,13 @@
 @property (strong, nonatomic) PADropdownBar* dropDownBar;
 @property (strong, nonatomic) PACirclesTableViewController* circleViewController;
 @property (strong, nonatomic) PAEventsViewController* eventsViewController;
+@property (strong, nonatomic) PAProfileTableViewController* profileViewController;
 
 // icloud triggered selector for remote change to key-value store
 - (void)iCloudKeyStateChanged:(NSNotification*)notification;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+-(void)setProfileProperty:(PAProfileTableViewController*)profileController;
 
 @end

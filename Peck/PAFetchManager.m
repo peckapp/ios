@@ -153,6 +153,7 @@
     [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
     [[PASyncManager globalSyncManager] updateDiningInfo];
     [[PASyncManager globalSyncManager] updatePecks];
+    [[PASyncManager globalSyncManager] updateCircleInfo];
     //[[PASyncManager globalSyncManager] updatePeerInfo];
 }
 

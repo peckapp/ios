@@ -375,6 +375,7 @@
                                       else if([direction isEqualToString:@"change_password"]) {
                                           PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
                                           [appdelegate.dropDownBar selectItemAtIndex:4];
+                                          [appdelegate.profileViewController performSegueWithIdentifier:@"changePassword" sender:appdelegate.profileViewController];
                                       }
                                       else{
                                           if(controller){
@@ -882,8 +883,6 @@
                      [self setAttributesInExplore:explore withDictionary:eventAttributes andCategory:@"event"];
                      //NSLog(@"EXPLORE: %@",explore);
                  }
-                 
-                 
              }
              
              NSDictionary* announcementsFromResponse = [exploreDictionary objectForKey:@"explore_announcements"];
@@ -1792,6 +1791,9 @@
     event.attendees = [dictionary objectForKey:@"attendees"];
     if(![[dictionary objectForKey:@"user_id"] isKindOfClass:[NSNull class]]){
         event.created_by = [dictionary objectForKey:@"user_id"];
+    }
+    if(![[dictionary objectForKey:@"location"] isKindOfClass:[NSNull class]]){
+        event.location = [dictionary objectForKey:@"location"];
     }
 }
 

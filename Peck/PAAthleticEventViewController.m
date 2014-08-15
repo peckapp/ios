@@ -653,7 +653,7 @@ BOOL reloaded = NO;
     cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
     [cell.likeButton setHidden:NO];
     [cell.numberOfLikesLabel setHidden:NO];
-
+    cell.commentor_id = tempComment.peer_id;
     if([self userHasLikedComment:tempComment]){
         [cell.likeButton setTitle:@"Unlike" forState:UIControlStateNormal];
     }else{
