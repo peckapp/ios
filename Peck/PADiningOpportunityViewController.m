@@ -7,6 +7,7 @@
 //
 
 #import "PADiningOpportunityViewController.h"
+#import "PADiningOpportunityCell.h"
 #import "PAAssetManager.h"
 #import "PAAppDelegate.h"
 #import "DiningPlace.h"
@@ -17,6 +18,7 @@
 
 @property (assign, nonatomic) BOOL expanded;
 
+@property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UILabel *placeLabel;
 
 @end
@@ -36,6 +38,9 @@ PAAssetManager *assetManager;
 
     self.view.backgroundColor = [assetManager darkColor];
 
+    self.headerView = [[UIView alloc] init];
+    self.headerView.backgroundColor = [UIColor whiteColor];
+
     self.placeLabel = [[UILabel alloc] init];
     self.placeLabel.textColor = [UIColor whiteColor];
     self.placeLabel.font = [UIFont boldSystemFontOfSize:17.0];
@@ -44,7 +49,10 @@ PAAssetManager *assetManager;
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    self.placeLabel.frame = CGRectInset(CGRectMake(0, 0, self.view.frame.size.width, 88), 15, 15);
+    self.view.frame = self.parentViewController.view.bounds;
+
+    self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
+    self.placeLabel.frame = CGRectInset(self.headerView.frame, 15, 15);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -66,14 +74,17 @@ PAAssetManager *assetManager;
             abort();
         }
 
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         self.tableView.dataSource = self;
         self.tableView.delegate = self;
-        self.tableView.frame = self.view.frame;
+        self.tableView.tableHeaderView = self.headerView;
+        self.tableView.backgroundColor = [UIColor clearColor];
         [self.view addSubview:self.tableView];
-        [self.tableView reloadData];
-        [self.tableView beginUpdates];
-        [self.tableView endUpdates];
+        self.tableView.frame = self.view.bounds;
+        self.tableView.contentInset = UIEdgeInsetsMake(256, 0, 0, 0);
+        //[self.tableView reloadData];
+        //[self.tableView beginUpdates];
+        //[self.tableView endUpdates];
         
         self.expanded = YES;
         [[PASyncManager globalSyncManager] updateMenuItemsForOpportunity:self.diningOpportunity andPlace:self.detailItem];
@@ -136,19 +147,18 @@ PAAssetManager *assetManager;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"menu-item-cell-identifier"];
+    PADiningOpportunityCell *cell = [tableView dequeueReusableCellWithIdentifier:@"menu-item-cell-identifier"];
     if (cell == nil) {
-        [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"menu-item-cell-identifier"];
+        [tableView registerNib:[UINib nibWithNibName:@"PADiningOpportunityCell" bundle:nil] forCellReuseIdentifier:@"menu-item-cell-identifier"];
         cell = [tableView dequeueReusableCellWithIdentifier:@"menu-item-cell-identifier"];
     }
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
 
--(void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath{
-    MenuItem* tempMenuItem = [_fetchedResultsController objectAtIndexPath:indexPath];
-    //cell.textLabel.text = tempMenuItem.name;
-    cell.backgroundColor = [assetManager lightColor];
+-(void)configureCell:(PADiningOpportunityCell *)cell atIndexPath:(NSIndexPath *)indexPath{
+    MenuItem *tempMenuItem = [_fetchedResultsController objectAtIndexPath:indexPath];
+    cell.nameLabel.text = tempMenuItem.name;
 }
 
 #pragma mark - Fetched Results Controller
@@ -208,6 +218,7 @@ PAAssetManager *assetManager;
 {
     [self.tableView beginUpdates];
 }
+
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {

@@ -133,10 +133,6 @@ PAAssetManager * assetManager;
     return @"Added Members";
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 30;
-}
-
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
