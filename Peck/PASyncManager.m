@@ -390,7 +390,9 @@
                                         UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
                                         [appDelegate.window setRootViewController:newRoot];
                                       }else{
-                                        [controller dismissViewControllerAnimated:YES completion:nil];
+                                          if(controller){
+                                              [controller dismissViewControllerAnimated:YES completion:nil];
+                                          }
                                       }
                                   }
      
@@ -601,14 +603,14 @@
     [[PASessionManager sharedClient] PATCH:passwordURL
                                 parameters:[self applyWrapper:@"user" toDictionary:passwordInfo]
                                    success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                       //NSLog(@"password JSON: %@",JSON);
+                                       NSLog(@"password JSON: %@",JSON);
                                        NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                        NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
                                        if([[userDictionary objectForKey:@"response"] isEqualToString:@"Old password was wrong"]){
                                            NSLog(@"show alert");
                                            PAChangePasswordViewController* sender = (PAChangePasswordViewController*)controller;
                                            [sender showWrongPasswordAlert];
-                                       }else if([[userDictionary objectForKey:@"response"] isEqualToString:@"password was successfully changed!"]){
+                                       }else if([[userDictionary objectForKey:@"response"] isEqualToString:@"Password was successfully changed!"]){
                                            PAChangePasswordViewController* sender = (PAChangePasswordViewController*)controller;
                                            [sender showSuccessAlert];
                                        }

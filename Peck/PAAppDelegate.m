@@ -17,6 +17,7 @@
 #import "PADropdownViewController.h"
 #import "PASyncManager.h"
 #import <Security/Security.h>
+#import "PAMethodManager.h"
 
 
 @implementation PAAppDelegate
@@ -308,7 +309,40 @@
         }
     }];
     
+    
+    NSLog(@"incoming url: %@", url);
+    NSMutableDictionary* urlInfo = [self urlToDictionary:[url absoluteString]];
+    if(urlInfo){
+        if([[urlInfo objectForKey:@"view"] isEqualToString:@"passwordReset"]){
+            [[PAMethodManager sharedMethodManager] handleResetLink:urlInfo];
+        }
+    }
+    
+    
     return wasHandled;
+}
+
+-(NSMutableDictionary*)urlToDictionary:(NSString*)url{
+    NSMutableDictionary* queryDictionary = [[NSMutableDictionary alloc] init];
+    
+    //sets the url to everything after the question mark
+    NSArray* urlArray =[url componentsSeparatedByString:@"?"];
+    if([urlArray count]>1){
+        url = urlArray[1];
+        NSArray* urlComponents = [url componentsSeparatedByString:@"&"];
+        for (NSString *keyValuePair in urlComponents)
+        {
+            NSArray *pairComponents = [keyValuePair componentsSeparatedByString:@"="];
+            NSString *key = [pairComponents objectAtIndex:0];
+            NSString *value = [pairComponents objectAtIndex:1];
+            
+            [queryDictionary setObject:value forKey:key];
+        }
+        return queryDictionary;
+    }else{
+        return nil;
+    }
+    
 }
 
 #pragma mark - Standard methods

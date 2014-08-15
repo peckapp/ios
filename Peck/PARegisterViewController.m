@@ -52,7 +52,11 @@
     self.emailField.delegate=self;
     
     Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
-    self.emailField.placeholder = [@"email" stringByAppendingString:currentInstitution.email_regex];
+    if(currentInstitution.email_regex){
+        self.emailField.placeholder = [@"email" stringByAppendingString:currentInstitution.email_regex];
+    }else{
+        self.emailField.placeholder = @"email@yourInstitution.edu";
+    }
     self.passwordField1.placeholder = @"********";
     self.passwordField2.placeholder = @"********";
     

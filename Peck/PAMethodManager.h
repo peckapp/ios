@@ -19,5 +19,7 @@
 -(void)showInstitutionAlert:(void (^)(void))callbackBlock;
 
 -(UIImageView*)imageForPeer:(Peer*)peer;
--(void)postInfoToFacebook:(NSDictionary*)eventInfo withImage:(NSData*)imageDat; 
+-(void)postInfoToFacebook:(NSDictionary*)eventInfo withImage:(NSData*)imageDat;
+
+-(void)handleResetLink:(NSMutableDictionary*)urlInfo;
 @end
