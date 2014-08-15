@@ -50,6 +50,8 @@ BOOL loggedIn;
     tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changePicture)];
     tapRecognizer.cancelsTouchesInView = NO;
     [profilePicture addGestureRecognizer:tapRecognizer];
+    profilePicture.layer.cornerRadius = 64;
+    profilePicture.clipsToBounds = YES;
     profilePicture.userInteractionEnabled = YES;
 }
 
