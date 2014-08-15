@@ -60,6 +60,6 @@
     UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
     UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
     PAInitialViewController* root = loginRoot.viewControllers[0];
-    root.justOpenedApp=NO;
+    root.direction=@"none";
     [self.viewController presentViewController:loginRoot animated:YES completion:nil];}
 @end

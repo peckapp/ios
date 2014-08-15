@@ -183,7 +183,7 @@
             UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
             UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
             PAInitialViewController* root = loginRoot.viewControllers[0];
-            root.justOpenedApp=YES;
+            root.direction=@"homepage";
             [self.initialViewController presentViewController:loginRoot animated:YES completion:nil];
             //segue to the login page
         }
@@ -311,7 +311,7 @@
     
 }
 
-- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(BOOL)goToHomepage
+- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(NSString*)direction
 {
     // adds the unique user device token to the userInfo NSDictionary
     NSDictionary* userInfoWithUDID = [self addUDIDToDictionary:userInfo];
@@ -367,11 +367,16 @@
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       
                                       
-                                      if(goToHomepage){
+                                      if([direction isEqualToString:@"homepage"]){
                                           PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
                                         UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
                                         [appDelegate.window setRootViewController:newRoot];
-                                      }else{
+                                      }
+                                      else if([direction isEqualToString:@"change_password"]) {
+                                          PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+                                          [appdelegate.dropDownBar selectItemAtIndex:4];
+                                      }
+                                      else{
                                           if(controller){
                                               [controller dismissViewControllerAnimated:YES completion:nil];
                                           }

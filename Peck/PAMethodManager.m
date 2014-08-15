@@ -250,7 +250,7 @@
                                nil];
     
     NSLog(@"login info %@", loginInfo);
-    [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:nil direction:NO];
+    [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:nil direction:@"change_password"];
 }
 
 @end

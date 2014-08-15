@@ -412,11 +412,12 @@
     
     NSError *error;
     NSArray *array = [_managedObjectContext executeFetchRequest:request error:&error];
-    if (array == nil)
+    if ([array count]>0)
     {
-        // Deal with error...
+       
+        return array[0];
     }
-    return array[0];
+    return nil;
 }
 
 @end

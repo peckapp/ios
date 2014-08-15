@@ -142,7 +142,7 @@ BOOL loggedIn;
         UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
         UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
         PAInitialViewController* root = loginRoot.viewControllers[0];
-        root.justOpenedApp=NO;
+        root.direction = @"none";
         [self presentViewController:loginRoot animated:YES completion:nil];
     }else{
         //Logging out the user
