@@ -26,6 +26,9 @@
 -(void)createAnonymousUserHelper;
 //calls create anonymous user with a completetion block that has components more easily accessed from within the sync manager
 
+-(void)resetPassword:(NSDictionary*)dictionary;
+//sends a new confirmation email with the password to the given email
+
 // sends the device token to the server and performs operations based on the result
 -(void)sendUDIDForInitViewController:(UIViewController*)initViewController;
 // sends post request to server with institution_id and stores response user_id in NSUserDefaults
@@ -40,7 +43,7 @@
 -(void)checkFacebookUser:(NSDictionary*)dictionary withCallback:(void (^)(BOOL, NSString*))callbackBlock;
 //checks with the server to check if a facebook link exists for the user that is attempting to login
 
--(void)loginWithFacebook:(NSDictionary*)dictionary forViewController:(UIViewController*)sender;
+-(void)loginWithFacebook:(NSDictionary*)dictionary forViewController:(UIViewController*)sender withCallback:(void (^)(BOOL))callbackBlock;
 
 -(void)changePassword:(NSDictionary*)passwordInfo forViewController:(UIViewController*)controller;
 
