@@ -49,6 +49,11 @@
     schoolPicker.dataSource = self;
     schoolPicker.delegate = self;
     
+    NSArray* institutions = [self fetchInstitutions];
+    if([institutions count]>0){
+        self.institutions = institutions;
+    }
+    
     [self updateInstitutions];
     
     [schoolPicker reloadAllComponents];

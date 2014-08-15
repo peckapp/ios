@@ -639,7 +639,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"JSON: %@",JSON);
+             //NSLog(@"Peer JSON: %@",JSON);
              NSDictionary *usersDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
              for (NSDictionary *userAttributes in postsFromResponse) {
@@ -693,6 +693,9 @@
     }
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         peer.imageURL = [dictionary objectForKey:@"image"];
+    }
+    if(![[dictionary objectForKey:@"institution_id"] isKindOfClass:[NSNull class]]){
+        peer.home_institution = [dictionary objectForKey:@"institution_id"];
     }
 }
 #pragma mark - Like actions
