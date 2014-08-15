@@ -533,6 +533,9 @@
     self.descriptionTextView.text=@"";
     self.startTimeLabel.text =@"None";
     self.endTimeLabel.text = @"None";
+    self.locationTextField.text = @"";
+    self.startTimeLabel.text = @"None";
+    self.endTimeLabel.text = @"None";
     [self.tableView reloadData];
     
     
