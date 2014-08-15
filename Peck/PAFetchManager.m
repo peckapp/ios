@@ -33,6 +33,29 @@
 }
 
 
+-(void)manuallyChangeInstituion{
+    //changes the insitution of the user to his home instition
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber* instID = [defaults objectForKey:@"home_institution"];
+    Institution* institution = [self fetchInstitutionForID:instID];
+    [defaults setObject:institution.id forKey:@"institution_id"];
+    
+    [self switchInstitution];
+}
+
+-(void)switchInstitution{
+    //takes care of instiution switching
+    
+    [self removeAllObjectsOfType:@"Event"];
+    [self removeAllObjectsOfType:@"Subscription"];
+    [self removeAllObjectsOfType:@"Explore"];
+    
+    [[PASyncManager globalSyncManager] updateEventInfo];
+    [[PASyncManager globalSyncManager] updateDiningInfo];
+    [[PASyncManager globalSyncManager] updateSubscriptions];
+    [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
+}
+
 -(Peer*)getPeerWithID:(NSNumber*)peerID{
     
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];

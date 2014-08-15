@@ -152,7 +152,7 @@
 
 - (IBAction)forgotPasswordButton:(id)sender {
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Reset Password?"
-                                                    message:@"Are you sure you want to reset your password?"
+                                                    message:@"Are you sure you want to reset your password? A confirmation email will be sent to the email you have provided."
                                                    delegate:self
                                           cancelButtonTitle:@"No"
                                           otherButtonTitles:@"Yes", nil];

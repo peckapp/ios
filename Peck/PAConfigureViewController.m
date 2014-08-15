@@ -14,6 +14,8 @@
 #import "PASyncManager.h"
 #import "Institution.h"
 
+#import "PAFetchManager.h"
+
 @interface PAConfigureViewController ()
 
 @property (nonatomic,retain) NSArray * institutions;
@@ -171,6 +173,8 @@
     NSLog(@"selected institution: %@ with id: %@",institution.name,institution.id);
     
     PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    [[PAFetchManager sharedFetchManager] switchInstitution];
     
     // if this is root because of the initial download of the app
     if ([appDelegate window].rootViewController == self) {

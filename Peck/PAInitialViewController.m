@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 
 @property (weak, nonatomic) IBOutlet FBLoginView *fbLogin;
+@property (strong, nonatomic) UIAlertView* resetPassAlert;
 
 - (IBAction)cancelLogin:(id)sender;
 - (IBAction)finishLogin:(id)sender;
@@ -148,6 +149,25 @@
         
     }
 }
+
+- (IBAction)resetPassword:(id)sender {
+    self.resetPassAlert = [[UIAlertView alloc] initWithTitle:@"Reset Password?"
+                                                    message:@"Are you sure you want to reset your password? A confirmation email will be sent to the email you have provided."
+                                                   delegate:self
+                                          cancelButtonTitle:@"No"
+                                          otherButtonTitles:@"Yes", nil];
+    [self.resetPassAlert show];
+    
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(buttonIndex==1 && alertView==self.resetPassAlert){
+        //reset the user's password
+        NSDictionary* dictionary = [NSDictionary dictionaryWithObject:self.emailField.text forKey:@"email"];
+        [[PASyncManager globalSyncManager] resetPassword:dictionary];
+    }
+}
+
 
 -(void)loginWithFacebook:(id<FBGraphUser>)user andBool:(BOOL)sendEmail withEmail:(NSString*)email withCallback:(void(^)(BOOL))callbackBlock{
     
