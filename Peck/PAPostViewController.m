@@ -400,8 +400,8 @@
 {
     if([segue.identifier isEqualToString:@"showInvites"]){
         NSLog(@"set the parent");
-        PAInvitationsTableViewController* childController = [segue destinationViewController];
-        childController.parentPostViewController = self;
+        PAInvitationsTableViewController *childController = [segue destinationViewController];
+        childController.delegate = self;
         childController.invitedCircles = self.invitedCirclesDictionary;
         childController.invitedPeople = self.invitedPeopleDictionary;
     }

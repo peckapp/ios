@@ -224,64 +224,53 @@
             </objects>
             <point key="canvasLocation" x="580" y="2822"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="3s9-nz-Tvr">
+        <!--Invitations Table View Controller-->
+        <scene sceneID="77z-Jo-pYu">
             <objects>
-                <navigationController id="was-N0-fjp" sceneMemberID="viewController">
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="GEh-on-U5V">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="V6y-RR-AL1" kind="relationship" relationship="rootViewController" id="eV5-Pa-2i5"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="SGu-Iw-dah" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="48" y="1807"/>
-        </scene>
-        <!--Invitations-->
-        <scene sceneID="74c-YO-RuB">
-            <objects>
-                <tableViewController id="V6y-RR-AL1" customClass="PAInvitationsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="vUT-Gt-dvU">
-                        <rect key="frame" x="0.0" y="94" width="320" height="504"/>
+                <viewController id="qq4-RG-yrn" customClass="PAInvitationsTableViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xHj-aI-Mz5">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="QPt-YA-IR2">
-                            <rect key="frame" x="0.0" y="64" width="320" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <searchBar contentMode="redraw" id="P4v-VS-n15">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no"/>
-                                </searchBar>
-                            </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        </view>
-                        <sections/>
-                        <connections>
-                            <outlet property="dataSource" destination="V6y-RR-AL1" id="wqi-bf-F3P"/>
-                            <outlet property="delegate" destination="V6y-RR-AL1" id="Tuy-uB-RSj"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Invitations" id="Hrl-NV-8TP">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="tG1-JG-okc"/>
-                        <barButtonItem key="rightBarButtonItem" title="Done" id="VwI-aF-0eo">
-                            <connections>
-                                <action selector="addInvites:" destination="V6y-RR-AL1" id="coV-BR-Adh"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                        <subviews>
+                            <searchBar contentMode="redraw" id="fa9-e7-27k">
+                                <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="fKx-Xp-vzB">
+                                <rect key="frame" x="0.0" y="108" width="320" height="460"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                            </tableView>
+                            <navigationBar contentMode="scaleToFill" translucent="NO" id="eKq-pD-S4W">
+                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="Invitations" id="dri-cF-haj">
+                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="RGV-uw-Djc">
+                                            <connections>
+                                                <action selector="cancel:" destination="qq4-RG-yrn" id="zqc-l8-vqn"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Done" id="bEI-7R-0V6">
+                                            <connections>
+                                                <action selector="addInvites:" destination="qq4-RG-yrn" id="drQ-ec-1bs"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
                     <connections>
-                        <outlet property="searchBar" destination="P4v-VS-n15" id="aDq-Ag-Qu9"/>
+                        <outlet property="searchBar" destination="fa9-e7-27k" id="jWg-tz-LOr"/>
+                        <outlet property="tableView" destination="fKx-Xp-vzB" id="N8n-4L-GKt"/>
                     </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1C1-0c-0yF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nC7-IZ-2xe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="535" y="1807"/>
+            <point key="canvasLocation" x="25" y="1807"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PFl-1E-g1Q">
@@ -1061,7 +1050,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4sN-Pf-ic2">
-                                                    <rect key="frame" x="9" y="0.0" width="302.5" height="88.5"/>
+                                                    <rect key="frame" x="9" y="0.0" width="302.5" height="89"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -1190,7 +1179,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="was-N0-fjp" kind="modal" id="Qrk-UO-0YM"/>
+                                            <segue destination="qq4-RG-yrn" kind="modal" identifier="showInvites" id="reF-7q-a61"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="rP6-XV-IiA">

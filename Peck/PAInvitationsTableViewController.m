@@ -29,15 +29,6 @@
 
 PAAssetManager * assetManager;
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -328,20 +319,26 @@ PAAssetManager * assetManager;
 }
 */
 
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
     [self.searchBar resignFirstResponder];
 }
 
-- (IBAction)addInvites:(id)sender {
-    NSLog(@"invite the people");
-    PAPostViewController* parent = (PAPostViewController*)self.parentPostViewController;
-    parent.invitedPeople = [self.invitedPeople allValues];
-    parent.invitedCircles = [self.invitedCircles allValues];
+- (IBAction)addInvites:(id)sender
+{
+    self.delegate.invitedPeople = [self.invitedPeople allValues];
+    self.delegate.invitedCircles = [self.invitedCircles allValues];
     
-    parent.invitedPeopleDictionary = self.invitedPeople;
-    parent.invitedCirclesDictionary = self.invitedCircles;
+    self.delegate.invitedPeopleDictionary = self.invitedPeople;
+    self.delegate.invitedCirclesDictionary = self.invitedCircles;
     [self.view endEditing:YES];
-    [self.navigationController popViewControllerAnimated:YES];
 
+    [self dismissViewControllerAnimated:YES completion:nil];
+
+}
+
+- (IBAction)cancel:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end
