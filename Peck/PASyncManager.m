@@ -694,6 +694,9 @@
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         peer.imageURL = [dictionary objectForKey:@"image"];
     }
+    if(![[dictionary objectForKey:@"institution_id"] isKindOfClass:[NSNull class]]){
+        peer.home_institution = [dictionary objectForKey:@"institution_id"];
+    }
 }
 #pragma mark - Like actions
 

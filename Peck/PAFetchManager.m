@@ -46,7 +46,7 @@
 -(void)switchInstitution{
     //takes care of instiution switching
    
-    
+    [self removeAllUnnecessaryPeers];
     [self removeAllObjectsOfType:@"Event"];
     [self removeAllObjectsOfType:@"Subscription"];
     [self removeAllObjectsOfType:@"Explore"];
@@ -55,6 +55,7 @@
     [[PASyncManager globalSyncManager] updateDiningInfo];
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
+    [[PASyncManager globalSyncManager] updatePeerInfo];
 }
 
 -(void)removeAllUnnecessaryPeers{
@@ -62,12 +63,32 @@
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
 
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Peer" inManagedObjectContext:_managedObjectContext];
+    [fetchRequest setEntity:entity];
+    [fetchRequest setIncludesPropertyValues:NO];
     
-     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSMutableArray* predicateArray = [[NSMutableArray alloc] init];
     if([defaults objectForKey:@"home_institution"]){
-        
+        NSPredicate* homePredicate = [NSPredicate predicateWithFormat:@"home_institution != %@", [defaults objectForKey:@"home_institution"]];
+        [predicateArray addObject:homePredicate];
     }
+    NSPredicate* currentInstitutionPredicate = [NSPredicate predicateWithFormat:@"home_institution != %@", [defaults objectForKey:@"insitution_id"]];
+    [predicateArray addObject:currentInstitutionPredicate];
     
+    NSPredicate* compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    
+    [fetchRequest setPredicate:compoundPredicate];
+
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    for (NSManagedObject * object in mutableFetchResults) {
+        [_managedObjectContext deleteObject:object];
+    }
+    NSError *saveError = nil;
+    [_managedObjectContext save:&saveError];
 }
 
 -(Peer*)getPeerWithID:(NSNumber*)peerID{
