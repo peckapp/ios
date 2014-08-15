@@ -18,7 +18,7 @@
 
 @property (assign, nonatomic) BOOL expanded;
 
-@property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) UIView *footerView;
 @property (strong, nonatomic) UILabel *placeLabel;
 
 @end
@@ -38,8 +38,8 @@ PAAssetManager *assetManager;
 
     self.view.backgroundColor = [assetManager darkColor];
 
-    self.headerView = [[UIView alloc] init];
-    self.headerView.backgroundColor = [UIColor whiteColor];
+    self.footerView = [[UIView alloc] init];
+    self.footerView.backgroundColor = [UIColor whiteColor];
 
     self.placeLabel = [[UILabel alloc] init];
     self.placeLabel.textColor = [UIColor whiteColor];
@@ -51,8 +51,8 @@ PAAssetManager *assetManager;
 {
     self.view.frame = self.parentViewController.view.bounds;
 
-    self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
-    self.placeLabel.frame = CGRectInset(self.headerView.frame, 15, 15);
+    self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 1000);
+    self.placeLabel.frame = CGRectInset(CGRectMake(0, 0, self.view.frame.size.width, 88), 15, 15);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -75,16 +75,13 @@ PAAssetManager *assetManager;
         }
 
         self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        self.tableView.backgroundColor = [UIColor clearColor];
         self.tableView.dataSource = self;
         self.tableView.delegate = self;
-        self.tableView.tableHeaderView = self.headerView;
-        self.tableView.backgroundColor = [UIColor clearColor];
+        self.tableView.tableFooterView = self.footerView;
         [self.view addSubview:self.tableView];
-        self.tableView.frame = self.view.bounds;
-        self.tableView.contentInset = UIEdgeInsetsMake(256, 0, 0, 0);
-        //[self.tableView reloadData];
-        //[self.tableView beginUpdates];
-        //[self.tableView endUpdates];
+        self.tableView.frame = self.view.frame;
+        self.tableView.contentInset = UIEdgeInsetsMake(256, 0, -self.footerView.frame.size.height, 0);
         
         self.expanded = YES;
         [[PASyncManager globalSyncManager] updateMenuItemsForOpportunity:self.diningOpportunity andPlace:self.detailItem];
