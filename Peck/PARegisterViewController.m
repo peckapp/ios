@@ -8,6 +8,7 @@
 
 #import "PARegisterViewController.h"
 #import "PASyncManager.h"
+#import "PAFetchManager.h"
 
 @interface PARegisterViewController ()
 
@@ -50,7 +51,8 @@
     self.passwordField2.delegate=self;
     self.emailField.delegate=self;
     
-    self.emailField.placeholder = @"email@yourinstitution.edu";
+    Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
+    self.emailField.placeholder = [@"email" stringByAppendingString:currentInstitution.email_regex];
     self.passwordField1.placeholder = @"********";
     self.passwordField2.placeholder = @"********";
     
@@ -131,25 +133,38 @@
     
         if([self.passwordField1.text isEqualToString:self.passwordField2.text]){
         
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            NSNumber * institutionID = [defaults objectForKey:@"institution_id"];
-            NSNumber * userID = [defaults objectForKey:@"user_id"];
+            if([self emailMatchesInstitution:self.emailField.text]){
+            
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                NSNumber * institutionID = [defaults objectForKey:@"institution_id"];
+                NSNumber * userID = [defaults objectForKey:@"user_id"];
         
-            NSDictionary *registeredUser = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            self.firstNameField.text, @"first_name",
-                                            self.lastNameField.text, @"last_name",
-                                            self.passwordField1.text, @"password",
-                                            self.passwordField2.text, @"password_confirmation",
-                                            self.blurbTextView.text, @"blurb",
-                                            self.emailField.text, @"email",
-                                            institutionID, @"institution_id",
-                                            userID, @"id",
-                                            @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
-                                            nil];
+                NSDictionary *registeredUser = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                self.firstNameField.text, @"first_name",
+                                                self.lastNameField.text, @"last_name",
+                                                self.passwordField1.text, @"password",
+                                                self.passwordField2.text, @"password_confirmation",
+                                                self.blurbTextView.text, @"blurb",
+                                                self.emailField.text, @"email",
+                                                institutionID, @"institution_id",
+                                                userID, @"id",
+                                                @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
+                                                nil];
         
-            [[PASyncManager globalSyncManager] registerUserWithInfo:registeredUser];
-            // send current information to the server and check result
-            return YES;
+                [[PASyncManager globalSyncManager] registerUserWithInfo:registeredUser];
+                // send current information to the server and check result
+                return YES;
+            }else{
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Email"
+                                                                message:@"Your email does not match the institution you have selected"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+
+                
+                return NO;
+            }
         }
         else{
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Different Passwords"
@@ -174,6 +189,23 @@
         return NO;
     }
     
+}
+
+-(BOOL)emailMatchesInstitution:(NSString*)userEmail{
+    Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
+    NSString* emailExtension = currentInstitution.email_regex;
+    //NSString* userEmail = [user objectForKey:@"email"];
+    NSInteger preceedingLength = [userEmail length] - [emailExtension length];
+    if(preceedingLength>0){
+        NSString* userEmailExtension = [userEmail substringFromIndex:preceedingLength];
+        if([userEmailExtension isEqualToString:emailExtension]){
+            return YES;
+        }else{
+            return NO;
+        }
+    }else{
+        return NO;
+    }
 }
 
 - (void)dismissKeyboard

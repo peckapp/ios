@@ -43,7 +43,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    self.emailField.placeholder = @"email@yourinstitution.edu";
+    Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
+    self.emailField.placeholder = [@"email" stringByAppendingString:currentInstitution.email_regex];
     self.passwordField.placeholder = @"password";
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
