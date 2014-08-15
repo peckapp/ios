@@ -34,6 +34,7 @@
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) UIView *footerView;
 @property (strong, nonatomic) UIView *imagesView;
 
 @property (strong, nonatomic) UIImageView *cleanImageView;
@@ -110,6 +111,7 @@ BOOL reloaded = NO;
     self.view.backgroundColor = [assetManager darkColor];
 
     self.headerView = [[UIView alloc] init];
+    self.footerView = [[UIView alloc] init];
     self.imagesView = [[UIView alloc] init];
 
     self.cleanImageView = [[UIImageView alloc] init];
@@ -233,6 +235,7 @@ BOOL reloaded = NO;
 
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, CGRectGetMaxY(self.descriptionLabel.frame) + buffer);
 
+    self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 1000);
 
      self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
      self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
@@ -324,9 +327,10 @@ BOOL reloaded = NO;
         self.tableView.dataSource = self;
         self.tableView.delegate = self;
         self.tableView.tableHeaderView = self.headerView;
+        self.tableView.tableFooterView = self.footerView;
         [self.view addSubview:self.tableView];
         self.tableView.frame = self.view.frame;
-        self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, self.keyboardAccessoryView.frame.size.height, 0);
+        self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, self.keyboardAccessoryView.frame.size.height - self.footerView.frame.size.height, 0);
 
         [self.view addSubview:self.keyboardAccessoryView];
 
