@@ -75,7 +75,8 @@
         NSPredicate* homePredicate = [NSPredicate predicateWithFormat:@"home_institution != %@", [defaults objectForKey:@"home_institution"]];
         [predicateArray addObject:homePredicate];
     }
-    NSPredicate* currentInstitutionPredicate = [NSPredicate predicateWithFormat:@"home_institution != %@", [defaults objectForKey:@"insitution_id"]];
+    NSLog(@"don't delete peers from institution: %@", [defaults objectForKey:@"institution_id"]);
+    NSPredicate* currentInstitutionPredicate = [NSPredicate predicateWithFormat:@"home_institution != %@", [defaults objectForKey:@"institution_id"]];
     [predicateArray addObject:currentInstitutionPredicate];
     
     NSPredicate* compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
