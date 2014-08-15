@@ -631,6 +631,8 @@ PAAssetManager * assetManager;
     }
 }
 
+
+// TODO: this should really be in the text field return button
 - (IBAction)createCircleButton:(id)sender {
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];

@@ -61,6 +61,9 @@ PAAssetManager * assetManager;
             self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
         }
 
+        self.profilePicture.layer.cornerRadius = 256;
+        self.profilePicture.clipsToBounds = YES;
+
     }
 }
 
