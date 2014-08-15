@@ -582,8 +582,6 @@ PAAssetManager * assetManager;
 
         if (cell.viewController == nil) {
             cell.viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"event-info-view-controller"];
-
-            cell.viewController.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
             [self addChildViewController:cell.viewController];
             [cell addSubview:cell.viewController.view];
             [cell.viewController didMoveToParentViewController:self];

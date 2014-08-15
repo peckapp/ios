@@ -8,18 +8,36 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PAInvitationsTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
+@protocol PAInvitationsDelegate
+
+@required
+
+@property (strong, nonatomic) NSArray* invitedPeople;
+@property (strong, nonatomic) NSArray* invitedCircles;
+
+@property (strong, nonatomic) NSMutableDictionary* invitedPeopleDictionary;
+@property (strong, nonatomic) NSMutableDictionary* invitedCirclesDictionary;
+
+@end
+
+@interface PAInvitationsTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
+
+@property (strong, nonatomic) id<PAInvitationsDelegate> delegate;
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+
 @property (strong, nonatomic) NSMutableArray* suggestedInvites;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-//@property (strong, nonatomic) NSMutableArray* invitedPeople;
+
 @property (strong, nonatomic) NSMutableDictionary* invitedPeople;
 @property (strong, nonatomic) NSMutableDictionary* invitedCircles;
 @property (weak, nonatomic) NSArray* invitedPeopleArray;
 @property (weak, nonatomic) NSArray* invitedCirclesArray;
 
-@property (strong, nonatomic) UIViewController* parentPostViewController;
 - (IBAction)addInvites:(id)sender;
+- (IBAction)cancel:(id)sender;
+
 @end

@@ -69,6 +69,8 @@ PAAssetManager *assetManager;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    self.view.frame = self.parentViewController.view.bounds;
+
     self.tableView.frame = self.view.frame;
 
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
@@ -239,6 +241,7 @@ PAAssetManager *assetManager;
 
     if (cell.viewController == nil) {
         cell.viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"dining-opportunity-view-controller"];
+        cell.viewController.view.frame = self.view.bounds;
         [self addChildViewController:cell.viewController];
         [cell addSubview:cell.viewController.view];
         [cell.viewController didMoveToParentViewController:self];

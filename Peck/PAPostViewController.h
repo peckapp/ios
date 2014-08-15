@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "PACoreDataProtocol.h"
 #import "Event.h"
+#import "PAInvitationsTableViewController.h"
 #import "Announcement.h"
 
-@interface PAPostViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PACoreDataProtocol, UITextViewDelegate>
+@interface PAPostViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PACoreDataProtocol, UITextViewDelegate, PAInvitationsDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -46,6 +47,7 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *selectorCell;
 
 @property (strong, nonatomic) NSMutableArray *userEvents;
+
 @property (strong, nonatomic) NSArray* invitedPeople;
 @property (strong, nonatomic) NSArray* invitedCircles;
 
