@@ -120,14 +120,14 @@
         if([self emailMatchesInstitution:[user objectForKey:@"email"]]){
             //The email matches the institution that the user has chosen. In this case, we will simply perform a normal login through facebook
             sendEmail = NO;
-            [self loginWithFacebook:user andBool:NO withEmail:[user objectForKey:@"email"]];
+            [self loginWithFacebook:user andBool:NO withEmail:[user objectForKey:@"email"] withCallback:nil];
         }else{
             //The email does not match the institution that the user has chosen. In this case we must call the method in the sync manager that checks to see if a facebook link already exists for the user.
             NSDictionary* dictionary = [NSDictionary dictionaryWithObject:[user objectForKey:@"link"] forKey:@"facebook_link"];
             [[PASyncManager globalSyncManager] checkFacebookUser:dictionary withCallback:^(BOOL registered, NSString* email){
                 if(registered){
                     NSLog(@"continue with normal facebook login");
-                    [self loginWithFacebook:user andBool:NO withEmail:email];
+                    [self loginWithFacebook:user andBool:NO withEmail:email withCallback:nil];
                 }else{
                     NSLog(@"ask the user for his institution email");
                     self.user = user;
@@ -149,7 +149,7 @@
     }
 }
 
--(void)loginWithFacebook:(id<FBGraphUser>)user andBool:(BOOL)sendEmail withEmail:(NSString*)email{
+-(void)loginWithFacebook:(id<FBGraphUser>)user andBool:(BOOL)sendEmail withEmail:(NSString*)email withCallback:(void(^)(BOOL))callbackBlock{
     
     FBAccessTokenData* accessTokenData = [[FBSession activeSession] accessTokenData];
     NSString* token = [accessTokenData accessToken];
@@ -165,12 +165,14 @@
                               [user objectForKey:@"link"], @"facebook_link",
                               nil];
     
+    NSLog(@"facebook user dictionary %@", userInfo);
+    
     //We will store the picture locally that facebook has given us in case the user has not saved a new photo
     NSString *userImageURL = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [user objectID]];
     
     [[NSUserDefaults standardUserDefaults] setObject:userImageURL forKey:@"profile_picture_url"];
     
-    [[PASyncManager globalSyncManager] loginWithFacebook:userInfo forViewController:self];
+    [[PASyncManager globalSyncManager] loginWithFacebook:userInfo forViewController:self withCallback:callbackBlock];
 }
 
 -(BOOL)emailMatchesInstitution:(NSString*)userEmail{

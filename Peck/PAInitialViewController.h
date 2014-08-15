@@ -12,6 +12,6 @@
 @interface PAInitialViewController : UITableViewController <FBLoginViewDelegate, UITableViewDelegate, UITextFieldDelegate>
 -(void)showAlert;
 @property BOOL justOpenedApp;
-@property id<FBGraphUser> user;
--(void)loginWithFacebook:(id<FBGraphUser>)user andBool:(BOOL)sendEmail withEmail:(NSString*)email;
+@property (strong ,nonatomic) id<FBGraphUser> user;
+-(void)loginWithFacebook:(id<FBGraphUser>)user andBool:(BOOL)sendEmail withEmail:(NSString*)email withCallback:(void(^)(BOOL))callbackBlock;
 @end

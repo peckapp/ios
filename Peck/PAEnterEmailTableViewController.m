@@ -10,6 +10,8 @@
 #import "PAInitialViewController.h"
 #import "Institution.h"
 #import "PAFetchManager.h"
+#import "PASyncManager.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @interface PAEnterEmailTableViewController ()
 
@@ -19,6 +21,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.emailField.delegate=self;
+    self.passwordField.delegate=self;
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -48,18 +53,53 @@
         self.emailField.placeholder = [@"example" stringByAppendingString:currentInstitution.email_regex];
     }
     
+    self.passwordCell.hidden = YES;
+    self.resetPasswordCell.hidden = YES;
 }
 
 - (IBAction)finishLogin:(id)sender {
-    if([self emailMatchesInstitution:self.emailField.text]){
-        [self.parent loginWithFacebook:self.parent.user andBool:YES withEmail:self.emailField.text];
-        if (FBSession.activeSession.state == FBSessionStateOpen|| FBSession.activeSession.state == FBSessionStateOpenTokenExtended){
-            
-            // Close the session and remove the access token from the cache
-            // The session state handler (in the app delegate) will be called automatically
-            [FBSession.activeSession closeAndClearTokenInformation];
-        }
+    [self finishTheLogin];
+}
 
+-(void)finishTheLogin{
+    if([self emailMatchesInstitution:self.emailField.text]){
+        if(self.passwordCell.hidden){
+            [self.parent loginWithFacebook:self.parent.user andBool:YES withEmail:self.emailField.text withCallback:^(BOOL emailNotFound){
+                if(emailNotFound){
+                    //The user has entered an email that does not match any emails in the database
+                    if (FBSession.activeSession.state == FBSessionStateOpen|| FBSession.activeSession.state == FBSessionStateOpenTokenExtended){
+                        
+                        // Close the session and remove the access token from the cache
+                        // The session state handler (in the app delegate) will be called automatically
+                        [FBSession.activeSession closeAndClearTokenInformation];
+                    }
+                }else{
+                    //The user has entered an email that already exists. We will ask the user for the password of the existing account.
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Existing Account"
+                                                                    message:@"The email you have entered matches the email of an existing user. Please enter the password of the account to link it with Facebook."
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"OK"
+                                                          otherButtonTitles: nil];
+                    [alert show];
+                    [self addPasswordFields];
+                    
+                }
+            }];
+        }else{
+            //the user is attempting to login with a password to an already existing account
+            FBAccessTokenData* accessTokenData = [[FBSession activeSession] accessTokenData];
+            NSString* token = [accessTokenData accessToken];
+            
+            NSDictionary* loginInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       self.emailField.text,@"email",
+                                       self.passwordField.text, @"password",
+                                       @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
+                                       [self.parent.user objectForKey:@"link"], @"facebook_link",
+                                       token, @"facebook_token",
+                                       
+                                       nil];
+            [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self direction:NO];
+        }
     }else{
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Invalid Email"
                                                         message:@"The email does not match the current institution"
@@ -83,6 +123,9 @@
 }
 
 
+
+
+
 -(BOOL)emailMatchesInstitution:(NSString*)userEmail{
     Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
     NSString* emailExtension = currentInstitution.email_regex;
@@ -100,5 +143,50 @@
     }
 }
 
+
+-(void)addPasswordFields{
+    self.passwordCell.hidden=NO;
+    self.resetPasswordCell.hidden=NO;
+    self.emailField.returnKeyType = UIReturnKeyNext;
+}
+
+- (IBAction)forgotPasswordButton:(id)sender {
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Reset Password?"
+                                                    message:@"Are you sure you want to reset your password?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"No"
+                                          otherButtonTitles:@"Yes", nil];
+    [alert show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(buttonIndex==1){
+        //reset the user's password
+        NSDictionary* dictionary = [NSDictionary dictionaryWithObject:self.emailField.text forKey:@"email"];
+        [[PASyncManager globalSyncManager] resetPassword:dictionary];
+    }
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    if(textField==self.emailField && self.passwordCell.hidden==YES){
+        //if the user is entering the email and has not been prompted for a password
+        [self finishTheLogin];
+        [textField resignFirstResponder];
+        return YES;
+    }else if(textField==self.emailField && self.passwordCell.hidden == NO){
+        [self.passwordField becomeFirstResponder];
+        return NO;
+    }else{
+        //the password field
+        [self finishTheLogin];
+        [textField resignFirstResponder];
+        return YES;
+    }
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [self.emailField resignFirstResponder];
+    [self.passwordField resignFirstResponder];
+}
 
 @end

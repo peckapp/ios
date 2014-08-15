@@ -239,6 +239,10 @@
                                   }];
 }
 
+-(void)resetPassword:(NSDictionary*)dictionary{
+    
+}
+
 -(void)updateUserWithInfo:(NSDictionary *)userInfo withImage:(NSData*)imageData
 {
     NSString* updateURL = [usersAPI stringByAppendingString:@"/"];
@@ -382,7 +386,6 @@
                                       [sender showAlert];
                                       
                                   }];
-
 }
 
 -(void)registerUserWithInfo:(NSDictionary*)userInfo{
@@ -466,7 +469,7 @@
 }
 
 
--(void)loginWithFacebook:(NSDictionary*)dictionary forViewController:(UIViewController*)sender{
+-(void)loginWithFacebook:(NSDictionary*)dictionary forViewController:(UIViewController*)sender withCallback:(void (^)(BOOL))callbackBlock{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 
     NSString* loginURL = [@"api/users/" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
@@ -479,6 +482,7 @@
                                        NSLog(@"JSON : %@", JSON);
                                        NSDictionary* json = (NSDictionary*)JSON;
                                        NSDictionary* userDictionary = [json objectForKey:@"user"];
+                                       callbackBlock(YES);
                                        
                                        if([[userDictionary objectForKey:@"active"] boolValue]){
                                            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -562,6 +566,10 @@
                                    }
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                        NSLog(@"ERROR: %@",error);
+                                       if([[[error userInfo] objectForKey:AFNetworkingOperationFailingURLResponseErrorKey] statusCode]==422){
+                                           callbackBlock(NO);
+                                       }
+                                       
                                    }];
 }
 
@@ -1308,6 +1316,8 @@
         
         NSString* diningOpportunitiesURL = [dining_opportunitiesAPI stringByAppendingString:@"?day_of_week="];
         diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[@([components weekday]-1) stringValue]];
+        diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:@"&institution_id="];
+        diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"] stringValue]];
         
         [[PASessionManager sharedClient] GET:diningOpportunitiesURL
                                   parameters:[self authenticationParameters]
