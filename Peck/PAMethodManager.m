@@ -12,6 +12,7 @@
 #import "PAAssetManager.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "PAFetchManager.h"
+#import "PASyncManager.h"
 
 @interface PAMethodManager()
 
@@ -206,9 +207,50 @@
         }];
         
     }
-    
-    
 }
 
+
+-(void)handleResetLink:(NSMutableDictionary*)urlInfo{
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"authentication_token"]){
+        //if the user has clicked a confirmation link and is currently signed in
+        [[PASyncManager globalSyncManager] logoutUser];
+        
+        [[PAFetchManager sharedFetchManager] logoutUser];
+        
+        if (FBSession.activeSession.state == FBSessionStateOpen|| FBSession.activeSession.state == FBSessionStateOpenTokenExtended) {
+            
+            // Close the session and remove the access token from the cache
+            // The session state handler (in the app delegate) will be called automatically
+            [FBSession.activeSession closeAndClearTokenInformation];
+        }
+        
+        
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        [defaults removeObjectForKey:@"authentication_token"];
+        [defaults removeObjectForKey:@"first_name"];
+        [defaults removeObjectForKey:@"last_name"];
+        [defaults removeObjectForKey:@"blurb"];
+        [defaults removeObjectForKey:@"email"];
+        [defaults removeObjectForKey:@"profile_picture_url"];
+        [defaults removeObjectForKey:@"home_institution"];
+        [defaults removeObjectForKey:@"facebook_profile_picture_url"];
+        
+        
+        [defaults setObject:@NO forKey:@"logged_in"];
+        
+        [[PASyncManager globalSyncManager] ceateAnonymousUser:nil];
+        
+    }
+    //At this point the user is certainly logged out, and we may continue by sending the email and password to api/access
+    
+    NSDictionary* loginInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [urlInfo objectForKey:@"email"],@"email",
+                               [urlInfo objectForKey:@"temp_pass"], @"password",
+                               @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
+                               nil];
+    
+    NSLog(@"login info %@", loginInfo);
+    [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:nil direction:NO];
+}
 
 @end

@@ -42,9 +42,6 @@ PAAssetManager * assetManager;
 - (void)awakeFromNib
 {
     assetManager = [PAAssetManager sharedManager];
-
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    self.userPicture =[UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
     _loadedImages = NO;
 
     self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -320,26 +317,32 @@ PAAssetManager * assetManager;
 - (UIImageView *)imageForPeerID:(NSNumber*)peerID
 {
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
+    NSURL* imageURL;
     if([[defaults objectForKey:@"user_id"] integerValue]==[peerID integerValue]){
-        return [[UIImageView alloc] initWithImage:self.userPicture];
+        //return self.userPicture;
+        imageURL = [NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];
     }
     else {
         Peer * peer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
         if (peer.imageURL) {
-            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
-            UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-            if(image){
-                return [[UIImageView alloc] initWithImage:image];
-            }
-            else {
-                UIImageView * imageView = [[UIImageView alloc] init];
-                [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
-                return imageView;
-            }
+            imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
+        }else{
+            imageURL=nil;
+        }
+    }
+    if(imageURL){
+        UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+        if(image){
+            return [[UIImageView alloc] initWithImage:image];
         }
         else {
-            return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
+            UIImageView * imageView = [[UIImageView alloc] init];
+            [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+            return imageView;
         }
+    }
+    else {
+        return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
     }
 }
 

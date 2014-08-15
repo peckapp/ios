@@ -28,7 +28,6 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-@property (strong, nonatomic) UIImage* userPicture;
 
 - (void)expandTableViewCell:(PACommentCell *)cell;
 - (void)compressTableViewCell:(PACommentCell *)cell;

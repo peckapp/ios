@@ -87,6 +87,9 @@
                                             newPassword, @"new_password",
                                             nil];
             [[PASyncManager globalSyncManager] changePassword:passwordChange forViewController:self];
+            self.passwordField.text=@"";
+            self.oldPasswordField.text=@"";
+            self.confirmPasswordField.text=@"";
         }else{
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Different Passwords"
                                                             message:@"Your new password must match the confirmation password"

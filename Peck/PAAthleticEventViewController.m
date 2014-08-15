@@ -84,9 +84,6 @@ BOOL reloaded = NO;
     [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
     //}
 
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    self.userPicture =[UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
-
     textViewHelper = [[UITextView alloc] init];
     [textViewHelper setHidden:YES];
 
@@ -725,28 +722,33 @@ BOOL reloaded = NO;
 
 - (UIImageView *)imageViewForComment:(Comment*)comment {
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
+    NSURL* imageURL;
     if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
-        return [[UIImageView alloc] initWithImage:self.userPicture];
+        //return [[UIImageView alloc] initWithImage:self.userPicture];
+        imageURL = [NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];
     } else {
         Peer * commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
         if(commentFromPeer.imageURL){
-            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
-            UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-
-            if(profPic){
-                return [[UIImageView alloc] initWithImage:profPic];
-            }
-            else{
-                UIImageView * imageView = [[UIImageView alloc] init];
-                [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
-                return imageView;
-            }
+            imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
+        }else{
+            imageURL = nil;
+        }
+    }if(imageURL){
+        UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+        if(profPic){
+            return [[UIImageView alloc] initWithImage:profPic];
         }
         else{
-            return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
+            UIImageView * imageView = [[UIImageView alloc] init];
+            [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
+            return imageView;
         }
     }
+    else{
+        return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
+    }
 }
+
 
 
 -(NSString*)dateToString:(NSDate *)date{

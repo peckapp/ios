@@ -50,7 +50,9 @@
 
     
     if(currentInstitution.email_regex){
-        self.emailField.placeholder = [@"example" stringByAppendingString:currentInstitution.email_regex];
+        self.emailField.placeholder = [@"email" stringByAppendingString:currentInstitution.email_regex];
+    }else{
+        self.emailField.placeholder = @"email@yourInstitution.edu";
     }
     
     self.passwordCell.hidden = YES;

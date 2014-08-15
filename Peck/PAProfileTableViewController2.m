@@ -12,6 +12,7 @@
 #import "PAFetchManager.h"
 #import "PAInitialViewController.h"
 #import "PAFriendProfileViewController.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface PAProfileTableViewController2 ()
 
@@ -64,13 +65,19 @@ BOOL loggedIn;
     NSString*blurb = [defaults objectForKey:@"blurb"];
     NSLog(@"blurb: %@",blurb);
     self.infoTextView.text = [defaults objectForKey:@"blurb"];
-    NSLog(@"profile picture path %@", [defaults objectForKey:@"profile_picture"]);
-    UIImage* image =[UIImage imageWithContentsOfFile:[defaults objectForKey:@"profile_picture"]];
-    if(image){
-        self.profilePicture.image = image;
+    
+    NSURL* url = [NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];
+    if(url){
+        UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:url]];
+        if(image){
+            self.profilePicture.image = image;
+        }else{
+            [self.profilePicture setImageWithURL:url placeholderImage:[UIImage imageNamed:@"profile-placeholder.png"]];
+        }
     }else{
-        self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
+        self.profilePicture.image =[UIImage imageNamed:@"profile-placeholder.png"];
     }
+    
     if([defaults objectForKey:@"authentication_token"]){
         loggedIn=YES;
         NSLog(@"logged in");
@@ -169,7 +176,6 @@ BOOL loggedIn;
         [defaults removeObjectForKey:@"last_name"];
         [defaults removeObjectForKey:@"blurb"];
         [defaults removeObjectForKey:@"email"];
-        [defaults removeObjectForKey:@"profile_picture"];
         [defaults removeObjectForKey:@"profile_picture_url"];
         [defaults removeObjectForKey:@"home_institution"];
         

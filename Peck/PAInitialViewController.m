@@ -43,7 +43,12 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    self.emailField.placeholder = @"email@yourinstitution.edu";
+    Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
+    if(currentInstitution.email_regex){
+        self.emailField.placeholder = [@"email" stringByAppendingString:currentInstitution.email_regex];
+    }else{
+        self.emailField.placeholder = @"email@yourInstitution.edu";
+    }
     self.passwordField.placeholder = @"password";
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
@@ -190,7 +195,7 @@
     //We will store the picture locally that facebook has given us in case the user has not saved a new photo
     NSString *userImageURL = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [user objectID]];
     
-    [[NSUserDefaults standardUserDefaults] setObject:userImageURL forKey:@"profile_picture_url"];
+    [[NSUserDefaults standardUserDefaults] setObject:userImageURL forKey:@"facebook_profile_picture_url"];
     
     [[PASyncManager globalSyncManager] loginWithFacebook:userInfo forViewController:self withCallback:callbackBlock];
 }
