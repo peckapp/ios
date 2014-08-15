@@ -496,8 +496,9 @@
                                        NSLog(@"JSON : %@", JSON);
                                        NSDictionary* json = (NSDictionary*)JSON;
                                        NSDictionary* userDictionary = [json objectForKey:@"user"];
-                                       callbackBlock(YES);
-                                       
+                                       if(callbackBlock){
+                                           callbackBlock(YES);
+                                       }
                                        if([[userDictionary objectForKey:@"active"] boolValue]){
                                            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                                            NSString* firstName = [userDictionary objectForKey:first_name_define];
@@ -581,7 +582,9 @@
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                        NSLog(@"ERROR: %@",error);
                                        if([[[error userInfo] objectForKey:AFNetworkingOperationFailingURLResponseErrorKey] statusCode]==422){
-                                           callbackBlock(NO);
+                                           if(callbackBlock){
+                                               callbackBlock(NO);
+                                           }
                                        }
                                        
                                    }];

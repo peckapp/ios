@@ -45,6 +45,7 @@
 
 -(void)switchInstitution{
     //takes care of instiution switching
+   
     
     [self removeAllObjectsOfType:@"Event"];
     [self removeAllObjectsOfType:@"Subscription"];
@@ -54,6 +55,19 @@
     [[PASyncManager globalSyncManager] updateDiningInfo];
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
+}
+
+-(void)removeAllUnnecessaryPeers{
+    //removes all peers that are not peers of the current institution or home institution
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+
+    
+     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    if([defaults objectForKey:@"home_institution"]){
+        
+    }
+    
 }
 
 -(Peer*)getPeerWithID:(NSNumber*)peerID{
