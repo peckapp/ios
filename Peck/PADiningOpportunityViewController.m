@@ -83,7 +83,9 @@ PAAssetManager *assetManager;
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
-
+        self.view.frame = self.parentController.viewFrame;
+        NSLog(@"menu items frame %@", NSStringFromCGRect(self.view.frame));
+        
         self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         self.tableView.backgroundColor = [UIColor clearColor];
         self.tableView.dataSource = self;
@@ -92,7 +94,10 @@ PAAssetManager *assetManager;
         [self.view addSubview:self.tableView];
         self.tableView.frame = self.view.frame;
         self.tableView.contentInset = UIEdgeInsetsMake(256, 0, -self.footerView.frame.size.height, 0);
+        [self.tableView setContentOffset:CGPointMake(0, -256)];
 
+        NSLog(@"table view frame %@", NSStringFromCGRect(self.tableView.frame));
+        
         [[PASyncManager globalSyncManager] updateMenuItemsForOpportunity:self.diningOpportunity andPlace:self.detailItem];
 
         void (^animationsBlock)(void) = ^{
