@@ -658,8 +658,8 @@ PAAssetManager * assetManager;
 {
     PANestedTableViewCell *cell = (PANestedTableViewCell *)[self.centerTableView cellForRowAtIndexPath:self.selectedCellIndexPath];
     cell.viewController.view.userInteractionEnabled = NO;
-    [cell.viewController compressAnimated:YES];
     [self tableView:self.centerTableView compressRowAtSelectedIndexPathAnimated:YES];
+    [cell.viewController compressAnimated:YES];
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath

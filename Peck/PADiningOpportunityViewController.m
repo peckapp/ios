@@ -14,10 +14,13 @@
 #import "MenuItem.h"
 #import "PASyncManager.h"
 
+#define imageHeight 256
+
 @interface PADiningOpportunityViewController ()
 
 @property (assign, nonatomic) BOOL expanded;
 
+@property (strong, nonatomic) UIImageView *locationImageView;
 @property (strong, nonatomic) UIView *footerView;
 @property (strong, nonatomic) UILabel *placeLabel;
 
@@ -38,6 +41,10 @@ PAAssetManager *assetManager;
 
     self.view.backgroundColor = [assetManager darkColor];
 
+    self.locationImageView = [[UIImageView alloc] initWithImage:[assetManager eventPlaceholder]];
+    self.locationImageView.contentMode = UIViewContentModeCenter;
+    [self.view addSubview:self.locationImageView];
+
     self.footerView = [[UIView alloc] init];
     self.footerView.backgroundColor = [UIColor whiteColor];
 
@@ -50,6 +57,9 @@ PAAssetManager *assetManager;
 - (void)viewWillAppear:(BOOL)animated
 {
     self.view.frame = self.parentViewController.view.bounds;
+
+    self.locationImageView.frame = CGRectMake(0, 0, self.view.frame.size.width, 256);
+
 
     self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 1000);
     self.placeLabel.frame = CGRectInset(CGRectMake(0, 0, self.view.frame.size.width, 88), 15, 15);
@@ -82,19 +92,54 @@ PAAssetManager *assetManager;
         [self.view addSubview:self.tableView];
         self.tableView.frame = self.view.frame;
         self.tableView.contentInset = UIEdgeInsetsMake(256, 0, -self.footerView.frame.size.height, 0);
-        
-        self.expanded = YES;
+
         [[PASyncManager globalSyncManager] updateMenuItemsForOpportunity:self.diningOpportunity andPlace:self.detailItem];
+
+        void (^animationsBlock)(void) = ^{
+            self.placeLabel.alpha = 0;
+        };
+
+        void (^completionBlock)(BOOL) = ^(BOOL finished){
+                    self.expanded = YES;
+        };
+
+        if (animated) {
+            [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                             animations:animationsBlock
+                             completion:completionBlock];
+        }
+        else {
+            animationsBlock();
+            completionBlock(true);
+        }
+
     }
 }
 
 - (void)compressAnimated:(BOOL)animated
 {
     if (self.expanded) {
-        [self.tableView removeFromSuperview];
-        self.tableView = nil;
 
-        self.expanded = NO;
+        void (^animationsBlock)(void) = ^{
+            self.placeLabel.alpha = 1;
+        };
+
+        void (^completionBlock)(BOOL) = ^(BOOL finished){
+            [self.tableView removeFromSuperview];
+            self.tableView = nil;
+            self.expanded = NO;
+        };
+
+        if (animated) {
+            [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                             animations:animationsBlock
+                             completion:completionBlock];
+        }
+        else {
+            animationsBlock();
+            completionBlock(true);
+        }
+
     }
 }
 

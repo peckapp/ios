@@ -34,6 +34,7 @@
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) UIView *footerView;
 @property (strong, nonatomic) UIView *imagesView;
 
 @property (strong, nonatomic) UIImageView *cleanImageView;
@@ -107,6 +108,7 @@ BOOL reloaded = NO;
     self.view.backgroundColor = [assetManager darkColor];
 
     self.headerView = [[UIView alloc] init];
+    self.footerView = [[UIView alloc] init];
     self.imagesView = [[UIView alloc] init];
 
     self.cleanImageView = [[UIImageView alloc] init];
@@ -230,6 +232,8 @@ BOOL reloaded = NO;
 
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, CGRectGetMaxY(self.descriptionLabel.frame) + buffer);
 
+    self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 1000);
+    self.footerView.backgroundColor = [UIColor whiteColor];
 
      self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
      self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
@@ -239,16 +243,14 @@ BOOL reloaded = NO;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    // NSLog(@"event info frame: %f", self.view.bounds.size.height);
     initialFrame = self.tableView.frame;
+    [super viewDidAppear:animated];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.keyboardAccessory resignFirstResponder];
-    
-    //[self deregisterFromKeyboardNotifications];
+    [self deregisterFromKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning
@@ -316,14 +318,15 @@ BOOL reloaded = NO;
 
         
         self.view.backgroundColor = [UIColor whiteColor];
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         self.tableView.backgroundColor = [UIColor clearColor];
         self.tableView.dataSource = self;
         self.tableView.delegate = self;
         self.tableView.tableHeaderView = self.headerView;
+        self.tableView.tableFooterView = self.footerView;
         [self.view addSubview:self.tableView];
         self.tableView.frame = self.view.frame;
-        self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, self.keyboardAccessoryView.frame.size.height, 0);
+        self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, self.keyboardAccessoryView.frame.size.height - self.footerView.frame.size.height, 0);
 
         [self.view addSubview:self.keyboardAccessoryView];
 
@@ -367,6 +370,7 @@ BOOL reloaded = NO;
 {
     if (self.expanded) {
 
+        [self.keyboardAccessory resignFirstResponder];
         [self deregisterFromKeyboardNotifications];
         self.view.backgroundColor = [assetManager darkColor];
         [self.tableView setContentOffset:CGPointMake(0, -imageHeight) animated:YES];
@@ -402,7 +406,7 @@ BOOL reloaded = NO;
 
 - (UIView *)viewForBackButton
 {
-    return self.tableView;
+    return self.view;
 }
 
 #pragma mark - managing the detail item
@@ -988,6 +992,11 @@ BOOL reloaded = NO;
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasHidden:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];
+
 }
 
 - (void)deregisterFromKeyboardNotifications {
@@ -999,6 +1008,11 @@ BOOL reloaded = NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillHideNotification
                                                   object:nil];
+
+}
+
+- (void)keyboardWasHidden:(NSNotification*)notification
+{
 
 }
 
@@ -1028,7 +1042,7 @@ BOOL reloaded = NO;
     [UIView setAnimationBeginsFromCurrentState:YES];
 
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
-    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.keyboardAccessory.frame = CGRectInset(self.keyboardAccessoryView.frame, 7, 7);
     self.postButton.alpha = 0;
 
     [UIView commitAnimations];

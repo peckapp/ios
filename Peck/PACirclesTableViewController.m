@@ -317,7 +317,7 @@ PAAssetManager *assetManager;
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) {
+    if (indexPath.row == [_fetchedResultsController.fetchedObjects count]) {
         return 44;
     }
     else if((self.selectedIndexPath != nil) && (indexPath.row == self.selectedIndexPath.row)) {
@@ -355,7 +355,9 @@ PAAssetManager *assetManager;
         viewingCell=YES;
         self.keyboardAccessory.hidden = NO;
         self.keyboardAccessoryView.frame = CGRectMake(0, cell.frame.origin.y + cell.frame.size.height - 44, self.view.frame.size.width, 44);
-        [self configureCell:cell atIndexPath:indexPath];*/
+        [self configureCell:cell atIndexPath:indexPath];
+         */
+
     } else {
         if (cell.addingMembers) {
             if (indexPath.row == [_fetchedResultsController.fetchedObjects count]) {

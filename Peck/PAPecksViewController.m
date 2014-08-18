@@ -260,15 +260,7 @@ static NSString *nibName = @"PAPeckCell";
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        // Configure cell by loading a nib.
-        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        
-    }
-    // Return cell size.
-    return cell.frame.size.height;
+    return 110;
 }
 
 - (NSInteger)daysBetweenDate:(NSDate*)fromDateTime andDate:(NSDate*)toDateTime
