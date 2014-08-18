@@ -1051,11 +1051,13 @@ BOOL reloaded = NO;
     [UIView setAnimationBeginsFromCurrentState:YES];
 
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
-    self.keyboardAccessory.frame = CGRectInset(self.keyboardAccessoryView.frame, 7, 7);
+    self.keyboardAccessory.frame = CGRectInset(self.keyboardAccessoryView.bounds, 7, 7);
     self.postButton.alpha = 0;
 
     NSLog(@"height of the view %f", self.view.frame.size.height);
     NSLog(@"keyboard y %f", self.keyboardAccessoryView.frame.origin.y);
+    
+    NSLog(@"actual keyboard frame %@", NSStringFromCGRect(self.keyboardAccessory.frame));
     
     [UIView commitAnimations];
 }
