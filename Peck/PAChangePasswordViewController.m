@@ -34,9 +34,14 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+   
     self.passwordField.delegate=self;
     self.oldPasswordField.delegate=self;
     self.confirmPasswordField.delegate=self;
+    if(self.tempPass){
+        self.oldPasswordField.text = self.tempPass;
+        self.tempPass=nil;
+    }
 }
 
 - (void)didReceiveMemoryWarning

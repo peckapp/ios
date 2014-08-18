@@ -375,6 +375,8 @@
                                       else if([direction isEqualToString:@"change_password"]) {
                                           PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
                                           [appdelegate.dropDownBar selectItemAtIndex:4];
+                                          [appdelegate.profileViewController.navigationController popToRootViewControllerAnimated:NO];
+                                          appdelegate.profileViewController.tempPass = [userInfo objectForKey:@"password"];
                                           [appdelegate.profileViewController performSegueWithIdentifier:@"changePassword" sender:appdelegate.profileViewController];
                                       }
                                       else{

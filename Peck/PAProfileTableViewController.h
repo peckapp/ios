@@ -25,5 +25,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *twitterTextField;
 @property (weak, nonatomic) IBOutlet UITextField *facebookTextField;
 @property (weak, nonatomic) IBOutlet UITextView *infoTextView;
+
+@property (strong, nonatomic) NSString* tempPass;
 - (IBAction)saveChangesButton:(id)sender;
 @end

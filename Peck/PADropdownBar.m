@@ -82,6 +82,7 @@
 
 - (void)selectItemAtIndex:(NSInteger)index
 {
+    if(self.currentIndex!=index){
     if (self.currentIndex == -1) {
         [self.delegate barDidSelectItemAtIndex:index];
     }
@@ -98,6 +99,7 @@
 
     self.currentIndex = index;
     [self.buttons[index] setSelected:YES];
+    }
 }
 
 - (void)deselectAllItems
