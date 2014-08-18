@@ -315,8 +315,8 @@ BOOL reloaded = NO;
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
-
         
+        self.view.frame = self.parentViewController.view.bounds;
         self.view.backgroundColor = [UIColor whiteColor];
         self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         self.tableView.backgroundColor = [UIColor clearColor];
@@ -331,6 +331,7 @@ BOOL reloaded = NO;
         [self.view addSubview:self.keyboardAccessoryView];
 
         self.cleanImageView.hidden = NO;
+        
 
         void (^animationsBlock)(void) = ^{
             self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
@@ -352,6 +353,8 @@ BOOL reloaded = NO;
             });
 
             [self registerForKeyboardNotifications];
+            NSLog(@"bounds:  %@", NSStringFromCGRect(self.parentViewController.view.bounds));
+            self.view.frame = self.parentViewController.view.bounds;
         };
 
         if (animated) {
@@ -1002,6 +1005,10 @@ BOOL reloaded = NO;
 - (void)deregisterFromKeyboardNotifications {
 
     [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillShowNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardDidHideNotification
                                                   object:nil];
 
@@ -1014,10 +1021,12 @@ BOOL reloaded = NO;
 - (void)keyboardWasHidden:(NSNotification*)notification
 {
 
+    NSLog(@"after the keyboard was hidden, the y is %f", self.keyboardAccessoryView.frame.origin.y);
 }
 
 - (void)keyboardWillShow:(NSNotification*)notification
 {
+    NSLog(@"keyboard will show");
     NSDictionary* info = [notification userInfo];
     CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
 
@@ -1045,6 +1054,9 @@ BOOL reloaded = NO;
     self.keyboardAccessory.frame = CGRectInset(self.keyboardAccessoryView.frame, 7, 7);
     self.postButton.alpha = 0;
 
+    NSLog(@"height of the view %f", self.view.frame.size.height);
+    NSLog(@"keyboard y %f", self.keyboardAccessoryView.frame.origin.y);
+    
     [UIView commitAnimations];
 }
 
