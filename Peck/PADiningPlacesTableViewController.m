@@ -22,6 +22,8 @@
 
 @property (strong, nonatomic) NSMutableArray *diningPlaces;
 
+@property (strong, nonatomic) UIView *parentBackButtonView;
+
 @property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UILabel *periodLabel;
 
@@ -65,6 +67,9 @@ PAAssetManager *assetManager;
 
     //self.diningPlaces = [[NSMutableArray alloc] init];
     self.diningPlaces = nil;
+
+    self.parentBackButtonView = [[UIView alloc] init];
+    [self.view addSubview:self.parentBackButtonView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -105,7 +110,8 @@ PAAssetManager *assetManager;
 
 - (UIView *)viewForBackButton
 {
-    return self.tableView;
+    self.parentBackButtonView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64);
+    return self.parentBackButtonView;
 }
 
 #pragma mark - managing the detail item
@@ -263,6 +269,8 @@ PAAssetManager *assetManager;
     cell.viewController.view.userInteractionEnabled = NO;
     [cell.viewController compressAnimated:YES];
     [self tableView:self.tableView compressRowAtSelectedIndexPathAnimated:YES];
+
+    self.parentBackButtonView.hidden = NO;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -283,6 +291,8 @@ PAAssetManager *assetManager;
     cell.viewController.view.userInteractionEnabled = YES;
     [cell.viewController expandAnimated:YES];
     [[cell.viewController viewForBackButton] addSubview:self.backButton];
+
+    self.parentBackButtonView.hidden = YES;
 
     [self tableView:tableView expandRowAtIndexPath:indexPath animated:YES];
 }

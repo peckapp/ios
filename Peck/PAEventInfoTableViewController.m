@@ -406,7 +406,7 @@ BOOL reloaded = NO;
 
 - (UIView *)viewForBackButton
 {
-    return self.tableView;
+    return self.view;
 }
 
 #pragma mark - managing the detail item
@@ -992,6 +992,11 @@ BOOL reloaded = NO;
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasHidden:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];
+
 }
 
 - (void)deregisterFromKeyboardNotifications {
@@ -1003,6 +1008,11 @@ BOOL reloaded = NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillHideNotification
                                                   object:nil];
+
+}
+
+- (void)keyboardWasHidden:(NSNotification*)notification
+{
 
 }
 
