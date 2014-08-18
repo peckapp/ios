@@ -93,7 +93,7 @@
 {
     [self dismissKeyboard];
     // dismiss the current login process to return to the main app
-    if(self.justOpenedApp){
+    if([self.direction isEqualToString:@"homepage"]){
         [[PASyncManager globalSyncManager] createAnonymousUserHelper];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -107,7 +107,7 @@
                                    self.passwordField.text, @"password",
                                    @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
                                    nil];
-        [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self direction:self.justOpenedApp];
+        [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self direction:self.direction];
     }
 }
 

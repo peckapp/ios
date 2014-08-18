@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
-#import "PAProfileTableViewController2.h"
+#import "PAProfileTableViewController.h"
 #import "PAAppDelegate.h"
 #import "PASyncManager.h"
 #import "PAFetchManager.h"
@@ -14,7 +14,7 @@
 #import "PAFriendProfileViewController.h"
 #import "UIImageView+AFNetworking.h"
 
-@interface PAProfileTableViewController2 ()
+@interface PAProfileTableViewController ()
 
 - (IBAction)login:(id)sender;
 
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation PAProfileTableViewController2
+@implementation PAProfileTableViewController
 
 @synthesize profilePicture;
 @synthesize emailTextField, twitterTextField, facebookTextField, infoTextView, firstNameTextField, lastNameTextField;
@@ -54,6 +54,10 @@ BOOL loggedIn;
     profilePicture.layer.cornerRadius = 64;
     profilePicture.clipsToBounds = YES;
     profilePicture.userInteractionEnabled = YES;
+    
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    //[appdelegate setProfileViewController:self];
+    [appdelegate setProfileProperty:self];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -142,7 +146,7 @@ BOOL loggedIn;
         UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
         UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
         PAInitialViewController* root = loginRoot.viewControllers[0];
-        root.justOpenedApp=NO;
+        root.direction = @"none";
         [self presentViewController:loginRoot animated:YES completion:nil];
     }else{
         //Logging out the user

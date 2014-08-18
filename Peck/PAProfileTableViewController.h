@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PACoreDataProtocol.h"
 
-@interface PAProfileTableViewController2 : UITableViewController <UIImagePickerControllerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITextFieldDelegate>{
+@interface PAProfileTableViewController : UITableViewController <UIImagePickerControllerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITextFieldDelegate>{
 }
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;

@@ -183,7 +183,7 @@
             UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
             UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
             PAInitialViewController* root = loginRoot.viewControllers[0];
-            root.justOpenedApp=YES;
+            root.direction=@"homepage";
             [self.initialViewController presentViewController:loginRoot animated:YES completion:nil];
             //segue to the login page
         }
@@ -311,7 +311,7 @@
     
 }
 
-- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(BOOL)goToHomepage
+- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(NSString*)direction
 {
     // adds the unique user device token to the userInfo NSDictionary
     NSDictionary* userInfoWithUDID = [self addUDIDToDictionary:userInfo];
@@ -367,11 +367,17 @@
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       
                                       
-                                      if(goToHomepage){
+                                      if([direction isEqualToString:@"homepage"]){
                                           PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
                                         UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
                                         [appDelegate.window setRootViewController:newRoot];
-                                      }else{
+                                      }
+                                      else if([direction isEqualToString:@"change_password"]) {
+                                          PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+                                          [appdelegate.dropDownBar selectItemAtIndex:4];
+                                          [appdelegate.profileViewController performSegueWithIdentifier:@"changePassword" sender:appdelegate.profileViewController];
+                                      }
+                                      else{
                                           if(controller){
                                               [controller dismissViewControllerAnimated:YES completion:nil];
                                           }
@@ -877,8 +883,6 @@
                      [self setAttributesInExplore:explore withDictionary:eventAttributes andCategory:@"event"];
                      //NSLog(@"EXPLORE: %@",explore);
                  }
-                 
-                 
              }
              
              NSDictionary* announcementsFromResponse = [exploreDictionary objectForKey:@"explore_announcements"];
@@ -1787,6 +1791,9 @@
     event.attendees = [dictionary objectForKey:@"attendees"];
     if(![[dictionary objectForKey:@"user_id"] isKindOfClass:[NSNull class]]){
         event.created_by = [dictionary objectForKey:@"user_id"];
+    }
+    if(![[dictionary objectForKey:@"location"] isKindOfClass:[NSNull class]]){
+        event.location = [dictionary objectForKey:@"location"];
     }
 }
 

@@ -26,6 +26,11 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+
+-(void)setProfileProperty:(PAProfileTableViewController*)profileController{
+    self.profileViewController = profileController;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // uncomment during application launch to clear out all NSUserDefaults
