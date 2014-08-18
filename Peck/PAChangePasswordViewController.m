@@ -41,7 +41,13 @@
     if(self.tempPass){
         self.oldPasswordField.text = self.tempPass;
         self.tempPass=nil;
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
     }
+}
+
+-(void)cancel{
+    NSLog(@"cancel");
+    [self dismissViewControllerAnimated:YES completion:^(void){}];
 }
 
 - (void)didReceiveMemoryWarning
@@ -95,6 +101,7 @@
             self.passwordField.text=@"";
             self.oldPasswordField.text=@"";
             self.confirmPasswordField.text=@"";
+            
         }else{
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Different Passwords"
                                                             message:@"Your new password must match the confirmation password"
@@ -132,6 +139,9 @@
 }
 
 -(void)showSuccessAlert{
+    if([self.navigationItem.leftBarButtonItem.title isEqualToString:@"Cancel"]){
+        [self dismissViewControllerAnimated:YES completion:^(void){}];
+    }
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Change Successful!"
                                                     message:@"Congrats on changing your password"
                                                    delegate:self
