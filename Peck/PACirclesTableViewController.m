@@ -10,12 +10,14 @@
 #import "PACircleCell.h"
 #import "PAAppDelegate.h"
 #import "Circle.h"
+#import "PAFetchManager.h"
 #import "PASyncManager.h"
 #import "PAFriendProfileViewController.h"
 #import "HTAutocompleteManager.h"
 #import "PACommentCell.h"
 #import "PAFriendProfileViewController.h"
 #import "PAAssetManager.h"
+#import "PAInvitationsTableViewController.h"
 
 #define cellHeight 100.0
 #define reloadTime 10
@@ -215,7 +217,6 @@ PAAssetManager *assetManager;
 }
 
 /*- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    //TODO: this is where we will send a new member to a circle that is already created
     NSLog(@"add a new member");
     HTAutocompleteTextField *tempTextField = (HTAutocompleteTextField *)textField;
     [self addMemberWithTextField:tempTextField];
@@ -580,8 +581,7 @@ PAAssetManager *assetManager;
 
 - (void)promptToAddMemberToCircleCell:(PACircleCell *)cell
 {
-    
-    NSLog(@"!!!");
+    /*
     [cell.commentsTableView setHidden:YES];
     [cell.suggestedMembersTableView setHidden:NO];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:cell.tag inSection:0];
@@ -601,14 +601,50 @@ PAAssetManager *assetManager;
     [self.keyboardAccessoryView removeFromSuperview];
     
     [self configureCell:cell atIndexPath:indexPath];
+     */
+
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:cell.tag inSection:0];
+    self.selectedIndexPath = indexPath;
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    self.tableView.scrollEnabled = NO;
+    viewingCell=YES;
+
+    selectedCell=cell.tag;
+    selectedCircle=cell.circle;
+
+    [self configureCell:cell atIndexPath:indexPath];
+
+    PAInvitationsTableViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"invitations"];
+    [self presentViewController:vc animated:YES completion:^{}];
+    vc.delegate = self;
+
+    Peer *peer;
+    NSMutableDictionary *mutableDictionary = [[NSMutableDictionary alloc] init];
+    for (peer in cell.members) {
+        [mutableDictionary setObject:peer.id forKey:[peer.id stringValue]];
+    }
+
+    vc.invitedPeople = mutableDictionary;
+    vc.invitedCircles = nil;
+
+
+}
+
+- (void)didInvitePeople:(NSMutableDictionary *)people andCircles:(NSMutableDictionary *)circles
+{
+    NSNumber *peerId;
+    for (peerId in people) {
+        [self addMember:[[PAFetchManager sharedFetchManager] getPeerWithID:peerId]];
+    }
 }
 
 - (void)dismissKeyboard:(id)sender
 {
-    NSLog(@"???");
     [self.inviteTextField resignFirstResponder];
     [self.textCapture resignFirstResponder];
-    }
+}
 
 -(void)dismissCircleTitleKeyboard{
     PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
@@ -678,6 +714,7 @@ PAAssetManager *assetManager;
     [self.tableView beginUpdates];
     NSLog(@"controller will change object");
 }
+
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {

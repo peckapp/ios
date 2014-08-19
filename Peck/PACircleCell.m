@@ -399,8 +399,8 @@ PAAssetManager * assetManager;
         }
         return defaultCellHeight+cellY;
 
-    }
-    else {
+
+    }    else {
         return 44;
     }
 }
