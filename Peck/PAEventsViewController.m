@@ -245,15 +245,13 @@ PAAssetManager * assetManager;
 }
 
 - (void)showEmptyContentIfNecessaryForTableView:(UITableView*) tableView {
+    [self.noContentView removeFromSuperview];
+    
     if ([[[self centerFetchedResultsController] fetchedObjects] count] == 0) {
         if (self.noContentView == nil) {
             self.noContentView = [PANoContentView noContentViewWithFrame:self.view.bounds viewController:self];
             [self.noContentView.subscriptionsButton addTarget:self action:@selector(transitionToSubscriptions) forControlEvents:UIControlEventTouchUpInside];
             [self.noContentView.createButton addTarget:self action:@selector(transitionToCreate) forControlEvents:UIControlEventTouchUpInside];
-        }
-        
-        if (self.noContentView.superview != nil) {
-            [self.noContentView removeFromSuperview];
         }
         
         self.noContentView.alpha = 0;
@@ -482,6 +480,8 @@ PAAssetManager * assetManager;
              withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
+    
+    [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
 }
 
 - (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
