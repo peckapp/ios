@@ -1417,6 +1417,8 @@
     diningEvent.end_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_time"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     diningEvent.type = @"dining";
     diningEvent.id = [dictionary objectForKey:@"id"];
+    diningEvent.opportunity_id = [dictionary objectForKey:@"opportunity_id"];
+    //The dining opportunity id is the original id of the dining opportunity. It is used to get the correct places, periods, and menu items from the sever. The id field is used for uniqueness when multiple dining opportunities are used for different days.
 }
 
 
@@ -1470,7 +1472,7 @@
 
 -(void)updateDiningPeriods:(Event*)diningOpportunity forViewController:(PADiningPlacesTableViewController*)viewController{
     NSString* diningPeriodsURL = [dining_periodsAPI stringByAppendingString:@"?dining_opportunity_id="];
-    diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningOpportunity.id stringValue]];
+    diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningOpportunity.opportunity_id stringValue]];
     
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:[NSDate date]];
     diningPeriodsURL = [diningPeriodsURL stringByAppendingString:@"&day_of_week="];
@@ -1524,7 +1526,7 @@
     diningPeriod.day_of_week = [dictionary objectForKey:@"day_of_week"];
     diningPeriod.id = [dictionary objectForKey:@"id"];
     diningPeriod.place_id=[dictionary objectForKey:@"dining_place_id"];
-    diningPeriod.opportunity_id = diningEvent.id;
+    diningPeriod.opportunity_id = diningEvent.opportunity_id;
     
 }
 #pragma mark - Menu Item actions
@@ -1575,7 +1577,7 @@
 -(void)setAttributesInMenuItem:(MenuItem*)menuItem withDictionary:(NSDictionary*)dictionary andPlace:(DiningPlace*)place andOpportunity:(Event*)opportunity{
     menuItem.name = [dictionary objectForKey:@"name"];
     menuItem.id = [dictionary objectForKey:@"id"];
-    menuItem.dining_opportunity_id =opportunity.id;
+    menuItem.dining_opportunity_id =opportunity.opportunity_id;
     if(![[dictionary objectForKey:@"dining_place_id"] isKindOfClass:[NSNull class]]){
         menuItem.dining_place_id =[dictionary objectForKey:@"dining_place_id"];
     }
