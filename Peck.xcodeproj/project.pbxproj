@@ -104,6 +104,8 @@
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
 		A4925C0D194A1B32001AAC4A /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */; };
+		A497A2EB19A3BF5200455F69 /* PASendFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A497A2EA19A3BF5200455F69 /* PASendFeedbackViewController.m */; };
+		A497A2EE19A3CD6600455F69 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A497A2ED19A3CD6600455F69 /* Event.m */; };
 		A4988A50199B9FFC005C43BC /* Peck.m in Sources */ = {isa = PBXBuildFile; fileRef = A4988A4F199B9FFC005C43BC /* Peck.m */; };
 		A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A99BAD19815AA4002DFD49 /* Subscription.m */; };
 		A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */; };
@@ -115,7 +117,6 @@
 		A4E21F6519659892002A9800 /* PACommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E21F6319659892002A9800 /* PACommentCell.m */; };
 		A4E21F6619659892002A9800 /* PACommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4E21F6419659892002A9800 /* PACommentCell.xib */; };
 		A4E47D571991261000DDF941 /* PAUserEventsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E47D561991261000DDF941 /* PAUserEventsTableViewController.m */; };
-		A4E47D5A1991295000DDF941 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E47D591991295000DDF941 /* Event.m */; };
 		A4F04BEE1994097500290CF2 /* PAMethodManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F04BED1994097500290CF2 /* PAMethodManager.m */; };
 		A4F04BF61995155900290CF2 /* PAPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F04BF51995155900290CF2 /* PAPromptView.m */; };
 		A4F04BF81995158F00290CF2 /* PAPromptView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4F04BF71995158F00290CF2 /* PAPromptView.xib */; };
@@ -344,6 +345,10 @@
 		A4925C08194A17A1001AAC4A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A4925C0A194A17AB001AAC4A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		A497A2E919A3BF5200455F69 /* PASendFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASendFeedbackViewController.h; sourceTree = "<group>"; };
+		A497A2EA19A3BF5200455F69 /* PASendFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASendFeedbackViewController.m; sourceTree = "<group>"; };
+		A497A2EC19A3CD6600455F69 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		A497A2ED19A3CD6600455F69 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A4988A4E199B9FFC005C43BC /* Peck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peck.h; sourceTree = "<group>"; };
 		A4988A4F199B9FFC005C43BC /* Peck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peck.m; sourceTree = "<group>"; };
 		A4A99BAC19815AA4002DFD49 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
@@ -364,8 +369,6 @@
 		A4E21F6419659892002A9800 /* PACommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PACommentCell.xib; sourceTree = "<group>"; };
 		A4E47D551991261000DDF941 /* PAUserEventsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAUserEventsTableViewController.h; sourceTree = "<group>"; };
 		A4E47D561991261000DDF941 /* PAUserEventsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAUserEventsTableViewController.m; sourceTree = "<group>"; };
-		A4E47D581991295000DDF941 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
-		A4E47D591991295000DDF941 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A4F04BEC1994097500290CF2 /* PAMethodManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAMethodManager.h; sourceTree = "<group>"; };
 		A4F04BED1994097500290CF2 /* PAMethodManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAMethodManager.m; sourceTree = "<group>"; };
 		A4F04BF41995155900290CF2 /* PAPromptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPromptView.h; sourceTree = "<group>"; };
@@ -813,8 +816,8 @@
 		DDDAEDE419479665004CE102 /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				A4E47D581991295000DDF941 /* Event.h */,
-				A4E47D591991295000DDF941 /* Event.m */,
+				A497A2EC19A3CD6600455F69 /* Event.h */,
+				A497A2ED19A3CD6600455F69 /* Event.m */,
 				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
 				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
 				A4773C7E19589E8200AB9831 /* PAEvents.h */,
@@ -877,6 +880,8 @@
 				A4E47D561991261000DDF941 /* PAUserEventsTableViewController.m */,
 				A482259419914C0D007D9A9F /* PAUserAnnouncementsTableViewController.h */,
 				A482259519914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m */,
+				A497A2E919A3BF5200455F69 /* PASendFeedbackViewController.h */,
+				A497A2EA19A3BF5200455F69 /* PASendFeedbackViewController.m */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -1160,6 +1165,7 @@
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
+				A497A2EB19A3BF5200455F69 /* PASendFeedbackViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
 				A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */,
 				A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */,
@@ -1168,7 +1174,6 @@
 				A4C8C347197D8F3F008F9F85 /* PAFetchManager.m in Sources */,
 				DD6902D2198820270095892F /* PAAssetManager.m in Sources */,
 				DD8C3394199D095B00B9966A /* PADiningOpportunityViewController.m in Sources */,
-				A4E47D5A1991295000DDF941 /* Event.m in Sources */,
 				A4F04BF61995155900290CF2 /* PAPromptView.m in Sources */,
 				A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */,
 				A4773C8C1959DD0E00AB9831 /* PAImageManager.m in Sources */,
@@ -1180,6 +1185,7 @@
 				A412E1D41986E63800384A11 /* Comment.m in Sources */,
 				A4988A50199B9FFC005C43BC /* Peck.m in Sources */,
 				867B52D619509F5000BEB37B /* PASessionManager.m in Sources */,
+				A497A2EE19A3CD6600455F69 /* Event.m in Sources */,
 				A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */,
 				DD3701401990081F006B63E8 /* PANestedTableViewController.m in Sources */,
 				A4C8B68C199E5D7D00EC8484 /* Peer.m in Sources */,

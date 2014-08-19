@@ -306,6 +306,10 @@ BOOL loggedIn;
         UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UINavigationController *navController = [loginStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
         [self presentViewController:navController animated:YES completion:nil];
+    }else if(indexPath.section==0 && indexPath.row==6){
+        UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UINavigationController *feedbackController = [loginStoryboard instantiateViewControllerWithIdentifier:@"sendFeedback"];
+        [self presentViewController:feedbackController animated:YES completion:nil];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

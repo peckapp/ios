@@ -151,7 +151,7 @@ PAAssetManager *assetManager;
     [fetchRequest setEntity:entity];
     
     NSString *attributeName = @"opportunity_id";
-    NSNumber *attributeValue = [self.detailItem valueForKey:@"id"];
+    NSNumber *attributeValue = [self.detailItem valueForKey:@"opportunity_id"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@",
                               attributeName, attributeValue];
     NSCalendar *calendar = [NSCalendar currentCalendar];

@@ -24,9 +24,7 @@
 @interface PACirclesTableViewController ()
 
 @property (strong, nonatomic) UIBarButtonItem * cancelCellButton;
-@property (strong, nonatomic) UITextField * inviteTextField;
-@property (strong, nonatomic) UITextField * textCapture;
-@property (strong, nonatomic) UITapGestureRecognizer * tapRecognizer;
+@property (strong, nonatomic) UISwipeGestureRecognizer * swipeRecognizer;
 @property (strong, nonatomic) NSMutableArray* addedPeers;
 
 @property (strong, nonatomic) UIView * keyboardAccessoryView;
@@ -92,31 +90,9 @@ PAAssetManager *assetManager;
     UIView * accessory = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 44.0)];
     accessory.backgroundColor = [UIColor whiteColor];
 
-    self.inviteTextField = [[UITextField alloc] initWithFrame:CGRectMake(8.0, 8.0, self.view.frame.size.width - 16.0 , 28.0)];
-    //self.inviteTextField.autocompleteDataSource = [HTAutocompleteManager sharedManager];
-    //self.inviteTextField.autocompleteType = HTAutocompleteTypeName;
-    self.inviteTextField.backgroundColor = [UIColor whiteColor];
-    self.inviteTextField.placeholder = @"Invite someone to the group";
-    [self.inviteTextField setBorderStyle:UITextBorderStyleRoundedRect];
-    [self.inviteTextField setReturnKeyType:UIReturnKeySend];
-    self.inviteTextField.delegate=self;
-    [self.inviteTextField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    
-    [self.inviteTextField addTarget:self
-                  action:@selector(textFieldDidChange:)
-        forControlEvents:UIControlEventEditingChanged];
-    
-    [accessory addSubview:self.inviteTextField];
-
-    // Stupid workaround for letting buttons capture keyboard input
-    self.textCapture = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-    self.textCapture.hidden = YES;
-    self.textCapture.inputAccessoryView = accessory;
-    [self.view addSubview:self.textCapture];
-
-    self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissCommentKeyboard)];
-    self.tapRecognizer.cancelsTouchesInView = NO;
-    [self.view addGestureRecognizer:self.tapRecognizer];
+    self.swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
+    self.swipeRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
+    self.swipeRecognizer.cancelsTouchesInView = NO;
 
 
     self.keyboardAccessoryView = [[UIView alloc] init];
@@ -203,7 +179,8 @@ PAAssetManager *assetManager;
 - (void)didSelectPostButton:(id)sender
 {
     [self postComment:self.keyboardAccessory.text];
-    [self.keyboardAccessory resignFirstResponder];
+    [self dismissKeyboard:self];
+    self.keyboardAccessory.text = @"";
 }
 
 #pragma mark - text field delegate
@@ -248,7 +225,6 @@ PAAssetManager *assetManager;
 */
 
 -(void)addMember:(Peer*)newMember{
-    self.inviteTextField.text=@"";
     PACircleCell* selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
     //selectedCell.suggestedMembers=nil;
     //[selectedCell.suggestedMembersTableView reloadData];
@@ -424,14 +400,13 @@ PAAssetManager *assetManager;
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
     self.postButton.frame = CGRectMake(self.keyboardAccessoryView.frame.size.width - self.keyboardAccessoryView.frame.size.height, 0, self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.height);
+    [cell addGestureRecognizer:self.swipeRecognizer];
     [cell addSubview:self.keyboardAccessoryView];
 }
 
 -(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
-    [self dismissCircleTitleKeyboard];
-    [self dismissCommentKeyboard];
+    [self dismissKeyboard:self];
     [self.addedPeers removeAllObjects];
-    self.inviteTextField.text=@"";
     viewingCell=NO;
     self.keyboardAccessory.hidden = YES;
     [self.keyboardAccessory resignFirstResponder];
@@ -448,6 +423,7 @@ PAAssetManager *assetManager;
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
     [self.keyboardAccessoryView removeFromSuperview];
+    [cell removeGestureRecognizer:self.swipeRecognizer];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -473,8 +449,7 @@ PAAssetManager *assetManager;
 
 - (void)cancelSelection
 {
-    [self dismissCommentKeyboard];
-    self.inviteTextField.text=@"";
+    [self dismissKeyboard:self];
     viewingCell=NO;
     self.tableView.scrollEnabled = YES;
     
@@ -636,8 +611,8 @@ PAAssetManager *assetManager;
 
 - (void)dismissKeyboard:(id)sender
 {
-    [self.inviteTextField resignFirstResponder];
-    [self.textCapture resignFirstResponder];
+    [self dismissCommentKeyboard];
+    [self dismissCircleTitleKeyboard];
 }
 
 -(void)dismissCircleTitleKeyboard{
@@ -873,7 +848,7 @@ PAAssetManager *assetManager;
 
         NSLog(@"post the comment");
         //NSString *commentText = cell.commentTextView.text;
-        //cell.commentTextView.text=@"";
+        self.keyboardAccessory.text = @"";
         
         
         

@@ -21,6 +21,8 @@
 
 // methods for anonymous user creation and subsqquent registration
 
+-(void)sendUserFeedback:(NSString*)feedback;
+
 -(void)logoutUser;
 
 -(void)createAnonymousUserHelper;
