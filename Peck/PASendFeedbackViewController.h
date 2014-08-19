@@ -12,5 +12,6 @@
 - (IBAction)cancelButton:(id)sender;
 - (IBAction)sendButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UITextView *feedbackTextView;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *categoryControl;
 
 @end

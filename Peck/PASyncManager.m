@@ -65,15 +65,18 @@
 
 #pragma mark - User actions
 
--(void)sendUserFeedback:(NSString*)feedback{
+-(void)sendUserFeedback:(NSString*)feedback withCategory:(NSString*)category{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     
     NSDictionary* userFeedback = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  feedback, @"feedback",
+                                  feedback, @"content",
                                   [defaults objectForKey:@"user_id"],@"user_id",
+                                  [defaults objectForKey:@"institution_id"], @"institution_id",
+                                  category, @"category",
+                                  [[self authenticationParameters] objectForKey:@"authentication"],@"authentication",
                                   nil];
-    [[PASessionManager sharedClient] POST:@"api/user_feedback"
-                                 parameters:[self applyWrapper:@"user" toDictionary:userFeedback]
+    [[PASessionManager sharedClient] POST:@"api/feedback/submit"
+                                 parameters:userFeedback
                                     success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Feedback Posted!"
                                                                                         message:@"Thank you, we appreciate your help" delegate:self cancelButtonTitle:@"You're Welcome" otherButtonTitles: nil];
@@ -90,8 +93,13 @@
 }
 
 -(void)logoutUser{
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            shortTermUDID, @"udid",
+                             @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464",@"device_token",
+                            [[self authenticationParameters] objectForKey:@"authentication"],@"authentication",
+                            nil];
     [[PASessionManager sharedClient] DELETE:@"api/access/logout"
-                               parameters:[self authenticationParameters]
+                               parameters:params
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                       
                                   }

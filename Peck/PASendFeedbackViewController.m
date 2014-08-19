@@ -48,7 +48,11 @@
 - (IBAction)sendButton:(id)sender {
     if(![self.feedbackTextView.text isEqualToString:@""]){
         NSLog(@"send the feedback");
-        [[PASyncManager globalSyncManager] sendUserFeedback:self.feedbackTextView.text];
+        NSString* category = @"problem";
+        if(self.categoryControl.selectedSegmentIndex==1){
+            category=@"suggestion";
+        }
+        [[PASyncManager globalSyncManager] sendUserFeedback:self.feedbackTextView.text withCategory:category];
         [self dismissViewControllerAnimated:YES completion:^(void){}];
     }
 }
