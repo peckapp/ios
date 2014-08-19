@@ -76,6 +76,12 @@
         viewController.tabBarItem.tag = idx;
         viewController.restorationIdentifier = identifier;
         [collector insertObject:viewController atIndex:idx];
+        // ensures that the view is loaded
+        if ([viewController isKindOfClass:[UINavigationController class]]) {
+            [[((UINavigationController*)viewController) topViewController] view];
+        } else {
+            [viewController view];
+        }
     }];
     self.secondaryViewControllers = [collector copy];
 
