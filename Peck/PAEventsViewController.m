@@ -28,7 +28,7 @@
 #define statusBarHeight 20
 #define searchBarHeight 44
 #define parallaxRange 128
-#define dateViewHeight 44
+#define datePopupHeight 44
 
 struct eventImage{
     const char* imageURL;
@@ -48,7 +48,9 @@ struct eventImage{
 
 @property (strong, nonatomic) UIImageView* helperImageView;
 
-@property (strong, nonatomic) PATemporaryDropdownView *dateView;
+@property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) UILabel *headerLabel;
+@property (strong, nonatomic) PATemporaryDropdownView *datePopup;
 
 @property (strong, nonatomic) PANoContentView * noContentView;
 
@@ -156,12 +158,24 @@ PAAssetManager * assetManager;
     self.rightTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.rightTableView.backgroundColor = [assetManager darkColor];
 
-    if (!self.dateView) {
-        self.dateView = [[PATemporaryDropdownView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, dateViewHeight)];
-        self.dateView.label.text = @"Home";
-        self.dateView.label.textColor = [UIColor whiteColor];
-        self.dateView.hiddenView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
-        [self.view addSubview:self.dateView];
+    if (!self.headerView) {
+        self.headerView = [[UIView alloc] init];
+        self.headerView.backgroundColor = [UIColor whiteColor];
+    }
+
+    if (!self.headerLabel) {
+        self.headerLabel = [[UILabel alloc] init];
+        self.headerLabel.font = [UIFont boldSystemFontOfSize:17.0];
+        self.headerLabel.textAlignment = NSTextAlignmentCenter;
+        self.headerLabel.text = @"Home";
+        [self.headerView addSubview:self.headerLabel];
+    }
+
+    if (!self.datePopup) {
+        self.datePopup = [[PATemporaryDropdownView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
+        self.datePopup.label.text = @"Home";
+        self.datePopup.hiddenView.backgroundColor = [UIColor whiteColor];
+        [self.view addSubview:self.datePopup];
     }
 
     [[PASyncManager globalSyncManager] updateSubscriptions];
@@ -191,15 +205,21 @@ PAAssetManager * assetManager;
 
     searchBar.frame = CGRectMake(0, -searchBarHeight, self.view.frame.size.width, searchBarHeight);
 
-    self.dateView.frame = CGRectMake(0, 0, self.view.frame.size.width, dateViewHeight);
-    self.dateView.hiddenView.frame = CGRectMake(0, -dateViewHeight, self.view.frame.size.width, dateViewHeight);
+    self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    self.headerLabel.frame = CGRectMake(0, self.headerView.frame.size.height - datePopupHeight, self.view.frame.size.width, datePopupHeight);
+
+    self.datePopup.frame = CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
+    self.datePopup.hiddenView.frame = CGRectMake(0, -datePopupHeight, self.view.frame.size.width, datePopupHeight);
 
     self.leftTableViewFrame = CGRectMake(-self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
-    self.centerTableViewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    self.rightTableViewFrame = CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
-
     self.leftTableView.frame = self.leftTableViewFrame;
+
+    self.centerTableViewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.centerTableView.frame = self.centerTableViewFrame;
+    self.centerTableView.contentInset = UIEdgeInsetsMake(-self.headerView.frame.size.height, 0, 0, 0);
+    self.centerTableView.tableHeaderView = self.headerView;
+
+    self.rightTableViewFrame = CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.rightTableView.frame = self.rightTableViewFrame;
 
     // self.centerTableView.tableHeaderView = searchBar;
@@ -862,7 +882,7 @@ PAAssetManager * assetManager;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    [self.dateView forceHiddenView];
+    [self.datePopup forceHiddenView];
     [searchBar resignFirstResponder];
 }
 
@@ -931,7 +951,7 @@ PAAssetManager * assetManager;
 }
 */
 
-- (void)displayDateView
+- (void)displaydatePopup
 {
     NSString *date = @"";
 
@@ -955,9 +975,9 @@ PAAssetManager * assetManager;
         date = [dateFormatter stringFromDate:[self getDateForDay:self.selectedDay]];
     }
 
-    self.dateView.label.text = date;
-
-    [self.dateView showHiddenView];
+    self.datePopup.label.text = date;
+    self.headerLabel.text = date;
+    [self.datePopup showHiddenView];
 }
 
 - (void)transitionToRightTableView
@@ -967,7 +987,10 @@ PAAssetManager * assetManager;
 
         self.selectedDay += 1;
 
-        [self displayDateView];
+        self.centerTableView.tableHeaderView = nil;
+        self.centerTableView.contentInset = UIEdgeInsetsZero;
+
+        [self displaydatePopup];
         
         [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
@@ -989,6 +1012,9 @@ PAAssetManager * assetManager;
 
                              [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
 
+                             self.centerTableView.tableHeaderView = self.headerView;
+                             self.centerTableView.contentInset = UIEdgeInsetsMake(-self.headerView.frame.size.height, 0, 0, 0);
+
                              [self.noContentView removeFromSuperview];
                              [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
 
@@ -1004,7 +1030,10 @@ PAAssetManager * assetManager;
 
         self.selectedDay -= 1;
 
-        [self displayDateView];
+        self.centerTableView.tableHeaderView = nil;
+        self.centerTableView.contentInset = UIEdgeInsetsZero;
+
+        [self displaydatePopup];
         
         [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
@@ -1024,6 +1053,9 @@ PAAssetManager * assetManager;
                              self.leftTableView = tempView;
 
                              [self tableView:self.leftTableView reloadDataFrom:self.leftFetchedResultsController];
+
+                             self.centerTableView.tableHeaderView = self.headerView;
+                             self.centerTableView.contentInset = UIEdgeInsetsMake(-self.headerView.frame.size.height, 0, 0, 0);
 
                              [self.noContentView removeFromSuperview];
                              [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
