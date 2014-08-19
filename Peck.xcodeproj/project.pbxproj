@@ -104,6 +104,7 @@
 		A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C08194A17A1001AAC4A /* AdSupport.framework */; };
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
 		A4925C0D194A1B32001AAC4A /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */; };
+		A497A2EB19A3BF5200455F69 /* PASendFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A497A2EA19A3BF5200455F69 /* PASendFeedbackViewController.m */; };
 		A4988A50199B9FFC005C43BC /* Peck.m in Sources */ = {isa = PBXBuildFile; fileRef = A4988A4F199B9FFC005C43BC /* Peck.m */; };
 		A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A99BAD19815AA4002DFD49 /* Subscription.m */; };
 		A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */; };
@@ -344,6 +345,8 @@
 		A4925C08194A17A1001AAC4A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A4925C0A194A17AB001AAC4A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		A497A2E919A3BF5200455F69 /* PASendFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASendFeedbackViewController.h; sourceTree = "<group>"; };
+		A497A2EA19A3BF5200455F69 /* PASendFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASendFeedbackViewController.m; sourceTree = "<group>"; };
 		A4988A4E199B9FFC005C43BC /* Peck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peck.h; sourceTree = "<group>"; };
 		A4988A4F199B9FFC005C43BC /* Peck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peck.m; sourceTree = "<group>"; };
 		A4A99BAC19815AA4002DFD49 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
@@ -877,6 +880,8 @@
 				A4E47D561991261000DDF941 /* PAUserEventsTableViewController.m */,
 				A482259419914C0D007D9A9F /* PAUserAnnouncementsTableViewController.h */,
 				A482259519914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m */,
+				A497A2E919A3BF5200455F69 /* PASendFeedbackViewController.h */,
+				A497A2EA19A3BF5200455F69 /* PASendFeedbackViewController.m */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -1160,6 +1165,7 @@
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
+				A497A2EB19A3BF5200455F69 /* PASendFeedbackViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
 				A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */,
 				A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */,

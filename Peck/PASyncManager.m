@@ -65,6 +65,30 @@
 
 #pragma mark - User actions
 
+-(void)sendUserFeedback:(NSString*)feedback{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSDictionary* userFeedback = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  feedback, @"feedback",
+                                  [defaults objectForKey:@"user_id"],@"user_id",
+                                  nil];
+    [[PASessionManager sharedClient] POST:@"api/user_feedback"
+                                 parameters:[self applyWrapper:@"user" toDictionary:userFeedback]
+                                    success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Feedback Posted!"
+                                                                                        message:@"Thank you, we appreciate your help" delegate:self cancelButtonTitle:@"Your Welcome" otherButtonTitles: nil];
+                                        [alert show];
+                                    }
+                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                        NSLog(@"ERROR: %@",error);
+                                        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Posting error"
+                                                                                        message:@"Something went wrong while trying to post your feedback, please try again later" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                                        [alert show];
+                                    }];
+
+    
+}
+
 -(void)logoutUser{
     [[PASessionManager sharedClient] DELETE:@"api/access/logout"
                                parameters:[self authenticationParameters]

@@ -129,6 +129,7 @@
     [self removeAllObjectsOfType:@"Event"];
     [self removeAllObjectsOfType:@"Explore"];
     
+    
     [[PASyncManager globalSyncManager] updatePeerInfo];
 }
 
