@@ -76,7 +76,7 @@
                                  parameters:[self applyWrapper:@"user" toDictionary:userFeedback]
                                     success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Feedback Posted!"
-                                                                                        message:@"Thank you, we appreciate your help" delegate:self cancelButtonTitle:@"Your Welcome" otherButtonTitles: nil];
+                                                                                        message:@"Thank you, we appreciate your help" delegate:self cancelButtonTitle:@"You're Welcome" otherButtonTitles: nil];
                                         [alert show];
                                     }
                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
