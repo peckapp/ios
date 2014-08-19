@@ -33,6 +33,8 @@
 		8671A2D0195B848D00700101 /* dropdown_post@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CB195B848D00700101 /* dropdown_post@2x.png */; };
 		8671A2D2195B848D00700101 /* dropdown_profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CD195B848D00700101 /* dropdown_profile@2x.png */; };
 		867B52D619509F5000BEB37B /* PASessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D519509F5000BEB37B /* PASessionManager.m */; };
+		8687622D19A38710009AF3D1 /* PANoContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8687622C19A38710009AF3D1 /* PANoContentView.m */; };
+		8687622F19A38724009AF3D1 /* PANoContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8687622E19A38724009AF3D1 /* PANoContentView.xib */; };
 		8689DD8B195871D200A6B61C /* PAFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8689DD8A195871D200A6B61C /* PAFilter.m */; };
 		8689DDB319589E3600A6B61C /* filter_detail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDAF19589E3600A6B61C /* filter_detail@2x.png */; };
 		8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB019589E3600A6B61C /* filter_dining@2x.png */; };
@@ -231,6 +233,9 @@
 		867B52D419509F5000BEB37B /* PASessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASessionManager.h; sourceTree = "<group>"; };
 		867B52D519509F5000BEB37B /* PASessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASessionManager.m; sourceTree = "<group>"; };
 		868572281943787300287A73 /* PACoreDataProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PACoreDataProtocol.h; sourceTree = "<group>"; };
+		8687622B19A38710009AF3D1 /* PANoContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PANoContentView.h; sourceTree = "<group>"; };
+		8687622C19A38710009AF3D1 /* PANoContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PANoContentView.m; sourceTree = "<group>"; };
+		8687622E19A38724009AF3D1 /* PANoContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PANoContentView.xib; sourceTree = "<group>"; };
 		8689DD89195871D200A6B61C /* PAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFilter.h; sourceTree = "<group>"; };
 		8689DD8A195871D200A6B61C /* PAFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFilter.m; sourceTree = "<group>"; };
 		8689DDAF19589E3600A6B61C /* filter_detail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_detail@2x.png"; sourceTree = "<group>"; };
@@ -635,8 +640,6 @@
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
 				86D59816193768BF00F38654 /* Main.storyboard */,
-				DD6902D0198820270095892F /* PAAssetManager.h */,
-				DD6902D1198820270095892F /* PAAssetManager.m */,
 				DD37013E1990081F006B63E8 /* PANestedTableViewController.h */,
 				DD37013F1990081F006B63E8 /* PANestedTableViewController.m */,
 				DDF0DB45199532A40061089E /* PANestedTableViewCell.h */,
@@ -767,6 +770,8 @@
 		A4C8C344197D8F0E008F9F85 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				DD6902D0198820270095892F /* PAAssetManager.h */,
+				DD6902D1198820270095892F /* PAAssetManager.m */,
 				A4C8C345197D8F3F008F9F85 /* PAFetchManager.h */,
 				A4C8C346197D8F3F008F9F85 /* PAFetchManager.m */,
 				A4F04BEC1994097500290CF2 /* PAMethodManager.h */,
@@ -820,6 +825,9 @@
 				A4E21F5F1964A749002A9800 /* PAEventInfoTableViewController.m */,
 				DDEF7DB7199C4D34007C28F7 /* PAAthleticEventViewController.h */,
 				DDEF7DB8199C4D34007C28F7 /* PAAthleticEventViewController.m */,
+				8687622B19A38710009AF3D1 /* PANoContentView.h */,
+				8687622C19A38710009AF3D1 /* PANoContentView.m */,
+				8687622E19A38724009AF3D1 /* PANoContentView.xib */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -1037,6 +1045,7 @@
 				DDEF7DB6199C15BA007C28F7 /* drop-shadow.png in Resources */,
 				A4E21F6619659892002A9800 /* PACommentCell.xib in Resources */,
 				DD898139195B5AE20079CDC9 /* image-placeholder.png in Resources */,
+				8687622F19A38724009AF3D1 /* PANoContentView.xib in Resources */,
 				DDFFF5CE1982CB7900DC5AC1 /* explore@2x.png in Resources */,
 				86051D49194BB27200961541 /* Silhouette.png in Resources */,
 				860A8D27195201A700C5B4A6 /* thor_peckapp_com.cer in Resources */,
@@ -1177,6 +1186,7 @@
 				86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */,
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,
 				A4E21F6519659892002A9800 /* PACommentCell.m in Sources */,
+				8687622D19A38710009AF3D1 /* PANoContentView.m in Sources */,
 				A4E47D571991261000DDF941 /* PAUserEventsTableViewController.m in Sources */,
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,
 				A4677D4819743A05007E3C3A /* DiningPeriod.m in Sources */,
