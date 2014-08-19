@@ -341,6 +341,7 @@ static NSString *nibName = @"PAPeckCell";
                         [appdelegate.circleViewController condenseCircleCell:cell atIndexPath:appdelegate.circleViewController.selectedIndexPath];
                     }
                 }
+                [appdelegate.circleViewController.tableView reloadData];
                 [appdelegate.circleViewController.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
                 
                 PACircleCell* cell = (PACircleCell*)[ appdelegate.circleViewController.tableView cellForRowAtIndexPath:indexPath];

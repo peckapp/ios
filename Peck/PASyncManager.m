@@ -65,18 +65,21 @@
 
 #pragma mark - User actions
 
--(void)sendUserFeedback:(NSString*)feedback{
+-(void)sendUserFeedback:(NSString*)feedback withCategory:(NSString*)category{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     
     NSDictionary* userFeedback = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  feedback, @"feedback",
+                                  feedback, @"content",
                                   [defaults objectForKey:@"user_id"],@"user_id",
+                                  [defaults objectForKey:@"institution_id"], @"institution_id",
+                                  category, @"category",
+                                  [[self authenticationParameters] objectForKey:@"authentication"],@"authentication",
                                   nil];
-    [[PASessionManager sharedClient] POST:@"api/user_feedback"
-                                 parameters:[self applyWrapper:@"user" toDictionary:userFeedback]
+    [[PASessionManager sharedClient] POST:@"api/feedback/submit"
+                                 parameters:userFeedback
                                     success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Feedback Posted!"
-                                                                                        message:@"Thank you, we appreciate your help" delegate:self cancelButtonTitle:@"Your Welcome" otherButtonTitles: nil];
+                                                                                        message:@"Thank you, we appreciate your help" delegate:self cancelButtonTitle:@"You're Welcome" otherButtonTitles: nil];
                                         [alert show];
                                     }
                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -90,8 +93,13 @@
 }
 
 -(void)logoutUser{
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                            shortTermUDID, @"udid",
+                             @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464",@"device_token",
+                            [[self authenticationParameters] objectForKey:@"authentication"],@"authentication",
+                            nil];
     [[PASessionManager sharedClient] DELETE:@"api/access/logout"
-                               parameters:[self authenticationParameters]
+                               parameters:params
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                       
                                   }
@@ -1417,6 +1425,8 @@
     diningEvent.end_date=[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_time"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     diningEvent.type = @"dining";
     diningEvent.id = [dictionary objectForKey:@"id"];
+    diningEvent.opportunity_id = [dictionary objectForKey:@"opportunity_id"];
+    //The dining opportunity id is the original id of the dining opportunity. It is used to get the correct places, periods, and menu items from the sever. The id field is used for uniqueness when multiple dining opportunities are used for different days.
 }
 
 
@@ -1470,7 +1480,7 @@
 
 -(void)updateDiningPeriods:(Event*)diningOpportunity forViewController:(PADiningPlacesTableViewController*)viewController{
     NSString* diningPeriodsURL = [dining_periodsAPI stringByAppendingString:@"?dining_opportunity_id="];
-    diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningOpportunity.id stringValue]];
+    diningPeriodsURL = [diningPeriodsURL stringByAppendingString:[diningOpportunity.opportunity_id stringValue]];
     
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:[NSDate date]];
     diningPeriodsURL = [diningPeriodsURL stringByAppendingString:@"&day_of_week="];
@@ -1524,14 +1534,14 @@
     diningPeriod.day_of_week = [dictionary objectForKey:@"day_of_week"];
     diningPeriod.id = [dictionary objectForKey:@"id"];
     diningPeriod.place_id=[dictionary objectForKey:@"dining_place_id"];
-    diningPeriod.opportunity_id = diningEvent.id;
+    diningPeriod.opportunity_id = diningEvent.opportunity_id;
     
 }
 #pragma mark - Menu Item actions
 
 -(void)updateMenuItemsForOpportunity:(Event*)diningOpportunity andPlace:(DiningPlace*)diningPlace{
     NSString * menuItemsURL = [menu_itemsAPI stringByAppendingString:@"?dining_opportunity_id="];
-    menuItemsURL = [menuItemsURL stringByAppendingString:[diningOpportunity.id stringValue]];
+    menuItemsURL = [menuItemsURL stringByAppendingString:[diningOpportunity.opportunity_id stringValue]];
     menuItemsURL = [menuItemsURL stringByAppendingString:@"&date_available="];
     
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
@@ -1575,7 +1585,7 @@
 -(void)setAttributesInMenuItem:(MenuItem*)menuItem withDictionary:(NSDictionary*)dictionary andPlace:(DiningPlace*)place andOpportunity:(Event*)opportunity{
     menuItem.name = [dictionary objectForKey:@"name"];
     menuItem.id = [dictionary objectForKey:@"id"];
-    menuItem.dining_opportunity_id =opportunity.id;
+    menuItem.dining_opportunity_id =opportunity.opportunity_id;
     if(![[dictionary objectForKey:@"dining_place_id"] isKindOfClass:[NSNull class]]){
         menuItem.dining_place_id =[dictionary objectForKey:@"dining_place_id"];
     }

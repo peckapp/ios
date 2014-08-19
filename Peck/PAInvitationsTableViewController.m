@@ -102,7 +102,8 @@ PAAssetManager * assetManager;
     
     for(int i=0;i<[mutableFetchResults count];i++){
         Peer* tempPeer = mutableFetchResults[i];
-        if([self.invitedPeople objectForKey:[tempPeer.id stringValue]]){
+        if([self.invitedPeople objectForKey:[tempPeer.id stringValue]] || [tempPeer.home_institution integerValue]!=[[[NSUserDefaults standardUserDefaults] objectForKey:@"home_institution"] integerValue]){
+            //if the user has already been invited or is not of the user's home institution
             [mutableFetchResults removeObjectAtIndex:i];
             i--;
         }

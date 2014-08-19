@@ -230,7 +230,7 @@ PAAssetManager *assetManager;
     NSLog(@"dining opp id: %@", self.diningOpportunity.id);
     
     NSPredicate *fromPlacePredicate = [NSPredicate predicateWithFormat:@"dining_place_id = %@", self.detailItem.id];
-    NSPredicate *fromOpportunityPredicate = [NSPredicate predicateWithFormat:@"dining_opportunity_id = %@", self.diningOpportunity.id];
+    NSPredicate *fromOpportunityPredicate = [NSPredicate predicateWithFormat:@"dining_opportunity_id = %@", self.diningOpportunity.opportunity_id];
 
     [predicateArray addObject:fromPlacePredicate];
     [predicateArray addObject:fromOpportunityPredicate];

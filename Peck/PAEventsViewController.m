@@ -259,6 +259,8 @@ PAAssetManager * assetManager;
 }
 
 - (void)showEmptyContentIfNecessaryForTableView:(UITableView*) tableView {
+    [self.noContentView removeFromSuperview];
+    
     if ([[[self centerFetchedResultsController] fetchedObjects] count] == 0) {
         if (self.noContentView == nil) {
             self.noContentView = [PANoContentView noContentViewWithFrame:self.view.bounds viewController:self];
@@ -279,6 +281,10 @@ PAAssetManager * assetManager;
 - (void)transitionToSubscriptions {
     PADropdownViewController *dropdownController = (PADropdownViewController*)self.parentViewController;
     [dropdownController.dropdownBar selectItemAtIndex:4];
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    PAProfileTableViewController* profileController = appdelegate.profileViewController;
+    [appdelegate.profileViewController.navigationController popToRootViewControllerAnimated:NO];
+    [profileController performSegueWithIdentifier:@"showSubscriptions" sender:profileController];
 }
 
 - (void)transitionToCreate {
@@ -468,16 +474,16 @@ PAAssetManager * assetManager;
         }
             break;
             
-        case NSFetchedResultsChangeDelete:
+        case NSFetchedResultsChangeDelete:{
             //Event *tempEvent = (Event *)anObject;
             if(viewingEvents){
-                [[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
+                //[[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
             }
             [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
-            
+        }
         case NSFetchedResultsChangeUpdate:
             [tableView cellForRowAtIndexPath:indexPath];
             break;
@@ -492,6 +498,8 @@ PAAssetManager * assetManager;
              withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
+    
+    [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
 }
 
 - (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
