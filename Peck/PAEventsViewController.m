@@ -269,6 +269,7 @@ PAAssetManager * assetManager;
     [dropdownController.dropdownBar selectItemAtIndex:4];
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     PAProfileTableViewController* profileController = appdelegate.profileViewController;
+    [appdelegate.profileViewController.navigationController popToRootViewControllerAnimated:NO];
     [profileController performSegueWithIdentifier:@"showSubscriptions" sender:profileController];
 }
 
