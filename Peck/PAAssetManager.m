@@ -27,7 +27,11 @@
         self.profilePlaceholder = [UIImage imageNamed:@"profile-placeholder"];
         self.darkColor = [UIColor colorWithRed:38/255.0 green:27/255.0 blue:48/255.0 alpha:1];
         self.lightColor = [UIColor colorWithRed:150/255.0 green:123/255.0 blue:255/255.0 alpha:1];
-        
+
+        // Awful green color
+        // self.darkColor = [UIColor colorWithRed:22/255.0 green:54/255.0 blue:41/255.0 alpha:1];
+        // self.lightColor = [UIColor colorWithRed:145/255.0 green:255/255.0 blue:144/255.0 alpha:1];
+
         
         CGSize size = CGSizeMake(200, 200);
         self.greyBackground = [self imageWithColor:[UIColor whiteColor] andSize:size];

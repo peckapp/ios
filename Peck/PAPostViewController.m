@@ -148,7 +148,7 @@
         self.descriptionTextView.textColor = [UIColor blackColor];
     }
     if(self.editableEvent.imageURL){
-        NSURL* url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.editableEvent.imageURL]];
+        NSURL* url = [NSURL URLWithString:self.editableEvent.imageURL];
         [self.photo setImageWithURL:url placeholderImage:[UIImage imageNamed:@"image-placeholder.png"]];
     }
     self.startTimePicker.date = self.editableEvent.start_date;
@@ -171,7 +171,7 @@
         self.descriptionTextView.textColor = [UIColor blackColor];
     }
     if(self.editableAnnouncement.imageURL){
-        NSURL* url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.editableAnnouncement.imageURL]];
+        NSURL* url = [NSURL URLWithString:self.editableAnnouncement.imageURL];
         [self.photo setImageWithURL:url placeholderImage:[UIImage imageNamed:@"image-placeholder.png"]];
     }
 

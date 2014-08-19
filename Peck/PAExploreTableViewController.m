@@ -105,7 +105,7 @@ NSCache *imageCache;
     NSLog(@"explore weight: %@", tempExplore.weight);
     
     if(tempExplore.imageURL){
-        NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempExplore.imageURL]];
+        NSURL* imageURL = [NSURL URLWithString:tempExplore.imageURL];
         UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
     
         if(image){

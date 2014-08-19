@@ -243,7 +243,7 @@ PAAssetManager * assetManager;
         if(imageURL){
             //if the event has a photo stored on the server
             NSLog(@"caching image for event %@", [eventID stringValue]);
-            NSURL * url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+            NSURL * url = [NSURL URLWithString:imageURL];
             
             
             loadedImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
@@ -828,6 +828,7 @@ PAAssetManager * assetManager;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+
     /*
 
    for (NSInteger i = 0; i < [self.centerTableView numberOfRowsInSection:0]; ++i)
@@ -860,7 +861,8 @@ PAAssetManager * assetManager;
      */
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self.dateView forceHiddenView];
     [searchBar resignFirstResponder];
 }
 
@@ -1114,7 +1116,7 @@ PAAssetManager * assetManager;
 }
 
 -(void)cacheImageForURL:(NSString*)urlString{
-    NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:urlString]];
+    NSURL* imageURL = [NSURL URLWithString:urlString];
     //self.helperImageView.image=nil;
     self.helperImageView.image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
     if(!self.helperImageView.image){

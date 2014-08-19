@@ -44,7 +44,7 @@ PAAssetManager * assetManager;
         self.blurbTextView.text = self.peer.blurb;
     
         if(self.peer.imageURL){
-            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:self.peer.imageURL]];
+            NSURL* imageURL = [NSURL URLWithString:self.peer.imageURL];
             [self.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
         }else{
             self.profilePicture.image = [UIImage imageNamed:@"profile-placeholder.png"];
@@ -116,7 +116,7 @@ PAAssetManager * assetManager;
 
 -(UIImageView*)imageForPeer:(Peer*)peer{
     if (peer.imageURL) {
-        NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
+        NSURL* imageURL = [NSURL URLWithString:peer.imageURL];
         UIImageView * imageView = [[UIImageView alloc] init];
         [imageView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
         return imageView;

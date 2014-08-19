@@ -93,7 +93,7 @@
 
 -(UIImageView*)imageForPeer:(Peer*)peer{
     if (peer.imageURL) {
-        NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
+        NSURL* imageURL = [NSURL URLWithString:peer.imageURL];
         UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
         if(image){
             return [[UIImageView alloc] initWithImage:image];

@@ -18,6 +18,7 @@
 #import "PASyncManager.h"
 #import <Security/Security.h>
 #import "PAMethodManager.h"
+#import "PAAssetManager.h"
 
 
 @implementation PAAppDelegate
@@ -135,7 +136,7 @@
         NSLog(@"launched with local notification: %@",localNotification);
     }
 
-    self.window.tintColor = [UIColor colorWithRed:150/255.0 green:123/255.0 blue:255/255.0 alpha:1.0];
+    self.window.tintColor = [[PAAssetManager sharedManager] lightColor];
 
     // saves NSUserDefaults to "disk"
     [[NSUserDefaults standardUserDefaults] synchronize];

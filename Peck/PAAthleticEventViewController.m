@@ -451,7 +451,7 @@ BOOL reloaded = NO;
 
         UIImage* image = nil;
         if ([self.detailItem valueForKey:@"imageURL"]) {
-            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"imageURL"]]];
+            NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"imageURL"]];
             UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
             if (cachedImage) {
                 self.cleanImageView.image = cachedImage;
@@ -465,7 +465,7 @@ BOOL reloaded = NO;
         }
 
         if ([self.detailItem valueForKey:@"imageURL"]) {
-            NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:[self.detailItem valueForKey:@"blurredImageURL"]]];
+            NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"blurredImageURL"]];
             UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
             if (cachedImage) {
                 self.blurredImageView.image = cachedImage;
@@ -729,7 +729,7 @@ BOOL reloaded = NO;
     } else {
         Peer * commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
         if(commentFromPeer.imageURL){
-            imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:commentFromPeer.imageURL]];
+            imageURL = [NSURL URLWithString:commentFromPeer.imageURL];
         }else{
             imageURL = nil;
         }

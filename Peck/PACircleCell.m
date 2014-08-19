@@ -309,7 +309,7 @@ PAAssetManager * assetManager;
     else {
         Peer * peer = [[PAFetchManager sharedFetchManager] getPeerWithID:peerID];
         if (peer.imageURL) {
-            imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:peer.imageURL]];
+            imageURL = [NSURL URLWithString:peer.imageURL];
         }else{
             imageURL=nil;
         }

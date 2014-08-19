@@ -14,5 +14,6 @@
 @property (strong, nonatomic) UILabel *label;
 
 - (void)showHiddenView;
+- (void)forceHiddenView;
 
 @end

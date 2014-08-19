@@ -45,19 +45,7 @@
 - (void)showHiddenView
 {
     if (self.pendingHideCount <= 0) {
-        [UIView animateWithDuration:0.2 delay:primaryDelay options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             self.hiddenView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-                         }
-                         completion:^(BOOL finished){
-                         }];
-
-        [UIView animateWithDuration:0.3 delay:secondaryDelay options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             self.label.alpha = 1;
-                         }
-                         completion:^(BOOL finished){
-                         }];
+        [self animateIn];
     }
     self.pendingHideCount += 1;
     [self performSelector:@selector(hideHiddenView) withObject:self afterDelay:hideDelay];
@@ -67,20 +55,50 @@
 {
     self.pendingHideCount -= 1;
     if (self.pendingHideCount <= 0) {
-        [UIView animateWithDuration:0.2 delay:secondaryDelay - primaryDelay options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             self.hiddenView.frame = CGRectMake(0, -self.frame.size.height, self.frame.size.width, self.frame.size.height);
-                         }
-                         completion:^(BOOL finished){
-                         }];
-
-        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             self.label.alpha = 0;
-                         }
-                         completion:^(BOOL finished){
-                         }];
+        [self animateOut];
     }
+}
+
+- (void)forceHiddenView
+{
+    if (self.pendingHideCount > 0) {
+        self.pendingHideCount = 0;
+        [self animateOut];
+    }
+}
+
+- (void)animateIn
+{
+    [UIView animateWithDuration:0.2 delay:primaryDelay options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.hiddenView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+                     }
+                     completion:^(BOOL finished){
+                     }];
+
+    [UIView animateWithDuration:0.3 delay:secondaryDelay options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.label.alpha = 1;
+                     }
+                     completion:^(BOOL finished){
+                     }];
+}
+
+- (void)animateOut
+{
+    [UIView animateWithDuration:0.2 delay:secondaryDelay - primaryDelay options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.hiddenView.frame = CGRectMake(0, -self.frame.size.height, self.frame.size.width, self.frame.size.height);
+                     }
+                     completion:^(BOOL finished){
+                     }];
+
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.label.alpha = 0;
+                     }
+                     completion:^(BOOL finished){
+                     }];
 }
 
 @end

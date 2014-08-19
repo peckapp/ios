@@ -332,7 +332,7 @@
                                         [defaults setObject:firstName forKey:first_name_define];
                                         [defaults setObject:lastName forKey:last_name_define];
                                         if(imageURL){
-                                            NSURL* url =[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+                                            NSURL* url =[NSURL URLWithString:imageURL];
                                             [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
                                         }
                                         
@@ -382,7 +382,7 @@
                                       
                                       if(imageURL){
                                           NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
-                                          NSURL* url =[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+                                          NSURL* url =[NSURL URLWithString:imageURL];
                                           [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
                                       }
                                       
@@ -561,7 +561,7 @@
                                        
                                            if(imageURL){
                                                NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
-                                               NSURL* url =[NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:imageURL]];
+                                               NSURL* url =[NSURL URLWithString:imageURL];
                                                [defaults setObject:[url absoluteString] forKey:@"profile_picture_url"];
                                            }else{
                                                //If the user has logged in with facebook but has not yet saved a new profile picture, we will use their facebook profile picture as their current image.
