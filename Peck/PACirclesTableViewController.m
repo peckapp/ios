@@ -209,11 +209,13 @@ PAAssetManager *assetManager;
 #pragma mark - text field delegate
 
 -(void)textFieldDidChange:(UITextField*)textField{
+    /*
     NSLog(@"textfield text: %@",textField.text);
     //NSLog(@"row: %i, section: %i",[self.selectedIndexPath row], [self.selectedIndexPath section]);
     PACircleCell * selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
     selectedCell.suggestedMembers = [self suggestedMembers:textField.text];
     [selectedCell.suggestedMembersTableView reloadData];
+     */
 }
 
 /*- (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -248,8 +250,8 @@ PAAssetManager *assetManager;
 -(void)addMember:(Peer*)newMember{
     self.inviteTextField.text=@"";
     PACircleCell* selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
-    selectedCell.suggestedMembers=nil;
-    [selectedCell.suggestedMembersTableView reloadData];
+    //selectedCell.suggestedMembers=nil;
+    //[selectedCell.suggestedMembersTableView reloadData];
     
     if(self.selectedIndexPath.row!=[_fetchedResultsController.fetchedObjects count]){
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -492,7 +494,6 @@ PAAssetManager *assetManager;
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
         cell.circleTitle.text=@"New";
         [cell.profilesTableView setHidden:YES];
-        [cell.suggestedMembersTableView setHidden:NO];
         [cell.commentsTableView setHidden:YES];
         [cell.titleTextField setHidden:YES];
         [cell.createCircleButton setHidden:YES];
@@ -510,15 +511,8 @@ PAAssetManager *assetManager;
     else{
         [cell.titleTextField setHidden:YES];
         [cell.profilesTableView setHidden:NO];
+        [cell.commentsTableView setHidden:NO];
         [cell.createCircleButton setHidden:YES];
-        if(!cell.addingMembers){
-            [cell.suggestedMembersTableView setHidden:YES];
-            [cell.commentsTableView setHidden:NO];
-        }
-        else if(cell.addingMembers){
-            [cell.suggestedMembersTableView setHidden:NO];
-            [cell.commentsTableView setHidden:YES];
-        }
         
         Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
         //NSLog(@"configure cell for circle %@", c);

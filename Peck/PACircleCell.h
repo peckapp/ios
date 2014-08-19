@@ -22,8 +22,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
 @property (weak, nonatomic) IBOutlet UITableView *profilesTableView;
 
-@property (weak, nonatomic) IBOutlet UITableView *suggestedMembersTableView;
-
 @property(nonatomic, assign) id <PACirclesControllerDelegate> delegate;
 @property BOOL loadedImages;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;

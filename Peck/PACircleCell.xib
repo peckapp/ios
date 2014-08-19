@@ -50,16 +50,6 @@
                             <action selector="leaveCircleButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="790-jI-Gbk"/>
                         </connections>
                     </button>
-                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="baP-po-hbb">
-                        <rect key="frame" x="0.0" y="114" width="320" height="421.5"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                    </tableView>
-                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="sEW-Wi-kY2">
-                        <rect key="frame" x="0.0" y="106" width="320" height="388"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                    </tableView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="OPp-OG-hB2">
                         <rect key="frame" x="200" y="6" width="54" height="33"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -76,6 +66,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </tableView>
+                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="sEW-Wi-kY2">
+                        <rect key="frame" x="0.0" y="106" width="320" height="461.5"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    </tableView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
@@ -85,7 +80,6 @@
                 <outlet property="createCircleButton" destination="wXC-83-NpW" id="BgR-ka-zIO"/>
                 <outlet property="leaveCircleButton" destination="9z0-Fk-KGq" id="q4T-jc-Eui"/>
                 <outlet property="profilesTableView" destination="XZl-as-txS" id="48Z-BR-35g"/>
-                <outlet property="suggestedMembersTableView" destination="baP-po-hbb" id="uke-vr-1ZZ"/>
                 <outlet property="titleTextField" destination="XVF-lT-1oS" id="xJS-gi-ctP"/>
             </connections>
         </tableViewCell>
