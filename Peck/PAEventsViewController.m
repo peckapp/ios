@@ -267,6 +267,9 @@ PAAssetManager * assetManager;
 - (void)transitionToSubscriptions {
     PADropdownViewController *dropdownController = (PADropdownViewController*)self.parentViewController;
     [dropdownController.dropdownBar selectItemAtIndex:4];
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    PAProfileTableViewController* profileController = appdelegate.profileViewController;
+    [profileController performSegueWithIdentifier:@"showSubscriptions" sender:profileController];
 }
 
 - (void)transitionToCreate {
