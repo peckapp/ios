@@ -121,6 +121,7 @@
     textField.autocorrectionType = UITextAutocorrectionTypeYes;
     textField.keyboardType = UIKeyboardTypeDefault;
     textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    
     return textField;
 }
 @end
