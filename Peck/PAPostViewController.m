@@ -395,6 +395,15 @@
     [self.tableView endUpdates];
 }
 
+- (void)didInvitePeople:(NSMutableDictionary *)people andCircles:(NSMutableDictionary *)circles
+{
+
+    self.invitedPeople = [people allValues];
+    self.invitedCircles = [circles allValues];
+
+    self.invitedPeopleDictionary = people;
+    self.invitedCirclesDictionary = circles;
+}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

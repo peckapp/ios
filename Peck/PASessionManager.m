@@ -15,7 +15,7 @@ static NSString * const PARailsServerBaseURLString = @"http://loki.peckapp.com:3
 static NSString * const PADevAPIBaseURLString = @"http://loki.peckapp.com:3500/";
 // Production Webservice - both https
 static NSString * const PAStagingAPIBaseURLString = @"https://buri.peckapp.com:3500/";
-static NSString * const PAProdAPIBaseURLString = @"https://buri.peckapp.com:3501/";
+static NSString * const PAProdAPIBaseURLString = @"https://yggdrasil.peckapp.com:3500/";
 
 @implementation PASessionManager
 

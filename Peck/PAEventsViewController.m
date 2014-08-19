@@ -22,6 +22,7 @@
 #import "UIImage+ImageEffects.h"
 #import "PAAssetManager.h"
 #import "PANestedTableViewCell.h"
+#import "PANoContentView.h"
 
 #define statusBarHeight 20
 #define searchBarHeight 44
@@ -44,7 +45,14 @@ struct eventImage{
 @property (assign, nonatomic) CGRect rightTableViewFrame;
 
 @property (strong, nonatomic) UIImageView* helperImageView;
+
+@property (strong, nonatomic) PANoContentView * noContentView;
+
+- (void)transitionToSubscriptions;
+- (void)transitionToCreate;
+
 @end
+
 
 @implementation PAEventsViewController
 
@@ -189,20 +197,10 @@ PAAssetManager * assetManager;
     viewingEvents = YES;
 }
 
-- (void)viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-}
-
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    NSLog(@"view did appear");
+    
+    [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -212,10 +210,6 @@ PAAssetManager * assetManager;
     
     [self.view endEditing:YES];
     viewingEvents=NO;
-}
-
--(void)viewDidDisappear:(BOOL)animated{
-    [super viewDidDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -248,6 +242,38 @@ PAAssetManager * assetManager;
             }
         }
     }
+}
+
+- (void)showEmptyContentIfNecessaryForTableView:(UITableView*) tableView {
+    if ([[[self centerFetchedResultsController] fetchedObjects] count] == 0) {
+        if (self.noContentView == nil) {
+            self.noContentView = [PANoContentView noContentViewWithFrame:self.view.bounds viewController:self];
+            [self.noContentView.subscriptionsButton addTarget:self action:@selector(transitionToSubscriptions) forControlEvents:UIControlEventTouchUpInside];
+            [self.noContentView.createButton addTarget:self action:@selector(transitionToCreate) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        if (self.noContentView.superview != nil) {
+            [self.noContentView removeFromSuperview];
+        }
+        
+        self.noContentView.alpha = 0;
+        // adds the noContentView's surrounding superview to the view so that it is properly centered
+        [tableView addSubview:self.noContentView];
+        
+        [UIView animateWithDuration:0.2 animations:^() {
+            self.noContentView.alpha = 1.0;
+        }];
+    }
+}
+
+- (void)transitionToSubscriptions {
+    PADropdownViewController *dropdownController = (PADropdownViewController*)self.parentViewController;
+    [dropdownController.dropdownBar selectItemAtIndex:4];
+}
+
+- (void)transitionToCreate {
+    PADropdownViewController *dropdownController = (PADropdownViewController*)self.parentViewController;
+    [dropdownController.dropdownBar selectItemAtIndex:2];
 }
 
 #pragma mark - Fetched Results controller
@@ -888,60 +914,67 @@ PAAssetManager * assetManager;
 - (void)transitionToRightTableView
 {
     if (self.selectedCellIndexPath == nil) {
-    NSLog(@"begin transition to right");
-    [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         self.rightTableView.frame = self.centerTableViewFrame;
-                         self.centerTableView.frame = self.leftTableViewFrame;
-                     }
-                     completion:^(BOOL finished){
-                         self.leftTableView.frame = self.rightTableViewFrame;
+        NSLog(@"begin transition to right");
+        
+        [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             self.rightTableView.frame = self.centerTableViewFrame;
+                             self.centerTableView.frame = self.leftTableViewFrame;
+                         }
+                         completion:^(BOOL finished){
+                             
+                             self.leftTableView.frame = self.rightTableViewFrame;
 
-                         UITableView * tempView = self.leftTableView;
-                         self.leftTableView = self.centerTableView;
-                         self.centerTableView = self.rightTableView;
-                         self.rightTableView = tempView;
+                             UITableView * tempView = self.leftTableView;
+                             self.leftTableView = self.centerTableView;
+                             self.centerTableView = self.rightTableView;
+                             self.rightTableView = tempView;
 
-                         self.selectedDay += 1;
+                             self.selectedDay += 1;
 
-                         self.leftFetchedResultsController = self.centerFetchedResultsController;
-                         self.centerFetchedResultsController = self.rightFetchedResultsController;
-                         self.rightFetchedResultsController = nil;
+                             self.leftFetchedResultsController = self.centerFetchedResultsController;
+                             self.centerFetchedResultsController = self.rightFetchedResultsController;
+                             self.rightFetchedResultsController = nil;
 
-                         [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
+                             [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
+                             
+                             [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
 
-                         NSLog(@"end transition to right");
-                     }];
+                             NSLog(@"end transition to right");
+                         }];
     }
 }
 
 -(void)transitionToLeftTableView
 {
     if (self.selectedCellIndexPath == nil) {
-    NSLog(@"begin transition to left");
-    [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         self.leftTableView.frame = self.centerTableViewFrame;
-                         self.centerTableView.frame = self.rightTableViewFrame;
-                     }
-                     completion:^(BOOL finished){
-                         self.rightTableView.frame = self.leftTableViewFrame;
+        NSLog(@"begin transition to left");
+        
+        [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             self.leftTableView.frame = self.centerTableViewFrame;
+                             self.centerTableView.frame = self.rightTableViewFrame;
+                         }
+                         completion:^(BOOL finished){
+                             self.rightTableView.frame = self.leftTableViewFrame;
 
-                         self.selectedDay -= 1;
+                             self.selectedDay -= 1;
 
-                         self.rightFetchedResultsController = self.centerFetchedResultsController;
-                         self.centerFetchedResultsController = self.leftFetchedResultsController;
-                         self.leftFetchedResultsController = nil;
+                             self.rightFetchedResultsController = self.centerFetchedResultsController;
+                             self.centerFetchedResultsController = self.leftFetchedResultsController;
+                             self.leftFetchedResultsController = nil;
 
-                         UITableView * tempView = self.rightTableView;
-                         self.rightTableView = self.centerTableView;
-                         self.centerTableView = self.leftTableView;
-                         self.leftTableView = tempView;
+                             UITableView * tempView = self.rightTableView;
+                             self.rightTableView = self.centerTableView;
+                             self.centerTableView = self.leftTableView;
+                             self.leftTableView = tempView;
 
-                         [self tableView:self.leftTableView reloadDataFrom:self.leftFetchedResultsController];
-
-                         NSLog(@"end transition to left");
-                     }];
+                             [self tableView:self.leftTableView reloadDataFrom:self.leftFetchedResultsController];
+                             
+                             [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
+                             
+                             NSLog(@"end transition to left");
+                         }];
     }
 }
 
@@ -954,7 +987,6 @@ PAAssetManager * assetManager;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-
 
     for(Event* event in fetchedResultsController.fetchedObjects){
         if (event.imageURL) {

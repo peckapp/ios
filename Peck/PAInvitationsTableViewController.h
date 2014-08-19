@@ -12,11 +12,7 @@
 
 @required
 
-@property (strong, nonatomic) NSArray* invitedPeople;
-@property (strong, nonatomic) NSArray* invitedCircles;
-
-@property (strong, nonatomic) NSMutableDictionary* invitedPeopleDictionary;
-@property (strong, nonatomic) NSMutableDictionary* invitedCirclesDictionary;
+- (void)didInvitePeople:(NSMutableDictionary *)people andCircles:(NSMutableDictionary *)circles;
 
 @end
 

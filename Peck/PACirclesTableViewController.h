@@ -10,6 +10,7 @@
 
 #import "PACoreDataProtocol.h"
 #import "Peer.h"
+#import "PAInvitationsTableViewController.h"
 @class PACircleCell;
 @class PACommentCell;
 
@@ -19,7 +20,14 @@
 
 @end
 
-@interface PACirclesTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, PACirclesControllerDelegate, UITextFieldDelegate>
+@interface PACirclesTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, PACirclesControllerDelegate, UITextFieldDelegate, PAInvitationsDelegate>
+
+@property (strong, nonatomic) NSArray* invitedPeople;
+@property (strong, nonatomic) NSArray* invitedCircles;
+
+@property (strong, nonatomic) NSMutableDictionary* invitedPeopleDictionary;
+@property (strong, nonatomic) NSMutableDictionary* invitedCirclesDictionary;
+
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray * circles;
 
@@ -30,16 +38,16 @@
 
 @property (strong, nonatomic) NSIndexPath * selectedIndexPath;
 
--(void)dismissCommentKeyboard;
--(void)postComment:(NSString *)cell;
--(void)showProfileOf:(Peer*)member;
--(void)expandTableViewCell:(PACommentCell *)cell;
--(void)compressTableViewCell:(PACommentCell *)cell;
+- (void)dismissCommentKeyboard;
+- (void)postComment:(NSString *)cell;
+- (void)showProfileOf:(Peer*)member;
+- (void)expandTableViewCell:(PACommentCell *)cell;
+- (void)compressTableViewCell:(PACommentCell *)cell;
 - (void)dismissKeyboard:(id)sender;
--(void)addMember:(Peer*)newMember;
--(void)dismissCircleTitleKeyboard;
--(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath;
--(void)expandCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath;
+- (void)addMember:(Peer*)newMember;
+- (void)dismissCircleTitleKeyboard;
+- (void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath;
+- (void)expandCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath;
 - (void)configureCell:(PACircleCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
 @end
