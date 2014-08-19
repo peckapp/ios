@@ -460,16 +460,16 @@ PAAssetManager * assetManager;
         }
             break;
             
-        case NSFetchedResultsChangeDelete:
+        case NSFetchedResultsChangeDelete:{
             //Event *tempEvent = (Event *)anObject;
             if(viewingEvents){
-                [[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
+                //[[PASyncManager globalSyncManager] deleteEvent: ((Event*)anObject).id];
             }
             [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
-            
+        }
         case NSFetchedResultsChangeUpdate:
             [tableView cellForRowAtIndexPath:indexPath];
             break;
