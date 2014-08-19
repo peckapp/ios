@@ -23,10 +23,12 @@
 #import "PAAssetManager.h"
 #import "PANestedTableViewCell.h"
 #import "PANoContentView.h"
+#import "PATemporaryDropdownView.h"
 
 #define statusBarHeight 20
 #define searchBarHeight 44
 #define parallaxRange 128
+#define dateViewHeight 44
 
 struct eventImage{
     const char* imageURL;
@@ -45,6 +47,8 @@ struct eventImage{
 @property (assign, nonatomic) CGRect rightTableViewFrame;
 
 @property (strong, nonatomic) UIImageView* helperImageView;
+
+@property (strong, nonatomic) PATemporaryDropdownView *dateView;
 
 @property (strong, nonatomic) PANoContentView * noContentView;
 
@@ -65,6 +69,7 @@ UISearchBar * searchBar;
 BOOL viewingEvents;
 BOOL parallaxOn;
 BOOL showingSearchBar;
+
 NSString *searchBarText;
 NSDate *today;
 
@@ -151,10 +156,16 @@ PAAssetManager * assetManager;
     self.rightTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.rightTableView.backgroundColor = [assetManager darkColor];
 
+    if (!self.dateView) {
+        self.dateView = [[PATemporaryDropdownView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, dateViewHeight)];
+        self.dateView.label.text = @"Home";
+        self.dateView.label.textColor = [UIColor whiteColor];
+        self.dateView.hiddenView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+        [self.view addSubview:self.dateView];
+    }
+
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updatePeerInfo];
-
-    [self.view addSubview:[assetManager createShadowWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64) top:NO]];
 
     UISwipeGestureRecognizer *swipeLeftGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(transitionToRightTableView)];
     swipeLeftGesture.numberOfTouchesRequired = 1;
@@ -179,6 +190,9 @@ PAAssetManager * assetManager;
     showingSearchBar = NO;
 
     searchBar.frame = CGRectMake(0, -searchBarHeight, self.view.frame.size.width, searchBarHeight);
+
+    self.dateView.frame = CGRectMake(0, 0, self.view.frame.size.width, dateViewHeight);
+    self.dateView.hiddenView.frame = CGRectMake(0, -dateViewHeight, self.view.frame.size.width, dateViewHeight);
 
     self.leftTableViewFrame = CGRectMake(-self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.centerTableViewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
@@ -250,10 +264,6 @@ PAAssetManager * assetManager;
             self.noContentView = [PANoContentView noContentViewWithFrame:self.view.bounds viewController:self];
             [self.noContentView.subscriptionsButton addTarget:self action:@selector(transitionToSubscriptions) forControlEvents:UIControlEventTouchUpInside];
             [self.noContentView.createButton addTarget:self action:@selector(transitionToCreate) forControlEvents:UIControlEventTouchUpInside];
-        }
-        
-        if (self.noContentView.superview != nil) {
-            [self.noContentView removeFromSuperview];
         }
         
         self.noContentView.alpha = 0;
@@ -911,10 +921,43 @@ PAAssetManager * assetManager;
 }
 */
 
+- (void)displayDateView
+{
+    NSString *date = @"";
+
+    if (self.selectedDay == -1) {
+        date = @"Yesterday";
+    }
+    else if (self.selectedDay == 0) {
+        date = @"Today";
+    }
+    else if (self.selectedDay == 1) {
+        date = @"Tomorrow";
+    }
+    else if (self.selectedDay <= 5 && self.selectedDay >= -3){
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"EEEE"];
+        date = [dateFormatter stringFromDate:[self getDateForDay:self.selectedDay]];
+    }
+    else {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MMM d"];
+        date = [dateFormatter stringFromDate:[self getDateForDay:self.selectedDay]];
+    }
+
+    self.dateView.label.text = date;
+
+    [self.dateView showHiddenView];
+}
+
 - (void)transitionToRightTableView
 {
     if (self.selectedCellIndexPath == nil) {
         NSLog(@"begin transition to right");
+
+        self.selectedDay += 1;
+
+        [self displayDateView];
         
         [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
@@ -930,14 +973,13 @@ PAAssetManager * assetManager;
                              self.centerTableView = self.rightTableView;
                              self.rightTableView = tempView;
 
-                             self.selectedDay += 1;
-
                              self.leftFetchedResultsController = self.centerFetchedResultsController;
                              self.centerFetchedResultsController = self.rightFetchedResultsController;
                              self.rightFetchedResultsController = nil;
 
                              [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
-                             
+
+                             [self.noContentView removeFromSuperview];
                              [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
 
                              NSLog(@"end transition to right");
@@ -949,6 +991,10 @@ PAAssetManager * assetManager;
 {
     if (self.selectedCellIndexPath == nil) {
         NSLog(@"begin transition to left");
+
+        self.selectedDay -= 1;
+
+        [self displayDateView];
         
         [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
@@ -957,8 +1003,6 @@ PAAssetManager * assetManager;
                          }
                          completion:^(BOOL finished){
                              self.rightTableView.frame = self.leftTableViewFrame;
-
-                             self.selectedDay -= 1;
 
                              self.rightFetchedResultsController = self.centerFetchedResultsController;
                              self.centerFetchedResultsController = self.leftFetchedResultsController;
@@ -970,7 +1014,8 @@ PAAssetManager * assetManager;
                              self.leftTableView = tempView;
 
                              [self tableView:self.leftTableView reloadDataFrom:self.leftFetchedResultsController];
-                             
+
+                             [self.noContentView removeFromSuperview];
                              [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
                              
                              NSLog(@"end transition to left");

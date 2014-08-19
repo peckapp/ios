@@ -19,7 +19,7 @@
 + (PANoContentView *)noContentViewWithFrame:(CGRect)frame viewController:(id)sender;
 {
     PANoContentView *noContentView = [[[NSBundle mainBundle] loadNibNamed:@"PANoContentView" owner:nil options:nil] lastObject];
-    
+
     UIView *view = [[UIView alloc] initWithFrame:frame];
     noContentView.center = view.center;
     [view addSubview:noContentView];
