@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.11" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6205" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="wW3-aa-Zdw">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6190.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -25,10 +25,10 @@
         <scene sceneID="cfV-R5-Ne6">
             <objects>
                 <tableViewController id="vCF-rC-B71" customClass="PAPecksViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="tZK-Kv-vMp">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="tZK-Kv-vMp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <connections>
                             <outlet property="dataSource" destination="vCF-rC-B71" id="6y1-Xn-cfP"/>
                             <outlet property="delegate" destination="vCF-rC-B71" id="5Oc-X5-utZ"/>
@@ -39,7 +39,6 @@
                         <barButtonItem key="backBarButtonItem" title="Done" id="iKi-ft-MfS"/>
                         <barButtonItem key="leftBarButtonItem" id="D4q-JD-5ek"/>
                     </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I8C-IW-9eh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -226,7 +225,7 @@
         <!--Invitations Table View Controller-->
         <scene sceneID="77z-Jo-pYu">
             <objects>
-                <viewController id="qq4-RG-yrn" customClass="PAInvitationsTableViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="invitations" id="qq4-RG-yrn" customClass="PAInvitationsTableViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xHj-aI-Mz5">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -695,12 +694,28 @@
             </objects>
             <point key="canvasLocation" x="-2290" y="4604"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="vdJ-Y5-Ava">
+            <objects>
+                <navigationController storyboardIdentifier="changePasswordController" id="Fyx-vP-MWh" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Plf-UW-XPJ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="8ga-7t-38c" kind="relationship" relationship="rootViewController" id="y7g-ZC-X4n"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ePR-9n-Th8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2036" y="5269"/>
+        </scene>
         <!--Change Password-->
         <scene sceneID="mTT-FR-3aA">
             <objects>
                 <tableViewController id="8ga-7t-38c" customClass="PAChangePasswordViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="K56-6s-J97">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="N5e-3i-Dsi">
@@ -833,7 +848,7 @@
         <!--Master-->
         <scene sceneID="VgW-fR-Quf">
             <objects>
-                <tableViewController storyboardIdentifier="primary" title="Master" id="pGg-6v-bdr" customClass="PAEventsViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="primary" title="Master" automaticallyAdjustsScrollViewInsets="NO" id="pGg-6v-bdr" customClass="PAEventsViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="tQt-TN-PWz">
                         <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" id="YHn-tq-yow">
@@ -1046,7 +1061,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4sN-Pf-ic2">
-                                                    <rect key="frame" x="15" y="0.0" width="297" height="89"/>
+                                                    <rect key="frame" x="8" y="0.0" width="302" height="89"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -1253,6 +1268,7 @@
         </simulatedScreenMetrics>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="y7g-ZC-X4n"/>
         <segue reference="hFV-W3-ZgN"/>
     </inferredMetricsTieBreakers>
 </document>

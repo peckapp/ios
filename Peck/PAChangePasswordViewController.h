@@ -12,6 +12,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *oldPasswordField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UITextField *confirmPasswordField;
+@property (strong, nonatomic) NSString* tempPass;
 - (IBAction)changePasswordButton:(id)sender;
 -(void)showWrongPasswordAlert;
 -(void)showSuccessAlert;

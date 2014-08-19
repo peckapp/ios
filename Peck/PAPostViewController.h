@@ -20,6 +20,8 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 - (IBAction)returnResultAndExit:(id)sender;
+- (void)didInvitePeople:(NSMutableDictionary *)people andCircles:(NSMutableDictionary *)circles;
+
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *topRightBarButton;
 
 @property (weak, nonatomic) NSString* controllerStatus;

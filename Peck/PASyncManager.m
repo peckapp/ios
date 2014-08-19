@@ -374,8 +374,18 @@
                                       }
                                       else if([direction isEqualToString:@"change_password"]) {
                                           PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-                                          [appdelegate.dropDownBar selectItemAtIndex:4];
-                                          [appdelegate.profileViewController performSegueWithIdentifier:@"changePassword" sender:appdelegate.profileViewController];
+                                          UIViewController* currentController = [appdelegate topMostController];
+                                          UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                                          UINavigationController *navController = [mainStoryboard instantiateViewControllerWithIdentifier:@"changePasswordController"];
+                                          PAChangePasswordViewController* root = navController.viewControllers[0];
+                                          root.tempPass =[userInfo objectForKey:@"password"];
+                                          
+                                          [currentController presentViewController:navController animated:YES completion:nil];
+                                          /*[appdelegate.dropDownBar selectItemAtIndex:4];
+                                          [appdelegate.profileViewController.navigationController popToRootViewControllerAnimated:NO];
+                                          appdelegate.profileViewController.tempPass = [userInfo objectForKey:@"password"];
+                                          [appdelegate.profileViewController performSegueWithIdentifier:@"changePassword" sender:appdelegate.profileViewController];*/
+                                          
                                       }
                                       else{
                                           if(controller){
@@ -1339,9 +1349,9 @@
         NSCalendar *calendar = [NSCalendar currentCalendar];
         NSDateComponents *components = [calendar components:(NSWeekdayCalendarUnit) fromDate:[NSDate date]];
         
-        NSString* diningOpportunitiesURL = [dining_opportunitiesAPI stringByAppendingString:@"?day_of_week="];
-        diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[@([components weekday]-1) stringValue]];
-        diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:@"&institution_id="];
+        NSString* diningOpportunitiesURL = [dining_opportunitiesAPI stringByAppendingString:@"?"];//day_of_week="];
+        //diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[@([components weekday]-1) stringValue]];
+        diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:@"institution_id="];
         diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"] stringValue]];
         
         [[PASessionManager sharedClient] GET:diningOpportunitiesURL

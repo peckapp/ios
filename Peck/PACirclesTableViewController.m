@@ -10,12 +10,14 @@
 #import "PACircleCell.h"
 #import "PAAppDelegate.h"
 #import "Circle.h"
+#import "PAFetchManager.h"
 #import "PASyncManager.h"
 #import "PAFriendProfileViewController.h"
 #import "HTAutocompleteManager.h"
 #import "PACommentCell.h"
 #import "PAFriendProfileViewController.h"
 #import "PAAssetManager.h"
+#import "PAInvitationsTableViewController.h"
 
 #define cellHeight 100.0
 #define reloadTime 10
@@ -112,9 +114,9 @@ PAAssetManager *assetManager;
     self.textCapture.inputAccessoryView = accessory;
     [self.view addSubview:self.textCapture];
 
-   /* self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
+    self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissCommentKeyboard)];
     self.tapRecognizer.cancelsTouchesInView = NO;
-    [self.view addGestureRecognizer:self.tapRecognizer];*/
+    [self.view addGestureRecognizer:self.tapRecognizer];
 
 
     self.keyboardAccessoryView = [[UIView alloc] init];
@@ -207,15 +209,16 @@ PAAssetManager *assetManager;
 #pragma mark - text field delegate
 
 -(void)textFieldDidChange:(UITextField*)textField{
+    /*
     NSLog(@"textfield text: %@",textField.text);
     //NSLog(@"row: %i, section: %i",[self.selectedIndexPath row], [self.selectedIndexPath section]);
     PACircleCell * selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
     selectedCell.suggestedMembers = [self suggestedMembers:textField.text];
     [selectedCell.suggestedMembersTableView reloadData];
+     */
 }
 
 /*- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    //TODO: this is where we will send a new member to a circle that is already created
     NSLog(@"add a new member");
     HTAutocompleteTextField *tempTextField = (HTAutocompleteTextField *)textField;
     [self addMemberWithTextField:tempTextField];
@@ -247,8 +250,8 @@ PAAssetManager *assetManager;
 -(void)addMember:(Peer*)newMember{
     self.inviteTextField.text=@"";
     PACircleCell* selectedCell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
-    selectedCell.suggestedMembers=nil;
-    [selectedCell.suggestedMembersTableView reloadData];
+    //selectedCell.suggestedMembers=nil;
+    //[selectedCell.suggestedMembersTableView reloadData];
     
     if(self.selectedIndexPath.row!=[_fetchedResultsController.fetchedObjects count]){
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -491,7 +494,6 @@ PAAssetManager *assetManager;
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
         cell.circleTitle.text=@"New";
         [cell.profilesTableView setHidden:YES];
-        [cell.suggestedMembersTableView setHidden:NO];
         [cell.commentsTableView setHidden:YES];
         [cell.titleTextField setHidden:YES];
         [cell.createCircleButton setHidden:YES];
@@ -509,15 +511,8 @@ PAAssetManager *assetManager;
     else{
         [cell.titleTextField setHidden:YES];
         [cell.profilesTableView setHidden:NO];
+        [cell.commentsTableView setHidden:NO];
         [cell.createCircleButton setHidden:YES];
-        if(!cell.addingMembers){
-            [cell.suggestedMembersTableView setHidden:YES];
-            [cell.commentsTableView setHidden:NO];
-        }
-        else if(cell.addingMembers){
-            [cell.suggestedMembersTableView setHidden:NO];
-            [cell.commentsTableView setHidden:YES];
-        }
         
         Circle * c = [_fetchedResultsController objectAtIndexPath:indexPath];
         //NSLog(@"configure cell for circle %@", c);
@@ -580,8 +575,7 @@ PAAssetManager *assetManager;
 
 - (void)promptToAddMemberToCircleCell:(PACircleCell *)cell
 {
-    
-    NSLog(@"!!!");
+    /*
     [cell.commentsTableView setHidden:YES];
     [cell.suggestedMembersTableView setHidden:NO];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:cell.tag inSection:0];
@@ -601,14 +595,50 @@ PAAssetManager *assetManager;
     [self.keyboardAccessoryView removeFromSuperview];
     
     [self configureCell:cell atIndexPath:indexPath];
+     */
+
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:cell.tag inSection:0];
+    self.selectedIndexPath = indexPath;
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    self.tableView.scrollEnabled = NO;
+    viewingCell=YES;
+
+    selectedCell=cell.tag;
+    selectedCircle=cell.circle;
+
+    [self configureCell:cell atIndexPath:indexPath];
+
+    PAInvitationsTableViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"invitations"];
+    [self presentViewController:vc animated:YES completion:^{}];
+    vc.delegate = self;
+
+    Peer *peer;
+    NSMutableDictionary *mutableDictionary = [[NSMutableDictionary alloc] init];
+    for (peer in cell.members) {
+        [mutableDictionary setObject:peer.id forKey:[peer.id stringValue]];
+    }
+
+    vc.invitedPeople = mutableDictionary;
+    vc.invitedCircles = nil;
+
+
+}
+
+- (void)didInvitePeople:(NSMutableDictionary *)people andCircles:(NSMutableDictionary *)circles
+{
+    NSNumber *peerId;
+    for (peerId in people) {
+        [self addMember:[[PAFetchManager sharedFetchManager] getPeerWithID:peerId]];
+    }
 }
 
 - (void)dismissKeyboard:(id)sender
 {
-    NSLog(@"???");
     [self.inviteTextField resignFirstResponder];
     [self.textCapture resignFirstResponder];
-    }
+}
 
 -(void)dismissCircleTitleKeyboard{
     PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
@@ -678,6 +708,7 @@ PAAssetManager *assetManager;
     [self.tableView beginUpdates];
     NSLog(@"controller will change object");
 }
+
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {

@@ -23,6 +23,8 @@
 
 @property (strong, nonatomic) UITableView *tableView;
 
+@property (nonatomic) CGRect viewFrame;
+
 - (void)configureView;
 - (void)fetchDiningPlace:(DiningPeriod *)diningPeriod;
 - (void)addDiningPlace:(DiningPlace *)diningPlace withPeriod:(DiningPeriod*)diningPeriod;

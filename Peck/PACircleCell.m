@@ -50,7 +50,8 @@ PAAssetManager * assetManager;
     self.profilesTableView.dataSource = self;
 
     self.profilesTableView.transform = CGAffineTransformMakeRotation(-M_PI_2);
-    self.profilesTableView.frame = CGRectMake(0, 52.0, self.frame.size.width, 52.0);
+    self.profilesTableView.frame = CGRectMake(0, 40.0, self.frame.size.width, 52.0);
+    self.profilesTableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
 
     self.commentsTableView.delegate=self;
     self.commentsTableView.dataSource=self;
@@ -58,9 +59,6 @@ PAAssetManager * assetManager;
     
     //NSLog(@"the superview height: %f", self.b);
     //self.commentsTableView.frame = CGRectMake(0, 0, self.superview.frame.size.width, <#CGFloat height#>)
-    
-    self.suggestedMembersTableView.delegate=self;
-    self.suggestedMembersTableView.dataSource=self;
     
     NSLog(@"frame height: %f", self.frame.size.height);
     //self.commentsTableView.frame = CGRectMake(0, 100, self.frame.size.width, self.frame.size.height-200);
@@ -117,10 +115,7 @@ PAAssetManager * assetManager;
 #pragma mark Table view data source
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    
-    if(tableView==self.suggestedMembersTableView){
-        return @"Add members";
-    }else if(tableView==self.commentsTableView){
+    if(tableView==self.commentsTableView){
         return @"Comments";
     }else{
         return @"";
@@ -131,7 +126,7 @@ PAAssetManager * assetManager;
     if(tableView==self.profilesTableView){
         return 0;
     }
-    return 30;
+    return 48;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -143,9 +138,6 @@ PAAssetManager * assetManager;
     else if (tableView == self.commentsTableView) {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
         return [sectionInfo numberOfObjects];
-    }
-    else if(tableView== self.suggestedMembersTableView){
-        return [self.suggestedMembers count];
     }
     else {
         return 0;
@@ -179,14 +171,6 @@ PAAssetManager * assetManager;
             cell = [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
         }
         [self configureCommentCell:cell atIndexPath:indexPath];
-        return cell;
-    }
-    else if(tableView == self.suggestedMembersTableView){
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"suggestedMember"];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"suggestedMember"];
-        }
-        [self configureSuggestedMemberCell:cell atIndexPath:indexPath];
         return cell;
     }
     else {
@@ -399,8 +383,8 @@ PAAssetManager * assetManager;
         }
         return defaultCellHeight+cellY;
 
-    }
-    else {
+
+    }    else {
         return 44;
     }
 }
@@ -434,12 +418,7 @@ PAAssetManager * assetManager;
         }
 
     }
-    else if(tableView == self.suggestedMembersTableView){
-        PACirclesTableViewController* parent = (PACirclesTableViewController*)self.parentViewController;
-        
-        Peer * newMember = self.suggestedMembers[indexPath.row];
-        [parent addMember:newMember];
-    }
+
     else {
 
     }
@@ -565,11 +544,6 @@ PAAssetManager * assetManager;
         // [self.commentsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
         PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentViewController;
         [parent dismissCommentKeyboard];
-    }
-    else if(scrollView==self.suggestedMembersTableView){
-        PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentViewController;
-        [parent dismissKeyboard:self];
-        [parent dismissCircleTitleKeyboard];
     }
 }
 

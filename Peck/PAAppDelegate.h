@@ -33,4 +33,5 @@
 - (NSURL *)applicationDocumentsDirectory;
 -(void)setProfileProperty:(PAProfileTableViewController*)profileController;
 
+- (UIViewController*) topMostController;
 @end

@@ -322,13 +322,8 @@ PAAssetManager * assetManager;
 
 - (IBAction)addInvites:(id)sender
 {
-    self.delegate.invitedPeople = [self.invitedPeople allValues];
-    self.delegate.invitedCircles = [self.invitedCircles allValues];
-    
-    self.delegate.invitedPeopleDictionary = self.invitedPeople;
-    self.delegate.invitedCirclesDictionary = self.invitedCircles;
     [self.view endEditing:YES];
-
+    [self.delegate didInvitePeople:self.invitedPeople andCircles:self.invitedCircles];
     [self dismissViewControllerAnimated:YES completion:nil];
 
 }
