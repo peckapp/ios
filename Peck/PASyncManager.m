@@ -437,6 +437,8 @@
                                               [defaults setObject:lastName forKey:last_name_define];
                                               [defaults setObject:email forKey:@"email"];
                                               [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
+                                              //defaults setObject:@" forKey:<#(NSString *)#>
+                                              //TODO: set the api key from a super create
                                           
                                               if(![blurb isKindOfClass:[NSNull class]]){
                                                   [defaults setObject:blurb forKey:@"blurb"];
