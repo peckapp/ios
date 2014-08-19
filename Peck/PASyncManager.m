@@ -1533,7 +1533,7 @@
 
 -(void)updateMenuItemsForOpportunity:(Event*)diningOpportunity andPlace:(DiningPlace*)diningPlace{
     NSString * menuItemsURL = [menu_itemsAPI stringByAppendingString:@"?dining_opportunity_id="];
-    menuItemsURL = [menuItemsURL stringByAppendingString:[diningOpportunity.id stringValue]];
+    menuItemsURL = [menuItemsURL stringByAppendingString:[diningOpportunity.opportunity_id stringValue]];
     menuItemsURL = [menuItemsURL stringByAppendingString:@"&date_available="];
     
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
