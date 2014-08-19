@@ -13,6 +13,7 @@
 #import "PAInitialViewController.h"
 #import "PAFriendProfileViewController.h"
 #import "UIImageView+AFNetworking.h"
+#import "PAChangePasswordViewController.h"
 
 @interface PAProfileTableViewController ()
 
@@ -131,6 +132,11 @@ BOOL loggedIn;
      if([[segue identifier] isEqualToString:@"showSubscriptions"]){
          NSLog(@"update subscriptions");
          
+     }
+     else if([[segue identifier] isEqualToString:@"changePassword"]){
+         PAChangePasswordViewController* destination = [segue destinationViewController];
+         destination.tempPass = self.tempPass;
+         self.tempPass=nil;
      }
  // Get the new view controller using [segue destinationViewController].
  // Pass the selected object to the new view controller.

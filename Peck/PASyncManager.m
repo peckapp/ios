@@ -374,8 +374,18 @@
                                       }
                                       else if([direction isEqualToString:@"change_password"]) {
                                           PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-                                          [appdelegate.dropDownBar selectItemAtIndex:4];
-                                          [appdelegate.profileViewController performSegueWithIdentifier:@"changePassword" sender:appdelegate.profileViewController];
+                                          UIViewController* currentController = [appdelegate topMostController];
+                                          UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                                          UINavigationController *navController = [mainStoryboard instantiateViewControllerWithIdentifier:@"changePasswordController"];
+                                          PAChangePasswordViewController* root = navController.viewControllers[0];
+                                          root.tempPass =[userInfo objectForKey:@"password"];
+                                          
+                                          [currentController presentViewController:navController animated:YES completion:nil];
+                                          /*[appdelegate.dropDownBar selectItemAtIndex:4];
+                                          [appdelegate.profileViewController.navigationController popToRootViewControllerAnimated:NO];
+                                          appdelegate.profileViewController.tempPass = [userInfo objectForKey:@"password"];
+                                          [appdelegate.profileViewController performSegueWithIdentifier:@"changePassword" sender:appdelegate.profileViewController];*/
+                                          
                                       }
                                       else{
                                           if(controller){
@@ -602,57 +612,89 @@
 
 -(void)updatePeerInfo
 {
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        
+    
+    
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         
-        NSLog(@"in secondary thread to update peer info");
+        NSString* usersURL = [[usersAPI stringByAppendingString:@"?institution_id="] stringByAppendingString:[[defaults objectForKey:@"institution_id"] stringValue]];
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
         _managedObjectContext = [appdelegate managedObjectContext];
         _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
-        [[PASessionManager sharedClient] GET:usersAPI
+        [[PASessionManager sharedClient] GET:usersURL
                                   parameters:[self authenticationParameters]
                                      success:^
-         (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"Peer JSON: %@",JSON);
-             NSDictionary *usersDictionary = (NSDictionary*)JSON;
-             NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
-             for (NSDictionary *userAttributes in postsFromResponse) {
-                 NSNumber *newID = [userAttributes objectForKey:@"id"];
-                 BOOL userAlreadyExists = [self objectExists:newID withType:@"Peer" andCategory:nil];
-                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                 [self.persistentStoreCoordinator lock];
-                 if(!userAlreadyExists && !([[defaults objectForKey:@"user_id"] integerValue]==[newID integerValue])){
-                     //NSLog(@"about to add the peer");
-                     if(![[userAttributes objectForKey:first_name_define] isKindOfClass:[NSNull class]]){
-                         Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
-                         [self setAttributesInPeer:peer withDictionary:userAttributes];
-                     }
-                     //NSLog(@"PEER: %@",peer);
-                 }if(userAlreadyExists){
-                     //if the peer is already in core data and is not the user
-                     Peer* peer = [[PAFetchManager sharedFetchManager] getPeerWithID:newID];
-                     if(peer){
-                         [self setAttributesInPeer:peer withDictionary:userAttributes];
-                     }
+        (NSURLSessionDataTask * __unused task, id JSON) {
+            //NSLog(@"Peer JSON: %@",JSON);
+            NSDictionary *usersDictionary = (NSDictionary*)JSON;
+            NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
+            [self handlePeers:postsFromResponse];
+        }
+                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                        NSLog(@"ERROR: %@",error);
+                                    }];
+        
+        if([defaults objectForKey:@"home_institution"]){
+            if([[defaults objectForKey:@"home_institution"] integerValue]!=[[defaults objectForKey:@"institution_id"] integerValue]){
+                //if the user is logged in and on a different institution than his home institution
+                NSLog(@"get peers for home institution as well");
+                usersURL =  [[usersAPI stringByAppendingString:@"?institution_id="] stringByAppendingString:[[defaults objectForKey:@"home_institution"] stringValue]];
+                [[PASessionManager sharedClient] GET:usersURL
+                                          parameters:[self authenticationParameters]
+                                             success:^
+                 (NSURLSessionDataTask * __unused task, id JSON) {
+                     //NSLog(@"Peer JSON: %@",JSON);
+                     NSDictionary *usersDictionary = (NSDictionary*)JSON;
+                     NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
+                     [self handlePeers:postsFromResponse];
+                     [self updatePecks];
+                     [self updateCircleInfo];
                  }
-                 NSError* error = nil;
-                 [_managedObjectContext save:&error];
-                 [self.persistentStoreCoordinator unlock];
-             }
-         }
-                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                         NSLog(@"ERROR: %@",error);
-                                     }];
+                                             failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                                 NSLog(@"ERROR: %@",error);
+                                             }];
+                
+            }
+        }
         
         dispatch_async(dispatch_get_main_queue(), ^{
             //TODO: if there are any problems with the core data being added in the thread above,
             // then we should add a separate managed object context and merge the two in this thread.
-            
-            
         });
     });
+    
+}
 
+-(void)handlePeers:(NSArray*)peers{
+    for (NSDictionary *userAttributes in peers) {
+        NSNumber *newID = [userAttributes objectForKey:@"id"];
+        BOOL userAlreadyExists = [self objectExists:newID withType:@"Peer" andCategory:nil];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [self.persistentStoreCoordinator lock];
+        if(!userAlreadyExists && !([[defaults objectForKey:@"user_id"] integerValue]==[newID integerValue])){
+            //NSLog(@"about to add the peer");
+            if(![[userAttributes objectForKey:first_name_define] isKindOfClass:[NSNull class]]){
+                Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
+                [self setAttributesInPeer:peer withDictionary:userAttributes];
+            }
+            //NSLog(@"PEER: %@",peer);
+        }if(userAlreadyExists){
+            //if the peer is already in core data and is not the user
+            Peer* peer = [[PAFetchManager sharedFetchManager] getPeerWithID:newID];
+            if(peer){
+                [self setAttributesInPeer:peer withDictionary:userAttributes];
+            }
+        }
+        NSError* error = nil;
+        [_managedObjectContext save:&error];
+        [self.persistentStoreCoordinator unlock];
+    }
+
+    
 }
 
 
@@ -1307,9 +1349,9 @@
         NSCalendar *calendar = [NSCalendar currentCalendar];
         NSDateComponents *components = [calendar components:(NSWeekdayCalendarUnit) fromDate:[NSDate date]];
         
-        NSString* diningOpportunitiesURL = [dining_opportunitiesAPI stringByAppendingString:@"?day_of_week="];
-        diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[@([components weekday]-1) stringValue]];
-        diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:@"&institution_id="];
+        NSString* diningOpportunitiesURL = [dining_opportunitiesAPI stringByAppendingString:@"?"];//day_of_week="];
+        //diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[@([components weekday]-1) stringValue]];
+        diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:@"institution_id="];
         diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"] stringValue]];
         
         [[PASessionManager sharedClient] GET:diningOpportunitiesURL

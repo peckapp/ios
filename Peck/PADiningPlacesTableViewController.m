@@ -15,6 +15,7 @@
 #import "PADiningCell.h"
 #import "PAAssetManager.h"
 #import "PANestedTableViewCell.h"
+#import "PADiningOpportunityViewController.h"
 
 #define cellHeight 88
 
@@ -100,6 +101,9 @@ PAAssetManager *assetManager;
     self.diningPlaces = [[NSMutableArray alloc] init];
     [self fetchDiningPeriods];
     [self.tableView reloadData];
+    self.view.frame = self.parentViewController.view.bounds;
+    self.viewFrame = self.parentViewController.view.bounds;
+    NSLog(@"dining places view frame %@", NSStringFromCGRect(self.view.bounds));
 }
 
 - (void)compressAnimated:(BOOL)animated
@@ -289,6 +293,8 @@ PAAssetManager *assetManager;
     self.selectedCellIndexPath = indexPath;
     PANestedTableViewCell *cell = (PANestedTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     cell.viewController.view.userInteractionEnabled = YES;
+    PADiningOpportunityViewController* viewController =  (PADiningOpportunityViewController*)cell.viewController;
+    viewController.parentController = self;
     [cell.viewController expandAnimated:YES];
     [[cell.viewController viewForBackButton] addSubview:self.backButton];
 

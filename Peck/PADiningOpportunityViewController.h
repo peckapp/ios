@@ -12,6 +12,7 @@
 #import "PACommentCell.h"
 #import "DiningPlace.h"
 #import "Event.h"
+#import "PADiningPlacesTableViewController.h"
 
 @interface PADiningOpportunityViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, PANestedTableViewCellSubviewControllerProtocol>
 
@@ -25,5 +26,6 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (strong, nonatomic) PADiningPlacesTableViewController* parentController;
 
 @end

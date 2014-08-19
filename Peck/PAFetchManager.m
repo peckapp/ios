@@ -154,7 +154,7 @@
     [[PASyncManager globalSyncManager] updateDiningInfo];
     [[PASyncManager globalSyncManager] updatePecks];
     [[PASyncManager globalSyncManager] updateCircleInfo];
-    //[[PASyncManager globalSyncManager] updatePeerInfo];
+    [[PASyncManager globalSyncManager] updatePeerInfo];
 }
 
 -(void)removeAllObjectsOfType:(NSString*)type{

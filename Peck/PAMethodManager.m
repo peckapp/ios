@@ -139,8 +139,7 @@
                 object[@"description"] =[eventInfo objectForKey:@"event_description"] ;
                 
                 // for og:url, we cover how this is used in the "Deep Linking" section below
-                object[@"url"] = @"http://loki.peckapp.com:3500/deep_links/native_peck";
-                
+                object[@"url"] =[ @"http://loki.peckapp.com:3500/deep_links/native_peck?event_id=" stringByAppendingString:[[eventInfo objectForKey:@"id"] stringValue]];
                 //object[@"url"] = @"http://example.com/roasted_pumpkin_seeds";
                 //TODO: fix the url to work with deep linking
                 
