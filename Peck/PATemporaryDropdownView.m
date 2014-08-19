@@ -61,7 +61,7 @@
 
 - (void)forceHiddenView
 {
-    if (self.pendingHideCount > 0) {
+    if (self.pendingHideCount >= 0) {
         self.pendingHideCount = 0;
         [self animateOut];
     }
