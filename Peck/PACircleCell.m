@@ -50,7 +50,8 @@ PAAssetManager * assetManager;
     self.profilesTableView.dataSource = self;
 
     self.profilesTableView.transform = CGAffineTransformMakeRotation(-M_PI_2);
-    self.profilesTableView.frame = CGRectMake(0, 52.0, self.frame.size.width, 52.0);
+    self.profilesTableView.frame = CGRectMake(0, 40.0, self.frame.size.width, 52.0);
+    self.profilesTableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
 
     self.commentsTableView.delegate=self;
     self.commentsTableView.dataSource=self;
@@ -125,7 +126,7 @@ PAAssetManager * assetManager;
     if(tableView==self.profilesTableView){
         return 0;
     }
-    return 30;
+    return 48;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
