@@ -856,7 +856,7 @@ PAAssetManager * assetManager;
 {
 
     if (scrollView.contentOffset.y < -heightToShowDate) {
-        [self.datePopup temporarilyShowHiddenView];
+        [self.datePopup showHiddenView];
         //self.centerTableView.contentInset = UIEdgeInsetsZero;
     }
     else if (scrollView.contentOffset.y > 0) {
@@ -899,6 +899,8 @@ PAAssetManager * assetManager;
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     [_searchBar resignFirstResponder];
+    [_leftSearchBar resignFirstResponder];
+    [_rightSearchBar resignFirstResponder];
 }
 
 #pragma mark - Search Bar Delegate
@@ -991,6 +993,7 @@ PAAssetManager * assetManager;
         date = [dateFormatter stringFromDate:[self getDateForDay:self.selectedDay]];
     }
 
+    [self.datePopup configureTodayButton:self.selectedDay];
     self.datePopup.label.text = date;
     [self.datePopup temporarilyShowHiddenView];
 }
@@ -1067,6 +1070,40 @@ PAAssetManager * assetManager;
                              NSLog(@"end transition to left");
                          }];
     }
+}
+
+-(void)switchToCurrentDay{
+    //change fetched results controllers and table views
+    if(self.selectedDay!=0){
+    
+        if(self.selectedDay<-1){
+            self.selectedDay=-1;
+            [self clearAllControllers];
+        }else if (self.selectedDay>1){
+            self.selectedDay=1;
+            [self clearAllControllers];
+        }
+    
+        [self clearSearchBars];
+        [self displaydatePopup];
+    
+        if(self.selectedDay<0){
+            [self transitionToRightTableView];
+        }else if(self.selectedDay>0){
+            [self transitionToLeftTableView];
+        }
+    }
+}
+
+-(void)clearAllControllers{
+    self.centerFetchedResultsController = nil;
+    self.rightFetchedResultsController = nil;
+    self.leftFetchedResultsController = nil;
+    
+    
+    [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+    [self tableView:self.leftTableView reloadDataFrom:self.leftFetchedResultsController];
+    [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
 }
 
 -(void)clearSearchBars{
