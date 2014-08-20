@@ -83,7 +83,11 @@ NSCache *imageCache;
     _searchBar.showsCancelButton = NO;
     _searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
     
-    self.tableView.tableHeaderView = self.searchBar;
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 54)];
+    [headerView addSubview:_searchBar];
+    //headerView.backgroundColor =
+    //self.tableView.tableHeaderView = self.searchBar;
+    self.tableView.tableHeaderView = headerView;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
