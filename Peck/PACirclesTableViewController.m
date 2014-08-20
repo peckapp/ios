@@ -116,8 +116,8 @@ PAAssetManager *assetManager;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-    //[super viewWillAppear:animated];
     //when this is uncommented, a strange error occurs where the circle cell will scroll up when the comment cell is selected
+    [super viewWillAppear:animated];
     
     /*_fetchedResultsController=nil;
     NSError *error = nil;
@@ -939,7 +939,7 @@ PAAssetManager *assetManager;
     NSError *error = nil;
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
     
-    NSArray* currentMembers = [[NSArray alloc] init];
+    NSArray* currentMembers = nil;
     if([_fetchedResultsController.fetchedObjects count]>self.selectedIndexPath.row){
         //if the user is adding members to an already created circle
         Circle* circle = [_fetchedResultsController objectAtIndexPath:self.selectedIndexPath];

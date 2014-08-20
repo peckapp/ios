@@ -34,9 +34,10 @@
 #import "Peck.h"
 #import "Announcement.h"
 #import "PAMethodManager.h"
+#import "PAUtils.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
-#define shortTermUDID @"1"
+
 
 @interface PASyncManager ()
 
@@ -94,8 +95,8 @@
 
 -(void)logoutUser{
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
-                            shortTermUDID, @"udid",
-                             @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464",@"device_token",
+                            deviceVendorIdentifier, @"udid",
+                            storedPushToken ,@"device_token",
                             [[self authenticationParameters] objectForKey:@"authentication"],@"authentication",
                             nil];
     [[PASessionManager sharedClient] DELETE:@"api/access/logout"
@@ -112,10 +113,10 @@
 }
 
 -(void)sendUDIDForInitViewController:(UIViewController*)initViewController{
-    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
+    //NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 //[store objectForKey:@"udid"],@"udid",
-                                shortTermUDID,@"udid",
+                                deviceVendorIdentifier,@"udid",
                                 nil];
     [[PASessionManager sharedClient] POST:@"api/users/user_for_udid"
                                parameters:dictionary
@@ -239,10 +240,10 @@
 -(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock
 {
     NSLog(@"creating an anonymous new user");
-    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
+    //NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     //NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:[store objectForKey:@"udid"] forKey:@"udid"];
-    NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:shortTermUDID forKey:@"udid"];
+    NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:deviceVendorIdentifier forKey:@"udid"];
     NSLog(@"deviceInfo: %@", deviceInfo);
     [[PASessionManager sharedClient] POST:usersAPI
                                parameters:deviceInfo
@@ -2265,10 +2266,10 @@
 // adds the unique user device token to any NSDictionary at the top level
 - (NSDictionary*)addUDIDToDictionary:(NSDictionary *)dictionary {
     // adds the unique user device token to the userInfo NSDictionary
-    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
+    //NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSMutableDictionary *mutDict = [dictionary mutableCopy];
     //[mutDict setObject:[store objectForKey:@"udid"] forKey:@"udid"];
-    [mutDict setObject:shortTermUDID forKey:@"udid"];
+    [mutDict setObject:deviceVendorIdentifier forKey:@"udid"];
     return [mutDict copy];
 }
 

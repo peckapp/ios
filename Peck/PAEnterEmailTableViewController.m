@@ -12,6 +12,7 @@
 #import "PAFetchManager.h"
 #import "PASyncManager.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "PAUtils.h"
 
 @interface PAEnterEmailTableViewController ()
 
@@ -95,7 +96,7 @@
             NSDictionary* loginInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                        self.emailField.text,@"email",
                                        self.passwordField.text, @"password",
-                                       @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
+                                       storedPushToken, @"device_token",
                                        [self.parent.user objectForKey:@"link"], @"facebook_link",
                                        token, @"facebook_token",
                                        

@@ -238,6 +238,7 @@
 		8687622B19A38710009AF3D1 /* PANoContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PANoContentView.h; sourceTree = "<group>"; };
 		8687622C19A38710009AF3D1 /* PANoContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PANoContentView.m; sourceTree = "<group>"; };
 		8687622E19A38724009AF3D1 /* PANoContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PANoContentView.xib; sourceTree = "<group>"; };
+		8687623019A51E90009AF3D1 /* PAUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PAUtils.h; sourceTree = SOURCE_ROOT; };
 		8689DD89195871D200A6B61C /* PAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAFilter.h; sourceTree = "<group>"; };
 		8689DD8A195871D200A6B61C /* PAFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAFilter.m; sourceTree = "<group>"; };
 		8689DDAF19589E3600A6B61C /* filter_detail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_detail@2x.png"; sourceTree = "<group>"; };
@@ -645,6 +646,7 @@
 				86B528E8198ABA76008E6060 /* Peck.entitlements */,
 				A433EAA3195B43C700DAA201 /* AutocompleteManager */,
 				868572281943787300287A73 /* PACoreDataProtocol.h */,
+				8687623019A51E90009AF3D1 /* PAUtils.h */,
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
 				86D59816193768BF00F38654 /* Main.storyboard */,

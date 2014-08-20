@@ -660,7 +660,7 @@ BOOL reloaded = NO;
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath{
     NSLog(@"configure cell");
-    cell.parentTableView = self;
+    cell.parentTableView = (UITableViewController*)self;
 
     //Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]];
     Comment* tempComment = [_fetchedResultsController objectAtIndexPath:indexPath];
