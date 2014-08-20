@@ -404,7 +404,8 @@ PAAssetManager *assetManager;
     [cell addSubview:self.keyboardAccessoryView];
 }
 
--(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+-(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath
+{
     [self dismissKeyboard:self];
     [self.addedPeers removeAllObjects];
     viewingCell=NO;
@@ -466,6 +467,7 @@ PAAssetManager *assetManager;
 {
     cell.tag=[indexPath row];
     cell.parentViewController=self;
+    cell.commentsTableView.frame = CGRectMake(cell.commentsTableView.frame.origin.x, cell.commentsTableView.frame.origin.y, cell.frame.size.width, cell.frame.size.height - cell.commentsTableView.frame.origin.y);
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
         cell.circleTitle.text=@"New";
         [cell.profilesTableView setHidden:YES];

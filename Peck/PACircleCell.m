@@ -181,11 +181,11 @@ PAAssetManager * assetManager;
 - (void)configureMemberCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     UIView * thumbnail = [[UIView alloc] initWithFrame:cell.frame];
     if (indexPath.row == [self.members count]) {
-        [thumbnail addSubview:[assetManager createThumbnailWithFrame:cell.frame imageView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"plus"]]]];
+        [thumbnail addSubview:[assetManager createThumbnailWithFrame:cell.bounds imageView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"plus"]]]];
     }
     else {
         Peer* peer = self.members[indexPath.row];
-        [thumbnail addSubview:[assetManager createThumbnailWithFrame:cell.frame imageView:[self imageForPeerID:peer.id]]];
+        [thumbnail addSubview:[assetManager createThumbnailWithFrame:cell.bounds imageView:[self imageForPeerID:peer.id]]];
     }
 
     thumbnail.userInteractionEnabled = NO;
