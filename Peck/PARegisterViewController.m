@@ -9,6 +9,7 @@
 #import "PARegisterViewController.h"
 #import "PASyncManager.h"
 #import "PAFetchManager.h"
+#import "PAUtils.h"
 
 @interface PARegisterViewController ()
 
@@ -152,7 +153,7 @@
                                                 self.emailField.text, @"email",
                                                 institutionID, @"institution_id",
                                                 userID, @"id",
-                                                @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
+                                                storedPushToken, @"device_token",
                                                 nil];
         
                 [[PASyncManager globalSyncManager] registerUserWithInfo:registeredUser];

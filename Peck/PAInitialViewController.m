@@ -12,6 +12,7 @@
 #import "PAFetchManager.h"
 #import "Institution.h"
 #import "PAEnterEmailTableViewController.h"
+#import "PAUtils.h"
 
 @interface PAInitialViewController ()
 
@@ -105,7 +106,7 @@
         NSDictionary* loginInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                    self.emailField.text,@"email",
                                    self.passwordField.text, @"password",
-                                   @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
+                                   storedPushToken, @"device_token",
                                    nil];
         [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self direction:self.direction];
     }
@@ -184,7 +185,7 @@
                               [user objectForKey:@"last_name"],@"last_name",
                               email,@"email",
                               token, @"facebook_token",
-                              @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
+                              storedPushToken, @"device_token",
                               [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"],@"institution_id",
                               [NSNumber numberWithBool:sendEmail], @"send_email",
                               [user objectForKey:@"link"], @"facebook_link",

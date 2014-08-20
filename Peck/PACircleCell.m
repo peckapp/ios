@@ -186,7 +186,7 @@ PAAssetManager * assetManager;
 
 - (void)configureMemberCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     UIView * thumbnail = [[UIView alloc] initWithFrame:cell.frame];
-    NSLog(@"row: %li frame: %@", indexPath.row,NSStringFromCGRect(cell.frame));
+    //NSLog(@"row: %li frame: %@", (long)indexPath.row,NSStringFromCGRect(cell.frame));
     if (indexPath.row == [self.members count]) {
         [thumbnail addSubview:[assetManager createThumbnailWithFrame:cell.frame imageView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"plus"]]]];
     }
@@ -496,6 +496,12 @@ PAAssetManager * assetManager;
             
         case NSFetchedResultsChangeDelete:
             [self.commentsTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
             break;
     }
 }

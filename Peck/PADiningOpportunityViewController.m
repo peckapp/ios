@@ -56,6 +56,9 @@ PAAssetManager *assetManager;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    // causes some jumpiness when uncommented
+    //[super viewWillAppear:animated];
+    
     self.view.frame = self.parentViewController.view.bounds;
 
     self.locationImageView.frame = CGRectMake(0, 0, self.view.frame.size.width, 256);
@@ -307,7 +310,7 @@ PAAssetManager *assetManager;
 
         case NSFetchedResultsChangeUpdate:
         {
-            UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            PADiningOpportunityCell * cell = (PADiningOpportunityCell*)[self.tableView cellForRowAtIndexPath:indexPath];
             [self configureCell:cell atIndexPath:indexPath];
             break;
         }
