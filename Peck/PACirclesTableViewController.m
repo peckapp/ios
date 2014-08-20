@@ -414,6 +414,7 @@ PAAssetManager *assetManager;
 }
 
 -(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    NSLog(@"condense cell for row: %li", (long)indexPath.row);
     [self dismissKeyboard:self];
     [self.addedPeers removeAllObjects];
     viewingCell=NO;
@@ -422,6 +423,7 @@ PAAssetManager *assetManager;
     self.tableView.scrollEnabled = YES;
     [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
     cell.addingMembers=NO;
+    [self.tableView reloadData];
     self.selectedIndexPath = nil;
     [self dismissKeyboard:self];
     if(indexPath){
@@ -429,6 +431,7 @@ PAAssetManager *assetManager;
     }else{
         [cell.leaveCircleButton setHidden:YES];
     }
+    
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
     [self.keyboardAccessoryView removeFromSuperview];
