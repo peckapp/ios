@@ -13,7 +13,8 @@
 @property (strong, nonatomic) UIView *hiddenView;
 @property (strong, nonatomic) UILabel *label;
 
+- (void)temporarilyShowHiddenView;
 - (void)showHiddenView;
-- (void)forceHiddenView;
+- (void)hideHiddenView;
 
 @end
