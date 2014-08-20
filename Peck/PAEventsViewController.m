@@ -833,7 +833,7 @@ PAAssetManager * assetManager;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 
-    if (scrollView.contentOffset.y < 0) {
+    if (scrollView.contentOffset.y < -20) {
         [self.datePopup temporarilyShowHiddenView];
     }
     else if (scrollView.contentOffset.y > 0) {
