@@ -906,15 +906,16 @@ PAAssetManager * assetManager;
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     NSLog(@"Text did change");
+    self.centerFetchedResultsController=nil;
     if([searchText isEqualToString:@""]){
         searchBar.text = nil;
         searchBarText = nil;
-        //[self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+        [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
         NSLog(@"User cancelled search");
     }
     else{
         searchBarText = searchText;
-        //[self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+        [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
     }
 }
 
@@ -935,8 +936,8 @@ PAAssetManager * assetManager;
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
     searchBar.text = nil;
     searchBarText=nil;
-    //self.centerFetchedResultsController = nil;
-    //[self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+    self.centerFetchedResultsController = nil;
+    [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
     NSLog(@"User cancelled search");
     [searchBar resignFirstResponder]; // if you want the keyboard to go away
 }
