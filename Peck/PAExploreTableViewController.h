@@ -11,7 +11,7 @@
 #import "PACoreDataProtocol.h"
 
 
-@interface PAExploreTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol>
+@interface PAExploreTableViewController : UITableViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol, UISearchBarDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
