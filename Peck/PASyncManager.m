@@ -368,6 +368,7 @@
                                       NSNumber* userID = [userDictionary objectForKey:@"id"];
                                       NSString* apiKey = [userDictionary objectForKey:@"api_key"];
                                       NSString* imageURL = [userDictionary objectForKey:@"image"];
+                                      NSNumber* institutionID = [userDictionary objectForKey:@"institution_id"];
                                       
                                       NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 
@@ -378,7 +379,7 @@
                                       [defaults setObject:email forKey:@"email"];
                                       [defaults setObject:userID forKey:@"user_id"];
                                       [defaults setObject:apiKey forKey:@"api_key"];
-                                      [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
+                                      [defaults setObject:institutionID forKey:@"home_institution"];
                                       
                                       if(imageURL){
                                           NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);

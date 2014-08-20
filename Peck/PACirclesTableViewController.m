@@ -84,6 +84,8 @@ PAAssetManager *assetManager;
         abort();
     }
     
+    // allows for the 1 pixel header to be ignored
+    self.tableView.contentInset = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0);    
     
     [self.tableView reloadData];
 
@@ -261,6 +263,13 @@ PAAssetManager *assetManager;
 }
 
 #pragma mark - Table view data source
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+        return 1.0f;
+    return 32.0f;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

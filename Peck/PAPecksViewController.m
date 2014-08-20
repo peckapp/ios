@@ -59,7 +59,9 @@ static NSString *nibName = @"PAPeckCell";
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-
+    
+    // allows for the 1 pixel header to be ignored
+    self.tableView.contentInset = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0);
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -133,8 +135,8 @@ static NSString *nibName = @"PAPeckCell";
 }
 
 -(void)showPecks{
-    self.tableView.backgroundColor = [UIColor whiteColor];
-    self.tableView.separatorColor = [UIColor lightGrayColor];
+//    self.tableView.backgroundColor = [UIColor whiteColor];
+//    self.tableView.separatorColor = [UIColor lightGrayColor];
     [self.noPecksLabel removeFromSuperview];
 }
 
@@ -151,6 +153,13 @@ static NSString *nibName = @"PAPeckCell";
 }
 
 #pragma mark - Table view data source
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+        return 1.0f;
+    return 32.0f;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
