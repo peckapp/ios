@@ -191,20 +191,20 @@ PAAssetManager * assetManager;
     searchBar.frame = CGRectMake(0, -searchBarHeight, self.view.frame.size.width, searchBarHeight);
 
     self.datePopup.frame = CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
-    // self.datePopup.hiddenView.frame = CGRectMake(0, -datePopupHeight, self.view.frame.size.width, datePopupHeight);
+    self.datePopup.hiddenView.frame = CGRectMake(0, -datePopupHeight, self.view.frame.size.width, datePopupHeight);
 
     self.leftTableViewFrame = CGRectMake(-self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.leftTableView.frame = self.leftTableViewFrame;
-    // self.leftTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
+    self.leftTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
 
     self.centerTableViewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.centerTableView.frame = self.centerTableViewFrame;
-    // self.centerTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
+    self.centerTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
 
 
     self.rightTableViewFrame = CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.rightTableView.frame = self.rightTableViewFrame;
-    // self.rightTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
+    self.rightTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
 
     // self.centerTableView.tableHeaderView = searchBar;
 
@@ -833,7 +833,7 @@ PAAssetManager * assetManager;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 
-    if (scrollView.contentOffset.y < 0) {
+    if (scrollView.contentOffset.y < -20) {
         [self.datePopup temporarilyShowHiddenView];
     }
     else if (scrollView.contentOffset.y > 0) {
