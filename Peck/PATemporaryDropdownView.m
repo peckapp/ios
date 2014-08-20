@@ -42,29 +42,34 @@
     return self;
 }
 
-- (void)showHiddenView
+- (void)temporarilyShowHiddenView
 {
     if (self.pendingHideCount <= 0) {
         [self animateIn];
     }
     self.pendingHideCount += 1;
-    [self performSelector:@selector(hideHiddenView) withObject:self afterDelay:hideDelay];
+    [self performSelector:@selector(hideHiddenViewAfterDelay) withObject:self afterDelay:hideDelay];
+}
+
+- (void)hideHiddenViewAfterDelay
+{
+    if (self.pendingHideCount == 1) {
+        [self hideHiddenView];
+    }
+    if (self.pendingHideCount > 1) {
+        self.pendingHideCount -= 1;
+    }
 }
 
 - (void)hideHiddenView
 {
-    self.pendingHideCount -= 1;
-    if (self.pendingHideCount <= 0) {
-        [self animateOut];
-    }
+    self.pendingHideCount = 0;
+    [self animateOut];
 }
 
-- (void)forceHiddenView
+- (void)showHiddenView
 {
-    if (self.pendingHideCount >= 0) {
-        self.pendingHideCount = 0;
-        [self animateOut];
-    }
+    [self animateIn];
 }
 
 - (void)animateIn

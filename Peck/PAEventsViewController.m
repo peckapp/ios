@@ -48,8 +48,6 @@ struct eventImage{
 
 @property (strong, nonatomic) UIImageView* helperImageView;
 
-@property (strong, nonatomic) UIView *headerView;
-@property (strong, nonatomic) UILabel *headerLabel;
 @property (strong, nonatomic) PATemporaryDropdownView *datePopup;
 
 @property (strong, nonatomic) PANoContentView * noContentView;
@@ -158,22 +156,9 @@ PAAssetManager * assetManager;
     self.rightTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.rightTableView.backgroundColor = [assetManager darkColor];
 
-    if (!self.headerView) {
-        self.headerView = [[UIView alloc] init];
-        self.headerView.backgroundColor = [UIColor whiteColor];
-    }
-
-    if (!self.headerLabel) {
-        self.headerLabel = [[UILabel alloc] init];
-        self.headerLabel.font = [UIFont boldSystemFontOfSize:17.0];
-        self.headerLabel.textAlignment = NSTextAlignmentCenter;
-        self.headerLabel.text = @"Home";
-        [self.headerView addSubview:self.headerLabel];
-    }
-
     if (!self.datePopup) {
         self.datePopup = [[PATemporaryDropdownView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
-        self.datePopup.label.text = @"Home";
+        self.datePopup.label.text = @"Today";
         self.datePopup.hiddenView.backgroundColor = [UIColor whiteColor];
         [self.view addSubview:self.datePopup];
     }
@@ -205,22 +190,21 @@ PAAssetManager * assetManager;
 
     searchBar.frame = CGRectMake(0, -searchBarHeight, self.view.frame.size.width, searchBarHeight);
 
-    self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    self.headerLabel.frame = CGRectMake(0, self.headerView.frame.size.height - datePopupHeight, self.view.frame.size.width, datePopupHeight);
-
     self.datePopup.frame = CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
-    self.datePopup.hiddenView.frame = CGRectMake(0, -datePopupHeight, self.view.frame.size.width, datePopupHeight);
+    // self.datePopup.hiddenView.frame = CGRectMake(0, -datePopupHeight, self.view.frame.size.width, datePopupHeight);
 
     self.leftTableViewFrame = CGRectMake(-self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.leftTableView.frame = self.leftTableViewFrame;
+    // self.leftTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
 
     self.centerTableViewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.centerTableView.frame = self.centerTableViewFrame;
-    self.centerTableView.contentInset = UIEdgeInsetsMake(-self.headerView.frame.size.height, 0, 0, 0);
-    self.centerTableView.tableHeaderView = self.headerView;
+    // self.centerTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
+
 
     self.rightTableViewFrame = CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.rightTableView.frame = self.rightTableViewFrame;
+    // self.rightTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
 
     // self.centerTableView.tableHeaderView = searchBar;
 
@@ -849,6 +833,13 @@ PAAssetManager * assetManager;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 
+    if (scrollView.contentOffset.y < 0) {
+        [self.datePopup temporarilyShowHiddenView];
+    }
+    else if (scrollView.contentOffset.y > 0) {
+        [self.datePopup hideHiddenView];
+    }
+
     /*
 
    for (NSInteger i = 0; i < [self.centerTableView numberOfRowsInSection:0]; ++i)
@@ -881,8 +872,8 @@ PAAssetManager * assetManager;
      */
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    [self.datePopup forceHiddenView];
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
     [searchBar resignFirstResponder];
 }
 
@@ -976,8 +967,7 @@ PAAssetManager * assetManager;
     }
 
     self.datePopup.label.text = date;
-    self.headerLabel.text = date;
-    [self.datePopup showHiddenView];
+    [self.datePopup temporarilyShowHiddenView];
 }
 
 - (void)transitionToRightTableView
@@ -986,9 +976,6 @@ PAAssetManager * assetManager;
         NSLog(@"begin transition to right");
 
         self.selectedDay += 1;
-
-        self.centerTableView.tableHeaderView = nil;
-        self.centerTableView.contentInset = UIEdgeInsetsZero;
 
         [self displaydatePopup];
         
@@ -1012,9 +999,6 @@ PAAssetManager * assetManager;
 
                              [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
 
-                             self.centerTableView.tableHeaderView = self.headerView;
-                             self.centerTableView.contentInset = UIEdgeInsetsMake(-self.headerView.frame.size.height, 0, 0, 0);
-
                              [self.noContentView removeFromSuperview];
                              [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
 
@@ -1029,9 +1013,6 @@ PAAssetManager * assetManager;
         NSLog(@"begin transition to left");
 
         self.selectedDay -= 1;
-
-        self.centerTableView.tableHeaderView = nil;
-        self.centerTableView.contentInset = UIEdgeInsetsZero;
 
         [self displaydatePopup];
         
@@ -1053,9 +1034,6 @@ PAAssetManager * assetManager;
                              self.leftTableView = tempView;
 
                              [self tableView:self.leftTableView reloadDataFrom:self.leftFetchedResultsController];
-
-                             self.centerTableView.tableHeaderView = self.headerView;
-                             self.centerTableView.contentInset = UIEdgeInsetsMake(-self.headerView.frame.size.height, 0, 0, 0);
 
                              [self.noContentView removeFromSuperview];
                              [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
