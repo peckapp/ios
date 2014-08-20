@@ -37,14 +37,11 @@
     // uncomment during application launch to clear out all NSUserDefaults
     // [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
     
-    // uncomment at launch to delete persistant store. probably a very messy way to do it
-    /*
-    for (NSPersistentStore *pstore in [[self persistentStoreCoordinator] persistentStores]) {
+    // uncomment at launch to nuke persistant store. definitely a messy way to do it, app will not run on that launch
+    /* for (NSPersistentStore *pstore in [[self persistentStoreCoordinator] persistentStores]) {
         [[self persistentStoreCoordinator] removePersistentStore:pstore error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@",pstore.URL] error:nil];
-    }
-     */
-    
+    } */
     
     // Override point for customization after application launch.
     
@@ -163,7 +160,7 @@
     return YES;
 }
 
-#pragma facebook stuff
+#pragma mark - facebook stuff
 
 // This method will handle ALL the session state changes in the app
 - (void)sessionStateChanged:(FBSession *)session state:(FBSessionState) state error:(NSError *)error

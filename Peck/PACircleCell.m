@@ -36,7 +36,7 @@ UITextView *textViewHelper;
 
 PAAssetManager * assetManager;
 
-#define defaultCellHeight 51
+#define defaultCellHeight 52.0
 #define cellY 22
 //the compressed text view height is used to avoid seeing half of the last line of the text view.
 //It should be changed manually if the default text view height is changed
@@ -48,14 +48,14 @@ PAAssetManager * assetManager;
 
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    self.profileCellFrame = CGRectMake(0, 0, 44.0, 44.0);
+    self.profileCellFrame = CGRectMake(0, 0, defaultCellHeight, defaultCellHeight);
 
     self.profilesTableView.delegate = self;
     self.profilesTableView.dataSource = self;
 
 //    self.profilesTableView.frame = CGRectMake(0, 0, 44.0, self.frame.size.height);
     self.profilesTableView.transform = CGAffineTransformMakeRotation(-M_PI_2);
-    self.profilesTableView.frame = CGRectMake(0, 40.0, self.frame.size.width, 52.0);
+    self.profilesTableView.frame = CGRectMake(0, 40.0, self.frame.size.width, defaultCellHeight);
     self.profilesTableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
 
     self.commentsTableView.delegate=self;
@@ -375,7 +375,7 @@ PAAssetManager * assetManager;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == self.profilesTableView) {
-        return 52;
+        return defaultCellHeight;
     }
     else if (tableView == self.commentsTableView) {
         if(indexPath.row>0){
