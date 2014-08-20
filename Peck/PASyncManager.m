@@ -1393,7 +1393,7 @@
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              NSDictionary *diningDictionary = (NSDictionary*)JSON;
-             NSLog(@"dining opp %@", JSON);
+             //NSLog(@"dining opp %@", JSON);
              NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_opportunities"];
              [self.persistentStoreCoordinator lock];
              for (NSDictionary *diningAttributes in postsFromResponse){
@@ -1446,7 +1446,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"JSON: %@",JSON);
+             //NSLog(@"JSON: %@",JSON);
              NSDictionary *diningDictionary = (NSDictionary*)JSON;
              NSDictionary *diningAttributes = [diningDictionary objectForKey:@"dining_place"];
              NSNumber *newID = [diningAttributes objectForKey:@"id"];
@@ -1454,7 +1454,7 @@
              BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace" andCategory:nil];
              
              if(!diningPlaceAlreadyExists){
-                    NSLog(@"setting dining place");
+                    //NSLog(@"setting dining place");
                     DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
                     [self setAttributesInDiningPlace:diningPlace withDictionary:diningAttributes];
                     [viewController addDiningPlace:diningPlace withPeriod:diningPeriod];
@@ -1816,7 +1816,7 @@
                                   parameters:params
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"EVENT JSON: %@",JSON);
+             NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
              [self.persistentStoreCoordinator lock];
