@@ -104,6 +104,11 @@ PAAssetManager * assetManager;
     self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(320 - 64, 0, 64, 64)];
     [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.backButton addSubview:[assetManager createPanelWithFrame:CGRectInset(self.backButton.bounds, 15, 15) rounded:YES shadow:YES]];
+    UIImageView *cancelIcon = [[UIImageView alloc] initWithImage:[assetManager cancelIcon]];
+    cancelIcon.frame = self.backButton.bounds;
+    cancelIcon.contentMode = UIViewContentModeScaleAspectFit;
+    cancelIcon.userInteractionEnabled = NO;
+    [self.backButton addSubview:cancelIcon];
 
     //we must store the profile picture every time the app loads because the local image storing is not persistent
     //[self storeProfilePicture];
