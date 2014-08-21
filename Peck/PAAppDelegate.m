@@ -260,6 +260,13 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     NSLog(@"did receive remote notification: %@ with fetch completion handler",userInfo);
+    if (application.applicationState == UIApplicationStateActive) {
+        NSLog(@"while running did receive remote notification: %@",userInfo);
+        
+    } else if (application.applicationState == UIApplicationStateInactive) {
+        NSLog(@"while in background did receive remote notification: %@",userInfo);
+        [self.dropDownBar selectItemAtIndex:0];
+    }
     
     // handle all types of notifications here and call completion handler with the proper UIBackgroundFetchResult for each case
     [[PASyncManager globalSyncManager] updatePecks];

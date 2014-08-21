@@ -243,7 +243,10 @@
     //NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     //NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:[store objectForKey:@"udid"] forKey:@"udid"];
-    NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:deviceVendorIdentifier forKey:@"udid"];
+    NSDictionary *deviceInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                @"ios", @"device_type",
+                                deviceVendorIdentifier,@"udid",
+                                nil];
     NSLog(@"deviceInfo: %@", deviceInfo);
     [[PASessionManager sharedClient] POST:usersAPI
                                parameters:deviceInfo
@@ -347,14 +350,15 @@
 - (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(NSString*)direction
 {
     // adds the unique user device token to the userInfo NSDictionary
-    NSDictionary* userInfoWithUDID = [self addUDIDToDictionary:userInfo];
-    
+    userInfo = [self addUDIDToDictionary:userInfo];
+    userInfo = [self addDeciveTypeToDictionary:userInfo];
     // sends either email and password, or facebook token and link, to the server for authentication
     // expects an authentication token to be returned in response
+    
     NSLog(@"Login dictionary: %@", userInfo);
     
     [[PASessionManager sharedClient] POST: @"api/access"
-                               parameters:[self applyWrapper:@"user" toDictionary:userInfoWithUDID]
+                               parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON){
                                       NSLog(@"LOGIN JSON: %@",JSON);
                                       
@@ -525,6 +529,7 @@
     NSString* loginURL = [@"api/users/" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
     loginURL = [loginURL stringByAppendingString:@"/facebook_login"];
     
+    dictionary = [self addDeciveTypeToDictionary:dictionary];
     
     [[PASessionManager sharedClient] PATCH:loginURL
                                 parameters:[self applyWrapper:@"user" toDictionary:[self addUDIDToDictionary:dictionary]]
@@ -2274,6 +2279,12 @@
     NSMutableDictionary *mutDict = [dictionary mutableCopy];
     //[mutDict setObject:[store objectForKey:@"udid"] forKey:@"udid"];
     [mutDict setObject:deviceVendorIdentifier forKey:@"udid"];
+    return [mutDict copy];
+}
+
+-(NSDictionary*)addDeciveTypeToDictionary:(NSDictionary*)dictionary{
+    NSMutableDictionary *mutDict = [dictionary mutableCopy];
+    [mutDict setObject:@"ios" forKey:@"device_type"];
     return [mutDict copy];
 }
 
