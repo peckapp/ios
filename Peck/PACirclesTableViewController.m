@@ -117,7 +117,7 @@ PAAssetManager *assetManager;
 
 -(void)viewWillAppear:(BOOL)animated {
     //when this is uncommented, a strange error occurs where the circle cell will scroll up when the comment cell is selected
-    [super viewWillAppear:animated];
+    //[super viewWillAppear:animated];
     
     /*_fetchedResultsController=nil;
     NSError *error = nil;
