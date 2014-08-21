@@ -140,6 +140,7 @@
 
 -(void)configureEventEditingView{
     self.selectorCell.tag = cellStateAlwaysOff;
+    self.inviteCell.tag = cellStateAlwaysOff;
     self.title = @"Edit Event";
     self.titleField.text = self.editableEvent.title;
     
@@ -164,6 +165,7 @@
     self.topRightBarButton.title = @"Save";
     self.controlSwitch.selectedSegmentIndex = 1;
     self.selectorCell.tag = cellStateAlwaysOff;
+    self.inviteCell.tag = cellStateAlwaysOff;
     self.title = @"Edit Announcement";
     self.titleField.text = self.editableAnnouncement.title;
     self.descriptionTextView.text = self.editableAnnouncement.content;
