@@ -159,6 +159,7 @@ PAAssetManager * assetManager;
     if (!self.datePopup) {
         self.datePopup = [[PATemporaryDropdownView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
         self.datePopup.label.text = @"Today";
+        self.datePopup.label.textColor = [assetManager darkColor];
         self.datePopup.hiddenView.backgroundColor = [UIColor whiteColor];
         [self.view addSubview:self.datePopup];
     }

@@ -21,8 +21,10 @@
 @property (assign, nonatomic) BOOL expanded;
 
 @property (strong, nonatomic) UIImageView *locationImageView;
+@property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UIView *footerView;
 @property (strong, nonatomic) UILabel *placeLabel;
+@property (strong, nonatomic) UILabel *titleLabel;
 
 @end
 
@@ -45,6 +47,8 @@ PAAssetManager *assetManager;
     self.locationImageView.contentMode = UIViewContentModeCenter;
     [self.view addSubview:self.locationImageView];
 
+    self.headerView = [[UIView alloc] init];
+
     self.footerView = [[UIView alloc] init];
     self.footerView.backgroundColor = [UIColor whiteColor];
 
@@ -52,14 +56,21 @@ PAAssetManager *assetManager;
     self.placeLabel.textColor = [UIColor whiteColor];
     self.placeLabel.font = [UIFont boldSystemFontOfSize:17.0];
     [self.view addSubview:self.placeLabel];
+
+    self.titleLabel = [[UILabel alloc] init];
+    self.titleLabel.textColor = [UIColor whiteColor];
+    self.titleLabel.font = [UIFont boldSystemFontOfSize:21.0];
+    [self.headerView addSubview:self.titleLabel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     self.view.frame = self.parentViewController.view.bounds;
 
-    self.locationImageView.frame = CGRectMake(0, 0, self.view.frame.size.width, 256);
+    self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.height, 1);
 
+    self.locationImageView.frame = CGRectMake(0, 0, self.view.frame.size.width, 256);
+    self.titleLabel.frame = CGRectInset(CGRectMake(0, -88 + 15, self.view.frame.size.width, 88), 15, 15);
 
     self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 1000);
     self.placeLabel.frame = CGRectInset(CGRectMake(0, 0, self.view.frame.size.width, 88), 15, 15);
@@ -90,6 +101,7 @@ PAAssetManager *assetManager;
         self.tableView.backgroundColor = [UIColor clearColor];
         self.tableView.dataSource = self;
         self.tableView.delegate = self;
+        self.tableView.tableHeaderView = self.headerView;
         self.tableView.tableFooterView = self.footerView;
         [self.view addSubview:self.tableView];
         self.tableView.frame = self.view.frame;
@@ -164,6 +176,7 @@ PAAssetManager *assetManager;
 -(void)configureView{
     if (self.detailItem) {
         self.placeLabel.text = self.detailItem.name;
+        self.titleLabel.text = self.detailItem.name;
     }
 }
 
