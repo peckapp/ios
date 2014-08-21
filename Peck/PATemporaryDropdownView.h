@@ -12,9 +12,10 @@
 
 @property (strong, nonatomic) UIView *hiddenView;
 @property (strong, nonatomic) UILabel *label;
+@property (strong, nonatomic) UIButton* todayButton;
 
 - (void)temporarilyShowHiddenView;
 - (void)showHiddenView;
 - (void)hideHiddenView;
-
+- (void)configureTodayButton:(NSInteger)selectedDay;
 @end

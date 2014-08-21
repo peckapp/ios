@@ -29,6 +29,7 @@
 #define searchBarHeight 44
 #define parallaxRange 128
 #define datePopupHeight 44
+#define heightToShowDate 50
 
 struct eventImage{
     const char* imageURL;
@@ -52,6 +53,10 @@ struct eventImage{
 
 @property (strong, nonatomic) PANoContentView * noContentView;
 
+@property (strong, nonatomic) UISearchBar* searchBar;
+@property (strong, nonatomic) UISearchBar* leftSearchBar;
+@property (strong, nonatomic) UISearchBar* rightSearchBar;
+
 - (void)transitionToSubscriptions;
 - (void)transitionToCreate;
 
@@ -64,7 +69,7 @@ struct eventImage{
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-UISearchBar * searchBar;
+//UISearchBar * searchBar;
 
 BOOL viewingEvents;
 BOOL parallaxOn;
@@ -117,11 +122,7 @@ PAAssetManager * assetManager;
 
     self.selectedDay = 0;
 
-    if(!searchBar){
-        searchBar = [[UISearchBar alloc] init];
-        searchBar.delegate = self;
-        searchBar.showsCancelButton = NO;
-    }
+   
     
     if (!self.leftTableView) {
         self.leftTableView = [[UITableView alloc] init];
@@ -188,24 +189,46 @@ PAAssetManager * assetManager;
 
     NSLog(@"View will appear (events)");
     showingSearchBar = NO;
+    
+    //if(!_searchBar){
+        _searchBar = [[UISearchBar alloc] init];
+        _searchBar.delegate = self;
+        _searchBar.showsCancelButton = NO;
+    //}
+    
+    //if(!_leftSearchBar){
+        _leftSearchBar = [[UISearchBar alloc] init];
+        _leftSearchBar.delegate = self;
+        _leftSearchBar.showsCancelButton = NO;
+    //}
+    //if(!_rightSearchBar){
+        _rightSearchBar = [[UISearchBar alloc] init];
+        _rightSearchBar.delegate = self;
+        _rightSearchBar.showsCancelButton = NO;
+    //}
 
-    searchBar.frame = CGRectMake(0, -searchBarHeight, self.view.frame.size.width, searchBarHeight);
+    _searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
+    _leftSearchBar.frame =CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
+    _rightSearchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
 
     self.datePopup.frame = CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
     self.datePopup.hiddenView.frame = CGRectMake(0, -datePopupHeight, self.view.frame.size.width, datePopupHeight);
 
     self.leftTableViewFrame = CGRectMake(-self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.leftTableView.frame = self.leftTableViewFrame;
-    self.leftTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
+    //self.leftTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
+    self.leftTableView.tableHeaderView = self.leftSearchBar;
 
     self.centerTableViewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.centerTableView.frame = self.centerTableViewFrame;
-    self.centerTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
-
+    //self.centerTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
+    self.centerTableView.tableHeaderView = self.searchBar;
+    
 
     self.rightTableViewFrame = CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.rightTableView.frame = self.rightTableViewFrame;
-    self.rightTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
+    //self.rightTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
+    self.rightTableView.tableHeaderView = self.rightSearchBar;
 
     // self.centerTableView.tableHeaderView = searchBar;
 
@@ -834,11 +857,13 @@ PAAssetManager * assetManager;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 
-    if (scrollView.contentOffset.y < -20) {
-        [self.datePopup temporarilyShowHiddenView];
+    if (scrollView.contentOffset.y < -heightToShowDate) {
+        [self.datePopup showHiddenView];
+        //self.centerTableView.contentInset = UIEdgeInsetsZero;
     }
     else if (scrollView.contentOffset.y > 0) {
         [self.datePopup hideHiddenView];
+        //self.centerTableView.contentInset = UIEdgeInsetsMake(-datePopupHeight, 0, 0, 0);
     }
 
     /*
@@ -875,7 +900,9 @@ PAAssetManager * assetManager;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    [searchBar resignFirstResponder];
+    [_searchBar resignFirstResponder];
+    [_leftSearchBar resignFirstResponder];
+    [_rightSearchBar resignFirstResponder];
 }
 
 #pragma mark - Search Bar Delegate
@@ -883,15 +910,16 @@ PAAssetManager * assetManager;
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     NSLog(@"Text did change");
+    self.centerFetchedResultsController=nil;
     if([searchText isEqualToString:@""]){
         searchBar.text = nil;
         searchBarText = nil;
-        //[self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+        [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
         NSLog(@"User cancelled search");
     }
     else{
         searchBarText = searchText;
-        //[self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+        [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
     }
 }
 
@@ -912,8 +940,8 @@ PAAssetManager * assetManager;
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
     searchBar.text = nil;
     searchBarText=nil;
-    //self.centerFetchedResultsController = nil;
-    //[self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+    self.centerFetchedResultsController = nil;
+    [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
     NSLog(@"User cancelled search");
     [searchBar resignFirstResponder]; // if you want the keyboard to go away
 }
@@ -967,6 +995,7 @@ PAAssetManager * assetManager;
         date = [dateFormatter stringFromDate:[self getDateForDay:self.selectedDay]];
     }
 
+    [self.datePopup configureTodayButton:self.selectedDay];
     self.datePopup.label.text = date;
     [self.datePopup temporarilyShowHiddenView];
 }
@@ -979,6 +1008,7 @@ PAAssetManager * assetManager;
         self.selectedDay += 1;
 
         [self displaydatePopup];
+        [self clearSearchBars];
         
         [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
@@ -1014,7 +1044,7 @@ PAAssetManager * assetManager;
         NSLog(@"begin transition to left");
 
         self.selectedDay -= 1;
-
+        [self clearSearchBars];
         [self displaydatePopup];
         
         [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
@@ -1042,6 +1072,50 @@ PAAssetManager * assetManager;
                              NSLog(@"end transition to left");
                          }];
     }
+}
+
+-(void)switchToCurrentDay{
+    //change fetched results controllers and table views
+    if(self.selectedDay!=0){
+    
+        if(self.selectedDay<-1){
+            self.selectedDay=-1;
+            [self clearAllControllers];
+        }else if (self.selectedDay>1){
+            self.selectedDay=1;
+            [self clearAllControllers];
+        }
+    
+        [self clearSearchBars];
+        [self displaydatePopup];
+    
+        if(self.selectedDay<0){
+            [self transitionToRightTableView];
+        }else if(self.selectedDay>0){
+            [self transitionToLeftTableView];
+        }
+    }
+}
+
+-(void)clearAllControllers{
+    self.centerFetchedResultsController = nil;
+    self.rightFetchedResultsController = nil;
+    self.leftFetchedResultsController = nil;
+    
+    
+    [self tableView:self.centerTableView reloadDataFrom:self.centerFetchedResultsController];
+    [self tableView:self.leftTableView reloadDataFrom:self.leftFetchedResultsController];
+    [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
+}
+
+-(void)clearSearchBars{
+    _searchBar.text=@"";
+    _leftSearchBar.text=@"";
+    _rightSearchBar.text=@"";
+    
+    [_searchBar resignFirstResponder];
+    [_leftSearchBar resignFirstResponder];
+    [_rightSearchBar resignFirstResponder];
 }
 
 - (void)tableView:(UITableView *)tableView reloadDataFrom:(NSFetchedResultsController *)fetchedResultsController

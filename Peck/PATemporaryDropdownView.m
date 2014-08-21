@@ -7,6 +7,7 @@
 //
 
 #import "PATemporaryDropdownView.h"
+#import "PAAppDelegate.h"
 
 #define primaryDelay 0.1
 #define secondaryDelay 0.2
@@ -15,6 +16,8 @@
 @interface PATemporaryDropdownView ()
 
 @property (assign, nonatomic) NSInteger pendingHideCount;
+@property (nonatomic) CGRect leftButtonFrame;
+@property (nonatomic) CGRect rightButtonFrame;
 
 @end
 
@@ -38,8 +41,40 @@
         self.label.text = @"";
         self.label.alpha = 0;
         [self.hiddenView addSubview:self.label];
+        
+        self.todayButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+        self.todayButton.userInteractionEnabled=YES;
+        self.todayButton.hidden=YES;
+        [self.todayButton setTitle:@"today" forState:UIControlStateNormal];
+        self.todayButton.frame = CGRectMake(0, 0, 80, 40.0);
+        [self.todayButton addTarget:self
+                   action:@selector(goToToday)
+         forControlEvents:UIControlEventTouchUpInside];
+        [self.hiddenView addSubview:self.todayButton];
+        
+        self.rightButtonFrame = CGRectMake(260, 0, 60, 44);
+        self.leftButtonFrame = CGRectMake(0, 0, 60, 44);
+        
     }
     return self;
+}
+
+-(void)configureTodayButton:(NSInteger)selectedDay{
+    if(selectedDay==0){
+        self.todayButton.hidden=YES;
+    }else if(selectedDay<0){
+        self.todayButton.hidden=NO;
+        self.todayButton.frame = self.rightButtonFrame;
+    }else if(selectedDay>0){
+        self.todayButton.hidden=NO;
+        self.todayButton.frame = self.leftButtonFrame;
+    }
+}
+
+-(void)goToToday{
+    NSLog(@"show today's events");
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    [appdelegate.eventsViewController switchToCurrentDay];
 }
 
 - (void)temporarilyShowHiddenView
@@ -77,6 +112,7 @@
     [UIView animateWithDuration:0.2 delay:primaryDelay options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.hiddenView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+                         self.userInteractionEnabled=YES;
                      }
                      completion:^(BOOL finished){
                      }];
@@ -94,6 +130,7 @@
     [UIView animateWithDuration:0.2 delay:secondaryDelay - primaryDelay options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.hiddenView.frame = CGRectMake(0, -self.frame.size.height, self.frame.size.width, self.frame.size.height);
+                         self.userInteractionEnabled=NO;
                      }
                      completion:^(BOOL finished){
                      }];

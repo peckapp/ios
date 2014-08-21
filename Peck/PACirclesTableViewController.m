@@ -84,6 +84,8 @@ PAAssetManager *assetManager;
         abort();
     }
     
+    // allows for the 1 pixel header to be ignored
+    self.tableView.contentInset = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0);    
     
     [self.tableView reloadData];
 
@@ -114,8 +116,8 @@ PAAssetManager *assetManager;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-    //[super viewWillAppear:animated];
     //when this is uncommented, a strange error occurs where the circle cell will scroll up when the comment cell is selected
+    //[super viewWillAppear:animated];
     
     /*_fetchedResultsController=nil;
     NSError *error = nil;
@@ -262,6 +264,13 @@ PAAssetManager *assetManager;
 
 #pragma mark - Table view data source
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+        return 1.0f;
+    return 32.0f;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -316,7 +325,9 @@ PAAssetManager *assetManager;
 {
     PACircleCell *cell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:indexPath];
     if(!viewingCell){
-        [self expandCircleCell:cell atIndexPath:indexPath];
+        if(indexPath.row<[self.fetchedResultsController.fetchedObjects count]){
+            [self expandCircleCell:cell atIndexPath:indexPath];
+        }
         
         /*
         cell.addingMembers=NO;
@@ -371,6 +382,9 @@ PAAssetManager *assetManager;
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
         [cell updateCircleMembers:nil];
         cell.titleTextField.text=@"";
+        [self.tableView setScrollEnabled:YES];
+    }else{
+        [self.tableView setScrollEnabled:NO];
     }
     [cell performFetch];
     self.selectedIndexPath = indexPath;
@@ -378,7 +392,7 @@ PAAssetManager *assetManager;
     [self.tableView endUpdates];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     
-    self.tableView.scrollEnabled = NO;
+    //self.tableView.scrollEnabled = NO;
     viewingCell=YES;
     
     [self configureCell:cell atIndexPath:indexPath];
@@ -414,6 +428,7 @@ PAAssetManager *assetManager;
     self.tableView.scrollEnabled = YES;
     [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
     cell.addingMembers=NO;
+    [self.tableView reloadData];
     self.selectedIndexPath = nil;
     [self dismissKeyboard:self];
     if(indexPath){
@@ -421,6 +436,7 @@ PAAssetManager *assetManager;
     }else{
         [cell.leaveCircleButton setHidden:YES];
     }
+    
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
     [self.keyboardAccessoryView removeFromSuperview];
@@ -469,20 +485,20 @@ PAAssetManager *assetManager;
     cell.parentViewController=self;
     cell.commentsTableView.frame = CGRectMake(cell.commentsTableView.frame.origin.x, cell.commentsTableView.frame.origin.y, cell.frame.size.width, cell.frame.size.height - cell.commentsTableView.frame.origin.y);
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
-        cell.circleTitle.text=@"New";
+        cell.circleTitle.text=@"";
         [cell.profilesTableView setHidden:YES];
         [cell.commentsTableView setHidden:YES];
-        [cell.titleTextField setHidden:YES];
-        [cell.createCircleButton setHidden:YES];
+        //[cell.titleTextField setHidden:YES];
+        //[cell.createCircleButton setHidden:YES];
         [cell.leaveCircleButton setHidden:YES];
         [cell.backButton setHidden:YES];
         [cell updateCircleMembers:nil];
-        if(viewingCell){
+        //if(viewingCell){
             [cell.titleTextField setHidden:NO];
             [cell.profilesTableView setHidden:NO];
             [cell.createCircleButton setHidden:NO];
-            [cell.backButton setHidden:NO];
-        }
+            //[cell.backButton setHidden:NO];
+        //}
         
     }
     else{
@@ -932,7 +948,7 @@ PAAssetManager *assetManager;
     NSError *error = nil;
     NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:fetchRequest error:&error] mutableCopy];
     
-    NSArray* currentMembers = [[NSArray alloc] init];
+    NSArray* currentMembers = nil;
     if([_fetchedResultsController.fetchedObjects count]>self.selectedIndexPath.row){
         //if the user is adding members to an already created circle
         Circle* circle = [_fetchedResultsController objectAtIndexPath:self.selectedIndexPath];

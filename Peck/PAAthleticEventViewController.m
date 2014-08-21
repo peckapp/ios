@@ -901,30 +901,33 @@ BOOL reloaded = NO;
     if(![text isEqualToString:@""]){
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         if([defaults objectForKey:@"authentication_token"]){
-            self.commentText=nil;
-            /*
-             NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-             [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
-             */
+           if([[defaults objectForKey:@"institution_id"] integerValue]==[[defaults objectForKey:@"home_institution"]integerValue]){
+               self.commentText=nil;
+               /*
+                NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+                */
 
-            NSLog(@"post comment");
-            //NSString *commentText = cell.commentTextView.text;
-            //cell.commentTextView.text=@"";
+               NSLog(@"post comment");
+               //NSString *commentText = cell.commentTextView.text;
+               //cell.commentTextView.text=@"";
 
-            NSNumber *userID = [defaults objectForKey:@"user_id"];
-            NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
+               NSNumber *userID = [defaults objectForKey:@"user_id"];
+               NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
 
-            NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        text, @"content",
-                                        userID, @"user_id",
-                                        @"simple", @"category",
-                                        [self.detailItem valueForKey:@"id" ],@"comment_from",
-                                        institutionID, @"institution_id",
-                                        nil];
+               NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                           text, @"content",
+                                           userID, @"user_id",
+                                           @"simple", @"category",
+                                           [self.detailItem valueForKey:@"id" ],@"comment_from",
+                                           institutionID, @"institution_id",
+                                           nil];
 
-            [[PASyncManager globalSyncManager] postComment:dictionary];
-
-
+               [[PASyncManager globalSyncManager] postComment:dictionary];
+           }else{
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Foreign Institution" message:@"Please switch to your home institution to post comments" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [alert show];
+            }
         }else{
             [[PAMethodManager sharedMethodManager] showRegisterAlert:@"post a comment" forViewController:self];
         }

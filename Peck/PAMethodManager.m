@@ -13,6 +13,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "PAFetchManager.h"
 #import "PASyncManager.h"
+#import "PAUtils.h"
 
 @interface PAMethodManager()
 
@@ -245,7 +246,7 @@
     NSDictionary* loginInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                [urlInfo objectForKey:@"email"],@"email",
                                [urlInfo objectForKey:@"temp_pass"], @"password",
-                               @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464", @"device_token",
+                               storedPushToken, @"device_token",
                                nil];
     
     NSLog(@"login info %@", loginInfo);

@@ -34,9 +34,10 @@
 #import "Peck.h"
 #import "Announcement.h"
 #import "PAMethodManager.h"
+#import "PAUtils.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
-#define shortTermUDID @"1"
+
 
 @interface PASyncManager ()
 
@@ -94,8 +95,8 @@
 
 -(void)logoutUser{
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
-                            shortTermUDID, @"udid",
-                             @"6c6cfc215bdc2d7eeb93ac4581bc48f7eb30e641f7d8648451f4b1d3d1cde464",@"device_token",
+                            deviceVendorIdentifier, @"udid",
+                            storedPushToken ,@"device_token",
                             [[self authenticationParameters] objectForKey:@"authentication"],@"authentication",
                             nil];
     [[PASessionManager sharedClient] DELETE:@"api/access/logout"
@@ -112,10 +113,10 @@
 }
 
 -(void)sendUDIDForInitViewController:(UIViewController*)initViewController{
-    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
+    //NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 //[store objectForKey:@"udid"],@"udid",
-                                shortTermUDID,@"udid",
+                                deviceVendorIdentifier,@"udid",
                                 nil];
     [[PASessionManager sharedClient] POST:@"api/users/user_for_udid"
                                parameters:dictionary
@@ -239,10 +240,13 @@
 -(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock
 {
     NSLog(@"creating an anonymous new user");
-    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
+    //NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     //NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:[store objectForKey:@"udid"] forKey:@"udid"];
-    NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:shortTermUDID forKey:@"udid"];
+    NSDictionary *deviceInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                @"ios", @"device_type",
+                                deviceVendorIdentifier,@"udid",
+                                nil];
     NSLog(@"deviceInfo: %@", deviceInfo);
     [[PASessionManager sharedClient] POST:usersAPI
                                parameters:deviceInfo
@@ -346,14 +350,15 @@
 - (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(NSString*)direction
 {
     // adds the unique user device token to the userInfo NSDictionary
-    NSDictionary* userInfoWithUDID = [self addUDIDToDictionary:userInfo];
-    
+    userInfo = [self addUDIDToDictionary:userInfo];
+    userInfo = [self addDeciveTypeToDictionary:userInfo];
     // sends either email and password, or facebook token and link, to the server for authentication
     // expects an authentication token to be returned in response
+    
     NSLog(@"Login dictionary: %@", userInfo);
     
     [[PASessionManager sharedClient] POST: @"api/access"
-                               parameters:[self applyWrapper:@"user" toDictionary:userInfoWithUDID]
+                               parameters:[self applyWrapper:@"user" toDictionary:userInfo]
                                   success:^(NSURLSessionDataTask * __unused task, id JSON){
                                       NSLog(@"LOGIN JSON: %@",JSON);
                                       
@@ -368,6 +373,7 @@
                                       NSNumber* userID = [userDictionary objectForKey:@"id"];
                                       NSString* apiKey = [userDictionary objectForKey:@"api_key"];
                                       NSString* imageURL = [userDictionary objectForKey:@"image"];
+                                      NSNumber* institutionID = [userDictionary objectForKey:@"institution_id"];
                                       
                                       NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 
@@ -378,7 +384,7 @@
                                       [defaults setObject:email forKey:@"email"];
                                       [defaults setObject:userID forKey:@"user_id"];
                                       [defaults setObject:apiKey forKey:@"api_key"];
-                                      [defaults setObject:[userDictionary objectForKey:@"institution_id"] forKey:@"home_institution"];
+                                      [defaults setObject:institutionID forKey:@"home_institution"];
                                       
                                       if(imageURL){
                                           NSLog(@"shared client base url: %@",[PASessionManager sharedClient].baseURL);
@@ -523,6 +529,7 @@
     NSString* loginURL = [@"api/users/" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
     loginURL = [loginURL stringByAppendingString:@"/facebook_login"];
     
+    dictionary = [self addDeciveTypeToDictionary:dictionary];
     
     [[PASessionManager sharedClient] PATCH:loginURL
                                 parameters:[self applyWrapper:@"user" toDictionary:[self addUDIDToDictionary:dictionary]]
@@ -1393,7 +1400,7 @@
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
              NSDictionary *diningDictionary = (NSDictionary*)JSON;
-             NSLog(@"dining opp %@", JSON);
+             //NSLog(@"dining opp %@", JSON);
              NSArray *postsFromResponse = [diningDictionary objectForKey:@"dining_opportunities"];
              [self.persistentStoreCoordinator lock];
              for (NSDictionary *diningAttributes in postsFromResponse){
@@ -1446,7 +1453,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"JSON: %@",JSON);
+             //NSLog(@"JSON: %@",JSON);
              NSDictionary *diningDictionary = (NSDictionary*)JSON;
              NSDictionary *diningAttributes = [diningDictionary objectForKey:@"dining_place"];
              NSNumber *newID = [diningAttributes objectForKey:@"id"];
@@ -1454,7 +1461,7 @@
              BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace" andCategory:nil];
              
              if(!diningPlaceAlreadyExists){
-                    NSLog(@"setting dining place");
+                    //NSLog(@"setting dining place");
                     DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
                     [self setAttributesInDiningPlace:diningPlace withDictionary:diningAttributes];
                     [viewController addDiningPlace:diningPlace withPeriod:diningPeriod];
@@ -1816,7 +1823,7 @@
                                   parameters:params
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"EVENT JSON: %@",JSON);
+             NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
              [self.persistentStoreCoordinator lock];
@@ -1878,6 +1885,8 @@
 #pragma mark - Comment actions
 
 -(void)postComment:(NSDictionary *)dictionary{
+    
+    //if([defaults objectForKey:@"authentication_token"] && [[defaults objectForKey:@"institution_id"] integerValue]==[[defaults objectForKey:@"home_institution"]integerValue]){
     [[PASessionManager sharedClient] POST:commentsAPI
                                parameters:[self applyWrapper:@"comment" toDictionary:dictionary]
                                   success:^
@@ -1894,11 +1903,13 @@
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
                                   }];
-
 }
 
 -(void)updateCommentsFrom: (NSString *)comment_from withCategory:(NSString *)category{
     if(comment_from){
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        if([defaults objectForKey:@"authentication_token"] && ([[defaults objectForKey:@"institution_id"] integerValue]==[[defaults objectForKey:@"home_institution"]integerValue] || [category isEqualToString:@"circles"])){
+            //if the user is logged in and attempting to get the comments on an event that is on his home institution or trying to get the comments of a circle
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
         
@@ -1943,7 +1954,7 @@
                                              NSLog(@"ERROR: %@",error);
                                          }];
         });
-    
+        }
     }
 }
 
@@ -2264,10 +2275,16 @@
 // adds the unique user device token to any NSDictionary at the top level
 - (NSDictionary*)addUDIDToDictionary:(NSDictionary *)dictionary {
     // adds the unique user device token to the userInfo NSDictionary
-    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
+    //NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSMutableDictionary *mutDict = [dictionary mutableCopy];
     //[mutDict setObject:[store objectForKey:@"udid"] forKey:@"udid"];
-    [mutDict setObject:shortTermUDID forKey:@"udid"];
+    [mutDict setObject:deviceVendorIdentifier forKey:@"udid"];
+    return [mutDict copy];
+}
+
+-(NSDictionary*)addDeciveTypeToDictionary:(NSDictionary*)dictionary{
+    NSMutableDictionary *mutDict = [dictionary mutableCopy];
+    [mutDict setObject:@"ios" forKey:@"device_type"];
     return [mutDict copy];
 }
 

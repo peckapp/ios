@@ -34,21 +34,25 @@
 }
 
 -(id)init{
-    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-    _managedObjectContext = [appdelegate managedObjectContext];
+    self = [super init];
     
-    
-    NSFetchRequest * request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *events = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:_managedObjectContext];
-    [request setEntity:events];
-    NSError *error = nil;
-    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
-    
-    self.eventTree = [[PAEventBST alloc] init];
-    
-    for(int i=0; i<[mutableFetchResults count]; i++){
-        Event *tempEvent = mutableFetchResults[i];
-        [self.eventTree addNode:self.eventTree WithName:tempEvent.title WithEvent:tempEvent];
+    if (self) {
+        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [appdelegate managedObjectContext];
+        
+        
+        NSFetchRequest * request = [[NSFetchRequest alloc] init];
+        NSEntityDescription *events = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:_managedObjectContext];
+        [request setEntity:events];
+        NSError *error = nil;
+        NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
+        
+        self.eventTree = [[PAEventBST alloc] init];
+        
+        for(int i=0; i<[mutableFetchResults count]; i++){
+            Event *tempEvent = mutableFetchResults[i];
+            [self.eventTree addNode:self.eventTree WithName:tempEvent.title WithEvent:tempEvent];
+        }
     }
     
     return self;

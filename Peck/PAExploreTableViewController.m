@@ -19,6 +19,8 @@
 
 @interface PAExploreTableViewController ()
 
+@property (strong, nonatomic) UISearchBar* searchBar;
+
 @end
 
 @implementation PAExploreTableViewController
@@ -46,7 +48,17 @@ NSCache *imageCache;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
+    self.fetchedResultsController=nil;
+    
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        // Replace this implementation with code to handle the error appropriately.
+        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
     assetManager = [PAAssetManager sharedManager];
 
     self.title = @"Explore";
@@ -65,11 +77,43 @@ NSCache *imageCache;
     self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 
     [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
+    
+    _searchBar = [[UISearchBar alloc] init];
+    _searchBar.delegate = self;
+    _searchBar.showsCancelButton = NO;
+    _searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+    
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 54)];
+    [headerView addSubview:_searchBar];
+    //headerView.backgroundColor =
+    //self.tableView.tableHeaderView = self.searchBar;
+    self.tableView.tableHeaderView = headerView;
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+   
 }
 
 -(void)refresh{
     NSLog(@"refresh the table view");
     [[PASyncManager globalSyncManager] updateExploreInfoForViewController:self];
+}
+
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+    _fetchedResultsController=nil;
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Fetched results controller could not perform fetch");
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    [self.tableView reloadData];
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [self.searchBar resignFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning
@@ -101,6 +145,11 @@ NSCache *imageCache;
     cell.titleLabel.text = tempExplore.title;
     cell.exploreID = [tempExplore.id integerValue];
     cell.category = tempExplore.category;
+    if([tempExplore.category isEqualToString:@"announcement"]){
+        cell.contextLabel.text = @" Announcement";
+    }else{
+        cell.contextLabel.text = @" Event";
+    }
     
     NSLog(@"explore weight: %@", tempExplore.weight);
     
@@ -256,19 +305,25 @@ NSCache *imageCache;
     
     [fetchRequest setSortDescriptors:sortDescriptors];
     
+    if(!([self.searchBar.text isEqualToString:@""] || self.searchBar.text==nil)){
+        NSPredicate* searchPredicate = [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@", @"title", self.searchBar.text];
+        [fetchRequest setPredicate:searchPredicate];
+    }
+    
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
+    /*
 	NSError *error = nil;
 	if (![self.fetchedResultsController performFetch:&error]) {
         // Replace this implementation with code to handle the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
 	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 	    abort();
-	}
+	}*/
     
     return _fetchedResultsController;
 }

@@ -52,7 +52,7 @@ BOOL loggedIn;
     tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changePicture)];
     tapRecognizer.cancelsTouchesInView = NO;
     [profilePicture addGestureRecognizer:tapRecognizer];
-    profilePicture.layer.cornerRadius = 64;
+    profilePicture.layer.cornerRadius = profilePicture.frame.size.width / 2;
     profilePicture.clipsToBounds = YES;
     profilePicture.userInteractionEnabled = YES;
     
@@ -299,6 +299,13 @@ BOOL loggedIn;
 }
 
 #pragma mark - table view deleagate
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+        return 30.0f;
+    return 44.0f;
+}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if(indexPath.section==0 && indexPath.row==5){

@@ -35,4 +35,5 @@
 -(void)transitionToRightTableView;
 -(void)transitionToLeftTableView;
 
+-(void)switchToCurrentDay;
 @end

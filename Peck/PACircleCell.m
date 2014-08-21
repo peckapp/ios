@@ -22,6 +22,8 @@
 
 @interface PACircleCell ()
 
+@property (nonatomic) CGRect profileCellFrame;
+
 @end
 
 @implementation PACircleCell
@@ -34,7 +36,7 @@ UITextView *textViewHelper;
 
 PAAssetManager * assetManager;
 
-#define defaultCellHeight 51
+#define defaultCellHeight 52.0
 #define cellY 22
 //the compressed text view height is used to avoid seeing half of the last line of the text view.
 //It should be changed manually if the default text view height is changed
@@ -45,12 +47,15 @@ PAAssetManager * assetManager;
     _loadedImages = NO;
 
     self.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    self.profileCellFrame = CGRectMake(0, 0, defaultCellHeight, defaultCellHeight);
 
     self.profilesTableView.delegate = self;
     self.profilesTableView.dataSource = self;
 
+//    self.profilesTableView.frame = CGRectMake(0, 0, 44.0, self.frame.size.height);
     self.profilesTableView.transform = CGAffineTransformMakeRotation(-M_PI_2);
-    self.profilesTableView.frame = CGRectMake(0, 40.0, self.frame.size.width, 52.0);
+    self.profilesTableView.frame = CGRectMake(0, 40.0, self.frame.size.width, defaultCellHeight);
     self.profilesTableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
 
     self.commentsTableView.delegate=self;
@@ -124,9 +129,9 @@ PAAssetManager * assetManager;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if(tableView==self.profilesTableView){
-        return 0;
+        return 1.0;
     }
-    return 48;
+    return 48.0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -157,6 +162,7 @@ PAAssetManager * assetManager;
         UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"profilePreviewCell"];
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profilePreviewCell"];
+            cell.frame = self.profileCellFrame;
         }
 
         [self configureMemberCell:cell atIndexPath:indexPath];
@@ -180,6 +186,7 @@ PAAssetManager * assetManager;
 
 - (void)configureMemberCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     UIView * thumbnail = [[UIView alloc] initWithFrame:cell.frame];
+    //NSLog(@"row: %li frame: %@", (long)indexPath.row,NSStringFromCGRect(cell.frame));
     if (indexPath.row == [self.members count]) {
         [thumbnail addSubview:[assetManager createThumbnailWithFrame:cell.bounds imageView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"plus"]]]];
     }
@@ -368,7 +375,7 @@ PAAssetManager * assetManager;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == self.profilesTableView) {
-        return 52;
+        return defaultCellHeight;
     }
     else if (tableView == self.commentsTableView) {
         if(indexPath.row>0){
@@ -490,6 +497,12 @@ PAAssetManager * assetManager;
             
         case NSFetchedResultsChangeDelete:
             [self.commentsTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
             break;
     }
 }
