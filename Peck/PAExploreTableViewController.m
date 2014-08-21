@@ -145,6 +145,11 @@ NSCache *imageCache;
     cell.titleLabel.text = tempExplore.title;
     cell.exploreID = [tempExplore.id integerValue];
     cell.category = tempExplore.category;
+    if([tempExplore.category isEqualToString:@"announcement"]){
+        cell.contextLabel.text = @" Announcement";
+    }else{
+        cell.contextLabel.text = @" Event";
+    }
     
     NSLog(@"explore weight: %@", tempExplore.weight);
     

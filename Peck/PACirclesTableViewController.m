@@ -380,6 +380,9 @@ PAAssetManager *assetManager;
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
         [cell updateCircleMembers:nil];
         cell.titleTextField.text=@"";
+        [self.tableView setScrollEnabled:YES];
+    }else{
+        [self.tableView setScrollEnabled:NO];
     }
     [cell performFetch];
     self.selectedIndexPath = indexPath;
@@ -387,7 +390,7 @@ PAAssetManager *assetManager;
     [self.tableView endUpdates];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     
-    self.tableView.scrollEnabled = NO;
+    //self.tableView.scrollEnabled = NO;
     viewingCell=YES;
     
     [self configureCell:cell atIndexPath:indexPath];
