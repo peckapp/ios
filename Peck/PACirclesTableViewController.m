@@ -418,8 +418,8 @@ PAAssetManager *assetManager;
     [cell addSubview:self.keyboardAccessoryView];
 }
 
--(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath
-{
+-(void)condenseCircleCell:(PACircleCell*)cell atIndexPath:(NSIndexPath*)indexPath{
+    NSLog(@"condense cell for row: %li", (long)indexPath.row);
     [self dismissKeyboard:self];
     [self.addedPeers removeAllObjects];
     viewingCell=NO;
