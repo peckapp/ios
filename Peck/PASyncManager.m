@@ -1799,6 +1799,7 @@
 
 -(void)updateEventInfo
 {
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"]){
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         
@@ -1851,6 +1852,7 @@
         });
          */
     });
+    }
 }
 
 -(void)setAttributesInEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
@@ -2145,8 +2147,10 @@
 }
 
 -(void)updateSubscriptionsForCategory:(NSString*)category{
+    
     //three calls will be made to this method. It is necessary because the subscriptions must already be loaded into core date before we attemp to change its properties
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    if([defaults objectForKey:@"user_id"]){
     
     NSString* subscriptionURL = [subscriptionsAPI stringByAppendingString:@"?user_id="];
     subscriptionURL = [subscriptionURL stringByAppendingString:[[defaults objectForKey:@"user_id" ] stringValue]];
@@ -2176,7 +2180,7 @@
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                      NSLog(@"ERROR: %@",error);
                                  }];
-
+    }
 }
 
 

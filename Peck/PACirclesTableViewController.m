@@ -606,6 +606,8 @@ PAAssetManager *assetManager;
     [self presentViewController:vc animated:YES completion:^{}];
     vc.delegate = self;
 
+    
+    /*
     Peer *peer;
     NSMutableDictionary *mutableDictionary = [[NSMutableDictionary alloc] init];
     for (peer in cell.members) {
@@ -614,7 +616,7 @@ PAAssetManager *assetManager;
 
     vc.invitedPeople = mutableDictionary;
     vc.invitedCircles = nil;
-
+     */
 
 }
 
