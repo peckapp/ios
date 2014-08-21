@@ -120,7 +120,7 @@ static NSString *nibName = @"PAPeckCell";
     }else{
         self.promptView = [PAPromptView promptViewWithFrame:self.view.bounds viewController:self];
 
-        self.view.userInteractionEnabled = NO;
+        self.view.userInteractionEnabled = YES;
         [self.view addSubview:self.promptView];
     }
 }

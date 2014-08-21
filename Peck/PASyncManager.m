@@ -434,9 +434,14 @@
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
-                                      PAInitialViewController* sender = (PAInitialViewController*)controller;
-                                      [sender showAlert];
-                                      
+                                     // PAInitialViewController* sender = (PAInitialViewController*)controller;
+                                      //[sender showAlert];
+                                      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Incorrect email or password"
+                                                                                      message:@"Please enter a valid email and password"
+                                                                                     delegate:self
+                                                                            cancelButtonTitle:@"OK"
+                                                                            otherButtonTitles:nil];
+                                      [alert show];
                                   }];
 }
 
