@@ -1880,6 +1880,8 @@
 #pragma mark - Comment actions
 
 -(void)postComment:(NSDictionary *)dictionary{
+    
+    //if([defaults objectForKey:@"authentication_token"] && [[defaults objectForKey:@"institution_id"] integerValue]==[[defaults objectForKey:@"home_institution"]integerValue]){
     [[PASessionManager sharedClient] POST:commentsAPI
                                parameters:[self applyWrapper:@"comment" toDictionary:dictionary]
                                   success:^
@@ -1896,11 +1898,13 @@
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
                                   }];
-
 }
 
 -(void)updateCommentsFrom: (NSString *)comment_from withCategory:(NSString *)category{
     if(comment_from){
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        if([defaults objectForKey:@"authentication_token"] && ([[defaults objectForKey:@"institution_id"] integerValue]==[[defaults objectForKey:@"home_institution"]integerValue] || [category isEqualToString:@"circles"])){
+            //if the user is logged in and attempting to get the comments on an event that is on his home institution or trying to get the comments of a circle
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         dispatch_async(queue, ^{
         
@@ -1945,7 +1949,7 @@
                                              NSLog(@"ERROR: %@",error);
                                          }];
         });
-    
+        }
     }
 }
 

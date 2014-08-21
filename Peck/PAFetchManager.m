@@ -50,6 +50,7 @@
     [self removeAllObjectsOfType:@"Event"];
     [self removeAllObjectsOfType:@"Subscription"];
     [self removeAllObjectsOfType:@"Explore"];
+    [self removeAllObjectsOfType:@"Comment"];
     
     [[PASyncManager globalSyncManager] updateEventInfo];
     [[PASyncManager globalSyncManager] updateDiningInfo];
@@ -128,7 +129,6 @@
     [self removeAllObjectsOfType:@"Peck"];
     [self removeAllObjectsOfType:@"Event"];
     [self removeAllObjectsOfType:@"Explore"];
-    
     
     [[PASyncManager globalSyncManager] updatePeerInfo];
 }
