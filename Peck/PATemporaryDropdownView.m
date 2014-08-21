@@ -45,21 +45,25 @@
         self.todayButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
         self.todayButton.userInteractionEnabled=YES;
         self.todayButton.hidden=YES;
-        [self.todayButton setTitle:@"today" forState:UIControlStateNormal];
-        self.todayButton.frame = CGRectMake(0, 0, 80, 40.0);
+        self.todayButton.titleLabel.font = [UIFont systemFontOfSize:17.0];
+        [self.todayButton setTitle:@"Today" forState:UIControlStateNormal];
+        self.todayButton.frame = CGRectMake(0, 0, 80, 44);
+        self.todayButton.alpha = 0;
         [self.todayButton addTarget:self
                    action:@selector(goToToday)
          forControlEvents:UIControlEventTouchUpInside];
         [self.hiddenView addSubview:self.todayButton];
         
-        self.rightButtonFrame = CGRectMake(260, 0, 60, 44);
-        self.leftButtonFrame = CGRectMake(0, 0, 60, 44);
+        self.rightButtonFrame = CGRectMake(250, 0, 60, 44);
+        self.leftButtonFrame = CGRectMake(10, 0, 60, 44);
         
     }
     return self;
 }
 
 -(void)configureTodayButton:(NSInteger)selectedDay{
+    // TODO: Abstract this away from today button specifically, we might want to reuse this class elsewhere
+    // TODO: Animate this
     if(selectedDay==0){
         self.todayButton.hidden=YES;
     }else if(selectedDay<0){
@@ -120,6 +124,7 @@
     [UIView animateWithDuration:0.3 delay:secondaryDelay options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.label.alpha = 1;
+                         self.todayButton.alpha = 1;
                      }
                      completion:^(BOOL finished){
                      }];
@@ -138,6 +143,7 @@
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.label.alpha = 0;
+                         self.todayButton.alpha = 0;
                      }
                      completion:^(BOOL finished){
                      }];
