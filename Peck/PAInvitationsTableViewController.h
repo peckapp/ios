@@ -33,6 +33,10 @@
 @property (weak, nonatomic) NSArray* invitedPeopleArray;
 @property (weak, nonatomic) NSArray* invitedCirclesArray;
 
+
+@property(strong, nonatomic) NSArray* previouslyAddedPeople;
+
+@property (nonatomic) BOOL invitesForCircle;
 - (IBAction)addInvites:(id)sender;
 - (IBAction)cancel:(id)sender;
 

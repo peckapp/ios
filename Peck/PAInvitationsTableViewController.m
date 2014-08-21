@@ -109,6 +109,17 @@ PAAssetManager * assetManager;
         }
     }
     
+    if(self.previouslyAddedPeople){
+        for(int i=0;i<[mutableFetchResults count];i++){
+            for(Peer* addedPeer in self.previouslyAddedPeople){
+                Peer* tempPeer = mutableFetchResults[i];
+                if([tempPeer.id integerValue]==[addedPeer.id integerValue]){
+                    [mutableFetchResults removeObjectAtIndex:i];
+                }
+            }
+        }
+    }
+    
     for(int i=0;i<[mutableCircleFetchResults count];i++){
         Circle* tempCircle = mutableCircleFetchResults[i];
         if([self.invitedCircles objectForKey:[tempCircle.id stringValue]]){
@@ -117,8 +128,12 @@ PAAssetManager * assetManager;
         }
     }
     
-    self.suggestedInvites=(NSMutableArray*)[mutableCircleFetchResults arrayByAddingObjectsFromArray:mutableFetchResults];
-    
+    //we don't want people to be able to invite circles to circles
+    if(self.invitesForCircle){
+        self.suggestedInvites = mutableFetchResults;
+    }else{
+        self.suggestedInvites=(NSMutableArray*)[mutableCircleFetchResults arrayByAddingObjectsFromArray:mutableFetchResults];
+    }
     
     
     [self.tableView reloadData];
