@@ -122,23 +122,7 @@ PAAssetManager * assetManager;
 
     self.selectedDay = 0;
 
-    if(!_searchBar){
-        _searchBar = [[UISearchBar alloc] init];
-        _searchBar.delegate = self;
-        _searchBar.showsCancelButton = NO;
-    }
-    
-    if(!_leftSearchBar){
-        _leftSearchBar = [[UISearchBar alloc] init];
-        _leftSearchBar.delegate = self;
-        _leftSearchBar.showsCancelButton = NO;
-    }
-    if(!_rightSearchBar){
-        _rightSearchBar = [[UISearchBar alloc] init];
-        _rightSearchBar.delegate = self;
-        _rightSearchBar.showsCancelButton = NO;
-    }
-
+   
     
     if (!self.leftTableView) {
         self.leftTableView = [[UITableView alloc] init];
@@ -204,6 +188,23 @@ PAAssetManager * assetManager;
 
     NSLog(@"View will appear (events)");
     showingSearchBar = NO;
+    
+    if(!_searchBar){
+        _searchBar = [[UISearchBar alloc] init];
+        _searchBar.delegate = self;
+        _searchBar.showsCancelButton = NO;
+    }
+    
+    if(!_leftSearchBar){
+        _leftSearchBar = [[UISearchBar alloc] init];
+        _leftSearchBar.delegate = self;
+        _leftSearchBar.showsCancelButton = NO;
+    }
+    if(!_rightSearchBar){
+        _rightSearchBar = [[UISearchBar alloc] init];
+        _rightSearchBar.delegate = self;
+        _rightSearchBar.showsCancelButton = NO;
+    }
 
     _searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
     _leftSearchBar.frame =CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
