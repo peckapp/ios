@@ -325,7 +325,9 @@ PAAssetManager *assetManager;
 {
     PACircleCell *cell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:indexPath];
     if(!viewingCell){
-        [self expandCircleCell:cell atIndexPath:indexPath];
+        if(indexPath.row<[self.fetchedResultsController.fetchedObjects count]){
+            [self expandCircleCell:cell atIndexPath:indexPath];
+        }
         
         /*
         cell.addingMembers=NO;
@@ -482,20 +484,20 @@ PAAssetManager *assetManager;
     cell.tag=[indexPath row];
     cell.parentViewController=self;
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
-        cell.circleTitle.text=@"New";
+        cell.circleTitle.text=@"";
         [cell.profilesTableView setHidden:YES];
         [cell.commentsTableView setHidden:YES];
-        [cell.titleTextField setHidden:YES];
-        [cell.createCircleButton setHidden:YES];
+        //[cell.titleTextField setHidden:YES];
+        //[cell.createCircleButton setHidden:YES];
         [cell.leaveCircleButton setHidden:YES];
         [cell.backButton setHidden:YES];
         [cell updateCircleMembers:nil];
-        if(viewingCell){
+        //if(viewingCell){
             [cell.titleTextField setHidden:NO];
             [cell.profilesTableView setHidden:NO];
             [cell.createCircleButton setHidden:NO];
-            [cell.backButton setHidden:NO];
-        }
+            //[cell.backButton setHidden:NO];
+        //}
         
     }
     else{
