@@ -19,12 +19,8 @@
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @property (strong, nonatomic) id detailItem;
-- (IBAction)attendButton:(id)sender;
 
 @property (strong, nonatomic) NSString* commentText;
-@property (weak, nonatomic) IBOutlet UILabel *numberOfAttendees;
-@property (weak, nonatomic) IBOutlet UIButton *attendButton;
-
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

@@ -19,6 +19,8 @@
 
 
 #define imageHeight 256
+#define titleLabelDivide 90
+#define dateLabelDivide 196
 #define compressedHeight 88
 #define buffer 14
 #define defaultCellHeight 72
@@ -46,7 +48,8 @@
 @property (strong, nonatomic) UILabel *descriptionLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
 
-
+@property (strong, nonatomic) UIButton *attendButton;
+@property (strong, nonatomic) UILabel *attendeesLabel;
 
 @property (strong, nonatomic) UIView * keyboardAccessoryView;
 @property (strong, nonatomic) UITextField * keyboardAccessory;
@@ -123,13 +126,11 @@ BOOL reloaded = NO;
     self.timeLabel.textColor = [UIColor whiteColor];
     self.timeLabel.font = [UIFont boldSystemFontOfSize:17.0];
     self.timeLabel.textAlignment = NSTextAlignmentRight;
-    // self.timeLabel.backgroundColor = [UIColor lightGrayColor];
     [self.blurredImageView addSubview:self.timeLabel];
 
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
-    //self.titleLabel.backgroundColor = [UIColor lightGrayColor];
     [self.blurredImageView addSubview:self.titleLabel];
 
     [self.headerView addSubview:[assetManager createShadowWithFrame:CGRectMake(0, -64, self.view.frame.size.width, 64) top:YES]];
@@ -137,25 +138,29 @@ BOOL reloaded = NO;
     self.fullTitleLabel = [[UILabel alloc] init];
     self.fullTitleLabel.textColor = [UIColor whiteColor];
     self.fullTitleLabel.font = [UIFont boldSystemFontOfSize:21.0];
-    //self.titleLabel.backgroundColor = [UIColor lightGrayColor];
     [self.headerView addSubview:self.fullTitleLabel];
 
     self.dateLabel = [[UILabel alloc] init];
-    //self.dateLabel.backgroundColor = [UIColor lightGrayColor];
     [self.headerView addSubview:self.dateLabel];
 
     self.descriptionLabel = [[UILabel alloc] init];
     self.descriptionLabel.font = [UIFont systemFontOfSize:13.0];
     self.descriptionLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.descriptionLabel.numberOfLines = 0;
-    // self.descriptionLabel.backgroundColor = [UIColor lightGrayColor];
     [self.headerView addSubview:self.descriptionLabel];
 
     self.headerView.backgroundColor = [UIColor whiteColor];
 
     [self.view addSubview:self.imagesView];
-    
 
+    self.attendButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.attendButton addTarget:self action:@selector(attendButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
+    [self.headerView addSubview:self.attendButton];
+
+    self.attendeesLabel = [[UILabel alloc] init];
+    self.attendeesLabel.font = [UIFont systemFontOfSize:14.0];
+    [self.headerView addSubview:self.attendeesLabel];
 
     self.keyboardAccessoryView = [[UIView alloc] init];
     self.keyboardAccessoryView.backgroundColor = [UIColor whiteColor];
@@ -216,7 +221,7 @@ BOOL reloaded = NO;
 
     CGRect left;
     CGRect right;
-    CGRectDivide(self.blurredImageView.frame, &left, &right, 90, CGRectMinXEdge);
+    CGRectDivide(self.blurredImageView.frame, &left, &right, titleLabelDivide, CGRectMinXEdge);
     self.timeLabel.frame = left;
     self.titleLabel.frame = right;
     self.titleLabel.frame = CGRectInset(self.titleLabel.frame, buffer, 0);
@@ -224,8 +229,11 @@ BOOL reloaded = NO;
     self.fullTitleLabel.frame = CGRectMake(buffer, -buffer * 3, self.view.frame.size.width - buffer * 2, buffer * 3);
 
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
-    self.dateLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, 0);
+    self.dateLabel.frame = CGRectInset(self.headerView.frame, buffer, buffer);
     [self.dateLabel sizeToFit];
+
+    self.attendButton.frame = CGRectMake(dateLabelDivide, 0, self.view.frame.size.width - dateLabelDivide, 50);
+    self.attendeesLabel.frame = CGRectMake(self.view.frame.size.width - 20, 0, 20, 50);
 
     self.descriptionLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, CGRectGetMaxY(self.dateLabel.frame));
     [self.descriptionLabel sizeToFit];
@@ -235,11 +243,11 @@ BOOL reloaded = NO;
     self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 1000);
     self.footerView.backgroundColor = [UIColor whiteColor];
 
-     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
-     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
-     self.postButton.frame = CGRectMake(self.keyboardAccessoryView.frame.size.width - self.keyboardAccessoryView.frame.size.height, 0, self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.height);
+    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.postButton.frame = CGRectMake(self.keyboardAccessoryView.frame.size.width - self.keyboardAccessoryView.frame.size.height, 0, self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.height);
 
-     [self.keyboardAccessory resignFirstResponder];
+    [self.keyboardAccessory resignFirstResponder];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -442,15 +450,14 @@ BOOL reloaded = NO;
         [self.endTimeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
 
         self.descriptionTextView.text = [self.detailItem valueForKey:@"descrip"];
+         */
        
-        self.numberOfAttendees.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
+        self.attendeesLabel.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
         if([self attendingEvent]){
             [self.attendButton setTitle:@"Unattend" forState:UIControlStateNormal];
         }else{
             [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
         }
-        NSLog(@"attendees: %@", [self.detailItem valueForKey:@"attendees"]);
-        */
 
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"h:mm a"];

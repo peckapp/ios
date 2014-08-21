@@ -160,6 +160,7 @@ PAAssetManager * assetManager;
     if (!self.datePopup) {
         self.datePopup = [[PATemporaryDropdownView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
         self.datePopup.label.text = @"Today";
+        self.datePopup.label.textColor = [assetManager darkColor];
         self.datePopup.hiddenView.backgroundColor = [UIColor whiteColor];
         [self.view addSubview:self.datePopup];
     }
@@ -188,23 +189,21 @@ PAAssetManager * assetManager;
 
     NSLog(@"View will appear (events)");
     showingSearchBar = NO;
-    
-    //if(!_searchBar){
+
         _searchBar = [[UISearchBar alloc] init];
         _searchBar.delegate = self;
         _searchBar.showsCancelButton = NO;
-    //}
-    
-    //if(!_leftSearchBar){
+    _searchBar.searchBarStyle = UISearchBarStyleMinimal;
+
         _leftSearchBar = [[UISearchBar alloc] init];
         _leftSearchBar.delegate = self;
         _leftSearchBar.showsCancelButton = NO;
-    //}
-    //if(!_rightSearchBar){
+    _leftSearchBar.searchBarStyle = UISearchBarStyleMinimal;
+
         _rightSearchBar = [[UISearchBar alloc] init];
         _rightSearchBar.delegate = self;
         _rightSearchBar.showsCancelButton = NO;
-    //}
+    _rightSearchBar.searchBarStyle = UISearchBarStyleMinimal;
 
     _searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
     _leftSearchBar.frame =CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
