@@ -14,6 +14,7 @@
 @property (strong, nonatomic) UIImage * imagePlaceholder;
 @property (strong, nonatomic) UIImage * profilePlaceholder;
 @property (strong, nonatomic) UIImage * greyBackground;
+@property (strong, nonatomic) UIImage * cancelIcon;
 
 @property (strong, nonatomic) UIColor *darkColor;
 @property (strong, nonatomic) UIColor *lightColor;

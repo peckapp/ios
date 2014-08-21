@@ -25,6 +25,8 @@
         self.eventPlaceholder = [UIImage imageNamed:@"event-placeholder"];
         self.imagePlaceholder = [UIImage imageNamed:@"image-placeholder"];
         self.profilePlaceholder = [UIImage imageNamed:@"profile-placeholder"];
+        self.cancelIcon = [UIImage imageNamed:@"chevron-light"];
+
         self.darkColor = [UIColor colorWithRed:38/255.0 green:27/255.0 blue:48/255.0 alpha:1];
         self.lightColor = [UIColor colorWithRed:150/255.0 green:123/255.0 blue:255/255.0 alpha:1];
 

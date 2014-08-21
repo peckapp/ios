@@ -129,6 +129,10 @@
 		DD898137195B523F0079CDC9 /* button-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898134195B523F0079CDC9 /* button-selected@2x.png */; };
 		DD898139195B5AE20079CDC9 /* image-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD898138195B5AE20079CDC9 /* image-placeholder.png */; };
 		DD8C3394199D095B00B9966A /* PADiningOpportunityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD8C3393199D095B00B9966A /* PADiningOpportunityViewController.m */; };
+		DDA8417519A68C8800383A3B /* cancel-button.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA8417419A68C8800383A3B /* cancel-button.png */; };
+		DDA8417719A68F6000383A3B /* chevron@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA8417619A68F6000383A3B /* chevron@2x.png */; };
+		DDA8417919A690DC00383A3B /* cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA8417819A690DC00383A3B /* cancel@2x.png */; };
+		DDA8417B19A6938900383A3B /* chevron-light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA8417A19A6938900383A3B /* chevron-light@2x.png */; };
 		DDBCA9BE1986D6BC007D283E /* drop-shadow-horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */; };
 		DDCCE82019A3DC250054BA2B /* PATemporaryDropdownView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCCE81F19A3DC250054BA2B /* PATemporaryDropdownView.m */; };
 		DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAExploreCell.m */; };
@@ -389,6 +393,10 @@
 		DD898138195B5AE20079CDC9 /* image-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "image-placeholder.png"; sourceTree = "<group>"; };
 		DD8C3392199D095B00B9966A /* PADiningOpportunityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADiningOpportunityViewController.h; sourceTree = "<group>"; };
 		DD8C3393199D095B00B9966A /* PADiningOpportunityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADiningOpportunityViewController.m; sourceTree = "<group>"; };
+		DDA8417419A68C8800383A3B /* cancel-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel-button.png"; sourceTree = "<group>"; };
+		DDA8417619A68F6000383A3B /* chevron@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chevron@2x.png"; sourceTree = "<group>"; };
+		DDA8417819A690DC00383A3B /* cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel@2x.png"; sourceTree = "<group>"; };
+		DDA8417A19A6938900383A3B /* chevron-light@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chevron-light@2x.png"; sourceTree = "<group>"; };
 		DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "drop-shadow-horizontal.png"; sourceTree = "<group>"; };
 		DDCCE81E19A3DC250054BA2B /* PATemporaryDropdownView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PATemporaryDropdownView.h; sourceTree = "<group>"; };
 		DDCCE81F19A3DC250054BA2B /* PATemporaryDropdownView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PATemporaryDropdownView.m; sourceTree = "<group>"; };
@@ -469,6 +477,10 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				DDA8417A19A6938900383A3B /* chevron-light@2x.png */,
+				DDA8417819A690DC00383A3B /* cancel@2x.png */,
+				DDA8417619A68F6000383A3B /* chevron@2x.png */,
+				DDA8417419A68C8800383A3B /* cancel-button.png */,
 				DDEF7DB5199C15BA007C28F7 /* drop-shadow.png */,
 				DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */,
 				DDFFF5C21982CB3400DC5AC1 /* icons */,
@@ -1025,6 +1037,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4794C1D19620746002BD272 /* profile-placeholder.png in Resources */,
+				DDA8417519A68C8800383A3B /* cancel-button.png in Resources */,
 				86173751195E07F000F2A794 /* Main.storyboard in Resources */,
 				8689DDB519589E3600A6B61C /* filter_standard@2x.png in Resources */,
 				DDFFF5B919829DE700DC5AC1 /* feather-72@2x.png in Resources */,
@@ -1036,8 +1049,10 @@
 				DDFFF5AC19829BD100DC5AC1 /* feather-76@2x.png in Resources */,
 				A43BF0F8197992490009B7AD /* sidebar_background.jpg in Resources */,
 				A43BF1021979BC240009B7AD /* circles.jpeg in Resources */,
+				DDA8417719A68F6000383A3B /* chevron@2x.png in Resources */,
 				DDFFF5A819829BD100DC5AC1 /* feather-40.png in Resources */,
 				8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */,
+				DDA8417919A690DC00383A3B /* cancel@2x.png in Resources */,
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
 				A4F04BF81995158F00290CF2 /* PAPromptView.xib in Resources */,
 				A4677D53197562B1007E3C3A /* PADiningOpportunityCell.xib in Resources */,
@@ -1049,6 +1064,7 @@
 				DDFFF5BB19829DE700DC5AC1 /* feather-50@2x.png in Resources */,
 				869A85AE1964855B00F254C1 /* dropdown_circles@2x.png in Resources */,
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
+				DDA8417B19A6938900383A3B /* chevron-light@2x.png in Resources */,
 				DDFFF5A619829BD100DC5AC1 /* feather-60.png in Resources */,
 				DDFFF5B819829DE700DC5AC1 /* feather-72.png in Resources */,
 				DDFFF5AF19829BD100DC5AC1 /* feather-40@2x.png in Resources */,
