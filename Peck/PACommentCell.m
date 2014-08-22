@@ -14,6 +14,7 @@
 #import "PAAssetManager.h"
 #import "PAFetchManager.h"
 #import "PAFriendProfileViewController.h"
+#import "PAAthleticEventViewController.h"
 
 @implementation PACommentCell
 
@@ -87,8 +88,10 @@ PAAssetManager * assetManager;
 
 - (IBAction)likeButton:(id)sender {
     NSString*category = @"";
-    if(self.parentTableView){
+    if([self.parentTableView isKindOfClass:[PAEventInfoTableViewController class]]){
         category = @"simple";
+    }else if([self.parentTableView isKindOfClass:[PAAthleticEventViewController class]]){
+        category = @"athletic";
     }
     else if(self.parentCell){
         category = @"circles";

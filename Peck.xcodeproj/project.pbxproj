@@ -120,6 +120,7 @@
 		A4F04BEE1994097500290CF2 /* PAMethodManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F04BED1994097500290CF2 /* PAMethodManager.m */; };
 		A4F04BF61995155900290CF2 /* PAPromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F04BF51995155900290CF2 /* PAPromptView.m */; };
 		A4F04BF81995158F00290CF2 /* PAPromptView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4F04BF71995158F00290CF2 /* PAPromptView.xib */; };
+		A4FE792B19A7B39000A1E095 /* PAAthleticEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDEF7DB8199C4D34007C28F7 /* PAAthleticEventViewController.m */; };
 		BB24AC3498B040B69F5014A3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B42EB121A7584B6DAFCD7624 /* libPods.a */; };
 		DD3701401990081F006B63E8 /* PANestedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD37013F1990081F006B63E8 /* PANestedTableViewController.m */; };
 		DD5751B41980356100BF52A8 /* PAPeckInviteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD5751B31980356100BF52A8 /* PAPeckInviteCell.xib */; };
@@ -1166,6 +1167,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4FE792B19A7B39000A1E095 /* PAAthleticEventViewController.m in Sources */,
 				A43BF0FF1979B4A50009B7AD /* PAInvitationCell.m in Sources */,
 				A43BF0EE197819480009B7AD /* PASubscriptionsTableViewController.m in Sources */,
 				860EB42F1980660400F1E665 /* UIImage+ImageEffects.m in Sources */,

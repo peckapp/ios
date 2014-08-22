@@ -35,6 +35,7 @@
 #import "Announcement.h"
 #import "PAMethodManager.h"
 #import "PAUtils.h"
+#import "PAAthleticEventViewController.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -845,7 +846,7 @@
                                        
                                        //self set
                                        
-                                        [self updateAndReloadEvent:[attendee objectForKey:@"event_attended"] forViewController:controller];
+                                        [self updateAndReloadEvent:[attendee objectForKey:@"event_attended"] forViewController:controller withCategory:[attendee objectForKey:@"category"]];
                                        
                                        if([attendee objectForKey:@"peck"]){
                                            //if the user is attending from a peck
@@ -866,7 +867,7 @@
                                  parameters: [self applyWrapper:@"event_attendee" toDictionary:attendee]
                                     success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                         NSLog(@"attend JSON %@", JSON);
-                                        [self updateAndReloadEvent:[attendee objectForKey:@"event_attended"] forViewController:controller];
+                                        [self updateAndReloadEvent:[attendee objectForKey:@"event_attended"] forViewController:controller withCategory:[attendee objectForKey:@"category"]];
                                     }
      
                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -876,21 +877,30 @@
 
 }
 
--(void)updateAndReloadEvent:(NSNumber*)eventID forViewController:(UIViewController*)controller{
-    NSString* eventURL = [[simple_eventsAPI stringByAppendingString:@"/" ] stringByAppendingString:[eventID stringValue]];
+-(void)updateAndReloadEvent:(NSNumber*)eventID forViewController:(UIViewController*)controller withCategory:(NSString*)category{
+    NSString* eventURL = [[@"api/" stringByAppendingString:category ] stringByAppendingString:@"_events/"];
+                          
+    eventURL = [eventURL stringByAppendingString:[eventID stringValue]];
     [[PASessionManager sharedClient] GET:eventURL
                               parameters:[self authenticationParameters]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         //NSLog(@"EVENT JSON: %@",JSON);
+         NSLog(@"EVENT JSON: %@",JSON);
          NSDictionary* eventDictionary = (NSDictionary*)JSON;
-         NSDictionary* eventAttributes = [eventDictionary objectForKey:@"simple_event"];
-         Event* event = [[PAFetchManager sharedFetchManager] getObject:eventID withEntityType:@"Event" andType:@"simple"];
-         [self setAttributesInEvent:event withDictionary:eventAttributes];
+         NSDictionary* eventAttributes = [eventDictionary objectForKey:[category stringByAppendingString:@"_event"]];
+         Event* event = [[PAFetchManager sharedFetchManager] getObject:eventID withEntityType:@"Event" andType:category];
+         if([category isEqualToString:@"simple"]){
+             [self setAttributesInEvent:event withDictionary:eventAttributes];
+         }else{
+             [self setAttributesInAthleticEvent:event withDictionary:eventAttributes];
+         }
          if([controller isKindOfClass:[PAEventInfoTableViewController class]]){
              PAEventInfoTableViewController* sender = (PAEventInfoTableViewController*)controller;
              [sender reloadAttendeeLabels];
              //[sender configureView];
+         }else if([controller isKindOfClass:[PAAthleticEventViewController class]]){
+             PAAthleticEventViewController* sender = (PAAthleticEventViewController*)controller;
+             [sender reloadAttendeeLabels];
          }
          
      }

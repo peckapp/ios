@@ -606,12 +606,16 @@ PAAssetManager * assetManager;
 }
 - (IBAction)leaveCircleButton:(id)sender {
     PACirclesTableViewController* parent = (PACirclesTableViewController*) self.parentViewController;
-    [parent condenseCircleCell:self atIndexPath:nil];
+    NSLog(@"leave this circle %@", self.circle);
+    
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 [defaults objectForKey:@"user_id"],@"user_id",
-                                self.circle.id, @"circle_id",
+                                [NSNumber numberWithLong:[self.circle.id integerValue]], @"circle_id",
                                 nil];
+    NSLog(@"leave circle dict %@", dictionary);
+    
+    [parent condenseCircleCell:self atIndexPath:nil];
     [[PASyncManager globalSyncManager] leaveCircle:dictionary];
 }
 

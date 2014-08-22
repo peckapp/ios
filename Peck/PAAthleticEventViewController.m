@@ -1,8 +1,8 @@
 //
-//  PAAthleticEventViewController.m
+//  PAEventInfoTableViewController.m
 //  Peck
 //
-//  Created by Jonas Luebbers on 8/13/14.
+//  Created by John Karabinos on 7/2/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -19,6 +19,8 @@
 
 
 #define imageHeight 256
+#define titleLabelDivide 90
+#define dateLabelDivide 196
 #define compressedHeight 88
 #define buffer 14
 #define defaultCellHeight 72
@@ -34,6 +36,7 @@
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) UIView *footerView;
 @property (strong, nonatomic) UIView *imagesView;
 
 @property (strong, nonatomic) UIImageView *cleanImageView;
@@ -45,7 +48,8 @@
 @property (strong, nonatomic) UILabel *descriptionLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
 
-
+@property (strong, nonatomic) UIButton *attendButton;
+@property (strong, nonatomic) UILabel *attendeesLabel;
 
 @property (strong, nonatomic) UIView * keyboardAccessoryView;
 @property (strong, nonatomic) UITextField * keyboardAccessory;
@@ -59,6 +63,8 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+NSString * commentCellIdentifier = @"CommentCell";
+NSString * cellNibName = @"PACommentCell";
 NSMutableDictionary *heightDictionary;
 CGRect initialFrame;
 UITextView *textViewHelper;
@@ -71,24 +77,24 @@ BOOL reloaded = NO;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     assetManager = [PAAssetManager sharedManager];
-
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
-
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     //if(!self.formatter){
     self.formatter = [[NSDateFormatter alloc] init];
     [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
     //}
-
+    
     textViewHelper = [[UITextView alloc] init];
     [textViewHelper setHidden:YES];
-
+    
     heightDictionary = [[NSMutableDictionary alloc] init];
-
+    
     /*
      NSError * error = nil;
      if (![self.fetchedResultsController performFetch:&error])
@@ -97,96 +103,99 @@ BOOL reloaded = NO;
      abort();
      }
      */
-
+    
     //[self configureView];
-
+    
     //self.automaticallyAdjustsScrollViewInsets = NO;
-
+    
     self.view.backgroundColor = [assetManager darkColor];
-
+    
     self.headerView = [[UIView alloc] init];
+    self.footerView = [[UIView alloc] init];
     self.imagesView = [[UIView alloc] init];
-
+    
     self.cleanImageView = [[UIImageView alloc] init];
     self.cleanImageView.contentMode = UIViewContentModeCenter;
     [self.imagesView addSubview:self.cleanImageView];
-
+    
     self.blurredImageView = [[UIImageView alloc] init];
     self.blurredImageView.contentMode = UIViewContentModeCenter;
     [self.imagesView addSubview:self.blurredImageView];
-
+    
     self.timeLabel = [[UILabel alloc] init];
     self.timeLabel.textColor = [UIColor whiteColor];
     self.timeLabel.font = [UIFont boldSystemFontOfSize:17.0];
     self.timeLabel.textAlignment = NSTextAlignmentRight;
-    // self.timeLabel.backgroundColor = [UIColor lightGrayColor];
     [self.blurredImageView addSubview:self.timeLabel];
-
+    
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
-    //self.titleLabel.backgroundColor = [UIColor lightGrayColor];
     [self.blurredImageView addSubview:self.titleLabel];
-
+    
     [self.headerView addSubview:[assetManager createShadowWithFrame:CGRectMake(0, -64, self.view.frame.size.width, 64) top:YES]];
-
+    
     self.fullTitleLabel = [[UILabel alloc] init];
     self.fullTitleLabel.textColor = [UIColor whiteColor];
     self.fullTitleLabel.font = [UIFont boldSystemFontOfSize:21.0];
-    //self.titleLabel.backgroundColor = [UIColor lightGrayColor];
     [self.headerView addSubview:self.fullTitleLabel];
-
+    
     self.dateLabel = [[UILabel alloc] init];
-    //self.dateLabel.backgroundColor = [UIColor lightGrayColor];
     [self.headerView addSubview:self.dateLabel];
-
+    
     self.descriptionLabel = [[UILabel alloc] init];
     self.descriptionLabel.font = [UIFont systemFontOfSize:13.0];
     self.descriptionLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.descriptionLabel.numberOfLines = 0;
-    // self.descriptionLabel.backgroundColor = [UIColor lightGrayColor];
     [self.headerView addSubview:self.descriptionLabel];
-
+    
     self.headerView.backgroundColor = [UIColor whiteColor];
-
+    
     [self.view addSubview:self.imagesView];
-
-
-
+    
+    self.attendButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.attendButton addTarget:self action:@selector(attendButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
+    [self.headerView addSubview:self.attendButton];
+    
+    self.attendeesLabel = [[UILabel alloc] init];
+    self.attendeesLabel.font = [UIFont systemFontOfSize:14.0];
+    [self.headerView addSubview:self.attendeesLabel];
+    
     self.keyboardAccessoryView = [[UIView alloc] init];
     self.keyboardAccessoryView.backgroundColor = [UIColor whiteColor];
-
+    
     self.keyboardAccessory = [assetManager createTextFieldWithFrame:CGRectZero];
     self.keyboardAccessory.placeholder = @"Post a comment...";
     self.keyboardAccessory.delegate = self;
-
+    
     [self.keyboardAccessoryView addSubview:self.keyboardAccessory];
-
+    
     self.postButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
     [self.postButton addTarget:self action:@selector(didSelectPostButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.keyboardAccessoryView addSubview:self.postButton];
     self.postButton.alpha = 0;
-
+    
     /*
      [[NSNotificationCenter defaultCenter] addObserver:self
      selector:@selector(changeFirstResponder)
      name:UIKeyboardDidShowNotification
      object:nil];
      */
-
+    
     [self.tableView reloadData];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     //[super viewWillAppear:animated];
-
+    
     NSLog(@"event info view will appear");
-
+    
     /*
-
+     
      //[self registerForKeyboardNotifications];
      NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
-
+     
      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
      while(self.expanded) {
      [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple"];
@@ -194,7 +203,7 @@ BOOL reloaded = NO;
      }
      });
      */
-
+    
     self.view.frame = self.parentViewController.view.bounds;
     [self updateFrames];
 }
@@ -203,50 +212,53 @@ BOOL reloaded = NO;
 {
     NSLog(@"event info frame width: %f", self.view.frame.size.width);
     NSLog(@"event info frame height: %f", self.view.frame.size.height);
-
+    
     //self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
-
+    
     self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
     self.cleanImageView.frame = self.imagesView.frame;
     self.blurredImageView.frame = self.imagesView.frame;
-
+    
     CGRect left;
     CGRect right;
-    CGRectDivide(self.blurredImageView.frame, &left, &right, 90, CGRectMinXEdge);
+    CGRectDivide(self.blurredImageView.frame, &left, &right, titleLabelDivide, CGRectMinXEdge);
     self.timeLabel.frame = left;
     self.titleLabel.frame = right;
     self.titleLabel.frame = CGRectInset(self.titleLabel.frame, buffer, 0);
-
+    
     self.fullTitleLabel.frame = CGRectMake(buffer, -buffer * 3, self.view.frame.size.width - buffer * 2, buffer * 3);
-
+    
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
-    self.dateLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, 0);
+    self.dateLabel.frame = CGRectInset(self.headerView.frame, buffer, buffer);
     [self.dateLabel sizeToFit];
-
+    
+    self.attendButton.frame = CGRectMake(dateLabelDivide, 0, self.view.frame.size.width - dateLabelDivide, 50);
+    self.attendeesLabel.frame = CGRectMake(self.view.frame.size.width - 20, 0, 20, 50);
+    
     self.descriptionLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, CGRectGetMaxY(self.dateLabel.frame));
     [self.descriptionLabel sizeToFit];
-
+    
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, CGRectGetMaxY(self.descriptionLabel.frame) + buffer);
-
-
+    
+    self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 1000);
+    self.footerView.backgroundColor = [UIColor whiteColor];
+    
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
     self.postButton.frame = CGRectMake(self.keyboardAccessoryView.frame.size.width - self.keyboardAccessoryView.frame.size.height, 0, self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.height);
-
+    
     [self.keyboardAccessory resignFirstResponder];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    // NSLog(@"event info frame: %f", self.view.bounds.size.height);
     initialFrame = self.tableView.frame;
+    [super viewDidAppear:animated];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.keyboardAccessory resignFirstResponder];
-
-    //[self deregisterFromKeyboardNotifications];
+    [self deregisterFromKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning
@@ -258,32 +270,32 @@ BOOL reloaded = NO;
 /*
  //DO NOT DELETE (for now)
  #pragma mark - managing the keyboard notifications
-
+ 
  - (void)registerForKeyboardNotifications {
  [[NSNotificationCenter defaultCenter] addObserver:self
  selector:@selector(keyboardWasShown:)
  name:UIKeyboardDidShowNotification
  object:nil];
-
+ 
  [[NSNotificationCenter defaultCenter] addObserver:self
  selector:@selector(keyboardWillBeHidden:)
  name:UIKeyboardWillHideNotification
  object:nil];
-
+ 
  }
-
+ 
  - (void)deregisterFromKeyboardNotifications {
-
+ 
  [[NSNotificationCenter defaultCenter] removeObserver:self
  name:UIKeyboardDidHideNotification
  object:nil];
-
+ 
  [[NSNotificationCenter defaultCenter] removeObserver:self
  name:UIKeyboardWillHideNotification
  object:nil];
-
+ 
  }
-
+ 
  - (void)keyboardWasShown:(NSNotification *)notification {
  if(CGRectEqualToRect(self.tableView.frame, initialFrame)){
  NSDictionary* info = [notification userInfo];
@@ -293,7 +305,7 @@ BOOL reloaded = NO;
  [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
  }
  }
-
+ 
  - (void)keyboardWillBeHidden:(NSNotification *)notification {
  self.tableView.frame = initialFrame;
  }
@@ -304,51 +316,56 @@ BOOL reloaded = NO;
     if (!self.expanded) {
         //self.tableView = nil;
         self.fetchedResultsController = nil;
-
+        
         NSError * error = nil;
         if (![self.fetchedResultsController performFetch:&error])
         {
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
-
-
+        
+        self.view.frame = self.parentViewController.view.bounds;
+        NSLog(@"view frame %@", NSStringFromCGRect(self.view.frame));
         self.view.backgroundColor = [UIColor whiteColor];
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         self.tableView.backgroundColor = [UIColor clearColor];
         self.tableView.dataSource = self;
         self.tableView.delegate = self;
         self.tableView.tableHeaderView = self.headerView;
+        self.tableView.tableFooterView = self.footerView;
         [self.view addSubview:self.tableView];
         self.tableView.frame = self.view.frame;
-        self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, self.keyboardAccessoryView.frame.size.height, 0);
-
+        self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, self.keyboardAccessoryView.frame.size.height - self.footerView.frame.size.height, 0);
+        [self updateFrames];
         [self.view addSubview:self.keyboardAccessoryView];
-
+        
         self.cleanImageView.hidden = NO;
-
+        
+        
         void (^animationsBlock)(void) = ^{
             self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
             self.cleanImageView.frame = self.imagesView.frame;
             self.blurredImageView.frame = self.imagesView.frame;
             self.blurredImageView.alpha = 0;
         };
-
+        
         void (^completionBlock)(BOOL) = ^(BOOL finished){
             self.expanded = YES;
-
-
+            
+            
             NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 while(self.expanded) {
-                    [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"simple"];
+                    [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"athletic"];
                     [NSThread sleepForTimeInterval:reloadTime];
                 }
             });
-
+            
             [self registerForKeyboardNotifications];
+            NSLog(@"bounds:  %@", NSStringFromCGRect(self.parentViewController.view.bounds));
+            self.view.frame = self.parentViewController.view.bounds;
         };
-
+        
         if (animated) {
             [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                              animations:animationsBlock
@@ -364,28 +381,29 @@ BOOL reloaded = NO;
 - (void)compressAnimated:(BOOL)animated
 {
     if (self.expanded) {
-
+        
+        [self.keyboardAccessory resignFirstResponder];
         [self deregisterFromKeyboardNotifications];
         self.view.backgroundColor = [assetManager darkColor];
         [self.tableView setContentOffset:CGPointMake(0, -imageHeight) animated:YES];
-
+        
         void (^animationsBlock)(void) = ^{
             self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
             self.cleanImageView.frame = self.imagesView.frame;
             self.blurredImageView.frame = self.imagesView.frame;
             self.blurredImageView.alpha = 1;
         };
-
+        
         void (^completionBlock)(BOOL) = ^(BOOL finished){
             [self.keyboardAccessoryView removeFromSuperview];
             [self.tableView removeFromSuperview];
             self.tableView = nil;
             _fetchedResultsController = nil;
-
+            
             self.cleanImageView.hidden = YES;
             self.expanded = NO;
         };
-
+        
         if (animated) {
             [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                              animations:animationsBlock
@@ -396,6 +414,11 @@ BOOL reloaded = NO;
             completionBlock(true);
         }
     }
+}
+
+- (UIView *)viewForBackButton
+{
+    return self.view;
 }
 
 #pragma mark - managing the detail item
@@ -414,41 +437,40 @@ BOOL reloaded = NO;
 - (void)configureView
 {
     // Update the user interface for the detail item.
-
+    
     if (self.detailItem) {
-
+        
         /*
          self.title = [self.detailItem valueForKey:@"title"];
          self.nameLabel.text = [self.detailItem valueForKey:@"title"];
-
+         
          NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
          [dateFormatter setDateFormat:@"MMM dd, yyyy h:mm a"];
          [self.startTimeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
          [self.endTimeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"end_date"]]];
-
+         
          self.descriptionTextView.text = [self.detailItem valueForKey:@"descrip"];
-
-         self.numberOfAttendees.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
-         if([self attendingEvent]){
-         [self.attendButton setTitle:@"Unattend" forState:UIControlStateNormal];
-         }else{
-         [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
-         }
-         NSLog(@"attendees: %@", [self.detailItem valueForKey:@"attendees"]);
          */
-
+        
+        self.attendeesLabel.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
+        if([self attendingEvent]){
+            [self.attendButton setTitle:@"Unattend" forState:UIControlStateNormal];
+        }else{
+            [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
+        }
+        
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"h:mm a"];
         [self.timeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
-
+        
         self.titleLabel.text = [self.detailItem valueForKey:@"title"];
         self.fullTitleLabel.text = [self.detailItem valueForKey:@"title"];
-
+        
         [dateFormatter setDateFormat:@"MMM dd, yyyy h:mm a"];
         [self.dateLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
-
+        
         self.descriptionLabel.text = [self.detailItem valueForKey:@"descrip"];
-
+        
         UIImage* image = nil;
         if ([self.detailItem valueForKey:@"imageURL"]) {
             NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"imageURL"]];
@@ -463,7 +485,7 @@ BOOL reloaded = NO;
         else {
             self.cleanImageView.image = image;
         }
-
+        
         if ([self.detailItem valueForKey:@"imageURL"]) {
             NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"blurredImageURL"]];
             UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
@@ -478,8 +500,17 @@ BOOL reloaded = NO;
             self.blurredImageView.image = image;
         }
     }
-
+    
     [self updateFrames];
+}
+
+-(void)reloadAttendeeLabels{
+    self.attendeesLabel.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
+    if([self attendingEvent]){
+        [self.attendButton setTitle:@"Unattend" forState:UIControlStateNormal];
+    }else{
+        [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
+    }
 }
 
 
@@ -504,34 +535,34 @@ BOOL reloaded = NO;
     }
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     _managedObjectContext = [appdelegate managedObjectContext];
-
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
-
+    
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Comment" inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
-
-
+    
+    
     NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
-
+    
     NSPredicate *commentFromPredicate = [NSPredicate predicateWithFormat:@"comment_from = %@", [self.detailItem valueForKey:@"id"]];
-    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", @"simple"];
-
+    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", @"athletic"];
+    
     [predicateArray addObject:commentFromPredicate];
     [predicateArray addObject:categoryPredicate];
-
+    
     NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
     [fetchRequest setPredicate:compoundPredicate];
-
+    
     // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
-
+    
     // Edit the sort key as appropriate.
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"created_at" ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor];
-
+    
     [fetchRequest setSortDescriptors:sortDescriptors];
-
+    
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
@@ -539,11 +570,11 @@ BOOL reloaded = NO;
                                                              managedObjectContext:_managedObjectContext
                                                              sectionNameKeyPath:nil //this needs to be nil
                                                              cacheName:nil];
-
+    
     aFetchedResultsController.delegate = self;
     NSLog(@"number of fetched objects: %lu", (unsigned long)[aFetchedResultsController.fetchedObjects count]);
     self.fetchedResultsController = aFetchedResultsController;
-
+    
     return _fetchedResultsController;
 }
 
@@ -558,14 +589,14 @@ BOOL reloaded = NO;
         case NSFetchedResultsChangeInsert:
             [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
-
+            
         case NSFetchedResultsChangeDelete:
             [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
             break;
-
+            
         case NSFetchedResultsChangeMove:
             break;
-
+            
         case NSFetchedResultsChangeUpdate:
             break;
     }
@@ -576,14 +607,14 @@ BOOL reloaded = NO;
 {
     NSLog(@"did change object");
     UITableView *tableView = self.tableView;
-
+    
     switch(type)
     {
         case NSFetchedResultsChangeInsert:{
             [tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
-
+            
             break;
         }
         case NSFetchedResultsChangeDelete:
@@ -591,10 +622,10 @@ BOOL reloaded = NO;
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
             break;
-
+            
         case NSFetchedResultsChangeUpdate:
         {
-
+            
             PACommentCell * cell = (PACommentCell *)[tableView cellForRowAtIndexPath:newIndexPath];
             [self configureCell:cell atIndexPath:newIndexPath];
             break;
@@ -603,7 +634,7 @@ BOOL reloaded = NO;
             [tableView
              deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
              withRowAnimation:UITableViewRowAnimationFade];
-
+            
             [tableView
              insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
              withRowAnimation:UITableViewRowAnimationFade];
@@ -622,7 +653,7 @@ BOOL reloaded = NO;
 {
     return 1;
     //    return [[_fetchedResultsController sections] count;
-
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -633,21 +664,21 @@ BOOL reloaded = NO;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PACommentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell-identifier"];
+    PACommentCell *cell = [tableView dequeueReusableCellWithIdentifier:commentCellIdentifier];
     if (cell == nil) {
-        [tableView registerNib:[UINib nibWithNibName:@"PACommentCell" bundle:nil] forCellReuseIdentifier:@"cell-identifier"];
-        cell = [tableView dequeueReusableCellWithIdentifier:@"cell-identifier"];
+        [tableView registerNib:[UINib nibWithNibName:cellNibName bundle:nil] forCellReuseIdentifier:commentCellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:commentCellIdentifier];
     }
-
+    
     [self configureCell:cell atIndexPath:indexPath];
-
+    
     return cell;
 }
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath{
     NSLog(@"configure cell");
-    cell.parentTableView = self;
-
+    cell.parentTableView = (UITableViewController*)self;
+    
     //Comment *tempComment = _fetchedResultsController.fetchedObjects[[indexPath row]];
     Comment* tempComment = [_fetchedResultsController objectAtIndexPath:indexPath];
     cell.numberOfLikesLabel.text = [@([tempComment.likes count]) stringValue];
@@ -659,21 +690,21 @@ BOOL reloaded = NO;
     }else{
         [cell.likeButton setTitle:@"Like" forState:UIControlStateNormal];
     }
-
+    
     cell.commentID = tempComment.id;
     cell.commentIntegerID = [tempComment.id integerValue];
     //cell.comment = tempComment;
     cell.comment_from = [[self.detailItem valueForKey:@"id"] stringValue];
     cell.nameLabel.text = [self nameLabelTextForComment:tempComment];
     cell.commentTextView.text = tempComment.content;
-
+    
     UIImageView * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageViewForComment:tempComment]];
     if (cell.thumbnailView) {
         [cell.thumbnailView removeFromSuperview];
     }
     [cell addSubview:thumbnail];
     cell.thumbnailView = thumbnail;
-
+    
     NSString * commentID = [tempComment.id stringValue];
     CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
     if(height){
@@ -707,7 +738,7 @@ BOOL reloaded = NO;
             text=tempPeer.name;
         }
     }
-
+    
     NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"comment id: %@ my id: %@",comment.peer_id, [defaults objectForKey:@"user_id"]);
     if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
@@ -716,7 +747,7 @@ BOOL reloaded = NO;
     }
     text = [text stringByAppendingString:@" "];
     text = [text stringByAppendingString:[self dateToString:comment.created_at]];
-
+    
     return text;
 }
 
@@ -750,7 +781,6 @@ BOOL reloaded = NO;
 }
 
 
-
 -(NSString*)dateToString:(NSDate *)date{
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [calendar components:(NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:date];
@@ -760,12 +790,12 @@ BOOL reloaded = NO;
         hour-=12;
         timeOfDay = @" PM";
     }
-
+    
     NSString *minute = [@([components minute]) stringValue];
     if(minute.length==1){
         minute = [@"0" stringByAppendingString:minute];
     }
-
+    
     NSString * dateString = [[@(hour) stringValue] stringByAppendingString:@":"];
     dateString = [dateString stringByAppendingString:minute];
     dateString = [dateString stringByAppendingString:timeOfDay];
@@ -854,7 +884,7 @@ BOOL reloaded = NO;
 
 /*
  #pragma mark - Navigation
-
+ 
  // In a storyboard-based application, you will often want to do a little preparation before navigation
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
  {
@@ -866,10 +896,10 @@ BOOL reloaded = NO;
 - (void)expandTableViewCell:(PACommentCell *)cell {
     textViewHelper.frame = cell.commentTextView.frame;
     textViewHelper.text = cell.commentTextView.text;
-
+    
     [textViewHelper setFont:[UIFont systemFontOfSize:14]];
     [textViewHelper sizeToFit];
-
+    
     float newHeight = textViewHelper.frame.size.height;
     NSLog(@"new height: %f", newHeight);
     NSNumber *height = [NSNumber numberWithFloat: defaultCellHeight];
@@ -877,16 +907,16 @@ BOOL reloaded = NO;
         height = [NSNumber numberWithFloat:textViewHelper.frame.size.height + textViewHelper.frame.origin.y];
     }
     //Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
-
+    
     NSString * commentID = [cell.commentID stringValue];
-
+    
     [heightDictionary setValue:height forKey:commentID];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }
 
 -(void)compressTableViewCell:(PACommentCell *)cell{
-
+    
     //cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
     //Comment *comment = _fetchedResultsController.fetchedObjects[cell.tag];
     NSString *commentID = [cell.commentID stringValue];
@@ -897,49 +927,50 @@ BOOL reloaded = NO;
 
 -(void)postComment:(NSString *) text
 {
-
+    
     if(![text isEqualToString:@""]){
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         if([defaults objectForKey:@"authentication_token"]){
-           if([[defaults objectForKey:@"institution_id"] integerValue]==[[defaults objectForKey:@"home_institution"]integerValue]){
-               self.commentText=nil;
-               /*
-                NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-                [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
-                */
-
-               NSLog(@"post comment");
-               //NSString *commentText = cell.commentTextView.text;
-               //cell.commentTextView.text=@"";
-
-               NSNumber *userID = [defaults objectForKey:@"user_id"];
-               NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
-
-               NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                           text, @"content",
-                                           userID, @"user_id",
-                                           @"simple", @"category",
-                                           [self.detailItem valueForKey:@"id" ],@"comment_from",
-                                           institutionID, @"institution_id",
-                                           nil];
-
-               [[PASyncManager globalSyncManager] postComment:dictionary];
-           }else{
+            if([[defaults objectForKey:@"institution_id"] integerValue]==[[defaults objectForKey:@"home_institution"]integerValue]){
+                self.commentText=nil;
+                /*
+                 NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                 [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+                 */
+                
+                NSLog(@"post comment");
+                //NSString *commentText = cell.commentTextView.text;
+                //cell.commentTextView.text=@"";
+                
+                NSNumber *userID = [defaults objectForKey:@"user_id"];
+                NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
+                
+                NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                            text, @"content",
+                                            userID, @"user_id",
+                                            @"athletic", @"category",
+                                            [self.detailItem valueForKey:@"id" ],@"comment_from",
+                                            institutionID, @"institution_id",
+                                            nil];
+                
+                [[PASyncManager globalSyncManager] postComment:dictionary];
+            }else{
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Foreign Institution" message:@"Please switch to your home institution to post comments" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
                 [alert show];
             }
+            
         }else{
             [[PAMethodManager sharedMethodManager] showRegisterAlert:@"post a comment" forViewController:self];
         }
-
+        
     }
 }
 
 
 - (IBAction)attendButton:(id)sender {
     if([self.attendButton.titleLabel.text isEqualToString:@"Attend"]){
-
-
+        
+        
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         if([defaults objectForKey:@"authentication_token"]){
             NSLog(@"attend the event");
@@ -947,10 +978,10 @@ BOOL reloaded = NO;
                                       [defaults objectForKey:@"user_id"],@"user_id",
                                       [defaults objectForKey:@"institution_id"],@"institution_id",
                                       [self.detailItem valueForKey:@"id"],@"event_attended",
-                                      @"simple", @"category",
+                                      @"athletic", @"category",
                                       [defaults objectForKey:@"user_id"], @"added_by",
                                       nil];
-
+            
             [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:self];
         }else{
             [[PAMethodManager sharedMethodManager] showRegisterAlert:@"attend an event" forViewController:self];
@@ -958,18 +989,18 @@ BOOL reloaded = NO;
     }else{
         NSLog(@"unattend the event");
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-
+        
         NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
                                   [self.detailItem valueForKey:@"id"], @"event_attended",
                                   [defaults objectForKey:@"institution_id"],@"institution_id",
                                   [defaults objectForKey:@"user_id"],@"user_id",
-                                  @"simple", @"category",
+                                  @"athletic", @"category",
                                   nil];
-
+        
         [[PASyncManager globalSyncManager] unattendEvent: attendee forViewController:self];
-
+        
     }
-
+    
 }
 
 #pragma mark - Text Fields
@@ -979,42 +1010,58 @@ BOOL reloaded = NO;
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
                                                object:nil];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
-
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasHidden:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];
+    
 }
 
 - (void)deregisterFromKeyboardNotifications {
-
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillShowNotification
+                                                  object:nil];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardDidHideNotification
                                                   object:nil];
-
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillHideNotification
                                                   object:nil];
+    
+}
 
+- (void)keyboardWasHidden:(NSNotification*)notification
+{
+    
+    NSLog(@"after the keyboard was hidden, the y is %f", self.keyboardAccessoryView.frame.origin.y);
 }
 
 - (void)keyboardWillShow:(NSNotification*)notification
 {
+    NSLog(@"keyboard will show");
     NSDictionary* info = [notification userInfo];
     CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-
+    
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
-
+    
     self.keyboardAccessoryView.frame = CGRectOffset(self.keyboardAccessoryView.frame, 0, -keyboardSize.height);
     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - self.postButton.frame.size.width - 7, 30);
     self.postButton.alpha = 1;
-
+    
     [UIView commitAnimations];
-
+    
 }
 
 - (void)keyboardWillBeHidden:(NSNotification*)notification
@@ -1023,11 +1070,16 @@ BOOL reloaded = NO;
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
-
+    
     self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
-    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+    self.keyboardAccessory.frame = CGRectInset(self.keyboardAccessoryView.bounds, 7, 7);
     self.postButton.alpha = 0;
-
+    
+    NSLog(@"height of the view %f", self.view.frame.size.height);
+    NSLog(@"keyboard y %f", self.keyboardAccessoryView.frame.origin.y);
+    
+    NSLog(@"actual keyboard frame %@", NSStringFromCGRect(self.keyboardAccessory.frame));
+    
     [UIView commitAnimations];
 }
 

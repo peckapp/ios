@@ -632,7 +632,31 @@ PAAssetManager * assetManager;
         // [self configureDetailViewControllerCell:cell atIndexPath:indexPath];
         
         return cell;
+        
+    }else if([eventObject.type isEqualToString:@"athletic"]){
+        PANestedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"athleticCell"];
+        if (cell == nil) {
+            [tableView registerClass:[PANestedTableViewCell class] forCellReuseIdentifier:@"athleticCell"];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"athleticCell"];
+        }
+        
+        if (cell.viewController == nil) {
+            cell.viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"athletic-info-view-controller"];
+            [self addChildViewController:cell.viewController];
+            [cell addSubview:cell.viewController.view];
+            [cell.viewController didMoveToParentViewController:self];
+        }
+        
+        cell.clipsToBounds = YES;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.viewController.view.userInteractionEnabled = NO;
+        [cell.viewController setManagedObject:eventObject parentObject:nil];
+        
+        // [self configureDetailViewControllerCell:cell atIndexPath:indexPath];
+        
+        return cell;
     }
+    
     else {
         PANestedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
         if (cell == nil) {
