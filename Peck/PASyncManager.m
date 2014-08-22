@@ -362,6 +362,7 @@
                                   success:^(NSURLSessionDataTask * __unused task, id JSON){
                                       NSLog(@"LOGIN JSON: %@",JSON);
                                       
+                                      
                                       [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
                                       
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
@@ -446,7 +447,7 @@
                                   }];
 }
 
--(void)registerUserWithInfo:(NSDictionary*)userInfo{
+-(void)registerUserWithInfo:(NSDictionary*)userInfo forViewController:(UIViewController*)sender{
     NSString* registerURL = [usersAPI stringByAppendingString:@"/"];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSNumber* userID = [defaults objectForKey:@"user_id"];
@@ -458,7 +459,7 @@
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                       NSLog(@"JSON : %@", JSON);
                                       
-                                      
+                                      /*
                                       
                                       //NSLog(@"user register success: %@", JSON);
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
@@ -497,11 +498,28 @@
                                                                                otherButtonTitles:nil];
                                           [alert show];
                                           
+                                      }*/
+                                      if(sender){
+                                          [sender dismissViewControllerAnimated:YES completion:nil];
                                       }
+
+                                      
+                                      UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Registration Complete!"
+                                                                                     message:@"A confirmation email has been sent to the email provided"
+                                                                                    delegate:self
+                                                                           cancelButtonTitle:@"OK"
+                                                                           otherButtonTitles:nil];
+                                      [alert show];
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
+                                      UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Registration Error"
+                                                                                     message:@"Something went wrong while registering"
+                                                                                    delegate:self
+                                                                           cancelButtonTitle:@"OK"
+                                                                           otherButtonTitles:nil];
+                                      [alert show];
                                   }];
 }
 

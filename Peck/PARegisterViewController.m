@@ -156,9 +156,11 @@
                                                 storedPushToken, @"device_token",
                                                 nil];
         
-                [[PASyncManager globalSyncManager] registerUserWithInfo:registeredUser];
+                [[PASyncManager globalSyncManager] registerUserWithInfo:registeredUser forViewController:self];
                 // send current information to the server and check result
-                return YES;
+                //return YES;
+                //we don't want to go to that scary loading sceen
+                return NO;
             }else{
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Email"
                                                                 message:@"Your email does not match the institution you have selected"
