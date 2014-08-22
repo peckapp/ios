@@ -40,6 +40,7 @@
 @property BOOL endPickerIsOpen;
 @property CGRect initialTableViewFrame;
 @property BOOL userHasChangedEndTime;
+@property BOOL changedImage;
 
 @end
 
@@ -87,6 +88,7 @@
     self.descriptionTextView.delegate = self;
     self.locationTextField.delegate = self;
     userHasChangedEndTime = NO;
+    self.changedImage=NO;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -334,6 +336,7 @@
     NSLog(@"Post view frame height: %f", self.view.frame.size.height);
     
     // stores the image locally so that we can use the file path to send it to the server
+    self.changedImage=YES;
    
 }
 
@@ -556,7 +559,8 @@
     self.startTimeLabel.text = @"None";
     self.endTimeLabel.text = @"None";
     [self.tableView reloadData];
-    
+    self.facebookControl.on=YES;
+    self.changedImage = NO;
     
     // parent of self is a navigation controller, its parent is the dropdown controller
     [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];
@@ -564,7 +568,7 @@
 
 -(void)postEvent{
     
-    if(self.photo.image !=[UIImage imageNamed:@"image-placeholder.png"]){
+    if(self.changedImage){
         NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
     
         [[PASyncManager globalSyncManager] postEvent: [self configureEventDictioanry] withImage:data];
@@ -577,7 +581,7 @@
 
 -(void)postAnnouncement{
     
-    if(self.photo.image !=[UIImage imageNamed:@"image-placeholder.png"]){
+    if(self.changedImage){
 
         NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
     
