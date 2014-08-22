@@ -667,11 +667,11 @@
                               [NSNumber numberWithBool:self.publicSwitch.on], @"public",
                               [defaults objectForKey:@"user_id"],@"invited_by",
                               [defaults objectForKey:@"user_id"], @"user_id",
-                              finalInvites, @"event_member_ids",
-                              alert,@"message",
-                              [NSNumber numberWithBool:YES],@"send_push_notification",
                               self.locationTextField.text,@"location",
                               [NSNumber numberWithBool:postToFacebook], @"postToFacebook",
+                              alert,@"message",
+                              [NSNumber numberWithBool:YES],@"send_push_notification",
+                              finalInvites, @"event_member_ids",
                               nil];
 
     return setEvent;

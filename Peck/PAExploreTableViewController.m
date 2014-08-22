@@ -148,6 +148,8 @@ NSCache *imageCache;
     cell.category = tempExplore.category;
     if([tempExplore.category isEqualToString:@"announcement"]){
         cell.contextLabel.text = @" Announcement";
+    }else if([tempExplore.category isEqualToString:@"athletic"]){
+        cell.contextLabel.text = @" Athletic Event";
     }else{
         cell.contextLabel.text = @" Event";
     }

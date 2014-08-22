@@ -168,22 +168,6 @@
     }
     //object[@"event_id"] = [[eventInfo objectForKey:@"id"] stringValue];
     
-    /*
-     [FBRequestConnection startForPostOpenGraphObject:object completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-     if(!error) {
-     // get the object ID for the Open Graph object that is now stored in the Object API
-     NSString *objectId = [result objectForKey:@"id"];
-     NSLog(@"object id: %@", objectId);
-     
-     // Further code to post the OG story goes here
-     
-     } else {
-     // An error occurred
-     NSLog(@"Error posting the Open Graph object to the Object API: %@", error);
-     }
-     }];*/
-    
-    
     
     // Create an action
     id<FBOpenGraphAction> action = (id<FBOpenGraphAction>)[FBGraphObject graphObject];
@@ -215,6 +199,33 @@
         // If the Facebook app is NOT installed and we can't present the share dialog
     } else {
         // FALLBACK GOES HERE
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                       [eventInfo objectForKey:@"title"], @"name",
+                                       [eventInfo objectForKey:@"event_description"], @"description",
+                                       [ @"http://loki.peckapp.com:3500/deep_links/native_peck?event_id=" stringByAppendingString:[[eventInfo objectForKey:@"id"] stringValue]], @"link",
+                                        nil];
+        if(imageArray){
+            NSString*imageURL =[@"http://loki.peckapp.com:3500" stringByAppendingString:[eventInfo objectForKey:@"image"]];
+            
+            //[params setObject:imageURL forKey:@"picture"];
+        }
+        
+        [FBWebDialogs presentFeedDialogModallyWithSession:nil
+                                               parameters:params
+                                                  handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+                                                      if (error) {
+                                                          // Error launching the dialog or publishing a story.
+                                                         // NSLog([NSString stringWithFormat:@"Error publishing story: %@", error.description]);
+                                                      } else {
+                                                          if (result == FBWebDialogResultDialogNotCompleted) {
+                                                              // User cancelled.
+                                                              NSLog(@"User cancelled.");
+                                                          } else {
+                                                           
+                                                          }
+                                                      }
+                                                  }];
+        
     }
     
 

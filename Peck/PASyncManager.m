@@ -975,8 +975,8 @@
 
 -(void)updateExploreInfoForViewController:(UITableViewController*)viewController
 {
-    /*
     
+    /*
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         NSLog(@"in secondary thread");
@@ -1021,6 +1021,24 @@
                  }
                 
              }
+             
+             NSDictionary* athleticsFromResponse = [exploreDictionary objectForKey:@"explore_athletics"];
+             
+             if(![athleticsFromResponse isKindOfClass:[NSNull class]]){
+                 
+                 for(NSDictionary *athleticAttributes in announcementsFromResponse){
+                     NSNumber *newID = [athleticAttributes objectForKey:@"id"];
+                     BOOL athleticAlreadyExists = [self objectExists:newID withType:@"Explore" andCategory:@"athletic"];
+                     if(!athleticAlreadyExists){
+                         NSLog(@"about to add the explore athletic");
+                         Explore * explore = [NSEntityDescription insertNewObjectForEntityForName:@"Explore" inManagedObjectContext: _managedObjectContext];
+                         [self setAttributesInExplore:explore withDictionary:athleticAttributes andCategory:@"athletic"];
+                     }
+                 }
+                 
+             }
+
+             
              NSError* error = nil;
              [_managedObjectContext save:&error];
              [self.persistentStoreCoordinator unlock];
@@ -1054,7 +1072,9 @@
     NSDateFormatter * df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
     explore.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
-    explore.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    if(![[dictionary objectForKey:@"end_date"] isKindOfClass:[NSNull class]]){
+        explore.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    }
     explore.id = [dictionary objectForKey:@"id"];
     explore.category = category;
     if([dictionary objectForKey:@"score"]){
@@ -1811,7 +1831,7 @@
          NSLog(@"simple event creation success: %@", JSON);
          [self updateEventInfo];
          NSDictionary* json = (NSDictionary*)JSON;
-         if(FBSessionStateOpen){
+         if(FBSession.activeSession.state == FBSessionStateOpen && [[dictionary objectForKey:@"postToFacebook"] boolValue]==YES){
              [[PAMethodManager sharedMethodManager] postInfoToFacebook:[json objectForKey:@"simple_event"] withImage:nil];
          }else{
              NSLog(@"user not logged into facebook");
