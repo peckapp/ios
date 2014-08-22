@@ -483,7 +483,7 @@ PAAssetManager *assetManager;
 {
     cell.tag=[indexPath row];
     cell.parentViewController=self;
-    cell.commentsTableView.frame = CGRectMake(cell.commentsTableView.frame.origin.x, cell.commentsTableView.frame.origin.y, cell.frame.size.width, cell.frame.size.height - cell.commentsTableView.frame.origin.y);
+    //cell.commentsTableView.frame = CGRectMake(cell.commentsTableView.frame.origin.x, cell.commentsTableView.frame.origin.y, cell.frame.size.width, cell.frame.size.height - cell.commentsTableView.frame.origin.y);
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
         cell.circleTitle.text=@"";
         [cell.profilesTableView setHidden:YES];
@@ -607,6 +607,9 @@ PAAssetManager *assetManager;
     [self presentViewController:vc animated:YES completion:^{}];
     vc.delegate = self;
 
+    
+    vc.previouslyAddedPeople = cell.members;
+    vc.invitesForCircle=YES;
     
     /*
     Peer *peer;

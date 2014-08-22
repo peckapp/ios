@@ -675,7 +675,7 @@
                                   parameters:[self authenticationParameters]
                                      success:^
         (NSURLSessionDataTask * __unused task, id JSON) {
-            //NSLog(@"Peer JSON: %@",JSON);
+            NSLog(@"Peer JSON: %@",JSON);
             NSDictionary *usersDictionary = (NSDictionary*)JSON;
             NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
             [self handlePeers:postsFromResponse];

@@ -108,23 +108,29 @@ PAAssetManager * assetManager;
             i--;
         }
     }
+
+    NSLog(@"before filtering for already added people");
     
     if(self.previouslyAddedPeople){
-        for(int i=0;i<[mutableFetchResults count];i++){
+        for(int j=0;j<[mutableFetchResults count];j++){
             for(Peer* addedPeer in self.previouslyAddedPeople){
-                Peer* tempPeer = mutableFetchResults[i];
+                Peer* tempPeer = mutableFetchResults[j];
                 if([tempPeer.id integerValue]==[addedPeer.id integerValue]){
-                    [mutableFetchResults removeObjectAtIndex:i];
+                    [mutableFetchResults removeObjectAtIndex:j];
+                    j--;
+                    break;
                 }
             }
         }
     }
     
-    for(int i=0;i<[mutableCircleFetchResults count];i++){
-        Circle* tempCircle = mutableCircleFetchResults[i];
+    NSLog(@"after filtering for already filtered people");
+    
+    for(int k=0;k<[mutableCircleFetchResults count];k++){
+        Circle* tempCircle = mutableCircleFetchResults[k];
         if([self.invitedCircles objectForKey:[tempCircle.id stringValue]]){
-            [mutableCircleFetchResults removeObjectAtIndex:i];
-            i--;
+            [mutableCircleFetchResults removeObjectAtIndex:k];
+            k--;
         }
     }
     
