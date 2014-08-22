@@ -452,12 +452,7 @@ BOOL reloaded = NO;
         self.descriptionTextView.text = [self.detailItem valueForKey:@"descrip"];
          */
        
-        self.attendeesLabel.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
-        if([self attendingEvent]){
-            [self.attendButton setTitle:@"Unattend" forState:UIControlStateNormal];
-        }else{
-            [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
-        }
+        [self reloadAttendeeLabels];
 
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"h:mm a"];
@@ -505,22 +500,28 @@ BOOL reloaded = NO;
 }
 
 -(void)reloadAttendeeLabels{
-    self.attendeesLabel.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
+    NSArray* attendees = [self.detailItem valueForKey:@"attendees"];
+    if(![attendees isKindOfClass:[NSNull class]]){
+        self.attendeesLabel.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
+    }
     if([self attendingEvent]){
         [self.attendButton setTitle:@"Unattend" forState:UIControlStateNormal];
     }else{
         [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
     }
+    
 }
 
 
 -(BOOL)attendingEvent{
     NSArray* attendees = [self.detailItem valueForKey:@"attendees"];
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSInteger userID = [[defaults objectForKey:@"user_id"] integerValue];
-    for(int i = 0; i<[attendees count];i++){
-        if(userID==[attendees[i] integerValue]){
-            return YES;
+    if(![attendees isKindOfClass:[NSNull class]]){
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        NSInteger userID = [[defaults objectForKey:@"user_id"] integerValue];
+        for(int i = 0; i<[attendees count];i++){
+            if(userID==[attendees[i] integerValue]){
+                return YES;
+            }
         }
     }
     return NO;

@@ -1991,7 +1991,7 @@
     event.type = @"athletic";
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
     event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
-    
+    event.attendees = [dictionary objectForKey:@"attendees"];
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         event.imageURL = [dictionary objectForKey:@"image"];
     }
