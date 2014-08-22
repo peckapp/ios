@@ -401,6 +401,7 @@
                                       
                                       [self updateUserAnnouncements];
                                       [self updateEventInfo];
+                                      [self updateAthleticEvents];
                                       //take care of some necessary login stuff
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       
@@ -595,6 +596,7 @@
                                        
                                            [self updateUserAnnouncements];
                                            [self updateEventInfo];
+                                           [self updateAthleticEvents];
                                            //take care of some necessary login stuff
                                            [[PAFetchManager sharedFetchManager] loginUser];
                                            [sender dismissViewControllerAnimated:YES completion:nil];
@@ -940,7 +942,7 @@
     NSLog(@"set attributes of an institution");
 }
 
-#pragma mark - Explore tab actions
+#pragma mark - Explore actions
 
 -(void)updateExploreInfoForViewController:(UITableViewController*)viewController
 {
@@ -1829,7 +1831,7 @@
                                   parameters:params
                                      success:^
          (NSURLSessionDataTask * __unused task, id JSON) {
-             NSLog(@"EVENT JSON: %@",JSON);
+             //NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
              [self.persistentStoreCoordinator lock];
@@ -1873,6 +1875,92 @@
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
     event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     event.end_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    
+    if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
+        event.imageURL = [dictionary objectForKey:@"image"];
+    }
+    if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
+        event.blurredImageURL = [dictionary objectForKey:@"blurred_image"];
+    }
+    event.attendees = [dictionary objectForKey:@"attendees"];
+    if(![[dictionary objectForKey:@"user_id"] isKindOfClass:[NSNull class]]){
+        event.created_by = [dictionary objectForKey:@"user_id"];
+    }
+    if(![[dictionary objectForKey:@"location"] isKindOfClass:[NSNull class]]){
+        event.location = [dictionary objectForKey:@"location"];
+    }
+}
+
+#pragma mark - Athletic Event Actions
+
+-(void)updateAthleticEvents
+{
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"]){
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^{
+            
+            NSLog(@"in secondary thread to update athletic events");
+            PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+            _managedObjectContext = [appdelegate managedObjectContext];
+            _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
+            
+            NSString* athleticEventsURL = [athletic_eventsAPI stringByAppendingString:@"?user_id="];
+            
+            athleticEventsURL = [athleticEventsURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"] stringValue]];
+            NSLog(@"athletic events url %@", athleticEventsURL);
+            
+            NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"], @"user_id",
+                                    [[self authenticationParameters] objectForKey:@"authentication"], @"authentication",
+                                    nil];
+            
+            NSLog(@"params: %@", params);
+            
+            [[PASessionManager sharedClient] GET:athletic_eventsAPI
+                                      parameters:params
+                                         success:^
+             (NSURLSessionDataTask * __unused task, id JSON) {
+                 NSLog(@"ATHLETIC EVENT JSON: %@",JSON);
+                 NSDictionary *eventsDictionary = (NSDictionary*)JSON;
+                 NSArray *postsFromResponse = [eventsDictionary objectForKey:@"athletic_events"];
+                 [self.persistentStoreCoordinator lock];
+                 for (NSDictionary *eventAttributes in postsFromResponse) {
+                     NSNumber *newID = [eventAttributes objectForKey:@"id"];
+                     Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:[eventAttributes objectForKey:@"event_type"]];
+                     if(!event){
+                         event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
+                     }
+                     [self setAttributesInAthleticEvent:event withDictionary:eventAttributes];
+                     //We will set the attributes of the event even if it was already in core data in case the attributes of the event have changed (if it has been modified by subsequent scraping).
+                 }
+                 NSError* error = nil;
+                 [_managedObjectContext save:&error];
+                 [self.persistentStoreCoordinator unlock];
+             }
+                                         failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                             NSLog(@"ATHLETIC EVENT ERROR: %@",error);
+                                         }];
+            /*
+             dispatch_async(dispatch_get_main_queue(), ^{
+             
+             
+             });
+             */
+        });
+    }
+}
+
+-(void)setAttributesInAthleticEvent:(Event *)event withDictionary:(NSDictionary *)dictionary
+{
+    event.title = [dictionary objectForKey:@"title"];
+    NSString * descrip = [dictionary objectForKey:@"description"];
+    if (![descrip isKindOfClass:[NSNull class]]) {
+        event.descrip = descrip;
+    }
+    //event.location = [dictionary objectForKey:@"institution_id"];
+    event.id = [dictionary objectForKey:@"id"];
+    event.type = @"athletic";
+    //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
+    event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"date_and_time"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         event.imageURL = [dictionary objectForKey:@"image"];

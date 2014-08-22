@@ -71,6 +71,9 @@
 -(void)deleteEvent:(NSNumber*)eventID;
 -(void)updateEvent:(NSNumber*)eventID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData;
 
+// methods for updating athletics
+-(void)updateAthleticEvents;
+
 // methods for updating dining
 -(void)updateDiningInfo;
 -(void)updateDiningPlaces:(DiningPeriod*)diningPeriod forController:(PADiningPlacesTableViewController*)viewController;
