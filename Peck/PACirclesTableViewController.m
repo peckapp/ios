@@ -295,7 +295,6 @@ PAAssetManager *assetManager;
     if (cell == nil) {
         [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil]  forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        initialCommentTableFrame=cell.commentsTableView.frame;
     }
     
     [self configureCell:cell atIndexPath:indexPath];

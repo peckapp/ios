@@ -13,6 +13,7 @@
 # define institutionsAPI @"api/institutions"
 # define circlesAPI @"api/circles"
 # define simple_eventsAPI @"api/simple_events"
+# define athletic_eventsAPI @"api/athletic_events"
 # define exploreAPI @"api/explore"
 # define commentsAPI @"api/comments"
 # define circle_membersAPI @"api/circle_members"

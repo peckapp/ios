@@ -53,6 +53,7 @@
     [self removeAllObjectsOfType:@"Comment"];
     
     [[PASyncManager globalSyncManager] updateEventInfo];
+    [[PASyncManager globalSyncManager] updateAthleticEvents];
     [[PASyncManager globalSyncManager] updateDiningInfo];
     [[PASyncManager globalSyncManager] updateSubscriptions];
     [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];

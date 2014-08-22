@@ -190,6 +190,7 @@ PAAssetManager * assetManager;
     [super viewWillAppear:animated];
     
     [[PASyncManager globalSyncManager] updateEventInfo];
+    [[PASyncManager globalSyncManager] updateAthleticEvents];
     [[PASyncManager globalSyncManager] updateDiningInfo];
 
     NSLog(@"View will appear (events)");
