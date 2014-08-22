@@ -889,7 +889,8 @@
          [self setAttributesInEvent:event withDictionary:eventAttributes];
          if([controller isKindOfClass:[PAEventInfoTableViewController class]]){
              PAEventInfoTableViewController* sender = (PAEventInfoTableViewController*)controller;
-             [sender configureView];
+             [sender reloadAttendeeLabels];
+             //[sender configureView];
          }
          
      }
@@ -1855,7 +1856,7 @@
              [self.persistentStoreCoordinator lock];
              for (NSDictionary *eventAttributes in postsFromResponse) {
                 NSNumber *newID = [eventAttributes objectForKey:@"id"];
-                Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:[eventAttributes objectForKey:@"simple"]];
+                Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:[eventAttributes objectForKey:@"event_type"]];
                  if(!event){
                      event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
                  }
@@ -1945,6 +1946,7 @@
                      NSNumber *newID = [eventAttributes objectForKey:@"id"];
                      Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:[eventAttributes objectForKey:@"event_type"]];
                      if(!event){
+                         NSLog(@"adding an athletic event to core data");
                          event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
                      }
                      [self setAttributesInAthleticEvent:event withDictionary:eventAttributes];
@@ -1978,7 +1980,7 @@
     event.id = [dictionary objectForKey:@"id"];
     event.type = @"athletic";
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
-    event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"date_and_time"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         event.imageURL = [dictionary objectForKey:@"image"];

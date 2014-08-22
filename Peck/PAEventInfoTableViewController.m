@@ -504,6 +504,15 @@ BOOL reloaded = NO;
     [self updateFrames];
 }
 
+-(void)reloadAttendeeLabels{
+    self.attendeesLabel.text = [@([[self.detailItem valueForKey:@"attendees"] count]) stringValue];
+    if([self attendingEvent]){
+        [self.attendButton setTitle:@"Unattend" forState:UIControlStateNormal];
+    }else{
+        [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
+    }
+}
+
 
 -(BOOL)attendingEvent{
     NSArray* attendees = [self.detailItem valueForKey:@"attendees"];

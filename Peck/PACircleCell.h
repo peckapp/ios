@@ -10,7 +10,7 @@
 #import "PACirclesTableViewController.h"
 #import "Circle.h"
 
-@interface PACircleCell : UITableViewCell <NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface PACircleCell : UITableViewCell <NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 - (IBAction)leaveCircleButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *leaveCircleButton;

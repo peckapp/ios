@@ -61,6 +61,7 @@ PAAssetManager * assetManager;
     self.commentsTableView.delegate=self;
     self.commentsTableView.dataSource=self;
     
+    self.titleTextField.delegate =self;
     
     //NSLog(@"the superview height: %f", self.b);
     //self.commentsTableView.frame = CGRectMake(0, 0, self.superview.frame.size.width, <#CGFloat height#>)
@@ -658,6 +659,7 @@ PAAssetManager * assetManager;
         [parent dismissKeyboard:self];
         NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[parent.fetchedResultsController.fetchedObjects count] inSection:0];
         [parent condenseCircleCell:self atIndexPath:indexPath];
+        self.titleTextField.text=@"";
     
         [[PASyncManager globalSyncManager] postCircle:newCircle];
     }else{
@@ -665,4 +667,37 @@ PAAssetManager * assetManager;
     }
     
 }
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
+    /*
+    if(textField==self.titleTextField){
+        NSLog(@"scroll the table view up");
+        PACirclesTableViewController* parent = (PACirclesTableViewController*)self.parentViewController;
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[parent.fetchedResultsController.fetchedObjects count] inSection:0];
+         [parent.tableView scrollToRowAtIndexPath: indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        parent.tableView.contentInset = UIEdgeInsetsMake(0, 0, parent.keyboardHeight, 0);
+    }*/
+
+}
+
+/*
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    if(textField==self.titleTextField){
+        PACirclesTableViewController* parent = (PACirclesTableViewController*) self.parentViewController;
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[_fetchedResultsController.fetchedObjects count] inSection:0];
+       [parent.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        parent.tableView.contentInset = UIEdgeInsetsZero;
+    }
+}
+*/
+ 
+-(BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+        return YES;
+}
+
+
+
+
+
+
 @end

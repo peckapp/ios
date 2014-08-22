@@ -43,6 +43,7 @@
 static NSString * cellIdentifier = PACirclesIdentifier;
 static NSString * nibName = @"PACircleCell";
 
+
 Peer* selectedPeer;
 CGRect initialFrame;
 CGRect initialCommentTableFrame;
@@ -50,6 +51,7 @@ NSInteger selectedCell;
 Circle* selectedCircle;
 BOOL viewingCell;
 BOOL viewingCircles;
+BOOL usedTitleField;
 
 PAAssetManager *assetManager;
 
@@ -640,7 +642,8 @@ PAAssetManager *assetManager;
 }
 
 -(void)dismissCircleTitleKeyboard{
-    PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+    NSIndexPath*indexPath = [NSIndexPath indexPathForRow:[self.fetchedResultsController.fetchedObjects count] inSection:0];
+    PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     [cell.titleTextField resignFirstResponder];
     
 }
@@ -784,6 +787,10 @@ PAAssetManager *assetManager;
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidHide:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];
     
 }
 
@@ -795,6 +802,10 @@ PAAssetManager *assetManager;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillHideNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
                                                   object:nil];
     
 }
@@ -827,6 +838,16 @@ PAAssetManager *assetManager;
     NSDictionary* info = [notification userInfo];
     CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
 
+    
+    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[_fetchedResultsController.fetchedObjects count] inSection:0];
+    PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    if([cell.titleTextField isFirstResponder]){
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, keyboardSize.height, 0);
+        usedTitleField=YES;
+    }
+    
+    self.keyboardHeight = keyboardSize.height;
+    
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
@@ -839,8 +860,25 @@ PAAssetManager *assetManager;
     [UIView commitAnimations];
 }
 
+-(void)keyboardDidHide:(NSNotification *)notification{
+   // self.tableView.contentInset = UIEdgeInsetsZero;
+    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[_fetchedResultsController.fetchedObjects count] inSection:0];
+    if(usedTitleField){
+        //[self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        //TODO: make the transition from content insets to content inset zero a smooth transition
+        
+        self.tableView.contentInset = UIEdgeInsetsZero;
+        usedTitleField=NO;
+    }
+}
+
 - (void)keyboardWillBeHidden:(NSNotification *)notification
 {
+    
+   
+
+    
+    
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
@@ -978,5 +1016,6 @@ PAAssetManager *assetManager;
     }
     return mutableFetchResults;
 }
+
 
 @end

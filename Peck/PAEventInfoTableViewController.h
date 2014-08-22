@@ -32,4 +32,5 @@
 - (void)compressTableViewCell:(PACommentCell *)cell;
 - (void)postComment:(NSString *)text;
 - (void)configureView;
+- (void)reloadAttendeeLabels;
 @end
