@@ -102,6 +102,13 @@
     [self.photo addGestureRecognizer:tgr];
     self.photo.userInteractionEnabled = YES;
 
+     if(FBSession.activeSession.state == FBSessionStateOpen){
+         self.facebookCell.tag=0;
+     }else{
+         self.facebookCell.tag = cellStateAlwaysOff;
+     }
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
     
     //[self registerForKeyboardNotifications];
     
@@ -468,16 +475,37 @@
     NSUserDefaults* defualts = [NSUserDefaults standardUserDefaults];
     
     if([defualts objectForKey:@"authentication_token"]){
-        NSLog(@"inst id %li home id %li", (long)[[defualts objectForKey:@"institution_id"] integerValue], (long)[[defualts objectForKey:@"home_institution"] integerValue]);
-        if([[defualts objectForKey:@"institution_id"] integerValue] == [[defualts objectForKey:@"home_institution"] integerValue]){
-            //if the user is viewing his home institution
-            [self continuePost];
+    
+        if([self.topRightBarButton.title isEqualToString:@"Save"]){
+            //Editing
+            if(_controlSwitch.selectedSegmentIndex==0){
+                //The user is attempting to edit an event
+                if([self.titleField.text isEqualToString:@""]){
+                    [self showAllertWithMessage:@"Your event must have a title"];
+                }else{
+                    [self updateEvent];
+                }
+            }else{
+                //the user is attemping to edit an announcement
+                if([self.titleField.text isEqualToString:@""]){
+                    [self showAllertWithMessage:@"Your announcement must have a title"];
+                }else{
+                    [self updateAnnouncement];
+                }
+            }
         }else{
-            //if the user is not viewing his home institution
-            [[PAMethodManager sharedMethodManager] showInstitutionAlert:^{
-                //this callback block will only be called if the user selects continue in the uialert view
+
+        
+            if([[defualts objectForKey:@"institution_id"] integerValue] == [[defualts objectForKey:@"home_institution"] integerValue]){
+                //if the user is viewing his home institution
                 [self continuePost];
-            }];
+            }else{
+            //if the user is not viewing his home institution
+                [[PAMethodManager sharedMethodManager] showInstitutionAlert:^{
+                //this callback block will only be called if the user selects continue in the uialert view
+                    [self continuePost];
+                }];
+            }
         }
     }else{
         NSString*type = @"event";
@@ -490,25 +518,6 @@
 }
 
 -(void)continuePost{
-    if([self.topRightBarButton.title isEqualToString:@"Save"]){
-        //Editing
-        if(_controlSwitch.selectedSegmentIndex==0){
-            //The user is attempting to edit an event
-            if([self.titleField.text isEqualToString:@""]){
-                [self showAllertWithMessage:@"Your event must have a title"];
-            }else{
-                [self updateEvent];
-            }
-        }else{
-            //the user is attemping to edit an announcement
-            if([self.titleField.text isEqualToString:@""]){
-                [self showAllertWithMessage:@"Your announcement must have a title"];
-            }else{
-                [self updateAnnouncement];
-            }
-        }
-    }
-    else{
         //Posting
         if(_controlSwitch.selectedSegmentIndex==0){
             //The user is attempting to post an event
@@ -525,7 +534,6 @@
                 [self postAnnouncement];
             }
         }
-    }
 }
 
 -(void)showAllertWithMessage:(NSString*)message{
@@ -556,18 +564,27 @@
 
 -(void)postEvent{
     
-    NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
+    if(self.photo.image !=[UIImage imageNamed:@"image-placeholder.png"]){
+        NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
     
-    [[PASyncManager globalSyncManager] postEvent: [self configureEventDictioanry] withImage:data];
+        [[PASyncManager globalSyncManager] postEvent: [self configureEventDictioanry] withImage:data];
+    }else{
+        [[PASyncManager globalSyncManager] postEventWithoutImage:[self configureEventDictioanry]];
+    }
     [self clearScreenAndDismissView];
 }
 
 
 -(void)postAnnouncement{
     
-    NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
+    if(self.photo.image !=[UIImage imageNamed:@"image-placeholder.png"]){
+
+        NSData* data = UIImageJPEGRepresentation(self.photo.image, .5) ;
     
-    [[PASyncManager globalSyncManager] postAnnouncement:[self configureAnnouncementDictionary] withImage:data];
+        [[PASyncManager globalSyncManager] postAnnouncement:[self configureAnnouncementDictionary] withImage:data];
+    }else{
+        [[PASyncManager globalSyncManager]postAnnouncementWithoutImage:[self configureAnnouncementDictionary]];
+    }
     
     [self clearScreenAndDismissView];
 }
@@ -578,7 +595,7 @@
         data = UIImageJPEGRepresentation(self.photo.image, .5) ;
     }
     
-    [[PASyncManager globalSyncManager] updateEvent:self.editableEvent.id withDictionary:[self configureEventDictioanry] withImage:data];
+    [[PASyncManager globalSyncManager] updateEvent:[self.editableEvent.id stringValue] withDictionary:[self configureEventDictioanry] withImage:data];
     
     [self clearScreenAndDismissView];
     
@@ -632,6 +649,11 @@
         description = self.descriptionTextView.text;
     }
     
+    BOOL postToFacebook = NO;
+    if(self.facebookControl.on && self.facebookCell.tag!=cellStateAlwaysOff){
+        postToFacebook=YES;
+    }
+    
     NSDictionary *setEvent = [NSDictionary dictionaryWithObjectsAndKeys:
                               self.titleField.text,@"title",
                               description, @"event_description",
@@ -645,6 +667,7 @@
                               alert,@"message",
                               [NSNumber numberWithBool:YES],@"send_push_notification",
                               self.locationTextField.text,@"location",
+                              [NSNumber numberWithBool:postToFacebook], @"postToFacebook",
                               nil];
 
     return setEvent;

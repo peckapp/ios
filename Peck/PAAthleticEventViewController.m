@@ -27,7 +27,17 @@
 #define reloadTime 10
 
 
-@interface PAAthleticEventViewController ()
+@interface PAAthleticEventViewController (){
+    NSString * commentCellIdentifier;
+    NSString * cellNibName;
+    NSMutableDictionary *heightDictionary;
+    CGRect initialFrame;
+    UITextView *textViewHelper;
+    
+    PAAssetManager * assetManager;
+    
+    BOOL reloaded;
+}
 
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
 @property (nonatomic, retain) NSDateFormatter *formatter;
@@ -63,15 +73,7 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-NSString * commentCellIdentifier = @"CommentCell";
-NSString * cellNibName = @"PACommentCell";
-NSMutableDictionary *heightDictionary;
-CGRect initialFrame;
-UITextView *textViewHelper;
 
-PAAssetManager * assetManager;
-
-BOOL reloaded = NO;
 
 
 - (void)viewDidLoad
@@ -79,6 +81,10 @@ BOOL reloaded = NO;
     [super viewDidLoad];
     
     assetManager = [PAAssetManager sharedManager];
+    
+    commentCellIdentifier = @"AthleticCommentCell";
+    cellNibName = @"PACommentCell";
+    reloaded = NO;
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -341,6 +347,7 @@ BOOL reloaded = NO;
         
         self.cleanImageView.hidden = NO;
         
+        [self configureView];
         
         void (^animationsBlock)(void) = ^{
             self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);

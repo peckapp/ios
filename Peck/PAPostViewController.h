@@ -57,5 +57,7 @@
 @property (strong, nonatomic) NSMutableDictionary* invitedCirclesDictionary;
 
 @property (strong, nonatomic) NSDateFormatter* formatter;
+@property (weak, nonatomic) IBOutlet UITableViewCell *facebookCell;
+@property (weak, nonatomic) IBOutlet UISwitch *facebookControl;
 
 @end

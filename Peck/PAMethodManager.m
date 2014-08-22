@@ -118,97 +118,107 @@
     if(img){
         [FBRequestConnection startForUploadStagingResourceWithImage:img completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
             if(!error) {
-                // Log the uri of the staged image
-                NSLog(@"Successfuly staged image with staged URI: %@", [result objectForKey:@"uri"]);
-                
-                // Further code to post the OG story goes here
-                
-                
-                // instantiate a Facebook Open Graph object
-                NSMutableDictionary<FBOpenGraphObject> *object = [FBGraphObject openGraphObjectForPost];
-                
-                // specify that this Open Graph object will be posted to Facebook
-                object.provisionedForPost = YES;
-                
-                // for og:title
-                object[@"title"] = [eventInfo objectForKey:@"title"]; ;
-                
-                // for og:type, this corresponds to the Namespace you've set for your app and the object type name
-                object[@"type"] = @"com_peckapp_peck:event";
-                
-                // for og:description
-                object[@"description"] =[eventInfo objectForKey:@"event_description"] ;
-                
-                // for og:url, we cover how this is used in the "Deep Linking" section below
-                object[@"url"] =[ @"http://loki.peckapp.com:3500/deep_links/native_peck?event_id=" stringByAppendingString:[[eventInfo objectForKey:@"id"] stringValue]];
-                //object[@"url"] = @"http://example.com/roasted_pumpkin_seeds";
-                //TODO: fix the url to work with deep linking
-                
-                // for og:image we assign the image that we just staged, using the uri we got as a response
-                // the image has to be packed in a dictionary like this:
-                object[@"image"] = @[@{@"url": [result objectForKey:@"uri"], @"user_generated" : @"false" }];
-                
-                //object[@"event_id"] = [[eventInfo objectForKey:@"id"] stringValue];
-                
-                /*
-                 [FBRequestConnection startForPostOpenGraphObject:object completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-                 if(!error) {
-                 // get the object ID for the Open Graph object that is now stored in the Object API
-                 NSString *objectId = [result objectForKey:@"id"];
-                 NSLog(@"object id: %@", objectId);
-                 
-                 // Further code to post the OG story goes here
-                 
-                 } else {
-                 // An error occurred
-                 NSLog(@"Error posting the Open Graph object to the Object API: %@", error);
-                 }
-                 }];*/
-                
-                
-                
-                // Create an action
-                id<FBOpenGraphAction> action = (id<FBOpenGraphAction>)[FBGraphObject graphObject];
-                
-                // Link the object to the action
-                [action setObject:object forKey:@"event"];
-                
-                // Check if the Facebook app is installed and we can present the share dialog
-                FBOpenGraphActionParams *params = [[FBOpenGraphActionParams alloc] init];
-                params.action = action;
-                params.actionType = @"com_peckapp_peck:event";
-                
-                // If the Facebook app is installed and we can present the share dialog
-                if([FBDialogs canPresentShareDialogWithOpenGraphActionParams:params]) {
-                    // Show the share dialog
-                    [FBDialogs presentShareDialogWithOpenGraphAction:action
-                                                          actionType:@"com_peckapp_peck:post"
-                                                 previewPropertyName:@"event"
-                                                             handler:^(FBAppCall *call, NSDictionary *results, NSError *error) {
-                                                                 if(error) {
-                                                                     // There was an error
-                                                                     NSLog(@"Error publishing story: %@", error.description);
-                                                                 } else {
-                                                                     // Success
-                                                                     NSLog(@"result %@", results);
-                                                                 }
-                                                             }];
-                    
-                    // If the Facebook app is NOT installed and we can't present the share dialog
-                } else {
-                    // FALLBACK GOES HERE
-                }
-                
-                
+                NSArray* imageArray = @[@{@"url": [result objectForKey:@"uri"], @"user_generated" : @"false" }];
+                [self continuePost:imageArray withDictionary:eventInfo];
             } else {
                 // An error occurred
+                
                 NSLog(@"Error staging an image: %@", error);
             }
         }];
         
+    }else{
+        [self continuePost:nil withDictionary:eventInfo];
     }
 }
 
+
+-(void)continuePost:(NSArray*)imageArray withDictionary:(NSDictionary*)eventInfo{
+    // Log the uri of the staged image
+   /// NSLog(@"Successfuly staged image with staged URI: %@", [result objectForKey:@"uri"]);
+    
+    // Further code to post the OG story goes here
+    
+    
+    // instantiate a Facebook Open Graph object
+    NSMutableDictionary<FBOpenGraphObject> *object = [FBGraphObject openGraphObjectForPost];
+    
+    // specify that this Open Graph object will be posted to Facebook
+    object.provisionedForPost = YES;
+    
+    // for og:title
+    object[@"title"] = [eventInfo objectForKey:@"title"]; ;
+    
+    // for og:type, this corresponds to the Namespace you've set for your app and the object type name
+    object[@"type"] = @"com_peckapp_peck:event";
+    
+    // for og:description
+    object[@"description"] =[eventInfo objectForKey:@"event_description"] ;
+    
+    // for og:url, we cover how this is used in the "Deep Linking" section below
+    object[@"url"] =[ @"http://loki.peckapp.com:3500/deep_links/native_peck?event_id=" stringByAppendingString:[[eventInfo objectForKey:@"id"] stringValue]];
+    //object[@"url"] = @"http://example.com/roasted_pumpkin_seeds";
+    //TODO: fix the url to work with deep linking
+    
+    // for og:image we assign the image that we just staged, using the uri we got as a response
+    // the image has to be packed in a dictionary like this:
+    //object[@"image"] = @[@{@"url": [result objectForKey:@"uri"], @"user_generated" : @"false" }];
+    if(imageArray){
+        object[@"image"] = imageArray;
+    }
+    //object[@"event_id"] = [[eventInfo objectForKey:@"id"] stringValue];
+    
+    /*
+     [FBRequestConnection startForPostOpenGraphObject:object completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+     if(!error) {
+     // get the object ID for the Open Graph object that is now stored in the Object API
+     NSString *objectId = [result objectForKey:@"id"];
+     NSLog(@"object id: %@", objectId);
+     
+     // Further code to post the OG story goes here
+     
+     } else {
+     // An error occurred
+     NSLog(@"Error posting the Open Graph object to the Object API: %@", error);
+     }
+     }];*/
+    
+    
+    
+    // Create an action
+    id<FBOpenGraphAction> action = (id<FBOpenGraphAction>)[FBGraphObject graphObject];
+    
+    // Link the object to the action
+    [action setObject:object forKey:@"event"];
+    
+    // Check if the Facebook app is installed and we can present the share dialog
+    FBOpenGraphActionParams *params = [[FBOpenGraphActionParams alloc] init];
+    params.action = action;
+    params.actionType = @"com_peckapp_peck:event";
+    
+    // If the Facebook app is installed and we can present the share dialog
+    if([FBDialogs canPresentShareDialogWithOpenGraphActionParams:params]) {
+        // Show the share dialog
+        [FBDialogs presentShareDialogWithOpenGraphAction:action
+                                              actionType:@"com_peckapp_peck:post"
+                                     previewPropertyName:@"event"
+                                                 handler:^(FBAppCall *call, NSDictionary *results, NSError *error) {
+                                                     if(error) {
+                                                         // There was an error
+                                                         NSLog(@"Error publishing story: %@", error.description);
+                                                     } else {
+                                                         // Success
+                                                         NSLog(@"result %@", results);
+                                                     }
+                                                 }];
+        
+        // If the Facebook app is NOT installed and we can't present the share dialog
+    } else {
+        // FALLBACK GOES HERE
+    }
+    
+
+}
 
 -(void)handleResetLink:(NSMutableDictionary*)urlInfo{
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"authentication_token"]){

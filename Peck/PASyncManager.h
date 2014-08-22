@@ -62,14 +62,16 @@
 
 //announcement actions
 -(void)postAnnouncement:(NSDictionary*)dictionary withImage:(NSData*)imageData;
+-(void)postAnnouncementWithoutImage:(NSDictionary*)dictionary;
 -(void)updateAnnouncement:(NSNumber*)announcementID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData;
 -(void)updateUserAnnouncements;
 
 // methods for updating events
 -(void)updateEventInfo;
 -(void)postEvent:(NSDictionary *) dictionary withImage:(NSData*)imageDate;
+-(void)postEventWithoutImage:(NSDictionary *)dictionary;
 -(void)deleteEvent:(NSNumber*)eventID;
--(void)updateEvent:(NSNumber*)eventID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData;
+-(void)updateEvent:(NSString*)eventID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData;
 
 // methods for updating athletics
 -(void)updateAthleticEvents;

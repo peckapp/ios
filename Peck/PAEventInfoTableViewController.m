@@ -340,7 +340,7 @@ BOOL reloaded = NO;
         [self.view addSubview:self.keyboardAccessoryView];
 
         self.cleanImageView.hidden = NO;
-        
+        [self configureView];
 
         void (^animationsBlock)(void) = ^{
             self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);

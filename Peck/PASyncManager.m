@@ -975,6 +975,8 @@
 
 -(void)updateExploreInfoForViewController:(UITableViewController*)viewController
 {
+    /*
+    
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         NSLog(@"in secondary thread");
@@ -989,36 +991,39 @@
              NSLog(@"explore JSON: %@",JSON);
              NSDictionary *exploreDictionary = (NSDictionary*)JSON;
              NSArray *eventsFromResponse = [exploreDictionary objectForKey:@"explore_events"];
-             
              [self.persistentStoreCoordinator lock];
-             [[PAFetchManager sharedFetchManager] removeAllObjectsOfType:@"Explore"];
-             for (NSDictionary *eventAttributes in eventsFromResponse) {
-                 NSNumber *newID = [eventAttributes objectForKey:@"id"];
-                 
-                 BOOL eventAlreadyExists = [self objectExists:newID withType:@"Explore" andCategory:@"event"];
-                 if(!eventAlreadyExists){
-                     NSLog(@"about to add the explore event");
-                     Explore * explore = [NSEntityDescription insertNewObjectForEntityForName:@"Explore" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInExplore:explore withDictionary:eventAttributes andCategory:@"event"];
-                     //NSLog(@"EXPLORE: %@",explore);
+             if(![eventsFromResponse isKindOfClass:[NSNull class]]){
+                 [[PAFetchManager sharedFetchManager] removeAllObjectsOfType:@"Explore"];
+                 for (NSDictionary *eventAttributes in eventsFromResponse) {
+                     NSNumber *newID = [eventAttributes objectForKey:@"id"];
+                     
+                     BOOL eventAlreadyExists = [self objectExists:newID withType:@"Explore" andCategory:@"event"];
+                     if(!eventAlreadyExists){
+                         NSLog(@"about to add the explore event");
+                         Explore * explore = [NSEntityDescription insertNewObjectForEntityForName:@"Explore" inManagedObjectContext: _managedObjectContext];
+                         [self setAttributesInExplore:explore withDictionary:eventAttributes andCategory:@"event"];
+                         //NSLog(@"EXPLORE: %@",explore);
+                     }
                  }
              }
-             
              NSDictionary* announcementsFromResponse = [exploreDictionary objectForKey:@"explore_announcements"];
             
-             for(NSDictionary *announcementAttributes in announcementsFromResponse){
-                 NSNumber *newID = [announcementAttributes objectForKey:@"id"];
-                 BOOL announcementAlreadyExists = [self objectExists:newID withType:@"Explore" andCategory:@"announcement"];
-                 if(!announcementAlreadyExists){
-                     NSLog(@"about to add the explore announcement");
-                     Explore * explore = [NSEntityDescription insertNewObjectForEntityForName:@"Explore" inManagedObjectContext: _managedObjectContext];
-                     [self setAttributesInExplore:explore withDictionary:announcementAttributes andCategory:@"announcement"];
+             if(![announcementsFromResponse isKindOfClass:[NSNull class]]){
+             
+                 for(NSDictionary *announcementAttributes in announcementsFromResponse){
+                     NSNumber *newID = [announcementAttributes objectForKey:@"id"];
+                     BOOL announcementAlreadyExists = [self objectExists:newID withType:@"Explore" andCategory:@"announcement"];
+                     if(!announcementAlreadyExists){
+                         NSLog(@"about to add the explore announcement");
+                         Explore * explore = [NSEntityDescription insertNewObjectForEntityForName:@"Explore" inManagedObjectContext: _managedObjectContext];
+                         [self setAttributesInExplore:explore withDictionary:announcementAttributes andCategory:@"announcement"];
+                     }
                  }
+                
              }
              NSError* error = nil;
              [_managedObjectContext save:&error];
              [self.persistentStoreCoordinator unlock];
-             
              if(viewController){
                  [viewController.refreshControl endRefreshing];
              }
@@ -1040,7 +1045,7 @@
             
         });
     });
-
+*/
 }
 
 -(void)setAttributesInExplore:(Explore *) explore withDictionary: (NSDictionary *)dictionary andCategory:(NSString*)category{
@@ -1654,7 +1659,20 @@
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
          //NSLog(@"success: %@", JSON);
-         [self updateExploreInfoForViewController:nil];
+         //[self updateExploreInfoForViewController:nil];
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+}
+
+-(void)postAnnouncementWithoutImage:(NSDictionary*)dictionary{
+    [[PASessionManager sharedClient] POST:announcementAPI
+                               parameters:[self applyWrapper:@"announcement" toDictionary:dictionary]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         //NSLog(@"success: %@", JSON);
+         //[self updateExploreInfoForViewController:nil];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"ERROR: %@",error);
@@ -1772,7 +1790,7 @@
          [self updateEventInfo];
          NSDictionary* json = (NSDictionary*)JSON;
          
-         if(FBSessionStateOpen){
+         if(FBSession.activeSession.state == FBSessionStateOpen && [[dictionary objectForKey:@"postToFacebook"] boolValue]==YES){
              [[PAMethodManager sharedMethodManager] postInfoToFacebook:[json objectForKey:@"simple_event"] withImage:imageData];
          }else{
              NSLog(@"user not logged into facebook");
@@ -1785,7 +1803,28 @@
 
 }
 
--(void)updateEvent:(NSNumber*)eventID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData{
+-(void)postEventWithoutImage:(NSDictionary *)dictionary{
+    [[PASessionManager sharedClient] POST:simple_eventsAPI
+                               parameters:[self applyWrapper:@"simple_event" toDictionary:dictionary]
+                                  success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"simple event creation success: %@", JSON);
+         [self updateEventInfo];
+         NSDictionary* json = (NSDictionary*)JSON;
+         if(FBSessionStateOpen){
+             [[PAMethodManager sharedMethodManager] postInfoToFacebook:[json objectForKey:@"simple_event"] withImage:nil];
+         }else{
+             NSLog(@"user not logged into facebook");
+         }
+         
+     }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"ERROR: %@",error);
+                                  }];
+}
+
+
+-(void)updateEvent:(NSString*)eventID withDictionary:(NSDictionary*)dictionary withImage:(NSData*)imageData{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSDate* now = [NSDate date];
     NSTimeInterval nowEpochSeconds = [now timeIntervalSince1970];
@@ -1802,7 +1841,7 @@
     [baseDictioanary setObject:@"patch" forKey:@"_method"];
     
     NSString* eventURL = [simple_eventsAPI stringByAppendingString:@"/"];
-    eventURL = [eventURL stringByAppendingString:[eventID stringValue]];
+    eventURL = [eventURL stringByAppendingString:eventID];
     
     [[PASessionManager sharedClient] POST:eventURL
                                parameters:baseDictioanary
