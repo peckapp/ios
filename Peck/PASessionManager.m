@@ -23,7 +23,7 @@ static NSString * const PAProdAPIBaseURLString = @"https://yggdrasil.peckapp.com
     static PASessionManager *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PALocalAPIBaseURLString]];
+        _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PADevAPIBaseURLString]];
         
         _sharedClient.requestSerializer = [AFJSONRequestSerializer serializer];
         [_sharedClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
