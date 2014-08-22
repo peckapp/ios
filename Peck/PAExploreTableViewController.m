@@ -309,7 +309,7 @@ NSCache *imageCache;
     [fetchRequest setSortDescriptors:sortDescriptors];
     
     if(!([self.searchBar.text isEqualToString:@""] || self.searchBar.text==nil)){
-        NSPredicate* searchPredicate = [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@", @"title", self.searchBar.text];
+        NSPredicate* searchPredicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[c] %@", @"title", self.searchBar.text];
         [fetchRequest setPredicate:searchPredicate];
     }
     

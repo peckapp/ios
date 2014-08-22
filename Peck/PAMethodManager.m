@@ -204,12 +204,6 @@
                                        [eventInfo objectForKey:@"event_description"], @"description",
                                        [ @"http://loki.peckapp.com:3500/deep_links/native_peck?event_id=" stringByAppendingString:[[eventInfo objectForKey:@"id"] stringValue]], @"link",
                                         nil];
-        if(imageArray){
-            NSString*imageURL =[@"http://loki.peckapp.com:3500" stringByAppendingString:[eventInfo objectForKey:@"image"]];
-            
-            //[params setObject:imageURL forKey:@"picture"];
-        }
-        
         [FBWebDialogs presentFeedDialogModallyWithSession:nil
                                                parameters:params
                                                   handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {

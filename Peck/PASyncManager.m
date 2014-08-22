@@ -976,7 +976,7 @@
 -(void)updateExploreInfoForViewController:(UITableViewController*)viewController
 {
     
-    /*
+    
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
         NSLog(@"in secondary thread");
@@ -1026,7 +1026,7 @@
              
              if(![athleticsFromResponse isKindOfClass:[NSNull class]]){
                  
-                 for(NSDictionary *athleticAttributes in announcementsFromResponse){
+                 for(NSDictionary *athleticAttributes in athleticsFromResponse){
                      NSNumber *newID = [athleticAttributes objectForKey:@"id"];
                      BOOL athleticAlreadyExists = [self objectExists:newID withType:@"Explore" andCategory:@"athletic"];
                      if(!athleticAlreadyExists){
@@ -1063,7 +1063,7 @@
             
         });
     });
-*/
+
 }
 
 -(void)setAttributesInExplore:(Explore *) explore withDictionary: (NSDictionary *)dictionary andCategory:(NSString*)category{

@@ -346,7 +346,7 @@ PAAssetManager * assetManager;
     if(searchBarText){
         NSString *attributeName = @"title";
         NSString *attributeValue = searchBarText;
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@", attributeName, attributeValue];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[c] %@", attributeName, attributeValue];
         // the [c] dismisses case sensitivity
         [predicateArray addObject:predicate];
     }
