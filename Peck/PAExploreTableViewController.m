@@ -181,7 +181,7 @@ NSCache *imageCache;
         cell.photoView.image = [assetManager imagePlaceholder];
     }
     
-    if([tempExplore.category isEqualToString:@"event"]){
+    if([tempExplore.category isEqualToString:@"event"] || [tempExplore.category isEqualToString:@"athletic"]){
         cell.attendButton.hidden = NO;
     }else{
         cell.attendButton.hidden = YES;

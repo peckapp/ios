@@ -26,7 +26,7 @@
 }
 
 - (IBAction)attendEvent:(id)sender {
-    if([self.category isEqualToString:@"event"]){
+    if([self.category isEqualToString:@"event"] || [self.category isEqualToString:@"athletic"]){
         NSLog(@"attend the event");
         
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -48,15 +48,20 @@
 -(void)continueAttending{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"attend the event");
+    
+    NSString*category = @"simple";
+    if([self.category isEqualToString:@"athletic"]){
+        category = @"athletic";
+    }
     NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
                               [defaults objectForKey:@"user_id"],@"user_id",
                               [defaults objectForKey:@"institution_id"],@"institution_id",
                               [NSNumber numberWithLong:self.exploreID],@"event_attended",
-                              @"simple", @"category",
+                              category, @"category",
                               [defaults objectForKey:@"user_id"], @"added_by",
                               nil];
     
     [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:nil];
-    [[PAFetchManager sharedFetchManager] deleteObject:[NSNumber numberWithLong: self.exploreID] withEntityType:@"Explore" andCategory:@"event"];
+    [[PAFetchManager sharedFetchManager] deleteObject:[NSNumber numberWithLong: self.exploreID] withEntityType:@"Explore" andCategory:self.category];
 }
 @end
