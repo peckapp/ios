@@ -590,6 +590,7 @@ PAAssetManager *assetManager;
      */
 
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:cell.tag inSection:0];
+    
     self.selectedIndexPath = indexPath;
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
@@ -601,6 +602,7 @@ PAAssetManager *assetManager;
     selectedCircle=cell.circle;
 
     [self configureCell:cell atIndexPath:indexPath];
+    [self expandCircleCell:cell atIndexPath:indexPath];
 
     PAInvitationsTableViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"invitations"];
     [self presentViewController:vc animated:YES completion:^{}];

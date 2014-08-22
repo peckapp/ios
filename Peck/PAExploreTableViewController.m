@@ -93,6 +93,7 @@ NSCache *imageCache;
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
    
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor blackColor]];
 }
 
 -(void)refresh{

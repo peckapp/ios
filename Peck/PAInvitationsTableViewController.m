@@ -47,6 +47,7 @@ PAAssetManager * assetManager;
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"Invite a circle or friend...";
     
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor blackColor]];
     /*
     self.invitedPeopleTableView.delegate = self;
     self.invitedPeopleTableView.dataSource = self;

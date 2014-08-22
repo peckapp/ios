@@ -212,6 +212,8 @@ PAAssetManager * assetManager;
     _rightSearchBar.delegate = self;
     _rightSearchBar.showsCancelButton = NO;
     _rightSearchBar.searchBarStyle = UISearchBarStyleMinimal;
+    
+    //This changes the color throughout the app, we must now add it in view will appear of every view controller that contains a searche bar
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
 
     _searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
