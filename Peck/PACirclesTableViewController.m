@@ -295,7 +295,6 @@ PAAssetManager *assetManager;
     if (cell == nil) {
         [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil]  forCellReuseIdentifier:cellIdentifier];
         cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        initialCommentTableFrame=cell.commentsTableView.frame;
     }
     
     [self configureCell:cell atIndexPath:indexPath];
@@ -483,7 +482,7 @@ PAAssetManager *assetManager;
 {
     cell.tag=[indexPath row];
     cell.parentViewController=self;
-    cell.commentsTableView.frame = CGRectMake(cell.commentsTableView.frame.origin.x, cell.commentsTableView.frame.origin.y, cell.frame.size.width, cell.frame.size.height - cell.commentsTableView.frame.origin.y);
+    cell.commentsTableView.frame = CGRectMake(0, cellHeight, cell.frame.size.width, cell.frame.size.height - cellHeight);
     if(indexPath.row==[_fetchedResultsController.fetchedObjects count]){
         cell.circleTitle.text=@"";
         [cell.profilesTableView setHidden:YES];
