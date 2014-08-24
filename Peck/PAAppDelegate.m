@@ -153,7 +153,7 @@
     [NewRelicAgent startWithApplicationToken:@"AA14f069ef90609bd31c564006eebc0c133696af3b"];
     
     // Must remain after third-party SDK code
-    //[Crashlytics startWithAPIKey:@"147270e58be36f1b12187f08c0fa5ff034e701c8"];
+    [Crashlytics startWithAPIKey:@"147270e58be36f1b12187f08c0fa5ff034e701c8"];
     
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     

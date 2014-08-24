@@ -16,6 +16,8 @@
 		861E46A1198888AE0088B47F /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A0198888AE0088B47F /* CoreTelephony.framework */; };
 		861E46A3198888B80088B47F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A2198888B80088B47F /* SystemConfiguration.framework */; };
 		861E46A5198888C20088B47F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A4198888C20088B47F /* libz.dylib */; };
+		8625900B19A809F6000FA083 /* peck_launch_4_v1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8625900919A809F6000FA083 /* peck_launch_4_v1.png */; };
+		8625900C19A809F6000FA083 /* peck_launch_5_v1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8625900A19A809F6000FA083 /* peck_launch_5_v1.png */; };
 		86292512193CBE000057CA41 /* PAPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292511193CBE000057CA41 /* PAPostViewController.m */; };
 		86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292520193CBFD40057CA41 /* PAPeckCell.m */; };
 		86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86292521193CBFD40057CA41 /* PAPeckCell.xib */; };
@@ -213,6 +215,8 @@
 		861E46A0198888AE0088B47F /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		861E46A2198888B80088B47F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		861E46A4198888C20088B47F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		8625900919A809F6000FA083 /* peck_launch_4_v1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = peck_launch_4_v1.png; sourceTree = "<group>"; };
+		8625900A19A809F6000FA083 /* peck_launch_5_v1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = peck_launch_5_v1.png; sourceTree = "<group>"; };
 		86292510193CBE000057CA41 /* PAPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPostViewController.h; sourceTree = "<group>"; };
 		86292511193CBE000057CA41 /* PAPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPostViewController.m; sourceTree = "<group>"; };
 		8629251F193CBFD40057CA41 /* PAPeckCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPeckCell.h; sourceTree = "<group>"; };
@@ -478,6 +482,7 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				8625900819A8099F000FA083 /* launch-image */,
 				DDA8417A19A6938900383A3B /* chevron-light@2x.png */,
 				DDA8417819A690DC00383A3B /* cancel@2x.png */,
 				DDA8417619A68F6000383A3B /* chevron@2x.png */,
@@ -513,6 +518,15 @@
 				A40CF56219547A730021C088 /* Peers */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		8625900819A8099F000FA083 /* launch-image */ = {
+			isa = PBXGroup;
+			children = (
+				8625900919A809F6000FA083 /* peck_launch_4_v1.png */,
+				8625900A19A809F6000FA083 /* peck_launch_5_v1.png */,
+			);
+			name = "launch-image";
 			sourceTree = "<group>";
 		};
 		8629250D193CBB370057CA41 /* Post */ = {
@@ -1045,6 +1059,7 @@
 				DDFFF5A719829BD100DC5AC1 /* feather-29@2x.png in Resources */,
 				864D873D196470C100BCC01A /* facebook-login.png in Resources */,
 				8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */,
+				8625900C19A809F6000FA083 /* peck_launch_5_v1.png in Resources */,
 				DDFFF5B219829D1100DC5AC1 /* feather-57@2x.png in Resources */,
 				DDBCA9BE1986D6BC007D283E /* drop-shadow-horizontal.png in Resources */,
 				DDFFF5AC19829BD100DC5AC1 /* feather-76@2x.png in Resources */,
@@ -1086,6 +1101,7 @@
 				DDFFF5AE19829BD100DC5AC1 /* feather-60@2x.png in Resources */,
 				A4B772E719460C3200A31252 /* schools.plist in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
+				8625900B19A809F6000FA083 /* peck_launch_4_v1.png in Resources */,
 				DDFFF5CD1982CB7900DC5AC1 /* feather@2x.png in Resources */,
 				864D873E196470C100BCC01A /* facebook-logout.png in Resources */,
 				DDFFF5CA1982CB7900DC5AC1 /* circles@2x.png in Resources */,
