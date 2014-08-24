@@ -865,7 +865,7 @@ PAAssetManager *assetManager;
 
 -(void)keyboardDidHide:(NSNotification *)notification{
    // self.tableView.contentInset = UIEdgeInsetsZero;
-    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[_fetchedResultsController.fetchedObjects count] inSection:0];
+    //NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[_fetchedResultsController.fetchedObjects count] inSection:0];
     if(usedTitleField){
         //[self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         //TODO: make the transition from content insets to content inset zero a smooth transition

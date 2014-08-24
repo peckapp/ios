@@ -363,7 +363,6 @@
                                   success:^(NSURLSessionDataTask * __unused task, id JSON){
                                       //NSLog(@"LOGIN JSON: %@",JSON);
                                       
-                                      
                                       [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
                                       
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
@@ -406,7 +405,6 @@
                                       [self updateAthleticEvents];
                                       //take care of some necessary login stuff
                                       [[PAFetchManager sharedFetchManager] loginUser];
-                                      
                                       
                                       if([direction isEqualToString:@"homepage"]){
                                           PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
@@ -1448,8 +1446,8 @@
         _managedObjectContext = [appdelegate managedObjectContext];
         _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
-        NSCalendar *calendar = [NSCalendar currentCalendar];
-        NSDateComponents *components = [calendar components:(NSWeekdayCalendarUnit) fromDate:[NSDate date]];
+        //NSCalendar *calendar = [NSCalendar currentCalendar];
+        //NSDateComponents *components = [calendar components:(NSWeekdayCalendarUnit) fromDate:[NSDate date]];
         
         NSString* diningOpportunitiesURL = [dining_opportunitiesAPI stringByAppendingString:@"?"];//day_of_week="];
         //diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[@([components weekday]-1) stringValue]];

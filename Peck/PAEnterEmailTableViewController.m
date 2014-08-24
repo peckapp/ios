@@ -101,7 +101,7 @@
                                        token, @"facebook_token",
                                        
                                        nil];
-            [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self direction:NO];
+            [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self direction:@""];
         }
     }else{
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Invalid Email"
