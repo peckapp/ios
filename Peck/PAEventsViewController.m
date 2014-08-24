@@ -113,8 +113,6 @@ PAAssetManager * assetManager;
     //we must store the profile picture every time the app loads because the local image storing is not persistent
     //[self storeProfilePicture];
 
-
-    NSLog(@"View did load (events)");
     self.placeholderImage = [[UIImageView alloc] initWithImage:[assetManager eventPlaceholder]];
     self.placeholderImage.contentMode = UIViewContentModeScaleAspectFill;
     
@@ -182,6 +180,8 @@ PAAssetManager * assetManager;
     swipeRightGesture.numberOfTouchesRequired = 1;
     swipeRightGesture.direction = (UISwipeGestureRecognizerDirectionRight);
     [self.view addGestureRecognizer:swipeRightGesture];
+    
+    NSLog(@"Finished viewDidLoad (PAEventsViewController)");
 }
 
 
@@ -193,7 +193,7 @@ PAAssetManager * assetManager;
     [[PASyncManager globalSyncManager] updateAthleticEvents];
     [[PASyncManager globalSyncManager] updateDiningInfo];
 
-    NSLog(@"View will appear (events)");
+    //NSLog(@"View will appear (events)");
     showingSearchBar = NO;
 
     _searchBar = [[UISearchBar alloc] init];
@@ -359,7 +359,7 @@ PAAssetManager * assetManager;
 
     NSPredicate *startDatePredicate = [NSPredicate predicateWithFormat:@"start_date > %@", selectedMorning];
     NSPredicate *endDatePredicate = [NSPredicate predicateWithFormat:@"start_date < %@", selectedNight];
-    NSLog(@"the current date: %@", [NSDate date]);
+    //NSLog(@"the current date: %@", [NSDate date]);
 
     [predicateArray addObject:startDatePredicate];
     [predicateArray addObject:endDatePredicate];
@@ -1036,7 +1036,7 @@ PAAssetManager * assetManager;
 - (void)transitionToRightTableView
 {
     if (self.selectedCellIndexPath == nil) {
-        NSLog(@"begin transition to right");
+        //NSLog(@"begin transition to right");
 
         self.selectedDay += 1;
 
@@ -1066,7 +1066,7 @@ PAAssetManager * assetManager;
                              [self.noContentView removeFromSuperview];
                              [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
 
-                             NSLog(@"end transition to right");
+                             //NSLog(@"end transition to right");
                          }];
     }
 }
@@ -1074,7 +1074,7 @@ PAAssetManager * assetManager;
 -(void)transitionToLeftTableView
 {
     if (self.selectedCellIndexPath == nil) {
-        NSLog(@"begin transition to left");
+        //NSLog(@"begin transition to left");
 
         self.selectedDay -= 1;
         [self clearSearchBars];
@@ -1102,7 +1102,7 @@ PAAssetManager * assetManager;
                              [self.noContentView removeFromSuperview];
                              [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
                              
-                             NSLog(@"end transition to left");
+                             //NSLog(@"end transition to left");
                          }];
     }
 }

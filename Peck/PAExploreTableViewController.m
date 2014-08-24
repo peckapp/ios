@@ -88,6 +88,8 @@ NSCache *imageCache;
     //headerView.backgroundColor =
     //self.tableView.tableHeaderView = self.searchBar;
     self.tableView.tableHeaderView = headerView;
+    
+    NSLog(@"Finished viewDidLoad (PAExploreTableViewController)");
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -154,7 +156,7 @@ NSCache *imageCache;
         cell.contextLabel.text = @" Event";
     }
     
-    NSLog(@"explore weight: %@", tempExplore.weight);
+    //NSLog(@"explore weight: %@", tempExplore.weight);
     
     if(tempExplore.imageURL){
         NSURL* imageURL = [NSURL URLWithString:tempExplore.imageURL];

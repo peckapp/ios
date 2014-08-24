@@ -59,6 +59,8 @@ BOOL loggedIn;
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     //[appdelegate setProfileViewController:self];
     [appdelegate setProfileProperty:self];
+    
+    NSLog(@"Finished viewDidLoad (PAProfileTableViewController)");
 }
 
 -(void)viewWillAppear:(BOOL)animated{

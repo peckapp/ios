@@ -89,6 +89,8 @@
     self.locationTextField.delegate = self;
     userHasChangedEndTime = NO;
     self.changedImage=NO;
+    
+    NSLog(@"Finished viewDidLoad (PAPostViewController)");
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -333,7 +335,7 @@
     UIImage *image = [info valueForKey: UIImagePickerControllerEditedImage];
     self.photo.image = image;
 
-    NSLog(@"Post view frame height: %f", self.view.frame.size.height);
+    //NSLog(@"Post view frame height: %f", self.view.frame.size.height);
     
     // stores the image locally so that we can use the file path to send it to the server
     self.changedImage=YES;

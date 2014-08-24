@@ -85,7 +85,7 @@
                                         [alert show];
                                     }
                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                        NSLog(@"ERROR: %@",error);
+                                        NSLog(@"sendUserFeedback ERROR: %@",error);
                                         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Posting error"
                                                                                         message:@"Something went wrong while trying to post your feedback, please try again later" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
                                         [alert show];
@@ -106,7 +106,7 @@
                                       
                                   }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"logoutUser ERROR: %@",error);
                                       
                                   }];
     
@@ -184,7 +184,7 @@
                                       }
                                   }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"sendUDIDForInitViewController ERROR: %@",error);
                                   }];
 }
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -269,7 +269,7 @@
                                       }
                                   }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"ceateAnonymousUser ERROR: %@",error);
                                       if(callbackBlock){
                                           callbackBlock(NO);
                                       }
@@ -289,7 +289,7 @@
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                   }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
+                                     NSLog(@"resetPassword ERROR: %@",error);
                                 }];
 
 }
@@ -343,7 +343,7 @@
                                         
                                       }
                                       failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                          NSLog(@"ERROR: %@",error);
+                                          NSLog(@"updateUserWithInfo withImage ERROR: %@",error);
                                       }];
     
 }
@@ -436,7 +436,7 @@
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"authenticateUserWithInfo ERROR: %@",error);
                                      // PAInitialViewController* sender = (PAInitialViewController*)controller;
                                       //[sender showAlert];
                                       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Incorrect email or password"
@@ -514,7 +514,7 @@
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"registerUserWithInfo ERROR: %@",error);
                                       UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Registration Error"
                                                                                      message:@"Something went wrong while registering"
                                                                                     delegate:self
@@ -542,7 +542,7 @@
                                        }
                                 }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
+                                     NSLog(@"checkFacebookUser ERROR: %@",error);
                                  }];
     
 }
@@ -632,7 +632,7 @@
                                        
                                    }
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                       NSLog(@"ERROR: %@",error);
+                                       NSLog(@"loginWithFacebook ERROR: %@",error);
                                        if([[[error userInfo] objectForKey:AFNetworkingOperationFailingURLResponseErrorKey] statusCode]==422){
                                            if(callbackBlock){
                                                callbackBlock(NO);
@@ -668,7 +668,7 @@
      
      
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                       NSLog(@"ERROR: %@",error);
+                                       NSLog(@"changePassword ERROR: %@",error);
                                    }];
 }
 - (BOOL)validUserInfo:(NSDictionary*)userInfo
@@ -702,7 +702,7 @@
             [self handlePeers:postsFromResponse];
         }
                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                        NSLog(@"ERROR: %@",error);
+                                        NSLog(@"updatePeerInfo 1 ERROR: %@",error);
                                     }];
         
         if([defaults objectForKey:@"home_institution"]){
@@ -722,7 +722,7 @@
                      [self updateCircleInfo];
                  }
                                              failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                                 NSLog(@"ERROR: %@",error);
+                                                 NSLog(@"updatePeerInfo 2 ERROR: %@",error);
                                              }];
                 
             }
@@ -804,7 +804,7 @@
                                  }
     
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                       NSLog(@"ERROR: %@",error);
+                                       NSLog(@"likeComment ERROR: %@",error);
                                     
                                    }];
 }
@@ -828,7 +828,7 @@
                                    }
      
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                       NSLog(@"ERROR: %@",error);
+                                       NSLog(@"unlikeComment ERROR: %@",error);
                                        
                                    }];
 }
@@ -856,7 +856,7 @@
                                    }
      
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                       NSLog(@"ERROR: %@",error);
+                                       NSLog(@"attendEvent ERROR: %@",error);
                                        
                                    }];
 }
@@ -871,7 +871,7 @@
                                     }
      
                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                        NSLog(@"ERROR: %@",error);
+                                        NSLog(@"unattendEvent ERROR: %@",error);
                                         
                                     }];
 
@@ -905,7 +905,7 @@
          
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
+                                     NSLog(@"updateAndReloadEvent ERROR: %@",error);
                                      
                                  }];
 
@@ -944,7 +944,7 @@
                                          callbackBlock(YES);
                                      }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                         NSLog(@"ERROR: %@",error);
+                                         NSLog(@"updateAvailableInstitutionsWithCallback ERROR: %@",error);
                                          callbackBlock(NO);
                                      }];
     });
@@ -1048,7 +1048,7 @@
 
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                         NSLog(@"ERROR: %@",error);
+                                         NSLog(@"updateExploreInfoForViewController ERROR: %@",error);
                                          if(viewController){
                                              [viewController.refreshControl endRefreshing];
                                          }
@@ -1105,7 +1105,7 @@
          [self updateCircleInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"postCircle ERROR: %@",error);
                                   }];
    
     
@@ -1121,7 +1121,7 @@
          [[PAFetchManager sharedFetchManager] removeCircle: [dictionary objectForKey:@"circle_id"]];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"leaveCircle ERROR: %@",error);
                                   }];
 
 }
@@ -1137,7 +1137,7 @@
          [circleCell.profilesTableView reloadData];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"postCircleMember ERROR: %@",error);
                                   }];
     
 
@@ -1151,7 +1151,7 @@
              //NSLog(@"circle member success json: %@", JSON);
          }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"postCircleMember ERROR: %@",error);
                                   }];
 
 }
@@ -1176,7 +1176,7 @@
          //we must update the pecks in order to change the interacted with value to true so that the buttons are no longer selectable
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"acceptCircleInvite ERROR: %@",error);
                                   }];
 }
 
@@ -1201,7 +1201,7 @@
          [self updatePecks];
      }
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                       NSLog(@"ERROR: %@",error);
+                                       NSLog(@"deleteCircleMember ERROR: %@",error);
                                    }];
 }
 
@@ -1222,7 +1222,7 @@
          [tableViewSender.tableView reloadData];
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
+                                     NSLog(@"updateModifiedCircle ERROR: %@",error);
                                  }];
 }
 */
@@ -1267,7 +1267,7 @@
              }
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                         NSLog(@"ERROR: %@",error);
+                                         NSLog(@"updateCircleInfo ERROR: %@",error);
                                      }];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1339,7 +1339,7 @@
          //NSLog(@"peck JSON: %@", JSON);
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"deletePeck ERROR: %@",error);
                                   }];
     
 
@@ -1353,7 +1353,7 @@
          //NSLog(@"peck JSON: %@", JSON);
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"postPeck ERROR: %@",error);
                                   }];
     
 
@@ -1371,7 +1371,7 @@
          [self updatePecks];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"setInteractedForPeck ERROR: %@",error);
                                   }];
 
 }
@@ -1409,7 +1409,7 @@
          [self.persistentStoreCoordinator unlock];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"updatePecks ERROR: %@",error);
                                   }];
     
 
@@ -1481,7 +1481,7 @@
              [self.persistentStoreCoordinator unlock];
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                         NSLog(@"ERROR: %@",error);
+                                         NSLog(@"updateDiningInfo ERROR: %@",error);
                                      }];
     });
     
@@ -1533,7 +1533,7 @@
              [self.persistentStoreCoordinator unlock];
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                         NSLog(@"ERROR: %@",error);
+                                         NSLog(@"updateDiningPlaces ERROR: %@",error);
                                      }];
     //});
 
@@ -1586,7 +1586,7 @@
      }
      
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
+                                     NSLog(@"updateDiningPeriods ERROR: %@",error);
                                  }];
 
 }
@@ -1644,7 +1644,7 @@
     }
      
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
+                                     NSLog(@"updateMenuItemsForOpportunity ERROR: %@",error);
                                  }];
 
     
@@ -1682,7 +1682,7 @@
          //[self updateExploreInfoForViewController:nil];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"postAnnouncement ERROR: %@",error);
                                   }];
 }
 
@@ -1695,7 +1695,7 @@
          //[self updateExploreInfoForViewController:nil];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"postAnnouncementWithoutImage ERROR: %@",error);
                                   }];
 }
 
@@ -1737,7 +1737,7 @@
          
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
+                                     NSLog(@"updateUserAnnouncements ERROR: %@",error);
                                  }];
 
 }
@@ -1779,7 +1779,7 @@
          [self updateUserAnnouncements];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"updateAnnouncement ERROR: %@",error);
                                   }];
 
 }
@@ -1818,7 +1818,7 @@
 
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"postEvent ERROR: %@",error);
                                   }];
 
 }
@@ -1839,7 +1839,7 @@
          
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"postEventWithoutImage ERROR: %@",error);
                                   }];
 }
 
@@ -1872,7 +1872,7 @@
          [self updateEventInfo];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"updateEvent ERROR: %@",error);
                                   }];
 
 }
@@ -1887,7 +1887,7 @@
         //NSLog(@"success: %@", JSON);
     }
                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                        NSLog(@"ERROR: %@",error);
+                                        NSLog(@"deleteEvent ERROR: %@",error);
                                     }];
 
 }
@@ -1938,7 +1938,7 @@
              
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                         NSLog(@"ERROR: %@",error);
+                                         NSLog(@"updateEventInfo ERROR: %@",error);
                                      }];
         /*
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -2026,7 +2026,7 @@
                  [self.persistentStoreCoordinator unlock];
              }
                                          failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                             NSLog(@"ATHLETIC EVENT ERROR: %@",error);
+                                             NSLog(@"updateAthleticEvents ERROR: %@",error);
                                          }];
             /*
              dispatch_async(dispatch_get_main_queue(), ^{
@@ -2085,7 +2085,7 @@
          [self updateCommentsFrom:commentFromString withCategory:categoty];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"postComment ERROR: %@",error);
                                   }];
 }
 
@@ -2135,7 +2135,7 @@
                  }
              }
                                          failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                             NSLog(@"ERROR: %@",error);
+                                             NSLog(@"updateCommentsFrom ERROR: %@",error);
                                          }];
         });
         }
@@ -2196,7 +2196,7 @@
          [self updateSubscriptionsForCategory:@"department"];
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
+                                     NSLog(@"updateSubscriptions departments ERROR: %@",error);
                                  }];
     
     NSString* clubSubscriptionURL = @"api/clubs?institution_id=";
@@ -2226,7 +2226,7 @@
          [self updateSubscriptionsForCategory:@"club"];
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
+                                     NSLog(@"updateSubscriptions clubs ERROR: %@",error);
                                  }];
     
     
@@ -2258,7 +2258,7 @@
          
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
+                                     NSLog(@"updateSubscriptions athletic teams ERROR: %@",error);
                                  }];
 
 }
@@ -2288,7 +2288,7 @@
          
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"ERROR: %@",error);
+                                      NSLog(@"setAttributesInSubscription ERROR: %@",error);
                                   }];
 
 }
@@ -2321,7 +2321,7 @@
          //NSLog(@"success: %@", JSON);
      }
                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                        NSLog(@"ERROR: %@",error);
+                                        NSLog(@"deleteSubscriptions ERROR: %@",error);
                                     }];
 
     
@@ -2360,7 +2360,7 @@
          
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"ERROR: %@",error);
+                                     NSLog(@"updateSubscriptionsForCategory ERROR: %@",error);
                                  }];
     }
 }

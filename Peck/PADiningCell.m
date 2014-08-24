@@ -152,7 +152,7 @@
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
-    NSLog(@"did change object");
+    //NSLog(@"did change object");
     UITableView *tableView = self.menuItemsTableView;
     
     switch(type)

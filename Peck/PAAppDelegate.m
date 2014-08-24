@@ -42,6 +42,8 @@
         [[self persistentStoreCoordinator] removePersistentStore:pstore error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@",pstore.URL] error:nil];
     } */
+    // uncomment to get rid of a lingering badge on the app icon
+    //[[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
     // Override point for customization after application launch.
     
@@ -153,9 +155,8 @@
     [NewRelicAgent startWithApplicationToken:@"AA14f069ef90609bd31c564006eebc0c133696af3b"];
     
     // Must remain after third-party SDK code
+    //[[Crashlytics sharedInstance] setDebugMode:YES];
     [Crashlytics startWithAPIKey:@"147270e58be36f1b12187f08c0fa5ff034e701c8"];
-    
-    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     
     return YES;
 }
