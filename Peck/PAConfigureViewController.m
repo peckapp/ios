@@ -179,24 +179,34 @@
 {
     // sets the institution when continue is pressed
     Institution * institution = (Institution*)[self.institutions objectAtIndex:[self.schoolPicker selectedRowInComponent:0]];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:institution.id forKey:@"institution_id"];
-    NSLog(@"selected institution: %@ with id: %@",institution.name,institution.id);
-    
-    PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    
-    [[PAFetchManager sharedFetchManager] switchInstitution];
-    
-    // if this is root because of the initial download of the app
-    if ([appDelegate window].rootViewController == self) {
-        UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+    if (institution != nil) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:institution.id forKey:@"institution_id"];
+        NSLog(@"selected institution: %@ with id: %@",institution.name,institution.id);
         
-        [appDelegate.window setRootViewController:newRoot];
+        PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        
+        [[PAFetchManager sharedFetchManager] switchInstitution];
+        
+        // if this is root because of the initial download of the app
+        if ([appDelegate window].rootViewController == self) {
+            UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+            
+            [appDelegate.window setRootViewController:newRoot];
+        } else {
+            
+            [self.navigationController popViewControllerAnimated:YES];
+            //[self dismissViewControllerAnimated:YES completion:nil];
+        }
     } else {
-    
-        [self.navigationController popViewControllerAnimated:YES];
-        //[self dismissViewControllerAnimated:YES completion:nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"No Institution Selected"
+                                                            message:@"It seems like you were not able to select an Institution. We're looking into it!"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Okay"
+                                                  otherButtonTitles:nil];
+        [alertView show];
     }
+    
 }
 
 @end

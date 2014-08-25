@@ -132,7 +132,7 @@
     
     
     // TODO: remove this line with the next release of the new relic monitoring software. it quiets the threading logs
-    [NRLogger setLogLevels:NRLogLevelNone];
+    //[NRLogger setLogLevels:NRLogLevelNone];
     // activates connection to New Relic monitoring software
     [NewRelicAgent startWithApplicationToken:@"AA14f069ef90609bd31c564006eebc0c133696af3b"];
     

@@ -919,6 +919,8 @@
         _managedObjectContext = [appdelegate managedObjectContext];
         _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
         
+        
+        
         // no parameters needed here since the list of institutions is needed to get a user id
         [[PASessionManager sharedClient] GET:institutionsAPI
                                   parameters:[self authenticationParameters]
@@ -2366,7 +2368,9 @@
 
 #pragma mark - Utility Methods
 
-
+- (NSString*)fullUrlFromExt:(NSString*)ext {
+    return [[[[PASessionManager sharedClient] baseURL] absoluteString] stringByAppendingString:ext];
+}
 
 -(BOOL)objectExists:(NSNumber *) newID withType:(NSString*)type andCategory:(NSString*)category
 {
