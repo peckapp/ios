@@ -70,7 +70,7 @@ BOOL loggedIn;
     self.lastNameTextField.text = [defaults objectForKey:@"last_name"];
     self.emailTextField.text = [defaults objectForKey:@"email"];
     NSString*blurb = [defaults objectForKey:@"blurb"];
-    NSLog(@"blurb: %@",blurb);
+    //NSLog(@"blurb: %@",blurb);
     self.infoTextView.text = [defaults objectForKey:@"blurb"];
     
     NSURL* url = [NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];

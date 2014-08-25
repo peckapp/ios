@@ -36,6 +36,7 @@
 #import "PAMethodManager.h"
 #import "PAUtils.h"
 #import "PAAthleticEventViewController.h"
+#import "PAUtils.h"
 
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
@@ -103,16 +104,16 @@
     [[PASessionManager sharedClient] DELETE:@"api/access/logout"
                                parameters:params
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                      
+                                      [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:logged_in_key];
                                   }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"logoutUser ERROR: %@",error);
-                                      
                                   }];
     
 
 }
 
+// this methods is what allows for the potential of having a newly installed version of the app suggest a previous user's information if the device IDs match
 -(void)sendUDIDForInitViewController:(UIViewController*)initViewController{
     //NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -410,8 +411,7 @@
                                           PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
                                         UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
                                         [appDelegate.window setRootViewController:newRoot];
-                                      }
-                                      else if([direction isEqualToString:@"change_password"]) {
+                                      } else if([direction isEqualToString:@"change_password"]) {
                                           PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
                                           UIViewController* currentController = [appdelegate topMostController];
                                           UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -424,13 +424,13 @@
                                           [appdelegate.profileViewController.navigationController popToRootViewControllerAnimated:NO];
                                           appdelegate.profileViewController.tempPass = [userInfo objectForKey:@"password"];
                                           [appdelegate.profileViewController performSegueWithIdentifier:@"changePassword" sender:appdelegate.profileViewController];*/
-                                          
-                                      }
-                                      else{
+                                      } else{
                                           if(controller){
                                               [controller dismissViewControllerAnimated:YES completion:nil];
                                           }
                                       }
+                                      [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:logged_in_key];
+                                      [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
@@ -459,7 +459,6 @@
                                       //NSLog(@"JSON : %@", JSON);
                                       
                                       /*
-                                      
                                       //NSLog(@"user register success: %@", JSON);
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                       NSArray* errors = [postsFromResponse objectForKey:@"errors"];
@@ -617,16 +616,15 @@
                                            //take care of some necessary login stuff
                                            [[PAFetchManager sharedFetchManager] loginUser];
                                            [sender dismissViewControllerAnimated:YES completion:nil];
-                                       }
-                                       else{
+                                       } else {
                                            //show confirmation email alert
                                            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Confirmation Email Sent!" message:@"An email has been sent to the email you have provided" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
                                            [alert show];
                                            [sender dismissViewControllerAnimated:YES completion:nil];
                                        }
                                        
-                                       
-                                      
+                                       [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:logged_in_key];
+                                       [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
                                        
                                    }
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {

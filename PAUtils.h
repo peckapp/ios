@@ -13,4 +13,7 @@
 #define deviceVendorIdentifier [[[UIDevice currentDevice] identifierForVendor] UUIDString]
 #define storedPushToken [[NSUserDefaults standardUserDefaults] objectForKey:@"device_token"]
 
+// NSUserDefaults keys
+#define logged_in_key @"logged_in"
+
 #endif

@@ -126,7 +126,7 @@
         [self configureAnnouncementEditingView];
     }
     
-    NSLog(@"description text: %@", self.descriptionTextView.text);
+    //NSLog(@"description text: %@", self.descriptionTextView.text);
     if([self.descriptionTextView.text isEqualToString:@""] || self.descriptionTextView.text==nil){
         self.descriptionTextView.textColor = [UIColor lightGrayColor];
         self.descriptionTextView.text = @"Description";
