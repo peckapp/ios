@@ -21,16 +21,19 @@ PODS:
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - HTAutocompleteTextField (1.2.6)
+  - NewRelicAgent (3.396)
   - UICKeyChainStore (1.0.5)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.3.1)
   - HTAutocompleteTextField (~> 1.2.6)
+  - NewRelicAgent
   - UICKeyChainStore (~> 1.0.0)
 
 SPEC CHECKSUMS:
   AFNetworking: 6d7b76aa5d04c8c37daad3eef4b7e3f2a7620da3
   HTAutocompleteTextField: 92ca48eb8f2a7fba756fb9f19bc54cba3391b8f4
+  NewRelicAgent: a0352d12175fc9c4dfaf806f01892ad2ab5e8133
   UICKeyChainStore: 4f9719600cc70025064e26f28f1210bcfc3b0c35
 
 COCOAPODS: 0.33.1

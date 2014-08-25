@@ -69,20 +69,18 @@
                                           //[self sessionStateChanged:session state:state error:error];
                                       }];
     }
-    // get changes that might have happened while this
-    // instance of your app wasn't running
-    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     
-    NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
-    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
-    NSString* udid = [store objectForKey:@"udid"];
+    // attempts to store a persistent device identifier in the user's icloud data to allow for recognition of the user on a fresh install
+    NSUbiquitousKeyValueStore* uStore = [NSUbiquitousKeyValueStore defaultStore];
     NSLog(@"sync? %i",[[NSUbiquitousKeyValueStore defaultStore] synchronize]);
+    // get changes that might have happened while this instance of your app wasn't running
+    NSString* udid = [uStore objectForKey:@"udid"];
     if(udid == nil){
         NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-        [store setObject:deviceId forKey:@"udid"];
+        [uStore setObject:deviceId forKey:@"udid"];
         [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     }
-    NSLog(@"MY UDID: %@", [store objectForKey:@"udid"]);
+    NSLog(@"MY UDID: %@", [uStore objectForKey:@"udid"]);
     
     UIViewController *initViewController;
     _mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -114,27 +112,11 @@
             [[PASyncManager globalSyncManager] sendUDIDForInitViewController:initViewController];
         }
     }
-    // this is the device-specific identifier that we should be worrying about to keep track of things per-device
-    NSLog(@"ID for vendor: %@",[UIDevice currentDevice].identifierForVendor);
     
-    // if the user has already registered for push notifications allowing us to send them push notifications
-    // this relies upon the token being in NSUserDefaults and the user having registered ALWAYS happening at the same time, which may not actually be true... requires further thought
-    NSNumber *loggedIn = [defaults objectForKey:@"logged_in"];
-    if (loggedIn && [loggedIn isEqualToNumber:@YES]) {
-        NSLog(@"registering device for push notifications on launch");
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
-    }
-    // handles notifications that were queued while the app was closed
-    NSDictionary *remoteNotification = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    if (remoteNotification != nil) {
-        NSLog(@"launched with remote notification: %@",remoteNotification);
-        // handle push notifications received while application was in background
-    }
-    UILocalNotification *localNotification = [launchOptions valueForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-    if (localNotification != nil) {
-        NSLog(@"launched with local notification: %@",localNotification);
-    }
+    // re-registers for push notifiacitons on launch and handles available notifications in launchOptions
+    [self handleNotificationsOnLaunchWithOptions:launchOptions];
 
+    // Should set the tint color to match school configuration from the asset manager singleton
     self.window.tintColor = [[PAAssetManager sharedManager] lightColor];
 
     // saves NSUserDefaults to "disk"
@@ -231,6 +213,31 @@
 }
 
 #pragma mark - Notifications
+
+- (void)handleNotificationsOnLaunchWithOptions:(NSDictionary*)launchOptions {
+    // this is the device-specific identifier that we should be worrying about to keep track of things per-device
+    NSLog(@"ID for vendor: %@",[UIDevice currentDevice].identifierForVendor);
+    
+    // if the user has already registered for push notifications allowing us to send them push notifications
+    // this relies upon the token being in NSUserDefaults and the user having registered ALWAYS happening at the same time, which may not actually be true... requires further thought
+    NSNumber *loggedIn = [[NSUserDefaults standardUserDefaults] objectForKey:@"logged_in"];
+    if (loggedIn && [loggedIn isEqualToNumber:@YES]) {
+        NSLog(@"registering device for push notifications on launch");
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+    }
+    // handles notifications that were queued while the app was closed
+    NSDictionary *remoteNotification = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (remoteNotification != nil) {
+        NSLog(@"launched with remote notification: %@",remoteNotification);
+        // handle push notifications received while application was in background
+    }
+    UILocalNotification *localNotification = [launchOptions valueForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (localNotification != nil) {
+        NSLog(@"launched with local notification: %@",localNotification);
+    }
+}
+
+#pragma mark notification delegates
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
