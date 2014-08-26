@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6208.6" systemVersion="13D65" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Announcement" representedClassName="Announcement" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
@@ -132,9 +132,9 @@
         <element name="Event" positionX="124" positionY="467" width="128" height="330"/>
         <element name="Explore" positionX="261" positionY="261" width="128" height="240"/>
         <element name="Institution" positionX="-54" positionY="189" width="128" height="225"/>
-        <element name="MenuItem" positionX="90" positionY="342" width="128" height="103"/>
-        <element name="Peck" positionX="90" positionY="342" width="128" height="178"/>
-        <element name="Peer" positionX="261" positionY="261" width="128" height="135"/>
-        <element name="Subscription" positionX="90" positionY="342" width="128" height="120"/>
+        <element name="MenuItem" positionX="-72" positionY="441" width="128" height="103"/>
+        <element name="Peck" positionX="-218" positionY="227" width="128" height="178"/>
+        <element name="Peer" positionX="450" positionY="225" width="128" height="135"/>
+        <element name="Subscription" positionX="90" positionY="189" width="128" height="120"/>
     </elements>
 </model>

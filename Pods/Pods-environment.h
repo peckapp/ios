@@ -54,6 +54,12 @@
 #define COCOAPODS_VERSION_MINOR_HTAutocompleteTextField 2
 #define COCOAPODS_VERSION_PATCH_HTAutocompleteTextField 6
 
+// NewRelicAgent
+#define COCOAPODS_POD_AVAILABLE_NewRelicAgent
+#define COCOAPODS_VERSION_MAJOR_NewRelicAgent 3
+#define COCOAPODS_VERSION_MINOR_NewRelicAgent 396
+#define COCOAPODS_VERSION_PATCH_NewRelicAgent 0
+
 // UICKeyChainStore
 #define COCOAPODS_POD_AVAILABLE_UICKeyChainStore
 #define COCOAPODS_VERSION_MAJOR_UICKeyChainStore 1

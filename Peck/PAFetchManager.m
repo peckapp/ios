@@ -423,4 +423,32 @@
     return nil;
 }
 
+- (Institution*)fetchInstitutionMatchingEmail:(NSString *)email {
+    PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appDelegate managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Institution" inManagedObjectContext:_managedObjectContext];
+    NSFetchRequest * request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    NSRange rangeOfFirstMatch = [regex rangeOfFirstMatchInString:email options:0 range:NSMakeRange(0, [email length])];
+    if (!NSEqualRanges(rangeOfFirstMatch, NSMakeRange(NSNotFound, 0))) {
+        NSString *substringForFirstMatch = [email substringWithRange:rangeOfFirstMatch];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"email_regex LIKE %@", substringForFirstMatch];
+        [request setPredicate:predicate];
+        
+        NSError *fetchError;
+        NSArray *array = [_managedObjectContext executeFetchRequest:request error:&fetchError];
+        if ([array count]>0)
+        {
+            return array[0];
+        }
+    }
+    return nil;
+}
+
 @end

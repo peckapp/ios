@@ -57,5 +57,7 @@
 
 -(Institution*)fetchInstitutionForID:(NSNumber*)instID;
 
+-(Institution*)fetchInstitutionMatchingEmail:(NSString *)email;
+
 -(void)removeAllObjectsOfType:(NSString*)type;
 @end

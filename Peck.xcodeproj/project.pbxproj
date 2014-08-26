@@ -11,11 +11,8 @@
 		86051D4D194BB64200961541 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86051D4A194BB3EB00961541 /* FacebookSDK.framework */; };
 		860A8D27195201A700C5B4A6 /* thor_peckapp_com.cer in Resources */ = {isa = PBXBuildFile; fileRef = 860A8D26195201A700C5B4A6 /* thor_peckapp_com.cer */; };
 		860EB42F1980660400F1E665 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 860EB42E1980660400F1E665 /* UIImage+ImageEffects.m */; };
-		86173751195E07F000F2A794 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86D59816193768BF00F38654 /* Main.storyboard */; };
-		861E469F1988887C0088B47F /* NewRelicAgent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E469E1988887C0088B47F /* NewRelicAgent.framework */; };
-		861E46A1198888AE0088B47F /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A0198888AE0088B47F /* CoreTelephony.framework */; };
-		861E46A3198888B80088B47F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A2198888B80088B47F /* SystemConfiguration.framework */; };
-		861E46A5198888C20088B47F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A4198888C20088B47F /* libz.dylib */; };
+		8625900B19A809F6000FA083 /* peck_launch_4_v1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8625900919A809F6000FA083 /* peck_launch_4_v1.png */; };
+		8625900C19A809F6000FA083 /* peck_launch_5_v1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8625900A19A809F6000FA083 /* peck_launch_5_v1.png */; };
 		86292512193CBE000057CA41 /* PAPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292511193CBE000057CA41 /* PAPostViewController.m */; };
 		86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292520193CBFD40057CA41 /* PAPeckCell.m */; };
 		86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86292521193CBFD40057CA41 /* PAPeckCell.xib */; };
@@ -28,6 +25,10 @@
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
 		864D873D196470C100BCC01A /* facebook-login.png in Resources */ = {isa = PBXBuildFile; fileRef = 864D873B196470C100BCC01A /* facebook-login.png */; };
 		864D873E196470C100BCC01A /* facebook-logout.png in Resources */ = {isa = PBXBuildFile; fileRef = 864D873C196470C100BCC01A /* facebook-logout.png */; };
+		8665FD4019AB83F600AA1162 /* NewRelicAgent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8665FD3F19AB83F600AA1162 /* NewRelicAgent.framework */; };
+		8665FD4119AB840D00AA1162 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A0198888AE0088B47F /* CoreTelephony.framework */; };
+		8665FD4219AB842C00AA1162 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A2198888B80088B47F /* SystemConfiguration.framework */; };
+		8665FD4319AB847B00AA1162 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A4198888C20088B47F /* libz.dylib */; };
 		8671A2CE195B848D00700101 /* dropdown_pecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2C9195B848D00700101 /* dropdown_pecks@2x.png */; };
 		8671A2CF195B848D00700101 /* dropdown_explore@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CA195B848D00700101 /* dropdown_explore@2x.png */; };
 		8671A2D0195B848D00700101 /* dropdown_post@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CB195B848D00700101 /* dropdown_post@2x.png */; };
@@ -61,6 +62,7 @@
 		86D59835193768C000F38654 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86D59833193768C000F38654 /* InfoPlist.strings */; };
 		86D59837193768C000F38654 /* PeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59836193768C000F38654 /* PeckTests.m */; };
 		86DD9C2B195C70AE0074096E /* PeckWebserviceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DD9C2A195C70AE0074096E /* PeckWebserviceTests.m */; };
+		86E40D8419AAF535000C230C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86E40D8319AAF535000C230C /* Main.storyboard */; };
 		A40CF56819547ACC0021C088 /* PAPeers.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56719547ACC0021C088 /* PAPeers.m */; };
 		A40CF574195483140021C088 /* PABST.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF573195483140021C088 /* PABST.m */; };
 		A412E1D41986E63800384A11 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = A412E1D31986E63800384A11 /* Comment.m */; };
@@ -209,10 +211,11 @@
 		860A8D26195201A700C5B4A6 /* thor_peckapp_com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = thor_peckapp_com.cer; sourceTree = "<group>"; };
 		860EB42D1980660400F1E665 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		860EB42E1980660400F1E665 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
-		861E469E1988887C0088B47F /* NewRelicAgent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NewRelicAgent.framework; sourceTree = "<group>"; };
 		861E46A0198888AE0088B47F /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		861E46A2198888B80088B47F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		861E46A4198888C20088B47F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		8625900919A809F6000FA083 /* peck_launch_4_v1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = peck_launch_4_v1.png; sourceTree = "<group>"; };
+		8625900A19A809F6000FA083 /* peck_launch_5_v1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = peck_launch_5_v1.png; sourceTree = "<group>"; };
 		86292510193CBE000057CA41 /* PAPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPostViewController.h; sourceTree = "<group>"; };
 		86292511193CBE000057CA41 /* PAPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPostViewController.m; sourceTree = "<group>"; };
 		8629251F193CBFD40057CA41 /* PAPeckCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPeckCell.h; sourceTree = "<group>"; };
@@ -232,6 +235,8 @@
 		863843E6193CBA69004110F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		864D873B196470C100BCC01A /* facebook-login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-login.png"; sourceTree = "<group>"; };
 		864D873C196470C100BCC01A /* facebook-logout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-logout.png"; sourceTree = "<group>"; };
+		8665FD3D19AB83C900AA1162 /* libPods-NewRelicAgent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-NewRelicAgent.a"; path = "Pods/build/Release-iphoneos/libPods-NewRelicAgent.a"; sourceTree = "<group>"; };
+		8665FD3F19AB83F600AA1162 /* NewRelicAgent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NewRelicAgent.framework; path = Pods/NewRelicAgent/NewRelic_iOS_Agent_3.396/NewRelicAgent.framework; sourceTree = "<group>"; };
 		8671A2C9195B848D00700101 /* dropdown_pecks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_pecks@2x.png"; sourceTree = "<group>"; };
 		8671A2CA195B848D00700101 /* dropdown_explore@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_explore@2x.png"; sourceTree = "<group>"; };
 		8671A2CB195B848D00700101 /* dropdown_post@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_post@2x.png"; sourceTree = "<group>"; };
@@ -268,7 +273,6 @@
 		86D59812193768BF00F38654 /* Peck-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Peck-Prefix.pch"; sourceTree = "<group>"; };
 		86D59813193768BF00F38654 /* PAAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PAAppDelegate.h; sourceTree = "<group>"; };
 		86D59814193768BF00F38654 /* PAAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PAAppDelegate.m; sourceTree = "<group>"; };
-		86D59817193768BF00F38654 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		86D5981A193768BF00F38654 /* Peck.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Peck.xcdatamodel; sourceTree = "<group>"; };
 		86D5981C193768BF00F38654 /* PAEventsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PAEventsViewController.h; sourceTree = "<group>"; };
 		86D5981D193768BF00F38654 /* PAEventsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PAEventsViewController.m; sourceTree = "<group>"; };
@@ -280,6 +284,7 @@
 		86D59836193768C000F38654 /* PeckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PeckTests.m; sourceTree = "<group>"; };
 		86DD9C2A195C70AE0074096E /* PeckWebserviceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckWebserviceTests.m; sourceTree = "<group>"; };
 		86DD9C2C195C71C30074096E /* webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = webservice.h; sourceTree = "<group>"; };
+		86E40D8319AAF535000C230C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A40CF56619547ACC0021C088 /* PAPeers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPeers.h; sourceTree = "<group>"; };
 		A40CF56719547ACC0021C088 /* PAPeers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPeers.m; sourceTree = "<group>"; };
 		A40CF572195483140021C088 /* PABST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PABST.h; sourceTree = "<group>"; };
@@ -441,12 +446,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8665FD4319AB847B00AA1162 /* libz.dylib in Frameworks */,
+				8665FD4219AB842C00AA1162 /* SystemConfiguration.framework in Frameworks */,
+				8665FD4119AB840D00AA1162 /* CoreTelephony.framework in Frameworks */,
+				8665FD4019AB83F600AA1162 /* NewRelicAgent.framework in Frameworks */,
 				A42D4FB9198AAAB000536453 /* Security.framework in Frameworks */,
-				861E46A5198888C20088B47F /* libz.dylib in Frameworks */,
-				861E46A3198888B80088B47F /* SystemConfiguration.framework in Frameworks */,
-				861E46A1198888AE0088B47F /* CoreTelephony.framework in Frameworks */,
 				86051D4D194BB64200961541 /* FacebookSDK.framework in Frameworks */,
-				861E469F1988887C0088B47F /* NewRelicAgent.framework in Frameworks */,
 				A4925C0D194A1B32001AAC4A /* libsqlite3.0.dylib in Frameworks */,
 				A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */,
 				A4925C09194A17A1001AAC4A /* AdSupport.framework in Frameworks */,
@@ -478,6 +483,7 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				8625900819A8099F000FA083 /* launch-image */,
 				DDA8417A19A6938900383A3B /* chevron-light@2x.png */,
 				DDA8417819A690DC00383A3B /* cancel@2x.png */,
 				DDA8417619A68F6000383A3B /* chevron@2x.png */,
@@ -513,6 +519,15 @@
 				A40CF56219547A730021C088 /* Peers */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		8625900819A8099F000FA083 /* launch-image */ = {
+			isa = PBXGroup;
+			children = (
+				8625900919A809F6000FA083 /* peck_launch_4_v1.png */,
+				8625900A19A809F6000FA083 /* peck_launch_5_v1.png */,
+			);
+			name = "launch-image";
 			sourceTree = "<group>";
 		};
 		8629250D193CBB370057CA41 /* Post */ = {
@@ -631,11 +646,12 @@
 		86D59801193768BF00F38654 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8665FD3F19AB83F600AA1162 /* NewRelicAgent.framework */,
+				8665FD3D19AB83C900AA1162 /* libPods-NewRelicAgent.a */,
 				A42D4FB8198AAAB000536453 /* Security.framework */,
 				861E46A4198888C20088B47F /* libz.dylib */,
 				861E46A2198888B80088B47F /* SystemConfiguration.framework */,
 				861E46A0198888AE0088B47F /* CoreTelephony.framework */,
-				861E469E1988887C0088B47F /* NewRelicAgent.framework */,
 				869B8788195B2226001DF0A2 /* Crashlytics.framework */,
 				A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */,
 				A4925C0A194A17AB001AAC4A /* Social.framework */,
@@ -662,7 +678,7 @@
 				8687623019A51E90009AF3D1 /* PAUtils.h */,
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
-				86D59816193768BF00F38654 /* Main.storyboard */,
+				86E40D8319AAF535000C230C /* Main.storyboard */,
 				DD37013E1990081F006B63E8 /* PANestedTableViewController.h */,
 				DD37013F1990081F006B63E8 /* PANestedTableViewController.m */,
 				DDF0DB45199532A40061089E /* PANestedTableViewCell.h */,
@@ -1039,12 +1055,12 @@
 			files = (
 				A4794C1D19620746002BD272 /* profile-placeholder.png in Resources */,
 				DDA8417519A68C8800383A3B /* cancel-button.png in Resources */,
-				86173751195E07F000F2A794 /* Main.storyboard in Resources */,
 				8689DDB519589E3600A6B61C /* filter_standard@2x.png in Resources */,
 				DDFFF5B919829DE700DC5AC1 /* feather-72@2x.png in Resources */,
 				DDFFF5A719829BD100DC5AC1 /* feather-29@2x.png in Resources */,
 				864D873D196470C100BCC01A /* facebook-login.png in Resources */,
 				8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */,
+				8625900C19A809F6000FA083 /* peck_launch_5_v1.png in Resources */,
 				DDFFF5B219829D1100DC5AC1 /* feather-57@2x.png in Resources */,
 				DDBCA9BE1986D6BC007D283E /* drop-shadow-horizontal.png in Resources */,
 				DDFFF5AC19829BD100DC5AC1 /* feather-76@2x.png in Resources */,
@@ -1064,6 +1080,7 @@
 				A43BF1001979B4A50009B7AD /* PAInvitationCell.xib in Resources */,
 				DDFFF5BB19829DE700DC5AC1 /* feather-50@2x.png in Resources */,
 				869A85AE1964855B00F254C1 /* dropdown_circles@2x.png in Resources */,
+				86E40D8419AAF535000C230C /* Main.storyboard in Resources */,
 				A463F385194B959800ED441F /* PACircleCell.xib in Resources */,
 				DDA8417B19A6938900383A3B /* chevron-light@2x.png in Resources */,
 				DDFFF5A619829BD100DC5AC1 /* feather-60.png in Resources */,
@@ -1086,6 +1103,7 @@
 				DDFFF5AE19829BD100DC5AC1 /* feather-60@2x.png in Resources */,
 				A4B772E719460C3200A31252 /* schools.plist in Resources */,
 				863843DA193CB75F004110F5 /* Login.storyboard in Resources */,
+				8625900B19A809F6000FA083 /* peck_launch_4_v1.png in Resources */,
 				DDFFF5CD1982CB7900DC5AC1 /* feather@2x.png in Resources */,
 				864D873E196470C100BCC01A /* facebook-logout.png in Resources */,
 				DDFFF5CA1982CB7900DC5AC1 /* circles@2x.png in Resources */,
@@ -1285,14 +1303,6 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		86D59816193768BF00F38654 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				86D59817193768BF00F38654 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		86D59833193768C000F38654 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1320,6 +1330,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1389,12 +1400,17 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"/Users/${USER}/Documents/FacebookSDK",
+					"$(PROJECT_DIR)/Pods/NewRelicAgent/NewRelic_iOS_Agent_3.396",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Peck/Peck-Prefix.pch";
 				INFOPLIST_FILE = "Peck/Peck-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/build/Release-iphoneos",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-framework",
@@ -1429,12 +1445,17 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"/Users/${USER}/Documents/FacebookSDK",
+					"$(PROJECT_DIR)/Pods/NewRelicAgent/NewRelic_iOS_Agent_3.396",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Peck/Peck-Prefix.pch";
 				INFOPLIST_FILE = "Peck/Peck-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/build/Release-iphoneos",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-framework",

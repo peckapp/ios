@@ -13,9 +13,9 @@ static NSString * const PALocalAPIBaseURLString = @"http://localhost:3000/";
 // Development webservice
 static NSString * const PARailsServerBaseURLString = @"http://loki.peckapp.com:3000/"; // must be manually running from command line on the server
 static NSString * const PADevAPIBaseURLString = @"http://loki.peckapp.com:3500/";
-// Production Webservice - both https
+// Production Webservice - both force SSL
 static NSString * const PAStagingAPIBaseURLString = @"https://buri.peckapp.com:3500/";
-static NSString * const PAProdAPIBaseURLString = @"https://yggdrasil.peckapp.com:3500/";
+static NSString * const PAProdAPIBaseURLString = @"https://yggdrasil.peckapp.com/";
 
 @implementation PASessionManager
 
@@ -24,6 +24,10 @@ static NSString * const PAProdAPIBaseURLString = @"https://yggdrasil.peckapp.com
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PADevAPIBaseURLString]];
+        
+        //_sharedClient.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
+        // TODO: must remove this for production once our certificates for the webservice are created
+        _sharedClient.securityPolicy.allowInvalidCertificates = YES;
         
         _sharedClient.requestSerializer = [AFJSONRequestSerializer serializer];
         [_sharedClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
@@ -34,6 +38,7 @@ static NSString * const PAProdAPIBaseURLString = @"https://yggdrasil.peckapp.com
     return _sharedClient;
 }
 
+/*
 + (instancetype)sharedSecureClient {
     static PASessionManager *_sharedClient = nil;
     static dispatch_once_t onceToken;
@@ -52,5 +57,6 @@ static NSString * const PAProdAPIBaseURLString = @"https://yggdrasil.peckapp.com
     
     return _sharedClient;
 }
+ */
 
 @end

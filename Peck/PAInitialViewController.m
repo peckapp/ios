@@ -22,6 +22,9 @@
 @property (weak, nonatomic) IBOutlet FBLoginView *fbLogin;
 @property (strong, nonatomic) UIAlertView* resetPassAlert;
 
+@property (strong, nonatomic) UIAlertView* switchInstAlert;
+@property (strong, nonatomic) UIAlertView* invalidEmailAlert;
+
 - (IBAction)cancelLogin:(id)sender;
 - (IBAction)finishLogin:(id)sender;
 
@@ -121,10 +124,10 @@
        
         NSLog(@"user info: %@ %@ %@ %@", [user objectForKey:@"first_name"], [user objectForKey:@"last_name"], [user objectForKey:@"email"], [[FBSession activeSession] accessTokenData]);
         
-        
+        REGISTER_PUSH_NOTIFICATIONS;
         
         BOOL sendEmail = YES;
-        if([self emailMatchesInstitution:[user objectForKey:@"email"]]){
+        if([self emailMatchesCurrentInstitution:[user objectForKey:@"email"]]){
             //The email matches the institution that the user has chosen. In this case, we will simply perform a normal login through facebook
             sendEmail = NO;
             [self loginWithFacebook:user andBool:NO withEmail:[user objectForKey:@"email"] withCallback:nil];
@@ -138,10 +141,25 @@
                 }else{
                     NSLog(@"ask the user for his institution email");
                     self.user = user;
-                    [self performSegueWithIdentifier:@"enterValidEmail" sender:self];
+                    Institution *inst = [[PAFetchManager sharedFetchManager] fetchInstitutionMatchingEmail:[user objectForKey:@"email"]];
+                    if (inst != nil) {
+                        NSString *msg = [NSString stringWithFormat:@"The email registered with your Facebook account does not match your currently selected institution, but does match %@. Would you like to switch?",inst.name];
+                        self.switchInstAlert = [[UIAlertView alloc] initWithTitle:@"Unmatched Email"
+                                                                        message:msg
+                                                                       delegate:self
+                                                              cancelButtonTitle:@"No"
+                                                              otherButtonTitles:@"Switch", nil];
+                        [self.switchInstAlert show];
+                    } else {
+                        self.invalidEmailAlert = [[UIAlertView alloc] initWithTitle:@"Invalid Email"
+                                                                        message:@"The email registered with your Facebook account does not match any available institution."
+                                                                       delegate:self
+                                                              cancelButtonTitle:@"OK"
+                                                              otherButtonTitles: nil];
+                        [self.invalidEmailAlert show];
+                    }
                 }
             }];
-
         }
         
         /*
@@ -166,8 +184,21 @@
     
 }
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if(buttonIndex==1 && alertView==self.resetPassAlert){
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (alertView == self.switchInstAlert) {
+        if (buttonIndex == 1) {
+            // if desired by the user, the institution id is updated to that matching their facebook email account
+            Institution *inst = [[PAFetchManager sharedFetchManager] fetchInstitutionMatchingEmail:[self.user objectForKey:@"email"]];
+            [[NSUserDefaults standardUserDefaults] setObject:inst.id forKey:institution_id_key];
+            [self loginWithFacebook:self.user andBool:NO withEmail:[self.user objectForKey:@"email"] withCallback:nil];
+        } else {
+            // is the user does not want the institution matching their email for some reason, it continues to the email enter page
+            [self performSegueWithIdentifier:@"enterValidEmail" sender:self];
+        }
+    } else if (alertView == self.invalidEmailAlert) {
+        [self performSegueWithIdentifier:@"enterValidEmail" sender:self];
+    }
+    else if(buttonIndex==1 && alertView==self.resetPassAlert){
         //reset the user's password
         NSDictionary* dictionary = [NSDictionary dictionaryWithObject:self.emailField.text forKey:@"email"];
         [[PASyncManager globalSyncManager] resetPassword:dictionary];
@@ -178,17 +209,20 @@
 -(void)loginWithFacebook:(id<FBGraphUser>)user andBool:(BOOL)sendEmail withEmail:(NSString*)email withCallback:(void(^)(BOOL))callbackBlock{
     
     FBAccessTokenData* accessTokenData = [[FBSession activeSession] accessTokenData];
-    NSString* token = [accessTokenData accessToken];
+    NSString* fbToken = [accessTokenData accessToken];
+    NSString* instID = [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"];
+    NSString* deviceToken = storedPushToken;
     
     NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                               [user objectForKey:@"first_name"],@"first_name",
                               [user objectForKey:@"last_name"],@"last_name",
                               email,@"email",
-                              token, @"facebook_token",
-                              storedPushToken, @"device_token",
-                              [[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"],@"institution_id",
+                              fbToken, @"facebook_token",
+                              instID,@"institution_id",
+                              @"ios",@"device_type",
                               [NSNumber numberWithBool:sendEmail], @"send_email",
                               [user objectForKey:@"link"], @"facebook_link",
+                              deviceToken, @"device_token",
                               nil];
     
     NSLog(@"facebook user dictionary %@", userInfo);
@@ -201,19 +235,19 @@
     [[PASyncManager globalSyncManager] loginWithFacebook:userInfo forViewController:self withCallback:callbackBlock];
 }
 
--(BOOL)emailMatchesInstitution:(NSString*)userEmail{
+-(BOOL)emailMatchesCurrentInstitution:(NSString*)userEmail{
     Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
     NSString* emailExtension = currentInstitution.email_regex;
     //NSString* userEmail = [user objectForKey:@"email"];
     NSInteger preceedingLength = [userEmail length] - [emailExtension length];
-    if(preceedingLength>0){
+    if(preceedingLength>0) {
         NSString* userEmailExtension = [userEmail substringFromIndex:preceedingLength];
         if([userEmailExtension isEqualToString:emailExtension]){
             return YES;
-        }else{
+        } else {
             return NO;
         }
-    }else{
+    } else {
         return NO;
     }
 }
@@ -283,7 +317,7 @@
 
 -(void)showAlert{
     NSLog(@"wrong information");
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Incorrect email or password"
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login Failed"
                                                     message:@"Please enter a valid email and password"
                                                    delegate:self
                                           cancelButtonTitle:@"OK"

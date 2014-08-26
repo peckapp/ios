@@ -189,7 +189,7 @@ BOOL reloaded = NO;
 -(void)viewWillAppear:(BOOL)animated{
     //[super viewWillAppear:animated];
     
-    NSLog(@"event info view will appear");
+    //NSLog(@"event info view will appear");
 
     /*
     
@@ -210,8 +210,8 @@ BOOL reloaded = NO;
 
 - (void)updateFrames
 {
-    NSLog(@"event info frame width: %f", self.view.frame.size.width);
-    NSLog(@"event info frame height: %f", self.view.frame.size.height);
+    //NSLog(@"event info frame width: %f", self.view.frame.size.width);
+    //NSLog(@"event info frame height: %f", self.view.frame.size.height);
 
     //self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
 
@@ -606,7 +606,7 @@ BOOL reloaded = NO;
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
-    NSLog(@"did change object");
+    //NSLog(@"did change object");
     UITableView *tableView = self.tableView;
     
     switch(type)

@@ -41,14 +41,15 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    /*
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Invalid Email"
                                                     message:@"The email account registered with your Facebook account does not match the institution you have selected"
                                                    delegate:self
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles: nil];
     [alert show];
+     */
     Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
-
     
     if(currentInstitution.email_regex){
         self.emailField.placeholder = [@"email" stringByAppendingString:currentInstitution.email_regex];
@@ -101,7 +102,7 @@
                                        token, @"facebook_token",
                                        
                                        nil];
-            [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self direction:NO];
+            [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self direction:@""];
         }
     }else{
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Invalid Email"

@@ -66,7 +66,7 @@ PAAssetManager * assetManager;
     //NSLog(@"the superview height: %f", self.b);
     //self.commentsTableView.frame = CGRectMake(0, 0, self.superview.frame.size.width, <#CGFloat height#>)
     
-    NSLog(@"frame height: %f", self.frame.size.height);
+    //NSLog(@"frame height: %f", self.frame.size.height);
     //self.commentsTableView.frame = CGRectMake(0, 100, self.frame.size.width, self.frame.size.height-200);
     
     heightDictionary = [[NSMutableDictionary alloc] init];
@@ -511,7 +511,7 @@ PAAssetManager * assetManager;
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
-    NSLog(@"did change object");
+    //NSLog(@"did change object");
     UITableView *tableView = self.commentsTableView;
     
     switch(type)

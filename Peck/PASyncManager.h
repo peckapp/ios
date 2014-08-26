@@ -31,8 +31,10 @@
 -(void)resetPassword:(NSDictionary*)dictionary;
 //sends a new confirmation email with the password to the given email
 
-// sends the device token to the server and performs operations based on the result
+// sends the device identifier to the server and performs operations based on the result
 -(void)sendUDIDForInitViewController:(UIViewController*)initViewController;
+// updates the user device token for the current UDID and user
+-(void)updateDeviceToken:(NSString*)token forDeviceIdentifier:(NSString*)identifier;
 // sends post request to server with institution_id and stores response user_id in NSUserDefaults
 -(void)ceateAnonymousUser:(void (^)(BOOL))callbackBlock;
 // sends post request to the server completing the user's other info after the registration process is triggered
@@ -99,8 +101,8 @@
 -(void)setInteractedForPeck:(NSNumber*)peckID;
 
 //methods for comments
--(void)postComment:(NSDictionary *)dictionary;
--(void)updateCommentsFrom: (NSString *)comment_from withCategory:(NSString *)category;
+-(void)postComment:(NSDictionary*)dictionary;
+-(void)updateCommentsFrom:(NSString*)comment_from withCategory:(NSString*)category;
 
 -(void)updatePeerInfo;
 

@@ -115,6 +115,7 @@ PAAssetManager *assetManager;
     
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     appdelegate.circleViewController = self;
+    NSLog(@"Finished viewDidLoad (PACirclesTableViewController)");
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -128,7 +129,7 @@ PAAssetManager *assetManager;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }*/
-
+    //NSLog(@"starting circles viewWillAppear");
     
     [[PASyncManager globalSyncManager] updateCircleInfo];
 
@@ -157,6 +158,8 @@ PAAssetManager *assetManager;
     [super viewDidAppear:animated];
 
     [self.tableView reloadData];
+    
+    //NSLog(@"ending circles viewDidAppear");
     
 }
 
@@ -669,7 +672,7 @@ PAAssetManager *assetManager;
 #pragma mark - Fetched Results controller
 
 -(NSFetchedResultsController *)fetchedResultsController{
-    NSLog(@"Returning the normal controller");
+    //NSLog(@"Returning the normal controller");
     if(_fetchedResultsController!=nil){
         return _fetchedResultsController;
     }
@@ -708,7 +711,7 @@ PAAssetManager *assetManager;
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
     [self.tableView beginUpdates];
-    NSLog(@"controller will change object");
+    //NSLog(@"controller will change object");
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
@@ -734,7 +737,7 @@ PAAssetManager *assetManager;
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
-    NSLog(@"did change object");
+    //NSLog(@"did change object");
     UITableView *tableView = self.tableView;
     
     switch(type)
@@ -862,7 +865,7 @@ PAAssetManager *assetManager;
 
 -(void)keyboardDidHide:(NSNotification *)notification{
    // self.tableView.contentInset = UIEdgeInsetsZero;
-    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[_fetchedResultsController.fetchedObjects count] inSection:0];
+    //NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[_fetchedResultsController.fetchedObjects count] inSection:0];
     if(usedTitleField){
         //[self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         //TODO: make the transition from content insets to content inset zero a smooth transition

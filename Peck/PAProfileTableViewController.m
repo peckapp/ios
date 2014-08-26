@@ -59,6 +59,8 @@ BOOL loggedIn;
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     //[appdelegate setProfileViewController:self];
     [appdelegate setProfileProperty:self];
+    
+    NSLog(@"Finished viewDidLoad (PAProfileTableViewController)");
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -67,18 +69,13 @@ BOOL loggedIn;
     self.firstNameTextField.text = [defaults objectForKey:@"first_name"];
     self.lastNameTextField.text = [defaults objectForKey:@"last_name"];
     self.emailTextField.text = [defaults objectForKey:@"email"];
-    NSString*blurb = [defaults objectForKey:@"blurb"];
-    NSLog(@"blurb: %@",blurb);
+    //NSString*blurb = [defaults objectForKey:@"blurb"];
+    //NSLog(@"blurb: %@",blurb);
     self.infoTextView.text = [defaults objectForKey:@"blurb"];
     
     NSURL* url = [NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];
     if(url){
-        UIImage* image = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:url]];
-        if(image){
-            self.profilePicture.image = image;
-        }else{
-            [self.profilePicture setImageWithURL:url placeholderImage:[UIImage imageNamed:@"profile-placeholder.png"]];
-        }
+        [self.profilePicture setImageWithURL:url placeholderImage:[UIImage imageNamed:@"profile-placeholder.png"]];
     }else{
         self.profilePicture.image =[UIImage imageNamed:@"profile-placeholder.png"];
     }
