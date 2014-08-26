@@ -2,7 +2,7 @@
 //  Event.m
 //  Peck
 //
-//  Created by John Karabinos on 8/19/14.
+//  Created by John Karabinos on 8/26/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -21,10 +21,14 @@
 @dynamic imageURL;
 @dynamic location;
 @dynamic members;
+@dynamic opportunity_id;
 @dynamic start_date;
 @dynamic title;
 @dynamic type;
 @dynamic updated_at;
-@dynamic opportunity_id;
+@dynamic team_name;
+@dynamic team_score;
+@dynamic opponent_score;
+@dynamic home_or_away;
 
 @end

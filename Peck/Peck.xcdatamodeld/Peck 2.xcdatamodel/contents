@@ -47,12 +47,16 @@
         <attribute name="created_by" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="descrip" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="end_date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="home_or_away" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="imageURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="members" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="opponent_score" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="opportunity_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="start_date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="team_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="team_score" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
@@ -125,7 +129,7 @@
         <element name="Comment" positionX="207" positionY="288" width="128" height="150"/>
         <element name="DiningPeriod" positionX="90" positionY="351" width="128" height="135"/>
         <element name="DiningPlace" positionX="-108" positionY="441" width="128" height="150"/>
-        <element name="Event" positionX="124" positionY="467" width="128" height="270"/>
+        <element name="Event" positionX="124" positionY="467" width="128" height="330"/>
         <element name="Explore" positionX="261" positionY="261" width="128" height="240"/>
         <element name="Institution" positionX="-54" positionY="189" width="128" height="225"/>
         <element name="MenuItem" positionX="90" positionY="342" width="128" height="103"/>

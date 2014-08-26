@@ -105,8 +105,8 @@
 		A4925C0B194A17AB001AAC4A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0A194A17AB001AAC4A /* Social.framework */; };
 		A4925C0D194A1B32001AAC4A /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */; };
 		A497A2EB19A3BF5200455F69 /* PASendFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A497A2EA19A3BF5200455F69 /* PASendFeedbackViewController.m */; };
-		A497A2EE19A3CD6600455F69 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A497A2ED19A3CD6600455F69 /* Event.m */; };
 		A4988A50199B9FFC005C43BC /* Peck.m in Sources */ = {isa = PBXBuildFile; fileRef = A4988A4F199B9FFC005C43BC /* Peck.m */; };
+		A498CE2319ACDF7A00FDA1DC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A498CE2219ACDF7A00FDA1DC /* Event.m */; };
 		A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A99BAD19815AA4002DFD49 /* Subscription.m */; };
 		A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */; };
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
@@ -354,10 +354,10 @@
 		A4925C0C194A1B32001AAC4A /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		A497A2E919A3BF5200455F69 /* PASendFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASendFeedbackViewController.h; sourceTree = "<group>"; };
 		A497A2EA19A3BF5200455F69 /* PASendFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASendFeedbackViewController.m; sourceTree = "<group>"; };
-		A497A2EC19A3CD6600455F69 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
-		A497A2ED19A3CD6600455F69 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A4988A4E199B9FFC005C43BC /* Peck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peck.h; sourceTree = "<group>"; };
 		A4988A4F199B9FFC005C43BC /* Peck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peck.m; sourceTree = "<group>"; };
+		A498CE2119ACDF7A00FDA1DC /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		A498CE2219ACDF7A00FDA1DC /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		A4A99BAC19815AA4002DFD49 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
 		A4A99BAD19815AA4002DFD49 /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Subscription.m; sourceTree = "<group>"; };
 		A4B772E31945FEFB00A31252 /* PAConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAConfigureViewController.h; sourceTree = "<group>"; };
@@ -836,8 +836,8 @@
 		DDDAEDE419479665004CE102 /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				A497A2EC19A3CD6600455F69 /* Event.h */,
-				A497A2ED19A3CD6600455F69 /* Event.m */,
+				A498CE2119ACDF7A00FDA1DC /* Event.h */,
+				A498CE2219ACDF7A00FDA1DC /* Event.m */,
 				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
 				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
 				A4773C7E19589E8200AB9831 /* PAEvents.h */,
@@ -1186,6 +1186,7 @@
 				A4794C23196320AB002BD272 /* PAInvitationViewController.m in Sources */,
 				A43BF0FB1979B0B60009B7AD /* PAInvitationsTableViewController.m in Sources */,
 				A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */,
+				A498CE2319ACDF7A00FDA1DC /* Event.m in Sources */,
 				A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
@@ -1211,7 +1212,6 @@
 				A412E1D41986E63800384A11 /* Comment.m in Sources */,
 				A4988A50199B9FFC005C43BC /* Peck.m in Sources */,
 				867B52D619509F5000BEB37B /* PASessionManager.m in Sources */,
-				A497A2EE19A3CD6600455F69 /* Event.m in Sources */,
 				A4773C831958A27F00AB9831 /* PAEventBST.m in Sources */,
 				DD3701401990081F006B63E8 /* PANestedTableViewController.m in Sources */,
 				A4C8B68C199E5D7D00EC8484 /* Peer.m in Sources */,
