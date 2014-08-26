@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6208.6" systemVersion="13D65" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Announcement" representedClassName="Announcement" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
@@ -120,17 +120,17 @@
         <attribute name="subscription_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Announcement" positionX="90" positionY="342" width="128" height="133"/>
-        <element name="Circle" positionX="261" positionY="198" width="128" height="105"/>
-        <element name="Comment" positionX="207" positionY="288" width="128" height="150"/>
-        <element name="DiningPeriod" positionX="90" positionY="351" width="128" height="135"/>
-        <element name="DiningPlace" positionX="-108" positionY="441" width="128" height="150"/>
-        <element name="Event" positionX="124" positionY="467" width="128" height="270"/>
-        <element name="Explore" positionX="261" positionY="261" width="128" height="240"/>
+        <element name="Announcement" positionX="97" positionY="360" width="128" height="133"/>
+        <element name="Circle" positionX="270" positionY="192" width="128" height="105"/>
+        <element name="Comment" positionX="250" positionY="324" width="128" height="150"/>
+        <element name="DiningPeriod" positionX="-72" positionY="567" width="128" height="135"/>
+        <element name="DiningPlace" positionX="-225" positionY="441" width="128" height="150"/>
+        <element name="Event" positionX="90" positionY="558" width="128" height="270"/>
+        <element name="Explore" positionX="252" positionY="516" width="128" height="240"/>
         <element name="Institution" positionX="-54" positionY="189" width="128" height="225"/>
-        <element name="MenuItem" positionX="90" positionY="342" width="128" height="103"/>
-        <element name="Peck" positionX="90" positionY="342" width="128" height="178"/>
-        <element name="Peer" positionX="261" positionY="261" width="128" height="135"/>
-        <element name="Subscription" positionX="90" positionY="342" width="128" height="120"/>
+        <element name="MenuItem" positionX="-72" positionY="441" width="128" height="103"/>
+        <element name="Peck" positionX="-218" positionY="227" width="128" height="178"/>
+        <element name="Peer" positionX="450" positionY="225" width="128" height="135"/>
+        <element name="Subscription" positionX="90" positionY="189" width="128" height="120"/>
     </elements>
 </model>
