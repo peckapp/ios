@@ -19,6 +19,7 @@
 #import <Security/Security.h>
 #import "PAMethodManager.h"
 #import "PAAssetManager.h"
+#import "PAUtils.h"
 
 
 @implementation PAAppDelegate
@@ -223,7 +224,7 @@
     NSNumber *loggedIn = [[NSUserDefaults standardUserDefaults] objectForKey:@"logged_in"];
     if (loggedIn && [loggedIn isEqualToNumber:@YES]) {
         NSLog(@"registering device for push notifications on launch");
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+        REGISTER_PUSH_NOTIFICATIONS;
     }
     // handles notifications that were queued while the app was closed
     NSDictionary *remoteNotification = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -246,6 +247,9 @@
     NSLog(@"Device Token ---> %@", token);
     [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"device_token"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    // patches the existing UDID record with the new device token
+    [[PASyncManager globalSyncManager] updateDeviceToken:token forDeviceIdentifier:[[[UIDevice currentDevice] identifierForVendor] UUIDString]];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error

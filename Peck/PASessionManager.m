@@ -23,7 +23,7 @@ static NSString * const PAProdAPIBaseURLString = @"https://yggdrasil.peckapp.com
     static PASessionManager *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PADevAPIBaseURLString]];
+        _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PAProdAPIBaseURLString]];
         
         //_sharedClient.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
         // TODO: must remove this for production once our certificates for the webservice are created

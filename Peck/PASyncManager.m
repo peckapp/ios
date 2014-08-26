@@ -99,6 +99,7 @@
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
                             deviceVendorIdentifier, @"udid",
                             storedPushToken ,@"device_token",
+                            @"ios",@"device_type",
                             [[self authenticationParameters] objectForKey:@"authentication"],@"authentication",
                             nil];
     [[PASessionManager sharedClient] DELETE:@"api/access/logout"
@@ -113,12 +114,28 @@
 
 }
 
+-(void)updateDeviceToken:(NSString *)token forDeviceIdentifier:(NSString *)identifier {
+    NSDictionary *dictionary = @{@"token": token,
+                                 @"udid": identifier};
+    dictionary = [self applyWrapper:@"unique_device_identifier" toDictionary:dictionary];
+    
+    [[PASessionManager sharedClient] PATCH:@"api/unique_device_identifiers/update_token"
+                                parameters:dictionary
+                                   success:^(NSURLSessionDataTask *task, id responseObject){
+                                       
+                                   }
+                                   failure:^(NSURLSessionDataTask *task, NSError *failure){
+                                       NSLog(@"updateDeviceToken forDeviceIdentifier ERROR: %@",failure);
+                                   }];
+}
+
 // this methods is what allows for the potential of having a newly installed version of the app suggest a previous user's information if the device IDs match
 -(void)sendUDIDForInitViewController:(UIViewController*)initViewController{
     //NSUbiquitousKeyValueStore* store = [NSUbiquitousKeyValueStore defaultStore];
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 //[store objectForKey:@"udid"],@"udid",
                                 deviceVendorIdentifier,@"udid",
+                                @"ios", @"device_type",
                                 nil];
     [[PASessionManager sharedClient] POST:@"api/users/user_for_udid"
                                parameters:dictionary
@@ -188,6 +205,8 @@
                                       NSLog(@"sendUDIDForInitViewController ERROR: %@",error);
                                   }];
 }
+
+
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if([alertView.title isEqualToString:@"User Exists"]){
@@ -353,7 +372,7 @@
 {
     // adds the unique user device token to the userInfo NSDictionary
     userInfo = [self addUDIDToDictionary:userInfo];
-    userInfo = [self addDeciveTypeToDictionary:userInfo];
+    userInfo = [self addDeviceTypeToDictionary:userInfo];
     // sends either email and password, or facebook token and link, to the server for authentication
     // expects an authentication token to be returned in response
     
@@ -551,7 +570,7 @@
     NSString* loginURL = [@"api/users/" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
     loginURL = [loginURL stringByAppendingString:@"/facebook_login"];
     
-    dictionary = [self addDeciveTypeToDictionary:dictionary];
+    dictionary = [self addDeviceTypeToDictionary:dictionary];
     
     [[PASessionManager sharedClient] PATCH:loginURL
                                 parameters:[self applyWrapper:@"user" toDictionary:[self addUDIDToDictionary:dictionary]]
@@ -2468,7 +2487,7 @@
     return [mutDict copy];
 }
 
--(NSDictionary*)addDeciveTypeToDictionary:(NSDictionary*)dictionary{
+-(NSDictionary*)addDeviceTypeToDictionary:(NSDictionary*)dictionary{
     NSMutableDictionary *mutDict = [dictionary mutableCopy];
     [mutDict setObject:@"ios" forKey:@"device_type"];
     return [mutDict copy];

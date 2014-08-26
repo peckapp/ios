@@ -153,6 +153,7 @@
                                                 self.emailField.text, @"email",
                                                 institutionID, @"institution_id",
                                                 userID, @"id",
+                                                @"ios", @"device_type",
                                                 storedPushToken, @"device_token",
                                                 nil];
         

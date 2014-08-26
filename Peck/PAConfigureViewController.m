@@ -54,7 +54,9 @@
         self.institutions = institutions;
     }
     
-    [self updateInstitutions];
+    // commented out because it just causes a 401 on initial launch
+    // method is called by the SyncManager in sucess block of sendUDIDForInitViewController
+    //[self updateInstitutions];
     
     [schoolPicker reloadAllComponents];
     
