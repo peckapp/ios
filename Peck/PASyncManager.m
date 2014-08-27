@@ -900,7 +900,7 @@
                               parameters:[self authenticationParameters]
                                  success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
-         //NSLog(@"EVENT JSON: %@",JSON);
+         // NSLog(@"EVENT JSON: %@",JSON);
          NSDictionary* eventDictionary = (NSDictionary*)JSON;
          NSDictionary* eventAttributes = [eventDictionary objectForKey:[category stringByAppendingString:@"_event"]];
          Event* event = [[PAFetchManager sharedFetchManager] getObject:eventID withEntityType:@"Event" andType:category];
@@ -912,7 +912,7 @@
          if([controller isKindOfClass:[PAEventInfoTableViewController class]]){
              PAEventInfoTableViewController* sender = (PAEventInfoTableViewController*)controller;
              [sender reloadAttendeeLabels];
-             //[sender configureView];
+             // [sender configureView];
          }else if([controller isKindOfClass:[PAAthleticEventViewController class]]){
              PAAthleticEventViewController* sender = (PAAthleticEventViewController*)controller;
              [sender reloadAttendeeLabels];
@@ -2024,7 +2024,7 @@
                                       parameters:params
                                          success:^
              (NSURLSessionDataTask * __unused task, id JSON) {
-                 //NSLog(@"ATHLETIC EVENT JSON: %@",JSON);
+                 NSLog(@"ATHLETIC EVENT JSON: %@",JSON);
                  NSDictionary *eventsDictionary = (NSDictionary*)JSON;
                  NSArray *postsFromResponse = [eventsDictionary objectForKey:@"athletic_events"];
                  [self.persistentStoreCoordinator lock];
