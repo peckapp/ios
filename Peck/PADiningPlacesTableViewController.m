@@ -49,6 +49,11 @@ PAAssetManager *assetManager;
     self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(320 - 64, 0, 64, 64)];
     [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.backButton addSubview:[assetManager createPanelWithFrame:CGRectInset(self.backButton.bounds, 15, 15) rounded:YES shadow:YES]];
+    UIImageView *cancelIcon = [[UIImageView alloc] initWithImage:[assetManager cancelIcon]];
+    cancelIcon.frame = self.backButton.bounds;
+    cancelIcon.contentMode = UIViewContentModeScaleAspectFit;
+    cancelIcon.userInteractionEnabled = NO;
+    [self.backButton addSubview:cancelIcon];
 
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero];
     self.tableView.dataSource = self;
