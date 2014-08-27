@@ -465,11 +465,11 @@
         [dateFormatter setDateFormat:@"h:mm a"];
         [self.timeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
 
-        NSString *title = @""; //[self.detailItem valueForKey:@"team_name"];
+        NSString *team_name = [self.detailItem valueForKey:@"team_name"];
 
 
-        self.titleLabel.text = title;
-        self.fullTitleLabel.text = title;
+        self.titleLabel.text = team_name;
+        self.fullTitleLabel.text = team_name;
         
         [dateFormatter setDateFormat:@"MMM dd, yyyy h:mm a"];
         [self.dateLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
