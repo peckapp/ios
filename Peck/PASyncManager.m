@@ -1010,6 +1010,11 @@
              //NSLog(@"explore JSON: %@",JSON);
              NSDictionary *exploreDictionary = (NSDictionary*)JSON;
              NSArray *eventsFromResponse = [exploreDictionary objectForKey:@"explore_events"];
+             
+             [NewRelic recordMetricWithName:@"ExploreCount"
+                                   category:@"Content"
+                                      value:[NSNumber numberWithInt:[eventsFromResponse count]]];
+             
              [self.persistentStoreCoordinator lock];
              if(![eventsFromResponse isKindOfClass:[NSNull class]]){
                  [[PAFetchManager sharedFetchManager] removeAllObjectsOfType:@"Explore"];
@@ -1941,6 +1946,11 @@
              //NSLog(@"EVENT JSON: %@",JSON);
              NSDictionary *eventsDictionary = (NSDictionary*)JSON;
              NSArray *postsFromResponse = [eventsDictionary objectForKey:@"simple_events"];
+             
+             [NewRelic recordMetricWithName:@"SimpleEventCount"
+                                   category:@"Content"
+                                      value:[NSNumber numberWithInt:[postsFromResponse count]]];
+             
              [self.persistentStoreCoordinator lock];
              for (NSDictionary *eventAttributes in postsFromResponse) {
                 NSNumber *newID = [eventAttributes objectForKey:@"id"];
@@ -2029,6 +2039,11 @@
                  //NSLog(@"ATHLETIC EVENT JSON: %@",JSON);
                  NSDictionary *eventsDictionary = (NSDictionary*)JSON;
                  NSArray *postsFromResponse = [eventsDictionary objectForKey:@"athletic_events"];
+                 
+                 [NewRelic recordMetricWithName:@"AthleticEventCount"
+                                       category:@"Content"
+                                          value:[NSNumber numberWithInt:[postsFromResponse count]]];
+                 
                  [self.persistentStoreCoordinator lock];
                  for (NSDictionary *eventAttributes in postsFromResponse) {
                      NSNumber *newID = [eventAttributes objectForKey:@"id"];
