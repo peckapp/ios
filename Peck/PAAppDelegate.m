@@ -51,11 +51,24 @@
     //NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
     //[UICKeyChainStore setString:deviceId forKey:@"deviceId" service:@"Devices"];
     
+    /*
     // register to observe notifications from the store
     [[NSNotificationCenter defaultCenter]addObserver: self
                                             selector: @selector (iCloudKeyStateChanged:)
                                                 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
                                               object: [NSUbiquitousKeyValueStore defaultStore]];
+    // attempts to store a persistent device identifier in the user's icloud data to allow for recognition of the user on a fresh install
+    NSUbiquitousKeyValueStore* uStore = [NSUbiquitousKeyValueStore defaultStore];
+    NSLog(@"sync? %i",[[NSUbiquitousKeyValueStore defaultStore] synchronize]);
+    // get changes that might have happened while this instance of your app wasn't running
+    NSString* udid = [uStore objectForKey:@"udid"];
+    if(udid == nil){
+        NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [uStore setObject:deviceId forKey:@"udid"];
+        [[NSUbiquitousKeyValueStore defaultStore] synchronize];
+    }
+    NSLog(@"MY UDID: %@", [uStore objectForKey:@"udid"]);
+    */
     
     // Whenever a person opens the app, check for a cached session
     if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
@@ -70,18 +83,6 @@
                                           //[self sessionStateChanged:session state:state error:error];
                                       }];
     }
-    
-    // attempts to store a persistent device identifier in the user's icloud data to allow for recognition of the user on a fresh install
-    NSUbiquitousKeyValueStore* uStore = [NSUbiquitousKeyValueStore defaultStore];
-    NSLog(@"sync? %i",[[NSUbiquitousKeyValueStore defaultStore] synchronize]);
-    // get changes that might have happened while this instance of your app wasn't running
-    NSString* udid = [uStore objectForKey:@"udid"];
-    if(udid == nil){
-        NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-        [uStore setObject:deviceId forKey:@"udid"];
-        [[NSUbiquitousKeyValueStore defaultStore] synchronize];
-    }
-    NSLog(@"MY UDID: %@", [uStore objectForKey:@"udid"]);
     
     UIViewController *initViewController;
     _mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -244,7 +245,7 @@
 {
     NSString* token = [[deviceToken description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"Device Token ---> %@", token);
+    NSLog(@"Device Token sent to webservice");
     [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"device_token"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     

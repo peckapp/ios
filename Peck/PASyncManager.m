@@ -2026,7 +2026,7 @@
                                       parameters:params
                                          success:^
              (NSURLSessionDataTask * __unused task, id JSON) {
-                 NSLog(@"ATHLETIC EVENT JSON: %@",JSON);
+                 //NSLog(@"ATHLETIC EVENT JSON: %@",JSON);
                  NSDictionary *eventsDictionary = (NSDictionary*)JSON;
                  NSArray *postsFromResponse = [eventsDictionary objectForKey:@"athletic_events"];
                  [self.persistentStoreCoordinator lock];

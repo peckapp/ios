@@ -10,6 +10,7 @@
 #import "PAAppDelegate.h"
 #import "PASyncManager.h"
 #import "PAFetchManager.h"
+#import "PAAssetManager.h"
 #import "PAInitialViewController.h"
 #import "PAFriendProfileViewController.h"
 #import "UIImageView+AFNetworking.h"
@@ -20,6 +21,8 @@
 - (IBAction)login:(id)sender;
 
 - (IBAction)registerAccount:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UILabel *feedbackLabel;
 
 @end
 
@@ -47,6 +50,8 @@ BOOL loggedIn;
     self.firstNameTextField.delegate=self;
     self.lastNameTextField.delegate=self;
     self.emailTextField.delegate=self;
+    
+    self.feedbackLabel.textColor = [[PAAssetManager sharedManager] lightColor];
     
     UITapGestureRecognizer *tapRecognizer;
     tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changePicture)];
@@ -84,8 +89,8 @@ BOOL loggedIn;
         loggedIn=YES;
         NSLog(@"logged in");
         self.loginButton.title =@"Logout";
-        self.registerButton.title = @"";
-        self.registerButton.action = nil;
+        self.registerButton.title = @"Save";
+        self.registerButton.action = @selector(saveChangesButton:);
     }
     else{
         loggedIn=NO;
