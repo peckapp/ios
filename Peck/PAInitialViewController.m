@@ -70,6 +70,12 @@
     NSLog(@"fbLogin height: %f",self.fbLogin.frame.size.height);
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.tableView setUserInteractionEnabled:YES];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -231,6 +237,8 @@
     NSString *userImageURL = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [user objectID]];
     
     [[NSUserDefaults standardUserDefaults] setObject:userImageURL forKey:@"facebook_profile_picture_url"];
+    
+    [self.tableView setUserInteractionEnabled:NO];
     
     [[PASyncManager globalSyncManager] loginWithFacebook:userInfo forViewController:self withCallback:callbackBlock];
 }

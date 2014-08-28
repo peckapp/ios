@@ -582,8 +582,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Send Feedback" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U2N-yn-XFJ">
-                                                    <rect key="frame" x="20" y="11" width="156" height="21"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Send Feedback" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U2N-yn-XFJ">
+                                                    <rect key="frame" x="82" y="11" width="156" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
@@ -730,6 +730,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="emailTextField" destination="fFl-BU-kXH" id="4Aa-Fb-G5j"/>
+                        <outlet property="feedbackLabel" destination="U2N-yn-XFJ" id="sV0-zg-2sw"/>
                         <outlet property="firstNameTextField" destination="zCd-px-GUT" id="Hxg-Vw-JPN"/>
                         <outlet property="infoTextView" destination="cwc-nI-OLJ" id="RMB-vu-kbM"/>
                         <outlet property="lastNameTextField" destination="FDr-qy-zud" id="Ly1-W3-6ZB"/>
@@ -761,7 +762,7 @@
             </objects>
             <point key="canvasLocation" x="-1326" y="3827"/>
         </scene>
-        <!--User Announcements Table View Controller - My Announcements-->
+        <!--User Announcements Table View Controller - Announcements-->
         <scene sceneID="QMq-yP-TWH">
             <objects>
                 <tableViewController id="7hS-D8-tr4" customClass="PAUserAnnouncementsTableViewController" sceneMemberID="viewController">
@@ -774,7 +775,7 @@
                             <outlet property="delegate" destination="7hS-D8-tr4" id="avH-vD-q7e"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="My Announcements" id="RPb-95-RxE"/>
+                    <navigationItem key="navigationItem" title="Announcements" id="RPb-95-RxE"/>
                     <connections>
                         <segue destination="pma-WE-Hh3" kind="push" identifier="editAnnouncement" id="4q4-Pe-qR3"/>
                     </connections>
@@ -1022,7 +1023,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJo-9h-bmg">
-                                <rect key="frame" x="0.0" y="176" width="320" height="162"/>
+                                <rect key="frame" x="0.0" y="153" width="320" height="162"/>
                             </pickerView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select Your School" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2wi-Da-K1j">
                                 <rect key="frame" x="63" y="62" width="195" height="33"/>
@@ -1031,7 +1032,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HnY-LK-sOy">
-                                <rect key="frame" x="121" y="436" width="79" height="30"/>
+                                <rect key="frame" x="126" y="371" width="79" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Continue">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1399,7 +1400,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="4q4-Pe-qR3"/>
         <segue reference="gpx-S3-Fsz"/>
-        <segue reference="TbO-p2-TYX"/>
     </inferredMetricsTieBreakers>
 </document>

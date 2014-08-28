@@ -16,6 +16,7 @@
 		86292512193CBE000057CA41 /* PAPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292511193CBE000057CA41 /* PAPostViewController.m */; };
 		86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292520193CBFD40057CA41 /* PAPeckCell.m */; };
 		86292523193CBFD40057CA41 /* PAPeckCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86292521193CBFD40057CA41 /* PAPeckCell.xib */; };
+		8635758019AED91B00953E39 /* libFlurry_5.3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8635757F19AED91B00953E39 /* libFlurry_5.3.0.a */; };
 		863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843CB193CB31C004110F5 /* PACirclesTableViewController.m */; };
 		863843DA193CB75F004110F5 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 863843D3193CB75F004110F5 /* Login.storyboard */; };
 		863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843D5193CB75F004110F5 /* PAInitialViewController.m */; };
@@ -221,6 +222,8 @@
 		8629251F193CBFD40057CA41 /* PAPeckCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPeckCell.h; sourceTree = "<group>"; };
 		86292520193CBFD40057CA41 /* PAPeckCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPeckCell.m; sourceTree = "<group>"; };
 		86292521193CBFD40057CA41 /* PAPeckCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAPeckCell.xib; sourceTree = "<group>"; };
+		8635757E19AED91B00953E39 /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
+		8635757F19AED91B00953E39 /* libFlurry_5.3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurry_5.3.0.a; sourceTree = "<group>"; };
 		863843CA193CB31C004110F5 /* PACirclesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PACirclesTableViewController.h; sourceTree = "<group>"; };
 		863843CB193CB31C004110F5 /* PACirclesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PACirclesTableViewController.m; sourceTree = "<group>"; };
 		863843D3193CB75F004110F5 /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
@@ -448,6 +451,7 @@
 			files = (
 				8665FD4319AB847B00AA1162 /* libz.dylib in Frameworks */,
 				8665FD4219AB842C00AA1162 /* SystemConfiguration.framework in Frameworks */,
+				8635758019AED91B00953E39 /* libFlurry_5.3.0.a in Frameworks */,
 				8665FD4119AB840D00AA1162 /* CoreTelephony.framework in Frameworks */,
 				8665FD4019AB83F600AA1162 /* NewRelicAgent.framework in Frameworks */,
 				A42D4FB9198AAAB000536453 /* Security.framework in Frameworks */,
@@ -546,6 +550,22 @@
 			name = Post;
 			sourceTree = "<group>";
 		};
+		8635757D19AED91B00953E39 /* Flurry */ = {
+			isa = PBXGroup;
+			children = (
+				8635757E19AED91B00953E39 /* Flurry.h */,
+				8635757F19AED91B00953E39 /* libFlurry_5.3.0.a */,
+			);
+			path = Flurry;
+			sourceTree = "<group>";
+		};
+		8635758119AEDAE300953E39 /* Tutorial */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Tutorial;
+			sourceTree = "<group>";
+		};
 		863843D2193CB739004110F5 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -627,6 +647,7 @@
 			isa = PBXGroup;
 			children = (
 				86D5980A193768BF00F38654 /* Peck */,
+				8635757D19AED91B00953E39 /* Flurry */,
 				86D59830193768C000F38654 /* PeckTests */,
 				86D59801193768BF00F38654 /* Frameworks */,
 				86D59800193768BF00F38654 /* Products */,
@@ -696,6 +717,7 @@
 				A43BF0EB197819250009B7AD /* Subscriptions */,
 				A4B772DD1945F8DB00A31252 /* Configure */,
 				863843D2193CB739004110F5 /* Login */,
+				8635758119AEDAE300953E39 /* Tutorial */,
 				860BE45F19632CCE00E57A56 /* Models */,
 				867651EC19462E3500C14645 /* Webservice */,
 				86051D47194BB24900961541 /* Graphics */,
@@ -1410,6 +1432,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/build/Release-iphoneos",
+					"$(PROJECT_DIR)/Flurry",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1455,6 +1478,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/build/Release-iphoneos",
+					"$(PROJECT_DIR)/Flurry",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",

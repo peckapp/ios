@@ -10,6 +10,7 @@
 
 #import <FacebookSDK/FacebookSDK.h>
 #import <Crashlytics/Crashlytics.h>
+#import "Flurry.h"
 
 #import "PAEventsViewController.h"
 #import "PACoreDataProtocol.h"
@@ -51,11 +52,24 @@
     //NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
     //[UICKeyChainStore setString:deviceId forKey:@"deviceId" service:@"Devices"];
     
+    /*
     // register to observe notifications from the store
     [[NSNotificationCenter defaultCenter]addObserver: self
                                             selector: @selector (iCloudKeyStateChanged:)
                                                 name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
                                               object: [NSUbiquitousKeyValueStore defaultStore]];
+    // attempts to store a persistent device identifier in the user's icloud data to allow for recognition of the user on a fresh install
+    NSUbiquitousKeyValueStore* uStore = [NSUbiquitousKeyValueStore defaultStore];
+    NSLog(@"sync? %i",[[NSUbiquitousKeyValueStore defaultStore] synchronize]);
+    // get changes that might have happened while this instance of your app wasn't running
+    NSString* udid = [uStore objectForKey:@"udid"];
+    if(udid == nil){
+        NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [uStore setObject:deviceId forKey:@"udid"];
+        [[NSUbiquitousKeyValueStore defaultStore] synchronize];
+    }
+    NSLog(@"MY UDID: %@", [uStore objectForKey:@"udid"]);
+    */
     
     // Whenever a person opens the app, check for a cached session
     if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
@@ -70,18 +84,6 @@
                                           //[self sessionStateChanged:session state:state error:error];
                                       }];
     }
-    
-    // attempts to store a persistent device identifier in the user's icloud data to allow for recognition of the user on a fresh install
-    NSUbiquitousKeyValueStore* uStore = [NSUbiquitousKeyValueStore defaultStore];
-    NSLog(@"sync? %i",[[NSUbiquitousKeyValueStore defaultStore] synchronize]);
-    // get changes that might have happened while this instance of your app wasn't running
-    NSString* udid = [uStore objectForKey:@"udid"];
-    if(udid == nil){
-        NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-        [uStore setObject:deviceId forKey:@"udid"];
-        [[NSUbiquitousKeyValueStore defaultStore] synchronize];
-    }
-    NSLog(@"MY UDID: %@", [uStore objectForKey:@"udid"]);
     
     UIViewController *initViewController;
     _mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -136,6 +138,10 @@
     //[NRLogger setLogLevels:NRLogLevelNone];
     // activates connection to New Relic monitoring software
     [NewRelicAgent startWithApplicationToken:@"AA14f069ef90609bd31c564006eebc0c133696af3b"];
+    
+    //note: iOS only allows one crash reporting tool per app; if using another, set to: NO
+    [Flurry setCrashReportingEnabled:NO];
+    [Flurry startSession:@"Q6HJDW4WWVGQGKSX9BGV"];
     
     // Must remain after third-party SDK code
     //[[Crashlytics sharedInstance] setDebugMode:YES];
@@ -244,7 +250,7 @@
 {
     NSString* token = [[deviceToken description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"Device Token ---> %@", token);
+    NSLog(@"Device Token sent to webservice");
     [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"device_token"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -481,6 +487,7 @@
          Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
          
          */
+        
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         // TODO: eliminate this call
         abort();

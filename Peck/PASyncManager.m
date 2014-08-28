@@ -634,13 +634,15 @@
                                            [self updateAthleticEvents];
                                            //take care of some necessary login stuff
                                            [[PAFetchManager sharedFetchManager] loginUser];
-                                           [sender dismissViewControllerAnimated:YES completion:nil];
                                        } else {
                                            //show confirmation email alert
                                            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Confirmation Email Sent!" message:@"An email has been sent to the email you have provided" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
                                            [alert show];
-                                           [sender dismissViewControllerAnimated:YES completion:nil];
                                        }
+                                       
+                                       [sender dismissViewControllerAnimated:YES completion:^() {
+                                           [sender.view setUserInteractionEnabled:YES];
+                                       }];
                                        
                                        [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:logged_in_key];
                                        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
@@ -2018,13 +2020,13 @@
                                     [[self authenticationParameters] objectForKey:@"authentication"], @"authentication",
                                     nil];
             
-            //NSLog(@"params: %@", params);
+            //NSLog(@"athletic event params: %@", params);
             
             [[PASessionManager sharedClient] GET:athletic_eventsAPI
                                       parameters:params
                                          success:^
              (NSURLSessionDataTask * __unused task, id JSON) {
-                 NSLog(@"ATHLETIC EVENT JSON: %@",JSON);
+                 //NSLog(@"ATHLETIC EVENT JSON: %@",JSON);
                  NSDictionary *eventsDictionary = (NSDictionary*)JSON;
                  NSArray *postsFromResponse = [eventsDictionary objectForKey:@"athletic_events"];
                  [self.persistentStoreCoordinator lock];
@@ -2067,6 +2069,9 @@
     event.type = @"athletic";
     //event.isPublic = [[dictionary objectForKey:@"public"] boolValue];
     event.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_time"] doubleValue]];//+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    if(![[dictionary objectForKey:@"end_time"] isKindOfClass:[NSNull class]]){
+        event.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_time"] doubleValue]];
+    }
     event.attendees = [dictionary objectForKey:@"attendees"];
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
         event.imageURL = [dictionary objectForKey:@"image"];
@@ -2080,6 +2085,18 @@
     }
     if(![[dictionary objectForKey:@"location"] isKindOfClass:[NSNull class]]){
         event.location = [dictionary objectForKey:@"location"];
+    }
+    if (![[dictionary objectForKey:@"team_name"] isKindOfClass:[NSNull class]]) {
+        event.team_name = [dictionary objectForKey:@"team_name"];
+    }
+    if (![[dictionary objectForKey:@"team_score"] isKindOfClass:[NSNull class]]) {
+        event.team_score = [dictionary objectForKey:@"team_score"];
+    }
+    if (![[dictionary objectForKey:@"opponent_score"] isKindOfClass:[NSNull class]]) {
+        event.opponent_score = [dictionary objectForKey:@"opponent_score"];
+    }
+    if (![[dictionary objectForKey:@"home_or_away"] isKindOfClass:[NSNull class]]) {
+        event.home_or_away = [dictionary objectForKey:@"home_or_away"];
     }
 }
 
