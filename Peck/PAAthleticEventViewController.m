@@ -20,7 +20,7 @@
 
 #define imageHeight 256
 #define titleLabelDivide 90
-#define dateLabelDivide 196
+#define dateLabelDivide 200
 #define compressedHeight 88
 #define buffer 14
 #define defaultCellHeight 72
@@ -57,6 +57,7 @@
 @property (strong, nonatomic) UILabel *fullTitleLabel;
 @property (strong, nonatomic) UILabel *descriptionLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
+@property (strong, nonatomic) UILabel *scoreLabel;
 
 @property (strong, nonatomic) UIButton *attendButton;
 @property (strong, nonatomic) UILabel *attendeesLabel;
@@ -148,6 +149,11 @@
     
     self.dateLabel = [[UILabel alloc] init];
     [self.headerView addSubview:self.dateLabel];
+
+    self.scoreLabel = [[UILabel alloc] init];
+    self.scoreLabel.font = [UIFont systemFontOfSize:21.0];
+    self.scoreLabel.textAlignment = NSTextAlignmentCenter;
+    [self.headerView addSubview:self.scoreLabel];
     
     self.descriptionLabel = [[UILabel alloc] init];
     self.descriptionLabel.font = [UIFont systemFontOfSize:13.0];
@@ -240,10 +246,13 @@
     
     self.attendButton.frame = CGRectMake(dateLabelDivide, 0, self.view.frame.size.width - dateLabelDivide, 50);
     self.attendeesLabel.frame = CGRectMake(self.view.frame.size.width - 20, 0, 20, 50);
-    
-    self.descriptionLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, CGRectGetMaxY(self.dateLabel.frame));
+
+    self.scoreLabel.frame = CGRectMake(dateLabelDivide, 50, self.view.frame.size.width - dateLabelDivide, 21);
+
+    CGRect description = CGRectMake(0, 0, dateLabelDivide, self.headerView.frame.size.height);
+    self.descriptionLabel.frame = CGRectOffset(CGRectInset(description, buffer, buffer), 0, CGRectGetMaxY(self.dateLabel.frame));
     [self.descriptionLabel sizeToFit];
-    
+
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, CGRectGetMaxY(self.descriptionLabel.frame) + buffer);
     
     self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 1000);
@@ -465,16 +474,16 @@
         [dateFormatter setDateFormat:@"h:mm a"];
         [self.timeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
 
-        NSString *team_name = [self.detailItem valueForKey:@"team_name"];
-
-
-        self.titleLabel.text = team_name;
-        self.fullTitleLabel.text = team_name;
+        self.titleLabel.text = [self.detailItem valueForKey:@"title"];
+        self.fullTitleLabel.text = [self.detailItem valueForKey:@"title"];
         
         [dateFormatter setDateFormat:@"MMM dd, yyyy h:mm a"];
         [self.dateLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
         
         self.descriptionLabel.text = [self.detailItem valueForKey:@"descrip"];
+
+        // TODO: grab score from the database
+        self.scoreLabel.text = @"0 - 0";
         
         UIImage* image = nil;
         if ([self.detailItem valueForKey:@"imageURL"]) {
