@@ -10,6 +10,7 @@
 
 #import <FacebookSDK/FacebookSDK.h>
 #import <Crashlytics/Crashlytics.h>
+#import "Flurry.h"
 
 #import "PAEventsViewController.h"
 #import "PACoreDataProtocol.h"
@@ -137,6 +138,10 @@
     //[NRLogger setLogLevels:NRLogLevelNone];
     // activates connection to New Relic monitoring software
     [NewRelicAgent startWithApplicationToken:@"AA14f069ef90609bd31c564006eebc0c133696af3b"];
+    
+    //note: iOS only allows one crash reporting tool per app; if using another, set to: NO
+    [Flurry setCrashReportingEnabled:NO];
+    [Flurry startSession:@"Q6HJDW4WWVGQGKSX9BGV"];
     
     // Must remain after third-party SDK code
     //[[Crashlytics sharedInstance] setDebugMode:YES];
