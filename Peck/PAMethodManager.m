@@ -35,7 +35,7 @@
         _sharedMethodManager.registerAlert = [[UIAlertView alloc] initWithTitle:@"Unregistered Account"
                                                                         message:nil
                                                                        delegate:self
-                                                              cancelButtonTitle:@"OK"
+                                                              cancelButtonTitle:@"Okay"
                                                               otherButtonTitles:@"Register", nil];
         
         _sharedMethodManager.institutionAlert = [[UIAlertView alloc] initWithTitle:@"Foreign Institution"
@@ -266,6 +266,23 @@
     
     NSLog(@"login info %@", loginInfo);
     [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:nil direction:@"change_password"];
+}
+
+// sets the nsuserdefaults boolean values to false for each tutorial
+-(void)resetTutorialBooleans {
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    
+    [defaults setObject:@YES forKey:homepage_tutorial];
+    [defaults setObject:@YES forKey:dropdown_tutorial];
+}
+
+-(void)showTutorialAlertWithTitle:(NSString *)title andMessage:(NSString*)message {
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                     message:message
+                                                    delegate:self
+                                           cancelButtonTitle:@"Okay"
+                                           otherButtonTitles:nil];
+    [alert show];
 }
 
 @end

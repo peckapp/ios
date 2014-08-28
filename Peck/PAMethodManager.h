@@ -22,4 +22,8 @@
 -(void)postInfoToFacebook:(NSDictionary*)eventInfo withImage:(NSData*)imageDat;
 
 -(void)handleResetLink:(NSMutableDictionary*)urlInfo;
+
+-(void)resetTutorialBooleans;
+-(void)showTutorialAlertWithTitle:(NSString *)title andMessage:(NSString*)message;
+
 @end

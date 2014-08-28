@@ -15,12 +15,15 @@
 #import "PAFriendProfileViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "PAChangePasswordViewController.h"
+#import "PAMethodManager.h"
 
 @interface PAProfileTableViewController ()
 
 - (IBAction)login:(id)sender;
 
 - (IBAction)registerAccount:(id)sender;
+
+- (IBAction)resetTutorials:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UILabel *feedbackLabel;
 
@@ -319,6 +322,10 @@ BOOL loggedIn;
         UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UINavigationController *feedbackController = [loginStoryboard instantiateViewControllerWithIdentifier:@"sendFeedback"];
         [self presentViewController:feedbackController animated:YES completion:nil];
+    }else if(indexPath.section==0 && indexPath.row==7){
+        [[PAMethodManager sharedMethodManager] resetTutorialBooleans];
+        [[PAMethodManager sharedMethodManager] showTutorialAlertWithTitle:@"Reset Tutorials"
+                                                               andMessage:@"Good for you, tutorials are now reset and you will get to see how the app works again!"];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

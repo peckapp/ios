@@ -116,6 +116,11 @@
         }
     }
     
+    if ([defaults objectForKey:first_launch] == nil) {
+        [[PAMethodManager sharedMethodManager] resetTutorialBooleans];
+        DID_FIRST_LAUNCH;
+    }
+    
     // re-registers for push notifiacitons on launch and handles available notifications in launchOptions
     [self handleNotificationsOnLaunchWithOptions:launchOptions];
 

@@ -8,6 +8,8 @@
 
 #import "PADropdownViewController.h"
 #import <Foundation/Foundation.h>
+#import "PAMethodManager.h"
+#import "PAUtils.h"
 
 #pragma mark Private members
 
@@ -228,6 +230,12 @@
                          [newVC didMoveToParentViewController:self];
                          self.activeViewController = newVC;
                          self.view.userInteractionEnabled = YES;
+                         
+                         if ([SHOW_DROPDOWN_TUTORIAL  isEqual: @YES]) {
+                             [[PAMethodManager sharedMethodManager] showTutorialAlertWithTitle:@"Dropdown Bar"
+                                                                                    andMessage:@"This bar controls navigation between screens in Peck. Tap the same icon again to dismiss the current screen, or tap a different one to slide over."];
+                             DID_SHOW_DROPDOWN_TUTORIAL;
+                         }
                      }];
     // dismisses filter as dropbown appears
     [self hideFilter];

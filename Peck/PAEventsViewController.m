@@ -24,6 +24,8 @@
 #import "PANestedTableViewCell.h"
 #import "PANoContentView.h"
 #import "PATemporaryDropdownView.h"
+#import "PAMethodManager.h"
+#import "PAUtils.h"
 
 #define statusBarHeight 20
 #define searchBarHeight 44
@@ -246,6 +248,12 @@ PAAssetManager * assetManager;
     [self tableView:self.rightTableView reloadDataFrom:self.rightFetchedResultsController];
 
     viewingEvents = YES;
+    
+    if ([SHOW_HOMEPAGE_TUTORIAL  isEqual: @YES]) {
+        [[PAMethodManager sharedMethodManager] showTutorialAlertWithTitle:@"Homepage"
+                                                               andMessage:@"This is the homepage, displaying all events you are attending or are in your subscriptions. Swipe left and right to navigate between days."];
+        DID_SHOW_HOMEPAGE_TUTORIAL;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
