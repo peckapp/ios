@@ -482,6 +482,7 @@
         
         self.descriptionLabel.text = [self.detailItem valueForKey:@"descrip"];
 
+        // TODO: grab score from the database
         self.scoreLabel.text = @"0 - 0";
         
         UIImage* image = nil;
