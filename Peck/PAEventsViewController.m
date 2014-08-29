@@ -259,6 +259,7 @@ PAAssetManager * assetManager;
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    [self displaydatePopup];
     [self showEmptyContentIfNecessaryForTableView:self.centerTableView];
 }
 
@@ -1014,31 +1015,36 @@ PAAssetManager * assetManager;
 
 - (void)displaydatePopup
 {
-    NSString *date = @"";
+    //[self.datePopup configureTodayButton:self.selectedDay];
+    
+    [self.datePopup.previousButton setTitle:[self textForDay:self.selectedDay - 1] forState:UIControlStateNormal];
+    self.datePopup.label.text = [self textForDay:self.selectedDay];
+    [self.datePopup.nextButton setTitle:[self textForDay:self.selectedDay + 1] forState:UIControlStateNormal];
+    [self.datePopup showHiddenView];
+}
 
-    if (self.selectedDay == -1) {
+- (NSString*)textForDay:(NSInteger)dayNumber{
+    NSString *date = @"";
+    if (dayNumber == -1) {
         date = @"Yesterday";
     }
-    else if (self.selectedDay == 0) {
+    else if (dayNumber == 0) {
         date = @"Today";
     }
-    else if (self.selectedDay == 1) {
+    else if (dayNumber == 1) {
         date = @"Tomorrow";
     }
-    else if (self.selectedDay <= 5 && self.selectedDay >= -3){
+    else if (dayNumber <= 5 && dayNumber >= -3){
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"EEEE"];
-        date = [dateFormatter stringFromDate:[self getDateForDay:self.selectedDay]];
+        date = [dateFormatter stringFromDate:[self getDateForDay:dayNumber]];
     }
     else {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"MMM d"];
-        date = [dateFormatter stringFromDate:[self getDateForDay:self.selectedDay]];
+        date = [dateFormatter stringFromDate:[self getDateForDay:dayNumber]];
     }
-
-    [self.datePopup configureTodayButton:self.selectedDay];
-    self.datePopup.label.text = date;
-    [self.datePopup temporarilyShowHiddenView];
+    return date;
 }
 
 - (void)transitionToRightTableView
@@ -1050,6 +1056,8 @@ PAAssetManager * assetManager;
 
         [self displaydatePopup];
         [self clearSearchBars];
+        
+        [self.rightTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
         
         [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
@@ -1088,6 +1096,8 @@ PAAssetManager * assetManager;
         [self clearSearchBars];
         [self displaydatePopup];
         
+        [self.leftTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+        
         [UIView animateWithDuration:self.animationTime delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              self.leftTableView.frame = self.centerTableViewFrame;
@@ -1120,10 +1130,10 @@ PAAssetManager * assetManager;
     if(self.selectedDay!=0){
     
         if(self.selectedDay<-1){
-            self.selectedDay=-1;
+            self.selectedDay = -1;
             [self clearAllControllers];
         }else if (self.selectedDay>1){
-            self.selectedDay=1;
+            self.selectedDay = 1;
             [self clearAllControllers];
         }
     
@@ -1136,6 +1146,22 @@ PAAssetManager * assetManager;
             [self transitionToLeftTableView];
         }
     }
+}
+
+- (void)switchToNextDay{
+    
+    [self clearSearchBars];
+    [self displaydatePopup];
+    
+    [self transitionToRightTableView];
+}
+
+- (void)switchToPreviousDay{
+    
+    [self clearSearchBars];
+    [self displaydatePopup];
+    
+    [self transitionToLeftTableView];
 }
 
 -(void)clearAllControllers{

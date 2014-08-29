@@ -42,6 +42,7 @@
         self.label.alpha = 0;
         [self.hiddenView addSubview:self.label];
         
+        /*
         self.todayButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
         self.todayButton.userInteractionEnabled=YES;
         self.todayButton.hidden=YES;
@@ -53,14 +54,35 @@
                    action:@selector(goToToday)
          forControlEvents:UIControlEventTouchUpInside];
         [self.hiddenView addSubview:self.todayButton];
+         */
         
-        self.rightButtonFrame = CGRectMake(250, 0, 60, 44);
-        self.leftButtonFrame = CGRectMake(10, 0, 60, 44);
+        self.rightButtonFrame = CGRectMake(210, 0, 100, 44);
+        self.leftButtonFrame = CGRectMake(10, 0, 100, 44);
+        
+        self.previousButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [self configureButton:self.previousButton withFrame:self.leftButtonFrame];
+        self.previousButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [self.previousButton addTarget:self action:@selector(goToPreviousDay) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.nextButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [self configureButton:self.nextButton withFrame:self.rightButtonFrame];
+        self.nextButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        [self.nextButton addTarget:self action:@selector(goToNextDay) forControlEvents:UIControlEventTouchUpInside];
+
         
     }
     return self;
 }
 
+- (void)configureButton:(UIButton*)button withFrame:(CGRect)frame{
+    button.userInteractionEnabled=YES;
+    button.titleLabel.font = [UIFont systemFontOfSize:17.0];
+    button.frame = frame;
+    button.alpha = 0;
+    [self.hiddenView addSubview:button];
+}
+
+/*
 -(void)configureTodayButton:(NSInteger)selectedDay{
     // TODO: Abstract this away from today button specifically, we might want to reuse this class elsewhere
     // TODO: Animate this
@@ -74,11 +96,24 @@
         self.todayButton.frame = self.leftButtonFrame;
     }
 }
+*/
 
 -(void)goToToday{
     NSLog(@"show today's events");
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     [appdelegate.eventsViewController switchToCurrentDay];
+}
+
+- (void)goToNextDay{
+    NSLog(@"show next day's events");
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    [appdelegate.eventsViewController switchToNextDay];
+}
+
+- (void)goToPreviousDay{
+    NSLog(@"show previous day's events");
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    [appdelegate.eventsViewController switchToPreviousDay];
 }
 
 - (void)temporarilyShowHiddenView
@@ -124,7 +159,9 @@
     [UIView animateWithDuration:0.3 delay:secondaryDelay options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.label.alpha = 1;
-                         self.todayButton.alpha = 1;
+                         //self.todayButton.alpha = 1;
+                         self.previousButton.alpha = 1;
+                         self.nextButton.alpha = 1;
                      }
                      completion:^(BOOL finished){
                      }];
@@ -143,7 +180,9 @@
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.label.alpha = 0;
-                         self.todayButton.alpha = 0;
+                         //self.todayButton.alpha = 0;
+                         self.previousButton.alpha = 1;
+                         self.nextButton.alpha = 1;
                      }
                      completion:^(BOOL finished){
                      }];

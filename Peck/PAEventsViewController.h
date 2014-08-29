@@ -36,4 +36,6 @@
 -(void)transitionToLeftTableView;
 
 -(void)switchToCurrentDay;
+-(void)switchToPreviousDay;
+-(void)switchToNextDay;
 @end
