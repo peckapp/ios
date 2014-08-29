@@ -23,8 +23,6 @@
 
 - (IBAction)registerAccount:(id)sender;
 
-- (IBAction)resetTutorials:(id)sender;
-
 @property (weak, nonatomic) IBOutlet UILabel *feedbackLabel;
 
 @end

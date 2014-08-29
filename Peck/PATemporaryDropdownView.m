@@ -99,19 +99,19 @@
 */
 
 -(void)goToToday{
-    NSLog(@"show today's events");
+    //NSLog(@"show today's events");
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     [appdelegate.eventsViewController switchToCurrentDay];
 }
 
 - (void)goToNextDay{
-    NSLog(@"show next day's events");
+    //NSLog(@"show next day's events");
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     [appdelegate.eventsViewController switchToNextDay];
 }
 
 - (void)goToPreviousDay{
-    NSLog(@"show previous day's events");
+    //NSLog(@"show previous day's events");
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     [appdelegate.eventsViewController switchToPreviousDay];
 }

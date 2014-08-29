@@ -132,10 +132,10 @@
         
         REGISTER_PUSH_NOTIFICATIONS;
         
-        BOOL sendEmail = YES;
+        //BOOL sendEmail = YES;
         if([self emailMatchesCurrentInstitution:[user objectForKey:@"email"]]){
             //The email matches the institution that the user has chosen. In this case, we will simply perform a normal login through facebook
-            sendEmail = NO;
+            //sendEmail = NO;
             [self loginWithFacebook:user andBool:NO withEmail:[user objectForKey:@"email"] withCallback:nil];
         }else{
             //The email does not match the institution that the user has chosen. In this case we must call the method in the sync manager that checks to see if a facebook link already exists for the user.
