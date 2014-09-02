@@ -1201,6 +1201,7 @@
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"acceptCircleInvite ERROR: %@",error);
+                                      [self handleError:error andMethodName:@"acceptCircleInvite"];
                                   }];
 }
 
@@ -2411,6 +2412,24 @@
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                      NSLog(@"updateSubscriptionsForCategory ERROR: %@",error);
                                  }];
+    }
+}
+
+#pragma mark - Error Handling
+
+- (void)handleError:(NSError*)error andMethodName:(NSString*)methodName {
+    NSHTTPURLResponse *response = [error.userInfo objectForKey:@"com.alamofire.serialization.response.error.response"];
+    
+    switch (response.statusCode) {
+        case 401:
+            NSLog(@"error for unauthorized access, manually logging out user");
+            [[PAMethodManager sharedMethodManager] logoutUserCompletely];
+            
+            [[PAMethodManager sharedMethodManager] showUnauthorizedAlertWithCallbackBlock:nil];
+            break;
+            
+        default:
+            break;
     }
 }
 

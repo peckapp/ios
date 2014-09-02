@@ -41,7 +41,7 @@
 
         NSArray *icons = @[[UIImage imageNamed:@"feather"],
                            [UIImage imageNamed:@"explore"],
-                           [UIImage imageNamed:@"post"],
+                           [UIImage imageNamed:@"plus"],
                            [UIImage imageNamed:@"circles"],
                            [UIImage imageNamed:@"profile"]];
 

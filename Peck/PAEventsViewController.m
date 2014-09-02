@@ -304,6 +304,8 @@ PAAssetManager * assetManager;
     }
 }
 
+#pragma mark - Empty Content handling
+
 - (void)showEmptyContentIfNecessaryForTableView:(UITableView*) tableView {
     [self.noContentView removeFromSuperview];
     

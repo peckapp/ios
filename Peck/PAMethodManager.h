@@ -11,17 +11,21 @@
 
 @interface PAMethodManager : NSObject <UIAlertViewDelegate>
 @property UIViewController* sender;
-@property (strong, nonatomic) void (^callbackBlock)(void);
 
 + (instancetype)sharedMethodManager;
 
+// alerts that may need to be displayed throughout the app
 -(void)showRegisterAlert:(NSString*)message forViewController:(UIViewController*)sender;
 -(void)showInstitutionAlert:(void (^)(void))callbackBlock;
+-(void)showUnauthorizedAlertWithCallbackBlock:(void (^)(void))callbackBlock;
 
 -(UIImageView*)imageForPeer:(Peer*)peer;
--(void)postInfoToFacebook:(NSDictionary*)eventInfo withImage:(NSData*)imageDat;
+-(void)postInfoToFacebook:(NSDictionary*)eventInfo withImage:(NSData*)imageData;
 
 -(void)handleResetLink:(NSMutableDictionary*)urlInfo;
+
+// handles all necessary logout actions, calling relevant fetch and sync manager methods, clearing FBSession, clearing NSUserDefaults, and creating a new anonymous user
+-(void)logoutUserCompletely;
 
 -(void)resetTutorialBooleans;
 -(void)showTutorialAlertWithTitle:(NSString *)title andMessage:(NSString*)message;

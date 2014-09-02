@@ -7,6 +7,7 @@
 //
 
 #import "PAMethodManager.h"
+#import "PAAppDelegate.h"
 #import "Peer.h"
 #import "UIImageView+AFNetworking.h"
 #import "PAAssetManager.h"
@@ -19,6 +20,10 @@
 
 @property UIAlertView* registerAlert;
 @property UIAlertView* institutionAlert;
+@property UIAlertView* unauthorizedAlert;
+
+@property (strong, nonatomic) void (^instCallbackBlock)(void);
+@property (strong, nonatomic) void (^unauthCallbackBlock)(void);
 
 @end
 
@@ -43,10 +48,17 @@
                                                                           delegate:self
                                                                  cancelButtonTitle:@"Cancel"
                                                                  otherButtonTitles:@"Continue", nil];
+        _sharedMethodManager.unauthorizedAlert = [[UIAlertView alloc] initWithTitle:@"Unauthorized Action"
+                                                                           message:@"Hmm, you seem to be improperly authenticated. Please login again."
+                                                                          delegate:self
+                                                                 cancelButtonTitle:@"Okay"
+                                                                 otherButtonTitles:nil];
     });
     
     return _sharedMethodManager;
 }
+
+#pragma mark - Alerts
 
 -(void)showRegisterAlert:(NSString*)message forViewController:(UIViewController *)sender{
     /*Brings up a ui alert if an unregistered user attempts to perform an action reserved for registered users
@@ -65,9 +77,15 @@
 }
 
 -(void)showInstitutionAlert:(void (^)(void))callbackBlock{
-    self.callbackBlock = callbackBlock;
+    self.instCallbackBlock = callbackBlock;
     self.institutionAlert.delegate=self;
     [self.institutionAlert show];
+}
+
+-(void)showUnauthorizedAlertWithCallbackBlock:(void (^)(void))callbackBlock {
+    self.unauthCallbackBlock = callbackBlock;
+    self.unauthorizedAlert.delegate=self;
+    [self.unauthorizedAlert show];
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
@@ -83,14 +101,43 @@
             //The user has pressed continue. We must switch to the user's home institution and then call the call back block to continue the action
             NSLog(@"switch the institution");
             [[PAFetchManager sharedFetchManager] manuallyChangeInstituion];
-            self.callbackBlock();
+            if (self.instCallbackBlock != nil) {
+                self.instCallbackBlock();
+            }
         }else{
             NSLog(@"don't perform the action");
+        }
+    }else if(alertView==self.unauthorizedAlert){
+        switch (buttonIndex) {
+            case 0: {
+                //The user is already logged out and has pressed okay.
+                //We must switch to the user's home institution and then execute the callback
+                NSLog(@"presenting login process");
+                PAAppDelegate *appDel = [[UIApplication sharedApplication] delegate];
+                [appDel.dropDownBar selectItemAtIndex:4];
+                
+                PAProfileTableViewController* profileController = appDel.profileViewController;
+                [appDel.profileViewController.navigationController popToRootViewControllerAnimated:NO];
+                [profileController presentLoginStoryboard];
+                
+                if (self.unauthCallbackBlock != nil) {
+                    self.unauthCallbackBlock();
+                }
+            }
+                break;
+            case 1:
+                // since this shouldn't ever really happen, could do a link to support/feedback page
+                NSLog(@"presenting support view");
+                break;
+                
+            default:
+                NSLog(@"not a current case");
+                break;
         }
     }
 }
 
-
+#pragma mark - Other
 
 -(UIImageView*)imageForPeer:(Peer*)peer{
     if (peer.imageURL) {
@@ -228,9 +275,7 @@
 -(void)handleResetLink:(NSMutableDictionary*)urlInfo{
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"authentication_token"]){
         //if the user has clicked a confirmation link and is currently signed in
-        [[PASyncManager globalSyncManager] logoutUser];
-        
-        [[PAFetchManager sharedFetchManager] logoutUser];
+        [self logoutUserCompletely];
         
         if (FBSession.activeSession.state == FBSessionStateOpen|| FBSession.activeSession.state == FBSessionStateOpenTokenExtended) {
             
@@ -238,23 +283,6 @@
             // The session state handler (in the app delegate) will be called automatically
             [FBSession.activeSession closeAndClearTokenInformation];
         }
-        
-        
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        [defaults removeObjectForKey:@"authentication_token"];
-        [defaults removeObjectForKey:@"first_name"];
-        [defaults removeObjectForKey:@"last_name"];
-        [defaults removeObjectForKey:@"blurb"];
-        [defaults removeObjectForKey:@"email"];
-        [defaults removeObjectForKey:@"profile_picture_url"];
-        [defaults removeObjectForKey:@"home_institution"];
-        [defaults removeObjectForKey:@"facebook_profile_picture_url"];
-        
-        
-        [defaults setObject:@NO forKey:@"logged_in"];
-        
-        [[PASyncManager globalSyncManager] ceateAnonymousUser:nil];
-        
     }
     //At this point the user is certainly logged out, and we may continue by sending the email and password to api/access
     
@@ -267,6 +295,34 @@
     NSLog(@"login info %@", loginInfo);
     [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:nil direction:@"change_password"];
 }
+
+- (void)logoutUserCompletely {
+    [[PASyncManager globalSyncManager] logoutUser];
+    
+    [[PAFetchManager sharedFetchManager] logoutUser];
+    
+    if (FBSession.activeSession.state == FBSessionStateOpen || FBSession.activeSession.state == FBSessionStateOpenTokenExtended) {
+        // Close the session and remove the access token from the cache
+        // The session state handler (in the app delegate) will be called automatically
+        [FBSession.activeSession closeAndClearTokenInformation];
+    }
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"authentication_token"];
+    [defaults removeObjectForKey:@"first_name"];
+    [defaults removeObjectForKey:@"last_name"];
+    [defaults removeObjectForKey:@"blurb"];
+    [defaults removeObjectForKey:@"email"];
+    [defaults removeObjectForKey:@"profile_picture_url"];
+    [defaults removeObjectForKey:@"facebook_profile_picture_url"];
+    [defaults removeObjectForKey:@"home_institution"];
+    
+    [defaults setObject:@NO forKey:@"logged_in"];
+    
+    [[PASyncManager globalSyncManager] ceateAnonymousUser:nil];
+}
+
+#pragma mark - Tutorial
 
 // sets the nsuserdefaults boolean values to false for each tutorial
 -(void)resetTutorialBooleans {

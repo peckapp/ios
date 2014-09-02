@@ -152,11 +152,7 @@ BOOL loggedIn;
 {
     if(!loggedIn){
         
-        UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
-        UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
-        PAInitialViewController* root = loginRoot.viewControllers[0];
-        root.direction = @"none";
-        [self presentViewController:loginRoot animated:YES completion:nil];
+        [self presentLoginStoryboard];
     }else{
         //Logging out the user
         
@@ -171,31 +167,7 @@ BOOL loggedIn;
         }
 
         
-        [[PASyncManager globalSyncManager] logoutUser];
-        
-        [[PAFetchManager sharedFetchManager] logoutUser];
-        
-        if (FBSession.activeSession.state == FBSessionStateOpen|| FBSession.activeSession.state == FBSessionStateOpenTokenExtended) {
-            
-            // Close the session and remove the access token from the cache
-            // The session state handler (in the app delegate) will be called automatically
-        [FBSession.activeSession closeAndClearTokenInformation];
-        }
-        
-        
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        [defaults removeObjectForKey:@"authentication_token"];
-        [defaults removeObjectForKey:@"first_name"];
-        [defaults removeObjectForKey:@"last_name"];
-        [defaults removeObjectForKey:@"blurb"];
-        [defaults removeObjectForKey:@"email"];
-        [defaults removeObjectForKey:@"profile_picture_url"];
-        [defaults removeObjectForKey:@"home_institution"];
-        
-        
-        [defaults setObject:@NO forKey:@"logged_in"];
-        
-        [[PASyncManager globalSyncManager] ceateAnonymousUser:nil];
+        [[PAMethodManager sharedMethodManager] logoutUserCompletely];
         
         self.emailTextField.text=@"";
         self.firstNameTextField.text=@"";
@@ -208,6 +180,14 @@ BOOL loggedIn;
         
         loggedIn=NO;
     }
+}
+
+- (void)presentLoginStoryboard {
+    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
+    UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
+    PAInitialViewController* root = loginRoot.viewControllers[0];
+    root.direction = @"none";
+    [self presentViewController:loginRoot animated:YES completion:nil];
 }
 
 - (IBAction)registerAccount:(id)sender {
