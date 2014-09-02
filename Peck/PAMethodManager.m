@@ -118,7 +118,8 @@
                 
                 PAProfileTableViewController* profileController = appDel.profileViewController;
                 [appDel.profileViewController.navigationController popToRootViewControllerAnimated:NO];
-                [profileController presentLoginStoryboard];
+                // must be presented by the dropdownController to ensure that it appears above the dropdown bar
+                [profileController presentLoginStoryboardFromViewController:appDel.dropdownController];
                 
                 if (self.unauthCallbackBlock != nil) {
                     self.unauthCallbackBlock();

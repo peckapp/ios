@@ -133,8 +133,9 @@
     // initializes the singleton
     [FBLoginView class];
     
+    self.dropdownController = [self.mainStoryboard instantiateInitialViewController];
     if (initViewController == nil) {
-        initViewController = [self.mainStoryboard instantiateInitialViewController];
+        initViewController = self.dropdownController;
     }
     [self.window setRootViewController:initViewController];
     

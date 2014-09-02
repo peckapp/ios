@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PADropdownBar.h"
+#import "PADropdownViewController.h"
 #import "PACirclesTableViewController.h"
 #import "PAEventsViewController.h"
 #import "PAProfileTableViewController.h"
@@ -22,6 +23,7 @@
 @property (readonly, weak) UIStoryboard * mainStoryboard;
 
 @property (strong, nonatomic) PADropdownBar* dropDownBar;
+@property (strong, nonatomic) PADropdownViewController* dropdownController;
 @property (strong, nonatomic) PACirclesTableViewController* circleViewController;
 @property (strong, nonatomic) PAEventsViewController* eventsViewController;
 @property (strong, nonatomic) PAProfileTableViewController* profileViewController;

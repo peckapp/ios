@@ -156,7 +156,7 @@ BOOL loggedIn;
 {
     if(!loggedIn){
         
-        [self presentLoginStoryboard];
+        [self presentLoginStoryboardFromViewController:self];
     }else{
         //Logging out the user
         
@@ -186,11 +186,11 @@ BOOL loggedIn;
     }
 }
 
-- (void)presentLoginStoryboard {
+- (void)presentLoginStoryboardFromViewController:(UIViewController*)viewController {
     UINavigationController *loginRoot = [self.loginStoryboard instantiateInitialViewController];
     PAInitialViewController* root = loginRoot.viewControllers[0];
     root.direction = @"none";
-    [self presentViewController:loginRoot animated:YES completion:nil];
+    [viewController presentViewController:loginRoot animated:YES completion:nil];
 }
 
 - (IBAction)registerAccount:(id)sender {

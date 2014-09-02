@@ -29,5 +29,6 @@
 @property (strong, nonatomic) NSString* tempPass;
 - (IBAction)saveChangesButton:(id)sender;
 
-- (void)presentLoginStoryboard;
+- (void)presentLoginStoryboardFromViewController:(UIViewController*)viewController;
+
 @end
