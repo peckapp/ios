@@ -108,7 +108,7 @@ PAAssetManager *assetManager;
     [self.tableView reloadData];
     self.view.frame = self.parentViewController.view.bounds;
     self.viewFrame = self.parentViewController.view.bounds;
-    NSLog(@"dining places view frame %@", NSStringFromCGRect(self.view.bounds));
+    //NSLog(@"dining places view frame %@", NSStringFromCGRect(self.view.bounds));
 }
 
 - (void)compressAnimated:(BOOL)animated

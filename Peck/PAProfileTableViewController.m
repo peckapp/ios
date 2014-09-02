@@ -25,6 +25,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *feedbackLabel;
 
+@property (strong, nonatomic) UIStoryboard *loginStoryboard;
+
 @end
 
 @implementation PAProfileTableViewController
@@ -65,6 +67,8 @@ BOOL loggedIn;
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     //[appdelegate setProfileViewController:self];
     [appdelegate setProfileProperty:self];
+    
+    self.loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
     
     NSLog(@"Finished viewDidLoad (PAProfileTableViewController)");
 }
@@ -183,8 +187,7 @@ BOOL loggedIn;
 }
 
 - (void)presentLoginStoryboard {
-    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
-    UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
+    UINavigationController *loginRoot = [self.loginStoryboard instantiateInitialViewController];
     PAInitialViewController* root = loginRoot.viewControllers[0];
     root.direction = @"none";
     [self presentViewController:loginRoot animated:YES completion:nil];
@@ -192,9 +195,8 @@ BOOL loggedIn;
 
 - (IBAction)registerAccount:(id)sender {
     NSLog(@"reg");
-    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
-    UIViewController *registerControllet = [loginStoryboard instantiateViewControllerWithIdentifier:@"register"];
-    [self presentViewController:registerControllet animated:YES completion:nil];
+    UIViewController *registerController = [self.loginStoryboard instantiateViewControllerWithIdentifier:@"register"];
+    [self presentViewController:registerController animated:YES completion:nil];
 }
 
 
@@ -254,7 +256,7 @@ BOOL loggedIn;
         controller.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         controller.modalPresentationStyle = UIModalPresentationCurrentContext;
         controller.delegate = self;
-        [self presentViewController: controller animated: YES completion: nil];
+        [self presentViewController:controller animated: YES completion: nil];
         
     }
 }
@@ -293,17 +295,17 @@ BOOL loggedIn;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if(indexPath.section==0 && indexPath.row==5){
         NSLog(@"view the user's profile");
-        UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        UINavigationController *navController = [loginStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
+        PAAppDelegate *appDel = [[UIApplication sharedApplication] delegate];
+        UINavigationController *navController = [appDel.mainStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
         [self presentViewController:navController animated:YES completion:nil];
     }else if(indexPath.section==0 && indexPath.row==6){
-        UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        UINavigationController *feedbackController = [loginStoryboard instantiateViewControllerWithIdentifier:@"sendFeedback"];
+        PAAppDelegate *appDel = [[UIApplication sharedApplication] delegate];
+        UINavigationController *feedbackController = [appDel.mainStoryboard instantiateViewControllerWithIdentifier:@"sendFeedback"];
         [self presentViewController:feedbackController animated:YES completion:nil];
     }else if(indexPath.section==0 && indexPath.row==7){
         [[PAMethodManager sharedMethodManager] resetTutorialBooleans];
         [[PAMethodManager sharedMethodManager] showTutorialAlertWithTitle:@"Reset Tutorials"
-                                                               andMessage:@"Good for you, tutorials are now reset and you will get to see how the app works again!"];
+                                                               andMessage:@"Tutorials are now reset and will appear as you navigate through the app!"];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

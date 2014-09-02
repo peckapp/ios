@@ -111,7 +111,7 @@ PAAssetManager *assetManager;
         self.tableView.contentInset = UIEdgeInsetsMake(256, 0, -self.footerView.frame.size.height, 0);
         [self.tableView setContentOffset:CGPointMake(0, -256)];
 
-        NSLog(@"table view frame %@", NSStringFromCGRect(self.tableView.frame));
+        //NSLog(@"table view frame %@", NSStringFromCGRect(self.tableView.frame));
         
         [[PASyncManager globalSyncManager] updateMenuItemsForOpportunity:self.diningOpportunity andPlace:self.detailItem];
 

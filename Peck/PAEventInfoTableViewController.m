@@ -325,7 +325,7 @@ BOOL reloaded = NO;
         }
         
         self.view.frame = self.parentViewController.view.bounds;
-        NSLog(@"view frame %@", NSStringFromCGRect(self.view.frame));
+        //NSLog(@"view frame %@", NSStringFromCGRect(self.view.frame));
         self.view.backgroundColor = [UIColor whiteColor];
         self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         self.tableView.backgroundColor = [UIColor clearColor];
@@ -362,7 +362,7 @@ BOOL reloaded = NO;
             });
 
             [self registerForKeyboardNotifications];
-            NSLog(@"bounds:  %@", NSStringFromCGRect(self.parentViewController.view.bounds));
+            //NSLog(@"bounds:  %@", NSStringFromCGRect(self.parentViewController.view.bounds));
             self.view.frame = self.parentViewController.view.bounds;
         };
 

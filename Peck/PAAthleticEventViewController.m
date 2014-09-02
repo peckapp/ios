@@ -20,6 +20,7 @@
 
 #define imageHeight 256
 #define titleLabelDivide 90
+#define titleAndNameSpacing 15
 #define dateLabelDivide 200
 #define compressedHeight 88
 #define buffer 14
@@ -53,7 +54,8 @@
 @property (strong, nonatomic) UIImageView *blurredImageView;
 
 @property (strong, nonatomic) UILabel *timeLabel;
-@property (strong, nonatomic) UILabel *titleLabel;
+@property (strong, nonatomic) UILabel *teamNameLabel;
+@property (strong, nonatomic) UILabel *titleDetailLabel;
 @property (strong, nonatomic) UILabel *fullTitleLabel;
 @property (strong, nonatomic) UILabel *descriptionLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
@@ -129,16 +131,22 @@
     self.blurredImageView.contentMode = UIViewContentModeCenter;
     [self.imagesView addSubview:self.blurredImageView];
     
+    self.teamNameLabel = [[UILabel alloc] init];
+    self.teamNameLabel.textColor = [UIColor whiteColor];
+    self.teamNameLabel.font = [UIFont boldSystemFontOfSize:17.0];
+    [self.blurredImageView addSubview:self.teamNameLabel];
+    
+    // detail label with the title of the event
+    self.titleDetailLabel = [[UILabel alloc] init];
+    self.titleDetailLabel.textColor = [UIColor whiteColor];
+    self.titleDetailLabel.font = [UIFont boldSystemFontOfSize:15.0];
+    [self.blurredImageView addSubview:self.titleDetailLabel];
+    
     self.timeLabel = [[UILabel alloc] init];
     self.timeLabel.textColor = [UIColor whiteColor];
     self.timeLabel.font = [UIFont boldSystemFontOfSize:17.0];
     self.timeLabel.textAlignment = NSTextAlignmentRight;
     [self.blurredImageView addSubview:self.timeLabel];
-    
-    self.titleLabel = [[UILabel alloc] init];
-    self.titleLabel.textColor = [UIColor whiteColor];
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
-    [self.blurredImageView addSubview:self.titleLabel];
     
     [self.headerView addSubview:[assetManager createShadowWithFrame:CGRectMake(0, -64, self.view.frame.size.width, 64) top:YES]];
     
@@ -235,8 +243,11 @@
     CGRect right;
     CGRectDivide(self.blurredImageView.frame, &left, &right, titleLabelDivide, CGRectMinXEdge);
     self.timeLabel.frame = left;
-    self.titleLabel.frame = right;
-    self.titleLabel.frame = CGRectInset(self.titleLabel.frame, buffer, 0);
+    self.teamNameLabel.frame = right;
+    self.teamNameLabel.frame = CGRectOffset(CGRectInset(self.teamNameLabel.frame, buffer, 0), 0, -titleAndNameSpacing);
+    
+    self.titleDetailLabel.frame = right;
+    self.titleDetailLabel.frame = CGRectOffset(CGRectInset(self.titleDetailLabel.frame, buffer, 0), 0, titleAndNameSpacing);
     
     self.fullTitleLabel.frame = CGRectMake(buffer, -buffer * 3, self.view.frame.size.width - buffer * 2, buffer * 3);
     
@@ -340,7 +351,7 @@
         }
         
         self.view.frame = self.parentViewController.view.bounds;
-        NSLog(@"view frame %@", NSStringFromCGRect(self.view.frame));
+        //NSLog(@"view frame %@", NSStringFromCGRect(self.view.frame));
         self.view.backgroundColor = [UIColor whiteColor];
         self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         self.tableView.backgroundColor = [UIColor clearColor];
@@ -378,7 +389,7 @@
             });
             
             [self registerForKeyboardNotifications];
-            NSLog(@"bounds:  %@", NSStringFromCGRect(self.parentViewController.view.bounds));
+            //NSLog(@"bounds:  %@", NSStringFromCGRect(self.parentViewController.view.bounds));
             self.view.frame = self.parentViewController.view.bounds;
         };
         
@@ -474,7 +485,8 @@
         [dateFormatter setDateFormat:@"h:mm a"];
         [self.timeLabel setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
 
-        self.titleLabel.text = [self.detailItem valueForKey:@"title"];
+        self.teamNameLabel.text = [self.detailItem valueForKey:@"team_name"];
+        self.titleDetailLabel.text = [self.detailItem valueForKey:@"title"];
         self.fullTitleLabel.text = [self.detailItem valueForKey:@"title"];
         
         [dateFormatter setDateFormat:@"MMM dd, yyyy h:mm a"];
