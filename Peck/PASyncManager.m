@@ -1013,7 +1013,7 @@
              
              [NewRelic recordMetricWithName:@"ExploreCount"
                                    category:@"Content"
-                                      value:[NSNumber numberWithInt:[eventsFromResponse count]]];
+                                      value:[NSNumber numberWithInteger:[eventsFromResponse count]]];
              
              [self.persistentStoreCoordinator lock];
              if(![eventsFromResponse isKindOfClass:[NSNull class]]){
@@ -1950,7 +1950,7 @@
              
              [NewRelic recordMetricWithName:@"SimpleEventCount"
                                    category:@"Content"
-                                      value:[NSNumber numberWithInt:[postsFromResponse count]]];
+                                      value:[NSNumber numberWithInteger:[postsFromResponse count]]];
              
              [self.persistentStoreCoordinator lock];
              for (NSDictionary *eventAttributes in postsFromResponse) {
@@ -2043,7 +2043,7 @@
                  
                  [NewRelic recordMetricWithName:@"AthleticEventCount"
                                        category:@"Content"
-                                          value:[NSNumber numberWithInt:[postsFromResponse count]]];
+                                          value:[NSNumber numberWithInteger:[postsFromResponse count]]];
                  
                  [self.persistentStoreCoordinator lock];
                  for (NSDictionary *eventAttributes in postsFromResponse) {
