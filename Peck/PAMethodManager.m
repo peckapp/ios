@@ -41,7 +41,7 @@
                                                                         message:nil
                                                                        delegate:self
                                                               cancelButtonTitle:@"Okay"
-                                                              otherButtonTitles:@"Register", nil];
+                                                              otherButtonTitles:@"Register", @"Login", nil];
         
         _sharedMethodManager.institutionAlert = [[UIAlertView alloc] initWithTitle:@"Foreign Institution"
                                                                            message:@"Your current institution will be switched to your home institution to complete this action"
@@ -69,8 +69,9 @@
         Attending an event
         Creating a circle
     */
-    message =[@"Please login or register to " stringByAppendingString:message];
+    message =[@"Please register or login to " stringByAppendingString:message];
     self.registerAlert.message = message;
+    self.registerAlert.delegate = self;
     self.sender = sender;
     [self.registerAlert show];
     
@@ -93,8 +94,12 @@
         if(buttonIndex==1){
             //The user has selected register
             UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
-            UIViewController *registerControllet = [loginStoryboard instantiateViewControllerWithIdentifier:@"register"];
-            [self.sender presentViewController:registerControllet animated:YES completion:nil];
+            UIViewController *registerController = [loginStoryboard instantiateViewControllerWithIdentifier:@"register"];
+            [self.sender presentViewController:registerController animated:YES completion:nil];
+        } else if (buttonIndex==2) {
+            UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
+            UIViewController *loginController = [loginStoryboard instantiateInitialViewController];
+            [self.sender presentViewController:loginController animated:YES completion:nil];
         }
     }else if(alertView==self.institutionAlert){
         if(buttonIndex==1){

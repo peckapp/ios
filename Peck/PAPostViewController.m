@@ -213,13 +213,8 @@
         if([self.startTimePicker.date compare:self.endTimePicker.date]==NSOrderedDescending || !userHasChangedEndTime){
             //if the start time is after the end time or the end time has not been set yet
             
-            NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
-            [dateComponents setHour:1];
-        
-            self.endTimePicker.date = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:self.startTimePicker.date options:0];
-        
-            stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
-            self.endTimeLabel.text = stringFromDate;
+            [self setEndDateOneHourAfterStartDate];
+            
         }else{
             //if the times are in the correct order, reset the end time label.
             //This is here in case the end time label has a strike through the time, it will reset if you change the start time to before the previously illegal end time
@@ -246,6 +241,16 @@
         }
     }
 
+}
+
+-(void)setEndDateOneHourAfterStartDate {
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setHour:1];
+    
+    self.endTimePicker.date = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:self.startTimePicker.date options:0];
+    
+    NSString *stringFromDate = [formatter stringFromDate:self.endTimePicker.date];
+    self.endTimeLabel.text = stringFromDate;
 }
 
 #pragma mark table view delegate
@@ -486,14 +491,14 @@
             if(_controlSwitch.selectedSegmentIndex==0){
                 //The user is attempting to edit an event
                 if([self.titleField.text isEqualToString:@""]){
-                    [self showAllertWithMessage:@"Your event must have a title"];
+                    [self showAlertWithMessage:@"Your event must have a title"];
                 }else{
                     [self updateEvent];
                 }
             }else{
                 //the user is attemping to edit an announcement
                 if([self.titleField.text isEqualToString:@""]){
-                    [self showAllertWithMessage:@"Your announcement must have a title"];
+                    [self showAlertWithMessage:@"Announcement must have a title"];
                 }else{
                     [self updateAnnouncement];
                 }
@@ -526,22 +531,50 @@
         //Posting
         if(_controlSwitch.selectedSegmentIndex==0){
             //The user is attempting to post an event
-            if([self.titleField.text isEqualToString:@""] || [self.startTimeLabel.text isEqualToString:@""]){
-                [self showAllertWithMessage:@"You must enter an event name and time"];
-            }else{
+            if([self postFieldsAreComplete]){
+                // alerts handled in the if statement method call
                 [self postEvent];
             }
         }else if(_controlSwitch.selectedSegmentIndex==1){
             //The user is attempting to post an announcement
             if([self.titleField.text isEqualToString:@""]){
-                [self showAllertWithMessage:@"You must enter an announcement title"];
+                [self showAlertWithMessage:@"Must enter a title"];
             }else{
                 [self postAnnouncement];
             }
         }
 }
 
--(void)showAllertWithMessage:(NSString*)message{
+// determines whether or not the user has entered the necessary information
+-(BOOL)postFieldsAreComplete {
+    // if the title is blank or the time is unmodified
+    if ([self.titleField.text isEqualToString:@""] ||
+        [self.startTimeLabel.text isEqualToString:@"None"] ||
+        [self.locationTextField.text isEqualToString:@""]) {
+        
+        [self showAlertWithMessage:@"Must enter name, time, and location."];
+        return false;
+    }
+    // start time must be in the future
+    if ([self.startTimePicker.date compare:[NSDate date]] == NSOrderedAscending) {
+        
+        [self showAlertWithMessage:@"Start time must be in the future."];
+        return false;
+    }
+    // start time must be before end time
+    if ([self.startTimePicker.date compare:self.endTimePicker.date] == NSOrderedDescending) {
+        
+        [self showAlertWithMessage:@"End time must be after start time."];
+        [self setEndDateOneHourAfterStartDate];
+        
+        return false;
+    }
+    // if the
+    
+    return true;
+}
+
+-(void)showAlertWithMessage:(NSString*)message{
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Information"
                                                     message:message
                                                    delegate:self
