@@ -19,6 +19,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "PAMethodManager.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "PAUtils.h"
 
 /*
  State for each cell is defined by the cell's tag.
@@ -203,6 +204,8 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - Date picker methods
 
 -(void)dateChanged:(id)sender{
     if(sender==self.startTimePicker){
@@ -480,6 +483,8 @@
     }
 }
 
+#pragma mark - handling user send requests
+
 - (IBAction)returnResultAndExit:(id)sender
 {
     NSUserDefaults* defualts = [NSUserDefaults standardUserDefaults];
@@ -601,6 +606,8 @@
     [((PADropdownViewController*)self.parentViewController.parentViewController).dropdownBar deselectAllItems];
 }
 
+#pragma mark - Sending of content
+
 -(void)postEvent{
     
     if(self.changedImage){
@@ -626,6 +633,19 @@
     }
     
     [self clearScreenAndDismissView];
+}
+
+-(void)handlePostTutorial {
+    if (SHOW_POST_TUTORIAL) {
+        UIAlertView *postTutorial = [[UIAlertView alloc] initWithTitle:@"Congratulations!"
+                                                               message:@"Great job on your first post. If you want to edit it\
+                                                                        or invite more people, find it in the profile dropdown."
+                                                              delegate:self
+                                                     cancelButtonTitle:@"Okay"
+                                                     otherButtonTitles:nil];
+        [postTutorial show];
+        DID_SHOW_POST_TUTORIAL;
+    }
 }
 
 -(void)updateEvent{

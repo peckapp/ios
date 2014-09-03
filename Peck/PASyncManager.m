@@ -1890,7 +1890,11 @@
     
     [[PASessionManager sharedClient] POST:eventURL
                                parameters:baseDictioanary
-                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
+                constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+                    if (imageData != nil) {
+                        [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];
+                    }
+                }
                                   success:^
      (NSURLSessionDataTask * __unused task, id JSON) {
         // NSLog(@"simple event creation success: %@", JSON);

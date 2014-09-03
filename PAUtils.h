@@ -16,15 +16,23 @@
 // NSUserDefaults keys
 #define logged_in_key @"logged_in"
 #define institution_id_key @"institution_id"
-// tutorials
+
+// TUTORIALS
+// first launch
 #define first_launch @"first_launch"
 #define DID_FIRST_LAUNCH [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:first_launch]
+// homepage
 #define homepage_tutorial @"should_show_homepage_tutorial"
 #define SHOW_HOMEPAGE_TUTORIAL [[NSUserDefaults standardUserDefaults] objectForKey:homepage_tutorial]
 #define DID_SHOW_HOMEPAGE_TUTORIAL [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:homepage_tutorial]
+// dropdown
 #define dropdown_tutorial @"should_show_dropdown_tutorial"
 #define SHOW_DROPDOWN_TUTORIAL [[NSUserDefaults standardUserDefaults] objectForKey:dropdown_tutorial]
 #define DID_SHOW_DROPDOWN_TUTORIAL [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:dropdown_tutorial]
+// event post
+#define post_tutorial @"should_show_post_tutorial"
+#define SHOW_POST_TUTORIAL [[NSUserDefaults standardUserDefaults] objectForKey:post_tutorial]
+#define DID_SHOW_POST_TUTORIAL [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:post_tutorial]
 
 // common boilerplate methods calls
 #define REGISTER_PUSH_NOTIFICATIONS [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge]
