@@ -618,6 +618,7 @@
         [[PASyncManager globalSyncManager] postEventWithoutImage:[self configureEventDictioanry]];
     }
     [self clearScreenAndDismissView];
+    [self handlePostTutorial];
 }
 
 
@@ -633,13 +634,13 @@
     }
     
     [self clearScreenAndDismissView];
+    [self handlePostTutorial];
 }
 
 -(void)handlePostTutorial {
     if (SHOW_POST_TUTORIAL) {
         UIAlertView *postTutorial = [[UIAlertView alloc] initWithTitle:@"Congratulations!"
-                                                               message:@"Great job on your first post. If you want to edit it\
-                                                                        or invite more people, find it in the profile dropdown."
+                                                               message:@"Great job on your first post. If you want to edit it or invite more people, find it in the profile dropdown."
                                                               delegate:self
                                                      cancelButtonTitle:@"Okay"
                                                      otherButtonTitles:nil];
