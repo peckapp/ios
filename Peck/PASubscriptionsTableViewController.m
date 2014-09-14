@@ -12,8 +12,7 @@
 #import "PAFetchManager.h"
 #import "Subscription.h"
 #import "PASyncManager.h"
-
-@class PAConfigureViewController;
+#import "PAConfigureViewController.h"
 
 @interface PASubscriptionsTableViewController ()
 
@@ -56,11 +55,11 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    if ([self.navigationController.topViewController isKindOfClass:[PASubscriptionsTableViewController class]]) {
+    if ([self.navigationController.topViewController isKindOfClass:[PAConfigureViewController class]]) {
         self.isInitializing = YES;
     } else {
         self.isInitializing = NO;
-        self.finishButton.enabled = NO;
+        self.finishButton.enabled = false;
     }
     
     NSError *error = nil;
@@ -183,10 +182,13 @@
 #pragma mark - Navigation
 
 -(IBAction)finishInitialSelections:(id)sender {
-    PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    if (self.isInitializing) {
+        PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        
+        UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+        [appDelegate.window setRootViewController:newRoot];
+    }
     
-    UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
-    [appDelegate.window setRootViewController:newRoot];
 }
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation

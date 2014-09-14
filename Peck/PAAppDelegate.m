@@ -37,7 +37,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // uncomment during application launch to clear out all NSUserDefaults
-    [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
+    //[[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
     
     // uncomment at launch to nuke persistant store. definitely a messy way to do it, app will not run on that launch
     /* for (NSPersistentStore *pstore in [[self persistentStoreCoordinator] persistentStores]) {

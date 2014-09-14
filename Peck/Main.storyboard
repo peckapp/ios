@@ -773,14 +773,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Subscriptions" id="nWc-uY-sBZ">
-                        <barButtonItem key="rightBarButtonItem" title="Finish" id="YUi-N4-Voh">
+                        <barButtonItem key="rightBarButtonItem" title="Finish" id="vhb-A3-YBs">
                             <connections>
-                                <action selector="finishInitialSelections:" destination="O2x-q1-ptf" id="yTN-AZ-rjW"/>
+                                <action selector="finishInitialSelections:" destination="O2x-q1-ptf" id="xZV-5Y-zpH"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="finishButton" destination="YUi-N4-Voh" id="okr-UC-3aU"/>
+                        <outlet property="finishButton" destination="vhb-A3-YBs" id="7HF-kj-ZBP"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vSJ-am-N53" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1442,8 +1442,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="TbO-p2-TYX"/>
         <segue reference="gpx-S3-Fsz"/>
-        <segue reference="4q4-Pe-qR3"/>
         <segue reference="1BS-S8-4I3"/>
         <segue reference="dcQ-aV-Gat"/>
     </inferredMetricsTieBreakers>
