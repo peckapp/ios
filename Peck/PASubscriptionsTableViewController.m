@@ -57,9 +57,12 @@
     
     if ([self.navigationController.topViewController isKindOfClass:[PAConfigureViewController class]]) {
         self.isInitializing = YES;
+        self.finishButton.enabled = true;
+        self.finishButton.title = @"Finish";
     } else {
         self.isInitializing = NO;
         self.finishButton.enabled = false;
+        self.finishButton.title = @"";
     }
     
     NSError *error = nil;
