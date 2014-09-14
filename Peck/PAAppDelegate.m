@@ -37,7 +37,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // uncomment during application launch to clear out all NSUserDefaults
-    // [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
+    [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
     
     // uncomment at launch to nuke persistant store. definitely a messy way to do it, app will not run on that launch
     /* for (NSPersistentStore *pstore in [[self persistentStoreCoordinator] persistentStores]) {
@@ -99,7 +99,7 @@
     
     if(institutionID == nil){
         NSLog(@"Open up the configure screen");
-        initViewController = [self.mainStoryboard instantiateViewControllerWithIdentifier:@"configure"];
+        initViewController = [self.mainStoryboard instantiateViewControllerWithIdentifier:@"initialSetup"];
         
         if(userID == nil){
             /*
@@ -112,7 +112,7 @@
                     NSLog(@"Anonymous user creation unsucessful");
                 }
             }];*/
-            [[PASyncManager globalSyncManager] sendUDIDForInitViewController:initViewController];
+            [[PASyncManager globalSyncManager] sendUDIDForInitViewController:[(UINavigationController*)initViewController topViewController]];
         }
     }
     

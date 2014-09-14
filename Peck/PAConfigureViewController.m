@@ -7,18 +7,17 @@
 //
 
 #import "PAConfigureViewController.h"
-
 #import "PAAppDelegate.h"
 #import "PADropdownViewController.h"
-
 #import "PASyncManager.h"
 #import "Institution.h"
-
 #import "PAFetchManager.h"
+#import "PASubscriptionsTableViewController.h"
 
 @interface PAConfigureViewController ()
 
 @property (nonatomic,retain) NSArray * institutions;
+@property (weak, nonatomic) IBOutlet UIButton *continueButton;
 
 @end
 
@@ -161,7 +160,7 @@
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     /*
-    *** This has been commented out for a reason. The school should not be set until the continue button is pressed because the previous methd of setting the institution could produce an error. If the user wished to select the first institution, but there was already an institution in user defaults then the institution would not be properly set.
+    *** This has been commented out for a reason. The school should not be set until the continue button is pressed because the previous method of setting the institution could produce an error. If the user wished to select the first institution, but there was already an institution in user defaults then the institution would not be properly set.
     ***
      
     Institution * institution = (Institution*)[self.institutions objectAtIndex:row];
@@ -191,10 +190,8 @@
         [[PAFetchManager sharedFetchManager] switchInstitution];
         
         // if this is root because of the initial download of the app
-        if ([appDelegate window].rootViewController == self) {
-            UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
-            
-            [appDelegate.window setRootViewController:newRoot];
+        if ([appDelegate window].rootViewController == self.navigationController) {
+            [self performSegueWithIdentifier:@"initialSubscriptions" sender:self];
         } else {
             
             [self.navigationController popViewControllerAnimated:YES];
@@ -206,9 +203,16 @@
                                                            delegate:self
                                                   cancelButtonTitle:@"Okay"
                                                   otherButtonTitles:nil];
+        // post error to flurry here
         [alertView show];
     }
     
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqual: @"initialSubscriptions"]) {
+        [(PASubscriptionsTableViewController*)segue.destinationViewController setIsInitializing:YES];
+    }
 }
 
 @end

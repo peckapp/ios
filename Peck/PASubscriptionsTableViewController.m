@@ -8,15 +8,26 @@
 
 #import "PASubscriptionsTableViewController.h"
 #import "PASubscriptionCell.h"
+#import "PAAppDelegate.h"
 #import "PAFetchManager.h"
 #import "Subscription.h"
 #import "PASyncManager.h"
 
+@class PAConfigureViewController;
+
 @interface PASubscriptionsTableViewController ()
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *finishButton;
+
+-(IBAction)finishInitialSelections:(id)sender;
 
 @end
 
 @implementation PASubscriptionsTableViewController
+
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -33,9 +44,9 @@
     
     NSLog(@"view did load");
     
-    self.departmentSubscriptions = [[PAFetchManager sharedFetchManager] fetchSubscriptionsForCategory:@"department"];
-    self.clubSubscriptions = [[PAFetchManager sharedFetchManager] fetchSubscriptionsForCategory:@"club"];
-    self.athleticSubscriptions = [[PAFetchManager sharedFetchManager] fetchSubscriptionsForCategory:@"athletic"];
+//    self.departmentSubscriptions = [[PAFetchManager sharedFetchManager] fetchSubscriptionsForCategory:@"department"];
+//    self.clubSubscriptions = [[PAFetchManager sharedFetchManager] fetchSubscriptionsForCategory:@"club"];
+//    self.athleticSubscriptions = [[PAFetchManager sharedFetchManager] fetchSubscriptionsForCategory:@"athletic"];
     
     self.addedSubscriptions = [[NSMutableDictionary alloc] init];
     self.deletedSubscriptions = [[NSMutableDictionary alloc] init];
@@ -44,6 +55,20 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    if ([self.navigationController.topViewController isKindOfClass:[PASubscriptionsTableViewController class]]) {
+        self.isInitializing = YES;
+    } else {
+        self.isInitializing = NO;
+        self.finishButton.enabled = NO;
+    }
+    
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -69,18 +94,14 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 3;
+    return [[[self fetchedResultsController] sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if(section==0)
-        return [self.departmentSubscriptions count];
-    else if(section==1)
-        return [self.clubSubscriptions count];
-    else
-        return [self.athleticSubscriptions count];
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[[self fetchedResultsController] sections] objectAtIndex:section];
+    return [sectionInfo numberOfObjects];
 }
 
 
@@ -101,14 +122,8 @@
 
 -(void)configureCell:(PASubscriptionCell*)cell atIndexPath:(NSIndexPath*)indexPath{
     cell.parentViewController = self;
-    Subscription* tempSubscription;
-    if(indexPath.section==0){
-        tempSubscription = self.departmentSubscriptions[indexPath.row];
-    }else if(indexPath.section==1){
-        tempSubscription = self.clubSubscriptions[indexPath.row];
-    }else if(indexPath.section==2){
-        tempSubscription = self.athleticSubscriptions[indexPath.row];
-    }
+    Subscription* tempSubscription = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+
     cell.subscriptionTitle.text = tempSubscription.name;
     cell.subscription = tempSubscription;
     BOOL subscribed = [tempSubscription.subscribed boolValue];
@@ -122,14 +137,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    
-    if(section==0){
-        return @"Departments";
-    }else if(section==1){
-        return @"Clubs";
-    }else{
-        return @"Athletics";
-    }
+    return [[[[self fetchedResultsController] sections]objectAtIndex:section] name];
 }
 
 
@@ -174,6 +182,13 @@
 
 #pragma mark - Navigation
 
+-(IBAction)finishInitialSelections:(id)sender {
+    PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+    [appDelegate.window setRootViewController:newRoot];
+}
+
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -182,5 +197,108 @@
     // Pass the selected object to the new view controller.
 }
 
+#pragma mark - Fetched Results controller
+
+-(NSFetchedResultsController *)fetchedResultsController{
+    //NSLog(@"Returning the normal controller");
+    if(_fetchedResultsController!=nil){
+        return _fetchedResultsController;
+    }
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
+    
+    NSString * subscriptionString = @"Subscription";
+    NSEntityDescription *entity = [NSEntityDescription entityForName:subscriptionString inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    // Set the batch size to a suitable number.
+    [fetchRequest setFetchBatchSize:20];
+    
+    // Edit the sort keys as appropriate.
+    NSArray *sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"category" ascending:YES],
+                                 [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    
+    // Edit the section name key path and cache name if appropriate.
+    // nil for section name key path means "no sections".
+    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                          managedObjectContext:_managedObjectContext
+                                                                            sectionNameKeyPath:@"category"
+                                                                                     cacheName:nil];
+    frc.delegate = self;
+    self.fetchedResultsController = frc;
+    
+    return _fetchedResultsController;
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView beginUpdates];
+    //NSLog(@"controller will change object");
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                          withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                          withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            break;
+    }
+}
+
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{
+    //NSLog(@"did change object");
+    UITableView *tableView = self.tableView;
+    
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:{
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+                             withRowAnimation:UITableViewRowAnimationFade];
+            [tableView reloadData];
+            break;
+            
+        }
+        case NSFetchedResultsChangeDelete:
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            [self configureCell:(PASubscriptionCell*)[tableView cellForRowAtIndexPath:indexPath]
+                    atIndexPath:indexPath];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                             withRowAnimation:UITableViewRowAnimationFade];
+            
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+                             withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)controllerDidChangeContent: (NSFetchedResultsController *)controller
+{
+    [self.tableView endUpdates];
+}
 
 @end

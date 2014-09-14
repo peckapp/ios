@@ -877,11 +877,6 @@ PAAssetManager *assetManager;
 
 - (void)keyboardWillBeHidden:(NSNotification *)notification
 {
-    
-   
-
-    
-    
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];

@@ -762,9 +762,9 @@
         <!--Subscriptions Table View Controller - Subscriptions-->
         <scene sceneID="NRg-Or-pU3">
             <objects>
-                <tableViewController id="O2x-q1-ptf" customClass="PASubscriptionsTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="subscriptions" useStoryboardIdentifierAsRestorationIdentifier="YES" id="O2x-q1-ptf" customClass="PASubscriptionsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Cbb-95-ZMa">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <connections>
@@ -772,7 +772,16 @@
                             <outlet property="delegate" destination="O2x-q1-ptf" id="7Uj-1P-LPw"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Subscriptions" id="nWc-uY-sBZ"/>
+                    <navigationItem key="navigationItem" title="Subscriptions" id="nWc-uY-sBZ">
+                        <barButtonItem key="rightBarButtonItem" title="Finish" id="YUi-N4-Voh">
+                            <connections>
+                                <action selector="finishInitialSelections:" destination="O2x-q1-ptf" id="yTN-AZ-rjW"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="finishButton" destination="YUi-N4-Voh" id="okr-UC-3aU"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vSJ-am-N53" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1022,6 +1031,21 @@
             </objects>
             <point key="canvasLocation" x="-2512" y="2982"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="7kc-al-37S">
+            <objects>
+                <navigationController storyboardIdentifier="initialSetup" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="s2I-g5-Gdn" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="jPT-14-0EF">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="bqA-zm-rn3" kind="relationship" relationship="rootViewController" id="1BS-S8-4I3"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="weT-fd-RJ1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1993" y="2918"/>
+        </scene>
         <!--Configure View Controller - Institution-->
         <scene sceneID="6a9-5L-6bf">
             <objects>
@@ -1031,7 +1055,7 @@
                         <viewControllerLayoutGuide type="bottom" id="CDM-HG-FkX"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="KM5-SG-XcY">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="sidebar_background.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="NCl-5M-Ixd">
@@ -1039,16 +1063,16 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJo-9h-bmg">
-                                <rect key="frame" x="0.0" y="153" width="320" height="162"/>
+                                <rect key="frame" x="0.0" y="181.5" width="320" height="162"/>
                             </pickerView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select Your School" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2wi-Da-K1j">
-                                <rect key="frame" x="63" y="62" width="195" height="33"/>
+                                <rect key="frame" x="63" y="70.5" width="195" height="33"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HnY-LK-sOy">
-                                <rect key="frame" x="126" y="371" width="79" height="30"/>
+                                <rect key="frame" x="126" y="421" width="79" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Continue">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1063,7 +1087,9 @@
                     </view>
                     <navigationItem key="navigationItem" title="Institution" id="RwU-f6-Dvt"/>
                     <connections>
+                        <outlet property="continueButton" destination="HnY-LK-sOy" id="rLs-Jo-m8v"/>
                         <outlet property="schoolPicker" destination="qJo-9h-bmg" id="caa-gJ-js3"/>
+                        <segue destination="O2x-q1-ptf" kind="push" identifier="initialSubscriptions" id="dcQ-aV-Gat"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xNH-lF-J6l" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1416,7 +1442,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="4q4-Pe-qR3"/>
         <segue reference="gpx-S3-Fsz"/>
+        <segue reference="4q4-Pe-qR3"/>
+        <segue reference="1BS-S8-4I3"/>
+        <segue reference="dcQ-aV-Gat"/>
     </inferredMetricsTieBreakers>
 </document>
