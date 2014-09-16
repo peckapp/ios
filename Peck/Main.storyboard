@@ -725,7 +725,7 @@
             </objects>
             <point key="canvasLocation" x="-2241" y="3755"/>
         </scene>
-        <!--Subscriptions Collection View Controller-->
+        <!--Subscriptions-->
         <scene sceneID="Hup-Oo-0de">
             <objects>
                 <collectionViewController id="w6A-JF-GcP" customClass="PASubscriptionsCollectionViewController" sceneMemberID="viewController">
@@ -754,7 +754,7 @@
                             <outlet property="delegate" destination="w6A-JF-GcP" id="Lt7-fB-Zqc"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="Sfi-T0-470">
+                    <navigationItem key="navigationItem" title="Subscriptions" id="Sfi-T0-470">
                         <barButtonItem key="rightBarButtonItem" title="Item" id="mrR-fy-XIw">
                             <connections>
                                 <action selector="finishInitialSelections:" destination="w6A-JF-GcP" id="N7b-RP-V0y"/>

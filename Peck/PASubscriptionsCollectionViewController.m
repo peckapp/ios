@@ -111,16 +111,8 @@ static NSString *CellIdentifier = @"SubscriptionsCollectionViewCell";
     
     subscriptionCell.parentViewController = self;
     
-    subscriptionCell.imageView.frame = subscriptionCell.contentView.frame;
-    [subscriptionCell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:subscription.imageURL]]
-                                      placeholderImage:nil
-                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                                   cellTitle.textColor = [UIColor lightTextColor];
-                                                   NSLog(@"subscription image succeeded");
-                                               }
-                                               failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                                   NSLog(@"subscription image failed: %@",error);
-                                               }];
+    subscriptionCell.imageView.frame = subscriptionCell.layer.frame;
+    [subscriptionCell.imageView setImageWithURL:[NSURL URLWithString:subscription.imageURL]];
     
     BOOL subscribed = [subscription.subscribed boolValue];
     if(subscribed) {
