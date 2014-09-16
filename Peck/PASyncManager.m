@@ -2296,17 +2296,16 @@
          NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"athletic_teams"];
          for (NSDictionary *athleticAttributes in postsFromResponse) {
              NSNumber *newID = [athleticAttributes objectForKey:@"id"];
-             BOOL athleticAlreadyExists = [self objectExists:newID withType:@"Subscription" andCategory:@"athletic"];
-             if(!athleticAlreadyExists){
+             Subscription *subscription = (Subscription*)[self objectWithID:newID withType:@"Subscription" andCategory:@"athletic"];
+             [self.persistentStoreCoordinator lock];
+             if(subscription == nil){
                  //NSLog(@"adding a subscription to Core Data");
-                 [self.persistentStoreCoordinator lock];
-                 Subscription* subscription = [NSEntityDescription insertNewObjectForEntityForName:@"Subscription" inManagedObjectContext: _managedObjectContext];
-                 [self setAttributesInSubscription:subscription withDictionary:athleticAttributes andCategory:@"athletic"];
-                 NSError* error = nil;
-                 [_managedObjectContext save:&error];
-                 [self.persistentStoreCoordinator unlock];
-                 //NSLog(@"SUBSCRIPTION: %@",subscription);
+                 subscription = [NSEntityDescription insertNewObjectForEntityForName:@"Subscription" inManagedObjectContext: _managedObjectContext];
              }
+             [self setAttributesInSubscription:subscription withDictionary:athleticAttributes andCategory:@"athletic"];
+             NSError* error = nil;
+             [_managedObjectContext save:&error];
+             [self.persistentStoreCoordinator unlock];
          }
          [self updateSubscriptionsForCategory:@"athletic"];
          
@@ -2328,6 +2327,7 @@
     }
     subscription.id = [dictionary objectForKey:@"id"];
     subscription.category = category;
+    subscription.imageURL = [dictionary objectForKey:@"image"];
 }
 
 
@@ -2470,6 +2470,36 @@
         return NO;
     else {
         return YES;
+    }
+}
+
+-(NSManagedObject*)objectWithID:(NSNumber *) newID withType:(NSString*)type andCategory:(NSString*)category
+{
+    NSFetchRequest * request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *objects = [NSEntityDescription entityForName:type inManagedObjectContext:_managedObjectContext];
+    [request setEntity:objects];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id = %@", newID];
+    NSMutableArray*predicateArray = [[NSMutableArray alloc] init];
+    [predicateArray addObject:predicate];
+    //[request setPredicate:predicate];
+    
+    if(category!=nil){
+        NSPredicate* categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@",category];
+        [predicateArray addObject:categoryPredicate];
+    }
+    
+    NSPredicate *compoundPredicate= [NSCompoundPredicate andPredicateWithSubpredicates:predicateArray];
+    [request setPredicate:compoundPredicate];
+    
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error]mutableCopy];
+    //fetch events in order to check if the events we want to add already exist in core data
+    
+    if([mutableFetchResults count]==0)
+        return nil;
+    else {
+        return mutableFetchResults[0];
     }
 }
 

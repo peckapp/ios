@@ -27,6 +27,7 @@
 		863843E0193CB7A4004110F5 /* PeckLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843DF193CB7A4004110F5 /* PeckLoadingViewController.m */; };
 		863843E3193CB7FD004110F5 /* PAExploreTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863843E2193CB7FD004110F5 /* PAExploreTableViewController.m */; };
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
+		863A77A119C8A07300E13413 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 863A77A019C8A07300E13413 /* Subscription.m */; };
 		864D873D196470C100BCC01A /* facebook-login.png in Resources */ = {isa = PBXBuildFile; fileRef = 864D873B196470C100BCC01A /* facebook-login.png */; };
 		864D873E196470C100BCC01A /* facebook-logout.png in Resources */ = {isa = PBXBuildFile; fileRef = 864D873C196470C100BCC01A /* facebook-logout.png */; };
 		8665FD4019AB83F600AA1162 /* NewRelicAgent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8665FD3F19AB83F600AA1162 /* NewRelicAgent.framework */; };
@@ -113,7 +114,6 @@
 		A497A2EB19A3BF5200455F69 /* PASendFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A497A2EA19A3BF5200455F69 /* PASendFeedbackViewController.m */; };
 		A4988A50199B9FFC005C43BC /* Peck.m in Sources */ = {isa = PBXBuildFile; fileRef = A4988A4F199B9FFC005C43BC /* Peck.m */; };
 		A498CE2319ACDF7A00FDA1DC /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = A498CE2219ACDF7A00FDA1DC /* Event.m */; };
-		A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A99BAD19815AA4002DFD49 /* Subscription.m */; };
 		A4B772E51945FEFB00A31252 /* PAConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */; };
 		A4B772E719460C3200A31252 /* schools.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4B772E619460C3200A31252 /* schools.plist */; };
 		A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BDFE6E195329650020EFD5 /* PAExploreInfoViewController.m */; };
@@ -245,6 +245,8 @@
 		863843E1193CB7FD004110F5 /* PAExploreTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreTableViewController.h; sourceTree = "<group>"; };
 		863843E2193CB7FD004110F5 /* PAExploreTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreTableViewController.m; sourceTree = "<group>"; };
 		863843E6193CBA69004110F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		863A779F19C8A07300E13413 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
+		863A77A019C8A07300E13413 /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Subscription.m; sourceTree = "<group>"; };
 		864D873B196470C100BCC01A /* facebook-login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-login.png"; sourceTree = "<group>"; };
 		864D873C196470C100BCC01A /* facebook-logout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-logout.png"; sourceTree = "<group>"; };
 		8665FD3D19AB83C900AA1162 /* libPods-NewRelicAgent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-NewRelicAgent.a"; path = "Pods/build/Release-iphoneos/libPods-NewRelicAgent.a"; sourceTree = "<group>"; };
@@ -375,8 +377,6 @@
 		A4988A4F199B9FFC005C43BC /* Peck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peck.m; sourceTree = "<group>"; };
 		A498CE2119ACDF7A00FDA1DC /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		A498CE2219ACDF7A00FDA1DC /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
-		A4A99BAC19815AA4002DFD49 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
-		A4A99BAD19815AA4002DFD49 /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Subscription.m; sourceTree = "<group>"; };
 		A4B772E31945FEFB00A31252 /* PAConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAConfigureViewController.h; sourceTree = "<group>"; };
 		A4B772E41945FEFB00A31252 /* PAConfigureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAConfigureViewController.m; sourceTree = "<group>"; };
 		A4B772E619460C3200A31252 /* schools.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = schools.plist; sourceTree = "<group>"; };
@@ -794,8 +794,8 @@
 		A43BF0EB197819250009B7AD /* Subscriptions */ = {
 			isa = PBXGroup;
 			children = (
-				A4A99BAC19815AA4002DFD49 /* Subscription.h */,
-				A4A99BAD19815AA4002DFD49 /* Subscription.m */,
+				863A779F19C8A07300E13413 /* Subscription.h */,
+				863A77A019C8A07300E13413 /* Subscription.m */,
 				A43BF0EC197819480009B7AD /* PASubscriptionsTableViewController.h */,
 				A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */,
 				A43BF0EF1978198D0009B7AD /* PASubscriptionCell.h */,
@@ -1244,13 +1244,13 @@
 				A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */,
 				A498CE2319ACDF7A00FDA1DC /* Event.m in Sources */,
 				A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */,
+				863A77A119C8A07300E13413 /* Subscription.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
 				A497A2EB19A3BF5200455F69 /* PASendFeedbackViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
 				DDCCE82019A3DC250054BA2B /* PATemporaryDropdownView.m in Sources */,
-				A4A99BAE19815AA4002DFD49 /* Subscription.m in Sources */,
 				A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
 				A4F04BEE1994097500290CF2 /* PAMethodManager.m in Sources */,

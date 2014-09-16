@@ -7,7 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Subscription.h"
 
 @interface PASubscriptionsCollectionCell : UICollectionViewCell
+
+@property (strong, nonatomic) IBOutlet UILabel *subscriptionTitle;
+@property (strong, nonatomic) IBOutlet UISwitch *subscriptionSwitch;
+
+- (IBAction)switchSubscription:(id)sender;
+
+@property (strong, nonatomic) IBOutlet UIImageView *imageView;
+
+@property (weak, nonatomic) Subscription* subscription;
+
+@property (strong, nonatomic) UIViewController* parentViewController;
 
 @end

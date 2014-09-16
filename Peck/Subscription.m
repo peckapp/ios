@@ -2,7 +2,7 @@
 //  Subscription.m
 //  Peck
 //
-//  Created by John Karabinos on 7/24/14.
+//  Created by Aaron Taylor on 9/16/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -11,8 +11,10 @@
 
 @implementation Subscription
 
+@dynamic blurredImageURL;
 @dynamic category;
 @dynamic id;
+@dynamic imageURL;
 @dynamic name;
 @dynamic subscribed;
 @dynamic subscription_id;

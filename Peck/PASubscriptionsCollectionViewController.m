@@ -11,10 +11,19 @@
 #import "PASubscriptionsCollectionCell.h"
 #import "Subscription.h"
 #import "PAAppDelegate.h"
+#import "UIImageView+AFNetworking.h"
 
 static NSString *CellIdentifier = @"SubscriptionsCollectionViewCell";
 
-@implementation PASubscriptionsCollectionViewController{
+@interface PASubscriptionsCollectionViewController ()
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *finishButton;
+
+-(IBAction)finishInitialSelections:(id)sender;
+
+@end
+
+@implementation PASubscriptionsCollectionViewController {
     NSMutableArray *_objectChanges;
     NSMutableArray *_sectionChanges;
 }
@@ -30,14 +39,42 @@ static NSString *CellIdentifier = @"SubscriptionsCollectionViewCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    if (self.isInitializing == YES) {
+        self.finishButton.enabled = true;
+        self.finishButton.title = @"Finish";
+    } else {
+        self.isInitializing = NO;
+        self.finishButton.enabled = false;
+        self.finishButton.title = @"";
+    }
+    
+    [self.collectionView registerNib:[UINib nibWithNibName:@"PASubscriptionsCollectionCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:CellIdentifier];
+    self.collectionView.backgroundColor = [UIColor whiteColor];
     
     _objectChanges = [NSMutableArray array];
     _sectionChanges = [NSMutableArray array];
+    
+    NSError *err = nil;
+    [[self fetchedResultsController] performFetch:&err];
+    if (err) {
+        NSLog(@"error performing subscriptions fetch: %@",err);
+        abort();
+    }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(IBAction)finishInitialSelections:(id)sender {
+    if (self.isInitializing) {
+        PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        
+        UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+        [appDelegate.window setRootViewController:newRoot];
+    }
+    
 }
 
 #pragma mark - data source
@@ -53,7 +90,10 @@ static NSString *CellIdentifier = @"SubscriptionsCollectionViewCell";
 
 -(UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     PASubscriptionsCollectionCell *cell = (PASubscriptionsCollectionCell*)[collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
-    
+//    if (cell == nil) {
+//        [self.collectionView registerNib:[UINib nibWithNibName:@"PASubscriptionCell" bundle:nil]  forCellReuseIdentifier:CellIdentifier];
+//        cell = [self.collectionView dequeueReusableCellWithIdentifier:@"subscriptionCell"];
+//    }
     Subscription *sub = (Subscription*)[self.fetchedResultsController objectAtIndexPath:indexPath];
     
     [self configureCell:cell withObject:sub];
@@ -64,11 +104,49 @@ static NSString *CellIdentifier = @"SubscriptionsCollectionViewCell";
 }
 
 -(void)configureCell:(PASubscriptionsCollectionCell*)subscriptionCell withObject:(Subscription*)subscription {
+    subscriptionCell.subscription = subscription;
+    UILabel * cellTitle = subscriptionCell.subscriptionTitle;
+    cellTitle.text = subscription.name;
+    cellTitle.textColor = [UIColor darkTextColor];
     
+    subscriptionCell.parentViewController = self;
+    
+    subscriptionCell.imageView.frame = subscriptionCell.contentView.frame;
+    [subscriptionCell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:subscription.imageURL]]
+                                      placeholderImage:nil
+                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                                   cellTitle.textColor = [UIColor lightTextColor];
+                                                   NSLog(@"subscription image succeeded");
+                                               }
+                                               failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                                   NSLog(@"subscription image failed: %@",error);
+                                               }];
+    
+    BOOL subscribed = [subscription.subscribed boolValue];
+    if(subscribed) {
+        subscriptionCell.subscriptionSwitch.on = YES;
+    } else {
+        subscriptionCell.subscriptionSwitch.on = NO;
+    }
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    CGFloat dim = (self.view.frame.size.width / 2.0) - 10.0;
+    return CGSizeMake(dim, dim);
 }
 
 #pragma mark - delegate
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+#pragma mark - Flow Layout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    CGFloat dim = (self.view.frame.size.width / 2.0) - 40.0;
+    return CGSizeMake(dim, dim);
+}
 
 #pragma mark - fetched results controller
 
