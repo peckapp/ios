@@ -266,7 +266,7 @@ PAAssetManager *assetManager;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.viewController.view.userInteractionEnabled = NO;
     DiningPlace* diningPlace = self.diningPlaces[indexPath.row];
-    NSLog(@"dining place id in configure cell: %@", diningPlace.id);
+    //NSLog(@"dining place id in configure cell: %@", diningPlace.id);
     [cell.viewController setManagedObject:diningPlace parentObject:self.detailItem];
 
     return cell;

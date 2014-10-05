@@ -1115,6 +1115,11 @@
     if(![[dictionary objectForKey:@"user_id"] isKindOfClass:[NSNull class]]){
         explore.created_by = [dictionary objectForKey:@"user_id"];
     }
+    
+    // handle athletic events more properly
+    if ([category isEqualToString:@"athletic"]) {
+        // input team name, etc. into the model
+    }
 }
 
 #pragma mark - Circles actions
@@ -1524,44 +1529,39 @@
 
 
 -(void)updateDiningPlaces:(DiningPeriod*)diningPeriod forController:(PADiningPlacesTableViewController*)viewController{
-   //dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-   //dispatch_async(queue, ^{
-        NSString * diningPlacesURL = [dining_placesAPI stringByAppendingString:@"/"];
-        //diningPlacesURL = [diningPlacesURL stringByAppendingString:@"id="];
-        diningPlacesURL = [diningPlacesURL stringByAppendingString:[diningPeriod.place_id stringValue]];
-    
-        //NSLog(@"in secondary thread to update dining");
-        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-        _managedObjectContext = [appdelegate managedObjectContext];
-        _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
-    
-        [[PASessionManager sharedClient] GET:diningPlacesURL
-                                  parameters:[self authenticationParameters]
-                                     success:^
-         (NSURLSessionDataTask * __unused task, id JSON) {
-             //NSLog(@"JSON: %@",JSON);
-             NSDictionary *diningDictionary = (NSDictionary*)JSON;
-             NSDictionary *diningAttributes = [diningDictionary objectForKey:@"dining_place"];
-             NSNumber *newID = [diningAttributes objectForKey:@"id"];
-             [self.persistentStoreCoordinator lock];
-             BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace" andCategory:nil];
-             
-             if(!diningPlaceAlreadyExists){
-                    //NSLog(@"setting dining place");
-                    DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
-                    [self setAttributesInDiningPlace:diningPlace withDictionary:diningAttributes];
-                    [viewController addDiningPlace:diningPlace withPeriod:diningPeriod];
-                
-             }
-             NSError* error = nil;
-             [_managedObjectContext save:&error];
-             [self.persistentStoreCoordinator unlock];
-         }
-                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                         NSLog(@"updateDiningPlaces ERROR: %@",error);
-                                     }];
-    //});
+    NSString * diningPlacesURL = [dining_placesAPI stringByAppendingString:@"/"];
+    //diningPlacesURL = [diningPlacesURL stringByAppendingString:@"id="];
+    diningPlacesURL = [diningPlacesURL stringByAppendingString:[diningPeriod.place_id stringValue]];
 
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
+
+    [[PASessionManager sharedClient] GET:diningPlacesURL
+                              parameters:[self authenticationParameters]
+                                 success:^
+     (NSURLSessionDataTask * __unused task, id JSON) {
+         NSLog(@"JSON: %@",JSON);
+         NSDictionary *diningDictionary = (NSDictionary*)JSON;
+         NSDictionary *diningAttributes = [diningDictionary objectForKey:@"dining_place"];
+         NSNumber *newID = [diningAttributes objectForKey:@"id"];
+         [self.persistentStoreCoordinator lock];
+         BOOL diningPlaceAlreadyExists = [self objectExists:newID withType:@"DiningPlace" andCategory:nil];
+         
+         if(!diningPlaceAlreadyExists){
+                //NSLog(@"setting dining place");
+                DiningPlace * diningPlace = [NSEntityDescription insertNewObjectForEntityForName:@"DiningPlace" inManagedObjectContext: _managedObjectContext];
+                [self setAttributesInDiningPlace:diningPlace withDictionary:diningAttributes];
+                [viewController addDiningPlace:diningPlace withPeriod:diningPeriod];
+            
+         }
+         NSError* error = nil;
+         [_managedObjectContext save:&error];
+         [self.persistentStoreCoordinator unlock];
+     }
+                                 failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                     NSLog(@"updateDiningPlaces ERROR: %@",error);
+                                 }];
 }
 
 -(void)setAttributesInDiningPlace:(DiningPlace*)diningPlace withDictionary:(NSDictionary*)dictionary {
@@ -2233,20 +2233,20 @@
          //NSLog(@"Subscription JSON: %@",JSON);
          NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
          NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"departments"];
+         [self.persistentStoreCoordinator lock];
          for (NSDictionary *departmentAttributes in postsFromResponse) {
              NSNumber *newID = [departmentAttributes objectForKey:@"id"];
              BOOL departmentAlreadyExists = [self objectExists:newID withType:@"Subscription" andCategory:@"department"];
              if(!departmentAlreadyExists){
                  //NSLog(@"adding an event to Core Data");
-                 [self.persistentStoreCoordinator lock];
                  Subscription* subscription = [NSEntityDescription insertNewObjectForEntityForName:@"Subscription" inManagedObjectContext: _managedObjectContext];
                  [self setAttributesInSubscription:subscription withDictionary:departmentAttributes andCategory:@"department"];
+                 //NSLog(@"SUBSCRIPTION: %@",subscription);
                  NSError* error = nil;
                  [_managedObjectContext save:&error];
-                 [self.persistentStoreCoordinator unlock];
-                 //NSLog(@"SUBSCRIPTION: %@",subscription);
              }
          }
+         [self.persistentStoreCoordinator unlock];
          [self updateSubscriptionsForCategory:@"department"];
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {

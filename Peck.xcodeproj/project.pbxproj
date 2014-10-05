@@ -38,6 +38,7 @@
 		8671A2CF195B848D00700101 /* dropdown_explore@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CA195B848D00700101 /* dropdown_explore@2x.png */; };
 		8671A2D0195B848D00700101 /* dropdown_post@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CB195B848D00700101 /* dropdown_post@2x.png */; };
 		8671A2D2195B848D00700101 /* dropdown_profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CD195B848D00700101 /* dropdown_profile@2x.png */; };
+		86755A3219D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86755A3119D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.m */; };
 		867B52D619509F5000BEB37B /* PASessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 867B52D519509F5000BEB37B /* PASessionManager.m */; };
 		8687622D19A38710009AF3D1 /* PANoContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8687622C19A38710009AF3D1 /* PANoContentView.m */; };
 		8687622F19A38724009AF3D1 /* PANoContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8687622E19A38724009AF3D1 /* PANoContentView.xib */; };
@@ -255,6 +256,8 @@
 		8671A2CA195B848D00700101 /* dropdown_explore@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_explore@2x.png"; sourceTree = "<group>"; };
 		8671A2CB195B848D00700101 /* dropdown_post@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_post@2x.png"; sourceTree = "<group>"; };
 		8671A2CD195B848D00700101 /* dropdown_profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_profile@2x.png"; sourceTree = "<group>"; };
+		86755A3019D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+NSFetchedResultsController.h"; sourceTree = "<group>"; };
+		86755A3119D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+NSFetchedResultsController.m"; sourceTree = "<group>"; };
 		867651ED19462E5200C14645 /* old_webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = old_webservice.h; sourceTree = "<group>"; };
 		867B52D419509F5000BEB37B /* PASessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASessionManager.h; sourceTree = "<group>"; };
 		867B52D519509F5000BEB37B /* PASessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASessionManager.m; sourceTree = "<group>"; };
@@ -806,6 +809,8 @@
 				861B31A419C7A2EB00EF14DC /* PASubscriptionsCollectionCell.h */,
 				861B31A519C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m */,
 				861B31A719C7AB4100EF14DC /* PASubscriptionsCollectionCell.xib */,
+				86755A3019D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.h */,
+				86755A3119D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.m */,
 			);
 			name = Subscriptions;
 			sourceTree = "<group>";
@@ -1228,6 +1233,7 @@
 				860EB42F1980660400F1E665 /* UIImage+ImageEffects.m in Sources */,
 				8689DD8B195871D200A6B61C /* PAFilter.m in Sources */,
 				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
+				86755A3219D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.m in Sources */,
 				863843E3193CB7FD004110F5 /* PAExploreTableViewController.m in Sources */,
 				A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */,
 				A439EBC7199D196700FFEF33 /* Institution.m in Sources */,

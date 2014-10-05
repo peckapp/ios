@@ -98,7 +98,7 @@ PAAssetManager *assetManager;
             abort();
         }
         self.view.frame = self.parentController.viewFrame;
-        NSLog(@"menu items frame %@", NSStringFromCGRect(self.view.frame));
+        //NSLog(@"menu items frame %@", NSStringFromCGRect(self.view.frame));
         
         self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         self.tableView.backgroundColor = [UIColor clearColor];
@@ -242,8 +242,8 @@ PAAssetManager *assetManager;
 
     NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
     
-    NSLog(@"dining place id: %@", self.detailItem.id);
-    NSLog(@"dining opp id: %@", self.diningOpportunity.id);
+    //NSLog(@"dining place id: %@", self.detailItem.id);
+    //NSLog(@"dining opp id: %@", self.diningOpportunity.id);
     
     NSPredicate *fromPlacePredicate = [NSPredicate predicateWithFormat:@"dining_place_id = %@", self.detailItem.id];
     NSPredicate *fromOpportunityPredicate = [NSPredicate predicateWithFormat:@"dining_opportunity_id = %@", self.diningOpportunity.opportunity_id];

@@ -125,21 +125,22 @@ NSCache *imageCache;
     // Dispose of any resources that can be recreated.
 }
 
+- (void)cacheImagesPastCurrentIndexPath:(NSIndexPath*)indexPath {
+    
+}
+
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return [[self.fetchedResultsController sections] count];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
     return [sectionInfo numberOfObjects];
 }
 
-- (void)configureCell:(PAExploreCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
+- (void)configureCell:(PAExploreCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     cell.backgroundView = [assetManager createShadowWithFrame:cell.frame];
     cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
 
@@ -167,17 +168,19 @@ NSCache *imageCache;
         }
         else {
             //[cell.photoView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
-            [cell.photoView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:imageURL] placeholderImage:[assetManager greyBackground] success:^(NSURLRequest* request, NSHTTPURLResponse* response, UIImage* image){
-                
-                [UIView transitionWithView:cell.photoView
-                                  duration:.4f
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{
-                                    cell.photoView.image = image;
-                                } completion:nil];
-            }failure:^(NSURLRequest* request, NSHTTPURLResponse* response, NSError* error){
-                NSLog(@"failed to get image");
-            }];
+            [cell.photoView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:imageURL]
+                                  placeholderImage:[assetManager greyBackground]
+                                           success:^(NSURLRequest* request, NSHTTPURLResponse* response, UIImage* image){
+                                               [UIView transitionWithView:cell.photoView
+                                                                 duration:.4f
+                                                                  options:UIViewAnimationOptionTransitionCrossDissolve
+                                                               animations:^{
+                                                                   cell.photoView.image = image;
+                                                               } completion:nil];
+                                           }
+                                           failure:^(NSURLRequest* request, NSHTTPURLResponse* response, NSError* error){
+                                               NSLog(@"failed to get image");
+                                           }];
         }
     }else{
         cell.photoView.image = [assetManager imagePlaceholder];
@@ -202,6 +205,8 @@ NSCache *imageCache;
     }
     
     [self configureCell:cell atIndexPath:indexPath];
+    
+    [self cacheImagesPastCurrentIndexPath:indexPath];
     
     return cell;
 }

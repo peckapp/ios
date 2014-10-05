@@ -340,7 +340,7 @@
     }];
     
     
-    NSLog(@"incoming url: %@", url);
+    //NSLog(@"incoming url: %@", url);
     NSMutableDictionary* urlInfo = [self urlToDictionary:[url absoluteString]];
     if(urlInfo){
         if([[urlInfo objectForKey:@"view"] isEqualToString:@"passwordReset"]){
