@@ -24,6 +24,8 @@
 
 @property (nonatomic) CGRect profileCellFrame;
 
+@property (nonatomic) UIActionSheet *leaveActionSheet;
+
 @end
 
 @implementation PACircleCell
@@ -553,14 +555,6 @@ PAAssetManager * assetManager;
 {
     [self.commentsTableView endUpdates];
 }
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    if(scrollView==self.commentsTableView){
-        // NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        // [self.commentsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
-        PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentViewController;
-        [parent dismissCommentKeyboard];
-    }
-}
 
 -(void)performFetch{
     self.fetchedResultsController=nil;
@@ -572,6 +566,29 @@ PAAssetManager * assetManager;
     }
     [self.commentsTableView reloadData];
 }
+
+#pragma mark - UIActionSheet delegate methods
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (actionSheet == self.leaveActionSheet) {
+        if (buttonIndex == 0) {
+            PACirclesTableViewController* parent = (PACirclesTableViewController*) self.parentViewController;
+            
+            NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+            NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        [defaults objectForKey:@"user_id"],@"user_id",
+                                        [NSNumber numberWithLong:[self.circle.id integerValue]], @"circle_id",
+                                        nil];
+            NSLog(@"leave circle dict %@", dictionary);
+            
+            [parent condenseCircleCell:self atIndexPath:nil];
+            [[PASyncManager globalSyncManager] leaveCircle:dictionary];
+        }
+        
+    }
+}
+
+#pragma mark - Cell compression and expansion
 
 -(void)expand:(PACommentCell*)cell{
     textViewHelper.frame = cell.commentTextView.frame;
@@ -604,19 +621,16 @@ PAAssetManager * assetManager;
     [self.commentsTableView endUpdates];
 
 }
-- (IBAction)leaveCircleButton:(id)sender {
-    PACirclesTableViewController* parent = (PACirclesTableViewController*) self.parentViewController;
-    NSLog(@"leave this circle %@", self.circle);
-    
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                [defaults objectForKey:@"user_id"],@"user_id",
-                                [NSNumber numberWithLong:[self.circle.id integerValue]], @"circle_id",
-                                nil];
-    NSLog(@"leave circle dict %@", dictionary);
-    
-    [parent condenseCircleCell:self atIndexPath:nil];
-    [[PASyncManager globalSyncManager] leaveCircle:dictionary];
+- (IBAction)leaveCircleButton:(id)sender {    
+    if (self.leaveActionSheet == nil) {
+        self.leaveActionSheet = [[UIActionSheet alloc] initWithTitle:@"If you leave a circle, you cannot undo this action. You must be added again to re-join."
+                                                            delegate:self
+                                                   cancelButtonTitle:@"No thanks"
+                                              destructiveButtonTitle:@"Leave"
+                                                   otherButtonTitles:nil];
+    }
+
+    [self.leaveActionSheet showInView:self.parentViewController.view];
 }
 
 - (IBAction)backButton:(id)sender {
@@ -670,6 +684,15 @@ PAAssetManager * assetManager;
         [[PAMethodManager sharedMethodManager]showRegisterAlert:@"create a circle" forViewController:self.parentViewController];
     }
     
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    if(scrollView==self.commentsTableView){
+        // NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        // [self.commentsTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+        PACirclesTableViewController *parent = (PACirclesTableViewController*)self.parentViewController;
+        [parent dismissCommentKeyboard];
+    }
 }
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField{

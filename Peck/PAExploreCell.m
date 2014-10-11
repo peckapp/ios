@@ -10,6 +10,7 @@
 #import "PASyncManager.h"
 #import "PAMethodManager.h"
 #import "PAFetchManager.h"
+#import "PAUtils.h"
 
 @implementation PAExploreCell
 
@@ -27,7 +28,7 @@
 
 - (IBAction)attendEvent:(id)sender {
     if([self.category isEqualToString:@"event"] || [self.category isEqualToString:@"athletic"]){
-        NSLog(@"attend the event");
+        NSLog(@"attempt to attend the event");
         
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         if([defaults objectForKey:@"authentication_token"]){
@@ -48,6 +49,13 @@
 -(void)continueAttending{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSLog(@"attend the event");
+    
+    if (SHOW_ATTEND_TUTORIAL) {
+        [[PAMethodManager sharedMethodManager] showTutorialAlertWithTitle:@"Attending an Event"
+                                                               andMessage:@"Events that you choose to attend are removed from the explore feed and displayed in the homepage"];
+        DID_SHOW_ATTEND_TUTORIAL;
+    }
+    
     
     NSString*category = @"simple";
     if([self.category isEqualToString:@"athletic"]){

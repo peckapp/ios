@@ -535,6 +535,17 @@ PAAssetManager *assetManager;
     [self performSegueWithIdentifier:@"createACircle" sender:self];
 }
 
+- (void)expandTableViewCell:(PACommentCell *)cell {
+    NSLog(@"still expanding!!");
+    PACircleCell *circleCell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+    [circleCell expand:cell];
+}
+
+-(void)compressTableViewCell:(PACommentCell *)cell{
+    PACircleCell *circleCell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
+    [circleCell compress:cell];
+}
+
 # pragma mark - PACirclesControllerDelegate
 
 /*-(void)profile:(int)member withCircle:(NSInteger)circle{
@@ -895,8 +906,9 @@ PAAssetManager *assetManager;
     PACommentCell *commentCell = (PACommentCell*)[circleCell.commentsTableView cellForRowAtIndexPath:indexPath];
     [commentCell.commentTextView resignFirstResponder];*/
     [self.keyboardAccessory resignFirstResponder];
-
 }
+
+#pragma mark - Network Interaction
 
 -(void)postComment:(NSString *)text
 {
@@ -937,19 +949,6 @@ PAAssetManager *assetManager;
         
         self.keyboardAccessory.text = @"";
     }
-}
-
-
-
-- (void)expandTableViewCell:(PACommentCell *)cell {
-    NSLog(@"still expanding!!");
-    PACircleCell *circleCell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
-    [circleCell expand:cell];
-}
-
--(void)compressTableViewCell:(PACommentCell *)cell{
-    PACircleCell *circleCell = (PACircleCell *)[self.tableView cellForRowAtIndexPath:self.selectedIndexPath];
-    [circleCell compress:cell];
 }
 
 

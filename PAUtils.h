@@ -40,7 +40,7 @@
 // attending an explore event
 #define attend_tutorial @"should_show_attend_tutorial"
 #define SHOW_ATTEND_TUTORIAL [[NSUserDefaults standardUserDefaults] objectForKey:attend_tutorial]
-#define DID_SHOW_ATTEND TUTORIAL [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:attend_tutorial]
+#define DID_SHOW_ATTEND_TUTORIAL [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:attend_tutorial]
 
 // common boilerplate methods calls
 #define REGISTER_PUSH_NOTIFICATIONS [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge]

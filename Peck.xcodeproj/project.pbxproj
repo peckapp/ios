@@ -69,6 +69,7 @@
 		86D59837193768C000F38654 /* PeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D59836193768C000F38654 /* PeckTests.m */; };
 		86DD9C2B195C70AE0074096E /* PeckWebserviceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DD9C2A195C70AE0074096E /* PeckWebserviceTests.m */; };
 		86E40D8419AAF535000C230C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86E40D8319AAF535000C230C /* Main.storyboard */; };
+		86F890E019E980F100D1E5D0 /* PAUnregisteredViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F890DF19E980F100D1E5D0 /* PAUnregisteredViewController.m */; };
 		A40CF56819547ACC0021C088 /* PAPeers.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF56719547ACC0021C088 /* PAPeers.m */; };
 		A40CF574195483140021C088 /* PABST.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CF573195483140021C088 /* PABST.m */; };
 		A412E1D41986E63800384A11 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = A412E1D31986E63800384A11 /* Comment.m */; };
@@ -302,6 +303,8 @@
 		86DD9C2A195C70AE0074096E /* PeckWebserviceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeckWebserviceTests.m; sourceTree = "<group>"; };
 		86DD9C2C195C71C30074096E /* webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = webservice.h; sourceTree = "<group>"; };
 		86E40D8319AAF535000C230C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		86F890DE19E980F100D1E5D0 /* PAUnregisteredViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAUnregisteredViewController.h; sourceTree = "<group>"; };
+		86F890DF19E980F100D1E5D0 /* PAUnregisteredViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAUnregisteredViewController.m; sourceTree = "<group>"; };
 		A40CF56619547ACC0021C088 /* PAPeers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPeers.h; sourceTree = "<group>"; };
 		A40CF56719547ACC0021C088 /* PAPeers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPeers.m; sourceTree = "<group>"; };
 		A40CF572195483140021C088 /* PABST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PABST.h; sourceTree = "<group>"; };
@@ -959,6 +962,8 @@
 				A482259519914C0D007D9A9F /* PAUserAnnouncementsTableViewController.m */,
 				A497A2E919A3BF5200455F69 /* PASendFeedbackViewController.h */,
 				A497A2EA19A3BF5200455F69 /* PASendFeedbackViewController.m */,
+				86F890DE19E980F100D1E5D0 /* PAUnregisteredViewController.h */,
+				86F890DF19E980F100D1E5D0 /* PAUnregisteredViewController.m */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -1251,6 +1256,7 @@
 				A498CE2319ACDF7A00FDA1DC /* Event.m in Sources */,
 				A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */,
 				863A77A119C8A07300E13413 /* Subscription.m in Sources */,
+				86F890E019E980F100D1E5D0 /* PAUnregisteredViewController.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,

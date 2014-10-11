@@ -337,6 +337,7 @@
     [defaults setObject:@YES forKey:homepage_tutorial];
     [defaults setObject:@YES forKey:dropdown_tutorial];
     [defaults setObject:@YES forKey:post_tutorial];
+    [defaults setObject:@YES forKey:attend_tutorial];
 }
 
 -(void)showTutorialAlertWithTitle:(NSString *)title andMessage:(NSString*)message {
