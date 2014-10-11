@@ -1,32 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="tpD-WR-8r9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="tpD-WR-8r9">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
-        <scene sceneID="pxZ-z7-9Ks">
-            <objects>
-                <navigationController storyboardIdentifier="pecks" id="7JH-4n-3HO" sceneMemberID="viewController">
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="EKq-rt-smD">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="tRP-fa-M6u" kind="relationship" relationship="rootViewController" id="UUj-Nk-hyv"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="tpZ-Qj-2jT" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2495" y="1415"/>
-        </scene>
         <!--Pecks-->
         <scene sceneID="hiY-Kt-049">
             <objects>
-                <tableViewController id="tRP-fa-M6u" customClass="PAPecksViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="pecks" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tRP-fa-M6u" customClass="PAPecksViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="QIA-mJ-ZIs">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <connections>
@@ -42,31 +25,14 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NeF-IW-LeT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1998" y="1415"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="HFq-Ep-DiC">
-            <objects>
-                <navigationController storyboardIdentifier="explore" id="Xth-WP-P1X" sceneMemberID="viewController">
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="CT8-FN-odH">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="3UC-WZ-Iy0" kind="relationship" relationship="rootViewController" id="iF9-MN-Fbk"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="YlO-E9-lkg" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1514" y="1078"/>
+            <point key="canvasLocation" x="-2486" y="1415"/>
         </scene>
         <!--Explore-->
         <scene sceneID="hrY-dW-Yv5">
             <objects>
-                <tableViewController title="Explore" id="3UC-WZ-Iy0" customClass="PAExploreTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="explore" title="Explore" useStoryboardIdentifierAsRestorationIdentifier="YES" id="3UC-WZ-Iy0" customClass="PAExploreTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="k87-c5-AJn">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
@@ -75,10 +41,13 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Explore" id="Iry-cM-7KR"/>
+                    <connections>
+                        <segue destination="yaJ-jx-f6y" kind="modal" identifier="present_info" id="bBw-L7-91o"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZvJ-od-Ek0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1028" y="1078"/>
+            <point key="canvasLocation" x="-1978" y="1398"/>
         </scene>
         <!--Detail-->
         <scene sceneID="MMH-01-1Lk">
@@ -113,7 +82,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wLB-Nf-H7T" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-528" y="1078"/>
+            <point key="canvasLocation" x="-1478" y="1398"/>
         </scene>
         <!--Circles-->
         <scene sceneID="Yk1-SF-5XL">
@@ -767,7 +736,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FHJ-kd-VI5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1356" y="3820"/>
+            <point key="canvasLocation" x="-1326" y="3784"/>
         </scene>
         <!--Announcements-->
         <scene sceneID="QMq-yP-TWH">
@@ -805,14 +774,14 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y1F-I5-aZl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2036" y="5269"/>
+            <point key="canvasLocation" x="-2258" y="5253"/>
         </scene>
         <!--Change Password-->
         <scene sceneID="j81-cO-9Iy">
             <objects>
                 <tableViewController id="fVF-Ay-1lf" customClass="PAChangePasswordViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="i2g-ty-Vtj">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="IUB-UG-tud">
@@ -1400,9 +1369,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="gpx-S3-Fsz"/>
         <segue reference="YoB-2V-iLE"/>
         <segue reference="YOv-jg-7ue"/>
         <segue reference="TbO-p2-TYX"/>
+        <segue reference="QB7-YB-AWH"/>
     </inferredMetricsTieBreakers>
 </document>

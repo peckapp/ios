@@ -30,8 +30,6 @@
 #define statusBarHeight 20
 #define searchBarHeight 44
 #define parallaxRange 128
-#define datePopupHeight 44
-#define heightToShowDate 50
 
 struct eventImage{
     const char* imageURL;
@@ -163,7 +161,7 @@ PAAssetManager * assetManager;
     self.rightTableView.backgroundColor = [assetManager darkColor];
 
     if (!self.datePopup) {
-        self.datePopup = [[PATemporaryDropdownView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight)];
+        self.datePopup = [[PATemporaryDropdownView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT)];
         self.datePopup.label.text = @"Today";
         self.datePopup.label.textColor = [assetManager darkColor];
         self.datePopup.hiddenView.backgroundColor = [UIColor whiteColor];
@@ -218,12 +216,12 @@ PAAssetManager * assetManager;
     //This changes the color throughout the app, we must now add it in view will appear of every view controller that contains a searche bar
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
 
-    _searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
-    _leftSearchBar.frame =CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
-    _rightSearchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
+    _searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT);
+    _leftSearchBar.frame =CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT);
+    _rightSearchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT);
 
-    self.datePopup.frame = CGRectMake(0, 0, self.view.frame.size.width, datePopupHeight);
-    self.datePopup.hiddenView.frame = CGRectMake(0, -datePopupHeight, self.view.frame.size.width, datePopupHeight);
+    self.datePopup.frame = CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT);
+    self.datePopup.hiddenView.frame = CGRectMake(0, -TEMPORARY_HEADER_HEIGHT, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT);
 
     self.leftTableViewFrame = CGRectMake(-self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.leftTableView.frame = self.leftTableViewFrame;
@@ -901,7 +899,7 @@ PAAssetManager * assetManager;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 
-    if (scrollView.contentOffset.y < -heightToShowDate) {
+    if (scrollView.contentOffset.y < -SHOW_HEADER_DEPTH) {
         [self.datePopup showHiddenView];
         //self.centerTableView.contentInset = UIEdgeInsetsZero;
     }

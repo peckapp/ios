@@ -13,6 +13,10 @@
 #define deviceVendorIdentifier [[[UIDevice currentDevice] identifierForVendor] UUIDString]
 #define storedPushToken [[NSUserDefaults standardUserDefaults] objectForKey:@"device_token"]
 
+// UI sizing values
+#define TEMPORARY_HEADER_HEIGHT 44
+#define SHOW_HEADER_DEPTH 50
+
 // NSUserDefaults keys
 #define logged_in_key @"logged_in"
 #define institution_id_key @"institution_id"
@@ -33,6 +37,10 @@
 #define post_tutorial @"should_show_post_tutorial"
 #define SHOW_POST_TUTORIAL [[NSUserDefaults standardUserDefaults] objectForKey:post_tutorial]
 #define DID_SHOW_POST_TUTORIAL [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:post_tutorial]
+// attending an explore event
+#define attend_tutorial @"should_show_attend_tutorial"
+#define SHOW_ATTEND_TUTORIAL [[NSUserDefaults standardUserDefaults] objectForKey:attend_tutorial]
+#define DID_SHOW_ATTEND TUTORIAL [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:attend_tutorial]
 
 // common boilerplate methods calls
 #define REGISTER_PUSH_NOTIFICATIONS [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge]

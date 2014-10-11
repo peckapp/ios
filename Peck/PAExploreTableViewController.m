@@ -14,12 +14,16 @@
 #import "PASyncManager.h"
 #import "PAAssetManager.h"
 #import "UIImageView+AFNetworking.h"
+#import "PATemporaryDropdownView.h"
+#import "PAUtils.h"
 
 #define cellHeight 380
 
 @interface PAExploreTableViewController ()
 
 @property (strong, nonatomic) UISearchBar* searchBar;
+
+@property (strong, nonatomic) PATemporaryDropdownView *exploreHeader;
 
 @end
 
@@ -89,11 +93,23 @@ NSCache *imageCache;
     //self.tableView.tableHeaderView = self.searchBar;
     self.tableView.tableHeaderView = headerView;
     
+    if (!self.exploreHeader) {
+        self.exploreHeader = [[PATemporaryDropdownView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT)];
+        self.exploreHeader.label.text = @"Explore";
+        self.exploreHeader.label.textColor = [assetManager darkColor];
+        self.exploreHeader.hiddenView.backgroundColor = [UIColor whiteColor];
+        [self.view addSubview:self.exploreHeader];
+    }
+
+    
     NSLog(@"Finished viewDidLoad (PAExploreTableViewController)");
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    self.exploreHeader.frame = CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT);
+    self.exploreHeader.hiddenView.frame = CGRectMake(0, -TEMPORARY_HEADER_HEIGHT, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT);
    
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor blackColor]];
 }
@@ -147,6 +163,9 @@ NSCache *imageCache;
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"hh:mma  EEEE MMM dd"];// here set format which you want...
+    cell.dateLabel.text = [dateFormatter stringFromDate:tempExplore.start_date];
     cell.exploreID = [tempExplore.id integerValue];
     cell.category = tempExplore.category;
     if([tempExplore.category isEqualToString:@"announcement"]){
@@ -216,6 +235,8 @@ NSCache *imageCache;
     return cellHeight;
 }
 
+#pragma mark - Table View Delegate
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     //[self performSegueWithIdentifier:@"showMessageDetail" sender:self];
     
@@ -223,49 +244,29 @@ NSCache *imageCache;
     self.tableView.tableHeaderView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, 60);
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [spinner setCenter:CGPointMake(self.tableView.tableHeaderView.frame.size.width, 20)]; // I do this because I'm in landscape mode
-    [self.tableView.tableHeaderView addSubview:spinner];*/
+    [self.tableView.tableHeaderView addSubview:spinner];
+     */
+    [self performSegueWithIdentifier:@"present_info" sender:self];
+    
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
      
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    
+    if (scrollView.contentOffset.y < -SHOW_HEADER_DEPTH) {
+        [self.exploreHeader showHiddenView];
+        //self.centerTableView.contentInset = UIEdgeInsetsZero;
+    }
+    else if (scrollView.contentOffset.y > 0) {
+        [self.exploreHeader hideHiddenView];
+        //self.centerTableView.contentInset = UIEdgeInsetsMake(-datePopupHeight, 0, 0, 0);
+    }
+    
 }
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 /*
 #pragma mark - Navigation

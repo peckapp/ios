@@ -37,7 +37,6 @@
             [parent.deletedSubscriptions removeObjectForKey:subKey];
         }
         
-        
     }else{
         NSLog(@"remove subscription");
         self.subscription.subscribed = [NSNumber numberWithBool:NO];
