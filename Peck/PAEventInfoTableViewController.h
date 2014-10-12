@@ -9,12 +9,13 @@
 //  The view calls a get request to reload the comments every couple of seconds while active.
 
 #import <UIKit/UIKit.h>
-#import "PACoreDataProtocol.h"
-#import "PANestedTableViewCell.h"
+
+#import "PANestedInfoViewController.h"
 
 @class PACommentCell;
 
-@interface PAEventInfoTableViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, PANestedTableViewCellSubviewControllerProtocol>
+// superclass definition defines some functionality
+@interface PAEventInfoTableViewController : PANestedInfoViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
@@ -31,6 +32,6 @@
 - (void)expandTableViewCell:(PACommentCell *)cell;
 - (void)compressTableViewCell:(PACommentCell *)cell;
 - (void)postComment:(NSString *)text;
-- (void)configureViewFromDetailItem;
+- (void)configureView;
 - (void)reloadAttendeeLabels;
 @end

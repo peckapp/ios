@@ -8,6 +8,7 @@
 
 
 #import "PAEventInfoTableViewController.h"
+#import "PANestedInfoViewControllerPrivate.h"
 #import "PACommentCell.h"
 #import "PAAppDelegate.h"
 #import "PASyncManager.h"
@@ -29,35 +30,6 @@
 
 
 @interface PAEventInfoTableViewController ()
-
--(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
-@property (nonatomic, retain) NSDateFormatter *formatter;
-
-@property (assign, nonatomic) BOOL expanded;
-
-@property (strong, nonatomic) UITableView *tableView;
-@property (strong, nonatomic) UIView *headerView;
-@property (strong, nonatomic) UIView *footerView;
-@property (strong, nonatomic) UIView *imagesView;
-
-@property (strong, nonatomic) UIImageView *cleanImageView; // displayed when expanded
-@property (strong, nonatomic) UIImageView *blurredImageView; // displayed when compressed
-
-@property (strong, nonatomic) UILabel *timeLabel;
-@property (strong, nonatomic) UILabel *titleLabel;
-@property (strong, nonatomic) UILabel *fullTitleLabel;
-@property (strong, nonatomic) UILabel *descriptionLabel;
-@property (strong, nonatomic) UILabel *dateLabel;
-
-@property (strong, nonatomic) UIImage *attendImage;
-@property (strong, nonatomic) UIImage *nullAttendImage;
-@property (strong, nonatomic) UIImageView *attendingIcon; // visible only if the event is being attended by the user
-@property (strong, nonatomic) UIButton *attendButton;
-@property (strong, nonatomic) UILabel *attendeesLabel;
-
-@property (strong, nonatomic) UIView * keyboardAccessoryView;
-@property (strong, nonatomic) UITextField * keyboardAccessory;
-@property (strong, nonatomic) UIButton * postButton;
 
 @end
 
@@ -158,8 +130,6 @@ BOOL reloaded = NO;
 
     [self.view addSubview:self.imagesView];
 
-    self.attendImage = [UIImage imageNamed:@"attend_icon"];
-    self.nullAttendImage = [UIImage imageNamed:@"null_attend_icon"];
     self.attendingIcon = [[UIImageView alloc] initWithImage:self.nullAttendImage];
     self.attendingIcon.userInteractionEnabled = NO;
     [self.blurredImageView addSubview:self.attendingIcon];
@@ -529,14 +499,16 @@ BOOL reloaded = NO;
     }
     if([self attendingEvent]){
         [self.attendButton setTitle:@"Unattend" forState:UIControlStateNormal];
+        self.attendingIcon.image = self.attendImage;
     }else{
         [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
+        self.attendingIcon.image = self.nullAttendImage;
     }
     
 }
 
 
--(BOOL)attendingEvent{
+-(BOOL)attendingEvent {
     NSArray* attendees = [self.detailItem valueForKey:@"attendees"];
     if(![attendees isKindOfClass:[NSNull class]]){
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -1000,7 +972,6 @@ BOOL reloaded = NO;
 
 - (IBAction)attendButton:(id)sender {
     if([self.attendButton.titleLabel.text isEqualToString:@"Attend"]){
-        
        
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         if([defaults objectForKey:@"authentication_token"]){
@@ -1031,7 +1002,7 @@ BOOL reloaded = NO;
         [[PASyncManager globalSyncManager] unattendEvent: attendee forViewController:self];
         
     }
-    
+    [self reloadAttendeeLabels];
 }
 
 #pragma mark - Text Fields

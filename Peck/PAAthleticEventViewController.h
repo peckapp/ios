@@ -9,12 +9,11 @@
 //  The view calls a get request to reload the comments every couple of seconds while active.
 
 #import <UIKit/UIKit.h>
-#import "PACoreDataProtocol.h"
-#import "PANestedTableViewCell.h"
+#import "PANestedInfoViewController.h"
 
 @class PACommentCell;
 
-@interface PAAthleticEventViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, PANestedTableViewCellSubviewControllerProtocol>
+@interface PAAthleticEventViewController : PANestedInfoViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 

@@ -8,6 +8,7 @@
 
 
 #import "PAAthleticEventViewController.h"
+#import "PANestedInfoViewControllerPrivate.h"
 #import "PACommentCell.h"
 #import "PAAppDelegate.h"
 #import "PASyncManager.h"
@@ -22,13 +23,14 @@
 #define titleLabelDivide 90
 #define titleAndNameSpacing 15
 #define dateLabelDivide 200
+#define attendIconRatio 0.1
 #define compressedHeight 88
 #define buffer 14
 #define defaultCellHeight 72
 #define reloadTime 10
 
 
-@interface PAAthleticEventViewController (){
+@interface PAAthleticEventViewController () {
     NSString * commentCellIdentifier;
     NSString * cellNibName;
     NSMutableDictionary *heightDictionary;
@@ -40,33 +42,9 @@
     BOOL reloaded;
 }
 
--(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
-@property (nonatomic, retain) NSDateFormatter *formatter;
-
-@property (assign, nonatomic) BOOL expanded;
-
-@property (strong, nonatomic) UITableView *tableView;
-@property (strong, nonatomic) UIView *headerView;
-@property (strong, nonatomic) UIView *footerView;
-@property (strong, nonatomic) UIView *imagesView;
-
-@property (strong, nonatomic) UIImageView *cleanImageView;
-@property (strong, nonatomic) UIImageView *blurredImageView;
-
-@property (strong, nonatomic) UILabel *timeLabel;
 @property (strong, nonatomic) UILabel *teamNameLabel;
 @property (strong, nonatomic) UILabel *titleDetailLabel;
-@property (strong, nonatomic) UILabel *fullTitleLabel;
-@property (strong, nonatomic) UILabel *descriptionLabel;
-@property (strong, nonatomic) UILabel *dateLabel;
 @property (strong, nonatomic) UILabel *scoreLabel;
-
-@property (strong, nonatomic) UIButton *attendButton;
-@property (strong, nonatomic) UILabel *attendeesLabel;
-
-@property (strong, nonatomic) UIView * keyboardAccessoryView;
-@property (strong, nonatomic) UITextField * keyboardAccessory;
-@property (strong, nonatomic) UIButton * postButton;
 
 @end
 
@@ -75,8 +53,6 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
-
 
 
 - (void)viewDidLoad
@@ -173,6 +149,10 @@
     
     [self.view addSubview:self.imagesView];
     
+    self.attendingIcon = [[UIImageView alloc] initWithImage:self.nullAttendImage];
+    self.attendingIcon.userInteractionEnabled = NO;
+    [self.blurredImageView addSubview:self.attendingIcon];
+    
     self.attendButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.attendButton addTarget:self action:@selector(attendButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
@@ -254,6 +234,12 @@
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
     self.dateLabel.frame = CGRectInset(self.headerView.frame, buffer, buffer);
     [self.dateLabel sizeToFit];
+    
+    CGFloat attendIconSize = self.blurredImageView.frame.size.height * attendIconRatio;
+    CGFloat attendX = self.timeLabel.frame.origin.x + 0.5*self.timeLabel.frame.size.width;
+    CGFloat attendY = self.timeLabel.frame.origin.y + 0.2*self.blurredImageView.frame.size.height;
+    CGRect attendRect = CGRectMake(attendX, attendY, attendIconSize, attendIconSize);
+    self.attendingIcon.frame = attendRect;
     
     self.attendButton.frame = CGRectMake(dateLabelDivide, 0, self.view.frame.size.width - dateLabelDivide, 50);
     self.attendeesLabel.frame = CGRectMake(self.view.frame.size.width - 20, 0, 20, 50);
@@ -480,6 +466,8 @@
          */
         
         [self reloadAttendeeLabels];
+        // sets the attending icon to the proper value based on listed attendees for the event
+        self.attendingIcon.image = [self attendingEvent] ? self.attendImage : self.nullAttendImage;
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"h:mm a"];

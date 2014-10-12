@@ -17,6 +17,7 @@
 		861B58D019EB14BE00C20FA2 /* attend_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 861B58CF19EB14BE00C20FA2 /* attend_icon@2x.png */; };
 		861B58D219EB198000C20FA2 /* null_attend_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 861B58D119EB198000C20FA2 /* null_attend_icon@2x.png */; };
 		861B58D819EB1F4C00C20FA2 /* DiningPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B58D719EB1F4C00C20FA2 /* DiningPlace.m */; };
+		861B58DE19EB214900C20FA2 /* PANestedInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B58DD19EB214900C20FA2 /* PANestedInfoViewController.m */; };
 		8625900B19A809F6000FA083 /* peck_launch_4_v1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8625900919A809F6000FA083 /* peck_launch_4_v1.png */; };
 		8625900C19A809F6000FA083 /* peck_launch_5_v1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8625900A19A809F6000FA083 /* peck_launch_5_v1.png */; };
 		86292512193CBE000057CA41 /* PAPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292511193CBE000057CA41 /* PAPostViewController.m */; };
@@ -229,6 +230,9 @@
 		861B58D119EB198000C20FA2 /* null_attend_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "null_attend_icon@2x.png"; sourceTree = "<group>"; };
 		861B58D619EB1F4C00C20FA2 /* DiningPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPlace.h; sourceTree = "<group>"; };
 		861B58D719EB1F4C00C20FA2 /* DiningPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPlace.m; sourceTree = "<group>"; };
+		861B58DC19EB214900C20FA2 /* PANestedInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = PANestedInfoViewController.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; wrapsLines = 1; };
+		861B58DD19EB214900C20FA2 /* PANestedInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = PANestedInfoViewController.m; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; wrapsLines = 1; };
+		861B58DF19EB22BB00C20FA2 /* PANestedInfoViewControllerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PANestedInfoViewControllerPrivate.h; sourceTree = "<group>"; };
 		861E46A0198888AE0088B47F /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		861E46A2198888B80088B47F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		861E46A4198888C20088B47F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -713,6 +717,9 @@
 				86E40D8319AAF535000C230C /* Main.storyboard */,
 				DD37013E1990081F006B63E8 /* PANestedTableViewController.h */,
 				DD37013F1990081F006B63E8 /* PANestedTableViewController.m */,
+				861B58DC19EB214900C20FA2 /* PANestedInfoViewController.h */,
+				861B58DF19EB22BB00C20FA2 /* PANestedInfoViewControllerPrivate.h */,
+				861B58DD19EB214900C20FA2 /* PANestedInfoViewController.m */,
 				DDF0DB45199532A40061089E /* PANestedTableViewCell.h */,
 				DDF0DB46199532A40061089E /* PANestedTableViewCell.m */,
 				86613BE2197DD7D4004914B2 /* Dropdown */,
@@ -1310,6 +1317,7 @@
 				86D5981B193768BF00F38654 /* Peck.xcdatamodeld in Sources */,
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,
 				A4E21F6519659892002A9800 /* PACommentCell.m in Sources */,
+				861B58DE19EB214900C20FA2 /* PANestedInfoViewController.m in Sources */,
 				8687622D19A38710009AF3D1 /* PANoContentView.m in Sources */,
 				A4E47D571991261000DDF941 /* PAUserEventsTableViewController.m in Sources */,
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,
