@@ -530,16 +530,6 @@
 			name = Graphics;
 			sourceTree = "<group>";
 		};
-		860BE45F19632CCE00E57A56 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				A439EBC5199D196700FFEF33 /* Institution.h */,
-				A439EBC6199D196700FFEF33 /* Institution.m */,
-				A40CF56219547A730021C088 /* Peers */,
-			);
-			name = Models;
-			sourceTree = "<group>";
-		};
 		8625900819A8099F000FA083 /* launch-image */ = {
 			isa = PBXGroup;
 			children = (
@@ -733,10 +723,10 @@
 				A4B772DD1945F8DB00A31252 /* Configure */,
 				863843D2193CB739004110F5 /* Login */,
 				8635758119AEDAE300953E39 /* Tutorial */,
-				860BE45F19632CCE00E57A56 /* Models */,
 				867651EC19462E3500C14645 /* Webservice */,
 				86051D47194BB24900961541 /* Graphics */,
 				86D59822193768BF00F38654 /* Images.xcassets */,
+				86F890E119EAF38700D1E5D0 /* ManagedObjects */,
 				86D59819193768BF00F38654 /* Peck.xcdatamodeld */,
 				86D5980B193768BF00F38654 /* Supporting Files */,
 			);
@@ -775,6 +765,52 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		86F890E119EAF38700D1E5D0 /* ManagedObjects */ = {
+			isa = PBXGroup;
+			children = (
+				86F890E319EAF41800D1E5D0 /* Content */,
+				86F890E219EAF40700D1E5D0 /* Dining */,
+				A40CF56219547A730021C088 /* Peers */,
+				A4677D3D19743A05007E3C3A /* Circle.h */,
+				A4677D3E19743A05007E3C3A /* Circle.m */,
+				A439EBC5199D196700FFEF33 /* Institution.h */,
+				A439EBC6199D196700FFEF33 /* Institution.m */,
+				863A779F19C8A07300E13413 /* Subscription.h */,
+				863A77A019C8A07300E13413 /* Subscription.m */,
+			);
+			name = ManagedObjects;
+			sourceTree = "<group>";
+		};
+		86F890E219EAF40700D1E5D0 /* Dining */ = {
+			isa = PBXGroup;
+			children = (
+				A4677D4619743A05007E3C3A /* DiningPeriod.h */,
+				A4677D4719743A05007E3C3A /* DiningPeriod.m */,
+				A4677D4019743A05007E3C3A /* DiningPlace.h */,
+				A4677D4119743A05007E3C3A /* DiningPlace.m */,
+				A4677D4C19746F45007E3C3A /* MenuItem.h */,
+				A4677D4D19746F45007E3C3A /* MenuItem.m */,
+			);
+			name = Dining;
+			sourceTree = "<group>";
+		};
+		86F890E319EAF41800D1E5D0 /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				A498CE2119ACDF7A00FDA1DC /* Event.h */,
+				A498CE2219ACDF7A00FDA1DC /* Event.m */,
+				A482259719914E0B007D9A9F /* Explore.h */,
+				A482259819914E0B007D9A9F /* Explore.m */,
+				A48225A0199268D6007D9A9F /* Announcement.h */,
+				A48225A1199268D6007D9A9F /* Announcement.m */,
+				A412E1D21986E63800384A11 /* Comment.h */,
+				A412E1D31986E63800384A11 /* Comment.m */,
+				A4988A4E199B9FFC005C43BC /* Peck.h */,
+				A4988A4F199B9FFC005C43BC /* Peck.m */,
+			);
+			name = Content;
+			sourceTree = "<group>";
+		};
 		A40CF56219547A730021C088 /* Peers */ = {
 			isa = PBXGroup;
 			children = (
@@ -800,8 +836,6 @@
 		A43BF0EB197819250009B7AD /* Subscriptions */ = {
 			isa = PBXGroup;
 			children = (
-				863A779F19C8A07300E13413 /* Subscription.h */,
-				863A77A019C8A07300E13413 /* Subscription.m */,
 				A43BF0EC197819480009B7AD /* PASubscriptionsTableViewController.h */,
 				A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */,
 				A43BF0EF1978198D0009B7AD /* PASubscriptionCell.h */,
@@ -821,12 +855,6 @@
 		A46F08FE196DC0E700CFA5D0 /* Dining */ = {
 			isa = PBXGroup;
 			children = (
-				A4677D4C19746F45007E3C3A /* MenuItem.h */,
-				A4677D4D19746F45007E3C3A /* MenuItem.m */,
-				A4677D4619743A05007E3C3A /* DiningPeriod.h */,
-				A4677D4719743A05007E3C3A /* DiningPeriod.m */,
-				A4677D4019743A05007E3C3A /* DiningPlace.h */,
-				A4677D4119743A05007E3C3A /* DiningPlace.m */,
 				A46F08FF196DC11800CFA5D0 /* PADiningPlacesTableViewController.h */,
 				A46F0900196DC11800CFA5D0 /* PADiningPlacesTableViewController.m */,
 				A46F0923196F2A7600CFA5D0 /* PADiningCell.h */,
@@ -866,8 +894,6 @@
 		A4E21F611965982C002A9800 /* Comment */ = {
 			isa = PBXGroup;
 			children = (
-				A412E1D21986E63800384A11 /* Comment.h */,
-				A412E1D31986E63800384A11 /* Comment.m */,
 				A4E21F6219659892002A9800 /* PACommentCell.h */,
 				A4E21F6319659892002A9800 /* PACommentCell.m */,
 				A4E21F6419659892002A9800 /* PACommentCell.xib */,
@@ -878,8 +904,6 @@
 		DDDAEDE019475EE7004CE102 /* Pecks */ = {
 			isa = PBXGroup;
 			children = (
-				A4988A4E199B9FFC005C43BC /* Peck.h */,
-				A4988A4F199B9FFC005C43BC /* Peck.m */,
 				DDDAEDDD19475EBA004CE102 /* PAPecksViewController.h */,
 				DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */,
 				8629251F193CBFD40057CA41 /* PAPeckCell.h */,
@@ -896,8 +920,6 @@
 		DDDAEDE419479665004CE102 /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				A498CE2119ACDF7A00FDA1DC /* Event.h */,
-				A498CE2219ACDF7A00FDA1DC /* Event.m */,
 				86D5981C193768BF00F38654 /* PAEventsViewController.h */,
 				86D5981D193768BF00F38654 /* PAEventsViewController.m */,
 				A4773C7E19589E8200AB9831 /* PAEvents.h */,
@@ -918,8 +940,6 @@
 		DDDAEDE51947967A004CE102 /* Explore */ = {
 			isa = PBXGroup;
 			children = (
-				A482259719914E0B007D9A9F /* Explore.h */,
-				A482259819914E0B007D9A9F /* Explore.m */,
 				863843E1193CB7FD004110F5 /* PAExploreTableViewController.h */,
 				863843E2193CB7FD004110F5 /* PAExploreTableViewController.m */,
 				DDDAEDD819465DCB004CE102 /* PAExploreCell.h */,
@@ -934,8 +954,6 @@
 		DDDAEDE7194796BA004CE102 /* Circles */ = {
 			isa = PBXGroup;
 			children = (
-				A4677D3D19743A05007E3C3A /* Circle.h */,
-				A4677D3E19743A05007E3C3A /* Circle.m */,
 				863843CA193CB31C004110F5 /* PACirclesTableViewController.h */,
 				863843CB193CB31C004110F5 /* PACirclesTableViewController.m */,
 				A463F381194B959800ED441F /* PACircleCell.h */,
@@ -950,8 +968,6 @@
 		DDDAEDE8194796C6004CE102 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				A48225A0199268D6007D9A9F /* Announcement.h */,
-				A48225A1199268D6007D9A9F /* Announcement.m */,
 				A43BF0E8197813200009B7AD /* PAProfileTableViewController.h */,
 				A43BF0E9197813200009B7AD /* PAProfileTableViewController.m */,
 				A43BF0F4197978690009B7AD /* PAChangePasswordViewController.h */,

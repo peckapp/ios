@@ -68,32 +68,7 @@
 
 #pragma mark - User actions
 
--(void)sendUserFeedback:(NSString*)feedback withCategory:(NSString*)category{
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    
-    NSDictionary* userFeedback = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  feedback, @"content",
-                                  [defaults objectForKey:@"user_id"],@"user_id",
-                                  [defaults objectForKey:@"institution_id"], @"institution_id",
-                                  category, @"category",
-                                  [[self authenticationParameters] objectForKey:@"authentication"],@"authentication",
-                                  nil];
-    [[PASessionManager sharedClient] POST:@"api/feedback/submit"
-                                 parameters:userFeedback
-                                    success:^(NSURLSessionDataTask * __unused task, id JSON) {
-                                        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Feedback Posted!"
-                                                                                        message:@"Thank you, we appreciate your help" delegate:self cancelButtonTitle:@"You're Welcome" otherButtonTitles: nil];
-                                        [alert show];
-                                    }
-                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                        NSLog(@"sendUserFeedback ERROR: %@",error);
-                                        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Posting error"
-                                                                                        message:@"Something went wrong while trying to post your feedback, please try again later" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                                        [alert show];
-                                    }];
-
-    
-}
+#pragma mark authentication
 
 -(void)logoutUser{
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -365,7 +340,6 @@
                                       failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                           NSLog(@"updateUserWithInfo withImage ERROR: %@",error);
                                       }];
-    
 }
 
 - (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(NSString*)direction
@@ -539,6 +513,8 @@
                                       [alert show];
                                   }];
 }
+
+#pragma mark Facebook
 
 -(void)checkFacebookUser:(NSDictionary*)dictionary withCallback:(void (^)(BOOL, NSString*))callbackBlock{
     //NSLog(@"params: %@", dictionary);
@@ -799,6 +775,35 @@
         peer.home_institution = [dictionary objectForKey:@"institution_id"];
     }
 }
+
+-(void)sendUserFeedback:(NSString*)feedback withCategory:(NSString*)category{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSDictionary* userFeedback = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  feedback, @"content",
+                                  [defaults objectForKey:@"user_id"],@"user_id",
+                                  [defaults objectForKey:@"institution_id"], @"institution_id",
+                                  category, @"category",
+                                  [[self authenticationParameters] objectForKey:@"authentication"],@"authentication",
+                                  nil];
+    [[PASessionManager sharedClient] POST:@"api/feedback/submit"
+                               parameters:userFeedback
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Feedback Posted!"
+                                                                                      message:@"Thank you, we appreciate your help" delegate:self cancelButtonTitle:@"You're Welcome" otherButtonTitles: nil];
+                                      [alert show];
+                                  }
+                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                      NSLog(@"sendUserFeedback ERROR: %@",error);
+                                      UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Posting error"
+                                                                                      message:@"Something went wrong while trying to post your feedback, please try again later" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                                      [alert show];
+                                  }];
+    
+    
+}
+
+
 #pragma mark - Like actions
 
 -(void)likeComment:(NSInteger)commentID from:(NSString*)comment_from withCategory:(NSString*)category{
