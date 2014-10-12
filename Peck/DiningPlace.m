@@ -2,7 +2,7 @@
 //  DiningPlace.m
 //  Peck
 //
-//  Created by John Karabinos on 7/14/14.
+//  Created by Aaron Taylor on 10/12/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -18,5 +18,7 @@
 @dynamic name;
 @dynamic start_date;
 @dynamic updated_at;
+@dynamic imageURL;
+@dynamic blurredImageURL;
 
 @end

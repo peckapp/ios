@@ -14,6 +14,9 @@
 		861B31A319C7A1E100EF14DC /* PASubscriptionsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B31A219C7A1E100EF14DC /* PASubscriptionsCollectionViewController.m */; };
 		861B31A619C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B31A519C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m */; };
 		861B31A819C7AB4100EF14DC /* PASubscriptionsCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 861B31A719C7AB4100EF14DC /* PASubscriptionsCollectionCell.xib */; };
+		861B58D019EB14BE00C20FA2 /* attend_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 861B58CF19EB14BE00C20FA2 /* attend_icon@2x.png */; };
+		861B58D219EB198000C20FA2 /* null_attend_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 861B58D119EB198000C20FA2 /* null_attend_icon@2x.png */; };
+		861B58D819EB1F4C00C20FA2 /* DiningPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B58D719EB1F4C00C20FA2 /* DiningPlace.m */; };
 		8625900B19A809F6000FA083 /* peck_launch_4_v1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8625900919A809F6000FA083 /* peck_launch_4_v1.png */; };
 		8625900C19A809F6000FA083 /* peck_launch_5_v1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8625900A19A809F6000FA083 /* peck_launch_5_v1.png */; };
 		86292512193CBE000057CA41 /* PAPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86292511193CBE000057CA41 /* PAPostViewController.m */; };
@@ -92,7 +95,6 @@
 		A463F388194F3A4B00ED441F /* PAFriendProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A463F387194F3A4B00ED441F /* PAFriendProfileViewController.m */; };
 		A463F38F19507FA300ED441F /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = A463F38E19507FA300ED441F /* Property List.plist */; };
 		A4677D3F19743A05007E3C3A /* Circle.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D3E19743A05007E3C3A /* Circle.m */; };
-		A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4119743A05007E3C3A /* DiningPlace.m */; };
 		A4677D4819743A05007E3C3A /* DiningPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4719743A05007E3C3A /* DiningPeriod.m */; };
 		A4677D4E19746F45007E3C3A /* MenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D4D19746F45007E3C3A /* MenuItem.m */; };
 		A4677D52197562B1007E3C3A /* PADiningOpportunityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A4677D50197562B1007E3C3A /* PADiningOpportunityCell.m */; };
@@ -223,6 +225,10 @@
 		861B31A419C7A2EB00EF14DC /* PASubscriptionsCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASubscriptionsCollectionCell.h; sourceTree = "<group>"; };
 		861B31A519C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASubscriptionsCollectionCell.m; sourceTree = "<group>"; };
 		861B31A719C7AB4100EF14DC /* PASubscriptionsCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PASubscriptionsCollectionCell.xib; sourceTree = "<group>"; };
+		861B58CF19EB14BE00C20FA2 /* attend_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "attend_icon@2x.png"; sourceTree = "<group>"; };
+		861B58D119EB198000C20FA2 /* null_attend_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "null_attend_icon@2x.png"; sourceTree = "<group>"; };
+		861B58D619EB1F4C00C20FA2 /* DiningPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPlace.h; sourceTree = "<group>"; };
+		861B58D719EB1F4C00C20FA2 /* DiningPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPlace.m; sourceTree = "<group>"; };
 		861E46A0198888AE0088B47F /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		861E46A2198888B80088B47F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		861E46A4198888C20088B47F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -343,8 +349,6 @@
 		A463F38E19507FA300ED441F /* Property List.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Property List.plist"; sourceTree = "<group>"; };
 		A4677D3D19743A05007E3C3A /* Circle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Circle.h; sourceTree = "<group>"; };
 		A4677D3E19743A05007E3C3A /* Circle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Circle.m; sourceTree = "<group>"; };
-		A4677D4019743A05007E3C3A /* DiningPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPlace.h; sourceTree = "<group>"; };
-		A4677D4119743A05007E3C3A /* DiningPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPlace.m; sourceTree = "<group>"; };
 		A4677D4619743A05007E3C3A /* DiningPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPeriod.h; sourceTree = "<group>"; };
 		A4677D4719743A05007E3C3A /* DiningPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiningPeriod.m; sourceTree = "<group>"; };
 		A4677D4C19746F45007E3C3A /* MenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItem.h; sourceTree = "<group>"; };
@@ -502,6 +506,8 @@
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				861B58CF19EB14BE00C20FA2 /* attend_icon@2x.png */,
+				861B58D119EB198000C20FA2 /* null_attend_icon@2x.png */,
 				8625900819A8099F000FA083 /* launch-image */,
 				DDA8417A19A6938900383A3B /* chevron-light@2x.png */,
 				DDA8417819A690DC00383A3B /* cancel@2x.png */,
@@ -784,10 +790,10 @@
 		86F890E219EAF40700D1E5D0 /* Dining */ = {
 			isa = PBXGroup;
 			children = (
+				861B58D619EB1F4C00C20FA2 /* DiningPlace.h */,
+				861B58D719EB1F4C00C20FA2 /* DiningPlace.m */,
 				A4677D4619743A05007E3C3A /* DiningPeriod.h */,
 				A4677D4719743A05007E3C3A /* DiningPeriod.m */,
-				A4677D4019743A05007E3C3A /* DiningPlace.h */,
-				A4677D4119743A05007E3C3A /* DiningPlace.m */,
 				A4677D4C19746F45007E3C3A /* MenuItem.h */,
 				A4677D4D19746F45007E3C3A /* MenuItem.m */,
 			);
@@ -1127,6 +1133,8 @@
 				DDFFF5B219829D1100DC5AC1 /* feather-57@2x.png in Resources */,
 				DDBCA9BE1986D6BC007D283E /* drop-shadow-horizontal.png in Resources */,
 				DDFFF5AC19829BD100DC5AC1 /* feather-76@2x.png in Resources */,
+				861B58D019EB14BE00C20FA2 /* attend_icon@2x.png in Resources */,
+				861B58D219EB198000C20FA2 /* null_attend_icon@2x.png in Resources */,
 				A43BF0F8197992490009B7AD /* sidebar_background.jpg in Resources */,
 				A43BF1021979BC240009B7AD /* circles.jpeg in Resources */,
 				DDA8417719A68F6000383A3B /* chevron@2x.png in Resources */,
@@ -1270,7 +1278,6 @@
 				A43BF0FB1979B0B60009B7AD /* PAInvitationsTableViewController.m in Sources */,
 				A46F0901196DC11800CFA5D0 /* PADiningPlacesTableViewController.m in Sources */,
 				A498CE2319ACDF7A00FDA1DC /* Event.m in Sources */,
-				A4677D4219743A05007E3C3A /* DiningPlace.m in Sources */,
 				863A77A119C8A07300E13413 /* Subscription.m in Sources */,
 				86F890E019E980F100D1E5D0 /* PAUnregisteredViewController.m in Sources */,
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
@@ -1319,6 +1326,7 @@
 				863843DD193CB75F004110F5 /* PARegisterViewController.m in Sources */,
 				A4677D4E19746F45007E3C3A /* MenuItem.m in Sources */,
 				A46F0926196F2A7600CFA5D0 /* PADiningCell.m in Sources */,
+				861B58D819EB1F4C00C20FA2 /* DiningPlace.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

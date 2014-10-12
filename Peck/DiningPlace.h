@@ -2,7 +2,7 @@
 //  DiningPlace.h
 //  Peck
 //
-//  Created by John Karabinos on 7/14/14.
+//  Created by Aaron Taylor on 10/12/14.
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
@@ -19,5 +19,7 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSDate * start_date;
 @property (nonatomic, retain) NSDate * updated_at;
+@property (nonatomic, retain) NSString * imageURL;
+@property (nonatomic, retain) NSString * blurredImageURL;
 
 @end

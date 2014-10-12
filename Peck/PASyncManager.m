@@ -268,7 +268,7 @@
                                       if(callbackBlock){
                                           callbackBlock(NO);
                                       }
-                                  }];
+                                      }];
 }
 
 -(void)resetPassword:(NSDictionary*)dictionary{
@@ -1572,6 +1572,12 @@
 -(void)setAttributesInDiningPlace:(DiningPlace*)diningPlace withDictionary:(NSDictionary*)dictionary {
     diningPlace.name = [dictionary objectForKey:@"name"];
     diningPlace.id = [dictionary objectForKey:@"id"];
+    if ([dictionary valueForKey:@"image"]) {
+        diningPlace.imageURL = [dictionary objectForKey:@"image"];
+    }
+    if ([dictionary valueForKey:@"blurred_image"]) {
+        diningPlace.blurredImageURL = [dictionary objectForKey:@"blurred_image"];
+    }
     //[diningPlace addDining_opportunityObject:diningEvent];
 }
 
@@ -2427,6 +2433,16 @@
 #pragma mark - Error Handling
 
 - (void)handleError:(NSError*)error andMethodName:(NSString*)methodName {
+    switch (error.code) {
+        case -1005: { //kCFURLErrorNetworkConnectionLost
+            NSString *msg = [NSString stringWithFormat:@"Please Connect to the Internet to continue with %@",methodName];
+            [[PAMethodManager sharedMethodManager] showNoInternetAlertWithMessage:msg];
+            break;
+        }
+        default:
+            break;
+    }
+    
     NSHTTPURLResponse *response = [error.userInfo objectForKey:@"com.alamofire.serialization.response.error.response"];
     
     switch (response.statusCode) {

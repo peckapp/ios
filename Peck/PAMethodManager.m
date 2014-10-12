@@ -21,6 +21,7 @@
 @property UIAlertView* registerAlert;
 @property UIAlertView* institutionAlert;
 @property UIAlertView* unauthorizedAlert;
+@property UIAlertView* noInternetAlert;
 
 @property (strong, nonatomic) void (^instCallbackBlock)(void);
 @property (strong, nonatomic) void (^unauthCallbackBlock)(void);
@@ -81,6 +82,21 @@
     self.instCallbackBlock = callbackBlock;
     self.institutionAlert.delegate=self;
     [self.institutionAlert show];
+}
+
+-(void)showNoInternetAlertWithMessage:(NSString*)message {
+    if (self.noInternetAlert == nil) {
+        self.noInternetAlert = [[UIAlertView alloc] initWithTitle:@"No Internet Connection"
+                                                          message:@"msg"
+                                                         delegate:self
+                                                cancelButtonTitle:@"Okay"
+                                                otherButtonTitles:nil];
+    }
+    if (message) {
+        self.noInternetAlert.message = message;
+    } else {
+        self.noInternetAlert.message = @"Please connect to the internet to complete this operation";
+    }
 }
 
 -(void)showUnauthorizedAlertWithCallbackBlock:(void (^)(void))callbackBlock {

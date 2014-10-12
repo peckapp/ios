@@ -31,6 +31,6 @@
 - (void)expandTableViewCell:(PACommentCell *)cell;
 - (void)compressTableViewCell:(PACommentCell *)cell;
 - (void)postComment:(NSString *)text;
-- (void)configureView;
+- (void)configureViewFromDetailItem;
 - (void)reloadAttendeeLabels;
 @end

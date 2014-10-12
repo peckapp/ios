@@ -603,6 +603,7 @@ PAAssetManager * assetManager;
 
 - (PANestedTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // select the proper fetched results controller for the requesting tableview
     NSFetchedResultsController *fetchedResultsController = nil;
     if (tableView == self.leftTableView) {
         fetchedResultsController = self.leftFetchedResultsController;
@@ -614,11 +615,12 @@ PAAssetManager * assetManager;
         fetchedResultsController = self.rightFetchedResultsController;
     }
     else {
-        return nil;
+        return nil; // should never occur
     }
 
     Event *eventObject = [fetchedResultsController objectAtIndexPath:indexPath];
-
+    
+    // Dining Cells
     if ([eventObject.type isEqualToString:@"dining"]) {
         PANestedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"diningCell"];
         if (cell == nil) {
@@ -642,7 +644,9 @@ PAAssetManager * assetManager;
         
         return cell;
         
-    }else if([eventObject.type isEqualToString:@"athletic"]){
+    }
+    // Athletic Cells
+    else if([eventObject.type isEqualToString:@"athletic"]){
         PANestedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"athleticCell"];
         if (cell == nil) {
             [tableView registerClass:[PANestedTableViewCell class] forCellReuseIdentifier:@"athleticCell"];
@@ -665,7 +669,7 @@ PAAssetManager * assetManager;
         
         return cell;
     }
-    
+    // Event Cells (default option)
     else {
         PANestedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
         if (cell == nil) {
@@ -690,56 +694,6 @@ PAAssetManager * assetManager;
         return cell;
     }
 }
-
-
-/*
-
-- (void)configureEventCell:(PAEventCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-    if([cell isKindOfClass:[PAEventCell class]]){
-        Event *tempEvent;
-
-        tempEvent = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
-
-        cell.titleLabel.text = tempEvent.title;
-        cell.startTime.text = [self dateToString:tempEvent.start_date];
-        cell.endTime.text = [self dateToString:tempEvent.end_date];
-
-        cell.clipsToBounds = YES;
-
-        NSString * imageID = [tempEvent.id stringValue];
-
-        NSLog(@"event %@ has an imageID of %@",tempEvent.title, imageID);
-
-
-        UIImage * cachedImage = [self.imageCache objectForKey:imageID];
-        //NSURL* imageURL = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:tempEvent.imageURL]];
-        //UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-
-        //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        if (cachedImage) {
-            cell.eventImageView.image = cachedImage;
-        }
-        else {
-            cell.eventImageView.image = self.placeholderImage.image;
-        }
-        
-        //cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    }
-}
-
--(void)configureDiningCell:(PADiningOpportunityCell*)cell atIndexPath:(NSIndexPath*)indexPath
-{
-
-    Event* tempDiningEvent = [self.centerFetchedResultsController objectAtIndexPath:indexPath];
-
-    cell.nameLabel.text = tempDiningEvent.title;
-    //cell.startTimeLabel.text = [self dateToString:tempDiningEvent.start_date];
-    //cell.endTimeLabel.text = [self dateToString:tempDiningEvent.end_date];
-    
-}
-
-*/
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -786,31 +740,6 @@ PAAssetManager * assetManager;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
-    Event *selectedEvent = [_fetchedResultsController objectAtIndexPath:indexPath];
-    if([selectedEvent.type isEqualToString:@"simple"]){
-        [self performSegueWithIdentifier:@"showEventDetail" sender:self];
-    }
-    else if([selectedEvent.type isEqualToString:@"dining"]){
-        [self performSegueWithIdentifier:@"showDiningDetail" sender:self];
-    }
-     */
-
-    /*
-     NSLog(@"selected cell %ld", (long)indexPath.row);
-
-     UIViewController * newVC = self.detailViewControllers[indexPath.row];
-     [newVC.view addSubview:self.backButton];
-
-     newVC.view.userInteractionEnabled = YES;
-
-     self.selectedCellIndexPath = indexPath;
-     [self.tableView beginUpdates];
-     [self.tableView endUpdates];
-     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-     self.tableView.scrollEnabled = NO;
-     */
-
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     self.selectedCellIndexPath = indexPath;
@@ -848,29 +777,6 @@ PAAssetManager * assetManager;
     // The table view should not be re-orderable.
     return NO;
 }
-
-/*
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"showEventDetail"]) {
-        showingDetail=YES;
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSManagedObject *object;
-        object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        [[segue destinationViewController] setDetailItem:object];
-    }
-    else if ([[segue identifier] isEqualToString:@"showDiningDetail"]) {
-        showingDetail=YES;
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSManagedObject *object;
-        object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        //Event *diningEvent=(Event*)object;
-        //[[PASyncManager globalSyncManager] updateDiningPlaces:diningEvent forController:[segue destinationViewController]];
-        [[segue destinationViewController] setDetailItem:object];
-    }
-}
- */
-
 
 -(NSString*)dateToString:(NSDate *)date{
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -1203,64 +1109,6 @@ PAAssetManager * assetManager;
             [self cacheImageForURL:event.blurredImageURL];
         }
     }
-
-    /*
-    NSMutableArray* eventURLs = [[NSMutableArray alloc] init];
-    NSMutableArray* eventTypes = [[NSMutableArray alloc] init];
-    NSMutableArray* eventIDs = [[NSMutableArray alloc] init];
-    NSMutableArray* eventRows = [[NSMutableArray alloc] init];
-    for(int i = 0; i < [fetchedResultsController.fetchedObjects count]; i++){
-        
-        Event* tempEvent = fetchedResultsController.fetchedObjects[i];
-        
-        // cannot asynchronously cache image it there isn't one
-        if (tempEvent.blurredImageURL != nil && ![tempEvent.blurredImageURL isEqualToString:@"/images/missing.png"]) {
-            if(![self.imageCache objectForKey:[tempEvent.id stringValue]]){
-                //if the image is not already cached
-                [eventURLs addObject:tempEvent.blurredImageURL];
-                [eventTypes addObject:tempEvent.type];
-                [eventIDs addObject:tempEvent.id];
-                [eventRows addObject:[NSNumber numberWithInt:i]];
-            }
-        }
-    }
-     */
-
-    /*
-    for(int j=0; j<[eventIDs count];j++){
-        if( [eventTypes[j] isEqualToString:@"simple"]){
-            NSURL * url = [NSURL URLWithString:[@"http://loki.peckapp.com:3500" stringByAppendingString:eventURLs[j]]];
-            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:url]];
-            if(!cachedImage){
-                NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[eventRows[j] integerValue] inSection:0];
-                PAEventCell* cell = (PAEventCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-                if(![cell isKindOfClass:[PADiningOpportunityCell class]]){
-                    [cell.eventImageView setImageWithURL:url placeholderImage:self.placeholderImage.image];
-                }
-            }
-        }
-    }
-    */
-
-    /*
-    for(int i = 0; i<[eventIDs count]; i++){
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-        dispatch_async(queue, ^{
-            [self cacheImageForEventURL:eventURLs[i] Type:eventTypes[i] AndID:eventIDs[i]];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSIndexPath* indexPath =[NSIndexPath indexPathForRow: [eventRows[i] integerValue] inSection:0];
-                /
-                PAEventCell* cell = (PAEventCell*)[tableView cellForRowAtIndexPath:indexPath];
-                if(fetchedResultsController.fetchedObjects.count > indexPath.row){
-                    if ([cell isKindOfClass:[PAEventCell class]]) {
-                        // [self configureEventCell:cell atIndexPath:indexPath];
-                    }
-                }
-                //to reload the cell after the image is cached
-            });
-        });
-    }
-     */
 
     [tableView reloadData];
     [tableView beginUpdates];

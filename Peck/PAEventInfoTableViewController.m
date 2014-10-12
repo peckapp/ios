@@ -21,7 +21,8 @@
 #define imageHeight 256
 #define titleLabelDivide 90
 #define dateLabelDivide 196
-#define compressedHeight 88
+#define attendIconRatio 0.1
+#define compressedHeight 96
 #define buffer 14
 #define defaultCellHeight 72
 #define reloadTime 10
@@ -39,8 +40,8 @@
 @property (strong, nonatomic) UIView *footerView;
 @property (strong, nonatomic) UIView *imagesView;
 
-@property (strong, nonatomic) UIImageView *cleanImageView;
-@property (strong, nonatomic) UIImageView *blurredImageView;
+@property (strong, nonatomic) UIImageView *cleanImageView; // displayed when expanded
+@property (strong, nonatomic) UIImageView *blurredImageView; // displayed when compressed
 
 @property (strong, nonatomic) UILabel *timeLabel;
 @property (strong, nonatomic) UILabel *titleLabel;
@@ -48,6 +49,9 @@
 @property (strong, nonatomic) UILabel *descriptionLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
 
+@property (strong, nonatomic) UIImage *attendImage;
+@property (strong, nonatomic) UIImage *nullAttendImage;
+@property (strong, nonatomic) UIImageView *attendingIcon; // visible only if the event is being attended by the user
 @property (strong, nonatomic) UIButton *attendButton;
 @property (strong, nonatomic) UILabel *attendeesLabel;
 
@@ -131,6 +135,7 @@ BOOL reloaded = NO;
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
+    self.titleLabel.numberOfLines = 0;
     [self.blurredImageView addSubview:self.titleLabel];
 
     [self.headerView addSubview:[assetManager createShadowWithFrame:CGRectMake(0, -64, self.view.frame.size.width, 64) top:YES]];
@@ -153,6 +158,12 @@ BOOL reloaded = NO;
 
     [self.view addSubview:self.imagesView];
 
+    self.attendImage = [UIImage imageNamed:@"attend_icon"];
+    self.nullAttendImage = [UIImage imageNamed:@"null_attend_icon"];
+    self.attendingIcon = [[UIImageView alloc] initWithImage:self.nullAttendImage];
+    self.attendingIcon.userInteractionEnabled = NO;
+    [self.blurredImageView addSubview:self.attendingIcon];
+    
     self.attendButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.attendButton addTarget:self action:@selector(attendButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
@@ -225,6 +236,12 @@ BOOL reloaded = NO;
     self.timeLabel.frame = left;
     self.titleLabel.frame = right;
     self.titleLabel.frame = CGRectInset(self.titleLabel.frame, buffer, 0);
+    
+    CGFloat attendIconSize = self.blurredImageView.frame.size.height * attendIconRatio;
+    CGFloat attendX = self.timeLabel.frame.origin.x + 0.5*self.timeLabel.frame.size.width;
+    CGFloat attendY = self.timeLabel.frame.origin.y + 0.2*self.blurredImageView.frame.size.height;
+    CGRect attendRect = CGRectMake(attendX, attendY, attendIconSize, attendIconSize);
+    self.attendingIcon.frame = attendRect;
 
     self.fullTitleLabel.frame = CGRectMake(buffer, -buffer * 3, self.view.frame.size.width - buffer * 2, buffer * 3);
 
@@ -310,6 +327,8 @@ BOOL reloaded = NO;
         self.tableView.frame = initialFrame;
 }
 */
+
+#pragma mark - PANestedTableViewCellSubviewControllerProtocol
 
 - (void)expandAnimated:(BOOL)animated
 {
@@ -421,7 +440,7 @@ BOOL reloaded = NO;
     return self.view;
 }
 
-#pragma mark - managing the detail item
+#pragma mark managing the detail item
 
 - (void)setManagedObject:(NSManagedObject *)managedObject parentObject:(NSManagedObject *)parentObject
 {
@@ -453,6 +472,8 @@ BOOL reloaded = NO;
          */
        
         [self reloadAttendeeLabels];
+        // sets the attending icon to the proper value based on listed attendees for the event
+        self.attendingIcon.image = [self attendingEvent] ? self.attendImage : self.nullAttendImage;
 
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"h:mm a"];
@@ -466,6 +487,7 @@ BOOL reloaded = NO;
 
         self.descriptionLabel.text = [self.detailItem valueForKey:@"descrip"];
 
+        // setting the clean Image for when the cell is expanded
         UIImage* image = nil;
         if ([self.detailItem valueForKey:@"imageURL"]) {
             NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"imageURL"]];
@@ -481,6 +503,7 @@ BOOL reloaded = NO;
             self.cleanImageView.image = image;
         }
 
+        // setting the blurred image for when the cell is compressed
         if ([self.detailItem valueForKey:@"imageURL"]) {
             NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"blurredImageURL"]];
             UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
@@ -527,7 +550,7 @@ BOOL reloaded = NO;
     return NO;
 }
 
-#pragma mark - managing the fetched results controller
+#pragma mark - fetched results controller (comments)
 
 -(NSFetchedResultsController *)fetchedResultsController{
     NSLog(@"configuring the fetched results controller");
@@ -663,6 +686,19 @@ BOOL reloaded = NO;
     return [sectionInfo numberOfObjects];
 }
 
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([indexPath row] < [_fetchedResultsController.fetchedObjects count]){
+        Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]];
+        NSString * commentID = [comment.id stringValue];
+        CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
+        if(height){
+            return height;
+        }
+    }
+    return defaultCellHeight;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PACommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -720,6 +756,8 @@ BOOL reloaded = NO;
         //[cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
     }
 }
+
+#pragma mark helpers for configureView
 
 -(BOOL)userHasLikedComment:(Comment*)comment{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -803,18 +841,7 @@ BOOL reloaded = NO;
     return dateString;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([indexPath row] < [_fetchedResultsController.fetchedObjects count]){
-        Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]];
-        NSString * commentID = [comment.id stringValue];
-        CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
-        if(height){
-            return height;
-        }
-    }
-    return defaultCellHeight;
-}
+#pragma mark - Scroll View Delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -831,6 +858,8 @@ BOOL reloaded = NO;
      */
     [self.keyboardAccessory resignFirstResponder];
 }
+
+#pragma mark - Table View Delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -926,6 +955,8 @@ BOOL reloaded = NO;
     [self.tableView endUpdates];
 }
 
+#pragma mark - User Actions
+
 -(void)postComment:(NSString *) text
 {
    
@@ -966,7 +997,6 @@ BOOL reloaded = NO;
 
     }
 }
-
 
 - (IBAction)attendButton:(id)sender {
     if([self.attendButton.titleLabel.text isEqualToString:@"Attend"]){
