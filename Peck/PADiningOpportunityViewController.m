@@ -13,6 +13,7 @@
 #import "DiningPlace.h"
 #import "MenuItem.h"
 #import "PASyncManager.h"
+#import "UIImageView+AFNetworking.h"
 
 #define imageHeight 256
 
@@ -20,6 +21,7 @@
 
 @property (assign, nonatomic) BOOL expanded;
 
+@property (strong, nonatomic) UIImageView *blurredImageView;
 @property (strong, nonatomic) UIImageView *locationImageView;
 @property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UIView *footerView;
@@ -42,10 +44,14 @@ PAAssetManager *assetManager;
     assetManager = [PAAssetManager sharedManager];
 
     self.view.backgroundColor = [assetManager darkColor];
-
+    
     self.locationImageView = [[UIImageView alloc] initWithImage:[assetManager eventPlaceholder]];
     self.locationImageView.contentMode = UIViewContentModeCenter;
     [self.view addSubview:self.locationImageView];
+    
+    self.blurredImageView = [[UIImageView alloc] initWithImage:[assetManager eventPlaceholder]];
+    self.blurredImageView.contentMode = UIViewContentModeCenter;
+    [self.view addSubview:self.blurredImageView];
 
     self.headerView = [[UIView alloc] init];
 
@@ -71,6 +77,8 @@ PAAssetManager *assetManager;
     self.view.frame = self.parentViewController.view.bounds;
 
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.height, 1);
+    
+    self.blurredImageView.frame = CGRectMake(0, 0, self.view.frame.size.width, 84);
 
     self.locationImageView.frame = CGRectMake(0, 0, self.view.frame.size.width, 256);
     self.titleLabel.frame = CGRectInset(CGRectMake(0, -88 + 15, self.view.frame.size.width, 88), 15, 15);
@@ -117,6 +125,7 @@ PAAssetManager *assetManager;
 
         void (^animationsBlock)(void) = ^{
             self.placeLabel.alpha = 0;
+            self.blurredImageView.alpha = 0;
         };
 
         void (^completionBlock)(BOOL) = ^(BOOL finished){
@@ -180,6 +189,12 @@ PAAssetManager *assetManager;
     if (self.detailItem) {
         self.placeLabel.text = self.detailItem.name;
         self.titleLabel.text = self.detailItem.name;
+        
+        NSURL *blurredImageURL = [NSURL URLWithString:self.detailItem.blurredImageURL];
+        [self.blurredImageView setImageWithURL:blurredImageURL];
+        
+        NSURL *imageURL = [NSURL URLWithString:self.detailItem.imageURL];
+        [self.locationImageView setImageWithURL:imageURL];
     }
 }
 
