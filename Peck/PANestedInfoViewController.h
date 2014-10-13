@@ -31,4 +31,9 @@
 
 // post a comment to the webservice
 -(void)postComment:(NSString *)text withCategory:(NSString*)category;
+
+@property (strong, nonatomic) NSString* commentText;
+
+@property (strong, nonatomic) NSString* category;
+
 @end

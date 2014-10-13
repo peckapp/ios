@@ -151,6 +151,7 @@ PAAssetManager *assetManager;
 
         void (^animationsBlock)(void) = ^{
             self.placeLabel.alpha = 1;
+            self.blurredImageView.alpha = 1;
         };
 
         void (^completionBlock)(BOOL) = ^(BOOL finished){

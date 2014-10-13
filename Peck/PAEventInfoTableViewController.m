@@ -25,11 +25,12 @@
 #define attendIconRatio 0.1
 #define compressedHeight 96
 #define buffer 14
-#define defaultCommentCellHeight 72
 #define reloadTime 10
 
 
-@interface PAEventInfoTableViewController ()
+@interface PAEventInfoTableViewController () {
+    
+}
 
 @end
 
@@ -43,7 +44,6 @@ NSString * cellIdentifier = @"CommentCell";
 NSString * nibName = @"PACommentCell";
 NSMutableDictionary *heightDictionary;
 CGRect initialFrame;
-UITextView *textViewHelper;
 
 PAAssetManager * assetManager;
 
@@ -56,6 +56,8 @@ BOOL reloaded = NO;
 
     assetManager = [PAAssetManager sharedManager];
     
+    self.category = @"simple";
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -66,8 +68,8 @@ BOOL reloaded = NO;
         [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
     //}
 
-    textViewHelper = [[UITextView alloc] init];
-    [textViewHelper setHidden:YES];
+    self.textViewHelper = [[UITextView alloc] init];
+    [self.textViewHelper setHidden:YES];
 
     heightDictionary = [[NSMutableDictionary alloc] init];
 
@@ -115,6 +117,7 @@ BOOL reloaded = NO;
     self.fullTitleLabel = [[UILabel alloc] init];
     self.fullTitleLabel.textColor = [UIColor whiteColor];
     self.fullTitleLabel.font = [UIFont boldSystemFontOfSize:21.0];
+    self.fullTitleLabel.numberOfLines = 0;
     [self.headerView addSubview:self.fullTitleLabel];
 
     self.dateLabel = [[UILabel alloc] init];
@@ -215,7 +218,10 @@ BOOL reloaded = NO;
     CGRect attendRect = CGRectMake(attendX, attendY, attendIconSize, attendIconSize);
     self.attendingIcon.frame = attendRect;
 
-    self.fullTitleLabel.frame = CGRectMake(buffer, -buffer * 3, self.view.frame.size.width - buffer * 2, buffer * 3);
+    CGFloat fullTitleSize = buffer * 3;
+    self.fullTitleLabel.frame = CGRectMake(0, 0, self.view.frame.size.width - buffer * 2, fullTitleSize);
+    [self.fullTitleLabel sizeToFit];
+    self.fullTitleLabel.frame = CGRectMake(buffer, - (self.fullTitleLabel.frame.size.height + buffer), self.fullTitleLabel.frame.size.width, self.fullTitleLabel.frame.size.height);
 
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
     self.dateLabel.frame = CGRectInset(self.headerView.frame, buffer, buffer);
@@ -461,37 +467,6 @@ BOOL reloaded = NO;
 
         self.descriptionLabel.text = [self.detailItem valueForKey:@"descrip"];
 
-        
-
-        // moved to superclass
-//        UIImage* image = nil;
-//        if ([self.detailItem valueForKey:@"imageURL"]) {
-//            NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"blurredImageURL"]];
-//            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-//            if (cachedImage) {
-//                self.blurredImageView.image = cachedImage;
-//            }
-//            else {
-//                [self.blurredImageView setImageWithURL:imageURL placeholderImage:image];
-//            }
-//        }
-//        else {
-//            self.blurredImageView.image = image;
-//        }
-//        // setting the clean Image for when the cell is expanded
-//        if ([self.detailItem valueForKey:@"imageURL"]) {
-//            NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"imageURL"]];
-//            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-//            if (cachedImage) {
-//                self.cleanImageView.image = cachedImage;
-//            }
-//            else {
-//                [self.cleanImageView setImageWithURL:imageURL placeholderImage:image];
-//            }
-//        }
-//        else {
-//            self.cleanImageView.image = image;
-//        }
     }
 
     [self updateFrames];
@@ -901,17 +876,17 @@ BOOL reloaded = NO;
 */
 
 - (void)expandTableViewCell:(PACommentCell *)cell {
-    textViewHelper.frame = cell.commentTextView.frame;
-    textViewHelper.text = cell.commentTextView.text;
+    self.textViewHelper.frame = cell.commentTextView.frame;
+    self.textViewHelper.text = cell.commentTextView.text;
     
-    [textViewHelper setFont:[UIFont systemFontOfSize:14]];
-    [textViewHelper sizeToFit];
+    [self.textViewHelper setFont:[UIFont systemFontOfSize:14]];
+    [self.textViewHelper sizeToFit];
     
-    float newHeight = textViewHelper.frame.size.height;
+    float newHeight = self.textViewHelper.frame.size.height;
     NSLog(@"new height: %f", newHeight);
     NSNumber *height = [NSNumber numberWithFloat: defaultCommentCellHeight];
-    if(textViewHelper.frame.size.height + textViewHelper.frame.origin.y > defaultCommentCellHeight){
-        height = [NSNumber numberWithFloat:textViewHelper.frame.size.height + textViewHelper.frame.origin.y];
+    if(self.textViewHelper.frame.size.height + self.textViewHelper.frame.origin.y > defaultCommentCellHeight){
+        height = [NSNumber numberWithFloat:self.textViewHelper.frame.size.height + self.textViewHelper.frame.origin.y];
     }
     //Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
     
@@ -967,105 +942,6 @@ BOOL reloaded = NO;
         
     }
     [self reloadAttendeeLabels];
-}
-
-#pragma mark - Text Fields
-
-- (void)registerForKeyboardNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasHidden:)
-                                                 name:UIKeyboardDidHideNotification
-                                               object:nil];
-
-}
-
-- (void)deregisterFromKeyboardNotifications {
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardWillShowNotification
-                                                  object:nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardDidHideNotification
-                                                  object:nil];
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardWillHideNotification
-                                                  object:nil];
-
-}
-
-- (void)keyboardWasHidden:(NSNotification*)notification
-{
-
-    NSLog(@"after the keyboard was hidden, the y is %f", self.keyboardAccessoryView.frame.origin.y);
-}
-
-- (void)keyboardWillShow:(NSNotification*)notification
-{
-    NSLog(@"keyboard will show");
-    NSDictionary* info = [notification userInfo];
-    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
-    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-
-    self.keyboardAccessoryView.frame = CGRectOffset(self.keyboardAccessoryView.frame, 0, -keyboardSize.height);
-    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - self.postButton.frame.size.width - 7, 30);
-    self.postButton.alpha = 1;
-
-    [UIView commitAnimations];
-
-}
-
-- (void)keyboardWillBeHidden:(NSNotification*)notification
-{
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
-    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-
-    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
-    self.keyboardAccessory.frame = CGRectInset(self.keyboardAccessoryView.bounds, 7, 7);
-    self.postButton.alpha = 0;
-
-    NSLog(@"height of the view %f", self.view.frame.size.height);
-    NSLog(@"keyboard y %f", self.keyboardAccessoryView.frame.origin.y);
-    
-    NSLog(@"actual keyboard frame %@", NSStringFromCGRect(self.keyboardAccessory.frame));
-    
-    [UIView commitAnimations];
-}
-
-- (BOOL)textViewIsSmallerThanFrame:(NSString*)text{
-    textViewHelper.frame = CGRectMake(0, 0, 222, 0);
-    [textViewHelper setFont:[UIFont systemFontOfSize:14]];
-    [textViewHelper setHidden:YES];
-    textViewHelper.text = text;
-    [textViewHelper sizeToFit];
-    if(textViewHelper.frame.size.height>defaultCommentCellHeight){
-        return NO;
-    }
-    return YES;
-}
-
-- (void)didSelectPostButton:(id)sender
-{
-    [self postComment:self.keyboardAccessory.text withCategory:@"simple"];
-    [self.keyboardAccessory resignFirstResponder];
-    self.keyboardAccessory.text = @"";
 }
 
 @end

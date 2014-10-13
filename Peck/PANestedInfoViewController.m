@@ -155,4 +155,106 @@
     }
 }
 
+#pragma mark - Text Fields
+
+- (void)registerForKeyboardNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasHidden:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];
+    
+}
+
+- (void)deregisterFromKeyboardNotifications {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillShowNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+    
+}
+
+- (void)keyboardWasHidden:(NSNotification*)notification
+{
+    
+    NSLog(@"after the keyboard was hidden, the y is %f", self.keyboardAccessoryView.frame.origin.y);
+}
+
+- (void)keyboardWillShow:(NSNotification*)notification
+{
+    NSLog(@"keyboard will show");
+    NSDictionary* info = [notification userInfo];
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+    self.keyboardAccessoryView.frame = CGRectOffset(self.keyboardAccessoryView.frame, 0, -keyboardSize.height);
+    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - self.postButton.frame.size.width - 7, 30);
+    self.postButton.alpha = 1;
+    
+    [UIView commitAnimations];
+    
+}
+
+- (void)keyboardWillBeHidden:(NSNotification*)notification
+{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+    self.keyboardAccessory.frame = CGRectInset(self.keyboardAccessoryView.bounds, 7, 7);
+    self.postButton.alpha = 0;
+    
+    NSLog(@"height of the view %f", self.view.frame.size.height);
+    NSLog(@"keyboard y %f", self.keyboardAccessoryView.frame.origin.y);
+    
+    NSLog(@"actual keyboard frame %@", NSStringFromCGRect(self.keyboardAccessory.frame));
+    
+    [UIView commitAnimations];
+}
+
+- (BOOL)textViewIsSmallerThanFrame:(NSString*)text{
+    _textViewHelper.frame = CGRectMake(0, 0, 222, 0);
+    [_textViewHelper setFont:[UIFont systemFontOfSize:14]];
+    [_textViewHelper setHidden:YES];
+    _textViewHelper.text = text;
+    [_textViewHelper sizeToFit];
+    if(_textViewHelper.frame.size.height>defaultCommentCellHeight){
+        return NO;
+    }
+    return YES;
+}
+
+#pragma mark - Commenting
+
+- (void)didSelectPostButton:(id)sender
+{
+    [self postComment:self.keyboardAccessory.text withCategory:self.category];
+    [self.keyboardAccessory resignFirstResponder];
+    self.keyboardAccessory.text = @"";
+}
+
+
 @end

@@ -8,10 +8,14 @@
 
 #import "PANestedInfoViewController.h"
 
+#define defaultCommentCellHeight 72
+
 @class PACommentCell;
 
 // private class extensions of the
-@interface PANestedInfoViewController ()
+@interface PANestedInfoViewController () {
+    
+}
 
 // configures the view with the information from the detailItem
 -(void)configureView;
@@ -47,7 +51,10 @@
 @property (strong, nonatomic) UITextField * keyboardAccessory;
 @property (strong, nonatomic) UIButton * postButton;
 
-@property (strong, nonatomic) NSString* commentText;
+@property (strong, nonatomic) UITextView *textViewHelper;
+
+- (void)registerForKeyboardNotifications;
+- (void)deregisterFromKeyboardNotifications;
 
 -(void) showSeparators;
 -(void) hideSeparators;

@@ -35,7 +35,6 @@
     NSString * cellNibName;
     NSMutableDictionary *heightDictionary;
     CGRect initialFrame;
-    UITextView *textViewHelper;
     
     PAAssetManager * assetManager;
     
@@ -61,6 +60,8 @@
     
     assetManager = [PAAssetManager sharedManager];
     
+    self.category = @"athletic";
+    
     commentCellIdentifier = @"AthleticCommentCell";
     cellNibName = @"PACommentCell";
     reloaded = NO;
@@ -75,8 +76,8 @@
     [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
     //}
     
-    textViewHelper = [[UITextView alloc] init];
-    [textViewHelper setHidden:YES];
+    self.textViewHelper = [[UITextView alloc] init];
+    [self.textViewHelper setHidden:YES];
     
     heightDictionary = [[NSMutableDictionary alloc] init];
     
@@ -369,7 +370,7 @@
             NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 while(self.expanded) {
-                    [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:@"athletic"];
+                    [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:self.category];
                     [NSThread sleepForTimeInterval:reloadTime];
                 }
             });
@@ -567,7 +568,7 @@
     NSMutableArray *predicateArray =[[NSMutableArray alloc] init];
     
     NSPredicate *commentFromPredicate = [NSPredicate predicateWithFormat:@"comment_from = %@", [self.detailItem valueForKey:@"id"]];
-    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", @"athletic"];
+    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"category like %@", self.category];
     
     [predicateArray addObject:commentFromPredicate];
     [predicateArray addObject:categoryPredicate];
@@ -915,17 +916,17 @@
  */
 
 - (void)expandTableViewCell:(PACommentCell *)cell {
-    textViewHelper.frame = cell.commentTextView.frame;
-    textViewHelper.text = cell.commentTextView.text;
+    self.textViewHelper.frame = cell.commentTextView.frame;
+    self.textViewHelper.text = cell.commentTextView.text;
     
-    [textViewHelper setFont:[UIFont systemFontOfSize:14]];
-    [textViewHelper sizeToFit];
+    [self.textViewHelper setFont:[UIFont systemFontOfSize:14]];
+    [self.textViewHelper sizeToFit];
     
-    float newHeight = textViewHelper.frame.size.height;
+    float newHeight = self.textViewHelper.frame.size.height;
     NSLog(@"new height: %f", newHeight);
     NSNumber *height = [NSNumber numberWithFloat: defaultCellHeight];
-    if(textViewHelper.frame.size.height + textViewHelper.frame.origin.y > defaultCellHeight){
-        height = [NSNumber numberWithFloat:textViewHelper.frame.size.height + textViewHelper.frame.origin.y];
+    if(self.textViewHelper.frame.size.height + self.textViewHelper.frame.origin.y > defaultCellHeight){
+        height = [NSNumber numberWithFloat:self.textViewHelper.frame.size.height + self.textViewHelper.frame.origin.y];
     }
     //Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
     
@@ -958,7 +959,7 @@
                                       [defaults objectForKey:@"user_id"],@"user_id",
                                       [defaults objectForKey:@"institution_id"],@"institution_id",
                                       [self.detailItem valueForKey:@"id"],@"event_attended",
-                                      @"athletic", @"category",
+                                      self.category, @"category",
                                       [defaults objectForKey:@"user_id"], @"added_by",
                                       nil];
             
@@ -974,112 +975,13 @@
                                   [self.detailItem valueForKey:@"id"], @"event_attended",
                                   [defaults objectForKey:@"institution_id"],@"institution_id",
                                   [defaults objectForKey:@"user_id"],@"user_id",
-                                  @"athletic", @"category",
+                                  self.category, @"category",
                                   nil];
         
         [[PASyncManager globalSyncManager] unattendEvent: attendee forViewController:self];
         
     }
     
-}
-
-#pragma mark - Text Fields
-
-- (void)registerForKeyboardNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasHidden:)
-                                                 name:UIKeyboardDidHideNotification
-                                               object:nil];
-    
-}
-
-- (void)deregisterFromKeyboardNotifications {
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardWillShowNotification
-                                                  object:nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardDidHideNotification
-                                                  object:nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardWillHideNotification
-                                                  object:nil];
-    
-}
-
-- (void)keyboardWasHidden:(NSNotification*)notification
-{
-    
-    NSLog(@"after the keyboard was hidden, the y is %f", self.keyboardAccessoryView.frame.origin.y);
-}
-
-- (void)keyboardWillShow:(NSNotification*)notification
-{
-    NSLog(@"keyboard will show");
-    NSDictionary* info = [notification userInfo];
-    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
-    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    
-    self.keyboardAccessoryView.frame = CGRectOffset(self.keyboardAccessoryView.frame, 0, -keyboardSize.height);
-    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - self.postButton.frame.size.width - 7, 30);
-    self.postButton.alpha = 1;
-    
-    [UIView commitAnimations];
-    
-}
-
-- (void)keyboardWillBeHidden:(NSNotification*)notification
-{
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
-    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    
-    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
-    self.keyboardAccessory.frame = CGRectInset(self.keyboardAccessoryView.bounds, 7, 7);
-    self.postButton.alpha = 0;
-    
-    NSLog(@"height of the view %f", self.view.frame.size.height);
-    NSLog(@"keyboard y %f", self.keyboardAccessoryView.frame.origin.y);
-    
-    NSLog(@"actual keyboard frame %@", NSStringFromCGRect(self.keyboardAccessory.frame));
-    
-    [UIView commitAnimations];
-}
-
-- (BOOL)textViewIsSmallerThanFrame:(NSString*)text{
-    textViewHelper.frame = CGRectMake(0, 0, 222, 0);
-    [textViewHelper setFont:[UIFont systemFontOfSize:14]];
-    [textViewHelper setHidden:YES];
-    textViewHelper.text = text;
-    [textViewHelper sizeToFit];
-    if(textViewHelper.frame.size.height>defaultCellHeight){
-        return NO;
-    }
-    return YES;
-}
-
-- (void)didSelectPostButton:(id)sender
-{
-    [self postComment:self.keyboardAccessory.text withCategory:@"athletic"];
-    [self.keyboardAccessory resignFirstResponder];
-    self.keyboardAccessory.text = @"";
 }
 
 @end
