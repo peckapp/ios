@@ -12,6 +12,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "PASyncManager.h"
 #import "PAMethodManager.h"
+#import "PACommentCell.h"
 
 #define separatorWidth 0.5
 
@@ -155,6 +156,106 @@
     }
 }
 
+
+
+#pragma mark - Scroll View Delegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    //self.keyboardAccessoryView.frame = CGRectMake(0, scrollView.contentOffset.y + self.view.frame.size.height - self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.width, self.keyboardAccessoryView.frame.size.height);
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    /*
+     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+     PACommentCell *cell = (PACommentCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+     [cell.commentTextView resignFirstResponder];
+     */
+    [self.keyboardAccessory resignFirstResponder];
+}
+
+# pragma mark - TableView actions
+- (void)expandTableViewCell:(PACommentCell *)cell {
+    self.textViewHelper.frame = cell.commentTextView.frame;
+    self.textViewHelper.text = cell.commentTextView.text;
+    
+    [self.textViewHelper setFont:[UIFont systemFontOfSize:14]];
+    [self.textViewHelper sizeToFit];
+    
+    float newHeight = self.textViewHelper.frame.size.height;
+    NSLog(@"new height: %f", newHeight);
+    NSNumber *height = [NSNumber numberWithFloat: defaultCommentCellHeight];
+    if(self.textViewHelper.frame.size.height + self.textViewHelper.frame.origin.y > defaultCommentCellHeight){
+        height = [NSNumber numberWithFloat:self.textViewHelper.frame.size.height + self.textViewHelper.frame.origin.y];
+    }
+    //Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
+    
+    NSString * commentID = [cell.commentID stringValue];
+    
+    [self.heightDictionary setValue:height forKey:commentID];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+}
+
+-(void)compressTableViewCell:(PACommentCell *)cell{
+    
+    //cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCommentCellHeight);
+    //Comment *comment = _fetchedResultsController.fetchedObjects[cell.tag];
+    NSString *commentID = [cell.commentID stringValue];
+    [self.heightDictionary removeObjectForKey:commentID];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+}
+
+
+#pragma mark - User Actions
+
+- (IBAction)attendButton:(id)sender {
+    if([self.attendButton.titleLabel.text isEqualToString:@"Attend"]){
+        
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        if([defaults objectForKey:@"authentication_token"]){
+            NSLog(@"attend the event");
+            NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      [defaults objectForKey:@"user_id"],@"user_id",
+                                      [defaults objectForKey:@"institution_id"],@"institution_id",
+                                      [self.detailItem valueForKey:@"id"],@"event_attended",
+                                      self.category, @"category",
+                                      [defaults objectForKey:@"user_id"], @"added_by",
+                                      nil];
+            
+            [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:self];
+        }else{
+            [[PAMethodManager sharedMethodManager] showRegisterAlert:@"attend an event" forViewController:self];
+        }
+    }else{
+        NSLog(@"unattend the event");
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        
+        NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [self.detailItem valueForKey:@"id"], @"event_attended",
+                                  [defaults objectForKey:@"institution_id"],@"institution_id",
+                                  [defaults objectForKey:@"user_id"],@"user_id",
+                                  self.category, @"category",
+                                  nil];
+        
+        [[PASyncManager globalSyncManager] unattendEvent: attendee forViewController:self];
+        
+    }
+    [self reloadAttendeeLabels];
+}
+
+#pragma mark Commenting
+
+- (void)didSelectPostButton:(id)sender
+{
+    [self postComment:self.keyboardAccessory.text withCategory:self.category];
+    [self.keyboardAccessory resignFirstResponder];
+    self.keyboardAccessory.text = @"";
+}
+
 #pragma mark - Text Fields
 
 - (void)registerForKeyboardNotifications {
@@ -246,15 +347,5 @@
     }
     return YES;
 }
-
-#pragma mark - Commenting
-
-- (void)didSelectPostButton:(id)sender
-{
-    [self postComment:self.keyboardAccessory.text withCategory:self.category];
-    [self.keyboardAccessory resignFirstResponder];
-    self.keyboardAccessory.text = @"";
-}
-
 
 @end

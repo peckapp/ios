@@ -33,7 +33,6 @@
 @interface PAAthleticEventViewController () {
     NSString * commentCellIdentifier;
     NSString * cellNibName;
-    NSMutableDictionary *heightDictionary;
     CGRect initialFrame;
     
     PAAssetManager * assetManager;
@@ -79,7 +78,7 @@
     self.textViewHelper = [[UITextView alloc] init];
     [self.textViewHelper setHidden:YES];
     
-    heightDictionary = [[NSMutableDictionary alloc] init];
+    self.heightDictionary = [[NSMutableDictionary alloc] init];
     
     /*
      NSError * error = nil;
@@ -728,7 +727,7 @@
     cell.thumbnailView = thumbnail;
     
     NSString * commentID = [tempComment.id stringValue];
-    CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
+    CGFloat height = [[self.heightDictionary valueForKey:commentID] floatValue];
     if(height){
         cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, height);
         cell.expanded=YES;
@@ -824,34 +823,7 @@
     return dateString;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([indexPath row] < [_fetchedResultsController.fetchedObjects count]){
-        Comment *comment = _fetchedResultsController.fetchedObjects[[indexPath row]];
-        NSString * commentID = [comment.id stringValue];
-        CGFloat height = [[heightDictionary valueForKey:commentID] floatValue];
-        if(height){
-            return height;
-        }
-    }
-    return defaultCellHeight;
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    //self.keyboardAccessoryView.frame = CGRectMake(0, scrollView.contentOffset.y + self.view.frame.size.height - self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.width, self.keyboardAccessoryView.frame.size.height);
-}
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    /*
-     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-     PACommentCell *cell = (PACommentCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
-     [cell.commentTextView resignFirstResponder];
-     */
-    [self.keyboardAccessory resignFirstResponder];
-}
+#pragma mark - Table View Delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -866,122 +838,5 @@
     }
 }
 
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- } else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
- {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
-
-- (void)expandTableViewCell:(PACommentCell *)cell {
-    self.textViewHelper.frame = cell.commentTextView.frame;
-    self.textViewHelper.text = cell.commentTextView.text;
-    
-    [self.textViewHelper setFont:[UIFont systemFontOfSize:14]];
-    [self.textViewHelper sizeToFit];
-    
-    float newHeight = self.textViewHelper.frame.size.height;
-    NSLog(@"new height: %f", newHeight);
-    NSNumber *height = [NSNumber numberWithFloat: defaultCellHeight];
-    if(self.textViewHelper.frame.size.height + self.textViewHelper.frame.origin.y > defaultCellHeight){
-        height = [NSNumber numberWithFloat:self.textViewHelper.frame.size.height + self.textViewHelper.frame.origin.y];
-    }
-    //Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
-    
-    NSString * commentID = [cell.commentID stringValue];
-    
-    [heightDictionary setValue:height forKey:commentID];
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
-}
-
--(void)compressTableViewCell:(PACommentCell *)cell{
-    
-    //cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
-    //Comment *comment = _fetchedResultsController.fetchedObjects[cell.tag];
-    NSString *commentID = [cell.commentID stringValue];
-    [heightDictionary removeObjectForKey:commentID];
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
-}
-
-
-- (IBAction)attendButton:(id)sender {
-    if([self.attendButton.titleLabel.text isEqualToString:@"Attend"]){
-        
-        
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        if([defaults objectForKey:@"authentication_token"]){
-            NSLog(@"attend the event");
-            NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      [defaults objectForKey:@"user_id"],@"user_id",
-                                      [defaults objectForKey:@"institution_id"],@"institution_id",
-                                      [self.detailItem valueForKey:@"id"],@"event_attended",
-                                      self.category, @"category",
-                                      [defaults objectForKey:@"user_id"], @"added_by",
-                                      nil];
-            
-            [[PASyncManager globalSyncManager] attendEvent:attendee forViewController:self];
-        }else{
-            [[PAMethodManager sharedMethodManager] showRegisterAlert:@"attend an event" forViewController:self];
-        }
-    }else{
-        NSLog(@"unattend the event");
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        
-        NSDictionary* attendee = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [self.detailItem valueForKey:@"id"], @"event_attended",
-                                  [defaults objectForKey:@"institution_id"],@"institution_id",
-                                  [defaults objectForKey:@"user_id"],@"user_id",
-                                  self.category, @"category",
-                                  nil];
-        
-        [[PASyncManager globalSyncManager] unattendEvent: attendee forViewController:self];
-        
-    }
-    
-}
 
 @end

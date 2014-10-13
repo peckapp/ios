@@ -52,6 +52,7 @@
 @property (strong, nonatomic) UIButton * postButton;
 
 @property (strong, nonatomic) UITextView *textViewHelper;
+@property (strong, nonatomic) NSMutableDictionary *heightDictionary;
 
 - (void)registerForKeyboardNotifications;
 - (void)deregisterFromKeyboardNotifications;
