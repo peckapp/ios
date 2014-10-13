@@ -726,7 +726,6 @@
             // then we should add a separate managed object context and merge the two in this thread.
         });
     });
-    
 }
 
 -(void)handlePeers:(NSArray*)peers{
@@ -753,8 +752,6 @@
         [_managedObjectContext save:&error];
         [self.persistentStoreCoordinator unlock];
     }
-
-    
 }
 
 
@@ -1052,7 +1049,7 @@
              }
              
              NSDictionary* athleticsFromResponse = [exploreDictionary objectForKey:@"explore_athletics"];
-             
+             // NSLog(@"ATHLETICS EXPLORE JSON: %@", athleticsFromResponse);
              if(![athleticsFromResponse isKindOfClass:[NSNull class]]){
                  
                  for(NSDictionary *athleticAttributes in athleticsFromResponse){
@@ -1100,7 +1097,8 @@
     
     NSDateFormatter * df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
-    explore.start_date =[NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"start_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
+    explore.start_date = startDate;
     if(![[dictionary objectForKey:@"end_date"] isKindOfClass:[NSNull class]]){
         explore.end_date = [NSDate dateWithTimeIntervalSince1970:[[dictionary objectForKey:@"end_date"] doubleValue]+[[NSTimeZone systemTimeZone] secondsFromGMT]];
     }

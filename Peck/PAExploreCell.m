@@ -40,7 +40,7 @@
                 [alert show];
             }
         }else{
-            [[PAMethodManager sharedMethodManager] showRegisterAlert:@"attend an event" forViewController:nil];
+            [[PAMethodManager sharedMethodManager] showRegisterAlert:@"attend an event" forViewController:self.parentViewController];
         }
 
     }

@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface PAExploreCell : UITableViewCell
+
+@property (weak, nonatomic) UIViewController *parentViewController;
+
 @property (weak, nonatomic) IBOutlet UILabel *contextLabel;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *photoView;

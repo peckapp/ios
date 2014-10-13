@@ -38,11 +38,6 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedMethodManager = [[PAMethodManager alloc] init];
-        _sharedMethodManager.registerAlert = [[UIAlertView alloc] initWithTitle:@"Unregistered Account"
-                                                                        message:nil
-                                                                       delegate:self
-                                                              cancelButtonTitle:@"Okay"
-                                                              otherButtonTitles:@"Register", @"Login", nil];
         
         _sharedMethodManager.institutionAlert = [[UIAlertView alloc] initWithTitle:@"Foreign Institution"
                                                                            message:@"Your current institution will be switched to your home institution to complete this action"
@@ -70,7 +65,14 @@
         Attending an event
         Creating a circle
     */
-    message =[@"Please register or login to " stringByAppendingString:message];
+    if (self.registerAlert == nil) {
+        self.registerAlert = [[UIAlertView alloc] initWithTitle:@"Unregistered Account"
+                                                        message:nil
+                                                       delegate:self
+                                              cancelButtonTitle:@"Okay"
+                                              otherButtonTitles:@"Register", @"Login", nil];
+    }
+    message = [@"Please register or login to " stringByAppendingString:message];
     self.registerAlert.message = message;
     self.registerAlert.delegate = self;
     self.sender = sender;
@@ -106,6 +108,7 @@
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    // Registration/Login Alert
     if(alertView==self.registerAlert){
         if(buttonIndex==1){
             //The user has selected register
@@ -117,7 +120,10 @@
             UIViewController *loginController = [loginStoryboard instantiateInitialViewController];
             [self.sender presentViewController:loginController animated:YES completion:nil];
         }
-    }else if(alertView==self.institutionAlert){
+        self.registerAlert = nil;
+    }
+    // Institution Alert
+    else if(alertView==self.institutionAlert){
         if(buttonIndex==1){
             //The user has pressed continue. We must switch to the user's home institution and then call the call back block to continue the action
             NSLog(@"switch the institution");
@@ -128,7 +134,9 @@
         }else{
             NSLog(@"don't perform the action");
         }
-    }else if(alertView==self.unauthorizedAlert){
+    }
+    // Unauthorized Alert
+    else if(alertView==self.unauthorizedAlert){
         switch (buttonIndex) {
             case 0: {
                 //The user is already logged out and has pressed okay.
