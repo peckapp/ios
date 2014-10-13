@@ -165,6 +165,8 @@ BOOL reloaded = NO;
      */
     
     [self.tableView reloadData];
+    
+    [self showSeparators];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -414,8 +416,8 @@ BOOL reloaded = NO;
 
 - (void)setManagedObject:(NSManagedObject *)managedObject parentObject:(NSManagedObject *)parentObject
 {
-    if (_detailItem != managedObject) {
-        _detailItem = managedObject;
+    if (self.detailItem != managedObject) {
+        self.detailItem = managedObject;
         // Update the view.
         [self configureView];
         //[self.tableView beginUpdates];
@@ -428,6 +430,8 @@ BOOL reloaded = NO;
     // Update the user interface for the detail item.
     
     if (self.detailItem) {
+        
+        [super configureView];
 
         /*
         self.title = [self.detailItem valueForKey:@"title"];
@@ -457,36 +461,37 @@ BOOL reloaded = NO;
 
         self.descriptionLabel.text = [self.detailItem valueForKey:@"descrip"];
 
-        // setting the clean Image for when the cell is expanded
-        UIImage* image = nil;
-        if ([self.detailItem valueForKey:@"imageURL"]) {
-            NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"imageURL"]];
-            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-            if (cachedImage) {
-                self.cleanImageView.image = cachedImage;
-            }
-            else {
-                [self.cleanImageView setImageWithURL:imageURL placeholderImage:image];
-            }
-        }
-        else {
-            self.cleanImageView.image = image;
-        }
+        
 
-        // setting the blurred image for when the cell is compressed
-        if ([self.detailItem valueForKey:@"imageURL"]) {
-            NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"blurredImageURL"]];
-            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-            if (cachedImage) {
-                self.blurredImageView.image = cachedImage;
-            }
-            else {
-                [self.blurredImageView setImageWithURL:imageURL placeholderImage:image];
-            }
-        }
-        else {
-            self.blurredImageView.image = image;
-        }
+        // moved to superclass
+//        UIImage* image = nil;
+//        if ([self.detailItem valueForKey:@"imageURL"]) {
+//            NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"blurredImageURL"]];
+//            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+//            if (cachedImage) {
+//                self.blurredImageView.image = cachedImage;
+//            }
+//            else {
+//                [self.blurredImageView setImageWithURL:imageURL placeholderImage:image];
+//            }
+//        }
+//        else {
+//            self.blurredImageView.image = image;
+//        }
+//        // setting the clean Image for when the cell is expanded
+//        if ([self.detailItem valueForKey:@"imageURL"]) {
+//            NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"imageURL"]];
+//            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+//            if (cachedImage) {
+//                self.cleanImageView.image = cachedImage;
+//            }
+//            else {
+//                [self.cleanImageView setImageWithURL:imageURL placeholderImage:image];
+//            }
+//        }
+//        else {
+//            self.cleanImageView.image = image;
+//        }
     }
 
     [self updateFrames];

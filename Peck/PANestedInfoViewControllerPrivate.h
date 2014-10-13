@@ -12,7 +12,12 @@
 
 // private class extensions of the
 @interface PANestedInfoViewController ()
+
+// configures the view with the information from the detailItem
+-(void)configureView;
+
 -(void)configureCell:(PACommentCell *)cell atIndexPath: (NSIndexPath *)indexPath;
+
 @property (nonatomic, retain) NSDateFormatter *formatter;
 
 @property (assign, nonatomic) BOOL expanded;
@@ -41,5 +46,8 @@
 @property (strong, nonatomic) UIView * keyboardAccessoryView;
 @property (strong, nonatomic) UITextField * keyboardAccessory;
 @property (strong, nonatomic) UIButton * postButton;
+
+-(void) showSeparators;
+-(void) hideSeparators;
 
 @end

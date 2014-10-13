@@ -438,8 +438,8 @@
 
 - (void)setManagedObject:(NSManagedObject *)managedObject parentObject:(NSManagedObject *)parentObject
 {
-    if (_detailItem != managedObject) {
-        _detailItem = managedObject;
+    if (self.detailItem != managedObject) {
+        self.detailItem = managedObject;
         // Update the view.
         [self configureView];
         //[self.tableView beginUpdates];
@@ -452,7 +452,7 @@
     // Update the user interface for the detail item.
     
     if (self.detailItem) {
-        
+        [super configureView];
         /*
          self.title = [self.detailItem valueForKey:@"title"];
          self.nameLabel.text = [self.detailItem valueForKey:@"title"];
@@ -485,34 +485,35 @@
         // TODO: grab score from the database
         self.scoreLabel.text = @"0 - 0";
         
-        UIImage* image = nil;
-        if ([self.detailItem valueForKey:@"imageURL"]) {
-            NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"imageURL"]];
-            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-            if (cachedImage) {
-                self.cleanImageView.image = cachedImage;
-            }
-            else {
-                [self.cleanImageView setImageWithURL:imageURL placeholderImage:image];
-            }
-        }
-        else {
-            self.cleanImageView.image = image;
-        }
-        
-        if ([self.detailItem valueForKey:@"imageURL"]) {
-            NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"blurredImageURL"]];
-            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
-            if (cachedImage) {
-                self.blurredImageView.image = cachedImage;
-            }
-            else {
-                [self.blurredImageView setImageWithURL:imageURL placeholderImage:image];
-            }
-        }
-        else {
-            self.blurredImageView.image = image;
-        }
+        // moved to superclass
+//        UIImage* image = nil;
+//        if ([self.detailItem valueForKey:@"imageURL"]) {
+//            NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"imageURL"]];
+//            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+//            if (cachedImage) {
+//                self.cleanImageView.image = cachedImage;
+//            }
+//            else {
+//                [self.cleanImageView setImageWithURL:imageURL placeholderImage:image];
+//            }
+//        }
+//        else {
+//            self.cleanImageView.image = image;
+//        }
+//        
+//        if ([self.detailItem valueForKey:@"imageURL"]) {
+//            NSURL* imageURL = [NSURL URLWithString:[self.detailItem valueForKey:@"blurredImageURL"]];
+//            UIImage* cachedImage = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+//            if (cachedImage) {
+//                self.blurredImageView.image = cachedImage;
+//            }
+//            else {
+//                [self.blurredImageView setImageWithURL:imageURL placeholderImage:image];
+//            }
+//        }
+//        else {
+//            self.blurredImageView.image = image;
+//        }
     }
     
     [self updateFrames];

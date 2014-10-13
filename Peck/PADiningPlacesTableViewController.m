@@ -17,7 +17,11 @@
 #import "PANestedTableViewCell.h"
 #import "PADiningOpportunityViewController.h"
 
+#import <QuartzCore/QuartzCore.h>
+
 #define cellHeight 88
+
+#define separatorWidth 1.0
 
 @interface PADiningPlacesTableViewController ()
 
@@ -28,7 +32,15 @@
 @property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UILabel *periodLabel;
 
+// default separators to deliniate cell divisions. to be turned off for cells that display pictures
+@property (strong, nonatomic) CALayer *upperSeparator;
+@property (strong, nonatomic) CALayer *lowerSeparator;
+
+-(void) showSeparators;
+-(void) hideSeparators;
+
 @end
+
 
 @implementation PADiningPlacesTableViewController
 
@@ -76,6 +88,14 @@ PAAssetManager *assetManager;
 
     self.parentBackButtonView = [[UIView alloc] init];
     [self.view addSubview:self.parentBackButtonView];
+    
+    
+    self.upperSeparator = [[CALayer alloc] init];
+    [self.upperSeparator setBackgroundColor:[[[PAAssetManager sharedManager] lightColor] CGColor]];
+    self.lowerSeparator = [[CALayer alloc] init];
+    [self.lowerSeparator setBackgroundColor:[[[PAAssetManager sharedManager] lightColor] CGColor]];
+    
+    [self showSeparators];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -135,6 +155,20 @@ PAAssetManager *assetManager;
         
         
     }
+}
+
+-(void) showSeparators {
+    [self.view.layer addSublayer:self.upperSeparator];
+    self.upperSeparator.frame = CGRectMake(self.view.layer.frame.origin.x, self.view.layer.frame.origin.y, self.view.layer.frame.size.width, separatorWidth);
+    
+    [self.view.layer addSublayer:self.lowerSeparator];
+    self.lowerSeparator.frame = CGRectMake(self.view.layer.frame.origin.x, self.view.layer.frame.size.height - separatorWidth, self.view.layer.frame.size.width, separatorWidth);
+}
+
+-(void) hideSeparators {
+    [self.upperSeparator removeFromSuperlayer];
+    
+    [self.lowerSeparator removeFromSuperlayer];
 }
 
 - (void)setManagedObject:(NSManagedObject *)managedObject parentObject:(NSManagedObject *)parentObject

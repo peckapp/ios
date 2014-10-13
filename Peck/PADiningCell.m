@@ -9,6 +9,7 @@
 #import "PADiningCell.h"
 #import "PAAppDelegate.h"
 #import "MenuItem.h"
+#import "PAAssetManager.h"
 
 @implementation PADiningCell
 
@@ -21,7 +22,6 @@
 {
     self.menuItemsTableView.delegate=self;
     self.menuItemsTableView.dataSource=self;
-    
     
     // Initialization code
 }

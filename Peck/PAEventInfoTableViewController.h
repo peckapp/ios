@@ -19,7 +19,6 @@
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
-@property (strong, nonatomic) id detailItem;
 
 @property (strong, nonatomic) NSString* commentText;
 

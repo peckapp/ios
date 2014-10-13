@@ -134,7 +134,8 @@ PAAssetManager * assetManager;
     self.leftTableView.dataSource = self;
     self.leftTableView.delegate = self;
     self.leftTableView.separatorInset = UIEdgeInsetsZero;
-    self.leftTableView.separatorColor = [assetManager lightColor];
+    self.leftTableView.separatorColor = [UIColor clearColor];
+//    self.leftTableView.separatorColor = [assetManager lightColor];
     self.leftTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.leftTableView.backgroundColor = [assetManager darkColor];
 
@@ -145,7 +146,8 @@ PAAssetManager * assetManager;
     self.centerTableView.dataSource = self;
     self.centerTableView.delegate = self;
     self.centerTableView.separatorInset = UIEdgeInsetsZero;
-    self.centerTableView.separatorColor = [assetManager lightColor];
+    self.centerTableView.separatorColor = [UIColor clearColor];
+//    self.centerTableView.separatorColor = [assetManager lightColor];
     self.centerTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.centerTableView.backgroundColor = [assetManager darkColor];
 
@@ -156,7 +158,8 @@ PAAssetManager * assetManager;
     self.rightTableView.dataSource = self;
     self.rightTableView.delegate = self;
     self.rightTableView.separatorInset = UIEdgeInsetsZero;
-    self.rightTableView.separatorColor = [assetManager lightColor];
+    self.rightTableView.separatorColor = [UIColor clearColor];
+//    self.rightTableView.separatorColor = [assetManager lightColor];
     self.rightTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.rightTableView.backgroundColor = [assetManager darkColor];
 

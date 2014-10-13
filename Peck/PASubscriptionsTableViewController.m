@@ -139,7 +139,8 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [[[[self fetchedResultsController] sections]objectAtIndex:section] name];
+    NSString *header =[[[[self fetchedResultsController] sections]objectAtIndex:section] name];
+    return [header capitalizedString];
 }
 
 
