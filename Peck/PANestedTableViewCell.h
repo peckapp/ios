@@ -7,21 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PANestedInfoViewController.h"
+#import "PANestedCellControllerProtocol.h"
 
-@protocol PANestedTableViewCellSubviewControllerProtocol
-
-@required
-
-- (void) setManagedObject:(NSManagedObject *)managedObject parentObject:(NSManagedObject *)parentObject;
-- (void)expandAnimated:(BOOL)animated;
-- (void)compressAnimated:(BOOL)animated;
-- (UIView *)viewForBackButton;
-
-@end
+@class PANestedInfoViewController;
 
 @interface PANestedTableViewCell : UITableViewCell
 
-@property (strong, nonatomic) UIViewController<PANestedTableViewCellSubviewControllerProtocol> * viewController;
-
+@property (strong, nonatomic) UIViewController<PANestedCellControllerProtocol>* viewController;
 
 @end

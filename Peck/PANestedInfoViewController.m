@@ -38,7 +38,7 @@
     self.upperSeparator.frame = CGRectMake(self.view.layer.frame.origin.x, self.view.layer.frame.origin.y, self.view.layer.frame.size.width, separatorWidth);
     
     [self.view.layer addSublayer:self.lowerSeparator];
-    self.lowerSeparator.frame = CGRectMake(self.view.layer.frame.origin.x, self.view.layer.frame.size.height - separatorWidth, self.view.layer.frame.size.width, separatorWidth);
+    self.lowerSeparator.frame = CGRectMake(self.view.layer.frame.origin.x, self.blurredImageView.layer.frame.size.height - separatorWidth, self.view.layer.frame.size.width, separatorWidth);
 }
 
 -(void) hideSeparators {

@@ -95,7 +95,6 @@ PAAssetManager *assetManager;
     self.lowerSeparator = [[CALayer alloc] init];
     [self.lowerSeparator setBackgroundColor:[[[PAAssetManager sharedManager] lightColor] CGColor]];
     
-    [self showSeparators];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -108,6 +107,8 @@ PAAssetManager *assetManager;
     self.tableView.tableHeaderView = self.headerView;
     
     self.periodLabel.frame = CGRectInset(self.headerView.frame, 15, 0);
+    
+    [self showSeparators];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -162,7 +163,7 @@ PAAssetManager *assetManager;
     self.upperSeparator.frame = CGRectMake(self.view.layer.frame.origin.x, self.view.layer.frame.origin.y, self.view.layer.frame.size.width, separatorWidth);
     
     [self.view.layer addSublayer:self.lowerSeparator];
-    self.lowerSeparator.frame = CGRectMake(self.view.layer.frame.origin.x, self.view.layer.frame.size.height - separatorWidth, self.view.layer.frame.size.width, separatorWidth);
+    self.lowerSeparator.frame = CGRectMake(self.view.layer.frame.origin.x, self.containingCell.layer.frame.size.height - separatorWidth, self.view.layer.frame.size.width, separatorWidth);
 }
 
 -(void) hideSeparators {

@@ -215,6 +215,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		86014BEA19EBF32F00DDA5EA /* PANestedCellControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PANestedCellControllerProtocol.h; sourceTree = "<group>"; };
 		86051D48194BB27200961541 /* Silhouette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Silhouette.png; sourceTree = "<group>"; };
 		86051D4A194BB3EB00961541 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		860A8D26195201A700C5B4A6 /* thor_peckapp_com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = thor_peckapp_com.cer; sourceTree = "<group>"; };
@@ -507,6 +508,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		86014BE919EBF2E000DDA5EA /* Nesting */ = {
+			isa = PBXGroup;
+			children = (
+				DD37013E1990081F006B63E8 /* PANestedTableViewController.h */,
+				DD37013F1990081F006B63E8 /* PANestedTableViewController.m */,
+				861B58DC19EB214900C20FA2 /* PANestedInfoViewController.h */,
+				861B58DF19EB22BB00C20FA2 /* PANestedInfoViewControllerPrivate.h */,
+				861B58DD19EB214900C20FA2 /* PANestedInfoViewController.m */,
+				86014BEA19EBF32F00DDA5EA /* PANestedCellControllerProtocol.h */,
+				DDF0DB45199532A40061089E /* PANestedTableViewCell.h */,
+				DDF0DB46199532A40061089E /* PANestedTableViewCell.m */,
+			);
+			name = Nesting;
+			sourceTree = "<group>";
+		};
 		86051D47194BB24900961541 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
@@ -715,13 +731,7 @@
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
 				86E40D8319AAF535000C230C /* Main.storyboard */,
-				DD37013E1990081F006B63E8 /* PANestedTableViewController.h */,
-				DD37013F1990081F006B63E8 /* PANestedTableViewController.m */,
-				861B58DC19EB214900C20FA2 /* PANestedInfoViewController.h */,
-				861B58DF19EB22BB00C20FA2 /* PANestedInfoViewControllerPrivate.h */,
-				861B58DD19EB214900C20FA2 /* PANestedInfoViewController.m */,
-				DDF0DB45199532A40061089E /* PANestedTableViewCell.h */,
-				DDF0DB46199532A40061089E /* PANestedTableViewCell.m */,
+				86014BE919EBF2E000DDA5EA /* Nesting */,
 				86613BE2197DD7D4004914B2 /* Dropdown */,
 				A4C8C344197D8F0E008F9F85 /* Managers */,
 				DDDAEDE419479665004CE102 /* Events */,

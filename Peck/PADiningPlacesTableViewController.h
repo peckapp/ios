@@ -13,13 +13,15 @@
 #import "PANestedTableViewController.h"
 #import "PANestedTableViewCell.h"
 
-@interface PADiningPlacesTableViewController : PANestedTableViewController <PACoreDataProtocol, PANestedTableViewCellSubviewControllerProtocol, UITableViewDataSource, UITableViewDelegate>
+@interface PADiningPlacesTableViewController : PANestedTableViewController <PACoreDataProtocol, PANestedCellControllerProtocol, UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) id detailItem;
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+@property (weak, nonatomic) UITableViewCell *containingCell;
 
 @property (strong, nonatomic) UITableView *tableView;
 

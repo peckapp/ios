@@ -14,7 +14,7 @@
 #import "Event.h"
 #import "PADiningPlacesTableViewController.h"
 
-@interface PADiningOpportunityViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, PANestedTableViewCellSubviewControllerProtocol>
+@interface PADiningOpportunityViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, PANestedCellControllerProtocol>
 
 @property (strong, nonatomic) UITableView *tableView;
 

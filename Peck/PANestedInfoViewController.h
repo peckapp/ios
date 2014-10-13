@@ -9,11 +9,13 @@
 #import <UIKit/UIKit.h>
 
 #import "PACoreDataProtocol.h"
-#import "PANestedTableViewCell.h"
+#import "PANestedCellControllerProtocol.h"
 
-@interface PANestedInfoViewController : UIViewController <PANestedTableViewCellSubviewControllerProtocol>
+@interface PANestedInfoViewController : UIViewController <PANestedCellControllerProtocol>
 
 // the NSManagedObject that defined the attributes of this cell. usually passed by fetched results controller
 @property (strong, nonatomic) id detailItem;
+
+@property (weak, nonatomic) UITableViewCell *containingCell;
 
 @end

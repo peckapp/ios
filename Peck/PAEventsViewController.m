@@ -636,6 +636,7 @@ PAAssetManager * assetManager;
             [self addChildViewController:cell.viewController];
             [cell addSubview:cell.viewController.view];
             [cell.viewController didMoveToParentViewController:self];
+            ((PADiningPlacesTableViewController*)cell.viewController).containingCell = cell;
         }
 
         cell.clipsToBounds = YES;
@@ -661,6 +662,7 @@ PAAssetManager * assetManager;
             [self addChildViewController:cell.viewController];
             [cell addSubview:cell.viewController.view];
             [cell.viewController didMoveToParentViewController:self];
+            // ((PANestedInfoViewController*)cell.viewController).containingCell = cell;
         }
         
         cell.clipsToBounds = YES;
@@ -685,6 +687,7 @@ PAAssetManager * assetManager;
             [self addChildViewController:cell.viewController];
             [cell addSubview:cell.viewController.view];
             [cell.viewController didMoveToParentViewController:self];
+            // ((PANestedInfoViewController*)cell.viewController).containingCell = cell;
         }
 
         cell.clipsToBounds = YES;
