@@ -31,6 +31,10 @@
 #define searchBarHeight 44
 #define parallaxRange 128
 
+#define DINING_CELL_HEIGHT 68
+#define SIMPLE_CELL_HEIGHT 92
+#define ATHLETIC_CELL_HEIGHT 92
+
 struct eventImage{
     const char* imageURL;
     const char* type;
@@ -723,9 +727,13 @@ PAAssetManager * assetManager;
         return self.view.frame.size.height;
     }
     else if([tempEvent.type isEqualToString:@"dining"]){
-        return 64;
+        return DINING_CELL_HEIGHT;
     }
-    return 88;
+    else if ([tempEvent.type isEqualToString:@"athletic"]) {
+        return ATHLETIC_CELL_HEIGHT;
+    }
+    // default of simple cell height
+    return SIMPLE_CELL_HEIGHT;
 }
 
 - (void)backButton:(id)sender

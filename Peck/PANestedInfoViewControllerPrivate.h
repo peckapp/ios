@@ -47,6 +47,8 @@
 @property (strong, nonatomic) UITextField * keyboardAccessory;
 @property (strong, nonatomic) UIButton * postButton;
 
+@property (strong, nonatomic) NSString* commentText;
+
 -(void) showSeparators;
 -(void) hideSeparators;
 

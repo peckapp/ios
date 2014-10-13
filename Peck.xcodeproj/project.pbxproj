@@ -513,10 +513,10 @@
 			children = (
 				DD37013E1990081F006B63E8 /* PANestedTableViewController.h */,
 				DD37013F1990081F006B63E8 /* PANestedTableViewController.m */,
+				86014BEA19EBF32F00DDA5EA /* PANestedCellControllerProtocol.h */,
 				861B58DC19EB214900C20FA2 /* PANestedInfoViewController.h */,
 				861B58DF19EB22BB00C20FA2 /* PANestedInfoViewControllerPrivate.h */,
 				861B58DD19EB214900C20FA2 /* PANestedInfoViewController.m */,
-				86014BEA19EBF32F00DDA5EA /* PANestedCellControllerProtocol.h */,
 				DDF0DB45199532A40061089E /* PANestedTableViewCell.h */,
 				DDF0DB46199532A40061089E /* PANestedTableViewCell.m */,
 			);

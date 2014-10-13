@@ -17,19 +17,11 @@
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
-@property (strong, nonatomic) id detailItem;
-
-@property (strong, nonatomic) NSString* commentText;
-
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (strong, nonatomic) UIImage* userPicture;
 
-- (void)expandTableViewCell:(PACommentCell *)cell;
-- (void)compressTableViewCell:(PACommentCell *)cell;
-- (void)postComment:(NSString *)text;
-- (void)configureView;
-- (void)reloadAttendeeLabels;
+
 @end

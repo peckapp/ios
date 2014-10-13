@@ -699,7 +699,7 @@
             <objects>
                 <tableViewController id="nHe-bt-Mf7" customClass="PASubscriptionsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="IHd-d8-hcn">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
@@ -1050,7 +1050,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="weT-fd-RJ1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1938" y="2782"/>
+            <point key="canvasLocation" x="-1944" y="2928"/>
         </scene>
         <!--Institution-->
         <scene sceneID="6a9-5L-6bf">
@@ -1061,7 +1061,7 @@
                         <viewControllerLayoutGuide type="bottom" id="CDM-HG-FkX"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="KM5-SG-XcY">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="sidebar_background.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="NCl-5M-Ixd">
@@ -1099,7 +1099,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xNH-lF-J6l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1256" y="2918"/>
+            <point key="canvasLocation" x="-1454" y="2928"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="H0g-QF-CEn">
@@ -1431,9 +1431,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="YoB-2V-iLE"/>
+        <segue reference="1BS-S8-4I3"/>
+        <segue reference="bj2-af-O4h"/>
         <segue reference="gpx-S3-Fsz"/>
         <segue reference="TbO-p2-TYX"/>
-        <segue reference="bj2-af-O4h"/>
     </inferredMetricsTieBreakers>
 </document>

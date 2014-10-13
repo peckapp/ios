@@ -25,7 +25,7 @@
 #define attendIconRatio 0.1
 #define compressedHeight 96
 #define buffer 14
-#define defaultCellHeight 72
+#define defaultCommentCellHeight 72
 #define reloadTime 10
 
 
@@ -107,7 +107,7 @@ BOOL reloaded = NO;
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
-    self.titleLabel.numberOfLines = 0;
+    self.titleLabel.numberOfLines = 2;
     [self.blurredImageView addSubview:self.titleLabel];
 
     [self.headerView addSubview:[assetManager createShadowWithFrame:CGRectMake(0, -64, self.view.frame.size.width, 64) top:YES]];
@@ -673,7 +673,7 @@ BOOL reloaded = NO;
             return height;
         }
     }
-    return defaultCellHeight;
+    return defaultCommentCellHeight;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -727,7 +727,7 @@ BOOL reloaded = NO;
         //[cell.expandButton setTitle:@"Hide" forState:UIControlStateNormal];
     }
     else{
-        cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
+        cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCommentCellHeight);
         //using the default cell height used to show half a line, but now with autolayout constraints it displays correctly
         cell.expanded=NO;
         //[cell.expandButton setTitle:@"More" forState:UIControlStateNormal];
@@ -909,8 +909,8 @@ BOOL reloaded = NO;
     
     float newHeight = textViewHelper.frame.size.height;
     NSLog(@"new height: %f", newHeight);
-    NSNumber *height = [NSNumber numberWithFloat: defaultCellHeight];
-    if(textViewHelper.frame.size.height + textViewHelper.frame.origin.y > defaultCellHeight){
+    NSNumber *height = [NSNumber numberWithFloat: defaultCommentCellHeight];
+    if(textViewHelper.frame.size.height + textViewHelper.frame.origin.y > defaultCommentCellHeight){
         height = [NSNumber numberWithFloat:textViewHelper.frame.size.height + textViewHelper.frame.origin.y];
     }
     //Comment* comment = _fetchedResultsController.fetchedObjects[cell.tag];
@@ -924,7 +924,7 @@ BOOL reloaded = NO;
 
 -(void)compressTableViewCell:(PACommentCell *)cell{
     
-    //cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCellHeight);
+    //cell.commentTextView.frame = CGRectMake(cell.commentTextView.frame.origin.x, cell.commentTextView.frame.origin.y, cell.commentTextView.frame.size.width, defaultCommentCellHeight);
     //Comment *comment = _fetchedResultsController.fetchedObjects[cell.tag];
     NSString *commentID = [cell.commentID stringValue];
     [heightDictionary removeObjectForKey:commentID];
@@ -933,47 +933,6 @@ BOOL reloaded = NO;
 }
 
 #pragma mark - User Actions
-
--(void)postComment:(NSString *) text
-{
-   
-    if(![text isEqualToString:@""]){
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        if([defaults objectForKey:@"authentication_token"]){
-            if([[defaults objectForKey:@"institution_id"] integerValue]==[[defaults objectForKey:@"home_institution"]integerValue]){
-                self.commentText=nil;
-                /*
-                NSIndexPath* firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-                [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:firstCellIndexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
-                */
-    
-                NSLog(@"post comment");
-                //NSString *commentText = cell.commentTextView.text;
-                //cell.commentTextView.text=@"";
-        
-                NSNumber *userID = [defaults objectForKey:@"user_id"];
-                NSNumber *institutionID = [defaults objectForKey:@"institution_id"];
-    
-                NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            text, @"content",
-                                            userID, @"user_id",
-                                            @"simple", @"category",
-                                            [self.detailItem valueForKey:@"id" ],@"comment_from",
-                                            institutionID, @"institution_id",
-                                            nil];
-    
-                [[PASyncManager globalSyncManager] postComment:dictionary];
-            }else{
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Foreign Institution" message:@"Please switch to your home institution to post comments" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                [alert show];
-            }
-        
-        }else{
-            [[PAMethodManager sharedMethodManager] showRegisterAlert:@"post a comment" forViewController:self];
-        }
-
-    }
-}
 
 - (IBAction)attendButton:(id)sender {
     if([self.attendButton.titleLabel.text isEqualToString:@"Attend"]){
@@ -1096,7 +1055,7 @@ BOOL reloaded = NO;
     [textViewHelper setHidden:YES];
     textViewHelper.text = text;
     [textViewHelper sizeToFit];
-    if(textViewHelper.frame.size.height>defaultCellHeight){
+    if(textViewHelper.frame.size.height>defaultCommentCellHeight){
         return NO;
     }
     return YES;
@@ -1104,7 +1063,7 @@ BOOL reloaded = NO;
 
 - (void)didSelectPostButton:(id)sender
 {
-    [self postComment:self.keyboardAccessory.text];
+    [self postComment:self.keyboardAccessory.text withCategory:@"simple"];
     [self.keyboardAccessory resignFirstResponder];
     self.keyboardAccessory.text = @"";
 }

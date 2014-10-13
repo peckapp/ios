@@ -130,12 +130,16 @@ PAAssetManager *assetManager;
     self.view.frame = self.parentViewController.view.bounds;
     self.viewFrame = self.parentViewController.view.bounds;
     //NSLog(@"dining places view frame %@", NSStringFromCGRect(self.view.bounds));
+    
+    [self hideSeparators];
 }
 
 - (void)compressAnimated:(BOOL)animated
 {
     self.diningPlaces=nil;
     [self.tableView reloadData];
+    
+    [self showSeparators];
 }
 
 - (UIView *)viewForBackButton
