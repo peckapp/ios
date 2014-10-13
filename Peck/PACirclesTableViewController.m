@@ -73,7 +73,10 @@ PAAssetManager *assetManager;
 
     self.addedPeers = [[NSMutableArray alloc] init];
     viewingCell=NO;
-    self.cancelCellButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(cancelSelection)];
+    self.cancelCellButton = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                             style:UIBarButtonItemStylePlain
+                                                            target:self
+                                                            action:@selector(cancelSelection)];
     
     //self.title = @"Circles";
 

@@ -65,6 +65,8 @@ PAAssetManager * assetManager;
     
     self.titleTextField.delegate =self;
     
+    self.backButton.contentMode = UIViewContentModeScaleAspectFit;
+    
     //NSLog(@"the superview height: %f", self.b);
     //self.commentsTableView.frame = CGRectMake(0, 0, self.superview.frame.size.width, <#CGFloat height#>)
     

@@ -61,7 +61,7 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </tableView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="OPp-OG-hB2">
-                        <rect key="frame" x="276" y="0.0" width="44" height="41"/>
+                        <rect key="frame" x="261" y="-9" width="59" height="63"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <state key="normal" image="chevron.png"/>
                         <connections>
