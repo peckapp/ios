@@ -13,6 +13,11 @@
 #define deviceVendorIdentifier [[[UIDevice currentDevice] identifierForVendor] UUIDString]
 #define storedPushToken [[NSUserDefaults standardUserDefaults] objectForKey:@"device_token"]
 
+// device information
+#define IS_IOS6_AND_UP ([[UIDevice currentDevice].systemVersion floatValue] >= 6.0)
+#define IS_IOS7_AND_UP ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+#define IS_IOS8_AND_UP ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
+
 // UI sizing values
 #define TEMPORARY_HEADER_HEIGHT 44
 #define SHOW_HEADER_DEPTH 50
@@ -42,7 +47,21 @@
 #define SHOW_ATTEND_TUTORIAL [[NSUserDefaults standardUserDefaults] objectForKey:attend_tutorial]
 #define DID_SHOW_ATTEND_TUTORIAL [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:attend_tutorial]
 
+
+// modes for view controllers to adapt to
+typedef NS_ENUM(NSInteger, PAViewControllerMode) {
+    PAViewControllerModeDefault,
+    PAViewControllerModeInitializing,
+};
+
 // common boilerplate methods calls
-#define REGISTER_PUSH_NOTIFICATIONS [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge]
+
+#define REGISTER_PUSH_NOTIFICATIONS if (IS_IOS8_AND_UP) { \
+    [[UIApplication sharedApplication] registerForRemoteNotifications]; \
+    [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge |UIUserNotificationTypeSound categories:nil]]; \
+} else { \
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge]; \
+}
+
 
 #endif

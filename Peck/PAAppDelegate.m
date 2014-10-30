@@ -40,10 +40,10 @@
     //[[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
     
     // uncomment at launch to nuke persistant store. definitely a messy way to do it, app will not run on that launch
-    /* for (NSPersistentStore *pstore in [[self persistentStoreCoordinator] persistentStores]) {
+    /*for (NSPersistentStore *pstore in [[self persistentStoreCoordinator] persistentStores]) {
         [[self persistentStoreCoordinator] removePersistentStore:pstore error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@",pstore.URL] error:nil];
-    } */
+    }*/
     // uncomment to get rid of a lingering badge on the app icon
     //[[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
@@ -100,6 +100,7 @@
     if(institutionID == nil){
         NSLog(@"Open up the configure screen");
         initViewController = [self.mainStoryboard instantiateViewControllerWithIdentifier:@"initialSetup"];
+        [(PAConfigureViewController*)[(UINavigationController*)initViewController topViewController] setMode:PAViewControllerModeInitializing];
         
         if(userID == nil){
             /*

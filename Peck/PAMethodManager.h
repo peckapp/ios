@@ -31,4 +31,6 @@
 -(void)resetTutorialBooleans;
 -(void)showTutorialAlertWithTitle:(NSString *)title andMessage:(NSString*)message;
 
+-(BOOL)serverIsReachable;
+
 @end

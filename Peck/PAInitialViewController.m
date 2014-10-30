@@ -8,11 +8,13 @@
 
 #import "PAInitialViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "PAAppDelegate.h"
 #import "PASyncManager.h"
 #import "PAFetchManager.h"
 #import "Institution.h"
 #import "PAEnterEmailTableViewController.h"
 #import "PAUtils.h"
+#import "PAMethodManager.h"
 
 @interface PAInitialViewController ()
 
@@ -109,6 +111,8 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+# pragma mark - Peck Login
+
 - (IBAction)finishLogin:(id)sender {
     NSLog(@"finish the login");
     if(![self.emailField.text isEqualToString:@""] && ![self.passwordField.text isEqualToString:@""]){
@@ -117,17 +121,46 @@
                                    self.passwordField.text, @"password",
                                    storedPushToken, @"device_token",
                                    nil];
-        [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:self direction:self.direction];
+        
+        void (^callbackBlock)(BOOL);
+        if (self.mode == PAViewControllerModeInitializing) {
+            callbackBlock = ^(BOOL success) {
+                PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+                [appDelegate.window setRootViewController:newRoot];
+            };
+        } else {
+            callbackBlock = ^(BOOL success) {
+                [self dismissViewControllerAnimated:YES completion:^() {
+                    [self.view setUserInteractionEnabled:YES];
+                }];
+            };
+        }
+        
+        [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo withCallbackBlock:callbackBlock];
+    } else {
+        [[PAMethodManager sharedMethodManager] showTutorialAlertWithTitle:@"Missing Login Info" andMessage:@"Please enter a username and password"];
     }
 }
 
+- (IBAction)resetPassword:(id)sender {
+    self.resetPassAlert = [[UIAlertView alloc] initWithTitle:@"Reset Password?"
+                                                     message:@"Are you sure you want to reset your password? A confirmation email will be sent to the email you have provided."
+                                                    delegate:self
+                                           cancelButtonTitle:@"No"
+                                           otherButtonTitles:@"Yes", nil];
+    [self.resetPassAlert show];
+    
+}
+
+#pragma mark - Facebook Login
 
 - (void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user
 {
     // TODO: need to perform appropriate handling of the user here, including sending the necessary information back to the server
     
     if ([self verifyFacebookLoginWithUser:user]) {
-       
+        
         NSLog(@"user info: %@ %@ %@ %@", [user objectForKey:@"first_name"], [user objectForKey:@"last_name"], [user objectForKey:@"email"], [[FBSession activeSession] accessTokenData]);
         
         REGISTER_PUSH_NOTIFICATIONS;
@@ -150,18 +183,22 @@
                     Institution *inst = [[PAFetchManager sharedFetchManager] fetchInstitutionMatchingEmail:[user objectForKey:@"email"]];
                     if (inst != nil) {
                         NSString *msg = [NSString stringWithFormat:@"The email registered with your Facebook account does not match your currently selected institution, but does match %@. Would you like to switch?",inst.name];
-                        self.switchInstAlert = [[UIAlertView alloc] initWithTitle:@"Unmatched Email"
-                                                                        message:msg
-                                                                       delegate:self
-                                                              cancelButtonTitle:@"No"
-                                                              otherButtonTitles:@"Switch", nil];
+                        if (self.switchInstAlert == nil) {
+                            self.switchInstAlert = [[UIAlertView alloc] initWithTitle:@"Unmatched Email"
+                                                                              message:msg
+                                                                             delegate:self
+                                                                    cancelButtonTitle:@"No"
+                                                                    otherButtonTitles:@"Switch", nil];
+                        }
                         [self.switchInstAlert show];
                     } else {
-                        self.invalidEmailAlert = [[UIAlertView alloc] initWithTitle:@"Invalid Email"
-                                                                        message:@"The email registered with your Facebook account does not match any available institution."
-                                                                       delegate:self
-                                                              cancelButtonTitle:@"OK"
-                                                              otherButtonTitles: nil];
+                        if (self.invalidEmailAlert == nil) {
+                            self.invalidEmailAlert = [[UIAlertView alloc] initWithTitle:@"Invalid Email"
+                                                                                message:@"The email registered with your Facebook account does not match any available institution."
+                                                                               delegate:self
+                                                                      cancelButtonTitle:@"OK"
+                                                                      otherButtonTitles: nil];
+                        }
                         [self.invalidEmailAlert show];
                     }
                 }
@@ -180,39 +217,8 @@
     }
 }
 
-- (IBAction)resetPassword:(id)sender {
-    self.resetPassAlert = [[UIAlertView alloc] initWithTitle:@"Reset Password?"
-                                                    message:@"Are you sure you want to reset your password? A confirmation email will be sent to the email you have provided."
-                                                   delegate:self
-                                          cancelButtonTitle:@"No"
-                                          otherButtonTitles:@"Yes", nil];
-    [self.resetPassAlert show];
-    
-}
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (alertView == self.switchInstAlert) {
-        if (buttonIndex == 1) {
-            // if desired by the user, the institution id is updated to that matching their facebook email account
-            Institution *inst = [[PAFetchManager sharedFetchManager] fetchInstitutionMatchingEmail:[self.user objectForKey:@"email"]];
-            [[NSUserDefaults standardUserDefaults] setObject:inst.id forKey:institution_id_key];
-            [self loginWithFacebook:self.user andBool:NO withEmail:[self.user objectForKey:@"email"] withCallback:nil];
-        } else {
-            // is the user does not want the institution matching their email for some reason, it continues to the email enter page
-            [self performSegueWithIdentifier:@"enterValidEmail" sender:self];
-        }
-    } else if (alertView == self.invalidEmailAlert) {
-        [self performSegueWithIdentifier:@"enterValidEmail" sender:self];
-    }
-    else if(buttonIndex==1 && alertView==self.resetPassAlert){
-        //reset the user's password
-        NSDictionary* dictionary = [NSDictionary dictionaryWithObject:self.emailField.text forKey:@"email"];
-        [[PASyncManager globalSyncManager] resetPassword:dictionary];
-    }
-}
-
-
--(void)loginWithFacebook:(id<FBGraphUser>)user andBool:(BOOL)sendEmail withEmail:(NSString*)email withCallback:(void(^)(BOOL))callbackBlock{
+// if the facebook information is appropriate, attempt to authenticate with our servers
+-(void)loginWithFacebook:(id<FBGraphUser>)user andBool:(BOOL)sendEmail withEmail:(NSString*)email withCallback:(void(^)(BOOL))callbackBlock {
     
     FBAccessTokenData* accessTokenData = [[FBSession activeSession] accessTokenData];
     NSString* fbToken = [accessTokenData accessToken];
@@ -240,25 +246,56 @@
     
     [self.tableView setUserInteractionEnabled:NO];
     
-    [[PASyncManager globalSyncManager] loginWithFacebook:userInfo forViewController:self withCallback:callbackBlock];
+    void (^newCallback)(BOOL);
+    if (self.mode == PAViewControllerModeInitializing) {
+        newCallback = ^(BOOL success) {
+            if (callbackBlock) {
+                callbackBlock(success);
+            }
+            PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+            [appDelegate.window setRootViewController:newRoot];
+        };
+    } else {
+        newCallback = ^(BOOL success) {
+            if (callbackBlock) {
+                callbackBlock(success);
+            }
+            [self dismissViewControllerAnimated:YES completion:^() {
+                [self.view setUserInteractionEnabled:YES];
+            }];
+        };
+    }
+    
+    
+    [[PASyncManager globalSyncManager] loginWithFacebook:userInfo withCallback:newCallback];
 }
 
--(BOOL)emailMatchesCurrentInstitution:(NSString*)userEmail{
-    Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
-    NSString* emailExtension = currentInstitution.email_regex;
-    //NSString* userEmail = [user objectForKey:@"email"];
-    NSInteger preceedingLength = [userEmail length] - [emailExtension length];
-    if(preceedingLength>0) {
-        NSString* userEmailExtension = [userEmail substringFromIndex:preceedingLength];
-        if([userEmailExtension isEqualToString:emailExtension]){
-            return YES;
+#pragma mark - UIAlertViewDelegate
+
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (alertView == self.switchInstAlert) {
+        if (buttonIndex == 1) {
+            // if desired by the user, the institution id is updated to that matching their facebook email account
+            Institution *inst = [[PAFetchManager sharedFetchManager] fetchInstitutionMatchingEmail:[self.user objectForKey:@"email"]];
+            [[NSUserDefaults standardUserDefaults] setObject:inst.id forKey:institution_id_key];
+            [self loginWithFacebook:self.user andBool:NO withEmail:[self.user objectForKey:@"email"] withCallback:nil];
         } else {
-            return NO;
+            // is the user does not want the institution matching their email for some reason, it continues to the email enter page
+            [self performSegueWithIdentifier:@"enterValidEmail" sender:self];
         }
-    } else {
-        return NO;
+    } else if (alertView == self.invalidEmailAlert) {
+        [self performSegueWithIdentifier:@"enterValidEmail" sender:self];
+    }
+    else if(buttonIndex==1 && alertView==self.resetPassAlert){
+        //reset the user's password
+        NSDictionary* dictionary = [NSDictionary dictionaryWithObject:self.emailField.text forKey:@"email"];
+        [[PASyncManager globalSyncManager] resetPassword:dictionary];
     }
 }
+
+#pragma mark - Navigation
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
@@ -303,7 +340,6 @@
 - (BOOL)verifyFacebookLoginWithUser:(id<FBGraphUser>)user
 {
     if (FBSession.activeSession.state == FBSessionStateOpen) {
-
         return YES;
     }else{
         return NO;
@@ -311,6 +347,23 @@
 }
 
 # pragma mark - utilities
+
+-(BOOL)emailMatchesCurrentInstitution:(NSString*)userEmail{
+    Institution* currentInstitution = [[PAFetchManager sharedFetchManager] fetchInstitutionForID:[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"]];
+    NSString* emailExtension = currentInstitution.email_regex;
+    //NSString* userEmail = [user objectForKey:@"email"];
+    NSInteger preceedingLength = [userEmail length] - [emailExtension length];
+    if(preceedingLength>0) {
+        NSString* userEmailExtension = [userEmail substringFromIndex:preceedingLength];
+        if([userEmailExtension isEqualToString:emailExtension]){
+            return YES;
+        } else {
+            return NO;
+        }
+    } else {
+        return NO;
+    }
+}
 
 - (void)dismissKeyboard
 {

@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "PACoreDataProtocol.h"
+#import "PAUtils.h"
 
 @interface PAConfigureViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate, PACoreDataProtocol>
+
+@property (nonatomic) PAViewControllerMode mode;
 
 - (IBAction)continueButton:(id)sender;
 
@@ -21,4 +24,5 @@
 @property (strong, nonatomic) IBOutlet UIPickerView *schoolPicker;
 
 -(void)updateInstitutions;
+
 @end

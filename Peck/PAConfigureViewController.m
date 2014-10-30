@@ -13,11 +13,13 @@
 #import "Institution.h"
 #import "PAFetchManager.h"
 #import "PASubscriptionsTableViewController.h"
+#import "PAInitialViewController.h"
 
 @interface PAConfigureViewController ()
 
 @property (nonatomic,retain) NSArray * institutions;
 @property (weak, nonatomic) IBOutlet UIButton *continueButton;
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
 
 @end
 
@@ -51,6 +53,11 @@
     NSArray* institutions = [self fetchInstitutions];
     if([institutions count]>0){
         self.institutions = institutions;
+    }
+    
+    if (self.mode != PAViewControllerModeInitializing) {
+        [self.loginButton setHidden:YES];
+        [self.loginButton setEnabled:NO];
     }
     
     // commented out because it just causes a 401 on initial launch
@@ -131,7 +138,7 @@
     return 0;
 }
 
-#pragma mark - Navigation
+#pragma mark - UIPickerViewDelegate
 
 - (NSInteger)numberOfComponentsInPickerView: (UIPickerView *)pickerView
 {
@@ -144,7 +151,7 @@
     return self.institutions.count;
 }
 
-- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component  reusingView:(UIView *)view
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
     Institution * institution = (Institution*)[self.institutions objectAtIndex:row];
     
@@ -176,6 +183,8 @@
     return 40;
 }
 
+#pragma mark - Navigation
+
 - (IBAction)continueButton:(id)sender
 {
     // sets the institution when continue is pressed
@@ -206,7 +215,15 @@
         // post error to flurry here
         [alertView show];
     }
-    
+}
+
+- (IBAction)loginButton:(id)sender {
+    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
+    UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
+    PAInitialViewController* init = loginRoot.viewControllers[0];
+    init.direction = @"initialize";
+    init.mode = PAViewControllerModeInitializing;
+    [self presentViewController:loginRoot animated:YES completion:nil];
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

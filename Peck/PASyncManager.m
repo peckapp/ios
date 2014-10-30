@@ -185,7 +185,7 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if([alertView.title isEqualToString:@"User Exists"]){
+    if([alertView.title isEqualToString:@"User Exists"] || [alertView.title isEqualToString:@"Logged In User Exists"]){
         //if there was an anonymous user last logged in on this device
         if (buttonIndex == 0){
             //If the user presses no, we will create an anonymous user and load the institutions
@@ -213,7 +213,8 @@
             UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
             UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
             PAInitialViewController* root = loginRoot.viewControllers[0];
-            root.direction=@"homepage";
+            //root.direction=@"homepage";
+            root.mode = PAViewControllerModeInitializing;
             [self.initialViewController presentViewController:loginRoot animated:YES completion:nil];
             //segue to the login page
         }
@@ -343,8 +344,7 @@
                                       }];
 }
 
-- (void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(NSString*)direction
-{
+- (void)authenticateUserWithInfo:(NSDictionary*)userInfo withCallbackBlock:(void (^)(BOOL))callbackBlock {
     // adds the unique user device token to the userInfo NSDictionary
     userInfo = [self addUDIDToDictionary:userInfo];
     userInfo = [self addDeviceTypeToDictionary:userInfo];
@@ -358,7 +358,7 @@
                                   success:^(NSURLSessionDataTask * __unused task, id JSON){
                                       //NSLog(@"LOGIN JSON: %@",JSON);
                                       
-                                      [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+                                      REGISTER_PUSH_NOTIFICATIONS
                                       
                                       NSDictionary *postsFromResponse = (NSDictionary*)JSON;
                                       NSDictionary *userDictionary = [postsFromResponse objectForKey:@"user"];
@@ -401,42 +401,24 @@
                                       //take care of some necessary login stuff
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       
-                                      if([direction isEqualToString:@"homepage"]){
-                                          PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-                                        UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
-                                        [appDelegate.window setRootViewController:newRoot];
-                                      } else if([direction isEqualToString:@"change_password"]) {
-                                          PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-                                          UIViewController* currentController = [appdelegate topMostController];
-                                          UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                                          UINavigationController *navController = [mainStoryboard instantiateViewControllerWithIdentifier:@"changePasswordController"];
-                                          PAChangePasswordViewController* root = navController.viewControllers[0];
-                                          root.tempPass =[userInfo objectForKey:@"password"];
-                                          
-                                          [currentController presentViewController:navController animated:YES completion:nil];
-                                          /*[appdelegate.dropDownBar selectItemAtIndex:4];
-                                          [appdelegate.profileViewController.navigationController popToRootViewControllerAnimated:NO];
-                                          appdelegate.profileViewController.tempPass = [userInfo objectForKey:@"password"];
-                                          [appdelegate.profileViewController performSegueWithIdentifier:@"changePassword" sender:appdelegate.profileViewController];*/
-                                      } else{
-                                          if(controller){
-                                              [controller dismissViewControllerAnimated:YES completion:nil];
-                                          }
-                                      }
+                                      callbackBlock(YES);
+                                      
                                       [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:logged_in_key];
-                                      [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+                                      [[UIApplication sharedApplication] registerForRemoteNotifications];
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"authenticateUserWithInfo ERROR: %@",error);
+//                                      NSLog(@"authenticateUserWithInfo ERROR: %@",error);
                                      // PAInitialViewController* sender = (PAInitialViewController*)controller;
                                       //[sender showAlert];
-                                      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Incorrect email or password"
-                                                                                      message:@"Please enter a valid email and password"
-                                                                                     delegate:self
-                                                                            cancelButtonTitle:@"OK"
-                                                                            otherButtonTitles:nil];
-                                      [alert show];
+//                                      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Incorrect email or password"
+//                                                                                      message:@"Please enter a valid email and password"
+//                                                                                     delegate:self
+//                                                                            cancelButtonTitle:@"OK"
+//                                                                            otherButtonTitles:nil];
+//                                      [alert show];
+                                      
+                                      [self handleError:error withMethodName:@"authenticateUserWithInfo" userPrompted:YES];
                                   }];
 }
 
@@ -541,7 +523,7 @@
 }
 
 
--(void)loginWithFacebook:(NSDictionary*)dictionary forViewController:(UIViewController*)sender withCallback:(void (^)(BOOL))callbackBlock{
+-(void)loginWithFacebook:(NSDictionary*)dictionary withCallback:(void (^)(BOOL))callbackBlock{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 
     NSString* loginURL = [@"api/users/" stringByAppendingString:[[defaults objectForKey:@"user_id"] stringValue]];
@@ -617,13 +599,13 @@
                                            [alert show];
                                        }
                                        
-                                       [sender dismissViewControllerAnimated:YES completion:^() {
-                                           [sender.view setUserInteractionEnabled:YES];
-                                       }];
+                                       
                                        
                                        [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:logged_in_key];
-                                       [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
                                        
+                                       [[UIApplication sharedApplication] registerForRemoteNotifications];
+                                       UIUserNotificationSettings *uns = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+                                       [[UIApplication sharedApplication] registerUserNotificationSettings:uns];
                                    }
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                        NSLog(@"loginWithFacebook ERROR: %@",error);
@@ -670,6 +652,8 @@
     // TODO: check the user info dictionary for validity and presence of required fields
     return YES;
 }
+
+#pragma mark - Peers
 
 -(void)updatePeerInfo
 {
@@ -774,6 +758,8 @@
     }
 }
 
+#pragma mark - Feedback
+
 -(void)sendUserFeedback:(NSString*)feedback withCategory:(NSString*)category{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     
@@ -792,10 +778,7 @@
                                       [alert show];
                                   }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"sendUserFeedback ERROR: %@",error);
-                                      UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Posting error"
-                                                                                      message:@"Something went wrong while trying to post your feedback, please try again later" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                                      [alert show];
+                                      [self handleError:error withMethodName:@"sendUserFeedbackwithCategory" userPrompted:YES];
                                   }];
     
     
@@ -824,7 +807,7 @@
                                  }
     
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                       NSLog(@"likeComment ERROR: %@",error);
+                                       [self handleError:error withMethodName:@"likeComment" userPrompted:YES];
                                     
                                    }];
 }
@@ -848,7 +831,7 @@
                                    }
      
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                       NSLog(@"unlikeComment ERROR: %@",error);
+                                       [self handleError:error withMethodName:@"unlikeComment" userPrompted:YES];
                                        
                                    }];
 }
@@ -876,7 +859,7 @@
                                    }
      
                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                       NSLog(@"attendEvent ERROR: %@",error);
+                                       [self handleError:error withMethodName:@"attendEvent" userPrompted:YES];
                                        
                                    }];
 }
@@ -891,8 +874,7 @@
                                     }
      
                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                        NSLog(@"unattendEvent ERROR: %@",error);
-                                        
+                                        [self handleError:error withMethodName:@"unattendEvent" userPrompted:YES];
                                     }];
 
 }
@@ -1210,7 +1192,7 @@
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"acceptCircleInvite ERROR: %@",error);
-                                      [self handleError:error andMethodName:@"acceptCircleInvite"];
+                                      [self handleError:error withMethodName:@"acceptCircleInvite" userPrompted:YES];
                                   }];
 }
 
@@ -1717,7 +1699,7 @@
          //[self updateExploreInfoForViewController:nil];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"postAnnouncement ERROR: %@",error);
+                                      [self handleError:error withMethodName:@"postAnnouncement" userPrompted:YES];
                                   }];
 }
 
@@ -1730,7 +1712,7 @@
          //[self updateExploreInfoForViewController:nil];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"postAnnouncementWithoutImage ERROR: %@",error);
+                                      [self handleError:error withMethodName:@"postAnnouncementWithoutImage" userPrompted:YES];
                                   }];
 }
 
@@ -1808,11 +1790,10 @@
     [[PASessionManager sharedClient] POST:announcementURL
                                parameters:baseDictionary
                 constructingBodyWithBlock:^(id<AFMultipartFormData> formData) { [formData appendPartWithFileData:imageData name:@"image" fileName:fileName mimeType:@"image/jpeg"];}
-                                  success:^
-     (NSURLSessionDataTask * __unused task, id JSON) {
-         //NSLog(@"success: %@", JSON);
-         [self updateUserAnnouncements];
-     }
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      //NSLog(@"success: %@", JSON);
+                                      [self updateUserAnnouncements];
+                                  }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       NSLog(@"updateAnnouncement ERROR: %@",error);
                                   }];
@@ -1853,7 +1834,7 @@
 
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"postEvent ERROR: %@",error);
+                                      [self handleError:error withMethodName:@"postEventwithImage" userPrompted:YES];
                                   }];
 
 }
@@ -1874,7 +1855,7 @@
          
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"postEventWithoutImage ERROR: %@",error);
+                                      [self handleError:error withMethodName:@"postEventWithoutImage" userPrompted:YES];
                                   }];
 }
 
@@ -2149,7 +2130,7 @@
          [self updateCommentsFrom:commentFromString withCategory:categoty];
      }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"postComment ERROR: %@",error);
+                                      [self handleError:error withMethodName:@"postComment" userPrompted:YES];
                                   }];
 }
 
@@ -2199,7 +2180,7 @@
                  }
              }
                                          failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                             NSLog(@"updateCommentsFrom ERROR: %@",error);
+                                             [self handleError:error withMethodName:@"updateCommentsFrom" userPrompted:NO];
                                          }];
         });
         }
@@ -2238,29 +2219,28 @@
     
     [[PASessionManager sharedClient] GET:departmentSubscriptionURL
                               parameters:[self authenticationParameters]
-                                 success:^
-     (NSURLSessionDataTask * __unused task, id JSON) {
-         //NSLog(@"Subscription JSON: %@",JSON);
-         NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
-         NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"departments"];
-         [self.persistentStoreCoordinator lock];
-         for (NSDictionary *departmentAttributes in postsFromResponse) {
-             NSNumber *newID = [departmentAttributes objectForKey:@"id"];
-             BOOL departmentAlreadyExists = [self objectExists:newID withType:@"Subscription" andCategory:@"department"];
-             if(!departmentAlreadyExists){
-                 //NSLog(@"adding an event to Core Data");
-                 Subscription* subscription = [NSEntityDescription insertNewObjectForEntityForName:@"Subscription" inManagedObjectContext: _managedObjectContext];
-                 [self setAttributesInSubscription:subscription withDictionary:departmentAttributes andCategory:@"department"];
-                 //NSLog(@"SUBSCRIPTION: %@",subscription);
-                 NSError* error = nil;
-                 [_managedObjectContext save:&error];
-             }
-         }
-         [self.persistentStoreCoordinator unlock];
-         [self updateSubscriptionsForCategory:@"department"];
-     }
+                                 success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                     //NSLog(@"Subscription JSON: %@",JSON);
+                                     NSDictionary *subscriptionDictionary = (NSDictionary*)JSON;
+                                     NSArray *postsFromResponse = [subscriptionDictionary objectForKey:@"departments"];
+                                     [self.persistentStoreCoordinator performBlockAndWait:^() {
+                                         for (NSDictionary *departmentAttributes in postsFromResponse) {
+                                             NSNumber *newID = [departmentAttributes objectForKey:@"id"];
+                                             BOOL departmentAlreadyExists = [self objectExists:newID withType:@"Subscription" andCategory:@"department"];
+                                             if(!departmentAlreadyExists){
+                                                 //NSLog(@"adding an event to Core Data");
+                                                 Subscription* subscription = [NSEntityDescription insertNewObjectForEntityForName:@"Subscription" inManagedObjectContext: _managedObjectContext];
+                                                 [self setAttributesInSubscription:subscription withDictionary:departmentAttributes andCategory:@"department"];
+                                                 //NSLog(@"SUBSCRIPTION: %@",subscription);
+                                                 NSError* error = nil;
+                                                 [_managedObjectContext save:&error];
+                                             }
+                                         }
+                                     }];
+                                     [self updateSubscriptionsForCategory:@"department"];
+                                 }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"updateSubscriptions departments ERROR: %@",error);
+                                     [self handleError:error withMethodName:@"updateSubscriptions" userPrompted:NO];
                                  }];
     
     NSString* clubSubscriptionURL = @"api/clubs?institution_id=";
@@ -2290,7 +2270,7 @@
          [self updateSubscriptionsForCategory:@"club"];
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"updateSubscriptions clubs ERROR: %@",error);
+                                     [self handleError:error withMethodName:@"updateSubscriptions" userPrompted:NO];
                                  }];
     
     
@@ -2321,7 +2301,7 @@
          
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"updateSubscriptions athletic teams ERROR: %@",error);
+                                     [self handleError:error withMethodName:@"updateSubscriptions" userPrompted:NO];
                                  }];
 
 }
@@ -2341,18 +2321,17 @@
 }
 
 
--(void)postSubscriptions:(NSArray*)array{
+-(void)postSubscriptions:(NSArray*)array {
     
     [[PASessionManager sharedClient] POST:subscriptionsAPI
                                parameters:[self applyWrapper:@"subscriptions" toArray:array]
-                                  success:^
-     (NSURLSessionDataTask * __unused task, id JSON) {
-         //NSLog(@"success: %@", JSON);
-         [self updateSubscriptions];
+                                  success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                      //NSLog(@"success: %@", JSON);
+                                      [self updateSubscriptions];
          
-     }
+                                  }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                      NSLog(@"setAttributesInSubscription ERROR: %@",error);
+                                      [self handleError:error withMethodName:@"setAttributesInSubscription" userPrompted:NO];
                                   }];
 
 }
@@ -2385,7 +2364,7 @@
          //NSLog(@"success: %@", JSON);
      }
                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                        NSLog(@"deleteSubscriptions ERROR: %@",error);
+                                        [self handleError:error withMethodName:@"deleteSubscriptions" userPrompted:NO];
                                     }];
 
     
@@ -2424,18 +2403,23 @@
          
      }
                                  failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                     NSLog(@"updateSubscriptionsForCategory ERROR: %@",error);
+                                     [self handleError:error withMethodName:@"updateSubscriptionsForCategory" userPrompted:NO];
                                  }];
     }
 }
 
 #pragma mark - Error Handling
 
-- (void)handleError:(NSError*)error andMethodName:(NSString*)methodName {
+- (void)handleError:(NSError*)error withMethodName:(NSString*)methodName userPrompted:(BOOL) userPrompted {
+    
+    NSLog(@"%@ ERROR: %@",methodName,error);
+    
     switch (error.code) {
         case -1005: { //kCFURLErrorNetworkConnectionLost
-            NSString *msg = [NSString stringWithFormat:@"Please Connect to the Internet to continue with %@",methodName];
-            [[PAMethodManager sharedMethodManager] showNoInternetAlertWithMessage:msg];
+            NSString *msg = [NSString stringWithFormat:@"Please connect to the internet to continue with %@",methodName];
+            if (userPrompted) {
+                [[PAMethodManager sharedMethodManager] showNoInternetAlertWithMessage:msg];
+            }
             break;
         }
         default:

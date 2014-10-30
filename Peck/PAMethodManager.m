@@ -15,6 +15,7 @@
 #import "PAFetchManager.h"
 #import "PASyncManager.h"
 #import "PAUtils.h"
+#import "PAChangePasswordViewController.h"
 
 @interface PAMethodManager()
 
@@ -77,7 +78,6 @@
     self.registerAlert.delegate = self;
     self.sender = sender;
     [self.registerAlert show];
-    
 }
 
 -(void)showInstitutionAlert:(void (^)(void))callbackBlock{
@@ -88,7 +88,7 @@
 
 -(void)showNoInternetAlertWithMessage:(NSString*)message {
     if (self.noInternetAlert == nil) {
-        self.noInternetAlert = [[UIAlertView alloc] initWithTitle:@"No Internet Connection"
+        self.noInternetAlert = [[UIAlertView alloc] initWithTitle:@"Connection Lost"
                                                           message:@"msg"
                                                          delegate:self
                                                 cancelButtonTitle:@"Okay"
@@ -99,6 +99,7 @@
     } else {
         self.noInternetAlert.message = @"Please connect to the internet to complete this operation";
     }
+    [self.noInternetAlert show];
 }
 
 -(void)showUnauthorizedAlertWithCallbackBlock:(void (^)(void))callbackBlock {
@@ -168,6 +169,11 @@
 }
 
 #pragma mark - Other
+
+-(BOOL)serverIsReachable {
+    // TODO: attempt connection with the server
+    return YES;
+}
 
 -(UIImageView*)imageForPeer:(Peer*)peer{
     if (peer.imageURL) {
@@ -323,7 +329,18 @@
                                nil];
     
     NSLog(@"login info %@", loginInfo);
-    [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo forViewController:nil direction:@"change_password"];
+    [[PASyncManager globalSyncManager] authenticateUserWithInfo:loginInfo withCallbackBlock:^(BOOL success){
+        if (success) {
+            PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+            UIViewController* currentController = [appdelegate topMostController];
+            UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            UINavigationController *navController = [mainStoryboard instantiateViewControllerWithIdentifier:@"changePasswordController"];
+            PAChangePasswordViewController* root = navController.viewControllers[0];
+            root.tempPass =[loginInfo objectForKey:@"password"];
+            
+            [currentController presentViewController:navController animated:YES completion:nil];
+        }
+    }];
 }
 
 - (void)logoutUserCompletely {

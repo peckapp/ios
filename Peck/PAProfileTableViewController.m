@@ -154,6 +154,7 @@ BOOL loggedIn;
 
 - (IBAction)login:(id)sender
 {
+    
     if(!loggedIn){
         
         [self presentLoginStoryboardFromViewController:self];
@@ -248,6 +249,7 @@ BOOL loggedIn;
         [self presentViewController: controller animated: YES completion: nil];
     }
 }
+
 -(void)choosePhotoFromExistingImages
 {
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary])
@@ -293,19 +295,21 @@ BOOL loggedIn;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if(indexPath.section==0 && indexPath.row==5){
-        NSLog(@"view the user's profile");
-        PAAppDelegate *appDel = [[UIApplication sharedApplication] delegate];
-        UINavigationController *navController = [appDel.mainStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
-        [self presentViewController:navController animated:YES completion:nil];
-    }else if(indexPath.section==0 && indexPath.row==6){
-        PAAppDelegate *appDel = [[UIApplication sharedApplication] delegate];
-        UINavigationController *feedbackController = [appDel.mainStoryboard instantiateViewControllerWithIdentifier:@"sendFeedback"];
-        [self presentViewController:feedbackController animated:YES completion:nil];
-    }else if(indexPath.section==0 && indexPath.row==7){
-        [[PAMethodManager sharedMethodManager] resetTutorialBooleans];
-        [[PAMethodManager sharedMethodManager] showTutorialAlertWithTitle:@"Reset Tutorials"
-                                                               andMessage:@"Tutorials are now reset and will appear as you navigate through the app!"];
+    if (indexPath.section == 0) {
+        if(indexPath.row==5){
+            NSLog(@"view the user's profile");
+            PAAppDelegate *appDel = [[UIApplication sharedApplication] delegate];
+            UINavigationController *navController = [appDel.mainStoryboard instantiateViewControllerWithIdentifier:@"FriendProfile"];
+            [self presentViewController:navController animated:YES completion:nil];
+        }else if(indexPath.row==6){
+            PAAppDelegate *appDel = [[UIApplication sharedApplication] delegate];
+            UINavigationController *feedbackController = [appDel.mainStoryboard instantiateViewControllerWithIdentifier:@"sendFeedback"];
+            [self presentViewController:feedbackController animated:YES completion:nil];
+        }else if(indexPath.row==7){
+            [[PAMethodManager sharedMethodManager] resetTutorialBooleans];
+            [[PAMethodManager sharedMethodManager] showTutorialAlertWithTitle:@"Reset Tutorials"
+                                                                   andMessage:@"Tutorials are now reset and will appear as you navigate through the app!"];
+        }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -331,4 +335,5 @@ BOOL loggedIn;
     [[PASyncManager globalSyncManager] updateUserWithInfo:updatedInfo withImage:data];
     
 }
+
 @end

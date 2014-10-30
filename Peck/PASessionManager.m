@@ -13,8 +13,7 @@ static NSString * const PALocalAPIBaseURLString = @"http://localhost:3000/";
 // Development webservice
 static NSString * const PARailsServerBaseURLString = @"http://loki.peckapp.com:3000/"; // must be manually running from command line on the server
 static NSString * const PADevAPIBaseURLString = @"http://loki.peckapp.com:3500/";
-// Production Webservice - both force SSL
-static NSString * const PAStagingAPIBaseURLString = @"https://buri.peckapp.com:3500/";
+// Production Webservice - force SSL
 static NSString * const PAProdAPIBaseURLString = @"https://yggdrasil.peckapp.com/";
 
 @implementation PASessionManager

@@ -55,12 +55,10 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    if ([self.navigationController.topViewController isKindOfClass:[PAConfigureViewController class]]) {
-        self.isInitializing = YES;
+    if (self.isInitializing) {
         self.finishButton.enabled = true;
         self.finishButton.title = @"Finish";
     } else {
-        self.isInitializing = NO;
         self.finishButton.enabled = false;
         self.finishButton.title = @"";
     }

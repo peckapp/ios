@@ -40,14 +40,14 @@
 // sends post request to the server completing the user's other info after the registration process is triggered
 -(void)updateUserWithInfo:(NSDictionary*)userInfo withImage:(NSData*)imageData;
 // authenticates the user and updates the authentication token returned from the server
--(void)authenticateUserWithInfo:(NSDictionary*)userInfo forViewController:(UITableViewController*)controller direction:(NSString*)direction;
+-(void)authenticateUserWithInfo:(NSDictionary*)userInfo withCallbackBlock:(void (^)(BOOL))callbackBlock ;
 // sends patch request to the server when the registration process is complete
 -(void)registerUserWithInfo:(NSDictionary*)userInfo forViewController:(UIViewController*)sender;
 
 -(void)checkFacebookUser:(NSDictionary*)dictionary withCallback:(void (^)(BOOL, NSString*))callbackBlock;
 //checks with the server to check if a facebook link exists for the user that is attempting to login
 
--(void)loginWithFacebook:(NSDictionary*)dictionary forViewController:(UIViewController*)sender withCallback:(void (^)(BOOL))callbackBlock;
+-(void)loginWithFacebook:(NSDictionary*)dictionary withCallback:(void (^)(BOOL))callbackBlock;
 
 -(void)changePassword:(NSDictionary*)passwordInfo forViewController:(UIViewController*)controller;
 
