@@ -18,7 +18,9 @@
 -(void)showRegisterAlert:(NSString*)message forViewController:(UIViewController*)sender;
 -(void)showInstitutionAlert:(void (^)(void))callbackBlock;
 -(void)showUnauthorizedAlertWithCallbackBlock:(void (^)(void))callbackBlock;
+-(void)showNoInternetAlertWithTitle:(NSString*)title AndMessage:(NSString*)message;
 -(void)showNoInternetAlertWithMessage:(NSString*)message;
+-(void)showNoInternetAlert;
 
 -(UIImageView*)imageForPeer:(Peer*)peer;
 -(void)postInfoToFacebook:(NSDictionary*)eventInfo withImage:(NSData*)imageData;

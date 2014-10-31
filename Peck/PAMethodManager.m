@@ -14,8 +14,10 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "PAFetchManager.h"
 #import "PASyncManager.h"
+#import "PASessionManager.h"
 #import "PAUtils.h"
 #import "PAChangePasswordViewController.h"
+#import "Reachability.h"
 
 @interface PAMethodManager()
 
@@ -26,6 +28,8 @@
 
 @property (strong, nonatomic) void (^instCallbackBlock)(void);
 @property (strong, nonatomic) void (^unauthCallbackBlock)(void);
+
+@property (strong, nonatomic) Reachability *serverReachability;
 
 @end
 
@@ -86,20 +90,26 @@
     [self.institutionAlert show];
 }
 
--(void)showNoInternetAlertWithMessage:(NSString*)message {
+-(void)showNoInternetAlertWithTitle:(NSString *)title AndMessage:(NSString *)message {
     if (self.noInternetAlert == nil) {
-        self.noInternetAlert = [[UIAlertView alloc] initWithTitle:@"Connection Lost"
+        self.noInternetAlert = [[UIAlertView alloc] initWithTitle:@"No Internet"
                                                           message:@"msg"
                                                          delegate:self
                                                 cancelButtonTitle:@"Okay"
                                                 otherButtonTitles:nil];
     }
-    if (message) {
-        self.noInternetAlert.message = message;
-    } else {
-        self.noInternetAlert.message = @"Please connect to the internet to complete this operation";
-    }
+    self.noInternetAlert.title = title;
+    self.noInternetAlert.message = message;
+    
     [self.noInternetAlert show];
+}
+
+-(void)showNoInternetAlertWithMessage:(NSString*)message {
+    [self showNoInternetAlertWithTitle:@"Connection Lost" AndMessage:message];
+}
+
+-(void)showNoInternetAlert {
+    [self showNoInternetAlertWithTitle:@"Connection Lost" AndMessage:@"Please connect to the internet to complete this operation"];
 }
 
 -(void)showUnauthorizedAlertWithCallbackBlock:(void (^)(void))callbackBlock {
@@ -172,7 +182,10 @@
 
 -(BOOL)serverIsReachable {
     // TODO: attempt connection with the server
-    return YES;
+    if (self.serverReachability == nil) {
+        self.serverReachability = [Reachability reachabilityWithHostname:[[[PASessionManager sharedClient] baseURL] absoluteString]];
+    }
+    return [self.serverReachability isReachable];
 }
 
 -(UIImageView*)imageForPeer:(Peer*)peer{

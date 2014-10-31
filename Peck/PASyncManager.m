@@ -42,6 +42,13 @@
 #define serverDateFormat @"yyyy-MM-dd'T'kk:mm:ss.SSS'Z'"
 
 
+typedef NS_ENUM(NSInteger, PAAlertType){
+    PAAlertTypeRegistration,
+    PAAlertTypeLogin,
+    PAAlertTypeNoAction,
+    
+};
+
 @interface PASyncManager ()
 
 - (NSDictionary*) addUDIDToDictionary:(NSDictionary*)dictionary;
@@ -150,6 +157,7 @@
                                                                                                  delegate:self
                                                                                         cancelButtonTitle:@"No"
                                                                                         otherButtonTitles:@"Yes",nil];
+                                              loginAlert.tag = PAAlertTypeLogin;
                                               [loginAlert show];
                                           }
                                           else{
@@ -171,7 +179,8 @@
                                                                                          message:@"Would you like to use the previous user's information?"
                                                                                         delegate:self
                                                                                cancelButtonTitle:@"No"
-                                                                               otherButtonTitles:@"Yes",nil];
+                                                                                   otherButtonTitles:@"Yes",nil];
+                                              alert.tag = PAAlertTypeLogin;
                                               [alert show];
                                           }
                                           //[self ceateAnonymousUser:callbackBlock];
@@ -185,25 +194,34 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if([alertView.title isEqualToString:@"User Exists"] || [alertView.title isEqualToString:@"Logged In User Exists"]){
-        //if there was an anonymous user last logged in on this device
-        if (buttonIndex == 0){
-            //If the user presses no, we will create an anonymous user and load the institutions
-            //NSLog(@"create a new user");
-            [self createAnonymousUserHelper];
-        }else{
-            //If the user presses yes, we will load the previous data and segue to the homepage
-            //Note that we have already added the necessary information into user defaults
-            //NSLog(@"use previous user info");
-            PAConfigureViewController* configure = (PAConfigureViewController*) self.initialViewController;
-            PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-            // if this is root because of the initial download of the app
-            if ([appDelegate window].rootViewController == configure) {
-                UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
-               // NSLog(@"about to set the root");
-                [appDelegate.window setRootViewController:newRoot];
+    switch (alertView.tag) {
+        case PAAlertTypeLogin: {
+            //if there was an anonymous user last logged in on this device
+            if (buttonIndex == 0){
+                //If the user presses no, we will create an anonymous user and load the institutions
+                //NSLog(@"create a new user");
+                [self createAnonymousUserHelper];
+            }else{
+                //If the user presses yes, we will load the previous data and segue to the homepage
+                //Note that we have already added the necessary information into user defaults
+                //NSLog(@"use previous user info");
+                PAConfigureViewController* configure = (PAConfigureViewController*) self.initialViewController;
+                PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                // if this is root because of the initial download of the app
+                if ([appDelegate window].rootViewController == configure) {
+                    UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+                    // NSLog(@"about to set the root");
+                    [appDelegate.window setRootViewController:newRoot];
+                }
             }
+            break;
         }
+            
+        default:
+            break;
+    }
+    if(alertView.tag){
+        
     }else{
         if(buttonIndex==0){
             //NSLog(@"create a new user");
@@ -408,16 +426,6 @@
                                   }
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-//                                      NSLog(@"authenticateUserWithInfo ERROR: %@",error);
-                                     // PAInitialViewController* sender = (PAInitialViewController*)controller;
-                                      //[sender showAlert];
-//                                      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Incorrect email or password"
-//                                                                                      message:@"Please enter a valid email and password"
-//                                                                                     delegate:self
-//                                                                            cancelButtonTitle:@"OK"
-//                                                                            otherButtonTitles:nil];
-//                                      [alert show];
-                                      
                                       [self handleError:error withMethodName:@"authenticateUserWithInfo" userPrompted:YES];
                                   }];
 }
@@ -483,6 +491,7 @@
                                                                                     delegate:self
                                                                            cancelButtonTitle:@"OK"
                                                                            otherButtonTitles:nil];
+                                      alert.tag = PAAlertTypeRegistration;
                                       [alert show];
                                   }
      
@@ -493,6 +502,7 @@
                                                                                     delegate:self
                                                                            cancelButtonTitle:@"OK"
                                                                            otherButtonTitles:nil];
+                                      alert.tag = PAAlertTypeRegistration;
                                       [alert show];
                                   }];
 }
@@ -595,7 +605,12 @@
                                            [[PAFetchManager sharedFetchManager] loginUser];
                                        } else {
                                            //show confirmation email alert
-                                           UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Confirmation Email Sent!" message:@"An email has been sent to the email you have provided" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                                           UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Confirmation Email Sent!"
+                                                                                           message:@"An email has been sent to the email you have provided"
+                                                                                          delegate:self
+                                                                                 cancelButtonTitle:@"OK"
+                                                                                 otherButtonTitles: nil];
+                                           alert.tag = PAAlertTypeNoAction;
                                            [alert show];
                                        }
                                        
@@ -774,7 +789,11 @@
                                parameters:userFeedback
                                   success:^(NSURLSessionDataTask * __unused task, id JSON) {
                                       UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Feedback Posted!"
-                                                                                      message:@"Thank you, we appreciate your help" delegate:self cancelButtonTitle:@"You're Welcome" otherButtonTitles: nil];
+                                                                                      message:@"Thank you, we appreciate your help"
+                                                                                     delegate:self
+                                                                            cancelButtonTitle:@"Dismiss"
+                                                                            otherButtonTitles: nil];
+                                      alert.tag = PAAlertTypeNoAction;
                                       [alert show];
                                   }
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {

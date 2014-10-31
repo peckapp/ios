@@ -199,7 +199,7 @@ PAAssetManager *assetManager;
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@",
                               attributeName, attributeValue];
     NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [calendar components:(NSWeekdayCalendarUnit) fromDate:[NSDate date]];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitWeekday) fromDate:[NSDate date]];
     NSNumber * day = [NSNumber numberWithLong:([components weekday]-1)];
     
     NSPredicate *dayPredicate = [NSPredicate predicateWithFormat:@"day_of_week = %@", day];
@@ -349,7 +349,7 @@ PAAssetManager *assetManager;
 
 -(NSString*)dateToString:(NSDate *)date{
     NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [calendar components:(NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:date];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:date];
     NSInteger hour = [components hour];
     NSString * timeOfDay = @" AM";
     if(hour>12){

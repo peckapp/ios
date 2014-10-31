@@ -154,6 +154,11 @@ BOOL loggedIn;
 
 - (IBAction)login:(id)sender
 {
+    if ([[PAMethodManager sharedMethodManager] serverIsReachable] == NO) {
+        [[PAMethodManager sharedMethodManager] showNoInternetAlertWithTitle:@"No Server Connection"
+                                                                 AndMessage:@"Please connect to the internet to continue with login or logout."];
+        return;
+    }
     
     if(!loggedIn){
         
@@ -195,6 +200,13 @@ BOOL loggedIn;
 }
 
 - (IBAction)registerAccount:(id)sender {
+    if ([[PAMethodManager sharedMethodManager] serverIsReachable] == NO) {
+        [[PAMethodManager sharedMethodManager] showNoInternetAlertWithTitle:@"No Server Connection"
+                                                                 AndMessage:@"Please connect to the internet to continue with registration."];
+
+        return;
+    }
+    
     NSLog(@"reg");
     UIViewController *registerController = [self.loginStoryboard instantiateViewControllerWithIdentifier:@"register"];
     [self presentViewController:registerController animated:YES completion:nil];

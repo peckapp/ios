@@ -9,6 +9,7 @@
 #import "PANestedInfoViewController.h"
 #import "PANestedInfoViewControllerPrivate.h"
 #import "PAAssetManager.h"
+#import "PAFetchManager.h"
 #import "UIImageView+AFNetworking.h"
 #import "PASyncManager.h"
 #import "PAMethodManager.h"
@@ -249,11 +250,96 @@
 
 #pragma mark Commenting
 
-- (void)didSelectPostButton:(id)sender
-{
+- (void)didSelectPostButton:(id)sender {
     [self postComment:self.keyboardAccessory.text withCategory:self.category];
     [self.keyboardAccessory resignFirstResponder];
     self.keyboardAccessory.text = @"";
+}
+
+#pragma mark - helpers for configureView
+
+-(BOOL)userHasLikedComment:(Comment*)comment{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger userID = [[defaults objectForKey:@"user_id"] integerValue];
+    for(int i = 0; i < [comment.likes count];i++){
+        if(userID==[comment.likes[i] integerValue]){
+            return YES;
+        }
+    }return NO;
+}
+
+-(NSString*)nameLabelTextForComment:(Comment*)comment{
+    NSString* text = @"Unknown";
+    if(comment.peer_id){
+        Peer* tempPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];;
+        if(tempPeer){
+            text=tempPeer.name;
+        }
+    }
+    
+    NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
+    NSLog(@"comment id: %@ my id: %@",comment.peer_id, [defaults objectForKey:@"user_id"]);
+    if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
+        text = [[defaults objectForKey:@"first_name"] stringByAppendingString:@" "];
+        text = [text stringByAppendingString:[defaults objectForKey:@"last_name"]];
+    }
+    text = [text stringByAppendingString:@" "];
+    text = [text stringByAppendingString:[self dateToString:comment.created_at]];
+    
+    return text;
+}
+
+-(UIImageView *)imageViewForComment:(Comment*)comment {
+    NSUserDefaults*defaults = [NSUserDefaults standardUserDefaults];
+    NSURL* imageURL;
+    if([[defaults objectForKey:@"user_id"] integerValue]==[comment.peer_id integerValue]){
+        //return [[UIImageView alloc] initWithImage:self.userPicture];
+        imageURL = [NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];
+    } else {
+        Peer * commentFromPeer = [[PAFetchManager sharedFetchManager] getPeerWithID:comment.peer_id];
+        if(commentFromPeer.imageURL){
+            imageURL = [NSURL URLWithString:commentFromPeer.imageURL];
+        }else{
+            imageURL = nil;
+        }
+    }if(imageURL){
+        UIImage* profPic = [[UIImageView sharedImageCache] cachedImageForRequest:[NSURLRequest requestWithURL:imageURL]];
+        if(profPic){
+            return [[UIImageView alloc] initWithImage:profPic];
+        }
+        else{
+            UIImageView * imageView = [[UIImageView alloc] init];
+            [imageView setImageWithURL:imageURL placeholderImage:[[PAAssetManager sharedManager] profilePlaceholder]];
+            return imageView;
+        }
+    }
+    else{
+        return [[UIImageView alloc] initWithImage:[[PAAssetManager sharedManager] profilePlaceholder]];
+    }
+}
+
+#pragma mark - Utils
+
+
+-(NSString*)dateToString:(NSDate *)date {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:date];
+    NSInteger hour = [components hour];
+    NSString * timeOfDay = @" AM";
+    if(hour>12){
+        hour-=12;
+        timeOfDay = @" PM";
+    }
+    
+    NSString *minute = [@([components minute]) stringValue];
+    if(minute.length==1){
+        minute = [@"0" stringByAppendingString:minute];
+    }
+    
+    NSString * dateString = [[@(hour) stringValue] stringByAppendingString:@":"];
+    dateString = [dateString stringByAppendingString:minute];
+    dateString = [dateString stringByAppendingString:timeOfDay];
+    return dateString;
 }
 
 #pragma mark - Text Fields

@@ -11,6 +11,7 @@
 #define defaultCommentCellHeight 72
 
 @class PACommentCell;
+@class Comment;
 
 // private class extensions of the
 @interface PANestedInfoViewController () {
@@ -59,5 +60,15 @@
 
 -(void) showSeparators;
 -(void) hideSeparators;
+
+- (IBAction)attendButton:(id)sender;
+- (void)didSelectPostButton:(id)sender;
+
+-(BOOL)userHasLikedComment:(Comment*)comment;
+-(NSString*)nameLabelTextForComment:(Comment*)comment;
+-(UIImageView *)imageViewForComment:(Comment*)comment;
+
+-(NSString*)dateToString:(NSDate *)date;
+
 
 @end
