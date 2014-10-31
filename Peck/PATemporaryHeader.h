@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PATemporaryDropdownView : UIView
+@interface PATemporaryHeader : UIView
 
 @property (strong, nonatomic) UIView *hiddenView;
 @property (strong, nonatomic) UILabel *label;

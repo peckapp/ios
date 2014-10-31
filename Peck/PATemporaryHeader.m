@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
-#import "PATemporaryDropdownView.h"
+#import "PATemporaryHeader.h"
 #import "PAAppDelegate.h"
 
 #define primaryDelay 0.1
 #define secondaryDelay 0.2
 #define hideDelay 1.5
 
-@interface PATemporaryDropdownView ()
+@interface PATemporaryHeader ()
 
 @property (assign, nonatomic) NSInteger pendingHideCount;
 @property (nonatomic) CGRect leftButtonFrame;
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation PATemporaryDropdownView
+@implementation PATemporaryHeader
 
 
 - (instancetype)initWithFrame:(CGRect)frame

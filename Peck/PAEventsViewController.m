@@ -23,7 +23,7 @@
 #import "PAAssetManager.h"
 #import "PANestedTableViewCell.h"
 #import "PANoContentView.h"
-#import "PATemporaryDropdownView.h"
+#import "PATemporaryHeader.h"
 #import "PAMethodManager.h"
 #import "PAUtils.h"
 
@@ -53,7 +53,7 @@ struct eventImage{
 
 @property (strong, nonatomic) UIImageView* helperImageView;
 
-@property (strong, nonatomic) PATemporaryDropdownView *datePopup;
+@property (strong, nonatomic) PATemporaryHeader *datePopup;
 
 @property (strong, nonatomic) PANoContentView * noContentView;
 
@@ -168,7 +168,7 @@ PAAssetManager * assetManager;
     self.rightTableView.backgroundColor = [assetManager darkColor];
 
     if (!self.datePopup) {
-        self.datePopup = [[PATemporaryDropdownView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT)];
+        self.datePopup = [[PATemporaryHeader alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT)];
         self.datePopup.label.text = @"Today";
         self.datePopup.label.textColor = [assetManager darkColor];
         self.datePopup.hiddenView.backgroundColor = [UIColor whiteColor];

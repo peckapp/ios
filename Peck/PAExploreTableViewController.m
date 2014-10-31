@@ -14,7 +14,7 @@
 #import "PASyncManager.h"
 #import "PAAssetManager.h"
 #import "UIImageView+AFNetworking.h"
-#import "PATemporaryDropdownView.h"
+#import "PATemporaryHeader.h"
 #import "PAUtils.h"
 
 #define cellHeight 380
@@ -23,7 +23,7 @@
 
 @property (strong, nonatomic) UISearchBar* searchBar;
 
-@property (strong, nonatomic) PATemporaryDropdownView *exploreHeader;
+@property (strong, nonatomic) PATemporaryHeader *exploreHeader;
 
 @end
 
@@ -94,7 +94,7 @@ NSCache *imageCache;
     self.tableView.tableHeaderView = headerView;
     
     if (!self.exploreHeader) {
-        self.exploreHeader = [[PATemporaryDropdownView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT)];
+        self.exploreHeader = [[PATemporaryHeader alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT)];
         self.exploreHeader.label.text = @"Explore";
         self.exploreHeader.label.textColor = [assetManager darkColor];
         self.exploreHeader.hiddenView.backgroundColor = [UIColor whiteColor];

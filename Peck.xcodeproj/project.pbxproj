@@ -146,7 +146,7 @@
 		DDA8417919A690DC00383A3B /* cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA8417819A690DC00383A3B /* cancel@2x.png */; };
 		DDA8417B19A6938900383A3B /* chevron-light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDA8417A19A6938900383A3B /* chevron-light@2x.png */; };
 		DDBCA9BE1986D6BC007D283E /* drop-shadow-horizontal.png in Resources */ = {isa = PBXBuildFile; fileRef = DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */; };
-		DDCCE82019A3DC250054BA2B /* PATemporaryDropdownView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCCE81F19A3DC250054BA2B /* PATemporaryDropdownView.m */; };
+		DDCCE82019A3DC250054BA2B /* PATemporaryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCCE81F19A3DC250054BA2B /* PATemporaryHeader.m */; };
 		DDDAEDDB19465DCB004CE102 /* PAExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDD919465DCB004CE102 /* PAExploreCell.m */; };
 		DDDAEDDC19465DCB004CE102 /* PAExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDDAEDDA19465DCB004CE102 /* PAExploreCell.xib */; };
 		DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDAEDDE19475EBA004CE102 /* PAPecksViewController.m */; };
@@ -431,8 +431,8 @@
 		DDA8417819A690DC00383A3B /* cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel@2x.png"; sourceTree = "<group>"; };
 		DDA8417A19A6938900383A3B /* chevron-light@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chevron-light@2x.png"; sourceTree = "<group>"; };
 		DDBCA9BD1986D6BC007D283E /* drop-shadow-horizontal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "drop-shadow-horizontal.png"; sourceTree = "<group>"; };
-		DDCCE81E19A3DC250054BA2B /* PATemporaryDropdownView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PATemporaryDropdownView.h; sourceTree = "<group>"; };
-		DDCCE81F19A3DC250054BA2B /* PATemporaryDropdownView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PATemporaryDropdownView.m; sourceTree = "<group>"; };
+		DDCCE81E19A3DC250054BA2B /* PATemporaryHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PATemporaryHeader.h; sourceTree = "<group>"; };
+		DDCCE81F19A3DC250054BA2B /* PATemporaryHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PATemporaryHeader.m; sourceTree = "<group>"; };
 		DDCD45C0195DC8E60032333F /* profile-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile-placeholder.png"; sourceTree = "<group>"; };
 		DDDAEDD819465DCB004CE102 /* PAExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAExploreCell.h; sourceTree = "<group>"; };
 		DDDAEDD919465DCB004CE102 /* PAExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAExploreCell.m; sourceTree = "<group>"; };
@@ -627,8 +627,8 @@
 			children = (
 				8689DD89195871D200A6B61C /* PAFilter.h */,
 				8689DD8A195871D200A6B61C /* PAFilter.m */,
-				DDCCE81E19A3DC250054BA2B /* PATemporaryDropdownView.h */,
-				DDCCE81F19A3DC250054BA2B /* PATemporaryDropdownView.m */,
+				DDCCE81E19A3DC250054BA2B /* PATemporaryHeader.h */,
+				DDCCE81F19A3DC250054BA2B /* PATemporaryHeader.m */,
 				86BFB4AE194B889100ADAB75 /* PADropdownBar.h */,
 				86BFB4AF194B889100ADAB75 /* PADropdownBar.m */,
 				86D4A7231948FC4D008D9B25 /* PADropdownViewController.h */,
@@ -1302,7 +1302,7 @@
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
 				A497A2EB19A3BF5200455F69 /* PASendFeedbackViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
-				DDCCE82019A3DC250054BA2B /* PATemporaryDropdownView.m in Sources */,
+				DDCCE82019A3DC250054BA2B /* PATemporaryHeader.m in Sources */,
 				A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */,
 				86BFB4B0194B889100ADAB75 /* PADropdownBar.m in Sources */,
 				A4F04BEE1994097500290CF2 /* PAMethodManager.m in Sources */,
