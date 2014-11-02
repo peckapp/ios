@@ -277,7 +277,7 @@ typedef NS_ENUM(NSInteger, PAAlertType){
                                       [defaults setObject:userID forKey:user_id];
                                       NSString *apiKey = [userDictionary objectForKey:api_key];
                                       [defaults setObject:apiKey forKey:api_key];
-                                      [self updateExploreInfoForViewController:nil];
+                                      [self updateExploreWithCallback:nil];
                                       [self updateDiningInfo];
                                       if(callbackBlock){
                                           callbackBlock(YES);
@@ -996,9 +996,7 @@ typedef NS_ENUM(NSInteger, PAAlertType){
 
 #pragma mark - Explore actions
 
--(void)updateExploreInfoForViewController:(UITableViewController*)viewController
-{
-    
+-(void)updateExploreWithCallback:(void (^)(BOOL))callbackBlock {
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
     dispatch_async(queue, ^{
@@ -1070,17 +1068,18 @@ typedef NS_ENUM(NSInteger, PAAlertType){
              NSError* error = nil;
              [_managedObjectContext save:&error];
              [self.persistentStoreCoordinator unlock];
-             if(viewController){
-                 [viewController.refreshControl endRefreshing];
+             
+             if (callbackBlock) {
+                 callbackBlock(true);
              }
 
          }
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                          NSLog(@"updateExploreInfoForViewController ERROR: %@",error);
-                                         if(viewController){
-                                             [viewController.refreshControl endRefreshing];
+                                         
+                                         if (callbackBlock) {
+                                             callbackBlock(false);
                                          }
-
                                      }];
         
         dispatch_async(dispatch_get_main_queue(), ^{

@@ -9,10 +9,13 @@
 #import "PAExploreInfoViewController.h"
 
 @interface PAExploreInfoViewController ()
+
 - (void)setDetailItem:(id)newDetailItem;
+
 @end
 
 @implementation PAExploreInfoViewController
+
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;

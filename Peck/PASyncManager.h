@@ -106,7 +106,7 @@
 
 -(void)updatePeerInfo;
 
--(void)updateExploreInfoForViewController:(UITableViewController*)viewController;
+-(void)updateExploreWithCallback:(void (^)(BOOL))callbackBlock;
 
 //methods for subscriptions
 -(void)updateSubscriptions;

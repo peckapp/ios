@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Peck. All rights reserved.
 //
 
-#import "PAExploreTableViewController.h"
+#import "PAExploreViewController.h"
 #import "PAAppDelegate.h"
 #import "PAExploreCell.h"
 #import "PAExploreInfoViewController.h"
@@ -19,15 +19,17 @@
 
 #define cellHeight 380
 
-@interface PAExploreTableViewController ()
+@interface PAExploreViewController ()
+
+@property (strong) IBOutlet UITableView *tableView;
+@property (strong) UIRefreshControl *refreshControl;
 
 @property (strong, nonatomic) UISearchBar* searchBar;
-
 @property (strong, nonatomic) PATemporaryHeader *exploreHeader;
 
 @end
 
-@implementation PAExploreTableViewController
+@implementation PAExploreViewController
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
@@ -40,14 +42,14 @@ PAAssetManager * assetManager;
 
 NSCache *imageCache;
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+//- (id)initWithStyle:(UITableViewStyle)style
+//{
+//    self = [super initWithStyle:style];
+//    if (self) {
+//        // Custom initialization
+//    }
+//    return self;
+//}
 
 - (void)viewDidLoad
 {
@@ -80,7 +82,7 @@ NSCache *imageCache;
     self.tableView.contentInset = UIEdgeInsetsMake(9, 0, 0, 0);
     self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
 
-    [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
+    [[PASyncManager globalSyncManager] updateExploreWithCallback:nil];
     
     _searchBar = [[UISearchBar alloc] init];
     _searchBar.delegate = self;
@@ -98,7 +100,7 @@ NSCache *imageCache;
         self.exploreHeader.label.text = @"Explore";
         self.exploreHeader.label.textColor = [assetManager darkColor];
         self.exploreHeader.hiddenView.backgroundColor = [UIColor whiteColor];
-        [self.view addSubview:self.exploreHeader];
+        [self.view insertSubview:self.exploreHeader aboveSubview:self.tableView];
     }
 
     
@@ -110,13 +112,16 @@ NSCache *imageCache;
     
     self.exploreHeader.frame = CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT);
     self.exploreHeader.hiddenView.frame = CGRectMake(0, -TEMPORARY_HEADER_HEIGHT, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT);
+    [self.exploreHeader showHiddenView];
    
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor blackColor]];
 }
 
 -(void)refresh{
     NSLog(@"refresh the table view");
-    [[PASyncManager globalSyncManager] updateExploreInfoForViewController:self];
+    [[PASyncManager globalSyncManager] updateExploreWithCallback:^(BOOL sucess) {
+        [self.refreshControl endRefreshing];
+    }];
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
@@ -161,6 +166,7 @@ NSCache *imageCache;
     cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
     cell.parentViewController = self;
 
+    // Common configurations
     Explore *tempExplore = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.descriptionLabel.text = tempExplore.explore_description;
     cell.titleLabel.text = tempExplore.title;
@@ -169,15 +175,19 @@ NSCache *imageCache;
     cell.dateLabel.text = [dateFormatter stringFromDate:tempExplore.start_date];
     cell.exploreID = [tempExplore.id integerValue];
     cell.category = tempExplore.category;
+    
+    // Announcement configurations
     if([tempExplore.category isEqualToString:@"announcement"]){
         cell.contextLabel.text = @" Announcement";
-    }else if([tempExplore.category isEqualToString:@"athletic"]){
+    }
+    // Athletic Event configuration
+    else if([tempExplore.category isEqualToString:@"athletic"]){
         cell.contextLabel.text = @" Athletic Event";
-    }else{
+    }
+    // General Event configuration
+    else{
         cell.contextLabel.text = @" Event";
     }
-    
-    //NSLog(@"explore weight: %@", tempExplore.weight);
     
     if(tempExplore.imageURL){
         NSURL* imageURL = [NSURL URLWithString:tempExplore.imageURL];
@@ -187,7 +197,6 @@ NSCache *imageCache;
             cell.photoView.image = image;
         }
         else {
-            //[cell.photoView setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
             [cell.photoView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:imageURL]
                                   placeholderImage:[assetManager greyBackground]
                                            success:^(NSURLRequest* request, NSHTTPURLResponse* response, UIImage* image){
@@ -247,7 +256,8 @@ NSCache *imageCache;
     [spinner setCenter:CGPointMake(self.tableView.tableHeaderView.frame.size.width, 20)]; // I do this because I'm in landscape mode
     [self.tableView.tableHeaderView addSubview:spinner];
      */
-    [self performSegueWithIdentifier:@"present_info" sender:self];
+    
+    //[self performSegueWithIdentifier:@"present_info" sender:self];
     
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

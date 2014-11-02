@@ -56,7 +56,7 @@
     [[PASyncManager globalSyncManager] updateAthleticEvents];
     [[PASyncManager globalSyncManager] updateDiningInfo];
     [[PASyncManager globalSyncManager] updateSubscriptions];
-    [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
+    [[PASyncManager globalSyncManager] updateExploreWithCallback:nil];
     [[PASyncManager globalSyncManager] updatePeerInfo];
 }
 
@@ -152,7 +152,7 @@
     }
     
     [self removeAllObjectsOfType:@"Explore"];
-    [[PASyncManager globalSyncManager] updateExploreInfoForViewController:nil];
+    [[PASyncManager globalSyncManager] updateExploreWithCallback:nil];
     [[PASyncManager globalSyncManager] updateDiningInfo];
     [[PASyncManager globalSyncManager] updatePecks];
     [[PASyncManager globalSyncManager] updateCircleInfo];
