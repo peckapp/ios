@@ -64,6 +64,13 @@ BOOL loggedIn;
     profilePicture.clipsToBounds = YES;
     profilePicture.userInteractionEnabled = YES;
     
+    NSURL* url = [NSURL URLWithString:[[NSUserDefaults standardUserDefaults] objectForKey:@"profile_picture_url"]];
+    if(url){
+        [self.profilePicture setImageWithURL:url placeholderImage:[UIImage imageNamed:@"profile-placeholder.png"]];
+    }else{
+        self.profilePicture.image =[UIImage imageNamed:@"profile-placeholder.png"];
+    }
+    
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     //[appdelegate setProfileViewController:self];
     [appdelegate setProfileProperty:self];
@@ -83,21 +90,13 @@ BOOL loggedIn;
     //NSLog(@"blurb: %@",blurb);
     self.infoTextView.text = [defaults objectForKey:@"blurb"];
     
-    NSURL* url = [NSURL URLWithString:[defaults objectForKey:@"profile_picture_url"]];
-    if(url){
-        [self.profilePicture setImageWithURL:url placeholderImage:[UIImage imageNamed:@"profile-placeholder.png"]];
-    }else{
-        self.profilePicture.image =[UIImage imageNamed:@"profile-placeholder.png"];
-    }
-    
     if([defaults objectForKey:@"authentication_token"]){
         loggedIn=YES;
         NSLog(@"logged in");
         self.loginButton.title =@"Logout";
         self.registerButton.title = @"Save";
         self.registerButton.action = @selector(saveChangesButton:);
-    }
-    else{
+    } else {
         loggedIn=NO;
         NSLog(@"logged out");
         self.loginButton.title = @"Login";

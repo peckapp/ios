@@ -69,10 +69,14 @@ NSCache *imageCache;
 
     self.title = @"Explore";
     
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    [refreshControl addTarget:self action:@selector(refresh)
-             forControlEvents:UIControlEventValueChanged];
-    self.refreshControl = refreshControl;
+    // wrapping the tableView in a UITableViewController allows for the UIRefreshControl to be simpy added using apple's supported APIs
+    UITableViewController *tableViewController = [[UITableViewController alloc] init];
+    tableViewController.tableView = self.tableView;
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    tableViewController.refreshControl = self.refreshControl;
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -95,13 +99,11 @@ NSCache *imageCache;
     //self.tableView.tableHeaderView = self.searchBar;
     self.tableView.tableHeaderView = headerView;
     
-    if (!self.exploreHeader) {
-        self.exploreHeader = [[PATemporaryHeader alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT)];
-        self.exploreHeader.label.text = @"Explore";
-        self.exploreHeader.label.textColor = [assetManager darkColor];
-        self.exploreHeader.hiddenView.backgroundColor = [UIColor whiteColor];
-        [self.view insertSubview:self.exploreHeader aboveSubview:self.tableView];
-    }
+    // TODO: this header is beneath the tableView instead of above...
+    self.exploreHeader = [[PATemporaryHeader alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT)];
+    self.exploreHeader.label.text = @"Explore";
+    self.exploreHeader.label.textColor = [assetManager darkColor];
+    self.exploreHeader.hiddenView.backgroundColor = [UIColor whiteColor];
 
     
     NSLog(@"Finished viewDidLoad (PAExploreTableViewController)");
@@ -115,10 +117,11 @@ NSCache *imageCache;
     [self.exploreHeader showHiddenView];
    
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor blackColor]];
+    
+    [self.view addSubview:self.exploreHeader];
 }
 
--(void)refresh{
-    NSLog(@"refresh the table view");
+-(void)refresh {
     [[PASyncManager globalSyncManager] updateExploreWithCallback:^(BOOL sucess) {
         [self.refreshControl endRefreshing];
     }];
@@ -195,8 +198,7 @@ NSCache *imageCache;
     
         if(image){
             cell.photoView.image = image;
-        }
-        else {
+        } else {
             [cell.photoView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:imageURL]
                                   placeholderImage:[assetManager greyBackground]
                                            success:^(NSURLRequest* request, NSHTTPURLResponse* response, UIImage* image){
@@ -211,13 +213,13 @@ NSCache *imageCache;
                                                NSLog(@"failed to get image");
                                            }];
         }
-    }else{
+    } else {
         cell.photoView.image = [assetManager imagePlaceholder];
     }
     
-    if([tempExplore.category isEqualToString:@"event"] || [tempExplore.category isEqualToString:@"athletic"]){
+    if ([tempExplore.category isEqualToString:@"event"] || [tempExplore.category isEqualToString:@"athletic"]) {
         cell.attendButton.hidden = NO;
-    }else{
+    } else {
         cell.attendButton.hidden = YES;
     }
     
