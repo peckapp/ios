@@ -71,6 +71,11 @@
     [self selectCurrentDefaultIfExists];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    // set institution id back to nil if the user cancels the login screen
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"institution_id"];
+}
+
 -(void)updateInstitutions{
     [[PASyncManager globalSyncManager] updateAvailableInstitutionsWithCallback:^(BOOL success) {
         if (success) {

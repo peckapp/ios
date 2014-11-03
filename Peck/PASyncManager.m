@@ -46,7 +46,8 @@
 typedef NS_ENUM(NSInteger, PAAlertType){
     PAAlertTypeNoAction,
     PAAlertTypeRegistration,
-    PAAlertTypeLogin,
+    PAAlertTypeFailedLogin,
+    PAAlertTypeConfigureWithExistingUser,
 };
 
 
@@ -158,7 +159,7 @@ typedef NS_ENUM(NSInteger, PAAlertType){
                                                                                                  delegate:self
                                                                                         cancelButtonTitle:@"No"
                                                                                         otherButtonTitles:@"Yes",nil];
-                                              loginAlert.tag = PAAlertTypeLogin;
+                                              loginAlert.tag = PAAlertTypeConfigureWithExistingUser;
                                               [loginAlert show];
                                           }
                                           else{
@@ -181,7 +182,7 @@ typedef NS_ENUM(NSInteger, PAAlertType){
                                                                                         delegate:self
                                                                                cancelButtonTitle:@"No"
                                                                                    otherButtonTitles:@"Yes",nil];
-                                              alert.tag = PAAlertTypeLogin;
+                                              alert.tag = PAAlertTypeConfigureWithExistingUser;
                                               [alert show];
                                           }
                                           //[self ceateAnonymousUser:callbackBlock];
@@ -196,7 +197,7 @@ typedef NS_ENUM(NSInteger, PAAlertType){
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     switch (alertView.tag) {
-        case PAAlertTypeLogin: {
+        case PAAlertTypeConfigureWithExistingUser: {
             //if there was an anonymous user last logged in on this device
             if (buttonIndex == 0){
                 //If the user presses no, we will create an anonymous user and load the institutions
@@ -215,6 +216,11 @@ typedef NS_ENUM(NSInteger, PAAlertType){
                     [appDelegate.window setRootViewController:newRoot];
                 }
             }
+            break;
+        }
+            
+        case PAAlertTypeFailedLogin: {
+            // alert was used for failed login
             break;
         }
             
@@ -430,6 +436,16 @@ typedef NS_ENUM(NSInteger, PAAlertType){
      
                                   failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                       [self handleError:error withMethodName:@"authenticateUserWithInfo" userPrompted:YES];
+                                      if (error.code == -1011) {
+                                          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Incorrect Login Information"
+                                                                                          message:@"Either the email or Password you entered was incorrect"
+                                                                                         delegate:self
+                                                                                cancelButtonTitle:@"Okay"
+                                                                                otherButtonTitles:nil];
+                                          alert.tag = PAAlertTypeFailedLogin;
+                                          [alert show];
+                                          
+                                      }
                                   }];
 }
 
