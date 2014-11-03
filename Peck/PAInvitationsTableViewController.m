@@ -101,7 +101,7 @@ PAAssetManager * assetManager;
 
     
     
-    for(int i=0;i<[mutableFetchResults count];i++){
+    for(int i=0; i<[mutableFetchResults count]; i++){
         Peer* tempPeer = mutableFetchResults[i];
         if([self.invitedPeople objectForKey:[tempPeer.id stringValue]] || [tempPeer.home_institution integerValue]!=[[[NSUserDefaults standardUserDefaults] objectForKey:@"home_institution"] integerValue]){
             //if the user has already been invited or is not of the user's home institution
@@ -110,10 +110,10 @@ PAAssetManager * assetManager;
         }
     }
 
-    NSLog(@"before filtering for already added people");
+    // NSLog(@"before filtering for already added people");
     
     if(self.previouslyAddedPeople){
-        for(int j=0;j<[mutableFetchResults count];j++){
+        for(int j=0 ;j<[mutableFetchResults count]; j++){
             for(Peer* addedPeer in self.previouslyAddedPeople){
                 Peer* tempPeer = mutableFetchResults[j];
                 if([tempPeer.id integerValue]==[addedPeer.id integerValue]){
@@ -125,9 +125,9 @@ PAAssetManager * assetManager;
         }
     }
     
-    NSLog(@"after filtering for already filtered people");
+    // NSLog(@"after filtering for already filtered people");
     
-    for(int k=0;k<[mutableCircleFetchResults count];k++){
+    for(int k=0; k<[mutableCircleFetchResults count]; k++){
         Circle* tempCircle = mutableCircleFetchResults[k];
         if([self.invitedCircles objectForKey:[tempCircle.id stringValue]]){
             [mutableCircleFetchResults removeObjectAtIndex:k];

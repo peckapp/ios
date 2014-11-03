@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Vgz-Kj-Ti8">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -38,14 +39,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KBe-AB-SP9">
-                                                    <rect key="frame" x="15" y="11" width="47" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="example@me.net" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6zm-c6-v3j">
-                                                    <rect key="frame" x="120" y="7" width="192" height="30"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="email@institution.edu" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6zm-c6-v3j">
+                                                    <rect key="frame" x="18" y="8" width="294" height="27.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="next"/>
                                                     <connections>
@@ -53,6 +48,12 @@
                                                     </connections>
                                                 </textField>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="6zm-c6-v3j" firstAttribute="top" secondItem="JG8-je-Rnd" secondAttribute="topMargin" id="ExZ-ft-0bJ"/>
+                                                <constraint firstItem="6zm-c6-v3j" firstAttribute="leading" secondItem="JG8-je-Rnd" secondAttribute="leadingMargin" constant="10" id="KBn-J4-X97"/>
+                                                <constraint firstItem="6zm-c6-v3j" firstAttribute="trailing" secondItem="JG8-je-Rnd" secondAttribute="trailingMargin" id="eCc-Ki-da1"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="6zm-c6-v3j" secondAttribute="bottom" id="upW-yX-2V2"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="cN7-Ns-y1P">
@@ -62,21 +63,21 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="*****" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tUc-gS-lYW">
-                                                    <rect key="frame" x="120" y="7" width="192" height="30"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="password" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="tUc-gS-lYW">
+                                                    <rect key="frame" x="18" y="8" width="294" height="27.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="tbb-7d-huN" id="gyS-Rh-BRp"/>
                                                     </connections>
                                                 </textField>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pdQ-6V-CMr">
-                                                    <rect key="frame" x="15" y="11" width="81" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="tUc-gS-lYW" firstAttribute="trailing" secondItem="Wx2-kG-Lqg" secondAttribute="trailingMargin" id="BbU-jo-y9f"/>
+                                                <constraint firstItem="tUc-gS-lYW" firstAttribute="top" secondItem="Wx2-kG-Lqg" secondAttribute="topMargin" id="UiQ-XN-hp1"/>
+                                                <constraint firstItem="tUc-gS-lYW" firstAttribute="leading" secondItem="Wx2-kG-Lqg" secondAttribute="leadingMargin" constant="10" id="f1W-MA-n96"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="tUc-gS-lYW" secondAttribute="bottom" id="yRD-Td-0vp"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="t1k-hi-xXU">

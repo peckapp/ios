@@ -118,7 +118,8 @@ NSCache *imageCache;
    
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor blackColor]];
     
-    [self.view addSubview:self.exploreHeader];
+    // TODO: commented out to avoid overlapping strange behavior for this initial release
+    //[self.view addSubview:self.exploreHeader];
 }
 
 -(void)refresh {

@@ -14,6 +14,7 @@
 #import "PAFetchManager.h"
 #import "PASubscriptionsTableViewController.h"
 #import "PAInitialViewController.h"
+#import "PAMethodManager.h"
 
 @interface PAConfigureViewController ()
 
@@ -187,37 +188,36 @@
 
 - (IBAction)continueButton:(id)sender
 {
-    // sets the institution when continue is pressed
-    Institution * institution = (Institution*)[self.institutions objectAtIndex:[self.schoolPicker selectedRowInComponent:0]];
-    if (institution != nil) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:institution.id forKey:@"institution_id"];
-        NSLog(@"selected institution: %@ with id: %@",institution.name,institution.id);
-        
-        PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        
-        [[PAFetchManager sharedFetchManager] switchInstitution];
-        
-        // if this is root because of the initial download of the app
-        if ([appDelegate window].rootViewController == self.navigationController) {
-            [self performSegueWithIdentifier:@"initialSubscriptions" sender:self];
-        } else {
-            
-            [self.navigationController popViewControllerAnimated:YES];
-            //[self dismissViewControllerAnimated:YES completion:nil];
-        }
+    if ([self storeSelectedInstitution] == NO) {
+        // cannot continue if no institution was selected
+        return;
+    }
+    
+    [[PAFetchManager sharedFetchManager] switchInstitution];
+    
+    // if this is root because of the initial download of the app
+    if ([[[UIApplication sharedApplication] delegate] window].rootViewController == self.navigationController) {
+        [self performSegueWithIdentifier:@"initialSubscriptions" sender:self];
     } else {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"No Institution Selected"
-                                                            message:@"It seems like you were not able to select an Institution. We're looking into it!"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"Okay"
-                                                  otherButtonTitles:nil];
-        // post error to flurry here
-        [alertView show];
+        
+        [self.navigationController popViewControllerAnimated:YES];
+        //[self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
 - (IBAction)loginButton:(id)sender {
+    if ([self storeSelectedInstitution] == false) {
+        // must select an institution before logging in
+        return;
+    }
+    
+    // gaurd clause for missing internet connection
+    if ([[PAMethodManager sharedMethodManager] serverIsReachable] == NO) {
+        [[PAMethodManager sharedMethodManager] showNoInternetAlertWithTitle:@"No Connection"
+                                                                 AndMessage:@"It seems that you are unble to connect to our servers."];
+        return;
+    }
+    
     UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
     UINavigationController *loginRoot = [loginStoryboard instantiateInitialViewController];
     PAInitialViewController* init = loginRoot.viewControllers[0];
@@ -230,6 +230,28 @@
     if ([segue.identifier isEqual: @"initialSubscriptions"]) {
         [(PASubscriptionsTableViewController*)segue.destinationViewController setIsInitializing:YES];
     }
+}
+
+- (BOOL) storeSelectedInstitution {
+    // sets the institution when continue is pressed
+    Institution * institution = (Institution*)[self.institutions objectAtIndex:[self.schoolPicker selectedRowInComponent:0]];
+    
+    if (institution == nil) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"No Institution Selected"
+                                                            message:@"It seems like you were not able to select an Institution. We're looking into it!"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Okay"
+                                                  otherButtonTitles:nil];
+        // should post error to flurry here
+        [alertView show];
+        return false;
+    }
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:institution.id forKey:@"institution_id"];
+    NSLog(@"selected institution: %@ with id: %@",institution.name,institution.id);
+    
+    return true;
 }
 
 @end

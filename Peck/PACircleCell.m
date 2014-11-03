@@ -59,6 +59,8 @@ PAAssetManager * assetManager;
     self.profilesTableView.transform = CGAffineTransformMakeRotation(-M_PI_2);
     self.profilesTableView.frame = CGRectMake(0, 40.0, self.frame.size.width, defaultCellHeight);
     self.profilesTableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
+    self.profilesTableView.tableHeaderView = nil;
+    self.profilesTableView.tableFooterView = nil;
 
     self.commentsTableView.delegate=self;
     self.commentsTableView.dataSource=self;
@@ -132,9 +134,13 @@ PAAssetManager * assetManager;
     }
 }
 
+- (UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return nil;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if(tableView==self.profilesTableView){
-        return 1.0;
+    if(tableView == self.profilesTableView){
+        return 0.1;
     }
     return 48.0;
 }
@@ -144,12 +150,10 @@ PAAssetManager * assetManager;
     
     if (tableView == self.profilesTableView) {
         return [self.members count] + 1;
-    }
-    else if (tableView == self.commentsTableView) {
+    } else if (tableView == self.commentsTableView) {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[_fetchedResultsController sections] objectAtIndex:section];
         return [sectionInfo numberOfObjects];
-    }
-    else {
+    } else {
         return 0;
     }
 }

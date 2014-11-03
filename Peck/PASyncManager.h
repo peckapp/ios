@@ -105,6 +105,7 @@
 -(void)updateCommentsFrom:(NSString*)comment_from withCategory:(NSString*)category;
 
 -(void)updatePeerInfo;
+-(void)cachePeerImages;
 
 -(void)updateExploreWithCallback:(void (^)(BOOL))callbackBlock;
 

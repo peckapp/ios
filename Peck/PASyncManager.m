@@ -14,6 +14,7 @@
 #import "PAFetchManager.h"
 #import "PAUtils.h"
 #import "webservice.h"
+#import "UIImageView+AFNetworking.h"
 
 // view controllers
 #import "PAInitialViewController.h"
@@ -43,11 +44,11 @@
 
 
 typedef NS_ENUM(NSInteger, PAAlertType){
+    PAAlertTypeNoAction,
     PAAlertTypeRegistration,
     PAAlertTypeLogin,
-    PAAlertTypeNoAction,
-    
 };
+
 
 @interface PASyncManager ()
 
@@ -419,7 +420,9 @@ typedef NS_ENUM(NSInteger, PAAlertType){
                                       //take care of some necessary login stuff
                                       [[PAFetchManager sharedFetchManager] loginUser];
                                       
-                                      callbackBlock(YES);
+                                      if (callbackBlock) {
+                                          callbackBlock(YES);
+                                      }
                                       
                                       [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:logged_in_key];
                                       [[UIApplication sharedApplication] registerForRemoteNotifications];
@@ -675,57 +678,44 @@ typedef NS_ENUM(NSInteger, PAAlertType){
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         
+    NSString* usersURL = [[usersAPI stringByAppendingString:@"?institution_id="] stringByAppendingString:[[defaults objectForKey:@"institution_id"] stringValue]];
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    _managedObjectContext = [appdelegate managedObjectContext];
+    _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
     
+    [[PASessionManager sharedClient] GET:usersURL
+                              parameters:[self authenticationParameters]
+                                 success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                     //NSLog(@"Peer JSON: %@",JSON);
+                                     NSDictionary *usersDictionary = (NSDictionary*)JSON;
+                                     NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
+                                     [self handlePeers:postsFromResponse];
+                                 }
+                                failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                    NSLog(@"updatePeerInfo 1 ERROR: %@",error);
+                                }];
     
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-    dispatch_async(queue, ^{
+    if([defaults objectForKey:@"home_institution"] != nil &&
+       [[defaults objectForKey:@"home_institution"] integerValue] != [[defaults objectForKey:@"institution_id"] integerValue]){
         
-        NSString* usersURL = [[usersAPI stringByAppendingString:@"?institution_id="] stringByAppendingString:[[defaults objectForKey:@"institution_id"] stringValue]];
-        PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
-        _managedObjectContext = [appdelegate managedObjectContext];
-        _persistentStoreCoordinator = [appdelegate persistentStoreCoordinator];
-        
+        //if the user is logged in and on a different institution than his home institution
+        //NSLog(@"get peers for home institution as well");
+        usersURL =  [[usersAPI stringByAppendingString:@"?institution_id="] stringByAppendingString:[[defaults objectForKey:@"home_institution"] stringValue]];
         [[PASessionManager sharedClient] GET:usersURL
                                   parameters:[self authenticationParameters]
-                                     success:^
-        (NSURLSessionDataTask * __unused task, id JSON) {
-            //NSLog(@"Peer JSON: %@",JSON);
-            NSDictionary *usersDictionary = (NSDictionary*)JSON;
-            NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
-            [self handlePeers:postsFromResponse];
-        }
-                                    failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                        NSLog(@"updatePeerInfo 1 ERROR: %@",error);
-                                    }];
-        
-        if([defaults objectForKey:@"home_institution"]){
-            if([[defaults objectForKey:@"home_institution"] integerValue]!=[[defaults objectForKey:@"institution_id"] integerValue]){
-                //if the user is logged in and on a different institution than his home institution
-                //NSLog(@"get peers for home institution as well");
-                usersURL =  [[usersAPI stringByAppendingString:@"?institution_id="] stringByAppendingString:[[defaults objectForKey:@"home_institution"] stringValue]];
-                [[PASessionManager sharedClient] GET:usersURL
-                                          parameters:[self authenticationParameters]
-                                             success:^
-                 (NSURLSessionDataTask * __unused task, id JSON) {
-                     //NSLog(@"Peer JSON: %@",JSON);
-                     NSDictionary *usersDictionary = (NSDictionary*)JSON;
-                     NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
-                     [self handlePeers:postsFromResponse];
-                     [self updatePecks];
-                     [self updateCircleInfo];
-                 }
-                                             failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
-                                                 NSLog(@"updatePeerInfo 2 ERROR: %@",error);
-                                             }];
-                
-            }
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            //TODO: if there are any problems with the core data being added in the thread above,
-            // then we should add a separate managed object context and merge the two in this thread.
-        });
-    });
+                                     success:^(NSURLSessionDataTask * __unused task, id JSON) {
+                                         //NSLog(@"Peer JSON: %@",JSON);
+                                         NSDictionary *usersDictionary = (NSDictionary*)JSON;
+                                         NSArray *postsFromResponse = [usersDictionary objectForKey:@"users"];
+                                         [self handlePeers:postsFromResponse];
+                                         [self updatePecks];
+                                         [self updateCircleInfo];
+                                     }
+                                     failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
+                                         NSLog(@"updatePeerInfo 2 ERROR: %@",error);
+                                     }];
+    }
+    
 }
 
 -(void)handlePeers:(NSArray*)peers{
@@ -771,6 +761,22 @@ typedef NS_ENUM(NSInteger, PAAlertType){
     if(![[dictionary objectForKey:@"institution_id"] isKindOfClass:[NSNull class]]){
         peer.home_institution = [dictionary objectForKey:@"institution_id"];
     }
+}
+
+-(void)cachePeerImages {
+    //dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0ul);
+    //dispatch_async(queue, ^{
+        NSArray *allPeers = [[PAFetchManager sharedFetchManager] getAllPeers];
+        
+        for (int i = 0; i < [allPeers count]; i++) {
+            Peer *peer = allPeers[i];
+            NSURL *photoURL = [NSURL URLWithString:peer.imageURL];
+            NSURLRequest *photoRequest = [NSURLRequest requestWithURL:photoURL];
+            
+            UIImage *peerPhoto = [UIImage imageWithData:[NSData dataWithContentsOfURL:photoURL]];
+            [[UIImageView sharedImageCache] cacheImage:peerPhoto forRequest:photoRequest];
+        }
+    //});
 }
 
 #pragma mark - Feedback

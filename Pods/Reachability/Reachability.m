@@ -168,7 +168,7 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 -(Reachability *)initWithReachabilityRef:(SCNetworkReachabilityRef)ref 
 {
     self = [super init];
-    if (self != nil) 
+    if (self != nil)
     {
         self.reachableOnWWAN = YES;
         self.reachabilityRef = ref;

@@ -183,7 +183,8 @@
 -(BOOL)serverIsReachable {
     // TODO: attempt connection with the server
     if (self.serverReachability == nil) {
-        self.serverReachability = [Reachability reachabilityWithHostname:[[[PASessionManager sharedClient] baseURL] absoluteString]];
+        //NSString *serverURL = [[[PASessionManager sharedClient] baseURL] absoluteString];
+        self.serverReachability = [Reachability reachabilityForInternetConnection];
     }
     return [self.serverReachability isReachable];
 }

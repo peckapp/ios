@@ -89,6 +89,8 @@ PAAssetManager *assetManager;
         abort();
     }
     
+    [[PASyncManager globalSyncManager] cachePeerImages];
+    
     // allows for the 1 pixel header to be ignored
     self.tableView.contentInset = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0);    
     

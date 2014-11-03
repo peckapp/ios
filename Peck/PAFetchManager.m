@@ -120,6 +120,23 @@
 
 }
 
+-(NSArray*)getAllPeers {
+    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext* moc = [appdelegate managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Peer" inManagedObjectContext:moc];
+    [fetchRequest setEntity:entity];
+    
+    NSError *error = nil;
+    NSMutableArray *mutableFetchResults = [[moc executeFetchRequest:fetchRequest error:&error] mutableCopy];
+    
+    if([mutableFetchResults count]>0){
+        return mutableFetchResults;
+    }
+    return nil;
+}
+
 -(void)logoutUser{
     [self setAllSubscriptionsFalseForCategory:@"athletic"];
     [self setAllSubscriptionsFalseForCategory:@"department"];
