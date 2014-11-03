@@ -207,18 +207,23 @@ PAAssetManager * assetManager;
     _searchBar.delegate = self;
     _searchBar.showsCancelButton = NO;
     _searchBar.searchBarStyle = UISearchBarStyleMinimal;
-
+    _searchBar.placeholder = @"Search";
+    _searchBar.tintColor = [UIColor lightTextColor];
 
     _leftSearchBar = [[UISearchBar alloc] init];
     _leftSearchBar.delegate = self;
     _leftSearchBar.showsCancelButton = NO;
     _leftSearchBar.searchBarStyle = UISearchBarStyleMinimal;
+    _leftSearchBar.placeholder = @"Search";
+    _leftSearchBar.tintColor = [UIColor lightTextColor];
     
 
     _rightSearchBar = [[UISearchBar alloc] init];
     _rightSearchBar.delegate = self;
     _rightSearchBar.showsCancelButton = NO;
     _rightSearchBar.searchBarStyle = UISearchBarStyleMinimal;
+    _rightSearchBar.placeholder = @"Search";
+    _rightSearchBar.tintColor = [UIColor lightTextColor];
     
     //This changes the color throughout the app, we must now add it in view will appear of every view controller that contains a searche bar
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
@@ -818,9 +823,9 @@ PAAssetManager * assetManager;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-
+    // switch the datePopup state on pull down
     if (scrollView.contentOffset.y < -SHOW_HEADER_DEPTH) {
-        [self.datePopup showHiddenView];
+        [self.datePopup hideHiddenView];
         //self.centerTableView.contentInset = UIEdgeInsetsZero;
     }
     else if (scrollView.contentOffset.y > 0) {

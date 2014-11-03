@@ -2290,9 +2290,9 @@
         <image name="sidebar_background.jpg" width="640" height="1136"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="4q4-Pe-qR3"/>
-        <segue reference="YoB-2V-iLE"/>
         <segue reference="Mmg-sx-nQJ"/>
         <segue reference="gpx-S3-Fsz"/>
+        <segue reference="YoB-2V-iLE"/>
+        <segue reference="TbO-p2-TYX"/>
     </inferredMetricsTieBreakers>
 </document>

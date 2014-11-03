@@ -557,7 +557,7 @@
         [self.startTimeLabel.text isEqualToString:@"None"] ||
         [self.locationTextField.text isEqualToString:@""]) {
         
-        [self showAlertWithMessage:@"Must enter name, time, and location."];
+        [self showAlertWithMessage:@"Must enter title, time, and location."];
         return false;
     }
     // start time must be in the future

@@ -19,6 +19,8 @@
 @property (nonatomic) CGRect leftButtonFrame;
 @property (nonatomic) CGRect rightButtonFrame;
 
+@property BOOL isAnimating;
+
 @end
 
 @implementation PATemporaryHeader
@@ -69,6 +71,7 @@
         self.nextButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         [self.nextButton addTarget:self action:@selector(goToNextDay) forControlEvents:UIControlEventTouchUpInside];
 
+        self.isBeingShown = true;
         
     }
     return self;
@@ -137,23 +140,36 @@
 
 - (void)hideHiddenView
 {
+    if (self.isAnimating) {
+        return;
+    }
+    
+    self.isBeingShown = false;
     self.pendingHideCount = 0;
     [self animateOut];
 }
 
 - (void)showHiddenView
 {
+    if (self.isAnimating) {
+        return;
+    }
+    
+    self.isBeingShown = true;
     [self animateIn];
 }
 
 - (void)animateIn
 {
+    self.isAnimating = true;
+    
     [UIView animateWithDuration:0.2 delay:primaryDelay options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.hiddenView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
                          self.userInteractionEnabled=YES;
                      }
                      completion:^(BOOL finished){
+                         self.isAnimating = false;
                      }];
 
     [UIView animateWithDuration:0.3 delay:secondaryDelay options:UIViewAnimationOptionCurveEaseInOut
@@ -169,12 +185,14 @@
 
 - (void)animateOut
 {
+    self.isAnimating = true;
     [UIView animateWithDuration:0.2 delay:secondaryDelay - primaryDelay options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.hiddenView.frame = CGRectMake(0, -self.frame.size.height, self.frame.size.width, self.frame.size.height);
                          self.userInteractionEnabled=NO;
                      }
                      completion:^(BOOL finished){
+                         self.isAnimating = false;
                      }];
 
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut

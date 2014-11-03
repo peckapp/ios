@@ -16,6 +16,8 @@
 @property (strong, nonatomic) UIButton* previousButton;
 @property (strong, nonatomic) UIButton* nextButton;
 
+@property BOOL isBeingShown;
+
 - (void)temporarilyShowHiddenView;
 - (void)showHiddenView;
 - (void)hideHiddenView;

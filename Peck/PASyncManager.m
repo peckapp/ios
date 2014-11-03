@@ -764,8 +764,8 @@ typedef NS_ENUM(NSInteger, PAAlertType){
 }
 
 -(void)cachePeerImages {
-    //dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0ul);
-    //dispatch_async(queue, ^{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0ul);
+    dispatch_async(queue, ^{
         NSArray *allPeers = [[PAFetchManager sharedFetchManager] getAllPeers];
         
         for (int i = 0; i < [allPeers count]; i++) {
@@ -776,7 +776,7 @@ typedef NS_ENUM(NSInteger, PAAlertType){
             UIImage *peerPhoto = [UIImage imageWithData:[NSData dataWithContentsOfURL:photoURL]];
             [[UIImageView sharedImageCache] cacheImage:peerPhoto forRequest:photoRequest];
         }
-    //});
+    });
 }
 
 #pragma mark - Feedback

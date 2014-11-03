@@ -92,12 +92,13 @@ NSCache *imageCache;
     _searchBar.delegate = self;
     _searchBar.showsCancelButton = NO;
     _searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+    _searchBar.placeholder = @"Search";
     
     UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 54)];
     [headerView addSubview:_searchBar];
     //headerView.backgroundColor =
     //self.tableView.tableHeaderView = self.searchBar;
-    self.tableView.tableHeaderView = headerView;
+    self.tableView.tableHeaderView = _searchBar;
     
     // TODO: this header is beneath the tableView instead of above...
     self.exploreHeader = [[PATemporaryHeader alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT)];
