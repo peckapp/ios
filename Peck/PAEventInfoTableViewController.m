@@ -112,7 +112,7 @@ BOOL reloaded = NO;
     self.attendButton.frame = CGRectMake(dateLabelDivide, 0, self.view.frame.size.width - dateLabelDivide, 50);
     self.attendeesLabel.frame = CGRectMake(self.view.frame.size.width - 20, 0, 20, 50);
 
-    NSLog(@"headerView: %@", NSStringFromCGRect(self.headerView.frame));
+    // NSLog(@"headerView: %@", NSStringFromCGRect(self.headerView.frame));
     self.descriptionLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, CGRectGetMaxY(self.dateLabel.frame));
     [self.descriptionLabel sizeToFit];
 

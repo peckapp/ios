@@ -13,6 +13,11 @@
 #define secondaryDelay 0.2
 #define hideDelay 1.5
 
+#define buttonHeight 44
+#define buttonWidth 100
+
+#define buffer 10
+
 @interface PATemporaryHeader ()
 
 @property (assign, nonatomic) NSInteger pendingHideCount;
@@ -58,8 +63,8 @@
         [self.hiddenView addSubview:self.todayButton];
          */
         
-        self.rightButtonFrame = CGRectMake(210, 0, 100, 44);
-        self.leftButtonFrame = CGRectMake(10, 0, 100, 44);
+        self.rightButtonFrame = CGRectMake(self.frame.size.width - buffer - buttonWidth, 0, buttonWidth, buttonHeight);
+        self.leftButtonFrame = CGRectMake(10, 0, buttonWidth, buttonHeight);
         
         self.previousButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         [self configureButton:self.previousButton withFrame:self.leftButtonFrame];

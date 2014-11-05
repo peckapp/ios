@@ -54,11 +54,11 @@
     self.imagesView = [[UIView alloc] init];
     
     self.cleanImageView = [[UIImageView alloc] init];
-    self.cleanImageView.contentMode = UIViewContentModeCenter;
+    self.cleanImageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.imagesView addSubview:self.cleanImageView];
     
     self.blurredImageView = [[UIImageView alloc] init];
-    self.blurredImageView.contentMode = UIViewContentModeCenter;
+    self.blurredImageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.imagesView addSubview:self.blurredImageView];
     
     self.timeLabel = [[UILabel alloc] init];

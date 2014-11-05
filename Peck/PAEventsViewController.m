@@ -31,6 +31,8 @@
 #define searchBarHeight 44
 #define parallaxRange 128
 
+#define backButtonSize 64
+
 #define DINING_CELL_HEIGHT 68
 #define SIMPLE_CELL_HEIGHT 92
 #define ATHLETIC_CELL_HEIGHT 92
@@ -105,7 +107,7 @@ PAAssetManager * assetManager;
     
     self.helperImageView = [[UIImageView alloc] init];
 
-    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(320 - 64, 0, 64, 64)];
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - backButtonSize, 0, backButtonSize, backButtonSize)];
     [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.backButton addSubview:[assetManager createPanelWithFrame:CGRectInset(self.backButton.bounds, 15, 15) rounded:YES shadow:YES]];
     UIImageView *cancelIcon = [[UIImageView alloc] initWithImage:[assetManager cancelIcon]];

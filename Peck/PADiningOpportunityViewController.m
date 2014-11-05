@@ -46,11 +46,11 @@ PAAssetManager *assetManager;
     self.view.backgroundColor = [assetManager darkColor];
     
     self.locationImageView = [[UIImageView alloc] initWithImage:[assetManager eventPlaceholder]];
-    self.locationImageView.contentMode = UIViewContentModeCenter;
+    self.locationImageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.view addSubview:self.locationImageView];
     
     self.blurredImageView = [[UIImageView alloc] initWithImage:[assetManager eventPlaceholder]];
-    self.blurredImageView.contentMode = UIViewContentModeCenter;
+    self.blurredImageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.view addSubview:self.blurredImageView];
 
     self.headerView = [[UIView alloc] init];
