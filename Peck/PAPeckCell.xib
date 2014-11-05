@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6205" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="110" id="GzU-m1-cXU" customClass="PAPeckCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
+            <rect key="frame" x="0.0" y="0.0" width="339" height="110"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GzU-m1-cXU" id="iJ2-Rv-Ck6">
                 <rect key="frame" x="0.0" y="0.0" width="287" height="87"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Context" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gmh-cV-xTK">
-                        <rect key="frame" x="60" y="5" width="128" height="21"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Context" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gmh-cV-xTK">
+                        <rect key="frame" x="60" y="5" width="147" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Date" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nbT-d6-7oV">
-                        <rect key="frame" x="211" y="5" width="94" height="21"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nbT-d6-7oV">
+                        <rect key="frame" x="230" y="5" width="94" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="94" id="0AU-bY-6ne"/>
+                        </constraints>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eGk-03-lMc">
-                        <rect key="frame" x="99" y="71" width="50" height="30"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eGk-03-lMc">
+                        <rect key="frame" x="99" y="71" width="69" height="30"/>
                         <state key="normal" title="Accept">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
@@ -33,20 +38,20 @@
                             <action selector="acceptInviteButton:" destination="GzU-m1-cXU" eventType="touchUpInside" id="gA4-9G-fkh"/>
                         </connections>
                     </button>
-                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CaT-bw-zUR">
-                        <rect key="frame" x="60" y="24" width="245" height="44"/>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CaT-bw-zUR">
+                        <rect key="frame" x="60" y="24" width="264" height="44"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     </textView>
-                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BNs-Qu-VhY">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BNs-Qu-VhY">
                         <rect key="frame" x="0.0" y="0.0" width="52" height="68"/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UVx-RK-tMO">
-                        <rect key="frame" x="202" y="71" width="51" height="30"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UVx-RK-tMO">
+                        <rect key="frame" x="221" y="71" width="51" height="30"/>
                         <state key="normal" title="Decline">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
@@ -55,6 +60,28 @@
                         </connections>
                     </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="gmh-cV-xTK" firstAttribute="bottom" secondItem="nbT-d6-7oV" secondAttribute="bottom" id="1Zp-bV-s65"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="UVx-RK-tMO" secondAttribute="trailing" constant="59" id="1xj-DQ-oWT"/>
+                    <constraint firstItem="eGk-03-lMc" firstAttribute="top" secondItem="CaT-bw-zUR" secondAttribute="bottom" constant="3" id="7Oc-hD-Yvg"/>
+                    <constraint firstItem="nbT-d6-7oV" firstAttribute="firstBaseline" secondItem="gmh-cV-xTK" secondAttribute="firstBaseline" id="8Ex-8D-ioI"/>
+                    <constraint firstItem="eGk-03-lMc" firstAttribute="leading" secondItem="iJ2-Rv-Ck6" secondAttribute="leadingMargin" constant="91" id="QCp-I2-7hx"/>
+                    <constraint firstItem="CaT-bw-zUR" firstAttribute="top" secondItem="iJ2-Rv-Ck6" secondAttribute="topMargin" constant="16" id="Teg-4j-tfX"/>
+                    <constraint firstItem="CaT-bw-zUR" firstAttribute="leading" secondItem="gmh-cV-xTK" secondAttribute="leading" id="Tme-gW-G2D"/>
+                    <constraint firstItem="eGk-03-lMc" firstAttribute="top" secondItem="gmh-cV-xTK" secondAttribute="bottom" constant="45" id="UYu-B6-bS2"/>
+                    <constraint firstItem="eGk-03-lMc" firstAttribute="baseline" secondItem="UVx-RK-tMO" secondAttribute="baseline" id="V2n-cl-8Vg"/>
+                    <constraint firstItem="BNs-Qu-VhY" firstAttribute="top" secondItem="iJ2-Rv-Ck6" secondAttribute="top" id="Vme-uS-M1W"/>
+                    <constraint firstItem="UVx-RK-tMO" firstAttribute="leading" secondItem="eGk-03-lMc" secondAttribute="trailing" constant="53" id="gK4-TH-vA3"/>
+                    <constraint firstItem="nbT-d6-7oV" firstAttribute="leading" secondItem="gmh-cV-xTK" secondAttribute="trailing" constant="23" id="iJR-eA-12Q"/>
+                    <constraint firstItem="gmh-cV-xTK" firstAttribute="top" secondItem="iJ2-Rv-Ck6" secondAttribute="topMargin" constant="-3" id="lr2-s6-UiY"/>
+                    <constraint firstItem="BNs-Qu-VhY" firstAttribute="leading" secondItem="iJ2-Rv-Ck6" secondAttribute="leading" id="m77-Uo-7nk"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="BNs-Qu-VhY" secondAttribute="bottom" constant="33.5" id="sWM-LD-1qC"/>
+                    <constraint firstItem="gmh-cV-xTK" firstAttribute="leading" secondItem="BNs-Qu-VhY" secondAttribute="trailing" constant="8" symbolic="YES" id="uTO-YM-gcK"/>
+                    <constraint firstItem="gmh-cV-xTK" firstAttribute="centerX" secondItem="eGk-03-lMc" secondAttribute="centerX" id="uf2-nH-rBd"/>
+                    <constraint firstItem="CaT-bw-zUR" firstAttribute="bottom" secondItem="BNs-Qu-VhY" secondAttribute="bottom" id="wLW-hc-FmP"/>
+                    <constraint firstItem="CaT-bw-zUR" firstAttribute="trailing" secondItem="nbT-d6-7oV" secondAttribute="trailing" id="wjn-L8-4gd"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="nbT-d6-7oV" secondAttribute="trailing" constant="7" id="yXV-bD-KwQ"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="acceptButton" destination="eGk-03-lMc" id="nLn-3N-TFe"/>
@@ -64,15 +91,12 @@
                 <outlet property="profileTemplateView" destination="BNs-Qu-VhY" id="QRd-2X-fX5"/>
                 <outlet property="titleLabel" destination="gmh-cV-xTK" id="YK6-V4-Lrb"/>
             </connections>
-            <point key="canvasLocation" x="139" y="165"/>
+            <point key="canvasLocation" x="148.5" y="165"/>
         </tableViewCell>
     </objects>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4">
-            <size key="portraitSize" width="320" height="568"/>
-            <size key="landscapeSize" width="568" height="320"/>
-        </simulatedScreenMetrics>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
 </document>
