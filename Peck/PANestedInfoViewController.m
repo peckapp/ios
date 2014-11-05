@@ -28,13 +28,157 @@
 @implementation PANestedInfoViewController
 
 -(void)viewDidLoad {
+    // Date formatter for the full date indicator
+    self.formatter = [[NSDateFormatter alloc] init];
+    [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+    
+    // Images to indicate attendance status
     self.attendImage = [UIImage imageNamed:@"attend_icon"];
     self.nullAttendImage = [UIImage imageNamed:@"null_attend_icon"];
     
+    // Separators that are used to delineate Cells without images
     self.upperSeparator = [[CALayer alloc] init];
     [self.upperSeparator setBackgroundColor:[[[PAAssetManager sharedManager] lightColor] CGColor]];
     self.lowerSeparator = [[CALayer alloc] init];
     [self.lowerSeparator setBackgroundColor:[[[PAAssetManager sharedManager] lightColor] CGColor]];
+    
+    self.textViewHelper = [[UITextView alloc] init];
+    [self.textViewHelper setHidden:YES];
+    
+    self.heightDictionary = [[NSMutableDictionary alloc] init];
+    
+    self.view.backgroundColor = [[PAAssetManager sharedManager] darkColor];
+    
+    self.headerView = [[UIView alloc] init];
+    self.footerView = [[UIView alloc] init];
+    self.imagesView = [[UIView alloc] init];
+    
+    self.cleanImageView = [[UIImageView alloc] init];
+    self.cleanImageView.contentMode = UIViewContentModeCenter;
+    [self.imagesView addSubview:self.cleanImageView];
+    
+    self.blurredImageView = [[UIImageView alloc] init];
+    self.blurredImageView.contentMode = UIViewContentModeCenter;
+    [self.imagesView addSubview:self.blurredImageView];
+    
+    self.timeLabel = [[UILabel alloc] init];
+    self.timeLabel.textColor = [UIColor whiteColor];
+    self.timeLabel.font = [UIFont boldSystemFontOfSize:17.0];
+    self.timeLabel.textAlignment = NSTextAlignmentRight;
+    [self.blurredImageView addSubview:self.timeLabel];
+    
+    [self.headerView addSubview:[[PAAssetManager sharedManager] createShadowWithFrame:CGRectMake(0, -64, self.view.frame.size.width, 64) top:YES]];
+
+    self.fullTitleLabel = [[UILabel alloc] init];
+    self.fullTitleLabel.textColor = [UIColor whiteColor];
+    self.fullTitleLabel.font = [UIFont boldSystemFontOfSize:21.0];
+    self.fullTitleLabel.numberOfLines = 0;
+    [self.headerView addSubview:self.fullTitleLabel];
+    
+    self.dateLabel = [[UILabel alloc] init];
+    [self.headerView addSubview:self.dateLabel];
+    
+    self.descriptionLabel = [[UILabel alloc] init];
+    self.descriptionLabel.font = [UIFont systemFontOfSize:13.0];
+    self.descriptionLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.descriptionLabel.numberOfLines = 0;
+    [self.headerView addSubview:self.descriptionLabel];
+    
+    self.headerView.backgroundColor = [UIColor whiteColor];
+    
+    [self.view addSubview:self.imagesView];
+    
+    self.attendingIcon = [[UIImageView alloc] initWithImage:self.nullAttendImage];
+    self.attendingIcon.userInteractionEnabled = NO;
+    [self.blurredImageView addSubview:self.attendingIcon];
+    
+    self.attendButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.attendButton addTarget:self action:@selector(attendButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
+    [self.headerView addSubview:self.attendButton];
+    
+    self.attendeesLabel = [[UILabel alloc] init];
+    self.attendeesLabel.font = [UIFont systemFontOfSize:14.0];
+    [self.headerView addSubview:self.attendeesLabel];
+    
+    self.keyboardAccessoryView = [[UIView alloc] init];
+    self.keyboardAccessoryView.backgroundColor = [UIColor whiteColor];
+    
+    self.keyboardAccessory = [[PAAssetManager sharedManager] createTextFieldWithFrame:CGRectZero];
+    self.keyboardAccessory.placeholder = @"Post a comment...";
+    self.keyboardAccessory.delegate = self;
+    
+    [self.keyboardAccessoryView addSubview:self.keyboardAccessory];
+    
+    self.postButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    [self.postButton addTarget:self action:@selector(didSelectPostButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.keyboardAccessoryView addSubview:self.postButton];
+    self.postButton.alpha = 0;
+    
+    /*
+     [[NSNotificationCenter defaultCenter] addObserver:self
+     selector:@selector(changeFirstResponder)
+     name:UIKeyboardDidShowNotification
+     object:nil];
+     */
+    
+    [self.tableView reloadData];
+    
+    [self showSeparators];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    initialFrame = self.tableView.frame;
+    [super viewDidAppear:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.keyboardAccessory resignFirstResponder];
+    [self deregisterFromKeyboardNotifications];
+}
+
+
+-(void)updateFrames {
+    
+    self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
+    self.cleanImageView.frame = self.imagesView.frame;
+    self.blurredImageView.frame = self.imagesView.frame;
+    
+    
+    // This is code that the subclasses have in common, but the interleaving dependencies make it tough to move things into here
+    
+//    CGFloat attendIconSize = self.blurredImageView.frame.size.height * attendIconRatio;
+//    CGFloat attendX = self.timeLabel.frame.origin.x + 0.5*self.timeLabel.frame.size.width;
+//    CGFloat attendY = self.timeLabel.frame.origin.y + 0.2*self.blurredImageView.frame.size.height;
+//    CGRect attendRect = CGRectMake(attendX, attendY, attendIconSize, attendIconSize);
+//    self.attendingIcon.frame = attendRect;
+//    
+//    self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
+//    NSLog(@"headerView: %@", NSStringFromCGRect(self.headerView.frame));
+//    self.dateLabel.frame = CGRectInset(self.headerView.frame, buffer, buffer);
+//    [self.dateLabel sizeToFit];
+//    
+//    
+//    self.attendButton.frame = CGRectMake(dateLabelDivide, 0, self.view.frame.size.width - dateLabelDivide, 50);
+//    self.attendeesLabel.frame = CGRectMake(self.view.frame.size.width - 20, 0, 20, 50);
+//    
+//    self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, CGRectGetMaxY(self.descriptionLabel.frame) + buffer);
+//    
+//    self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 1000);
+//    self.footerView.backgroundColor = [UIColor whiteColor];
+//    
+//    self.keyboardAccessoryView.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+//    self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - 14, 30);
+//    self.postButton.frame = CGRectMake(self.keyboardAccessoryView.frame.size.width - self.keyboardAccessoryView.frame.size.height, 0, self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.height);
+//    
+//    [self.keyboardAccessory resignFirstResponder];
 }
 
 // show and hide the image separators
@@ -433,5 +577,48 @@
     }
     return YES;
 }
+/*
+ //DO NOT DELETE (for now)
+ #pragma mark - managing the keyboard notifications
+ 
+ - (void)registerForKeyboardNotifications {
+ [[NSNotificationCenter defaultCenter] addObserver:self
+ selector:@selector(keyboardWasShown:)
+ name:UIKeyboardDidShowNotification
+ object:nil];
+ 
+ [[NSNotificationCenter defaultCenter] addObserver:self
+ selector:@selector(keyboardWillBeHidden:)
+ name:UIKeyboardWillHideNotification
+ object:nil];
+ 
+ }
+ 
+ - (void)deregisterFromKeyboardNotifications {
+ 
+ [[NSNotificationCenter defaultCenter] removeObserver:self
+ name:UIKeyboardDidHideNotification
+ object:nil];
+ 
+ [[NSNotificationCenter defaultCenter] removeObserver:self
+ name:UIKeyboardWillHideNotification
+ object:nil];
+ 
+ }
+ 
+ - (void)keyboardWasShown:(NSNotification *)notification {
+ if(CGRectEqualToRect(self.tableView.frame, initialFrame)){
+ NSDictionary* info = [notification userInfo];
+ CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+ self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
+ NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+ [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+ }
+ }
+ 
+ - (void)keyboardWillBeHidden:(NSNotification *)notification {
+ self.tableView.frame = initialFrame;
+ }
+ */
 
 @end

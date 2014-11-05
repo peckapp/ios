@@ -13,7 +13,12 @@
 
 @class PACommentCell;
 
-@interface PANestedInfoViewController : UIViewController <PANestedCellControllerProtocol>
+@interface PANestedInfoViewController : UIViewController <PANestedCellControllerProtocol,
+                                                          NSFetchedResultsControllerDelegate,
+                                                          PACoreDataProtocol,
+                                                          UITableViewDelegate,
+                                                          UITableViewDataSource,
+                                                          UITextFieldDelegate>
 
 // the NSManagedObject that defined the attributes of this cell. usually passed by fetched results controller
 @property (strong, nonatomic) id detailItem;

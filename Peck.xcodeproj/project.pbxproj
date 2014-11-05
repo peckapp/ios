@@ -51,6 +51,7 @@
 		8689DDB419589E3600A6B61C /* filter_dining@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB019589E3600A6B61C /* filter_dining@2x.png */; };
 		8689DDB519589E3600A6B61C /* filter_standard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB119589E3600A6B61C /* filter_standard@2x.png */; };
 		8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8689DDB219589E3600A6B61C /* filter_subscription@2x.png */; };
+		8699BEC11A0A16260007FAEA /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8699BEC01A0A16260007FAEA /* Launch Screen.xib */; };
 		869A85AE1964855B00F254C1 /* dropdown_circles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 869A85AD1964855B00F254C1 /* dropdown_circles@2x.png */; };
 		869B8789195B2226001DF0A2 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 869B8788195B2226001DF0A2 /* Crashlytics.framework */; };
 		86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D4A7241948FC4D008D9B25 /* PADropdownViewController.m */; };
@@ -284,6 +285,7 @@
 		8689DDB019589E3600A6B61C /* filter_dining@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_dining@2x.png"; sourceTree = "<group>"; };
 		8689DDB119589E3600A6B61C /* filter_standard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_standard@2x.png"; sourceTree = "<group>"; };
 		8689DDB219589E3600A6B61C /* filter_subscription@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filter_subscription@2x.png"; sourceTree = "<group>"; };
+		8699BEC01A0A16260007FAEA /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		869A85AD1964855B00F254C1 /* dropdown_circles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_circles@2x.png"; sourceTree = "<group>"; };
 		869B8788195B2226001DF0A2 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		86B528E8198ABA76008E6060 /* Peck.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Peck.entitlements; sourceTree = "<group>"; };
@@ -730,6 +732,7 @@
 				8687623019A51E90009AF3D1 /* PAUtils.h */,
 				86D59813193768BF00F38654 /* PAAppDelegate.h */,
 				86D59814193768BF00F38654 /* PAAppDelegate.m */,
+				8699BEC01A0A16260007FAEA /* Launch Screen.xib */,
 				86E40D8319AAF535000C230C /* Main.storyboard */,
 				86014BE919EBF2E000DDA5EA /* Nesting */,
 				86613BE2197DD7D4004914B2 /* Dropdown */,
@@ -1160,6 +1163,7 @@
 				DDA8417919A690DC00383A3B /* cancel@2x.png in Resources */,
 				86D59823193768BF00F38654 /* Images.xcassets in Resources */,
 				A4F04BF81995158F00290CF2 /* PAPromptView.xib in Resources */,
+				8699BEC11A0A16260007FAEA /* Launch Screen.xib in Resources */,
 				A4677D53197562B1007E3C3A /* PADiningOpportunityCell.xib in Resources */,
 				DDFFF5BA19829DE700DC5AC1 /* feather-50.png in Resources */,
 				DD5751B819803BF800BF52A8 /* event-placeholder.png in Resources */,

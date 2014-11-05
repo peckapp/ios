@@ -14,11 +14,7 @@
 
 
 // superclass definition defines some functionality
-@interface PAEventInfoTableViewController : PANestedInfoViewController <NSFetchedResultsControllerDelegate,
-                                                                        PACoreDataProtocol,
-                                                                        UITableViewDelegate,
-                                                                        UITableViewDataSource,
-                                                                        UITextFieldDelegate>
+@interface PAEventInfoTableViewController : PANestedInfoViewController 
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 

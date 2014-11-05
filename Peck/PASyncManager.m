@@ -1496,8 +1496,8 @@ typedef NS_ENUM(NSInteger, PAAlertType){
 #pragma mark - Dining actions
 
 -(void)updateDiningInfo{
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-    dispatch_async(queue, ^{
+    //dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+    //dispatch_async(queue, ^{
         
         //NSLog(@"in secondary thread to update dining");
         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
@@ -1510,7 +1510,7 @@ typedef NS_ENUM(NSInteger, PAAlertType){
         NSString* diningOpportunitiesURL = [dining_opportunitiesAPI stringByAppendingString:@"?"];//day_of_week="];
         //diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[@([components weekday]-1) stringValue]];
         diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:@"institution_id="];
-        diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"institution_id"] stringValue]];
+        diningOpportunitiesURL = [diningOpportunitiesURL stringByAppendingString:[[[NSUserDefaults standardUserDefaults] objectForKey:inst_id] stringValue]];
         
         [[PASessionManager sharedClient] GET:diningOpportunitiesURL
                                   parameters:[self authenticationParameters]
@@ -1539,7 +1539,7 @@ typedef NS_ENUM(NSInteger, PAAlertType){
                                      failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                          NSLog(@"updateDiningInfo ERROR: %@",error);
                                      }];
-    });
+    //});
     
 }
 

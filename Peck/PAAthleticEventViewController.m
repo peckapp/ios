@@ -19,23 +19,9 @@
 #import "PAMethodManager.h"
 
 
-#define imageHeight 256
-#define titleLabelDivide 90
-#define titleAndNameSpacing 15
-#define dateLabelDivide 200
-#define attendIconRatio 0.1
-#define compressedHeight 88
-#define buffer 14
-#define defaultCellHeight 72
-#define reloadTime 10
-
-
 @interface PAAthleticEventViewController () {
     NSString * commentCellIdentifier;
     NSString * cellNibName;
-    CGRect initialFrame;
-    
-    PAAssetManager * assetManager;
     
     BOOL reloaded;
 }
@@ -57,55 +43,15 @@
 {
     [super viewDidLoad];
     
-    assetManager = [PAAssetManager sharedManager];
-    
     self.category = @"athletic";
     
     commentCellIdentifier = @"AthleticCommentCell";
     cellNibName = @"PACommentCell";
     reloaded = NO;
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    //if(!self.formatter){
-    self.formatter = [[NSDateFormatter alloc] init];
-    [self.formatter setDateFormat:@"MMM dd, yyyy h:mm a"];
-    //}
-    
-    self.textViewHelper = [[UITextView alloc] init];
-    [self.textViewHelper setHidden:YES];
-    
-    self.heightDictionary = [[NSMutableDictionary alloc] init];
-    
-    /*
-     NSError * error = nil;
-     if (![self.fetchedResultsController performFetch:&error])
-     {
-     NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-     abort();
-     }
-     */
-    
-    //[self configureView];
-    
-    //self.automaticallyAdjustsScrollViewInsets = NO;
-    
-    self.view.backgroundColor = [assetManager darkColor];
-    
-    self.headerView = [[UIView alloc] init];
-    self.footerView = [[UIView alloc] init];
-    self.imagesView = [[UIView alloc] init];
-    
-    self.cleanImageView = [[UIImageView alloc] init];
-    self.cleanImageView.contentMode = UIViewContentModeCenter;
-    [self.imagesView addSubview:self.cleanImageView];
-    
-    self.blurredImageView = [[UIImageView alloc] init];
-    self.blurredImageView.contentMode = UIViewContentModeCenter;
-    [self.imagesView addSubview:self.blurredImageView];
+    ////////////////////////////////////////////
+    // type-specific user interface elements
+    ////////////////////////////////////////////
     
     self.teamNameLabel = [[UILabel alloc] init];
     self.teamNameLabel.textColor = [UIColor whiteColor];
@@ -118,72 +64,16 @@
     self.titleDetailLabel.font = [UIFont boldSystemFontOfSize:15.0];
     [self.blurredImageView addSubview:self.titleDetailLabel];
     
-    self.timeLabel = [[UILabel alloc] init];
-    self.timeLabel.textColor = [UIColor whiteColor];
-    self.timeLabel.font = [UIFont boldSystemFontOfSize:17.0];
-    self.timeLabel.textAlignment = NSTextAlignmentRight;
-    [self.blurredImageView addSubview:self.timeLabel];
-    
-    [self.headerView addSubview:[assetManager createShadowWithFrame:CGRectMake(0, -64, self.view.frame.size.width, 64) top:YES]];
     
     self.fullTitleLabel = [[UILabel alloc] init];
     self.fullTitleLabel.textColor = [UIColor whiteColor];
     self.fullTitleLabel.font = [UIFont boldSystemFontOfSize:21.0];
     [self.headerView addSubview:self.fullTitleLabel];
     
-    self.dateLabel = [[UILabel alloc] init];
-    [self.headerView addSubview:self.dateLabel];
-
     self.scoreLabel = [[UILabel alloc] init];
     self.scoreLabel.font = [UIFont systemFontOfSize:21.0];
     self.scoreLabel.textAlignment = NSTextAlignmentCenter;
     [self.headerView addSubview:self.scoreLabel];
-    
-    self.descriptionLabel = [[UILabel alloc] init];
-    self.descriptionLabel.font = [UIFont systemFontOfSize:13.0];
-    self.descriptionLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    self.descriptionLabel.numberOfLines = 0;
-    [self.headerView addSubview:self.descriptionLabel];
-    
-    self.headerView.backgroundColor = [UIColor whiteColor];
-    
-    [self.view addSubview:self.imagesView];
-    
-    self.attendingIcon = [[UIImageView alloc] initWithImage:self.nullAttendImage];
-    self.attendingIcon.userInteractionEnabled = NO;
-    [self.blurredImageView addSubview:self.attendingIcon];
-    
-    self.attendButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.attendButton addTarget:self action:@selector(attendButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.attendButton setTitle:@"Attend" forState:UIControlStateNormal];
-    [self.headerView addSubview:self.attendButton];
-    
-    self.attendeesLabel = [[UILabel alloc] init];
-    self.attendeesLabel.font = [UIFont systemFontOfSize:14.0];
-    [self.headerView addSubview:self.attendeesLabel];
-    
-    self.keyboardAccessoryView = [[UIView alloc] init];
-    self.keyboardAccessoryView.backgroundColor = [UIColor whiteColor];
-    
-    self.keyboardAccessory = [assetManager createTextFieldWithFrame:CGRectZero];
-    self.keyboardAccessory.placeholder = @"Post a comment...";
-    self.keyboardAccessory.delegate = self;
-    
-    [self.keyboardAccessoryView addSubview:self.keyboardAccessory];
-    
-    self.postButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    [self.postButton addTarget:self action:@selector(didSelectPostButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.keyboardAccessoryView addSubview:self.postButton];
-    self.postButton.alpha = 0;
-    
-    /*
-     [[NSNotificationCenter defaultCenter] addObserver:self
-     selector:@selector(changeFirstResponder)
-     name:UIKeyboardDidShowNotification
-     object:nil];
-     */
-    
-    [self.tableView reloadData];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -210,14 +100,12 @@
 
 - (void)updateFrames
 {
+    [super updateFrames];
+    
     //NSLog(@"event info frame width: %f", self.view.frame.size.width);
     //NSLog(@"event info frame height: %f", self.view.frame.size.height);
     
     //self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 88);
-    
-    self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
-    self.cleanImageView.frame = self.imagesView.frame;
-    self.blurredImageView.frame = self.imagesView.frame;
     
     CGRect left;
     CGRect right;
@@ -261,67 +149,6 @@
     
     [self.keyboardAccessory resignFirstResponder];
 }
-
--(void)viewDidAppear:(BOOL)animated{
-    initialFrame = self.tableView.frame;
-    [super viewDidAppear:animated];
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [self.keyboardAccessory resignFirstResponder];
-    [self deregisterFromKeyboardNotifications];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
- //DO NOT DELETE (for now)
- #pragma mark - managing the keyboard notifications
- 
- - (void)registerForKeyboardNotifications {
- [[NSNotificationCenter defaultCenter] addObserver:self
- selector:@selector(keyboardWasShown:)
- name:UIKeyboardDidShowNotification
- object:nil];
- 
- [[NSNotificationCenter defaultCenter] addObserver:self
- selector:@selector(keyboardWillBeHidden:)
- name:UIKeyboardWillHideNotification
- object:nil];
- 
- }
- 
- - (void)deregisterFromKeyboardNotifications {
- 
- [[NSNotificationCenter defaultCenter] removeObserver:self
- name:UIKeyboardDidHideNotification
- object:nil];
- 
- [[NSNotificationCenter defaultCenter] removeObserver:self
- name:UIKeyboardWillHideNotification
- object:nil];
- 
- }
- 
- - (void)keyboardWasShown:(NSNotification *)notification {
- if(CGRectEqualToRect(self.tableView.frame, initialFrame)){
- NSDictionary* info = [notification userInfo];
- CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
- self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-keyboardSize.height);
- NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
- [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
- }
- }
- 
- - (void)keyboardWillBeHidden:(NSNotification *)notification {
- self.tableView.frame = initialFrame;
- }
- */
 
 - (void)expandAnimated:(BOOL)animated
 {
@@ -397,7 +224,7 @@
         
         [self.keyboardAccessory resignFirstResponder];
         [self deregisterFromKeyboardNotifications];
-        self.view.backgroundColor = [assetManager darkColor];
+        self.view.backgroundColor = [[PAAssetManager sharedManager] darkColor];
         [self.tableView setContentOffset:CGPointMake(0, -imageHeight) animated:YES];
         
         void (^animationsBlock)(void) = ^{
@@ -719,7 +546,7 @@
     cell.nameLabel.text = [self nameLabelTextForComment:tempComment];
     cell.commentTextView.text = tempComment.content;
     
-    UIImageView * thumbnail = [assetManager createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageViewForComment:tempComment]];
+    UIImageView * thumbnail = [[PAAssetManager sharedManager] createThumbnailWithFrame:cell.thumbnailViewTemplate.frame imageView:[self imageViewForComment:tempComment]];
     if (cell.thumbnailView) {
         [cell.thumbnailView removeFromSuperview];
     }

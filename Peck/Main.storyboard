@@ -294,11 +294,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u1h-3i-MCQ">
+                            <searchBar contentMode="redraw" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u1h-3i-MCQ">
                                 <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no"/>
                             </searchBar>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W9F-HZ-PG4">
+                            <navigationBar contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W9F-HZ-PG4">
                                 <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <items>
                                     <navigationItem title="Invitations" id="40L-Eg-6pZ">
@@ -315,7 +315,7 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="hgx-VD-u7P">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="hgx-VD-u7P">
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             </tableView>
                         </subviews>
@@ -335,6 +335,9 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="LC9-dE-OtF"/>
+                                <exclude reference="MFT-Im-LvZ"/>
+                                <exclude reference="Xdl-em-lNo"/>
                                 <exclude reference="1lJ-jO-V7J"/>
                                 <exclude reference="78w-Pg-G13"/>
                                 <exclude reference="B5m-O3-kj1"/>
@@ -342,14 +345,14 @@
                                 <exclude reference="bWk-Mu-mvD"/>
                                 <exclude reference="ol8-8o-HGz"/>
                                 <exclude reference="uXR-ZZ-r4K"/>
-                                <exclude reference="LC9-dE-OtF"/>
-                                <exclude reference="MFT-Im-LvZ"/>
-                                <exclude reference="Xdl-em-lNo"/>
                                 <exclude reference="LTG-Os-vh1"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="constraints">
+                                <include reference="LC9-dE-OtF"/>
+                                <include reference="MFT-Im-LvZ"/>
+                                <include reference="Xdl-em-lNo"/>
                                 <include reference="1lJ-jO-V7J"/>
                                 <include reference="78w-Pg-G13"/>
                                 <include reference="B5m-O3-kj1"/>
@@ -357,9 +360,6 @@
                                 <include reference="bWk-Mu-mvD"/>
                                 <include reference="ol8-8o-HGz"/>
                                 <include reference="uXR-ZZ-r4K"/>
-                                <include reference="LC9-dE-OtF"/>
-                                <include reference="MFT-Im-LvZ"/>
-                                <include reference="Xdl-em-lNo"/>
                                 <include reference="LTG-Os-vh1"/>
                             </mask>
                         </variation>

@@ -10,12 +10,24 @@
 
 #define defaultCommentCellHeight 72
 
+
+
+#define imageHeight 256
+#define titleLabelDivide 90
+#define titleAndNameSpacing 15
+#define dateLabelDivide 200
+#define attendIconRatio 0.1
+#define compressedHeight 88
+#define buffer 14
+#define defaultCellHeight 72
+#define reloadTime 10
+
 @class PACommentCell;
 @class Comment;
 
 // private class extensions of the
 @interface PANestedInfoViewController () {
-    
+    CGRect initialFrame;
 }
 
 // configures the view with the information from the detailItem
@@ -54,6 +66,8 @@
 
 @property (strong, nonatomic) UITextView *textViewHelper;
 @property (strong, nonatomic) NSMutableDictionary *heightDictionary;
+
+- (void)updateFrames;
 
 - (void)registerForKeyboardNotifications;
 - (void)deregisterFromKeyboardNotifications;
