@@ -39,13 +39,19 @@
         // The spacing between each button
         CGFloat buttonWidth = CGRectGetWidth(frame) / count;
 
+        NSArray *names = @[@"Pecks",
+                           @"Explore",
+                           @"Post",
+                           @"Circles",
+                           @"Profile"];
+        
         NSArray *icons = @[[UIImage imageNamed:@"feather"],
                            [UIImage imageNamed:@"explore"],
                            [UIImage imageNamed:@"plus"],
                            [UIImage imageNamed:@"circles"],
                            [UIImage imageNamed:@"profile"]];
 
-        NSMutableArray * collector = [[NSMutableArray alloc] init];
+        NSMutableArray *collector = [[NSMutableArray alloc] init];
         for (NSUInteger i = 0 ; i < count ; i++)
         {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -57,6 +63,14 @@
             button.frame = CGRectMake(i * buttonWidth, statusBarHeight + buffer, buttonWidth, barHeight);
             [self addSubview:button];
             [collector addObject:button];
+            
+//            UIBarItem *barButtonItem = [[UIBarButtonItem alloc] initWithImage:icons[i]
+//                                                                              style:UIBarButtonItemStyleDone
+//                                                                             target:self
+//                                                                             action:@selector(selectItem:)];
+//            [barButtonItem setTag:i];
+//            [barButtonItem setTitle:names[i]];
+//            [collector addObject:barButtonItem];
         }
 
         self.buttons = [collector copy];

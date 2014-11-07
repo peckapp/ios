@@ -36,6 +36,10 @@
 @property (nonatomic) CGRect childFrameTop;
 @property (nonatomic) CGRect childFrameBottom;
 
+// managing view controllers
+- (void)loadPrimaryViewControllerWithIdentifier:(NSString*)identifier;
+- (void)loadSecondaryViewControllersWithIdentifiers:(NSArray*)identifiers;
+
 @end
 
 #pragma mark - Implementation
@@ -56,37 +60,22 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     // Initialize child view controllers
     self.primaryViewControllerIdentifier = PAPrimaryIdentifier;
+    [self loadPrimaryViewControllerWithIdentifier:self.primaryViewControllerIdentifier];
+    
     self.secondaryViewControllerIdentifiers = @[PAPecksIdentifier,
                                                 PAExploreIdentifier,
                                                 PAPostIdentifier,
                                                 PACirclesIdentifier,
                                                 PAProfileIdentifier];
-
-    // Instantiate primary view controller
-    NSLog(@"Instantiating primary view controller");
-    self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:PAPrimaryIdentifier];
-
-    // Instantiate secondary view controllers
-    NSLog(@"Instantiating secondary view controllers");
-    NSMutableArray * collector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
-    [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
-        NSString * identifier = (NSString*)obj;
-        UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
-        viewController.tabBarItem.tag = idx;
-        viewController.restorationIdentifier = identifier;
-        [collector insertObject:viewController atIndex:idx];
-        // ensures that the view is loaded
-        if ([viewController isKindOfClass:[UINavigationController class]]) {
-            [[((UINavigationController*)viewController) topViewController] view];
-        } else {
-            [viewController view];
-        }
-    }];
-    self.secondaryViewControllers = [collector copy];
-
+    [self loadSecondaryViewControllersWithIdentifiers:self.secondaryViewControllerIdentifiers];
+    
+    // create and setup dropdownBar
+    dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)
+                                             itemCount:[self.secondaryViewControllerIdentifiers count]];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -95,8 +84,6 @@
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        dropdownBar = [[PADropdownBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)
-                                             itemCount:[self.secondaryViewControllerIdentifiers count]];
 
         self.childFrameCenter = CGRectMake(0,
                                        dropdownBar.frame.size.height,
@@ -153,6 +140,33 @@
 }
 
 #pragma mark Manage ViewControllers
+
+
+// Instantiate primary view controller
+- (void)loadPrimaryViewControllerWithIdentifier:(NSString *)identifier {
+    NSLog(@"Instantiating primary view controller");
+    self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+}
+
+// Instantiate secondary view controllers
+- (void)loadSecondaryViewControllersWithIdentifiers:(NSArray *)identifiers {
+    NSLog(@"Instantiating secondary view controllers");
+    NSMutableArray * collector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
+    [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
+        NSString * identifier = (NSString*)obj;
+        UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+        viewController.tabBarItem.tag = idx;
+        viewController.restorationIdentifier = identifier;
+        [collector insertObject:viewController atIndex:idx];
+        // ensures that the view is loaded
+        if ([viewController isKindOfClass:[UINavigationController class]]) {
+            [[((UINavigationController*)viewController) topViewController] view];
+        } else {
+            [viewController view];
+        }
+    }];
+    self.secondaryViewControllers = [collector copy];
+}
 
 /*
 - (void) displayChildViewController: (UIViewController*) newVC
