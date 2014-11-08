@@ -8,6 +8,8 @@
 
 #import "PADropdownBar.h"
 #import "PAAppDelegate.h"
+#import "PAAssetManager.h"
+#import "PABarButton.h"
 
 // Button dimensions. This should be calculated programatically from button image.
 #define barHeight 48.0
@@ -50,29 +52,25 @@
                            [UIImage imageNamed:@"plus"],
                            [UIImage imageNamed:@"circles"],
                            [UIImage imageNamed:@"profile"]];
+        UIImage *dismissal = [UIImage imageNamed:@"dismiss"];
 
         NSMutableArray *collector = [[NSMutableArray alloc] init];
         for (NSUInteger i = 0 ; i < count ; i++)
         {
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            //PABarButton *button = [[PABarButton alloc] initWithFrame:CGRectMake(i * buttonWidth, statusBarHeight + buffer, buttonWidth, barHeight)];
+            UIButton *button = [PABarButton buttonWithType:UIButtonTypeSystem];
             [button addTarget:self action:@selector(selectItem:) forControlEvents:UIControlEventTouchUpInside];
             [button setImage:icons[i] forState:UIControlStateNormal];
-            [button setImage:icons[i] forState:UIControlStateSelected];
+            [button setImage:dismissal forState:UIControlStateSelected];
+            [button setTitle:names[i] forState:UIControlStateNormal];
+            [button setTitle:@"" forState:UIControlStateSelected];
+            button.titleLabel.font = [UIFont systemFontOfSize:12.0];
             [button setTag:i];
             button.backgroundColor = [UIColor clearColor];
             button.frame = CGRectMake(i * buttonWidth, statusBarHeight + buffer, buttonWidth, barHeight);
             [self addSubview:button];
             [collector addObject:button];
-            
-//            UIBarItem *barButtonItem = [[UIBarButtonItem alloc] initWithImage:icons[i]
-//                                                                              style:UIBarButtonItemStyleDone
-//                                                                             target:self
-//                                                                             action:@selector(selectItem:)];
-//            [barButtonItem setTag:i];
-//            [barButtonItem setTitle:names[i]];
-//            [collector addObject:barButtonItem];
         }
-
         self.buttons = [collector copy];
         self.currentIndex = -1;
         
