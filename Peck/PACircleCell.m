@@ -51,16 +51,18 @@ PAAssetManager * assetManager;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     self.profileCellFrame = CGRectMake(0, 0, defaultCellHeight, defaultCellHeight);
-
+    
+    self.profilesTableView = [[UITableView alloc] init];
+    [self.profilesTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self addSubview:self.profilesTableView];
     self.profilesTableView.delegate = self;
     self.profilesTableView.dataSource = self;
-
-//    self.profilesTableView.frame = CGRectMake(0, 0, 44.0, self.frame.size.height);
     self.profilesTableView.transform = CGAffineTransformMakeRotation(-M_PI_2);
     self.profilesTableView.frame = CGRectMake(0, 40.0, self.frame.size.width, defaultCellHeight);
     self.profilesTableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
     self.profilesTableView.tableHeaderView = nil;
     self.profilesTableView.tableFooterView = nil;
+    NSLog(@"translates: %i",self.profilesTableView.translatesAutoresizingMaskIntoConstraints);
 
     self.commentsTableView.delegate=self;
     self.commentsTableView.dataSource=self;
@@ -70,7 +72,7 @@ PAAssetManager * assetManager;
     self.backButton.contentMode = UIViewContentModeScaleAspectFit;
     
     //NSLog(@"the superview height: %f", self.b);
-    //self.commentsTableView.frame = CGRectMake(0, 0, self.superview.frame.size.width, <#CGFloat height#>)
+    //self.commentsTableView.frame = CGRectMake(0, 0, self.superview.frame.size.width, self.superview.frame.size.height - 2*defaultCellHeight)
     
     //NSLog(@"frame height: %f", self.frame.size.height);
     //self.commentsTableView.frame = CGRectMake(0, 100, self.frame.size.width, self.frame.size.height-200);

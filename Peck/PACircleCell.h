@@ -25,7 +25,7 @@
 - (IBAction)createCircleButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *createCircleButton;
 @property (weak, nonatomic) IBOutlet UILabel *circleTitle;
-@property (weak, nonatomic) IBOutlet UITableView *profilesTableView;
+@property (strong, nonatomic) UITableView *profilesTableView;
 
 @property(nonatomic, assign) id <PACirclesControllerDelegate> delegate;
 @property BOOL loadedImages;
