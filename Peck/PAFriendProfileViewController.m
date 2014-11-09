@@ -13,6 +13,8 @@
 
 @interface PAFriendProfileViewController ()
 
+-(IBAction)sendEmail:(id)sender;
+
 @end
 
 @implementation PAFriendProfileViewController
@@ -42,7 +44,7 @@ PAAssetManager * assetManager;
     
         self.nameLabel.text = self.peer.name;
         self.blurbTextView.text = self.peer.blurb;
-    
+        
         if(self.peer.imageURL){
             NSURL* imageURL = [NSURL URLWithString:self.peer.imageURL];
             [self.profilePicture setImageWithURL:imageURL placeholderImage:[assetManager profilePlaceholder]];
@@ -124,6 +126,10 @@ PAAssetManager * assetManager;
     else{
          return [[UIImageView alloc] initWithImage:[assetManager profilePlaceholder]];
     }
+}
+
+-(IBAction)sendEmail:(id)sender {
+    
 }
 
 

@@ -21,6 +21,7 @@
 
 #define cellHeight 88
 
+#define BACK_BTN_SIZE 64
 #define separatorWidth 1.0
 
 @interface PADiningPlacesTableViewController ()
@@ -58,7 +59,7 @@ PAAssetManager *assetManager;
 
     self.view.backgroundColor = [assetManager darkColor];
 
-    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(320 - 64, 0, 64, 64)];
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - BACK_BTN_SIZE, 0, BACK_BTN_SIZE, BACK_BTN_SIZE)];
     [self.backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.backButton addSubview:[assetManager createPanelWithFrame:CGRectInset(self.backButton.bounds, 15, 15) rounded:YES shadow:YES]];
     UIImageView *cancelIcon = [[UIImageView alloc] initWithImage:[assetManager cancelIcon]];
