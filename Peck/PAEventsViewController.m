@@ -827,7 +827,7 @@ PAAssetManager * assetManager;
 {
     // switch the datePopup state on pull down
     if (scrollView.contentOffset.y < -SHOW_HEADER_DEPTH) {
-        [self.datePopup hideHiddenView];
+        [self.datePopup showHiddenView];
         //self.centerTableView.contentInset = UIEdgeInsetsZero;
     }
     else if (scrollView.contentOffset.y > 0) {

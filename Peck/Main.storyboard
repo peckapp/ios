@@ -178,7 +178,7 @@
         <!--Circles-->
         <scene sceneID="Yk1-SF-5XL">
             <objects>
-                <tableViewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="t7o-Oj-DxR" customClass="PACirclesTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="circles" useStoryboardIdentifierAsRestorationIdentifier="YES" id="t7o-Oj-DxR" customClass="PACirclesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Dxa-tj-jQG">
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -196,7 +196,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TTK-gi-MfY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="60" y="2980.9859154929577"/>
+            <point key="canvasLocation" x="-228" y="2988"/>
         </scene>
         <!--Create a Circle-->
         <scene sceneID="6uh-9i-bsr">
@@ -475,6 +475,9 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="DQ3-ga-Fab"/>
+                                        <exclude reference="MO2-Ox-iEe"/>
+                                        <exclude reference="Xy0-vd-bGi"/>
                                         <exclude reference="CuM-g7-sCX"/>
                                         <exclude reference="KbI-SR-eOF"/>
                                         <exclude reference="Kpw-fq-xK2"/>
@@ -483,13 +486,13 @@
                                         <exclude reference="9hD-kN-q6G"/>
                                         <exclude reference="U2R-Y4-uMB"/>
                                         <exclude reference="o32-5y-xXr"/>
-                                        <exclude reference="DQ3-ga-Fab"/>
-                                        <exclude reference="MO2-Ox-iEe"/>
-                                        <exclude reference="Xy0-vd-bGi"/>
                                     </mask>
                                 </variation>
                                 <variation key="widthClass=compact">
                                     <mask key="constraints">
+                                        <include reference="DQ3-ga-Fab"/>
+                                        <include reference="MO2-Ox-iEe"/>
+                                        <include reference="Xy0-vd-bGi"/>
                                         <include reference="CuM-g7-sCX"/>
                                         <include reference="KbI-SR-eOF"/>
                                         <include reference="Kpw-fq-xK2"/>
@@ -498,9 +501,6 @@
                                         <include reference="9hD-kN-q6G"/>
                                         <include reference="U2R-Y4-uMB"/>
                                         <include reference="o32-5y-xXr"/>
-                                        <include reference="DQ3-ga-Fab"/>
-                                        <include reference="MO2-Ox-iEe"/>
-                                        <include reference="Xy0-vd-bGi"/>
                                     </mask>
                                 </variation>
                             </scrollView>
@@ -2138,23 +2138,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xNH-lF-J6l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2727" y="3092"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="H0g-QF-CEn">
-            <objects>
-                <navigationController storyboardIdentifier="circles" id="Czx-Wj-b74" sceneMemberID="viewController">
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="GZP-Gr-ebK">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="t7o-Oj-DxR" kind="relationship" relationship="rootViewController" id="Gpq-jy-r6e"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4qt-od-eMy" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-843.75" y="2980.9859154929577"/>
         </scene>
         <!--Dropdown View Controller-->
         <scene sceneID="5WI-Mo-5D5">

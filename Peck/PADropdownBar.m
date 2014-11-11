@@ -52,19 +52,22 @@
                            [UIImage imageNamed:@"plus"],
                            [UIImage imageNamed:@"circles"],
                            [UIImage imageNamed:@"profile"]];
-        UIImage *dismissal = [UIImage imageNamed:@"dismiss"];
+        UIImage *dismissal = [UIImage imageNamed:@"dismiss_inv"];
 
         NSMutableArray *collector = [[NSMutableArray alloc] init];
         for (NSUInteger i = 0 ; i < count ; i++)
         {
             //PABarButton *button = [[PABarButton alloc] initWithFrame:CGRectMake(i * buttonWidth, statusBarHeight + buffer, buttonWidth, barHeight)];
-            UIButton *button = [PABarButton buttonWithType:UIButtonTypeSystem];
+            PABarButton *button = [PABarButton buttonWithType:UIButtonTypeCustom];
+//            [button setTitleEdgeInsets:UIEdgeInsetsMake(button.imageView.frame.size.height, // top
+//                                                        -button.imageView.frame.size.width, // left
+//                                                        0,0)];
             [button addTarget:self action:@selector(selectItem:) forControlEvents:UIControlEventTouchUpInside];
             [button setImage:icons[i] forState:UIControlStateNormal];
+            //[button setImage:dismissal forState:UIControlStateHighlighted];
             [button setImage:dismissal forState:UIControlStateSelected];
             [button setTitle:names[i] forState:UIControlStateNormal];
-            [button setTitle:@"" forState:UIControlStateSelected];
-            button.titleLabel.font = [UIFont systemFontOfSize:12.0];
+            [button setTitle:@"Tap to Dismiss" forState:UIControlStateSelected];
             [button setTag:i];
             button.backgroundColor = [UIColor clearColor];
             button.frame = CGRectMake(i * buttonWidth, statusBarHeight + buffer, buttonWidth, barHeight);
@@ -95,22 +98,22 @@
 - (void)selectItemAtIndex:(NSInteger)index
 {
     if(self.currentIndex!=index){
-    if (self.currentIndex == -1) {
-        [self.delegate barDidSelectItemAtIndex:index];
-    }
-    else {
-        if (index < self.currentIndex) {
-            [self.delegate barDidSlideLeftToIndex:index];
+        if (self.currentIndex == -1) { // everything is deselected
+            [self.delegate barDidSelectItemAtIndex:index];
         }
-        else {
-            [self.delegate barDidSlideRightToIndex:index];
+        else { // something is currently selected
+            if (index < self.currentIndex) {
+                [self.delegate barDidSlideLeftToIndex:index];
+            }
+            else {
+                [self.delegate barDidSlideRightToIndex:index];
+            }
+
+            [self.buttons[self.currentIndex] setSelected:NO];
         }
 
-        [self.buttons[self.currentIndex] setSelected:NO];
-    }
-
-    self.currentIndex = index;
-    [self.buttons[index] setSelected:YES];
+        self.currentIndex = index;
+        [self.buttons[index] setSelected:YES];
     }
 }
 
@@ -122,5 +125,36 @@
         self.currentIndex = -1;
     }
 }
+
+// below comes from top answer at:
+// http://stackoverflow.com/questions/1195342/hover-over-state-for-uibutton-on-iphone
+
+//- (void)touchesBegan: (NSSet *)touches
+//           withEvent: (UIEvent *)event {
+//    NSLog(@"TouchDown");
+//    
+//    CGPoint currentLocation = [[touches anyObject] locationInView:self];
+//    //[self magnifyKey:[self hitTest:currentLocation withEvent:UIEventTypeTouches]];
+//}
+//
+//-(void)touchesMoved: (NSSet *)touches
+//          withEvent: (UIEvent *)event {
+//    NSLog(@"TouchMoved");
+//    
+//    CGPoint currentLocation = [[touches anyObject] locationInView:self];
+//    //[self magnifyKey:[self keyAtPoint:currentLocation]];
+//}
+//
+//
+//-(void) touchesEnded: (NSSet *)touches
+//           withEvent: (UIEvent *)event{
+//    
+//    NSLog(@"TouchUp");
+//    
+//    CGPoint currentLocation = [[touches anyObject] locationInView:self];
+//    
+//    PABarButton *btn = (PABarButton*)[self hitTest:currentLocation withEvent:UIEventTypeTouches];
+//    [self selectItem:btn];
+//}
 
 @end
