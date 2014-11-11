@@ -49,6 +49,7 @@ BOOL reloaded = NO;
     // type-specific user interface elements
     ////////////////////////////////////////////
     
+    // title label is displayed on compressed cell view
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
@@ -103,7 +104,7 @@ BOOL reloaded = NO;
     CGFloat fullTitleSize = buffer * 3;
     self.fullTitleLabel.frame = CGRectMake(0, 0, self.view.frame.size.width - buffer * 2, fullTitleSize);
     [self.fullTitleLabel sizeToFit];
-    self.fullTitleLabel.frame = CGRectMake(buffer, - (self.fullTitleLabel.frame.size.height + buffer), self.fullTitleLabel.frame.size.width, self.fullTitleLabel.frame.size.height);
+    self.fullTitleLabel.frame = CGRectMake(0, - (self.fullTitleLabel.frame.size.height+buffer), self.view.frame.size.width, self.fullTitleLabel.frame.size.height+buffer);
 
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
     self.dateLabel.frame = CGRectInset(self.headerView.frame, buffer, buffer);

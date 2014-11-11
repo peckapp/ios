@@ -34,6 +34,7 @@
 		863843E7193CBA69004110F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863843E6193CBA69004110F5 /* CoreLocation.framework */; };
 		863A77A119C8A07300E13413 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 863A77A019C8A07300E13413 /* Subscription.m */; };
 		863BA2C81A120C3E005FBC3B /* dismiss_inv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 863BA2C71A120C3E005FBC3B /* dismiss_inv@2x.png */; };
+		863BA2CB1A12CFC5005FBC3B /* PAPaddedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 863BA2CA1A12CFC5005FBC3B /* PAPaddedLabel.m */; };
 		864D873D196470C100BCC01A /* facebook-login.png in Resources */ = {isa = PBXBuildFile; fileRef = 864D873B196470C100BCC01A /* facebook-login.png */; };
 		864D873E196470C100BCC01A /* facebook-logout.png in Resources */ = {isa = PBXBuildFile; fileRef = 864D873C196470C100BCC01A /* facebook-logout.png */; };
 		8665FD4019AB83F600AA1162 /* NewRelicAgent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8665FD3F19AB83F600AA1162 /* NewRelicAgent.framework */; };
@@ -267,6 +268,8 @@
 		863A779F19C8A07300E13413 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
 		863A77A019C8A07300E13413 /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Subscription.m; sourceTree = "<group>"; };
 		863BA2C71A120C3E005FBC3B /* dismiss_inv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dismiss_inv@2x.png"; sourceTree = "<group>"; };
+		863BA2C91A12CFC5005FBC3B /* PAPaddedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPaddedLabel.h; sourceTree = "<group>"; };
+		863BA2CA1A12CFC5005FBC3B /* PAPaddedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPaddedLabel.m; sourceTree = "<group>"; };
 		864D873B196470C100BCC01A /* facebook-login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-login.png"; sourceTree = "<group>"; };
 		864D873C196470C100BCC01A /* facebook-logout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-logout.png"; sourceTree = "<group>"; };
 		8665FD3D19AB83C900AA1162 /* libPods-NewRelicAgent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-NewRelicAgent.a"; path = "Pods/build/Release-iphoneos/libPods-NewRelicAgent.a"; sourceTree = "<group>"; };
@@ -758,6 +761,8 @@
 				A4B772DD1945F8DB00A31252 /* Configure */,
 				863843D2193CB739004110F5 /* Login */,
 				8635758119AEDAE300953E39 /* Tutorial */,
+				863BA2C91A12CFC5005FBC3B /* PAPaddedLabel.h */,
+				863BA2CA1A12CFC5005FBC3B /* PAPaddedLabel.m */,
 				867651EC19462E3500C14645 /* Webservice */,
 				86051D47194BB24900961541 /* Graphics */,
 				86D59822193768BF00F38654 /* Images.xcassets */,
@@ -1317,6 +1322,7 @@
 				86D59815193768BF00F38654 /* PAAppDelegate.m in Sources */,
 				863843CC193CB31C004110F5 /* PACirclesTableViewController.m in Sources */,
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
+				863BA2CB1A12CFC5005FBC3B /* PAPaddedLabel.m in Sources */,
 				A497A2EB19A3BF5200455F69 /* PASendFeedbackViewController.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
 				DDCCE82019A3DC250054BA2B /* PATemporaryHeader.m in Sources */,

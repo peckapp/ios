@@ -190,6 +190,12 @@ PAAssetManager * assetManager;
     swipeRightGesture.direction = (UISwipeGestureRecognizerDirectionRight);
     [self.view addGestureRecognizer:swipeRightGesture];
     
+    // does not work at all, is called repeatedly resulting in way too large number of pages being moves through
+    /* UIScreenEdgePanGestureRecognizer *edgeLeftGesture = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(transitionToLeftTableView)];
+    edgeLeftGesture.edges = UIRectEdgeLeft;
+    [self.view addGestureRecognizer:edgeLeftGesture];
+     */
+    
     NSLog(@"Finished viewDidLoad (PAEventsViewController)");
 }
 

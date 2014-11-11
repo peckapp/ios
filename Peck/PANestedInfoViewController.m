@@ -69,10 +69,12 @@
     
     [self.headerView addSubview:[[PAAssetManager sharedManager] createShadowWithFrame:CGRectMake(0, -64, self.view.frame.size.width, 64) top:YES]];
 
-    self.fullTitleLabel = [[UILabel alloc] init];
+    self.fullTitleLabel = [[PAPaddedLabel alloc] init];
     self.fullTitleLabel.textColor = [UIColor whiteColor];
     self.fullTitleLabel.font = [UIFont boldSystemFontOfSize:21.0];
     self.fullTitleLabel.numberOfLines = 0;
+    self.fullTitleLabel.backgroundColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.5];
+    self.fullTitleLabel.insets = UIEdgeInsetsMake(0, 15, 0, 0);
     [self.headerView addSubview:self.fullTitleLabel];
     
     self.dateLabel = [[UILabel alloc] init];

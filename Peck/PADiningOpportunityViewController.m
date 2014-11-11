@@ -14,6 +14,7 @@
 #import "MenuItem.h"
 #import "PASyncManager.h"
 #import "UIImageView+AFNetworking.h"
+#import "PAPaddedLabel.h"
 
 #define imageHeight 256
 
@@ -25,8 +26,10 @@
 @property (strong, nonatomic) UIImageView *locationImageView;
 @property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UIView *footerView;
+// place label for the compressed cell view
 @property (strong, nonatomic) UILabel *placeLabel;
-@property (strong, nonatomic) UILabel *titleLabel;
+// place label for the expanded view controller
+@property (strong, nonatomic) PAPaddedLabel *titleLabel;
 
 @end
 
@@ -63,9 +66,12 @@ PAAssetManager *assetManager;
     self.placeLabel.font = [UIFont boldSystemFontOfSize:17.0];
     [self.view addSubview:self.placeLabel];
 
-    self.titleLabel = [[UILabel alloc] init];
+    self.titleLabel = [[PAPaddedLabel alloc] init];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:21.0];
+    self.titleLabel.backgroundColor = [[UIColor darkTextColor] colorWithAlphaComponent:0.5];
+    self.titleLabel.opaque = false;
+    self.titleLabel.insets = UIEdgeInsetsMake(0, 15, 0, 0);
     [self.headerView addSubview:self.titleLabel];
 }
 
@@ -81,7 +87,7 @@ PAAssetManager *assetManager;
     self.blurredImageView.frame = CGRectMake(0, 0, self.view.frame.size.width, 84);
 
     self.locationImageView.frame = CGRectMake(0, 0, self.view.frame.size.width, 256);
-    self.titleLabel.frame = CGRectInset(CGRectMake(0, -88 + 15, self.view.frame.size.width, 88), 15, 15);
+    self.titleLabel.frame = CGRectInset(CGRectMake(0, -88 + 15, self.view.frame.size.width, 88), 0, 15);
 
     self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 1000);
     self.placeLabel.frame = CGRectInset(CGRectMake(0, 0, self.view.frame.size.width, 88), 15, 15);

@@ -117,7 +117,12 @@
     self.titleDetailLabel.frame = right;
     self.titleDetailLabel.frame = CGRectOffset(CGRectInset(self.titleDetailLabel.frame, buffer, 0), 0, titleAndNameSpacing);
     
-    self.fullTitleLabel.frame = CGRectMake(buffer, -buffer * 3, self.view.frame.size.width - buffer * 2, buffer * 3);
+//    self.fullTitleLabel.frame = CGRectMake(buffer, -buffer * 3, self.view.frame.size.width - buffer * 2, buffer * 3);
+    
+    CGFloat fullTitleSize = buffer * 3;
+    self.fullTitleLabel.frame = CGRectMake(0, 0, self.view.frame.size.width - buffer * 2, fullTitleSize);
+    [self.fullTitleLabel sizeToFit];
+    self.fullTitleLabel.frame = CGRectMake(0, - (self.fullTitleLabel.frame.size.height+buffer), self.view.frame.size.width, self.fullTitleLabel.frame.size.height+buffer);
     
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
     self.dateLabel.frame = CGRectInset(self.headerView.frame, buffer, buffer);

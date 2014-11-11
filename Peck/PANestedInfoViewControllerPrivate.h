@@ -7,6 +7,7 @@
 //
 
 #import "PANestedInfoViewController.h"
+#import "PAPaddedLabel.h"
 
 #define defaultCommentCellHeight 72
 
@@ -49,7 +50,7 @@
 
 @property (strong, nonatomic) UILabel *timeLabel;
 @property (strong, nonatomic) UILabel *titleLabel;
-@property (strong, nonatomic) UILabel *fullTitleLabel;
+@property (strong, nonatomic) PAPaddedLabel *fullTitleLabel;
 @property (strong, nonatomic) UILabel *descriptionLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
 
