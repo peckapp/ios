@@ -17,8 +17,8 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vQW-bS-wbH">
                         <rect key="frame" x="13" y="6" width="294" height="369.5"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hCx-XY-dMm">
-                                <rect key="frame" x="8" y="251.5" width="278" height="81"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hCx-XY-dMm">
+                                <rect key="frame" x="8" y="256" width="278" height="77"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -28,7 +28,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="294" height="205.5"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="   Some people are attending an event." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="294" translatesAutoresizingMaskIntoConstraints="NO" id="KFy-lt-Xcz">
-                                <rect key="frame" x="0.0" y="182.5" width="294" height="23"/>
+                                <rect key="frame" x="0.0" y="183" width="294" height="23"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="23" id="5FC-Ys-RAr"/>
@@ -38,7 +38,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jk0-2f-lNa">
-                                <rect key="frame" x="8" y="213.5" width="278" height="21"/>
+                                <rect key="frame" x="8" y="214" width="278" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="vur-1l-fja"/>
                                 </constraints>
@@ -46,7 +46,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uA-pe-kG2">
-                                <rect key="frame" x="8" y="235.5" width="278" height="21"/>
+                                <rect key="frame" x="8" y="236" width="278" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="zsN-BR-iaf"/>
                                 </constraints>
@@ -55,7 +55,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="py7-DU-HeP">
-                                <rect key="frame" x="105" y="340.5" width="84" height="21"/>
+                                <rect key="frame" x="105" y="341" width="84" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="84" id="262-Zh-G74"/>
                                     <constraint firstAttribute="height" constant="21" id="m9W-2k-09h"/>
@@ -79,7 +79,7 @@
                             <constraint firstItem="Jk0-2f-lNa" firstAttribute="top" secondItem="0bj-E2-vee" secondAttribute="bottom" constant="8" symbolic="YES" id="HCL-Qj-KRR"/>
                             <constraint firstItem="py7-DU-HeP" firstAttribute="top" secondItem="hCx-XY-dMm" secondAttribute="bottom" constant="8" symbolic="YES" id="HiV-Jt-Idt"/>
                             <constraint firstItem="py7-DU-HeP" firstAttribute="bottom" secondItem="vQW-bS-wbH" secondAttribute="bottomMargin" id="J3z-tu-qxq"/>
-                            <constraint firstItem="hCx-XY-dMm" firstAttribute="top" secondItem="Jk0-2f-lNa" secondAttribute="bottom" constant="17" id="Kej-Cu-g8P"/>
+                            <constraint firstItem="hCx-XY-dMm" firstAttribute="top" secondItem="Jk0-2f-lNa" secondAttribute="bottom" constant="21" id="Kej-Cu-g8P"/>
                             <constraint firstItem="0bj-E2-vee" firstAttribute="trailing" secondItem="KFy-lt-Xcz" secondAttribute="trailing" id="LwJ-rh-LBH"/>
                             <constraint firstItem="Jk0-2f-lNa" firstAttribute="leading" secondItem="6uA-pe-kG2" secondAttribute="leading" id="Mbe-Sy-fMc"/>
                             <constraint firstItem="py7-DU-HeP" firstAttribute="top" secondItem="6uA-pe-kG2" secondAttribute="bottom" constant="84" id="NFA-ep-2iq"/>
@@ -109,7 +109,7 @@
                 <outlet property="photoView" destination="0bj-E2-vee" id="GbY-O6-nsU"/>
                 <outlet property="titleLabel" destination="Jk0-2f-lNa" id="GGr-Lk-9hM"/>
             </connections>
-            <point key="canvasLocation" x="139" y="182"/>
+            <point key="canvasLocation" x="139" y="181"/>
         </tableViewCell>
     </objects>
     <resources>

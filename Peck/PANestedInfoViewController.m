@@ -80,10 +80,10 @@
     self.dateLabel = [[UILabel alloc] init];
     [self.headerView addSubview:self.dateLabel];
     
-    self.descriptionLabel = [[UILabel alloc] init];
+    self.descriptionLabel = [[UITextView alloc] init];
     self.descriptionLabel.font = [UIFont systemFontOfSize:13.0];
-    self.descriptionLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    self.descriptionLabel.numberOfLines = 0;
+    [self.descriptionLabel sizeToFit];
+//    self.descriptionLabel.scrollEnabled = YES;
     [self.headerView addSubview:self.descriptionLabel];
     
     self.headerView.backgroundColor = [UIColor whiteColor];
@@ -248,12 +248,116 @@
     
 }
 
--(void)compressAnimated:(BOOL)animated {
-    
+- (void)compressAnimated:(BOOL)animated
+{
+    if (self.expanded) {
+        
+        [self.keyboardAccessory resignFirstResponder];
+        [self deregisterFromKeyboardNotifications];
+        self.view.backgroundColor = [[PAAssetManager sharedManager] darkColor];
+        [self.tableView setContentOffset:CGPointMake(0, -imageHeight) animated:YES];
+        
+        void (^animationsBlock)(void) = ^{
+            self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
+            self.cleanImageView.frame = self.imagesView.frame;
+            self.blurredImageView.frame = self.imagesView.frame;
+            self.blurredImageView.alpha = 1;
+        };
+        
+        void (^completionBlock)(BOOL) = ^(BOOL finished){
+            [self.keyboardAccessoryView removeFromSuperview];
+            [self.tableView removeFromSuperview];
+            self.tableView = nil;
+            self.fetchedResultsController = nil;
+            
+            self.cleanImageView.hidden = YES;
+            self.expanded = NO;
+        };
+        
+        if (animated) {
+            [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                             animations:animationsBlock
+                             completion:completionBlock];
+        }
+        else {
+            animationsBlock();
+            completionBlock(true);
+        }
+    }
 }
 
--(void)expandAnimated:(BOOL)animated {
-    
+
+- (void)expandAnimated:(BOOL)animated
+{
+    if (!self.expanded) {
+        //self.tableView = nil;
+        self.fetchedResultsController = nil;
+        
+        NSError * error = nil;
+        if (![self.fetchedResultsController performFetch:&error])
+        {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+        
+        self.view.frame = self.parentViewController.view.bounds;
+        //NSLog(@"view frame %@", NSStringFromCGRect(self.view.frame));
+        self.view.backgroundColor = [UIColor whiteColor];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        self.tableView.backgroundColor = [UIColor clearColor];
+        self.tableView.dataSource = self;
+        self.tableView.delegate = self;
+        self.tableView.tableHeaderView = self.headerView;
+        self.tableView.tableFooterView = self.footerView;
+        [self.view addSubview:self.tableView];
+        self.tableView.frame = self.view.frame;
+        self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, self.keyboardAccessoryView.frame.size.height - self.footerView.frame.size.height, 0);
+        [self updateFrames];
+        [self.view addSubview:self.keyboardAccessoryView];
+        
+        self.cleanImageView.hidden = NO;
+        
+        [self configureView];
+        
+        void (^fastAnimationsBlock)(void) = ^{
+            self.blurredImageView.frame = CGRectOffset(self.blurredImageView.frame, 0, self.imagesView.frame.size.height - self.blurredImageView.frame.size.height) ;
+            self.blurredImageView.alpha = 0;
+        };
+        void (^animationsBlock)(void) = ^{
+            self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
+            self.cleanImageView.frame = self.imagesView.frame;
+        };
+        
+        void (^completionBlock)(BOOL) = ^(BOOL finished){
+            self.expanded = YES;
+            
+            
+            NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                while(self.expanded) {
+                    [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:self.category];
+                    [NSThread sleepForTimeInterval:reloadTime];
+                }
+            });
+            
+            [self registerForKeyboardNotifications];
+            //NSLog(@"bounds:  %@", NSStringFromCGRect(self.parentViewController.view.bounds));
+            self.view.frame = self.parentViewController.view.bounds;
+        };
+        
+        if (animated) {
+            [UIView animateWithDuration:0.15f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                             animations:fastAnimationsBlock
+                             completion:completionBlock];
+            [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                             animations:animationsBlock
+                             completion:completionBlock];
+        }
+        else {
+            animationsBlock();
+            completionBlock(true);
+        }
+    }
 }
 
 -(UIView*) viewForBackButton {
@@ -527,12 +631,12 @@
 - (void)keyboardWasHidden:(NSNotification*)notification
 {
     
-    NSLog(@"after the keyboard was hidden, the y is %f", self.keyboardAccessoryView.frame.origin.y);
+//    NSLog(@"after the keyboard was hidden, the y is %f", self.keyboardAccessoryView.frame.origin.y);
 }
 
 - (void)keyboardWillShow:(NSNotification*)notification
 {
-    NSLog(@"keyboard will show");
+//    NSLog(@"keyboard will show");
     NSDictionary* info = [notification userInfo];
     CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
@@ -560,10 +664,10 @@
     self.keyboardAccessory.frame = CGRectInset(self.keyboardAccessoryView.bounds, 7, 7);
     self.postButton.alpha = 0;
     
-    NSLog(@"height of the view %f", self.view.frame.size.height);
-    NSLog(@"keyboard y %f", self.keyboardAccessoryView.frame.origin.y);
+//    NSLog(@"height of the view %f", self.view.frame.size.height);
+//    NSLog(@"keyboard y %f", self.keyboardAccessoryView.frame.origin.y);
     
-    NSLog(@"actual keyboard frame %@", NSStringFromCGRect(self.keyboardAccessory.frame));
+//    NSLog(@"actual keyboard frame %@", NSStringFromCGRect(self.keyboardAccessory.frame));
     
     [UIView commitAnimations];
 }

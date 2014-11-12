@@ -62,7 +62,6 @@ PAAssetManager * assetManager;
     self.profilesTableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
     self.profilesTableView.tableHeaderView = nil;
     self.profilesTableView.tableFooterView = nil;
-    NSLog(@"translates: %i",self.profilesTableView.translatesAutoresizingMaskIntoConstraints);
 
     self.commentsTableView.delegate=self;
     self.commentsTableView.dataSource=self;

@@ -8,6 +8,7 @@
 
 
 #import "PAAthleticEventViewController.h"
+#import "PANestedInfoViewController.h"
 #import "PANestedInfoViewControllerPrivate.h"
 #import "PACommentCell.h"
 #import "PAAppDelegate.h"
@@ -33,6 +34,8 @@
 @end
 
 @implementation PAAthleticEventViewController
+
+@synthesize fetchedResultsController = _fetchedResultsController;
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
@@ -64,11 +67,10 @@
     self.titleDetailLabel.font = [UIFont boldSystemFontOfSize:15.0];
     [self.blurredImageView addSubview:self.titleDetailLabel];
     
-    
-    self.fullTitleLabel = [[UILabel alloc] init];
-    self.fullTitleLabel.textColor = [UIColor whiteColor];
-    self.fullTitleLabel.font = [UIFont boldSystemFontOfSize:21.0];
-    [self.headerView addSubview:self.fullTitleLabel];
+//    self.fullTitleLabel = [[PAPaddedLabel alloc] init];
+//    self.fullTitleLabel.textColor = [UIColor whiteColor];
+//    self.fullTitleLabel.font = [UIFont boldSystemFontOfSize:21.0];
+//    [self.headerView addSubview:self.fullTitleLabel];
     
     self.scoreLabel = [[UILabel alloc] init];
     self.scoreLabel.font = [UIFont systemFontOfSize:21.0];
@@ -153,112 +155,6 @@
     self.postButton.frame = CGRectMake(self.keyboardAccessoryView.frame.size.width - self.keyboardAccessoryView.frame.size.height, 0, self.keyboardAccessoryView.frame.size.height, self.keyboardAccessoryView.frame.size.height);
     
     [self.keyboardAccessory resignFirstResponder];
-}
-
-- (void)expandAnimated:(BOOL)animated
-{
-    if (!self.expanded) {
-        //self.tableView = nil;
-        self.fetchedResultsController = nil;
-        
-        NSError * error = nil;
-        if (![self.fetchedResultsController performFetch:&error])
-        {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-        
-        self.view.frame = self.parentViewController.view.bounds;
-        //NSLog(@"view frame %@", NSStringFromCGRect(self.view.frame));
-        self.view.backgroundColor = [UIColor whiteColor];
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        self.tableView.backgroundColor = [UIColor clearColor];
-        self.tableView.dataSource = self;
-        self.tableView.delegate = self;
-        self.tableView.tableHeaderView = self.headerView;
-        self.tableView.tableFooterView = self.footerView;
-        [self.view addSubview:self.tableView];
-        self.tableView.frame = self.view.frame;
-        self.tableView.contentInset = UIEdgeInsetsMake(imageHeight, 0, self.keyboardAccessoryView.frame.size.height - self.footerView.frame.size.height, 0);
-        [self updateFrames];
-        [self.view addSubview:self.keyboardAccessoryView];
-        
-        self.cleanImageView.hidden = NO;
-        
-        [self configureView];
-        
-        void (^animationsBlock)(void) = ^{
-            self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, imageHeight);
-            self.cleanImageView.frame = self.imagesView.frame;
-            self.blurredImageView.frame = self.imagesView.frame;
-            self.blurredImageView.alpha = 0;
-        };
-        
-        void (^completionBlock)(BOOL) = ^(BOOL finished){
-            self.expanded = YES;
-            
-            
-            NSString *eventID = [[self.detailItem valueForKey:@"id"] stringValue];
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                while(self.expanded) {
-                    [[PASyncManager globalSyncManager] updateCommentsFrom:eventID withCategory:self.category];
-                    [NSThread sleepForTimeInterval:reloadTime];
-                }
-            });
-            
-            [self registerForKeyboardNotifications];
-            //NSLog(@"bounds:  %@", NSStringFromCGRect(self.parentViewController.view.bounds));
-            self.view.frame = self.parentViewController.view.bounds;
-        };
-        
-        if (animated) {
-            [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-                             animations:animationsBlock
-                             completion:completionBlock];
-        }
-        else {
-            animationsBlock();
-            completionBlock(true);
-        }
-    }
-}
-
-- (void)compressAnimated:(BOOL)animated
-{
-    if (self.expanded) {
-        
-        [self.keyboardAccessory resignFirstResponder];
-        [self deregisterFromKeyboardNotifications];
-        self.view.backgroundColor = [[PAAssetManager sharedManager] darkColor];
-        [self.tableView setContentOffset:CGPointMake(0, -imageHeight) animated:YES];
-        
-        void (^animationsBlock)(void) = ^{
-            self.imagesView.frame = CGRectMake(0, 0, self.view.frame.size.width, compressedHeight);
-            self.cleanImageView.frame = self.imagesView.frame;
-            self.blurredImageView.frame = self.imagesView.frame;
-            self.blurredImageView.alpha = 1;
-        };
-        
-        void (^completionBlock)(BOOL) = ^(BOOL finished){
-            [self.keyboardAccessoryView removeFromSuperview];
-            [self.tableView removeFromSuperview];
-            self.tableView = nil;
-            _fetchedResultsController = nil;
-            
-            self.cleanImageView.hidden = YES;
-            self.expanded = NO;
-        };
-        
-        if (animated) {
-            [UIView animateWithDuration:0.3f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-                             animations:animationsBlock
-                             completion:completionBlock];
-        }
-        else {
-            animationsBlock();
-            completionBlock(true);
-        }
-    }
 }
 
 - (UIView *)viewForBackButton

@@ -51,7 +51,7 @@
 @property (strong, nonatomic) UILabel *timeLabel;
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) PAPaddedLabel *fullTitleLabel;
-@property (strong, nonatomic) UILabel *descriptionLabel;
+@property (strong, nonatomic) UITextView *descriptionLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
 
 @property (strong, nonatomic) UIImage *attendImage;

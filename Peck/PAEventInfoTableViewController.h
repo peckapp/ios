@@ -16,13 +16,5 @@
 // superclass definition defines some functionality
 @interface PAEventInfoTableViewController : PANestedInfoViewController 
 
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
-@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-
-@property (strong, nonatomic) UIImage* userPicture;
-
 
 @end

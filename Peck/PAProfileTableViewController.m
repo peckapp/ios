@@ -92,13 +92,13 @@ BOOL loggedIn;
     
     if([defaults objectForKey:@"authentication_token"]){
         loggedIn=YES;
-        NSLog(@"logged in");
+        NSLog(@"User is logged in");
         self.loginButton.title =@"Logout";
         self.registerButton.title = @"Save";
         self.registerButton.action = @selector(saveChangesButton:);
     } else {
         loggedIn=NO;
-        NSLog(@"logged out");
+        NSLog(@"User is logged out");
         self.loginButton.title = @"Login";
         self.registerButton.title = @"Register";
         self.registerButton.action = @selector(registerAccount:);

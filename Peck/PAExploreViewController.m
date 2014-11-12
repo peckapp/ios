@@ -187,8 +187,7 @@ NSCache *imageCache;
     }
     // Athletic Event configuration
     else if([tempExplore.category isEqualToString:@"athletic"]){
-        cell.contextLabel.text = @" Athletic Event";
-    }
+        cell.contextLabel.text = @" Athletic Event";    }
     // General Event configuration
     else{
         cell.contextLabel.text = @" Event";

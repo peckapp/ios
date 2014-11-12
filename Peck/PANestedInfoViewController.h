@@ -20,6 +20,15 @@
                                                           UITableViewDataSource,
                                                           UITextFieldDelegate>
 
+
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+@property (strong, nonatomic) UIImage* userPicture;
+
 // the NSManagedObject that defined the attributes of this cell. usually passed by fetched results controller
 @property (strong, nonatomic) id detailItem;
 

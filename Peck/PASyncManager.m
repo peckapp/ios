@@ -1133,6 +1133,8 @@ typedef NS_ENUM(NSInteger, PAAlertType){
     NSString* description = [category stringByAppendingString:@"_description"];
     if(![[dictionary objectForKey:description] isKindOfClass:[NSNull class]]){
         explore.explore_description = [dictionary objectForKey:description];
+    }else if (![[dictionary objectForKey:@"description"] isKindOfClass:[NSNull class]]) {
+        explore.explore_description = [dictionary objectForKey:@"description"];
     }
     
     if(![[dictionary objectForKey:@"image"] isEqualToString:@"/images/missing.png"]){
@@ -2080,30 +2082,28 @@ typedef NS_ENUM(NSInteger, PAAlertType){
                                        category:@"Content"
                                           value:[NSNumber numberWithInteger:[postsFromResponse count]]];
                  
-                 [self.persistentStoreCoordinator lock];
-                 for (NSDictionary *eventAttributes in postsFromResponse) {
-                     NSNumber *newID = [eventAttributes objectForKey:@"id"];
-                     Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:[eventAttributes objectForKey:@"event_type"]];
-                     if(!event){
-                         //NSLog(@"adding an athletic event to core data");
-                         event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
+                 [self.persistentStoreCoordinator performBlockAndWait:^() {
+                     for (NSDictionary *eventAttributes in postsFromResponse) {
+                         NSNumber *newID = [eventAttributes objectForKey:@"id"];
+                         Event* event = [[PAFetchManager sharedFetchManager] getObject:newID withEntityType:@"Event" andType:[eventAttributes objectForKey:@"event_type"]];
+                         if(!event){
+                             //NSLog(@"adding an athletic event to core data");
+                             event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext: _managedObjectContext];
+                         }
+                         [self setAttributesInAthleticEvent:event withDictionary:eventAttributes];
+                         //We will set the attributes of the event even if it was already in core data in case the attributes of the event have changed (if it has been modified by subsequent scraping).
                      }
-                     [self setAttributesInAthleticEvent:event withDictionary:eventAttributes];
-                     //We will set the attributes of the event even if it was already in core data in case the attributes of the event have changed (if it has been modified by subsequent scraping).
-                 }
-                 NSError* error = nil;
-                 [_managedObjectContext save:&error];
-                 [self.persistentStoreCoordinator unlock];
+                     NSError* error = nil;
+                     [_managedObjectContext save:&error];
+                     if (error) {
+                         NSLog(@"Athletic Events save error: %@",error);
+                     }
+                 }];
              }
                                          failure:^(NSURLSessionDataTask *__unused task, NSError *error) {
                                              NSLog(@"updateAthleticEvents ERROR: %@",error);
                                          }];
-            /*
-             dispatch_async(dispatch_get_main_queue(), ^{
-             
-             
-             });
-             */
+
         });
     }
 }

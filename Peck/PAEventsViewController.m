@@ -360,6 +360,34 @@ PAAssetManager * assetManager;
 
 #pragma mark - Fetched Results controller
 
+//- (void)testFetchingAthleticEvents {
+//    PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+//    _managedObjectContext = [appdelegate managedObjectContext];
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    
+//    NSString *eventString = @"Event";
+//    NSEntityDescription *entity = [NSEntityDescription entityForName:eventString inManagedObjectContext:self.managedObjectContext];
+//    [fetchRequest setEntity:entity];
+//    
+//    NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"type == %@", @"athletic"];
+//    
+//    [fetchRequest setPredicate:categoryPredicate];
+//    
+//    // Set the batch size to a suitable number.
+//    [fetchRequest setFetchBatchSize:20];
+//    
+//    // Edit the sort key as appropriate.
+//    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:YES];
+//    NSArray *sortDescriptors = @[sortDescriptor];
+//    
+//    [fetchRequest setSortDescriptors:sortDescriptors];
+//    
+//    NSError *err = nil;
+//    NSArray *array = [_managedObjectContext executeFetchRequest:fetchRequest error:&err];
+//    Event *e = array[0];
+//    NSLog(@"array length: %lu with elem: %@",(unsigned long)[array count], e);
+//}
+
 - (NSFetchedResultsController *)constructFetchedResultsControllerForDay:(NSInteger)day
 {
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
