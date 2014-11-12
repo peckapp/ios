@@ -856,7 +856,6 @@ PAAssetManager *assetManager;
 {
     NSDictionary* info = [notification userInfo];
     CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-
     
     NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[_fetchedResultsController.fetchedObjects count] inSection:0];
     PACircleCell* cell = (PACircleCell*)[self.tableView cellForRowAtIndexPath:indexPath];

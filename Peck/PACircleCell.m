@@ -597,7 +597,7 @@ PAAssetManager * assetManager;
 
 #pragma mark - Cell compression and expansion
 
--(void)expand:(PACommentCell*)cell{
+-(void)expand:(PACommentCell*)cell {
     textViewHelper.frame = cell.commentTextView.frame;
     textViewHelper.text=cell.commentTextView.text;
     
