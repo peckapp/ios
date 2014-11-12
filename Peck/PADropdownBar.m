@@ -15,6 +15,7 @@
 #define barHeight 48.0
 #define buffer 2.0
 #define statusBarHeight 20.0
+#define edgeBuffer 7.0
 
 #define selected [UIColor blackColor]
 #define deselected [UIColor grayColor]
@@ -39,7 +40,7 @@
         self.backgroundColor = [UIColor whiteColor];
 
         // The spacing between each button
-        CGFloat buttonWidth = CGRectGetWidth(frame) / count;
+        CGFloat buttonWidth = (CGRectGetWidth(frame) - 2*edgeBuffer) / count;
 
         NSArray *names = @[@"Pecks",
                            @"Explore",
@@ -70,7 +71,7 @@
             [button setTitle:@"Tap to Dismiss" forState:UIControlStateSelected];
             [button setTag:i];
             button.backgroundColor = [UIColor clearColor];
-            button.frame = CGRectMake(i * buttonWidth, statusBarHeight + buffer, buttonWidth, barHeight);
+            button.frame = CGRectMake(edgeBuffer + i * buttonWidth, statusBarHeight + buffer, buttonWidth, barHeight);
             [self addSubview:button];
             [collector addObject:button];
         }
