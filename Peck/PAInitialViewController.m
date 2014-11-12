@@ -119,6 +119,7 @@
                                    self.passwordField.text, @"password",
                                    storedPushToken, @"device_token",
                                    nil];
+        [self dismissKeyboard];
         
         void (^callbackBlock)(BOOL);
         if (self.mode == PAViewControllerModeInitializing) {
@@ -318,8 +319,8 @@
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if([[segue identifier] isEqualToString:@"enterValidEmail"]){
-        PAEnterEmailTableViewController* destintation = [segue destinationViewController];
-        destintation.parent = self;
+        PAEnterEmailTableViewController* destination = [segue destinationViewController];
+        destination.parent = self;
     }
 }
 

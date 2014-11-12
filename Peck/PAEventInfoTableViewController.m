@@ -117,7 +117,7 @@ BOOL reloaded = NO;
 
     // NSLog(@"headerView: %@", NSStringFromCGRect(self.headerView.frame));
     self.descriptionLabel.frame = CGRectOffset(CGRectInset(self.headerView.frame, buffer, buffer), 0, CGRectGetMaxY(self.dateLabel.frame));
-    [self.descriptionLabel sizeToFit];
+    //[self.descriptionLabel sizeToFit];
 
     self.headerView.frame = CGRectMake(0, 0, self.view.frame.size.width, CGRectGetMaxY(self.descriptionLabel.frame) + buffer);
 

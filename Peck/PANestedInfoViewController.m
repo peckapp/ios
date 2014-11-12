@@ -82,8 +82,8 @@
     
     self.descriptionLabel = [[UITextView alloc] init];
     self.descriptionLabel.font = [UIFont systemFontOfSize:13.0];
+    self.descriptionLabel.scrollEnabled = YES;
     [self.descriptionLabel sizeToFit];
-//    self.descriptionLabel.scrollEnabled = YES;
     [self.headerView addSubview:self.descriptionLabel];
     
     self.headerView.backgroundColor = [UIColor whiteColor];
@@ -645,7 +645,7 @@
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
     
-    self.keyboardAccessoryView.frame = CGRectOffset(self.keyboardAccessoryView.frame, 0, -keyboardSize.height);
+    self.keyboardAccessoryView.frame = CGRectOffset(self.keyboardAccessoryView.frame, 0, -keyboardSize.height/2);
     self.keyboardAccessory.frame = CGRectMake(7, 7, self.view.frame.size.width - self.postButton.frame.size.width - 7, 30);
     self.postButton.alpha = 1;
     
