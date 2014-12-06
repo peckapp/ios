@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Ash Furrow. All rights reserved.
 //
 
-#import "AFMasterViewController.h"
+#import "PASubscriptionsSelectorVC.h"
 #import "PASubscriptionsCollectionCell.h"
 #import "PAAssetManager.h"
 
 static NSString *CellIdentifier = @"SubCell";
 
-@interface AFMasterViewController ()
+@interface PASubscriptionsSelectorVC ()
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *finishButton;
 
@@ -20,7 +20,7 @@ static NSString *CellIdentifier = @"SubCell";
 
 @end
 
-@implementation AFMasterViewController
+@implementation PASubscriptionsSelectorVC
 {
     NSMutableArray *_objectChanges;
     NSMutableArray *_sectionChanges;

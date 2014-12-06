@@ -34,7 +34,7 @@
 		863A77A119C8A07300E13413 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 863A77A019C8A07300E13413 /* Subscription.m */; };
 		863BA2C81A120C3E005FBC3B /* dismiss_inv@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 863BA2C71A120C3E005FBC3B /* dismiss_inv@2x.png */; };
 		863BA2CB1A12CFC5005FBC3B /* PAPaddedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 863BA2CA1A12CFC5005FBC3B /* PAPaddedLabel.m */; };
-		863D816E1A336145001BFD61 /* AFMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 863D816D1A336145001BFD61 /* AFMasterViewController.m */; };
+		863D816E1A336145001BFD61 /* PASubscriptionsSelectorVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 863D816D1A336145001BFD61 /* PASubscriptionsSelectorVC.m */; };
 		864D873D196470C100BCC01A /* facebook-login.png in Resources */ = {isa = PBXBuildFile; fileRef = 864D873B196470C100BCC01A /* facebook-login.png */; };
 		864D873E196470C100BCC01A /* facebook-logout.png in Resources */ = {isa = PBXBuildFile; fileRef = 864D873C196470C100BCC01A /* facebook-logout.png */; };
 		8665FD4019AB83F600AA1162 /* NewRelicAgent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8665FD3F19AB83F600AA1162 /* NewRelicAgent.framework */; };
@@ -45,7 +45,6 @@
 		8671A2CF195B848D00700101 /* dropdown_explore@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CA195B848D00700101 /* dropdown_explore@2x.png */; };
 		8671A2D0195B848D00700101 /* dropdown_post@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CB195B848D00700101 /* dropdown_post@2x.png */; };
 		8671A2D2195B848D00700101 /* dropdown_profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CD195B848D00700101 /* dropdown_profile@2x.png */; };
-		86755A3219D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86755A3119D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.m */; };
 		8678205F1A0ECBF0005B9B41 /* dismiss@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8678205E1A0ECBF0005B9B41 /* dismiss@2x.png */; };
 		867820621A0ECC2B005B9B41 /* explore@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 867820601A0ECC2B005B9B41 /* explore@2x.png */; };
 		867820631A0ECC2B005B9B41 /* plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 867820611A0ECC2B005B9B41 /* plus@2x.png */; };
@@ -269,8 +268,8 @@
 		863BA2C71A120C3E005FBC3B /* dismiss_inv@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dismiss_inv@2x.png"; sourceTree = "<group>"; };
 		863BA2C91A12CFC5005FBC3B /* PAPaddedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPaddedLabel.h; sourceTree = "<group>"; };
 		863BA2CA1A12CFC5005FBC3B /* PAPaddedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPaddedLabel.m; sourceTree = "<group>"; };
-		863D816C1A336145001BFD61 /* AFMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFMasterViewController.h; sourceTree = "<group>"; };
-		863D816D1A336145001BFD61 /* AFMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFMasterViewController.m; sourceTree = "<group>"; };
+		863D816C1A336145001BFD61 /* PASubscriptionsSelectorVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASubscriptionsSelectorVC.h; sourceTree = "<group>"; };
+		863D816D1A336145001BFD61 /* PASubscriptionsSelectorVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASubscriptionsSelectorVC.m; sourceTree = "<group>"; };
 		864D873B196470C100BCC01A /* facebook-login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-login.png"; sourceTree = "<group>"; };
 		864D873C196470C100BCC01A /* facebook-logout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-logout.png"; sourceTree = "<group>"; };
 		8665FD3D19AB83C900AA1162 /* libPods-NewRelicAgent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-NewRelicAgent.a"; path = "Pods/build/Release-iphoneos/libPods-NewRelicAgent.a"; sourceTree = "<group>"; };
@@ -279,8 +278,6 @@
 		8671A2CA195B848D00700101 /* dropdown_explore@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_explore@2x.png"; sourceTree = "<group>"; };
 		8671A2CB195B848D00700101 /* dropdown_post@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_post@2x.png"; sourceTree = "<group>"; };
 		8671A2CD195B848D00700101 /* dropdown_profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_profile@2x.png"; sourceTree = "<group>"; };
-		86755A3019D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+NSFetchedResultsController.h"; sourceTree = "<group>"; };
-		86755A3119D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+NSFetchedResultsController.m"; sourceTree = "<group>"; };
 		867651ED19462E5200C14645 /* old_webservice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = old_webservice.h; sourceTree = "<group>"; };
 		8678205E1A0ECBF0005B9B41 /* dismiss@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dismiss@2x.png"; sourceTree = "<group>"; };
 		867820601A0ECC2B005B9B41 /* explore@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "explore@2x.png"; sourceTree = "<group>"; };
@@ -626,6 +623,18 @@
 			name = Login;
 			sourceTree = "<group>";
 		};
+		863D816F1A336913001BFD61 /* old tableview */ = {
+			isa = PBXGroup;
+			children = (
+				A43BF0EC197819480009B7AD /* PASubscriptionsTableViewController.h */,
+				A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */,
+				A43BF0EF1978198D0009B7AD /* PASubscriptionCell.h */,
+				A43BF0F01978198D0009B7AD /* PASubscriptionCell.m */,
+				A43BF0F11978198D0009B7AD /* PASubscriptionCell.xib */,
+			);
+			name = "old tableview";
+			sourceTree = "<group>";
+		};
 		864D873A19646F9900BCC01A /* facebook */ = {
 			isa = PBXGroup;
 			children = (
@@ -877,19 +886,13 @@
 		A43BF0EB197819250009B7AD /* Subscriptions */ = {
 			isa = PBXGroup;
 			children = (
-				A43BF0EC197819480009B7AD /* PASubscriptionsTableViewController.h */,
-				A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */,
-				A43BF0EF1978198D0009B7AD /* PASubscriptionCell.h */,
-				A43BF0F01978198D0009B7AD /* PASubscriptionCell.m */,
-				A43BF0F11978198D0009B7AD /* PASubscriptionCell.xib */,
+				863D816F1A336913001BFD61 /* old tableview */,
 				861B31A119C7A1E100EF14DC /* PASubscriptionsCollectionViewController.h */,
 				861B31A219C7A1E100EF14DC /* PASubscriptionsCollectionViewController.m */,
 				861B31A419C7A2EB00EF14DC /* PASubscriptionsCollectionCell.h */,
 				861B31A519C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m */,
-				863D816C1A336145001BFD61 /* AFMasterViewController.h */,
-				863D816D1A336145001BFD61 /* AFMasterViewController.m */,
-				86755A3019D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.h */,
-				86755A3119D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.m */,
+				863D816C1A336145001BFD61 /* PASubscriptionsSelectorVC.h */,
+				863D816D1A336145001BFD61 /* PASubscriptionsSelectorVC.m */,
 			);
 			name = Subscriptions;
 			sourceTree = "<group>";
@@ -1302,7 +1305,6 @@
 				860EB42F1980660400F1E665 /* UIImage+ImageEffects.m in Sources */,
 				8689DD8B195871D200A6B61C /* PAFilter.m in Sources */,
 				86BFB4AD194B41FB00ADAB75 /* PADropdownViewController.m in Sources */,
-				86755A3219D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.m in Sources */,
 				863843E3193CB7FD004110F5 /* PAExploreViewController.m in Sources */,
 				A433EAA2195B3F5800DAA201 /* HTAutocompleteManager.m in Sources */,
 				A439EBC7199D196700FFEF33 /* Institution.m in Sources */,
@@ -1335,7 +1337,7 @@
 				DD8C3394199D095B00B9966A /* PADiningOpportunityViewController.m in Sources */,
 				A4F04BF61995155900290CF2 /* PAPromptView.m in Sources */,
 				A4BDFE6F195329650020EFD5 /* PAExploreInfoViewController.m in Sources */,
-				863D816E1A336145001BFD61 /* AFMasterViewController.m in Sources */,
+				863D816E1A336145001BFD61 /* PASubscriptionsSelectorVC.m in Sources */,
 				A4773C8C1959DD0E00AB9831 /* PAImageManager.m in Sources */,
 				86292522193CBFD40057CA41 /* PAPeckCell.m in Sources */,
 				8627559A1A0D2E510004CA0C /* PABarButton.m in Sources */,

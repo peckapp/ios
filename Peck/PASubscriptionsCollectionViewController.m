@@ -11,7 +11,6 @@
 #import "PASubscriptionsCollectionCell.h"
 #import "Subscription.h"
 #import "PAAppDelegate.h"
-#import "UICollectionView+NSFetchedResultsController.h"
 #import "UIImageView+AFNetworking.h"
 
 static NSString *CellIdentifier = @"SubCell";
@@ -174,21 +173,21 @@ static NSString *CellIdentifier = @"SubCell";
     return _fetchedResultsController;
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
-{
-    
-    [self.collectionView addChangeForSection:sectionInfo atIndex:sectionIndex forChangeType:type];
-}
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
-{
-    
-    [self.collectionView addChangeForObjectAtIndexPath:indexPath forChangeType:type newIndexPath:newIndexPath];
-}
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    
-    [self.collectionView commitChanges];
-}
+//- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+//{
+//    
+//    [self.collectionView addChangeForSection:sectionInfo atIndex:sectionIndex forChangeType:type];
+//}
+//
+//- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+//{
+//    
+//    [self.collectionView addChangeForObjectAtIndexPath:indexPath forChangeType:type newIndexPath:newIndexPath];
+//}
+//
+//- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+//    
+//    [self.collectionView commitChanges];
+//}
 
 @end
