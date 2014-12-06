@@ -98,16 +98,6 @@
         [(PAConfigureViewController*)[(UINavigationController*)initViewController topViewController] setMode:PAViewControllerModeInitializing];
         
         if(userID == nil){
-            /*
-            [[PASyncManager globalSyncManager] ceateAnonymousUser:^(BOOL success) {
-                if (success) {
-                    NSLog(@"Sucessfully set a new anonymous user");
-                    PAConfigureViewController* configure = (PAConfigureViewController*) initViewController;
-                    [configure updateInstitutions];
-                } else {
-                    NSLog(@"Anonymous user creation unsucessful");
-                }
-            }];*/
             [[PASyncManager globalSyncManager] sendUDIDForInitViewController:[(UINavigationController*)initViewController topViewController]];
         }
     }

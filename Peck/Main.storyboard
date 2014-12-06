@@ -1461,42 +1461,6 @@
             </objects>
             <point key="canvasLocation" x="-3969.375" y="4410.2112676056331"/>
         </scene>
-        <!--Subscriptions Table View Controller-->
-        <scene sceneID="cyr-f0-edg">
-            <objects>
-                <tableViewController id="nHe-bt-Mf7" customClass="PASubscriptionsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="IHd-d8-hcn">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="aSI-RQ-92q">
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aSI-RQ-92q" id="rkr-88-LGV">
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="nHe-bt-Mf7" id="Q7i-Si-vc6"/>
-                            <outlet property="delegate" destination="nHe-bt-Mf7" id="q0o-c5-27r"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="RwC-Uk-uiZ">
-                        <barButtonItem key="rightBarButtonItem" title="Finish" id="FrX-cR-HZe">
-                            <connections>
-                                <action selector="finishInitialSelections:" destination="nHe-bt-Mf7" id="hTi-7O-OQh"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="finishButton" destination="FrX-cR-HZe" id="OBA-R1-uwd"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="oQn-oq-Mmk" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2572.5" y="4457"/>
-        </scene>
         <!--Subscriptions-->
         <scene sceneID="Hup-Oo-0de">
             <objects>
@@ -1504,9 +1468,10 @@
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="M4v-4d-MFq">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9rG-b4-Osf">
                             <size key="itemSize" width="162" height="68"/>
-                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="headerReferenceSize" width="50" height="50"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
@@ -1527,6 +1492,7 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="jQP-f6-qNg" firstAttribute="leading" secondItem="dA5-kl-3g3" secondAttribute="leadingMargin" constant="52" id="BEv-9H-a5s">
                                         <variation key="widthClass=compact" constant="13"/>
@@ -1564,6 +1530,48 @@
                                 </connections>
                             </collectionViewCell>
                         </cells>
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SubscriptionHeader" id="0Ks-8q-PUs" customClass="PASubscriptionsHeader">
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KXi-bC-Mva">
+                                    <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="KXi-bC-Mva" firstAttribute="top" secondItem="0Ks-8q-PUs" secondAttribute="topMargin" constant="6" id="H4Y-9u-BJz"/>
+                                <constraint firstItem="KXi-bC-Mva" firstAttribute="trailing" secondItem="0Ks-8q-PUs" secondAttribute="trailingMargin" id="P4G-uU-RH3"/>
+                                <constraint firstAttribute="bottomMargin" secondItem="KXi-bC-Mva" secondAttribute="bottom" constant="7" id="PJp-HR-MEJ"/>
+                                <constraint firstItem="KXi-bC-Mva" firstAttribute="leading" secondItem="0Ks-8q-PUs" secondAttribute="leadingMargin" id="ohY-7y-DzS"/>
+                            </constraints>
+                            <variation key="default">
+                                <mask key="subviews">
+                                    <exclude reference="KXi-bC-Mva"/>
+                                </mask>
+                                <mask key="constraints">
+                                    <exclude reference="H4Y-9u-BJz"/>
+                                    <exclude reference="P4G-uU-RH3"/>
+                                    <exclude reference="PJp-HR-MEJ"/>
+                                    <exclude reference="ohY-7y-DzS"/>
+                                </mask>
+                            </variation>
+                            <variation key="widthClass=compact">
+                                <mask key="subviews">
+                                    <include reference="KXi-bC-Mva"/>
+                                </mask>
+                                <mask key="constraints">
+                                    <include reference="H4Y-9u-BJz"/>
+                                    <include reference="P4G-uU-RH3"/>
+                                    <include reference="PJp-HR-MEJ"/>
+                                    <include reference="ohY-7y-DzS"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <outlet property="sectionTitle" destination="KXi-bC-Mva" id="F0x-Mt-qa5"/>
+                            </connections>
+                        </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="w6A-JF-GcP" id="G57-Tr-vpc"/>
                             <outlet property="delegate" destination="w6A-JF-GcP" id="Lt7-fB-Zqc"/>
@@ -1582,7 +1590,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FHJ-kd-VI5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2044.5" y="3767"/>
+            <point key="canvasLocation" x="-2698.5" y="4249"/>
         </scene>
         <!--Announcements-->
         <scene sceneID="QMq-yP-TWH">
@@ -2181,7 +2189,6 @@
                         <outlet property="continueButton" destination="HnY-LK-sOy" id="rLs-Jo-m8v"/>
                         <outlet property="loginButton" destination="zu8-V3-YJO" id="fZP-88-cKd"/>
                         <outlet property="schoolPicker" destination="qJo-9h-bmg" id="caa-gJ-js3"/>
-                        <segue destination="nHe-bt-Mf7" kind="show" identifier="initialSubscriptions" id="bj2-af-O4h"/>
                         <segue destination="w6A-JF-GcP" kind="show" identifier="initialSubscriptions" id="0uC-qc-gMv"/>
                     </connections>
                 </viewController>
@@ -2815,9 +2822,9 @@
         <image name="sidebar_background.jpg" width="640" height="1136"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IGb-OB-Nqp"/>
-        <segue reference="gpx-S3-Fsz"/>
         <segue reference="YoB-2V-iLE"/>
+        <segue reference="gpx-S3-Fsz"/>
         <segue reference="TbO-p2-TYX"/>
+        <segue reference="0uC-qc-gMv"/>
     </inferredMetricsTieBreakers>
 </document>

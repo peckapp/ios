@@ -41,6 +41,7 @@
 		8665FD4119AB840D00AA1162 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A0198888AE0088B47F /* CoreTelephony.framework */; };
 		8665FD4219AB842C00AA1162 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A2198888B80088B47F /* SystemConfiguration.framework */; };
 		8665FD4319AB847B00AA1162 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A4198888C20088B47F /* libz.dylib */; };
+		866E99EA1A33A4D700C29888 /* PASubscriptionsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 866E99E91A33A4D700C29888 /* PASubscriptionsHeader.m */; };
 		8671A2CE195B848D00700101 /* dropdown_pecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2C9195B848D00700101 /* dropdown_pecks@2x.png */; };
 		8671A2CF195B848D00700101 /* dropdown_explore@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CA195B848D00700101 /* dropdown_explore@2x.png */; };
 		8671A2D0195B848D00700101 /* dropdown_post@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CB195B848D00700101 /* dropdown_post@2x.png */; };
@@ -274,6 +275,8 @@
 		864D873C196470C100BCC01A /* facebook-logout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-logout.png"; sourceTree = "<group>"; };
 		8665FD3D19AB83C900AA1162 /* libPods-NewRelicAgent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-NewRelicAgent.a"; path = "Pods/build/Release-iphoneos/libPods-NewRelicAgent.a"; sourceTree = "<group>"; };
 		8665FD3F19AB83F600AA1162 /* NewRelicAgent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NewRelicAgent.framework; path = Pods/NewRelicAgent/NewRelic_iOS_Agent_3.396/NewRelicAgent.framework; sourceTree = "<group>"; };
+		866E99E81A33A4D700C29888 /* PASubscriptionsHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASubscriptionsHeader.h; sourceTree = "<group>"; };
+		866E99E91A33A4D700C29888 /* PASubscriptionsHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASubscriptionsHeader.m; sourceTree = "<group>"; };
 		8671A2C9195B848D00700101 /* dropdown_pecks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_pecks@2x.png"; sourceTree = "<group>"; };
 		8671A2CA195B848D00700101 /* dropdown_explore@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_explore@2x.png"; sourceTree = "<group>"; };
 		8671A2CB195B848D00700101 /* dropdown_post@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_post@2x.png"; sourceTree = "<group>"; };
@@ -893,6 +896,8 @@
 				863D816D1A336145001BFD61 /* PASubscriptionsSelectorVC.m */,
 				861B31A419C7A2EB00EF14DC /* PASubscriptionsCollectionCell.h */,
 				861B31A519C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m */,
+				866E99E81A33A4D700C29888 /* PASubscriptionsHeader.h */,
+				866E99E91A33A4D700C29888 /* PASubscriptionsHeader.m */,
 			);
 			name = Subscriptions;
 			sourceTree = "<group>";
@@ -1356,6 +1361,7 @@
 				86292512193CBE000057CA41 /* PAPostViewController.m in Sources */,
 				A4E21F6519659892002A9800 /* PACommentCell.m in Sources */,
 				861B58DE19EB214900C20FA2 /* PANestedInfoViewController.m in Sources */,
+				866E99EA1A33A4D700C29888 /* PASubscriptionsHeader.m in Sources */,
 				8687622D19A38710009AF3D1 /* PANoContentView.m in Sources */,
 				A4E47D571991261000DDF941 /* PAUserEventsTableViewController.m in Sources */,
 				DDDAEDDF19475EBA004CE102 /* PAPecksViewController.m in Sources */,

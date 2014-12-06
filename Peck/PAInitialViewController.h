@@ -11,6 +11,7 @@
 #import "PAUtils.h"
 
 @interface PAInitialViewController : UITableViewController <FBLoginViewDelegate, UITableViewDelegate, UITextFieldDelegate, UIAlertViewDelegate>
+
 -(void)showAlert;
 @property NSString* direction;
 @property PAViewControllerMode mode;

@@ -12,6 +12,7 @@
 #import "PAAppDelegate.h"
 #import "PAAssetManager.h"
 #import "PASyncManager.h"
+#import "PASubscriptionsHeader.h"
 
 static NSString *CellIdentifier = @"SubCell";
 
@@ -52,8 +53,6 @@ static NSString *CellIdentifier = @"SubCell";
         self.finishButton.title = @"";
     }
     
-    self.collectionView.backgroundColor = [UIColor whiteColor];
-    
     _objectChanges = [NSMutableArray array];
     _sectionChanges = [NSMutableArray array];
     
@@ -61,7 +60,12 @@ static NSString *CellIdentifier = @"SubCell";
     self.deletedSubscriptions = [NSMutableDictionary dictionary];
     
     UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout*)self.collectionView.collectionViewLayout;
-    collectionViewLayout.sectionInset = UIEdgeInsetsMake(20, 0, 20, 0);
+    collectionViewLayout.sectionInset = UIEdgeInsetsMake(0, 10, 20, 10);
+    
+    if (self.managedObjectContext == nil) {
+        PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        self.managedObjectContext = [appDelegate managedObjectContext];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -88,10 +92,33 @@ static NSString *CellIdentifier = @"SubCell";
 
 -(IBAction)finishInitialSelections:(id)sender {
     if (self.isInitializing) {
-        PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        // checks that the user has selected available subscriptions
+        if ([self.addedSubscriptions count] > 5) {
+            PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            
+            UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+            [appDelegate.window setRootViewController:newRoot];
+        } else {
+            UIAlertController *alertController;
+            if (self.fetchedResultsController.fetchedObjects.count > 0) {
+                alertController = [UIAlertController alertControllerWithTitle:@"Too Few Subscriptions"
+                                                                                         message:@"Please select at least five subscriptions to continue."
+                                                                                  preferredStyle:UIAlertControllerStyleAlert];
+                
+            } else {
+                alertController = [UIAlertController alertControllerWithTitle:@"Subscriptions are Loading"
+                                                                                         message:@"Please wait and select at least five subscriptions to continue."
+                                                                                  preferredStyle:UIAlertControllerStyleAlert];
+            }
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Okay"
+                                                               style:UIAlertActionStyleCancel
+                                                             handler:^(UIAlertAction *action) {
+                                                                 
+                                                             }];
+            [alertController addAction:okAction];
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
         
-        UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
-        [appDelegate.window setRootViewController:newRoot];
     } else {
         NSLog(@"PROBLEM: finishInitialSelections was called while the viewController was not initializing");
     }
@@ -131,6 +158,25 @@ static NSString *CellIdentifier = @"SubCell";
     } else {
         subscriptionCell.backgroundColor = [[PAAssetManager sharedManager] darkColor];
     }
+}
+
+- (UICollectionReusableView*)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    UICollectionReusableView *reusableview = nil;
+    
+    if (kind == UICollectionElementKindSectionHeader) {
+        PASubscriptionsHeader *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"SubscriptionHeader" forIndexPath:indexPath];
+        headerView.sectionTitle.text = [[[[[self fetchedResultsController] sections]objectAtIndex:indexPath.section] name] capitalizedString];
+        
+        reusableview = headerView;
+    }
+    
+//    if (kind == UICollectionElementKindSectionFooter) {
+//        UICollectionReusableView *footerview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView" forIndexPath:indexPath];
+//        
+//        reusableview = footerview;
+//    }
+    
+    return reusableview;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
