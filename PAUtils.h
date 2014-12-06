@@ -56,12 +56,8 @@ typedef NS_ENUM(NSInteger, PAViewControllerMode) {
 
 // common boilerplate methods calls
 
-#define REGISTER_PUSH_NOTIFICATIONS if (IS_IOS8_AND_UP) { \
-    [[UIApplication sharedApplication] registerForRemoteNotifications]; \
-    [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge |UIUserNotificationTypeSound categories:nil]]; \
-} else { \
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge]; \
-}
+#define REGISTER_PUSH_NOTIFICATIONS [[UIApplication sharedApplication] registerForRemoteNotifications]; \
+                                    [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge |UIUserNotificationTypeSound categories:nil]];
 
 
 #endif

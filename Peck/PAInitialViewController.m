@@ -160,7 +160,7 @@
     
     if ([self verifyFacebookLoginWithUser:user]) {
         
-        NSLog(@"user info: %@ %@ %@ %@", [user objectForKey:@"first_name"], [user objectForKey:@"last_name"], [user objectForKey:@"email"], [[FBSession activeSession] accessTokenData]);
+        // NSLog(@"user info: %@ %@ %@ %@", [user objectForKey:@"first_name"], [user objectForKey:@"last_name"], [user objectForKey:@"email"], [[FBSession activeSession] accessTokenData]);
         
         REGISTER_PUSH_NOTIFICATIONS;
         
@@ -236,7 +236,7 @@
                               deviceToken, @"device_token",
                               nil];
     
-    NSLog(@"facebook user dictionary %@", userInfo);
+    // NSLog(@"facebook user dictionary %@", userInfo);
     
     //We will store the picture locally that facebook has given us in case the user has not saved a new photo
     NSString *userImageURL = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [user objectID]];

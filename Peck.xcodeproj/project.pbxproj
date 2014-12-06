@@ -13,7 +13,6 @@
 		860EB42F1980660400F1E665 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 860EB42E1980660400F1E665 /* UIImage+ImageEffects.m */; };
 		861B31A319C7A1E100EF14DC /* PASubscriptionsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B31A219C7A1E100EF14DC /* PASubscriptionsCollectionViewController.m */; };
 		861B31A619C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B31A519C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m */; };
-		861B31A819C7AB4100EF14DC /* PASubscriptionsCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 861B31A719C7AB4100EF14DC /* PASubscriptionsCollectionCell.xib */; };
 		861B58D019EB14BE00C20FA2 /* attend_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 861B58CF19EB14BE00C20FA2 /* attend_icon@2x.png */; };
 		861B58D219EB198000C20FA2 /* null_attend_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 861B58D119EB198000C20FA2 /* null_attend_icon@2x.png */; };
 		861B58D819EB1F4C00C20FA2 /* DiningPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B58D719EB1F4C00C20FA2 /* DiningPlace.m */; };
@@ -231,7 +230,6 @@
 		861B31A219C7A1E100EF14DC /* PASubscriptionsCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASubscriptionsCollectionViewController.m; sourceTree = "<group>"; };
 		861B31A419C7A2EB00EF14DC /* PASubscriptionsCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASubscriptionsCollectionCell.h; sourceTree = "<group>"; };
 		861B31A519C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASubscriptionsCollectionCell.m; sourceTree = "<group>"; };
-		861B31A719C7AB4100EF14DC /* PASubscriptionsCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PASubscriptionsCollectionCell.xib; sourceTree = "<group>"; };
 		861B58CF19EB14BE00C20FA2 /* attend_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "attend_icon@2x.png"; sourceTree = "<group>"; };
 		861B58D119EB198000C20FA2 /* null_attend_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "null_attend_icon@2x.png"; sourceTree = "<group>"; };
 		861B58D619EB1F4C00C20FA2 /* DiningPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiningPlace.h; sourceTree = "<group>"; };
@@ -885,7 +883,6 @@
 				861B31A219C7A1E100EF14DC /* PASubscriptionsCollectionViewController.m */,
 				861B31A419C7A2EB00EF14DC /* PASubscriptionsCollectionCell.h */,
 				861B31A519C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m */,
-				861B31A719C7AB4100EF14DC /* PASubscriptionsCollectionCell.xib */,
 				86755A3019D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.h */,
 				86755A3119D0BF2300508CD8 /* UICollectionView+NSFetchedResultsController.m */,
 			);
@@ -1162,7 +1159,6 @@
 				8689DDB519589E3600A6B61C /* filter_standard@2x.png in Resources */,
 				DDFFF5B919829DE700DC5AC1 /* feather-72@2x.png in Resources */,
 				DDFFF5A719829BD100DC5AC1 /* feather-29@2x.png in Resources */,
-				861B31A819C7AB4100EF14DC /* PASubscriptionsCollectionCell.xib in Resources */,
 				864D873D196470C100BCC01A /* facebook-login.png in Resources */,
 				8678205F1A0ECBF0005B9B41 /* dismiss@2x.png in Resources */,
 				8689DDB619589E3600A6B61C /* filter_subscription@2x.png in Resources */,

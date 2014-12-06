@@ -14,7 +14,7 @@
 #import "UICollectionView+NSFetchedResultsController.h"
 #import "UIImageView+AFNetworking.h"
 
-static NSString *CellIdentifier = @"SubscriptionsCollectionViewCell";
+static NSString *CellIdentifier = @"SubCell";
 
 @interface PASubscriptionsCollectionViewController ()
 
@@ -51,7 +51,7 @@ static NSString *CellIdentifier = @"SubscriptionsCollectionViewCell";
         self.finishButton.title = @"";
     }
     
-    [self.collectionView registerNib:[UINib nibWithNibName:@"PASubscriptionsCollectionCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:CellIdentifier];
+    //[self.collectionView registerNib:[UINib nibWithNibName:@"PASubscriptionsCollectionCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:CellIdentifier];
     self.collectionView.backgroundColor = [UIColor whiteColor];
     
     _objectChanges = [NSMutableArray array];
@@ -104,9 +104,8 @@ static NSString *CellIdentifier = @"SubscriptionsCollectionViewCell";
 
 -(void)configureCell:(PASubscriptionsCollectionCell*)subscriptionCell withObject:(Subscription*)subscription {
     subscriptionCell.subscription = subscription;
-    UILabel * cellTitle = subscriptionCell.subscriptionTitle;
-    cellTitle.text = subscription.name;
-    cellTitle.textColor = [UIColor darkTextColor];
+    subscriptionCell.subscriptionTitle.text = subscription.name;
+    subscriptionCell.subscriptionTitle.textColor = [UIColor darkTextColor];
     
     subscriptionCell.parentViewController = self;
     
@@ -129,7 +128,7 @@ static NSString *CellIdentifier = @"SubscriptionsCollectionViewCell";
 #pragma mark - delegate
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    //Subscription *sub = (Subscription*)[self.fetchedResultsController objectAtIndexPath:indexPath];
 }
 
 #pragma mark - Flow Layout

@@ -11,10 +11,15 @@
 
 static NSString * const PALocalAPIBaseURLString = @"http://localhost:3000/";
 // Development webservice
-static NSString * const PARailsServerBaseURLString = @"http://loki.peckapp.com:3000/"; // must be manually running from command line on the server
-static NSString * const PADevAPIBaseURLString = @"http://loki.peckapp.com:3500/";
+//static NSString * const PARailsServerBaseURLString = @"http://loki.peckapp.com:3000/"; // must be manually running from command line on the server
+//static NSString * const PADevAPIBaseURLString = @"http://loki.peckapp.com:3500/";
 // Production Webservice - force SSL
-static NSString * const PAProdAPIBaseURLString = @"https://yggdrasil.peckapp.com/";
+//static NSString * const PAProdAPIBaseURLString = @"https://yggdrasil.peckapp.com/";
+
+// Heroku Production Webservice
+static NSString * const PAProdHerokuAPIBaseURLString = @"https://peckapp.herokuapp.com/";
+// Heroku Production Webservice
+static NSString * const PADevHerokuAPIBaseURLString = @"https://peckapp.herokuapp.com/";
 
 @implementation PASessionManager
 
@@ -22,7 +27,7 @@ static NSString * const PAProdAPIBaseURLString = @"https://yggdrasil.peckapp.com
     static PASessionManager *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PAProdAPIBaseURLString]];
+        _sharedClient = [[PASessionManager alloc] initWithBaseURL:[NSURL URLWithString:PADevHerokuAPIBaseURLString]];
         
         //_sharedClient.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
         // TODO: must remove this for production once our certificates for the webservice are created

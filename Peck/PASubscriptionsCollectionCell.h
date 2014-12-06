@@ -14,7 +14,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *subscriptionTitle;
 @property (strong, nonatomic) IBOutlet UISwitch *subscriptionSwitch;
 
-- (IBAction)switchSubscription:(id)sender;
+- (void)switchSubscription:(id)sender;
 
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 
