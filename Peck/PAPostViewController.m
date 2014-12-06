@@ -91,7 +91,7 @@
     userHasChangedEndTime = NO;
     self.changedImage=NO;
     
-    NSLog(@"Finished viewDidLoad (PAPostViewController)");
+    // NSLog(@"Finished viewDidLoad (PAPostViewController)");
 }
 
 -(void)viewDidAppear:(BOOL)animated{

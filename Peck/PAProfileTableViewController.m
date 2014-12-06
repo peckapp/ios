@@ -77,7 +77,7 @@ BOOL loggedIn;
     
     self.loginStoryboard = [UIStoryboard storyboardWithName:@"Login" bundle:nil];
     
-    NSLog(@"Finished viewDidLoad (PAProfileTableViewController)");
+    // NSLog(@"Finished viewDidLoad (PAProfileTableViewController)");
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -137,7 +137,9 @@ BOOL loggedIn;
      
      if([[segue identifier] isEqualToString:@"showSubscriptions"]){
          NSLog(@"update subscriptions");
-         
+         UIViewController<PACoreDataProtocol> *dest = (UIViewController<PACoreDataProtocol>*) segue.destinationViewController;
+         PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
+         dest.managedObjectContext = [appdelegate managedObjectContext];
      }
      else if([[segue identifier] isEqualToString:@"changePassword"]){
          PAChangePasswordViewController* destination = [segue destinationViewController];

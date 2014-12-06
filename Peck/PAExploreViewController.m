@@ -107,7 +107,7 @@ NSCache *imageCache;
     self.exploreHeader.hiddenView.backgroundColor = [UIColor whiteColor];
 
     
-    NSLog(@"Finished viewDidLoad (PAExploreTableViewController)");
+    // NSLog(@"Finished viewDidLoad (PAExploreTableViewController)");
 }
 
 -(void)viewWillAppear:(BOOL)animated{

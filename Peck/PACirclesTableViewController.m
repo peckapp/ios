@@ -120,7 +120,7 @@ PAAssetManager *assetManager;
     
     PAAppDelegate *appdelegate = [[UIApplication sharedApplication] delegate];
     appdelegate.circleViewController = self;
-    NSLog(@"Finished viewDidLoad (PACirclesTableViewController)");
+    // NSLog(@"Finished viewDidLoad (PACirclesTableViewController)");
 }
 
 -(void)viewWillAppear:(BOOL)animated {

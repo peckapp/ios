@@ -144,13 +144,13 @@
 
 // Instantiate primary view controller
 - (void)loadPrimaryViewControllerWithIdentifier:(NSString *)identifier {
-    NSLog(@"Instantiating primary view controller");
+    // NSLog(@"Instantiating primary view controller");
     self.primaryViewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
 }
 
 // Instantiate secondary view controllers
 - (void)loadSecondaryViewControllersWithIdentifiers:(NSArray *)identifiers {
-    NSLog(@"Instantiating secondary view controllers");
+    // NSLog(@"Instantiating secondary view controllers");
     NSMutableArray * collector = [NSMutableArray arrayWithCapacity:self.secondaryViewControllerIdentifiers.count];
     [self.secondaryViewControllerIdentifiers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL*stop){
         NSString * identifier = (NSString*)obj;

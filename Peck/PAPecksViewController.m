@@ -69,7 +69,7 @@ static NSString *nibName = @"PAPeckCell";
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    NSLog(@"Finished viewDidLoad (PAPecksViewController)");
+    // NSLog(@"Finished viewDidLoad (PAPecksViewController)");
 }
 -(void)viewWillAppear:(BOOL)animated{
     

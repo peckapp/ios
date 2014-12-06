@@ -196,7 +196,7 @@ PAAssetManager * assetManager;
     [self.view addGestureRecognizer:edgeLeftGesture];
      */
     
-    NSLog(@"Finished viewDidLoad (PAEventsViewController)");
+    // NSLog(@"Finished viewDidLoad (PAEventsViewController)");
 }
 
 
