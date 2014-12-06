@@ -626,6 +626,8 @@
 		863D816F1A336913001BFD61 /* old tableview */ = {
 			isa = PBXGroup;
 			children = (
+				861B31A119C7A1E100EF14DC /* PASubscriptionsCollectionViewController.h */,
+				861B31A219C7A1E100EF14DC /* PASubscriptionsCollectionViewController.m */,
 				A43BF0EC197819480009B7AD /* PASubscriptionsTableViewController.h */,
 				A43BF0ED197819480009B7AD /* PASubscriptionsTableViewController.m */,
 				A43BF0EF1978198D0009B7AD /* PASubscriptionCell.h */,
@@ -887,12 +889,10 @@
 			isa = PBXGroup;
 			children = (
 				863D816F1A336913001BFD61 /* old tableview */,
-				861B31A119C7A1E100EF14DC /* PASubscriptionsCollectionViewController.h */,
-				861B31A219C7A1E100EF14DC /* PASubscriptionsCollectionViewController.m */,
-				861B31A419C7A2EB00EF14DC /* PASubscriptionsCollectionCell.h */,
-				861B31A519C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m */,
 				863D816C1A336145001BFD61 /* PASubscriptionsSelectorVC.h */,
 				863D816D1A336145001BFD61 /* PASubscriptionsSelectorVC.m */,
+				861B31A419C7A2EB00EF14DC /* PASubscriptionsCollectionCell.h */,
+				861B31A519C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m */,
 			);
 			name = Subscriptions;
 			sourceTree = "<group>";

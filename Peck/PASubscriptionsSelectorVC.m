@@ -8,11 +8,18 @@
 
 #import "PASubscriptionsSelectorVC.h"
 #import "PASubscriptionsCollectionCell.h"
+
+#import "PAAppDelegate.h"
 #import "PAAssetManager.h"
+#import "PASyncManager.h"
 
 static NSString *CellIdentifier = @"SubCell";
 
 @interface PASubscriptionsSelectorVC ()
+
+// accessed by the cells when they are modified to keep track of changes to be sent to the webservice
+@property (strong, nonatomic) NSMutableDictionary* addedSubscriptions;
+@property (strong, nonatomic) NSMutableDictionary* deletedSubscriptions;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *finishButton;
 
@@ -36,14 +43,58 @@ static NSString *CellIdentifier = @"SubCell";
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
+    if (self.isInitializing == YES) {
+        self.finishButton.enabled = true;
+        self.finishButton.title = @"Finish";
+    } else {
+        self.isInitializing = NO;
+        self.finishButton.enabled = false;
+        self.finishButton.title = @"";
+    }
+    
+    self.collectionView.backgroundColor = [UIColor whiteColor];
+    
     _objectChanges = [NSMutableArray array];
     _sectionChanges = [NSMutableArray array];
+    
+    self.addedSubscriptions = [NSMutableDictionary dictionary];
+    self.deletedSubscriptions = [NSMutableDictionary dictionary];
+    
+    UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout*)self.collectionView.collectionViewLayout;
+    collectionViewLayout.sectionInset = UIEdgeInsetsMake(20, 0, 20, 0);
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    // updates the webservice with the subscription changes when the view disappears
+    if([[self.addedSubscriptions allValues] count]>0){
+        [[PASyncManager globalSyncManager] postSubscriptions:[self.addedSubscriptions allValues]];
+    }
+    if([[self.deletedSubscriptions allValues] count]>0){
+        [[PASyncManager globalSyncManager] deleteSubscriptions:[self.deletedSubscriptions allValues]];
+    }
+    
+//    NSError *err = nil;
+//    [self.managedObjectContext save:&err];
+//    if (err) {
+//        NSLog(@"Subscriptions save ERROR: %@",err);
+//    }
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(IBAction)finishInitialSelections:(id)sender {
+    if (self.isInitializing) {
+        PAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        
+        UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
+        [appDelegate.window setRootViewController:newRoot];
+    } else {
+        NSLog(@"PROBLEM: finishInitialSelections was called while the viewController was not initializing");
+    }
 }
 
 #pragma mark - UICollectionVIew
@@ -73,10 +124,7 @@ static NSString *CellIdentifier = @"SubCell";
 }
 
 -(void)configureCell:(PASubscriptionsCollectionCell*)subscriptionCell withObject:(Subscription*)subscription {
-    subscriptionCell.subscription = subscription;
     subscriptionCell.subscriptionTitle.text = subscription.name;
-    
-    subscriptionCell.parentViewController = self;
     
     if([subscription.subscribed boolValue]) {
         subscriptionCell.backgroundColor = [[PAAssetManager sharedManager] lightColor];
@@ -85,6 +133,63 @@ static NSString *CellIdentifier = @"SubCell";
     }
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    CGFloat dim = (self.view.frame.size.width / 2.0) - 20.0;
+    return CGSizeMake(dim, dim/2);
+}
+
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+//    CGFloat dim = 60.0;
+//    return CGSizeMake(dim, dim);
+//}
+
+# pragma mark delegate
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    Subscription *sub = (Subscription*)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    [self switchSubscription:sub withCell:(PASubscriptionsCollectionCell*)[collectionView cellForItemAtIndexPath:indexPath]];
+}
+
+- (void)switchSubscription:(Subscription*)subscription withCell:(PASubscriptionsCollectionCell*)cell {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber* institutionID = [defaults objectForKey:@"institution_id"];
+    NSNumber* userID = [defaults objectForKey:@"user_id"];
+    
+    NSString* subKey = [subscription.category stringByAppendingString:[subscription.id stringValue]];
+    
+    if ([subscription.subscribed boolValue]) { // user is subscribed, remove subscription
+        NSLog(@"remove subscription");
+        subscription.subscribed = [NSNumber numberWithBool:NO];
+        if(![self.addedSubscriptions objectForKey:subKey]){
+            //if the subscription is not on the list to be added
+            [self.deletedSubscriptions setObject:subscription.subscription_id forKey:subKey];
+            [cell setBackgroundColor:[[PAAssetManager sharedManager] lightColor]];
+        }else{
+            [self.addedSubscriptions removeObjectForKey:subKey];
+            [cell setBackgroundColor:[[PAAssetManager sharedManager] darkColor]];
+        }
+    } else { // user is not subscribed, subscribe them
+        subscription.subscribed = [NSNumber numberWithBool:YES];
+        
+        if(![self.deletedSubscriptions objectForKey:subKey]){
+            //if the subscription is not on the list to be deleted
+            NSDictionary* subscriptionDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                    subscription.id, @"subscribed_to",
+                                                    institutionID, @"institution_id",
+                                                    userID, @"user_id",
+                                                    subscription.category, @"category",
+                                                    nil];
+            
+            [self.addedSubscriptions setObject:subscriptionDictionary forKey:subKey];
+            [cell setBackgroundColor:[[PAAssetManager sharedManager] lightColor]];
+        }else{
+            [self.deletedSubscriptions removeObjectForKey:subKey];
+            [cell setBackgroundColor:[[PAAssetManager sharedManager] darkColor]];
+        }
+    }
+    
+}
 
 #pragma mark - Fetched results controller
 
@@ -242,7 +347,7 @@ static NSString *CellIdentifier = @"SubCell";
 
 - (BOOL)shouldReloadCollectionViewToPreventKnownIssue {
     __block BOOL shouldReload = NO;
-    for (NSDictionary *change in self.objectChanges) {
+    for (NSDictionary *change in _objectChanges) {
         [change enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
             NSFetchedResultsChangeType type = [key unsignedIntegerValue];
             NSIndexPath *indexPath = obj;

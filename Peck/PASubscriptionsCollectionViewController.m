@@ -76,7 +76,6 @@ static NSString *CellIdentifier = @"SubCell";
         UIViewController * newRoot = [appDelegate.mainStoryboard instantiateInitialViewController];
         [appDelegate.window setRootViewController:newRoot];
     }
-    
 }
 
 #pragma mark - data source
@@ -102,21 +101,21 @@ static NSString *CellIdentifier = @"SubCell";
 }
 
 -(void)configureCell:(PASubscriptionsCollectionCell*)subscriptionCell withObject:(Subscription*)subscription {
-    subscriptionCell.subscription = subscription;
-    subscriptionCell.subscriptionTitle.text = subscription.name;
-    subscriptionCell.subscriptionTitle.textColor = [UIColor darkTextColor];
-    
-    subscriptionCell.parentViewController = self;
-    
-    subscriptionCell.imageView.frame = subscriptionCell.layer.frame;
-    [subscriptionCell.imageView setImageWithURL:[NSURL URLWithString:subscription.imageURL]];
-    
-    BOOL subscribed = [subscription.subscribed boolValue];
-    if(subscribed) {
-        subscriptionCell.subscriptionSwitch.on = YES;
-    } else {
-        subscriptionCell.subscriptionSwitch.on = NO;
-    }
+//    subscriptionCell.subscription = subscription;
+//    subscriptionCell.subscriptionTitle.text = subscription.name;
+//    subscriptionCell.subscriptionTitle.textColor = [UIColor darkTextColor];
+//    
+//    subscriptionCell.parentViewController = self;
+//    
+//    subscriptionCell.imageView.frame = subscriptionCell.layer.frame;
+//    [subscriptionCell.imageView setImageWithURL:[NSURL URLWithString:subscription.imageURL]];
+//    
+//    BOOL subscribed = [subscription.subscribed boolValue];
+//    if(subscribed) {
+//        subscriptionCell.subscriptionSwitch.on = YES;
+//    } else {
+//        subscriptionCell.subscriptionSwitch.on = NO;
+//    }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{

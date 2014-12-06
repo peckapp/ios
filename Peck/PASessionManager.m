@@ -19,7 +19,7 @@ static NSString * const PALocalAPIBaseURLString = @"http://localhost:3000/";
 // Heroku Production Webservice
 static NSString * const PAProdHerokuAPIBaseURLString = @"https://peckapp.herokuapp.com/";
 // Heroku Production Webservice
-static NSString * const PADevHerokuAPIBaseURLString = @"https://peckapp.herokuapp.com/";
+static NSString * const PADevHerokuAPIBaseURLString = @"https://peckdevelopment.herokuapp.com/";
 
 @implementation PASessionManager
 

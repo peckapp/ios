@@ -7,14 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-
 #import <CoreData/CoreData.h>
+#import "PACoreDataProtocol.h"
 
-@interface PASubscriptionsSelectorVC : UICollectionViewController <NSFetchedResultsControllerDelegate>
+@interface PASubscriptionsSelectorVC : UICollectionViewController <PACoreDataProtocol, NSFetchedResultsControllerDelegate>
+
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
-@property (strong, nonatomic) NSMutableArray *objectChanges;
+// whether this is instantiated in the initial install process or within the settings tab.
+@property BOOL isInitializing;
 
 @end
