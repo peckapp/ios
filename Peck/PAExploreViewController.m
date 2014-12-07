@@ -21,13 +21,13 @@
 
 @interface PAExploreViewController ()
 
-@property (strong) IBOutlet UITableView *tableView;
+@property (strong) UITableView *tableView;
 @property (strong) UIRefreshControl *refreshControl;
 
 @property (strong, nonatomic) UISearchBar* searchBar;
-@property (strong, nonatomic) PATemporaryHeader *exploreHeader;
 
 @end
+
 
 @implementation PAExploreViewController
 
@@ -38,21 +38,7 @@
 static NSString * cellIdentifier = PAExploreIdentifier;
 static NSString * nibName = @"PAExploreCell";
 
-PAAssetManager * assetManager;
-
-NSCache *imageCache;
-
-//- (id)initWithStyle:(UITableViewStyle)style
-//{
-//    self = [super initWithStyle:style];
-//    if (self) {
-//        // Custom initialization
-//    }
-//    return self;
-//}
-
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.fetchedResultsController=nil;
@@ -64,10 +50,13 @@ NSCache *imageCache;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-    
-    assetManager = [PAAssetManager sharedManager];
 
     self.title = @"Explore";
+    
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
+    [self.view addSubview:self.tableView];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     
     // wrapping the tableView in a UITableViewController allows for the UIRefreshControl to be simpy added using apple's supported APIs
     UITableViewController *tableViewController = [[UITableViewController alloc] init];
@@ -76,12 +65,6 @@ NSCache *imageCache;
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
     tableViewController.refreshControl = self.refreshControl;
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
     self.tableView.contentInset = UIEdgeInsetsMake(9, 0, 0, 0);
     self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
@@ -96,31 +79,14 @@ NSCache *imageCache;
     
     UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 54)];
     [headerView addSubview:_searchBar];
-    //headerView.backgroundColor =
-    //self.tableView.tableHeaderView = self.searchBar;
     self.tableView.tableHeaderView = _searchBar;
-    
-    // TODO: this header is beneath the tableView instead of above...
-    self.exploreHeader = [[PATemporaryHeader alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT)];
-    self.exploreHeader.label.text = @"Explore";
-    self.exploreHeader.label.textColor = [assetManager darkColor];
-    self.exploreHeader.hiddenView.backgroundColor = [UIColor whiteColor];
-
     
     // NSLog(@"Finished viewDidLoad (PAExploreTableViewController)");
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
-    self.exploreHeader.frame = CGRectMake(0, 0, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT);
-    self.exploreHeader.hiddenView.frame = CGRectMake(0, -TEMPORARY_HEADER_HEIGHT, self.view.frame.size.width, TEMPORARY_HEADER_HEIGHT);
-    [self.exploreHeader showHiddenView];
-   
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor blackColor]];
-    
-    // TODO: commented out to avoid overlapping strange behavior for this initial release
-    //[self.view addSubview:self.exploreHeader];
 }
 
 -(void)refresh {
@@ -152,7 +118,7 @@ NSCache *imageCache;
 }
 
 - (void)cacheImagesPastCurrentIndexPath:(NSIndexPath*)indexPath {
-    
+    // TODO: implement this method to pre-load images as the user scrolls
 }
 
 #pragma mark - Table view data source
@@ -166,8 +132,24 @@ NSCache *imageCache;
     return [sectionInfo numberOfObjects];
 }
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    PAExploreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        // Configure cell by loading a nib.
+        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    }
+    
+    [self configureCell:cell atIndexPath:indexPath];
+    
+    [self cacheImagesPastCurrentIndexPath:indexPath];
+    
+    return cell;
+}
+
 - (void)configureCell:(PAExploreCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    cell.backgroundView = [assetManager createShadowWithFrame:cell.frame];
+    cell.backgroundView = [[PAAssetManager sharedManager] createShadowWithFrame:cell.frame];
     cell.backgroundColor = [UIColor groupTableViewBackgroundColor];
     cell.parentViewController = self;
 
@@ -201,7 +183,7 @@ NSCache *imageCache;
             cell.photoView.image = image;
         } else {
             [cell.photoView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:imageURL]
-                                  placeholderImage:[assetManager greyBackground]
+                                  placeholderImage:[[PAAssetManager sharedManager] greyBackground]
                                            success:^(NSURLRequest* request, NSHTTPURLResponse* response, UIImage* image){
                                                [UIView transitionWithView:cell.photoView
                                                                  duration:.4f
@@ -215,7 +197,7 @@ NSCache *imageCache;
                                            }];
         }
     } else {
-        cell.photoView.image = [assetManager imagePlaceholder];
+        cell.photoView.image = [[PAAssetManager sharedManager] imagePlaceholder];
     }
     
     if ([tempExplore.category isEqualToString:@"event"] || [tempExplore.category isEqualToString:@"athletic"]) {
@@ -223,35 +205,15 @@ NSCache *imageCache;
     } else {
         cell.attendButton.hidden = YES;
     }
-    
-    
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    PAExploreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        // Configure cell by loading a nib.
-        [tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
-        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    }
-    
-    [self configureCell:cell atIndexPath:indexPath];
-    
-    [self cacheImagesPastCurrentIndexPath:indexPath];
-    
-    return cell;
-}
-
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return cellHeight;
 }
 
 #pragma mark - Table View Delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    //[self performSegueWithIdentifier:@"showMessageDetail" sender:self];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     /*
     self.tableView.tableHeaderView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, 60);
@@ -260,49 +222,27 @@ NSCache *imageCache;
     [self.tableView.tableHeaderView addSubview:spinner];
      */
     
-    //[self performSegueWithIdentifier:@"present_info" sender:self];
-    
+    [self performSegueWithIdentifier:@"presentInfo" sender:self];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-     
 }
 
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+- (IBAction)unwindToExploreController:(UIStoryboardSegue *)unwindSegue
 {
     
-    if (scrollView.contentOffset.y < -SHOW_HEADER_DEPTH) {
-        [self.exploreHeader showHiddenView];
-        //self.centerTableView.contentInset = UIEdgeInsetsZero;
-    }
-    else if (scrollView.contentOffset.y > 0) {
-        [self.exploreHeader hideHiddenView];
-        //self.centerTableView.contentInset = UIEdgeInsetsMake(-datePopupHeight, 0, 0, 0);
-    }
-    
 }
 
-/*
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"showMessageDetail"]) {
+    if ([[segue identifier] isEqualToString:@"presentInfo"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         NSLog(@"segue destination: %@", [segue destinationViewController]);
         [[segue destinationViewController] setDetailItem:object];
     }
 }
-
 
 #pragma mark - Fetched results controller
 
@@ -408,7 +348,5 @@ NSCache *imageCache;
 {
     [self.tableView endUpdates];
 }
-
-
 
 @end

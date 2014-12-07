@@ -7,6 +7,8 @@
 //
 
 #import "PAExploreInfoViewController.h"
+#import "PAAssetManager.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface PAExploreInfoViewController ()
 
@@ -29,9 +31,6 @@
 {
     if (_detailItem != newDetailItem) {
         _detailItem = newDetailItem;
-        NSLog(@"the event: %@", _detailItem);
-        // Update the view.
-        [self configureView];
     }
 }
 
@@ -41,22 +40,18 @@
     
     if (self.detailItem) {
         NSLog(@"configure the detail item");
-        self.messagePhoto.image = [UIImage imageWithData:[self.detailItem valueForKey:@"photo"]];
-        self.messageTextView.text = [[self.detailItem valueForKey:@"text"] description];
+        NSURL *imgUrl = [NSURL URLWithString:[self.detailItem valueForKey:@"imageURL"]];
+        [self.messagePhoto setImageWithURL:imgUrl
+                          placeholderImage:[[PAAssetManager sharedManager] greyBackground]];
+        self.messageTextView.text = [self.detailItem valueForKey:@"explore_description"];
         
+        self.eventTitle.text = [[self.detailItem valueForKey:@"title"] description];
+        self.location.text = [[self.detailItem valueForKey:@"location"] description];
         
-        //cell.imageView.image = [UIImage imageWithData:tempEvent.photo];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MMM dd, yyyy h:mm a"];
+        [self.date setText:[dateFormatter stringFromDate:[self.detailItem valueForKey:@"start_date"]]];
     }
-}
-
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
 }
 
 - (void)viewDidLoad
@@ -67,12 +62,6 @@
     [self configureView];
     
     // Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 /*

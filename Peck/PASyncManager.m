@@ -739,24 +739,24 @@ typedef NS_ENUM(NSInteger, PAAlertType){
         NSNumber *newID = [userAttributes objectForKey:@"id"];
         BOOL userAlreadyExists = [self objectExists:newID withType:@"Peer" andCategory:nil];
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [self.persistentStoreCoordinator lock];
-        if(!userAlreadyExists && !([[defaults objectForKey:@"user_id"] integerValue]==[newID integerValue])){
-            //NSLog(@"about to add the peer");
-            if(![[userAttributes objectForKey:first_name_define] isKindOfClass:[NSNull class]]){
-                Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
-                [self setAttributesInPeer:peer withDictionary:userAttributes];
+        [self.persistentStoreCoordinator performBlockAndWait:^() {
+            if(!userAlreadyExists && !([[defaults objectForKey:@"user_id"] integerValue]==[newID integerValue])){
+                //NSLog(@"about to add the peer");
+                if(![[userAttributes objectForKey:first_name_define] isKindOfClass:[NSNull class]]){
+                    Peer * peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext: _managedObjectContext];
+                    [self setAttributesInPeer:peer withDictionary:userAttributes];
+                }
+                //NSLog(@"PEER: %@",peer);
+            }if(userAlreadyExists){
+                //if the peer is already in core data and is not the user
+                Peer* peer = [[PAFetchManager sharedFetchManager] getPeerWithID:newID];
+                if(peer){
+                    [self setAttributesInPeer:peer withDictionary:userAttributes];
+                }
             }
-            //NSLog(@"PEER: %@",peer);
-        }if(userAlreadyExists){
-            //if the peer is already in core data and is not the user
-            Peer* peer = [[PAFetchManager sharedFetchManager] getPeerWithID:newID];
-            if(peer){
-                [self setAttributesInPeer:peer withDictionary:userAttributes];
-            }
-        }
-        NSError* error = nil;
-        [_managedObjectContext save:&error];
-        [self.persistentStoreCoordinator unlock];
+            NSError* error = nil;
+            [_managedObjectContext save:&error];
+        }];
     }
 }
 

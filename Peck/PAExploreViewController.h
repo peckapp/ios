@@ -11,7 +11,7 @@
 #import "PACoreDataProtocol.h"
 
 
-@interface PAExploreViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol, UISearchBarDelegate>
+@interface PAExploreViewController : UIViewController <NSFetchedResultsControllerDelegate,PACoreDataProtocol, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -19,4 +19,7 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (strong, nonatomic) NSArray *items;
+
+- (IBAction)unwindToExploreController:(UIStoryboardSegue *)unwindSegue;
+
 @end
