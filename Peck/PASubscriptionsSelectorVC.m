@@ -13,7 +13,6 @@
 #import "PAAssetManager.h"
 #import "PASyncManager.h"
 #import "PASubscriptionsHeader.h"
-
 #import "UIImageView+AFNetworking.h"
 
 #define MAX_CELL_HEIGHT 80
@@ -176,7 +175,12 @@ static NSString *CellIdentifier = @"SubCell";
     
     if (kind == UICollectionElementKindSectionHeader) {
         PASubscriptionsHeader *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"SubscriptionHeader" forIndexPath:indexPath];
-        headerView.sectionTitle.text = [[[[[self fetchedResultsController] sections]objectAtIndex:indexPath.section] name] capitalizedString];
+        NSString *title = [[[[self fetchedResultsController] sections]objectAtIndex:indexPath.section] name];
+        // adds an 's' to section titles that are not plural
+        if ([title characterAtIndex:title.length-1] != 's') {
+            title = [title stringByAppendingString:@"s"];
+        }
+        headerView.sectionTitle.text = [title uppercaseString];
         [headerView.image setImage:[[PAAssetManager sharedManager] subscriptionPlaceholder]];
         reusableview = headerView;
     }
@@ -203,7 +207,7 @@ static NSString *CellIdentifier = @"SubCell";
 
 // returns spacing between lines in a section
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 3*MARGIN_SIZE;
+    return 3.5*MARGIN_SIZE;
 }
 
 // returns the spacing between different sections of the collectionview

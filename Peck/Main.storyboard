@@ -3,6 +3,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -1049,21 +1050,21 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="bottomMargin" secondItem="U2N-yn-XFJ" secondAttribute="bottom" constant="6.5" id="9el-og-kV7"/>
-                                                <constraint firstItem="U2N-yn-XFJ" firstAttribute="top" secondItem="Bjh-rW-zQc" secondAttribute="topMargin" id="Nv6-OM-h9N"/>
                                                 <constraint firstItem="U2N-yn-XFJ" firstAttribute="centerX" secondItem="Bjh-rW-zQc" secondAttribute="centerX" id="Rx9-dI-aFH"/>
+                                                <constraint firstAttribute="centerY" secondItem="U2N-yn-XFJ" secondAttribute="centerY" id="w1p-1w-Ey6"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="9el-og-kV7"/>
-                                                    <exclude reference="Nv6-OM-h9N"/>
                                                     <exclude reference="Rx9-dI-aFH"/>
+                                                    <exclude reference="w1p-1w-Ey6"/>
                                                 </mask>
                                             </variation>
                                             <variation key="widthClass=compact">
                                                 <mask key="constraints">
                                                     <include reference="9el-og-kV7"/>
-                                                    <include reference="Nv6-OM-h9N"/>
                                                     <include reference="Rx9-dI-aFH"/>
+                                                    <include reference="w1p-1w-Ey6"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -1467,7 +1468,7 @@
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="M4v-4d-MFq">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9rG-b4-Osf">
                             <size key="itemSize" width="126" height="43"/>
                             <size key="headerReferenceSize" width="50" height="50"/>
@@ -1526,62 +1527,48 @@
                             </collectionViewCell>
                         </cells>
                         <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SubscriptionHeader" id="0Ks-8q-PUs" customClass="PASubscriptionsHeader">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sat-ri-v1E">
-                                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KXi-bC-Mva">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KXi-bC-Mva">
                                     <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
+                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             <constraints>
-                                <constraint firstAttribute="bottom" secondItem="sat-ri-v1E" secondAttribute="bottom" id="8dy-zT-dQv"/>
                                 <constraint firstItem="KXi-bC-Mva" firstAttribute="bottom" secondItem="0Ks-8q-PUs" secondAttribute="bottomMargin" id="LLI-gl-NgV"/>
-                                <constraint firstItem="KXi-bC-Mva" firstAttribute="top" secondItem="0Ks-8q-PUs" secondAttribute="topMargin" constant="13" id="Ojr-09-wBq"/>
-                                <constraint firstItem="sat-ri-v1E" firstAttribute="leading" secondItem="0Ks-8q-PUs" secondAttribute="leading" id="WW8-ZL-s0c"/>
-                                <constraint firstAttribute="trailing" secondItem="sat-ri-v1E" secondAttribute="trailing" id="ZiW-mU-3hU"/>
-                                <constraint firstItem="sat-ri-v1E" firstAttribute="centerX" secondItem="KXi-bC-Mva" secondAttribute="centerX" id="eWD-O3-dcL"/>
-                                <constraint firstItem="sat-ri-v1E" firstAttribute="top" secondItem="0Ks-8q-PUs" secondAttribute="top" id="m8P-Tn-L3N"/>
+                                <constraint firstItem="KXi-bC-Mva" firstAttribute="top" secondItem="0Ks-8q-PUs" secondAttribute="topMargin" constant="13" id="Ojr-09-wBq">
+                                    <variation key="widthClass=compact" constant="16"/>
+                                </constraint>
+                                <constraint firstAttribute="centerX" secondItem="KXi-bC-Mva" secondAttribute="centerX" id="YIB-me-8kh"/>
                                 <constraint firstItem="KXi-bC-Mva" firstAttribute="leading" secondItem="0Ks-8q-PUs" secondAttribute="leadingMargin" id="qOe-kb-nnF"/>
                             </constraints>
                             <variation key="default">
                                 <mask key="subviews">
-                                    <exclude reference="sat-ri-v1E"/>
                                     <exclude reference="KXi-bC-Mva"/>
                                 </mask>
                                 <mask key="constraints">
-                                    <exclude reference="8dy-zT-dQv"/>
-                                    <exclude reference="WW8-ZL-s0c"/>
-                                    <exclude reference="ZiW-mU-3hU"/>
-                                    <exclude reference="eWD-O3-dcL"/>
-                                    <exclude reference="m8P-Tn-L3N"/>
                                     <exclude reference="LLI-gl-NgV"/>
                                     <exclude reference="Ojr-09-wBq"/>
+                                    <exclude reference="YIB-me-8kh"/>
                                     <exclude reference="qOe-kb-nnF"/>
                                 </mask>
                             </variation>
                             <variation key="widthClass=compact">
                                 <mask key="subviews">
-                                    <include reference="sat-ri-v1E"/>
                                     <include reference="KXi-bC-Mva"/>
                                 </mask>
                                 <mask key="constraints">
-                                    <include reference="8dy-zT-dQv"/>
-                                    <include reference="WW8-ZL-s0c"/>
-                                    <include reference="ZiW-mU-3hU"/>
-                                    <include reference="eWD-O3-dcL"/>
-                                    <include reference="m8P-Tn-L3N"/>
                                     <include reference="LLI-gl-NgV"/>
                                     <include reference="Ojr-09-wBq"/>
+                                    <include reference="YIB-me-8kh"/>
                                     <include reference="qOe-kb-nnF"/>
                                 </mask>
                             </variation>
                             <connections>
-                                <outlet property="image" destination="sat-ri-v1E" id="ywp-PH-L1D"/>
                                 <outlet property="sectionTitle" destination="KXi-bC-Mva" id="F0x-Mt-qa5"/>
                             </connections>
                         </collectionReusableView>
@@ -1603,7 +1590,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FHJ-kd-VI5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2698.5" y="4249"/>
+            <point key="canvasLocation" x="-2698.5" y="4250"/>
         </scene>
         <!--Announcements-->
         <scene sceneID="QMq-yP-TWH">
@@ -2835,9 +2822,9 @@
         <image name="sidebar_background.jpg" width="640" height="1136"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="YoB-2V-iLE"/>
-        <segue reference="gpx-S3-Fsz"/>
         <segue reference="TbO-p2-TYX"/>
-        <segue reference="0uC-qc-gMv"/>
+        <segue reference="IGb-OB-Nqp"/>
+        <segue reference="gpx-S3-Fsz"/>
+        <segue reference="YoB-2V-iLE"/>
     </inferredMetricsTieBreakers>
 </document>

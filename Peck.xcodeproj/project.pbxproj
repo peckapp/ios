@@ -42,7 +42,6 @@
 		8665FD4219AB842C00AA1162 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A2198888B80088B47F /* SystemConfiguration.framework */; };
 		8665FD4319AB847B00AA1162 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 861E46A4198888C20088B47F /* libz.dylib */; };
 		866E99EA1A33A4D700C29888 /* PASubscriptionsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 866E99E91A33A4D700C29888 /* PASubscriptionsHeader.m */; };
-		866E99ED1A33D27A00C29888 /* PAGroupedBackgroundFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 866E99EC1A33D27A00C29888 /* PAGroupedBackgroundFlowLayout.m */; };
 		8671A2CE195B848D00700101 /* dropdown_pecks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2C9195B848D00700101 /* dropdown_pecks@2x.png */; };
 		8671A2CF195B848D00700101 /* dropdown_explore@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CA195B848D00700101 /* dropdown_explore@2x.png */; };
 		8671A2D0195B848D00700101 /* dropdown_post@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8671A2CB195B848D00700101 /* dropdown_post@2x.png */; };
@@ -278,8 +277,6 @@
 		8665FD3F19AB83F600AA1162 /* NewRelicAgent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NewRelicAgent.framework; path = Pods/NewRelicAgent/NewRelic_iOS_Agent_3.396/NewRelicAgent.framework; sourceTree = "<group>"; };
 		866E99E81A33A4D700C29888 /* PASubscriptionsHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PASubscriptionsHeader.h; sourceTree = "<group>"; };
 		866E99E91A33A4D700C29888 /* PASubscriptionsHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PASubscriptionsHeader.m; sourceTree = "<group>"; };
-		866E99EB1A33D27A00C29888 /* PAGroupedBackgroundFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAGroupedBackgroundFlowLayout.h; sourceTree = "<group>"; };
-		866E99EC1A33D27A00C29888 /* PAGroupedBackgroundFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAGroupedBackgroundFlowLayout.m; sourceTree = "<group>"; };
 		8671A2C9195B848D00700101 /* dropdown_pecks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_pecks@2x.png"; sourceTree = "<group>"; };
 		8671A2CA195B848D00700101 /* dropdown_explore@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_explore@2x.png"; sourceTree = "<group>"; };
 		8671A2CB195B848D00700101 /* dropdown_post@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropdown_post@2x.png"; sourceTree = "<group>"; };
@@ -901,8 +898,6 @@
 				861B31A519C7A2EB00EF14DC /* PASubscriptionsCollectionCell.m */,
 				866E99E81A33A4D700C29888 /* PASubscriptionsHeader.h */,
 				866E99E91A33A4D700C29888 /* PASubscriptionsHeader.m */,
-				866E99EB1A33D27A00C29888 /* PAGroupedBackgroundFlowLayout.h */,
-				866E99EC1A33D27A00C29888 /* PAGroupedBackgroundFlowLayout.m */,
 			);
 			name = Subscriptions;
 			sourceTree = "<group>";
@@ -1337,7 +1332,6 @@
 				863843DB193CB75F004110F5 /* PAInitialViewController.m in Sources */,
 				863BA2CB1A12CFC5005FBC3B /* PAPaddedLabel.m in Sources */,
 				A497A2EB19A3BF5200455F69 /* PASendFeedbackViewController.m in Sources */,
-				866E99ED1A33D27A00C29888 /* PAGroupedBackgroundFlowLayout.m in Sources */,
 				A40CF56819547ACC0021C088 /* PAPeers.m in Sources */,
 				DDCCE82019A3DC250054BA2B /* PATemporaryHeader.m in Sources */,
 				A43BF0F21978198D0009B7AD /* PASubscriptionCell.m in Sources */,
