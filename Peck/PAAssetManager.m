@@ -23,6 +23,8 @@
     if (self = [super init]) {
 
         self.eventPlaceholder = [UIImage imageNamed:@"event-placeholder"];
+        // TODO: replace this with a real placeholder
+        self.subscriptionPlaceholder = [UIImage imageNamed:@"event-placeholder"];
         self.imagePlaceholder = [UIImage imageNamed:@"image-placeholder"];
         self.profilePlaceholder = [UIImage imageNamed:@"profile-placeholder"];
         self.cancelIcon = [UIImage imageNamed:@"chevron-light"];

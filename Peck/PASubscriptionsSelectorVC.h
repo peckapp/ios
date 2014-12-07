@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "PACoreDataProtocol.h"
 
-@interface PASubscriptionsSelectorVC : UICollectionViewController <PACoreDataProtocol, NSFetchedResultsControllerDelegate>
+@interface PASubscriptionsSelectorVC : UICollectionViewController <PACoreDataProtocol, NSFetchedResultsControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;

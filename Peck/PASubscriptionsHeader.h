@@ -11,5 +11,6 @@
 @interface PASubscriptionsHeader : UICollectionReusableView
 
 @property (weak, nonatomic) IBOutlet UILabel *sectionTitle;
+@property (weak, nonatomic) IBOutlet UIImageView *image;
 
 @end

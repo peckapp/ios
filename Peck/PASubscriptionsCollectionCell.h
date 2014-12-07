@@ -12,5 +12,6 @@
 @interface PASubscriptionsCollectionCell : UICollectionViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *subscriptionTitle;
+//@property (weak, nonatomic) IBOutlet UIImageView *iconImage;
 
 @end

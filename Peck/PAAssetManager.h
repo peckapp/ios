@@ -11,6 +11,7 @@
 @interface PAAssetManager : NSObject
 
 @property (strong, nonatomic) UIImage * eventPlaceholder;
+@property (strong, nonatomic) UIImage * subscriptionPlaceholder;
 @property (strong, nonatomic) UIImage * imagePlaceholder;
 @property (strong, nonatomic) UIImage * profilePlaceholder;
 @property (strong, nonatomic) UIImage * greyBackground;

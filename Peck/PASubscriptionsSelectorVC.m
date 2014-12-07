@@ -14,6 +14,11 @@
 #import "PASyncManager.h"
 #import "PASubscriptionsHeader.h"
 
+#import "UIImageView+AFNetworking.h"
+
+#define MAX_CELL_HEIGHT 80
+#define MARGIN_SIZE 5
+
 static NSString *CellIdentifier = @"SubCell";
 
 @interface PASubscriptionsSelectorVC ()
@@ -102,13 +107,12 @@ static NSString *CellIdentifier = @"SubCell";
             UIAlertController *alertController;
             if (self.fetchedResultsController.fetchedObjects.count > 0) {
                 alertController = [UIAlertController alertControllerWithTitle:@"Too Few Subscriptions"
-                                                                                         message:@"Please select at least five subscriptions to continue."
+                                                                                         message:@"Without subscriptions, your homepage will not contain any events. Select a few more!"
                                                                                   preferredStyle:UIAlertControllerStyleAlert];
                 
             } else {
-                alertController = [UIAlertController alertControllerWithTitle:@"Subscriptions are Loading"
-                                                                                         message:@"Please wait and select at least five subscriptions to continue."
-                                                                                  preferredStyle:UIAlertControllerStyleAlert];
+                // alertController = [UIAlertController alertControllerWithTitle:@"Subscriptions are Loading" message:@"Please wait and select at least five subscriptions to continue." preferredStyle:UIAlertControllerStyleAlert];
+                return;
             }
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Okay"
                                                                style:UIAlertActionStyleCancel
@@ -120,7 +124,9 @@ static NSString *CellIdentifier = @"SubCell";
         }
         
     } else {
-        NSLog(@"PROBLEM: finishInitialSelections was called while the viewController was not initializing");
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:@"finishInitialSelections was called while the viewController was not initializing"
+                                     userInfo:nil];
     }
 }
 
@@ -152,11 +158,16 @@ static NSString *CellIdentifier = @"SubCell";
 
 -(void)configureCell:(PASubscriptionsCollectionCell*)subscriptionCell withObject:(Subscription*)subscription {
     subscriptionCell.subscriptionTitle.text = subscription.name;
+    [subscriptionCell.subscriptionTitle setPreferredMaxLayoutWidth:self.view.frame.size.width/2 - 20];
     
-    if([subscription.subscribed boolValue]) {
-        subscriptionCell.backgroundColor = [[PAAssetManager sharedManager] lightColor];
-    } else {
-        subscriptionCell.backgroundColor = [[PAAssetManager sharedManager] darkColor];
+    //NSURL *imageURL = [NSURL URLWithString:subscription.imageURL];
+    //[subscriptionCell.iconImage setImageWithURL:imageURL placeholderImage:[[PAAssetManager sharedManager] subscriptionPlaceholder]];
+    
+    subscriptionCell.backgroundColor = [[PAAssetManager sharedManager] darkColor];
+    subscriptionCell.selectedBackgroundView = [[UIView alloc] initWithFrame:subscriptionCell.frame];
+    subscriptionCell.selectedBackgroundView.backgroundColor = [[PAAssetManager sharedManager] lightColor];
+    if ([subscription.subscribed boolValue]) {
+        [subscriptionCell setSelected:YES];
     }
 }
 
@@ -166,35 +177,53 @@ static NSString *CellIdentifier = @"SubCell";
     if (kind == UICollectionElementKindSectionHeader) {
         PASubscriptionsHeader *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"SubscriptionHeader" forIndexPath:indexPath];
         headerView.sectionTitle.text = [[[[[self fetchedResultsController] sections]objectAtIndex:indexPath.section] name] capitalizedString];
-        
+        [headerView.image setImage:[[PAAssetManager sharedManager] subscriptionPlaceholder]];
         reusableview = headerView;
     }
-    
-//    if (kind == UICollectionElementKindSectionFooter) {
-//        UICollectionReusableView *footerview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView" forIndexPath:indexPath];
-//        
-//        reusableview = footerview;
-//    }
     
     return reusableview;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    CGFloat dim = (self.view.frame.size.width / 2.0) - 20.0;
-    return CGSizeMake(dim, dim/2);
+// returns the size of the specified element
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    Subscription *sub = (Subscription*)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    CGFloat maxWidth = (self.view.frame.size.width / 3.0) - 10;
+    CGSize maxSize = CGSizeMake(maxWidth + 2*self.view.layoutMargins.right, MAX_CELL_HEIGHT);
+    CGRect textRect = [sub.name boundingRectWithSize:maxSize
+                                             options:NSStringDrawingUsesFontLeading
+                                          attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:14]}
+                                             context:[[NSStringDrawingContext alloc] init]];
+    return CGRectInset(textRect,-2*MARGIN_SIZE,-MARGIN_SIZE).size;
 }
 
-//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
-//    CGFloat dim = 60.0;
-//    return CGSizeMake(dim, dim);
-//}
+// returns the spacing between items
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 3*MARGIN_SIZE;
+}
+
+// returns spacing between lines in a section
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 3*MARGIN_SIZE;
+}
+
+// returns the spacing between different sections of the collectionview
+- (UIEdgeInsets) collectionView:(UICollectionView *)collectionView
+                         layout:(UICollectionViewLayout *)collectionViewLayout
+         insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0);
+}
 
 # pragma mark delegate
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
     Subscription *sub = (Subscription*)[self.fetchedResultsController objectAtIndexPath:indexPath];
     [self switchSubscription:sub withCell:(PASubscriptionsCollectionCell*)[collectionView cellForItemAtIndexPath:indexPath]];
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    Subscription *sub = (Subscription*)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    [self switchSubscription:sub withCell:(PASubscriptionsCollectionCell*)[collectionView cellForItemAtIndexPath:indexPath]];
+
 }
 
 - (void)switchSubscription:(Subscription*)subscription withCell:(PASubscriptionsCollectionCell*)cell {
@@ -205,7 +234,7 @@ static NSString *CellIdentifier = @"SubCell";
     NSString* subKey = [subscription.category stringByAppendingString:[subscription.id stringValue]];
     
     if ([subscription.subscribed boolValue]) { // user is subscribed, remove subscription
-        NSLog(@"remove subscription");
+        //NSLog(@"remove subscription");
         subscription.subscribed = [NSNumber numberWithBool:NO];
         if(![self.addedSubscriptions objectForKey:subKey]){
             //if the subscription is not on the list to be added
